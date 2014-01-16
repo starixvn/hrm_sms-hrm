@@ -1,0 +1,42 @@
+﻿@model Fanex.NexHR.ViewModels.RequestViewModel
+@using Fanex.NexHR.Models.Request
+@{
+    ViewBag.Title = Labels.RequestHistory;
+    Layout = null;
+}
+@section css{
+    @Url.CombresLink("sitecss")
+}
+@section js{
+    @Url.CombresLink("sitejs")
+}
+@section Breadcrumb {
+    <a class="step">HR</a> <span class="step">@ViewBag.Title</span>
+}
+@switch ((int)ViewBag.requestType)
+{
+    case (int)RequestFilter.CheckInOut:
+        IList<RequestEntity> entityCheckInOut = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewCheckInOutRequestHistory", entityCheckInOut);
+        break;
+    case (int)RequestFilter.LateInEarlyOut:
+        IList<RequestEntity> entityLateInEarlyOut = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewLateInEarlyOutRequestHistory", entityLateInEarlyOut);
+        break;
+    case (int)RequestFilter.ChangeShift:
+        IList<RequestEntity> entityChangeShift = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewChangeShiftRequestHistory", entityChangeShift);
+        break;
+    case (int)RequestFilter.Leave:
+        IList<RequestEntity> entityLeave = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewLeaveRequestHistory", entityLeave);
+        break;
+    case (int)RequestFilter.Overtime:
+        IList<RequestEntity> entityOvertime = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewOvertimeRequestHistory", entityOvertime);
+        break;
+    case (int)RequestFilter.KeepInView:
+        IList<RequestEntity> entityOKeepInView = ViewBag.EntityList;
+        Html.RenderPartial("Request/History/ViewKeepInViewRequestHistory", entityOKeepInView);
+        break;
+}

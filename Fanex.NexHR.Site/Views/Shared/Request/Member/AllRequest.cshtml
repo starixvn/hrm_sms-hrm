@@ -1,0 +1,108 @@
+﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+<table class="data persist-area">
+    <thead>
+        <tr class="persist-header">
+            <th>
+                #
+            </th>
+            <th>@Labels.Team
+            </th>
+            <th>@Labels.Employee
+            </th>
+            <th>
+                @Labels.Request
+            </th>
+            @*<th>@Labels.RequestDate</th>*@
+            <th>
+                Details
+            </th>
+            <th>@Labels.Remark
+            </th>
+            <th>@Labels.CreatedDate
+            </th>
+            @*<th>Total day(s)</th>*@
+            <th>@Labels.Status
+            </th>
+            <th>@Labels.History
+            </th>
+        </tr>
+    </thead>
+    @if (ViewBag.EntityList.Count > 0)
+    {
+        <tbody>
+            @{int index = 1;
+              RequestViewModel options = (RequestViewModel)ViewBag.Options;
+            }
+            @foreach (Fanex.NexHR.Models.Request.RequestEntity request in Model)
+            {
+                var requestModel = new RequestViewModel
+                {
+                    DateOption = options.DateOption,
+                    FromDate = options.FromDate,
+                    ToDate = options.ToDate,
+                    EmployeeId = request.Requester.Id,
+                    Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
+                    TeamIds = options.TeamIds == null ? string.Empty : options.TeamIds,
+                    StatusId = options.StatusId,
+                    RequestType = request.Type.RequestFilter
+                };
+
+                var requestDetail = new { requestid = @request.Id, type = @request.Type.RequestHistoryFilter };
+                
+                <tr id="row@(request.Id)">
+                    <td>@(index++)
+                    </td>
+                    <td  class="tooltip" title="@request.Requester.Team.Name">
+                        @request.Requester.Team.Code
+                    </td>
+                    <td class="tooltip" title="@request.Requester.FullName">
+                        @request.Requester.NickName.ToString()
+                    </td>
+                    <td class="highlight">
+                        @if (request.Type.Id == (int)RequestTypes.Leave)
+                        { 
+                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.LeaveType</a>
+                        }
+                        else if (request.Type.Id == (int)RequestTypes.ChangeShift)
+                        { 
+                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.Type.Name</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("member", "request", requestModel)">@request.Type.Name</a>
+                        }
+                    </td>
+                    <td class="left">
+                        @Html.Raw(Fanex.NexHR.Services.RequestService.ToRequestMessage(request))
+                    </td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    { 
+                        <td class="tooltip" title="@request.Remark">
+                            <span class="icon remark" alt="remark" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
+                    <td class="ddMMyyyyhhmm">
+                        @request.CreatedDate.ToShortFormatedDate()
+                    </td>
+                    @Html.Partial("Request/Member/SharedStatus", request)
+                    <td>
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                            @Labels.View </a>
+                    </td>
+                </tr>  
+            }
+        </tbody>
+    }
+    else
+    { 
+        @RazorHelper.DisplayNoInformation(colspan: 9);
+    }
+</table>
+@RazorHelper.VerifierAndApproverMenu()
+@RazorHelper.ResetMenu()

@@ -1,0 +1,103 @@
+﻿@model ShiftStatisticContentViewModel
+@{
+    Layout = null;
+}
+
+@Html.Hidden("PreviousFromDate", Model.FromDate.AddDays(-7).ToDateMonthYearFormatedDate())
+@Html.Hidden("PreviousToDate", Model.ToDate.AddDays(-7).ToDateMonthYearFormatedDate())
+@Html.Hidden("NextFromDate", Model.FromDate.AddDays(7).ToDateMonthYearFormatedDate())
+@Html.Hidden("NextToDate", Model.ToDate.AddDays(7).ToDateMonthYearFormatedDate())
+
+<table id="tblshiftstatistic" class="tabledata">
+    <thead>
+        <tr class="headerFilter">
+            <th colspan="18">
+                <div style="float:left;">
+                    <a id="lnkPrevious" href="javascript:;"> << Previous </a> ||
+                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span> 
+                    || <a id="lnkNext" href="javascript:;"> Next >> </a>  
+                </div>
+            </th>
+        </tr>
+        <tr class="headerName">
+            <th>
+                @Labels.Shift
+            </th>
+            <th>
+                @Model.FromDate.ToDateOfWeek()
+            </th>
+            <th>
+                @Model.FromDate.AddDays(1).ToDateOfWeek()
+            </th>
+            <th>
+                @Model.FromDate.AddDays(2).ToDateOfWeek()
+            </th>
+            <th>
+                @Model.FromDate.AddDays(3).ToDateOfWeek()
+            </th>
+            <th>
+                @Model.FromDate.AddDays(4).ToDateOfWeek()
+            </th>
+            <th class="weekend">
+                @Model.FromDate.AddDays(5).ToDateOfWeek()
+            </th>
+            <th class="weekend">
+                @Model.FromDate.AddDays(6).ToDateOfWeek()
+            </th>
+        </tr>
+    </thead>
+    
+        @if (Model.ShiftStatisticModels != null && Model.ShiftStatisticModels.Any())
+        {
+            var totalMonday = 0;
+            var totalTuesday = 0;
+            var totalWednesday = 0;
+            var totalThursday = 0;
+            var totalFriday = 0;
+            var totalSaturday = 0;
+            var totalSunday = 0;
+            <tbody>
+
+            @foreach (ShiftStatisticModel shiftStatisticModel in Model.ShiftStatisticModels)
+            {
+                totalMonday += shiftStatisticModel.WorkMonday;
+                totalTuesday += shiftStatisticModel.WorkTuesday;
+                totalWednesday += shiftStatisticModel.WorkWednesday;
+                totalThursday += shiftStatisticModel.WorkThursday;
+                totalFriday += shiftStatisticModel.WorkFriday;
+                totalSaturday += shiftStatisticModel.WorkSaturday;
+                totalSunday += shiftStatisticModel.WorkSunday;
+                
+                <tr>
+                    <td>@shiftStatisticModel.ShiftCode</td>
+                    <td>@shiftStatisticModel.WorkMonday</td>
+                    <td>@shiftStatisticModel.WorkTuesday</td>
+                    <td>@shiftStatisticModel.WorkWednesday</td>
+                    <td>@shiftStatisticModel.WorkThursday</td>
+                    <td>@shiftStatisticModel.WorkFriday</td>
+                    <td>@shiftStatisticModel.WorkSaturday</td>
+                    <td>@shiftStatisticModel.WorkSunday</td>
+                </tr>
+            }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>@Labels.Total:</td>
+                    <td>@totalMonday</td>
+                    <td>@totalTuesday</td>
+                    <td>@totalWednesday</td>
+                    <td>@totalThursday</td>
+                    <td>@totalFriday</td>
+                    <td>@totalSaturday</td>
+                    <td>@totalSunday</td>
+                </tr>
+            </tfoot>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 8); 
+        }
+</table>
+
+@Url.CombresLink("shiftstatisticcontentjs")

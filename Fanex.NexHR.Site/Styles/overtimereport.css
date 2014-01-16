@@ -1,0 +1,130 @@
+﻿#yearlyReport .total
+{
+    font-weight: bold;
+}
+
+table tr
+{
+    height: 30px;
+    text-align: center;
+}
+
+table.pretty thead th
+{
+    height: 25px;
+    vertical-align: middle;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    color: #fff;
+    text-transform: capitalize;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+.title
+{
+    font-family: Abel, Arial,Helvetica, "myriad Pro" , Tahoma;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    text-shadow: 0px 0px 1px #ddd;
+    color: #000;
+    font-weight: bold;
+}
+
+table tr.odd
+{
+    background-color: #ececec;
+}
+
+table.pretty tfoot th
+{
+    text-align: center;
+    font-weight: bold;
+}
+
+table.data tfoot tr.sum
+{
+    background-color: #b0cc7f;
+    text-align: center;
+    font-weight: bold;
+}
+
+span.hyperlink
+{
+    color: #0789D1;
+}
+
+select#calendar
+{
+    min-width: 100px;
+}
+
+input#Employee
+{
+    width: 180px;
+}
+
+.container_24 .grid_24
+{
+    width: 1000px;
+}
+
+#SubmitMonthlyReport
+{
+    margin-left: 100px;
+}
+
+#roundbar-blue
+{
+    clear: left;
+    float: left;
+    overflow: hidden;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+#roundbar-blue ul
+{
+    clear: left;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+}
+
+#roundbar-blue ul li
+{
+    display: block;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+.first
+{
+    border-right: 1px solid #49A9FF;
+}
+
+
+#roundbar-blue ul li a
+{
+    display: block;
+    margin: 0;
+    padding-right: .8em;
+    padding-left: .8em;
+    text-decoration: none;
+    line-height: 1.3em;
+}
+
+.active
+{
+    font-weight: bold;
+}
+
+#submitOTDetails
+{
+    margin-left: 30px;
+}

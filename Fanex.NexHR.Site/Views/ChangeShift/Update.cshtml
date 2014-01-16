@@ -1,0 +1,122 @@
+﻿@model Fanex.NexHR.ViewModels.ChangeShiftViewModel
+@{
+    ViewBag.Title = "Update My Change Shift Request";
+}
+@section css{
+    @Url.CombresLink("changeshiftcss")
+}
+@section js{
+    @Url.CombresLink("changeshiftjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "changeshift")">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+@section SeparatorMenu {
+    <a class="separator-simple-button js-separator-simple-button js-compact">Shift info</a>
+}
+<h2>@Labels.Edit</h2>
+<div class="bunhat">
+
+<div class="model-state" id="errors-model-state">
+            
+</div>
+
+    @using (Html.BeginForm())
+    {
+    
+        @Html.ValidationSummary(true)
+
+        if (ViewBag.Updated == true)
+        {
+        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
+        <input type="hidden" id="successed" value="true" />
+        <input type="hidden" id="year" value="@ViewBag.Year" />
+        }
+         <div id="shift-unavailable" class="ui-state-error ui-corner-all" style="padding: 0.7em; color:Red;">
+            @Labels.CannotCreateRequest
+        </div>
+          
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.Employee)
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.FromDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
+             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ToDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
+             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+            </div>
+        </div>
+        
+         <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Verifier)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Approver)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Remark)
+            </div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.Remark)
+            </div>
+        </div>
+        
+         <div class="formrow" id="shiftDetailSchedule">
+            @Html.Partial("ChangeShiftDetails", Model.ShiftDetails)
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.HiddenFor(model => model.Employee)
+                @Html.HiddenFor(model => model.DisplayName)
+                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.FromShift)
+                @Html.HiddenFor(model => model.FromShiftName)
+                @Html.HiddenFor(model => model.ToShiftName)
+                @Html.Hidden("RequestType", (int)RequestTypes.ChangeShift)
+            </div>
+            <div class="input">
+                <input type="button" name="submitEdit" value="@Fanex.NexHR.Resources.Labels.Update" class="button-primary submit"/>
+                <a href="@Url.Action("employeeview", "changeshift")" class="button">@Labels.Back</a>
+            </div>
+        </div>
+    }
+</div>

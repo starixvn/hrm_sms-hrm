@@ -1,0 +1,94 @@
+﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+@{
+    ViewBag.Title = Labels.MyLateInEarlyOutRequest;
+}
+@section css{
+    @Url.CombresLink("myrequestcss")
+}
+@section js{
+    @Url.CombresLink("empcheckinoutjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{
+    <input type="hidden" value="LateInEarlyOut" id="RequestType" />
+
+    <span>Year:</span>
+    @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
+    <div class="button-icon">
+        <span class="icon plus"></span>@Html.ActionLink(Labels.LateInEarlyOutRequest, "Create")
+    </div>   
+
+    <table class="data">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+
+                <th>@Labels.Request
+                </th>
+                <th>@Labels.Time
+                </th>
+                <th>Request Date
+                </th>
+                <th>@Labels.Shift
+                </th>
+                <th>@Labels.CreatedDate
+                </th>
+                <th>@Labels.Remark
+                </th>
+                <th>@Labels.Status
+                </th>
+            </tr>
+        </thead>
+        @if (Model.Count > 0)
+        {
+            <tbody>
+                @{int index = 1;}
+                @foreach (var request in Model)
+                { 
+                    <tr id="row@(request.Id)">
+                        <td>@(index++)
+                        </td>
+                        
+                        <td class="highlight">@request.Type.ToString()
+                        </td>
+                        <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.Type.Id)
+                        </td>
+                        
+                        <td class="ddMMyyyyhhmm">@request.FromDate.ToShortFormatedDate()
+                        </td>
+
+                        <td>@request.FromShift.Name.ToString()
+                        </td>
+                        <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
+                        </td>
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        { 
+                            <td class="tooltip" title="@request.Remark">
+                                <span class="icon remark" alt="remark" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                -
+                            </td>
+                        }
+                        @Html.Partial("_SharedRequestStatus", request)
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        { 
+            @RazorHelper.DisplayNoInformation(colspan: 11);
+        }
+    </table>
+}
+@RazorHelper.EmployeeProcessMenu()

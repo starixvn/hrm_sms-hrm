@@ -1,0 +1,130 @@
+﻿// --------------------------------------------------------------------------
+// <copyright file="IEmployeeService.cs" company="Nexcel Solutions Vietnam">
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
+// </history>
+
+namespace Fanex.NexHR.Services.Interface
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.ViewModels;
+
+    public interface IEmployeeService
+    {
+        IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType);
+
+        IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role);
+
+        UserLoginModel GetUserLoginByDomainUserName(string domainUsername = null);
+
+        UserLoginModel GetUserLoginByCode(string code);
+
+        UserLoginModel GetUserLoginByEmployeeId(int employeeId);
+
+        Employee GetEmployeeById(int? employeeId = null);
+
+        Employee GetEmployeeByCode(string code);
+
+        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null);
+
+        IList<Employee> GetEmployeesForRelatedTeam(int employeeId);
+
+        IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId = null);
+
+        IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
+
+        IList<Country> GetAllCountry();
+
+        Country GetCountryByCode(string countryCode);
+
+        bool AdjustAnnualLeaves(
+            ModelStateDictionary modelState,
+            string empIds,
+            string description,
+            DateTime fromDate,
+            decimal deductDays,
+            decimal creditDays,
+            DateTime createdDate,
+            int createdBy);
+
+        bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy);
+
+        IList<Employee> GetAll();
+
+        IList<Employee> GetLeaders(int id);
+
+        bool Insert(ModelStateDictionary modelState, CreateEmployeeViewModel model);
+
+        bool Delete(int id, DateTime resignedDate);
+
+        int Update(Employee model, ModelStateDictionary modelState);
+
+        bool UpdatePersonalInformation(ModelStateDictionary modelState, Employee model, out int errorCode, out string message);
+
+        EmployeeShift GetEmployeeShift(int id);
+
+        bool UpdateEmployeeShift(EmployeeShift model);
+
+        IList<WeekWorking> GetWeekWorking(int id, DateTime date);
+
+        bool UpdateWeekWorking(EmployeeShift model, DateTime date);
+
+        MySpaceViewModel GetMySpace(int id);
+
+        IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
+
+        IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);
+
+        IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null);
+
+        bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
+
+        IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
+
+        AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int id);
+
+        bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
+
+        bool UpdateAnnualLeaveTransaction(
+            long id, 
+            string description, 
+            DateTime fromDate,
+            decimal deductDays, 
+            decimal creditDays, 
+            DateTime modifiedDate, 
+            int modifiedBy);
+
+        bool InsertAnnualLeaveTransaction(
+            int empId, 
+            string description, 
+            DateTime fromDate,
+            decimal deductDays, 
+            decimal creditDays, 
+            DateTime createdDate, 
+            int createdBy);
+
+        IList<UserChangedShift> GetUserChangedShift(DateTime date);
+
+        IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null);
+
+        int GetDateRange(int employeeId, DateTime fromDate, DateTime toDate);
+
+        IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime fromDate, DateTime toDate);
+
+        int ValidateUser(string code, string password);
+
+        int ChangePassword(int empId, string oldPassword, string password);
+
+        int ResetPassword(int empId, string originalPassword);
+
+        bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
+
+        int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
+    }
+}

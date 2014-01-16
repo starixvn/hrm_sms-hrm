@@ -1,0 +1,121 @@
+﻿@model Fanex.NexHR.ViewModels.ChangeShiftViewModel
+@{
+    ViewBag.Title = Labels.ViewChangeShiftDetail;
+}
+<h2>
+    @ViewBag.Title</h2>
+<div class="bunhat">
+    @using (Html.BeginForm())
+    {
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.Employee)
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.FromDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ToDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Verifier)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown", @disabled = "disabled" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Approver)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown", @disabled = "disabled" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Remark)
+            </div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.Remark, new { @readonly = "true" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Status)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.FormattedStatus)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        
+        <div class="formrow" id="shiftDetailSchedule">
+            @Html.Partial("Request/HR/ChangeShiftDetails", Model.ShiftDetails)
+        </div>
+
+        <div class="formrow">
+            <div class="input">
+                @if (Model.Status == (byte)CurrentRequestStatus.Pending)
+                {
+                    if (Model.VerifierId.HasValue && Model.VerifierId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnAccept" type="button" value="@Labels.Accept" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnNotAccept" type="button" value="@Labels.NotAccept" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                    else if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                }
+                else if (Model.Status == (byte)CurrentRequestStatus.Accepted || (Model.Status == (byte)CurrentRequestStatus.NotAccepted))
+                {
+                    if (Model.VerifierId.HasValue && Model.VerifierId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                    else if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                }
+                else if (Model.Status == (byte)CurrentRequestStatus.Approved || (Model.Status == (byte)CurrentRequestStatus.Rejected))
+                {
+                    if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                }
+                <a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>
+            </div>
+        </div>
+    }
+</div>

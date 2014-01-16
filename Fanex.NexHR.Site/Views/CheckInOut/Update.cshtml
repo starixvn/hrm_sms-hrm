@@ -1,0 +1,139 @@
+﻿@model Fanex.NexHR.ViewModels.CheckInOutRequestViewModel
+@using System.Web.Mvc.Html5;
+@{
+    ViewBag.Title = "Update My Check In Out Request";
+}
+@section css{
+    @Url.CombresLink("checkinoutrequestcss")
+}
+@section js{
+    @Url.CombresLink("checkinoutrequestjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "checkinout")">@Labels.MyCheckInOutRequests</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2>@Labels.Edit</h2>
+<div class="bunhat">
+    @{ Html.EnableClientValidation(false); }
+    @using (Html.BeginForm())
+    {
+    
+        @Html.ValidationSummary()
+
+        if (ViewBag.Updated == true)
+        {
+        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
+        <input type="hidden" id="successed" value="true" />
+        <input type="hidden" id="year" value="@ViewBag.Year" />
+        }
+        <div id="model-state-error" class="ui-state-error ui-corner-all" style="padding: 0.7em;
+            color: Red;">
+            @Labels.CannotCreateRequest
+        </div>
+    
+        <div class="formrow">
+            <div class="label">
+                @Fanex.NexHR.Resources.Labels.RequestCode
+            </div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.RefNO)
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Type)
+            </div>
+            <div class="input">
+                @{
+        RequestTypes enumDisplayStatus = ((RequestTypes)@Model.Type);
+        string stringValue = enumDisplayStatus.ToString();
+                }
+                @stringValue
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.Employee)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                Attendant date
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now, unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+            </div>
+        </div>
+
+        <div class="formrow">
+            <div class="label">
+                @Fanex.NexHR.Resources.Labels.RequestTime
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now, unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute" })
+            </div>
+        </div>
+    
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Shift)
+            </div>
+            <div class="input">
+                <span id="shiftname">@Model.Shift</span> @*<a id="shiftinfo" href="javascript:;" title="@Fanex.NexHR.Resources.Labels.ShiftInfo">
+                <span class="icon shiftinfo"> </span>
+            </a>
+            <div class="hide">
+            @RazorHelper.ShiftInfoTable(ViewBag.Shifts)
+            </div>*@
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Verifier)*
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Approver)*
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+            </div>
+            <div class="input">
+                @Html.HiddenFor(model => model.Employee)
+                @Html.HiddenFor(model => model.DisplayName)
+                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Type)
+                @Html.HiddenFor(model => model.Shift)
+                @Html.Hidden("InTime")
+                @Html.Hidden("OutTime")
+                @Html.Hidden("RequestType", (int)RequestTypes.CheckIn)
+                <input type="submit" value="@Labels.Update"/>
+                <a href="@Url.Action("employeeview", "checkinout")" class="button">@Labels.Back</a>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,148 @@
+﻿ input[type="text"].shift
+  {
+      width: 80px;
+      }
+      
+  .tabledata input[type="text"]
+  {
+      font-size: 0.98em;
+      width: 75px;
+      text-align: center;
+      }
+.chooseweek
+{
+    color:red;
+    }
+.tabledata thead tr th.weekend
+{
+    color:red;
+    }
+.tabledata thead tr th
+{
+    height: 30px;
+    }
+.tabledata thead tr th.noneborderleft
+{
+    border-left: 0px solid #E3E4E6;
+    }
+.tabledata thead tr th.noneborderright
+{
+    border-right: 0px solid #E3E4E6;
+    
+}
+
+.tabledata tbody tr td.noneborderleft
+{
+    border-left: 0px solid #fff;
+    }
+.tabledata tbody tr td.noneborderright
+{
+    border-right: 0px solid #fff;
+}
+
+table.tabledata tr td.noneborderleft
+{
+    padding: 5px 5px 5px 0;
+}
+table.tabledata tr td.noneborderright
+{
+    padding: 5px 0 5px 5px;
+}
+
+table.tabledata tr th.noneborderleft
+{
+    padding: 5px 5px 5px 0;
+}
+table.tabledata tr th.noneborderright
+{
+    padding: 5px 0 5px 5px;
+}
+
+table.tabledata thead tr.headerFilter th {
+    background: none repeat scroll 0 0 #EDEFE5;
+    border: 1px solid #D2D2D2;
+    color: #333333;
+    font-weight: normal;
+    height: 20px;
+    padding: 5px;
+}
+
+table.tabledata td {
+    padding: 5px 5px;
+}
+
+.container_24 .grid_2, .grid_1 {
+    line-height: 26px;
+}
+
+fieldset {
+    margin: 15px 0;
+}
+
+.summary
+{
+    display:none;
+    text-align: center;
+    }
+
+#tblshiftstatistic
+{
+    width: 800px;
+    }
+    
+#tblshiftstatistic tr
+{
+    height: 30px;
+    }
+#tblshiftstatistic tfoot tr td
+{
+    background-color: #E3E4E6;
+    font-weight:bold;
+    }
+#tblshiftstatistic thead tr.headerName th
+{
+    font-weight:bold;
+    text-shadow: none;
+    }
+#tblshiftstatistic thead tr.headerFilter th
+{
+    font-weight:normal;
+    text-shadow: none;
+    }
+    
+#tblshiftstatistic tr:nth-child(odd)
+{
+	background-color: #f5f5f5;
+}
+
+#tblshiftstatistic tr:nth-child(even)
+{
+	background-color: #fff;
+}
+
+#tblshiftstatistic tr:hover
+{
+	background: #e3eceb;
+}
+
+.grid_10
+{
+    line-height:26px;
+    }
+#Employee
+{
+    width: 263px;
+    }
+.dropdown
+{
+    width: 300px;
+    }
+    
+.overOffdayInWeek
+{
+    background: #F9CDA2;
+    }
+.upOffdayInWeek
+{
+    background: #BFF7F6;
+    }

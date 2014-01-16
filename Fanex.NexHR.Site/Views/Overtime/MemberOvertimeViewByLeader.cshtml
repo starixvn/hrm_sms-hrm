@@ -1,0 +1,119 @@
+﻿@using Fanex.NexHR.Models.Request
+@model IList<RequestEntity>
+@{
+    Layout = null;
+}
+<table class="tabledata">
+        <thead>
+            <tr class="headermenu">
+                <th colspan="21">
+                    <div style="float:right;">
+                    @if (Roles.IsUserInRole("Verifier") && Roles.IsUserInRole("Approver"))
+                    {
+                         <div>
+                            <a id="lnkAccept" href="javascript:;"> Accept </a> || 
+                            <a id="lnkNotAccept" href="javascript:;"> Not Accept </a> || 
+                            <a id="lnkApprove" href="javascript:;"> Approve </a> ||
+                            <a id="lnkReject" href="javascript:;"> Reject </a>
+                        </div>
+                    }
+                    else if (Roles.IsUserInRole("Verifier"))
+                    {
+                        <div>
+                            <a id="lnkAccept" href="javascript:;"> Accept </a> || 
+                            <a id="lnkNotAccept" href="javascript:;"> Not Accept </a>
+                        </div>
+                    }
+                    else if (Roles.IsUserInRole("Approver"))
+                    {
+                        <div>
+                            <a id="lnkApprove" href="javascript:;"> Approve </a> ||
+                            <a id="lnkReject" href="javascript:;"> Reject </a>
+                        </div>
+                    }
+                     
+                </div>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <input id="chkAll" type="checkbox" />
+                </th>
+                <th>@Labels.FullName
+                </th>
+                <th>@Labels.Nick
+                </th>
+                <th>
+                    @Labels.Team
+                </th>
+                <th>@Labels.NormalDay
+                </th>
+                <th>@Labels.OffDay
+                </th>
+                <th>@Labels.PublicHoliday
+                </th>
+                <th>Details</th>
+                <th>
+                    @Labels.Verifier
+                </th>
+                <th>
+                    @Labels.Approver
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="chkSelect" data-requestId = "@item.Id" />
+                    </td>
+                    <td class="left">
+                        @item.Requester.FullName
+                    </td>
+                    <td>
+                        @item.Requester.NickName
+                    </td>
+                    <td class="tooltip" title="@item.Requester.Team.Name">
+                        @item.Requester.Team.Code
+                    </td>
+                    <td>
+                    @if (item.NormalHours > 0)
+                    {
+                        <span>@item.NormalHours</span>
+                    }
+                    </td>
+                    <td>
+                    @if (item.OffHours > 0)
+                    {
+                        <span>@item.OffHours</span>
+                    }
+                    </td>
+                    <td>
+                    @if (item.PublicHours > 0)
+                    {
+                        <span>@item.PublicHours</span>
+                    }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.Id, isHRView = false })">
+                            @Labels.View </a>
+                    </td>
+
+                    @Html.Partial("SharedVerifierStatus", item)
+                    @Html.Partial("SharedApproverStatus", item)
+                </tr>
+                }
+
+            }
+            else
+            { 
+                @RazorHelper.DisplayNoInformation(colspan: 12);
+            }
+        </tbody>
+    </table>
+@RazorHelper.VerifierAndApproverOvertimeMenu()
+
+@Url.CombresLink("monthlyovertimememberdetailjs")

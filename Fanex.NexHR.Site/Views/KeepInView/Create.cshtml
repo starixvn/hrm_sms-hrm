@@ -1,0 +1,142 @@
+﻿@model Fanex.NexHR.ViewModels.KeepInViewRequestViewModel
+@{
+    ViewBag.Title = "New Keep In View Request";
+}
+@section css{
+    @Url.CombresLink("keepinviewcss")
+}
+@section js{
+    @Url.CombresLink("keepinviewcreatejs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "keepinview")">@Labels.MyKeepInViewRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+<div class="bunhat">
+    @using (Html.BeginForm())
+    {
+    
+        @Html.ValidationSummary()
+
+        if (ViewBag.Requested == true)
+        {
+        <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div>
+        <input type="hidden" id="successed" value="true" />
+        <input type="hidden" id="year" value="@ViewBag.Year" />
+        }
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div id="grbHalfDay" class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.HalfDay)
+            </div>
+            <div class="input">
+                @Html.CheckBoxFor(model => model.HalfDay)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @if (Roles.IsUserInRole("ActingSupervisor"))
+                { 
+                    @Html.EditorFor(model => model.Employee)
+                }
+                else
+                {
+                    @Html.Label(Utilities.FormatString(Model.Employee))
+                }
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Date, Labels.Date)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.Date,
+                 DateTime.Now.AddDays(-7),
+                 DateTime.Now.AddMonths(1),
+                unavailDates: (IList<DateTime>)ViewBag.UnavailableDates)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div id="timeGroup" class="formrow">
+            <div class="label">
+                @Labels.Time
+            </div>
+            <div class="input">
+                <span class="time">
+                    @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
+                </span><span>~</span> <span class="time">
+                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                </span><span class="cross-day">
+                    @Html.CheckBoxFor(model => model.CrossDay)
+                    <label for="CrossDay">@Labels.CrossDay</label>
+                </span>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Shift, Labels.Shift)
+            </div>
+            <div class="input">
+                <span id="shiftName">@Html.DisplayFor(model => model.Shift)</span>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierList, "OwnerId", "FullName"))
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.ApproverList, "OwnerId", "FullName"))
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Remark, Labels.Remark)
+            </div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.Remark)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.HiddenFor(model => model.Employee)
+                @Html.HiddenFor(model => model.DisplayName)
+                @Html.HiddenFor(model => model.Shift)
+                @Html.HiddenFor(model => model.ShiftId)
+            </div>
+            <div class="input">
+                <input type="submit" value="@Labels.Request" class="button-primary submit"/>
+                <a href="@Url.Action("employeeview", "keepinview")" class="button">@Labels.Back</a>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,101 @@
+﻿@model Fanex.NexHR.ViewModels.ChangeShiftViewModel
+@{
+    ViewBag.Title = Labels.ViewChangeShiftDetail;
+}
+<h2>
+    @ViewBag.Title</h2>
+<div class="bunhat">
+    @using (Html.BeginForm())
+    {
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.Employee)
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.FromDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ToDate,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Verifier)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown", @disabled = "disabled" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Approver)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown", @disabled = "disabled" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Remark)
+            </div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.Remark, new { @readonly = "true" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Status)
+            </div>
+            <div class="input">
+                @Html.DisplayFor(model => model.FormattedStatus)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        
+        <div class="formrow" id="shiftDetailSchedule">
+            @Html.Partial("Request/HR/ChangeShiftDetails", Model.ShiftDetails)
+        </div>
+
+        <div class="formrow">
+            <div class="input">
+                @if (ViewBag.IsAllowChangeStatus)
+                {
+                    if (Model.Status == (byte)CurrentRequestStatus.Approved || Model.Status == (byte)CurrentRequestStatus.Rejected)
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnProcess" type="button" value="@Labels.Process" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnVoid" type="button" value="@Labels.Void" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                    if (Model.Status == (byte)CurrentRequestStatus.Processed || Model.Status == (byte)CurrentRequestStatus.Void)
+                    {
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    }
+                }
+                <a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>
+            </div>
+        </div>
+    }
+</div>

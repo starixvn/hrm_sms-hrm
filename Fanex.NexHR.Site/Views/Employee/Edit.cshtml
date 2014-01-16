@@ -1,0 +1,834 @@
+﻿@model Fanex.NexHR.Models.Employee
+@{
+    ViewBag.Title = "Edit";
+}
+@section css{
+    @Url.CombresLink("employeeeditcss")
+}
+@section js{
+    @Url.CombresLink("employeeeditjs")
+}
+@section Breadcrumb
+{
+    <a class="step" href="javascript:;">HR</a> <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
+}
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @id = "formEditUser" }))
+{
+    <div class="bunhat">
+        @*@Html.ValidationSummary(true)*@
+        @if (ViewBag.Updated == true)
+        {
+            <div class="success flash">
+                Saved</div> 
+        }
+        else if (ViewBag.Updated == false)
+        { 
+            <div class="error flash">@Messages.ErrorTryAgain</div> 
+        }
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" class="collapsed" />
+                <span>Personal</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        Avatar:
+                    </div>
+                    <div class="pcontent">
+                        <img id="avatar" src="~/employee/avatar/@(Model.Code)?f=@(Fanex.NexHR.Core.Utilities.RandomString(4))" alt="@Model.FullName" /><br />
+                        <input type="file" id="file" />
+                        <input type="button" id="upload" value="Upload" />
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Employee ID"):
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Code)
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.DomainUsername)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.DomainUsername)
+                        @Html.ValidationMessageFor(model => model.DomainUsername)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.FullName)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.FullName)
+                        @Html.ValidationMessageFor(model => model.FullName)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.NickName)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.NickName)
+                        @Html.ValidationMessageFor(model => model.NickName)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.DOB)
+                    </div>
+                    <div class="input">
+                        <div id="DOBPicker">
+                        </div>
+                    </div>
+                    @Html.HiddenFor(model => model.DOB)
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.PlaceOfBirth)
+                    </div>
+                    <div class="input">
+                        <div id="DOBPicker">
+                        </div>
+                    </div>
+                    @Html.EditorFor(model => model.PlaceOfBirth)
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Ethnic)
+                    </div>
+                    <div class="input">
+                        <div id="DOBPicker">
+                        </div>
+                    </div>
+                    @Html.EditorFor(model => model.Ethnic)
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Native)
+                    </div>
+                    <div class="input">
+                        <div id="DOBPicker">
+                        </div>
+                    </div>
+                    @Html.EditorFor(model => model.Native)
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Religion)
+                    </div>
+                    <div class="input">
+                        <div id="DOBPicker">
+                        </div>
+                    </div>
+                    @Html.EditorFor(model => model.Religion)
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Gender)
+                    </div>
+                    <div class="input">
+                        @{
+        var gender = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Unknown", Value = ""}, 
+                        new SelectListItem() {Text = "Female", Value = "0"},
+                        new SelectListItem() {Text = "Male", Value = "1"}
+                    };
+                        }
+                        @Html.DropDownListFor(model => model.Gender, gender)
+                        @Html.ValidationMessageFor(model => model.Gender)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Marriage")
+                    </div>
+                    <div class="input">
+                         @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Nationality")
+                    </div>
+                    <div class="input">
+                        @Html.DropDownListFor(x => x.CountryCode, Model.ListCountryCode, new { @class = "dropdown", @style = "width : 230px;" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("ID Card No")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.CardNo)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("ID Card Issue Date")
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.DateOfIdCard)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("ID Card Place Of Issue")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.PlaceOfIdCard)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.PassportNo)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.PassportNo)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.PassportExp)
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.PassportExp)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Qualification)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Qualification)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Major)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Major)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" />
+                <span>Contact</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Cellphone")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Phone)
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Home Phone")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.HomePhone)
+                        @Html.ValidationMessageFor(model => model.HomePhone)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Work Email")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Address)
+                    </div>
+                    <div class="input">
+                        @Html.TextAreaFor(model => model.Address)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.CurrentAddress)
+                    </div>
+                    <div class="input">
+                        @Html.TextAreaFor(model => model.CurrentAddress)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Skype)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Skype)
+                        @Html.ValidationMessageFor(model => model.Skype)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.Yahoo)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Yahoo)
+                        @Html.ValidationMessageFor(model => model.Yahoo)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" />
+                <span>Information</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Unit")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Unit)
+                        @Html.ValidationMessageFor(model => model.Unit)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Department/Team")
+                    </div>
+                    <div class="input">
+                        @Html.DropDownListFor(model => model.Team.Id, new SelectList(ViewBag.Groups, "Id", "Name"))
+                        @Html.ValidationMessageFor(model => model.Team.Id)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.JobTitleId)
+                    </div>
+                    <div class="input">
+                        @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), new { @style = "width : 230px;" })
+                        @Html.ValidationMessageFor(model => model.JobTitleId)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Verified by")
+                    </div>
+                    <div class="input">
+                        <span id="lstVerifier">@Model.Verifier</span>
+                        @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.Verifier, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Approved by")
+                    </div>
+                    <div class="input">
+                        <span id="lstApprover">@Model.Approver</span>
+                        @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.Approver, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Group Date")
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.JoinedDate)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Company Date")
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.CompanyDate)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.ConfirmedDate)
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.ConfirmedDate)
+                        @Html.ValidationMessageFor(model => model.ConfirmedDate)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.ResignedDate)
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.ResignedDate)
+                        @Html.ValidationMessageFor(model => model.ResignedDate)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" />
+                <span>Policy</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Allow Claim OT")
+                    </div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.CanOT)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Working days per Month")
+                    </div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.WorkingDays)
+                        @Html.ValidationMessageFor(model => model.WorkingDays)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Working hours per day")
+                    </div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.WorkingHours)
+                        @Html.ValidationMessageFor(model => model.WorkingHours)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Number of Offday:
+                    </div>
+                    <div class="pcontent">
+                        @Html.TextBoxFor(model => model.OffDaysbyWeek)
+                        @Html.ValidationMessageFor(model => model.OffDaysbyWeek)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        Leave Balance
+                    </div>
+                    <div class="input">
+                        @Model.AnnualLeaveBalance day(s) <a href="~/annualleavebalance/employee/@Model.Id" class="linkUpdate" >
+                            Update</a>
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        KIV Balance
+                    </div>
+                    <div class="input">
+                        @Model.KeepInViewBalance day(s)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" />
+                <span>Permission</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Authority Level")
+                    </div>
+                    <div class="input" id="userRole">
+                        @{
+        var roles = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Verifier", Value = "2"},
+                        new SelectListItem() {Text = "Approver", Value = "3"},
+                        new SelectListItem() {Text = "Shift Manager", Value = "4"},
+                        new SelectListItem() {Text = "Acting Supervisor", Value = "5"},
+                        new SelectListItem() {Text = "Human Resource", Value = "6"},
+                        new SelectListItem() {Text = "System Admin", Value = "7"}
+                    };
+                        }
+                        @Html.CheckBox("Member", true, new { disabled = true })
+                        @Html.Label("Member", "Member")
+                        @Html.CheckBoxListFor(model => model.RoleArray, roles)
+                        @Html.ValidationMessageFor(model => model.RoleArray)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.LabelFor(model => model.IsTopManager)
+                    </div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.IsTopManager)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Shift Arrangement")
+                    </div>
+                    <div class="input">
+                        @Model.EmpShiftList
+                        @Html.ActionLink("Update", "ShiftManager", "Employee", new { role = (short)RolesEnum.ShiftManager, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("On behalf Request")
+                    </div>
+                    <div class="input">
+                        @Model.ActingEmpList
+                        @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.ActingSupervisor, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.Label("Category")
+                    </div>
+                    <div class="input">
+                        @{
+        var empType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Local", Value = "true"}, 
+                        new SelectListItem() {Text = "Expat", Value = "false"},
+                    };
+                        }
+                        @Html.DropDownListFor(model => model.IsLocal, empType)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Applicable Default Shift")
+                    </div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.IsDefaultSchedule)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        Default Shift
+                    </div>
+                    <div class="input">
+                        <a href="~/employee/defaultschedule/@Model.Id">View</a>
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label("Enabled User")
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.Enabled)
+                        @Html.ValidationMessageFor(model => model.Enabled)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="employeeInfo">
+            <div class="boxtitle">
+                <img src="~/Styles/Images/collapsed.gif" />
+                <span>Contract</span>
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.BankAccount)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.BankAccount)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.TaxCode)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.TaxCode)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.SocialInsuranceNo)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.SocialInsuranceNo)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.RegisteredHospital)
+                    </div>
+                    <div class="input">
+                        @Html.EditorFor(model => model.RegisteredHospital)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="contractInfo">
+                        <div class="label">
+                            @Html.LabelFor(model => model.Contract1)
+                        </div>
+                        <div class="input">
+                            @Html.DropDownListFor(model => model.Contract1, (IList<SelectListItem>)ViewBag.Contract)
+                        </div>
+                    </div>
+                    <div class="contractDateFrom">
+                        <div class="input">
+                            <span>From</span>
+                            @Html.DatePickerFor(model => model.FromDate1)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                    <div class="contractDateTo">
+                        <div class="input">
+                            <span>To</span>
+                            @Html.DatePickerFor(model => model.ToDate1)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="contractInfo">
+                        <div class="label">
+                            @Html.LabelFor(model => model.Contract2)
+                        </div>
+                        <div class="input">
+                            @Html.DropDownListFor(model => model.Contract2, (IList<SelectListItem>)ViewBag.Contract)
+                        </div>
+                    </div>
+                    <div class="contractDateFrom">
+                        <div class="input">
+                            <span>From</span>
+                            @Html.DatePickerFor(model => model.FromDate2)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                    <div class="contractDateTo">
+                        <div class="input">
+                            <span>To</span>
+                            @Html.DatePickerFor(model => model.ToDate2)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="contractInfo">
+                        <div class="label">
+                            @Html.LabelFor(model => model.Contract3)
+                        </div>
+                        <div class="input">
+                            @Html.DropDownListFor(model => model.Contract3, (IList<SelectListItem>)ViewBag.Contract)
+                        </div>
+                    </div>
+                    <div class="contractDateFrom">
+                        <div class="input">
+                            <span>From</span>
+                            @Html.DatePickerFor(model => model.FromDate3)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                    <div class="contractDateTo">
+                        <div class="input">
+                            <span>To</span>
+                            @Html.DatePickerFor(model => model.ToDate3)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="contractInfo">
+                        <div class="label">
+                            @Html.LabelFor(model => model.Contract4)
+                        </div>
+                        <div class="input">
+                            @Html.DropDownListFor(model => model.Contract4, (IList<SelectListItem>)ViewBag.Contract)
+                        </div>
+                    </div>
+                    <div class="contractDateFrom">
+                        <div class="input">
+                            <span>From</span>
+                            @Html.DatePickerFor(model => model.FromDate4)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                    <div class="contractDateTo">
+                        <div class="input">
+                            <span>To</span>
+                            @Html.DatePickerFor(model => model.ToDate4)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="contractInfo">
+                        <div class="label">
+                            @Html.LabelFor(model => model.Contract5)
+                        </div>
+                        <div class="input">
+                            @Html.DropDownListFor(model => model.Contract5, (IList<SelectListItem>)ViewBag.Contract)
+                        </div>
+                    </div>
+                    <div class="contractDateFrom">
+                        <div class="input">
+                            <span>From</span>
+                            @Html.DatePickerFor(model => model.FromDate5)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                    <div class="contractDateTo">
+                        <div class="input">
+                            <span>To</span>
+                            @Html.DatePickerFor(model => model.ToDate5)
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                </div>
+
+                                <div class="line">
+                    <div class="label">
+                        @Html.LabelFor(model => model.History)
+                    </div>
+                    <div class="input">
+                        @Html.TextAreaFor(model => model.History)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <div class="input">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.Hidden("Authorize", (bool)ViewBag.Authorize)
+                <input type="button" value="Save" id="postform" class="space" />
+                <input type="button" id="delete" value="Delete" class="space" />
+                <input type="button" id="resetpassword" value="Reset Password" />
+            </div>
+        </div>
+    </div> 
+}

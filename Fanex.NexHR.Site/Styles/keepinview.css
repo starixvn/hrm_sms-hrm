@@ -1,0 +1,46 @@
+﻿#FromTime, #ToTime
+{
+    min-width: 60px;
+}
+
+.ddlfromtime, .ddltotime
+{
+    min-width: 60px;
+}
+
+.formrow .cross-day
+{
+}
+
+table.data tfoot.footleavedetail tr td
+{
+    font-weight: bold;
+    background: #EDF1DC;
+    text-align: right;
+}
+
+table.data tfoot.footleavedetail tr td#totalAnnualLeave
+{
+    text-align: center;
+    border-right: 1px solid #EDF1DC;
+}
+
+table.data tfoot.footleavedetail tr td#totalUnpaidLeave
+{
+    text-align: center;
+    border-right: 1px solid #EDF1DC;
+}
+
+.status2 td
+{
+	color: #3366CC !important;
+}
+
+.status3 td, .status3 td a
+{
+	color: #FF0000 !important;
+}
+
+.remark {
+	width:220px;
+}

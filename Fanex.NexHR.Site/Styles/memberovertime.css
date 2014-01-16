@@ -1,0 +1,57 @@
+﻿.container_24
+{
+    line-height: 26px;
+    }
+ .ui-corner-all
+ {
+     padding-top: 3px !important;
+     }
+ .labelforemployee
+ {
+     padding-left: 18px;
+     }
+.lablemonth
+ {
+     padding-left: 34px;
+     }
+.lableteam
+ {
+     padding-left: 36px;
+     }
+table.tabledata
+{
+    min-width: 983px;
+    }
+table.tabledata thead tr.headermenu th
+{
+    background: #EDEFE5;
+    }
+.status
+{
+    padding-right: 12px;
+    }
+.float-right
+{
+    float: right;
+    }
+.leftinfo
+{
+    text-decoration: underline;
+    font-style: italic;
+    }
+.header-title
+{
+    font-family: Abel,Arial,Helvetica,"myriad Pro",tahoma;
+    font-size: 1.8em;
+    text-shadow: 0 0 1px #DDDDDD;
+    font-weight: bold;
+    }
+#txtSubjectMail
+{
+    width: 350px;
+    }
+#txtContentMail
+{
+    width: 350px;
+    height: 118px;
+    }

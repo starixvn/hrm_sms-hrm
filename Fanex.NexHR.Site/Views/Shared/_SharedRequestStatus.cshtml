@@ -1,0 +1,37 @@
+﻿@model Fanex.NexHR.Models.Request.RequestEntity
+
+@{
+var request = (Fanex.NexHR.Models.Request.RequestEntity)Model;
+switch (request.Status.Id)
+{
+    case (byte)CurrentRequestStatus.Pending:
+        <td>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip @request.Status.ToString()" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
+        </td>
+        break;
+    case (byte)CurrentRequestStatus.Accepted:
+    case (byte)CurrentRequestStatus.NotAccepted:
+        <td>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+        </td>
+                                                                                                                                                                                               break;
+    case (byte)CurrentRequestStatus.Approved:
+    case (byte)CurrentRequestStatus.Rejected:
+        <td>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+        </td>   
+                                                                                                                                                                                               break;
+
+    case (byte)CurrentRequestStatus.Processed:
+    case (byte)CurrentRequestStatus.Void:
+        <td>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+        </td> 
+                                                                                                                                                                                   break;
+    default:
+     <td>
+        <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+    </td>   
+        break;
+}
+}

@@ -1,0 +1,174 @@
+﻿.subteam
+{
+    width: 240px;
+    height: 210px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border: solid 1px #ccc;
+    padding-bottom: 8px;
+}
+.subteam label
+{
+    display: block;
+    border-top: solid 1px #ccc;
+    padding-top: 4px;
+    margin-top: 4px;
+    line-height: 20px;
+}
+.subteam label:first-child
+{
+    border-top: none !important;
+}
+
+.linkUpdate
+{
+    margin-left: 5px;
+}
+
+/*Them*/
+
+.employeeInfo
+{
+    background-color: #fafafa;
+    border: 1px solid #ececec;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: 10px;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    color: #666666;
+    height: auto;
+}
+
+.boxtitle
+{
+    background-color: #E5E5E5;
+    background-image: -moz-linear-gradient(center top , #EBEBEB, #E5E5E5);
+    border-top: 1px solid #FAFAFA;
+    padding: 12px 12px;
+    font-family: "Myriad Pro" , Tahoma, REZ, Arial;
+    font-size: 16px;
+    text-shadow: 0.05em 0.05em #fff;
+    color: #777;
+    font-weight: bold;
+}
+
+.boxtitle img
+{
+    margin-left: 5px;
+}
+
+.boxcontent
+{
+    padding-bottom: 10px;
+}
+
+.line
+{
+    padding: 10px 0px;
+    border-bottom: 1px solid #e5e3e3;
+}
+
+.pcontent
+{
+    float: left;
+    text-align: left;
+    font-weight: bold;
+    max-width: 520px;
+}
+
+.label
+{
+    float: left;
+    text-align: right;
+    padding-left: 10px;
+    margin-right: 10px;
+    min-width: 150px;
+    margin-top: 6px;
+    font-weight: bold;
+}
+
+.bunhat
+{
+    min-width: 850px;
+}
+
+.menu
+{
+    text-align: center;
+    margin-top: 10px;
+}
+
+input.space
+{
+    margin-right: 10px;
+}
+
+.marginlable
+{
+    margin-top: 0px;
+}
+
+fieldset
+{
+    margin: 0px 0;
+}
+
+#IsLocal
+{
+    min-width: 110px;
+}
+
+#WorkingDays, #WorkingHours, #OffDaysbyWeek
+{
+    width: 90px;
+}
+
+input#resetpassword
+{
+    min-width: 120px;
+}
+
+.employeeInfo .boxtitle
+{
+    background-color: #d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.employeeInfo .boxcontent
+{
+    display: none;
+    padding: 5px;
+}
+
+.contractInfo
+{
+    width: 50%;
+    float: left;
+}
+
+.contractDateFrom
+{
+    float: left;
+}
+
+.contractDateFrom span
+{
+    font-weight: bold;
+}
+
+.contractDateTo span
+{
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#History
+{
+    width: 560px;
+}
+
+

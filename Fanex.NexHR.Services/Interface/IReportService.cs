@@ -1,0 +1,71 @@
+﻿// --------------------------------------------------------------------------
+// <copyright file="IReportService.cs" company="Nexcel Solutions Vietnam">
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Quinn.Vo" date="2013.9.20">Created</change>
+// </history>
+
+namespace Fanex.NexHR.Services.Interface
+{
+    using System;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.ViewModels;
+
+    public interface IReportService
+    {
+        IList<TotalWorkingHours> GetWorkingHoursList(
+            DateTime fromDate,
+            DateTime toDate,
+            int? empId,
+            string groupIds);
+
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
+            DateTime month,
+            int? empId,
+            string groupIds);
+        
+        IList<RequestsMonitoring> GetRequestMonitoring(
+            DateTime fromDate,
+            DateTime toDate,
+            int maxRequest,
+            int role,
+            int employeeID);
+
+        IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
+            DateTime fromTime,
+            DateTime toTime,
+            short type,
+            int? empId = null,
+            string groupIds = null,
+            int? excludeDeletedUsers = 1);
+
+        IList<LeaveSummary> GetAnnualLeaveBalanceReport(
+            int year,
+            int? empId,
+            string groupIds,
+            byte? isLocal);
+
+        IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
+
+        IList<ExtensionNoModel> GetAllExtensionNo();
+
+        IList<ExtensionNoModel> GetAllExtensionGroupInfo(bool isInternal, int? groupId);
+
+        bool AddNewExtensionNoMember(ExtensionNoModel model);
+
+        ExtensionNoModel GetEmployeeExtensionNoById(bool isInternal, int empExtID);
+
+        bool UpdateExtensionNoMember(ExtensionNoModel model);
+
+        bool DeleteExtensionNumber(int extId);
+
+        bool AddNewExternalGroup(string groupName);
+
+        bool EditExternalGroup(int groupId, string groupName);
+
+        bool DeleteExternalGroup(int groupId);
+    }
+}

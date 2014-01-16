@@ -1,0 +1,36 @@
+﻿@model Fanex.NexHR.Models.Request.RequestEntity
+
+@{
+var request = (Fanex.NexHR.Models.Request.RequestEntity)Model;
+switch (request.Status.Id)
+{
+    case (byte)CurrentRequestStatus.Pending:
+            <td>
+                @request.Requester.NickName
+            </td>
+        break;
+    case (byte)CurrentRequestStatus.Accepted:
+    case (byte)CurrentRequestStatus.NotAccepted:
+            <td>
+                @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())
+            </td>
+        break;
+    case (byte)CurrentRequestStatus.Approved:
+    case (byte)CurrentRequestStatus.Rejected:
+        <td>
+            @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())
+        </td>   
+        break;
+
+    case (byte)CurrentRequestStatus.Processed:
+    case (byte)CurrentRequestStatus.Void:
+        <td>
+            @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())
+        </td> 
+        break;
+    default:
+     <td>
+    </td>   
+        break;
+}
+}

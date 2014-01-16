@@ -1,0 +1,33 @@
+﻿$(document).ready(function () {
+    bindMenu('.Pending', 'pendingMenu');
+});
+
+function cancelRequest(id) {
+    confirm('Are you sure you want to cancel this request?', function () {
+        $.post(_global.root + 'keepinview/delete' + "/" + id, function (data) {
+            $('#row' + id).remove();
+            autoIndex();
+        });
+    });
+}
+
+function processRequest(command, eventElement) {
+    var requestId = $(eventElement).attr('requestId');
+
+    switch (command) {
+        case 'Edit':
+            location.href = _global.root + "KeepInView/Update/" + requestId;
+            break;
+        case 'Cancel':
+            cancelRequest(requestId);
+            break;
+    }
+}
+
+function bindMenu(element, menu) {
+    $(element).contextMenu({
+        menu: menu
+    }, function (command, eventElement) {
+        processRequest(command, eventElement);
+    });
+}

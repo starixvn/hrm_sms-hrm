@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+  <siteMapNode title="Root"  changeFrequency="Always"  updatePriority="Normal">
+    <siteMapNode title="Personal">
+      <siteMapNode title="My dashboard" controller="employee" action="myspace" icon="news" />
+      <siteMapNode title="Leave request" controller="leave" action="employeeview" icon="calendar7" hoverController="leave" hoverAction="create" hoverIcon="plus" />
+      <siteMapNode title="Change shift" controller="changeshift" action="employeeview" icon="clock3" hoverController="changeshift" hoverAction="create" hoverIcon="plus" />
+      <siteMapNode title="Late in - Early out" controller="lateinearlyout" action="employeeview" icon="clock2" hoverController="lateinearlyout" hoverAction="create" hoverIcon="plus" />
+      <siteMapNode title="Check in - Check out" controller="checkinout" action="employeeview" icon="clock1" hoverController="checkinout" hoverAction="create" hoverIcon="plus" />
+      <siteMapNode title="Keep in view" controller="keepinview" action="employeeview" icon="keepinview" hoverController="keepinview" hoverAction="create" hoverIcon="plus" />
+      <siteMapNode title="My overtime" controller="overtime" action="employeeview" icon="calendar1" />
+      <siteMapNode title="My Timesheet" controller="report" action="timesheet" icon="calendar8" />
+      <siteMapNode title="My calendar" controller="calendar" action="myworkingschedule" icon="calendar" />
+      <siteMapNode title="Members' requests" controller="request" action="member" icon="user1" roles="Approver, Verifier"/>
+      <siteMapNode title="Members' overtimes" controller="overtime" action="memberovertime" icon="user1" roles="Approver, Verifier"/>
+      <siteMapNode title="Requests statistic" controller="report" action="LeaderRequestMonitoring" icon="search" roles="Approver, Verifier" id="1"/>
+      <siteMapNode title="Schedule Arrange" controller="Calendar" action="ArrangeSchedule" icon="calendar" roles="ShiftManager"/>
+      <siteMapNode title="Shift Statistic" controller="Calendar" action="ShiftStatistic" icon="calendar" roles="ShiftManager, HR"/>
+      <siteMapNode title="My profile" controller="account" action="index" icon="user" />
+    </siteMapNode>
+    <siteMapNode title="HR space" roles="HR" >
+      <siteMapNode title="Employees' requests" controller="request" action="hrview" icon="user1" roles="HR" />
+      <siteMapNode title="Employees' Overtimes" controller="overtime" action="EmployeeOvertime" icon="user1" roles="HR" />
+      <siteMapNode title="Overtime Report" controller="overtime" action="YearlyReport" icon="calendar1" roles="HR" />
+      <siteMapNode title="Requests Statistics" controller="report" action="HRRequestMonitoring" icon="search" roles="HR"/>
+      <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
+      <siteMapNode title="Team management" controller="team" action="index" icon="setting" />
+      <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" />
+      <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
+      <siteMapNode title="Reports" controller="report" action="index" icon="search" roles="HR"/>
+    </siteMapNode>
+    <siteMapNode title="Company space">
+      <siteMapNode title="Contact list" controller="employee" action="index" icon="users" />
+      <siteMapNode title="Working calendars" controller="calendar" action="workingcalendars" icon="calendar" />
+      <!--<siteMapNode title="Employees' requests" controller="request" action="employeeview"  icon="user1" />-->
+      <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1" />
+      <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
+      <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6" />
+      <!--<siteMapNode title="Leave summary" controller="report" action="leavesummary" icon="calendar4" />-->
+      <siteMapNode title="Total working hours" controller="report" action="totalworkinghours" icon="clock" />
+      <siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />
+      <siteMapNode title="Shift info" controller="shift" action="index" icon="calendar3" />
+      <siteMapNode title="Extension numbers" controller="report" action="extensionno" icon="mobile" />
+      <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

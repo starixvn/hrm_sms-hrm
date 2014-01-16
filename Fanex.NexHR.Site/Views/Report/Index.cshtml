@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = Labels.Reports;
+}
+@section css{
+    @Url.CombresLink("myspacecss")
+}
+@section js{
+    @Url.CombresLink("myspacejs")
+}
+@section Breadcrumb {
+    <a class="step">HR</a> <a class="step">@ViewBag.Title</a>
+}
+<h2>@Labels.Reports</h2>
+<table class="data" id="reports">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                @Labels.ReportType
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                1
+            </td>
+            <td class="firstColumn">
+                @Html.ActionLink(Labels.TotalWorkingHourMonthly, "totalworkinghourmonthly", "report")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                2
+            </td>
+            <td class="firstColumn">
+                @Html.ActionLink(Labels.OvertimeReport, "OvertimeReport", "report")
+            </td>
+        </tr>
+
+    </tbody>
+</table>

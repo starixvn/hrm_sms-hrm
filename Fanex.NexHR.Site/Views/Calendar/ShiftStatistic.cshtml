@@ -1,0 +1,44 @@
+﻿@model ShiftStatisticViewModel
+@{
+    ViewBag.Title = @Labels.ShiftStatisticReport;
+}
+@section css{
+    @Url.CombresLink("shiftstatisticcss")
+}
+@section js{
+    @Url.CombresLink("shiftstatisticjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+<div class="container_24">
+        <div class="row">
+            <div class="grid_1">
+                @Labels.Team
+            </div>
+            <div class="grid_10">
+                <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
+                    @foreach (Team team in Model.Teams)
+                    { 
+                        <option value="@team.Id">@team.Name</option>
+                    }
+                </select>
+                
+                <input style="vertical-align: 0px" id="chkIsShowWholeCompany" type="checkbox" />
+                    <label for="chkIsShowWholeCompany"> Show whole company</label>
+            </div>
+            <div class="grid_2">
+                <input type="button" value="@Labels.Submit" id="btnSubmit"/>
+            </div>
+            <div class="clear"></div>
+        </div>
+        @Html.HiddenFor(model => model.FromDate)
+        @Html.HiddenFor(model => model.ToDate)
+
+</div>
+<div class="clear"></div>
+<div class="space"></div>
+<div class="clear"></div>
+<div class="space"></div>
+<div id="shiftStatistic"></div>

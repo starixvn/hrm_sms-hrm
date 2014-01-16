@@ -1,0 +1,26 @@
+<div>
+    <strong>Dear @Model.LeaderName</strong>
+</div>
+<p>
+    This is to inform you about your member, @Model.MemberName had a keep in view request
+    <br />
+    <br />
+    - Date: @Model.Date
+    <br />
+    - Shift: @Model.Shift
+    <br />
+    - Remark: @Model.Remark
+    <br />
+    <br />
+    Please process this request at: 
+    <a href="@Model.Url/keepinview/update/@Model.RequestId">
+        @Model.Url/keepinview/update/@Model.RequestId
+    </a>
+    <br />
+    <br />
+    ------------------------------------------------------
+    <br />
+    Any questions, please contact HR department.
+    <br />
+    Thanks
+</p>

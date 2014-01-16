@@ -1,0 +1,65 @@
+﻿#colordef .grid_2
+{
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    border: solid 1px #555;
+    border-radius: 3px;
+}
+#colordef .grid_4
+{
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    border: solid 1px #555;
+    border-radius: 3px;
+}
+.rowhover
+{
+    font-weight: bold;
+    text-shadow: 0 1px 0 #ff6600;
+}
+.offday
+{
+    background-color: #F8F89C !important;
+}
+.keepinviewday
+{
+    color: #ED4646 !important;
+    }
+.changeshift
+{
+    color: #ED4646 !important;
+}
+.holiday
+{
+    background-color: #F3AA4B !important;
+}
+.leaveday
+{
+    color: #ED4646 !important;
+}
+.leavehalfday2
+{
+    background-color: #D4E5D5 !important;
+}
+.annualleave
+{
+    background-color: #C7F391 !important;
+}
+.unpaidleave
+{
+    background-color: #EACDED !important;
+}
+.businesstrip
+{
+    background-color: #C1D6ED !important;
+}
+.weddingleave
+{
+    background-color: #7CD3E9 !important;
+}
+.multitypeleave
+{
+    color: #ED4646;
+}

@@ -1,0 +1,97 @@
+﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+<table class="data persist-area">
+    <thead>
+        <tr class="persist-header">
+            <th>
+                #
+            </th>
+            <th>@Labels.Team
+            </th>
+            <th>@Labels.Employee
+            </th>
+            <th>@Labels.FromDate
+            </th>
+            <th>@Labels.ToDate
+            </th>
+            <th>@Labels.CreatedDate
+            </th>
+            <th>@Labels.Remark
+            </th>
+            <th>@Labels.Status
+            </th>
+            <th>@Labels.History
+            </th>
+        </tr>
+    </thead>
+    @if (ViewBag.EntityList.Count > 0)
+    {
+        <tbody>
+            @{int index = 1;}
+            @foreach (var request in Model)
+            {
+                var requestModel = new
+                {
+                    EmployeeId = request.Requester.Id,
+                    Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
+                    RequestType = request.Type.RequestFilter
+                };
+
+                var requestDetail = new { requestid = @request.Id, type = @request.Type.RequestHistoryFilter };
+                
+                <tr id="row@(request.Id)">
+                    <td>
+                     @if ((bool)ViewBag.IsAllowChangeStatus)
+                     {
+                        <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@(index++)</a>
+                     }
+                     else
+                     {
+                         if ((bool)ViewBag.IsDailyRequest)
+                         {
+                             <a href="@Url.Action("dailyviewdetail", "request", requestDetail)">@(index++)</a>
+                         }
+                         else
+                         {
+                             <a href="@Url.Action("employeeviewdetail", "request", requestDetail)">@(index++)</a>
+                         }
+                     }
+                    </td>
+                    <td class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code
+                    </td>
+                    <td class="tooltip" title="@request.Requester.FullName">
+                        @request.Requester.NickName.ToString()
+                    </td>
+                    <td class="highlight">@request.FromDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    <td class="highlight">@request.ToDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
+                    </td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    { 
+                        <td class="tooltip" title="@request.Remark">
+                            <span class="icon remark" alt="remark" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
+                   @Html.Partial("Request/HR/SharedStatus", request)
+                    <td>
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                            @Labels.View </a>
+                    </td>
+                </tr>  
+            }
+        </tbody>
+    }
+    else
+    { 
+        @RazorHelper.DisplayNoInformation(colspan: 12);
+    }
+</table>
+@RazorHelper.HrMenu()
+@RazorHelper.ResetMenu()

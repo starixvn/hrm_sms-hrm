@@ -1,0 +1,80 @@
+﻿@using Fanex.NexHR.Models.Request
+@model MyOverTimeViewModel
+@{
+    ViewBag.Title = ViewBag.Employee+ "'s Overtime Request in " + ((DateTime)ViewBag.RequestedDate).ToString("MMM-yyyy");
+}
+@section css{
+    @Url.CombresLink("myovertimecss")
+}
+@section js{
+    @Url.CombresLink("myovertimerequestjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>
+    <a class="step">Update My Overtime Request</a>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{ 
+    @Html.Hidden("WorkingHours", (double)ViewBag.WorkingHours)
+    @Html.HiddenFor(x => x.EmpId)
+    <div class="grid_2 gridlabel fontbold">
+        @Html.LabelFor(model => model.Verifier)</div>
+    <div class="grid_5">
+        @if (Model.Verifier.Count() > 1)
+        {
+            @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, "--Select a Verifier--", new { @class = "dropdown" })
+        }
+        else
+        {
+            @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+        }
+    </div>
+   
+    <div class="grid_2 gridlabel fontbold">@Html.LabelFor(model => model.Approver)</div>
+    <div class="grid_5">
+        @if (Model.Approver.Count() > 1)
+        {
+            @Html.DropDownListFor(x => x.ApproverId, Model.Approver, "--Select an Approver--", new { @class = "dropdown" })
+        }
+        else
+        {
+            @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+        }
+    </div>
+    
+    <div class="grid_1 gridlabel fontbold statusmargin">@Labels.Status:
+    </div>
+    <div class="grid_7 gridlabel">@Model.OvertimeRequestStatus</div>
+   
+    <div class="float-right">
+        <input type="button" id="savefooter" value="@Labels.Save"/>
+        <input type="button" id="backfooter" value="@Labels.Back"/>
+    </div>
+    
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    
+    <div class="formrow" id="overtimeDetails">
+        @Html.Partial("OvertimeRequestDetails", Model.OvertimeRequest.ToList())
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    
+    <div class="float-right">
+        <input type="button" id="save" value="@Labels.Save"/>
+        <input type="button" id="back" value="@Labels.Back"/>
+    </div>
+     
+    <div id="errordialog" title="Update Failure!">
+    </div>
+}
+@RazorHelper.EmployeeProcessMenu()

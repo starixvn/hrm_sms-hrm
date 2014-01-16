@@ -1,0 +1,23 @@
+﻿@using Fanex.NexHR.Models.Request
+@section css{
+    @Url.CombresLink("memberrequestdetailpersonalspacecss")
+}
+@section js{
+    @Url.CombresLink("memberrequestdetailpersonalspacejs")
+}
+@section Breadcrumb {
+    <a class="step">Leader View</a> <span class="step">@ViewBag.Title</span>
+}
+@switch (Convert.ToInt32(HttpContext.Current.Request["type"]))
+{
+    case (int)RequestFilter.Leave: // Annual Leave
+        IList<RequestEntity> entityLeave = ViewBag.EntityList;
+        Html.RenderPartial("Request/Member/MemberLeaveDetail", entityLeave);
+        ViewBag.Title = Labels.ViewLeaveDetail;
+        break;
+    case (int)RequestFilter.ChangeShift: // Change Shift
+        IList<RequestEntity> entityChangeShift = ViewBag.EntityList;
+        Html.RenderPartial("Request/Member/MemberChangeShiftDetail", entityChangeShift);
+        ViewBag.Title = Labels.ViewChangeShiftDetail;
+        break;
+}

@@ -1,0 +1,95 @@
+﻿table.datasupervisor
+{
+    width: 550px;
+    text-align: center;
+    font-family: Arial;
+    font-size: 12px;
+    margin: 0 0 10px 0;
+    border: 1px solid #d2d2d2;
+}
+
+table.datasupervisor thead th
+{
+    border: 1px solid #d2d2d2;
+    background: #E3E4E6;
+    color: #333333;
+    padding: 5px;
+    height: 20px;
+    font-weight: normal;
+}
+
+table.datasupervisor thead th.supervisor
+{
+}
+
+table.datasupervisor thead th.request
+{
+    width: 180px;
+}
+
+table.datasupervisor td
+{
+    border: 1px solid #d2d2d2;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+table.datasupervisor td.left
+{
+    text-align: left;
+}
+
+.filter
+{
+    width: 828px;
+    padding: 10px;
+    background: #F4F4F4;
+    border: 1px solid #d2d2d2;
+}
+.filter *
+{
+    vertical-align: middle;
+}
+
+.addnew-supervisor
+{
+    padding: 10px;
+    border: 1px solid #d2d2d2;
+    background: #E3E4E6;
+    width: 528px;
+    border-bottom: none;
+}
+
+.addnew-supervisor .title
+{
+    width: 75px;
+    display: inline-block;
+}
+
+.addnew-supervisor button
+{
+    -moz-box-shadow:    1px 1px 3px 3px #f2f2f2;
+	-webkit-box-shadow: 1px 1px 3px 3px #f2f2f2;
+	box-shadow:         1px 1px 3px 3px #f2f2f2;
+	width: 242px;
+}
+
+.addnew-supervisor .control
+{
+    display: inline-block;
+}
+
+.addnew-supervisor .add
+{
+    float: right;
+    width: 176px;
+    display: inline-block;
+    text-align: left;
+    padding-top: 7px;
+}
+
+.addnew-supervisor *
+{
+    vertical-align: middle;
+}

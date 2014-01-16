@@ -1,0 +1,36 @@
+﻿@using Fanex.NexHR.Models.Request
+@model MyOverTimeViewModel
+@{
+    ViewBag.Title = Model.Employee + " 's " + Labels.OvertimeReport + " in " + ((DateTime)ViewBag.RequestedDate).ToString("MMM-yyyy");
+}
+@section css{
+    @Url.CombresLink("myovertimecss")
+}
+@section js{
+    @Url.CombresLink("myovertimerequestjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> 
+    <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.LeaveRequest</a>
+    <a class="step">@Model.Employee's @Labels.OvertimeReport Details</a>
+}
+@*<h2>@ViewBag.Title</h2>*@
+@using (Html.BeginForm())
+{    
+     <div class="grid_2 gridlabel title">
+         @ViewBag.Title
+    </div>
+    <input type="button" id="backHrReport" class="float-right" value="@Labels.Back"/>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="formrow" id="overtimeDetails">
+        @Html.Partial("OvertimeRequestDetails", Model.OvertimeRequest.ToList())
+    </div>
+    
+     
+}
+@RazorHelper.EmployeeProcessMenu()

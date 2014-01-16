@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = Labels.OvertimeReport;
+}
+@section css{
+    @Url.CombresLink("overtimereportcss")
+}
+@section js{
+    @Url.CombresLink("overtimereportjs")
+}
+@section Breadcrumb {
+    <a class="step">HR Space</a> <a class="step">@ViewBag.Title</a>
+}
+<div id="roundbar-blue">
+    <ul>
+        <li class="first" id="OTSummary"><a href="@Url.Action("yearlyreport", "overtime")">Overtime Report</a> </li>
+        <li><a id="OTDetails" href="@Url.Action("OTExcelReport", "overtime")">Overtime Report Details</a> </li>
+    </ul>
+</div>
+ <div class="clear">
+    </div>        
+    <div class="space">
+    </div> 
+    <div class="clear">
+    </div>        
+    <div class="space">
+    </div> 
+
+
+@using (Html.BeginForm())
+{
+    <div class="container_24 bunhat">
+        <div class="grid_24">
+            <div class="grid_1 gridlabel">
+                Year:
+            </div>
+            <div class="grid_2">
+                @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+            </div>
+            <div class="grid_2 gridlabel">
+                Calendar:
+            </div>
+            <div class="grid_3">
+                @{
+    var calendarType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Fiscal", Value = "1"}, 
+                        new SelectListItem() {Text = "Normal", Value = "0"},
+                    };
+                }
+                @Html.DropDownList("calendar", calendarType)
+            </div>
+            <div class="grid_1 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    { 
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="grid_2 gridlabel">
+                Employee
+            </div>
+            <div class="grid_5">
+                @Html.Editor("Employee")
+                @Html.Hidden("EmpId")
+            </div>
+            <div class="grid_2 gridlabel">
+                <input type="button" value="@Labels.Submit" id="submit"/>
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>        
+    <div class="space">
+    </div> 
+    <div class="clear">
+    </div>        
+    <div class="space">
+    </div> 
+    
+    <div class="formrow" id="yearlyReportDetails">
+    </div>
+    
+}

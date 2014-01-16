@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Overtime Report Details";
+}
+@section css{
+    @Url.CombresLink("overtimereportcss")
+}
+@section js{
+    @Url.CombresLink("overtimereportdetailsjs")
+}
+@section Breadcrumb {
+    <a class="step">HR Space</a> <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.OvertimeReport</a>
+    <a class="step">@ViewBag.Title</a>
+}
+@using (Html.BeginForm())
+{
+    @Html.Hidden("EmpId")
+    <div class="container_24 bunhat">
+        <div class="grid_24">
+            <div class="grid_2 gridlabel">@Labels.Employee</div>
+            <div class="grid_6">
+                @Html.TextBox("Employee")
+            </div>
+            <div class="grid_2 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    { 
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="grid_1 gridlabel">@Labels.Title</div>
+            <div class="grid_5">
+                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="grid_2 gridlabel">
+                From Date
+            </div>
+            <div class="grid_6">
+                @Html.DatePicker("fromDate", DateTime.Now.AddMonths(-1))
+            </div>
+            <div class="grid_2 gridlabel">
+                To Date
+            </div>
+            <div class="grid_4">
+                @Html.DatePicker("toDate", DateTime.Now.Date)
+            </div>
+            <div class="grid_6">
+                <input type="button" value="Preview" id="submitOTDetails"/>
+                <input type="button" id="excel" value="Excel" />
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    
+    <div id="OTExcelReportDetails"></div>
+}

@@ -1,0 +1,198 @@
+﻿@model IList<Fanex.NexHR.ViewModels.WorkingCalendarsViewModel>
+@section css{
+    @Url.CombresLink("workingcalendarscss")
+}
+@section js{
+    @Url.CombresLink("workingcalendarsjs")
+}
+@Html.Hidden("FromPreviousDate", ((DateTime)ViewBag.FromNewDate).AddDays(-7))
+@Html.Hidden("ToPreviousDate", ((DateTime)ViewBag.ToNewDate).AddDays(-7))
+@Html.Hidden("FromNextDate", ((DateTime)ViewBag.FromNewDate).AddDays(7))
+@Html.Hidden("ToNextDate", ((DateTime)ViewBag.ToNewDate).AddDays(7))
+<table id="example" border="0" cellpadding="0" cellspacing="0">
+    <thead>
+        @{
+            int daysInMonth = Model.Count != 0
+                ? Model[0].Days
+                : DateTime.DaysInMonth(ViewBag.Year, ViewBag.Month);
+
+            var fromDay = ((DateTime)ViewBag.FromNewDate);
+            var toDay = ((DateTime)ViewBag.ToNewDate);
+            var dayDiff = (toDay - fromDay).TotalDays;
+
+            var displayRowDays = fromDay.AddDays(-1);
+            <tr>
+                <th rowspan="2">
+                    Nick name
+                </th>
+                <th rowspan="2">
+                    Team
+                </th>
+                @for (int i = 0; i <= dayDiff; i++)
+                {
+                    <th colspan="">@fromDay.AddDays(i).ToString("dd MMM, yyyy")
+                    </th>
+                }
+
+
+            </tr>
+            <tr>
+                @for (int i = 0; i <= dayDiff; i++)
+                {
+                    if(i == dayDiff || i == dayDiff - 1)
+                    {
+                        <th class="weekend">
+                            @fromDay.AddDays(i).ToString("ddd")
+                        </th>
+                    }
+                    else
+                    {
+                        <th>
+                            @fromDay.AddDays(i).ToString("ddd")
+                        </th>
+                    }
+                }
+            </tr>                       
+                            
+        }
+    </thead>
+    <tbody>
+        @{
+            var leaves = string.Empty;
+            
+        }
+        @foreach (WorkingCalendarsViewModel employee in Model)
+        {
+            var day = 1;
+            <tr>
+                <th class="row-left">@employee.NickName
+                </th>
+                <th>@employee.Team
+                </th>
+                @foreach (var workingday in employee.WorkingSchedule)
+                {
+                    var shift = workingday.Title;
+                    leaves = string.Empty;
+
+                    if (!string.IsNullOrEmpty(shift) && shift[0].Equals('_'))
+                    { 
+                    <th class="ChangeShift">
+                        @shift.Substring(1)
+                    </th>
+                    }
+                    else if (!string.IsNullOrEmpty(shift) && shift[0].Equals('-'))
+                    {
+                        var shiftstring = shift.Substring(1);
+                        var arrLeaves = shiftstring.Split('/');
+
+                        for (int k = 0; (k < arrLeaves.Count()); k++)
+                        {
+                            leaves += arrLeaves[k].Trim() + "/";
+                        }
+
+                        if (leaves.Length > 0)
+                        {
+                            leaves = leaves.Substring(0, leaves.Length - 1);
+                        }
+
+                        if (arrLeaves.Count() > 1)
+                        {    
+                    <th class="leaveday leavehalfday2">
+                        @leaves
+                    </th>
+                        }
+                        else
+                        {
+                    <th class="leaveday">
+                        @leaves
+                    </th>
+                        }
+                    }
+                    else if (shift.Equals("AL"))
+                    { 
+                    <th class="leaveday annualleave">
+                        @shift
+                    </th>
+                    }
+                    else if (shift.Equals("UPL"))
+                    { 
+                    <th class="leaveday unpaidleave">
+                        @shift
+                    </th>
+                    }
+                    else if (shift.Equals("HAL"))
+                    { 
+                    <th class="leaveday">
+                        @shift
+                    </th>
+                    }
+                    else if (shift.Equals("OFF"))
+                    { 
+                    <th class="offday">
+                        @shift
+                    </th>
+                    }
+                    
+                    else if(shift.Equals("PH"))
+                    {
+                        <th class="holiday">
+                        @shift
+                    </th>
+                    }
+
+                    else if (shift.Equals("BL") || shift.Equals("BL1") || shift.Equals("BL2") || shift.Equals("BL3"))
+                    { 
+                    <th class="leaveday">
+                        @shift
+                    </th>
+                    }
+                    else if (shift.Equals("BT"))
+                    { 
+                    <th class="leaveday businesstrip">
+                        @shift
+                    </th>
+                    }
+                    else if(shift.Equals("WL"))
+                    {
+                        <th class="leaveday weddingleave">
+                        @shift
+                    </th>
+                    }
+                    else if (shift.IndexOf('/') > -1)
+                    {
+                        var arrLeaves = shift.Split('/');
+
+                        for (int k = 0; (k < arrLeaves.Count()); k++)
+                        {
+                            leaves += arrLeaves[k].Trim() + "/";
+                        }
+
+                        if (leaves.Length > 0)
+                        {
+                            leaves = leaves.Substring(0, leaves.Length - 1);
+                        }
+                                        
+                    <th class="leaveday leavehalfday2" title="@leaves">
+                        @leaves
+                    </th>
+                    }
+                    
+                    else if(shift.IndexOf("½")!= -1)
+                    {
+                        <th class="leaveday multitypeleave" style="background-color: @workingday.Color;">
+                        @shift
+                        </th>
+                    }
+
+                    else
+                    { 
+                    <th style="background-color: @workingday.Color;">
+                        @shift
+                    </th>
+                    }
+                    day++;
+                }
+            </tr>
+        }
+    </tbody>
+</table>

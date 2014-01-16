@@ -1,0 +1,28 @@
+<div>
+    <strong>Dear @Model.Leader</strong>
+</div>
+<p>
+    This is to inform you about your member, @Model.Member had a change working shift request
+    <br />
+    <br />
+    - From Date: @Model.FromDate
+    <br />
+    - To Date: @Model.ToDate
+    <br />
+   @* - Shift: @Model.FromShift to @Model.ToShift
+    <br />*@
+    - Remark: @Model.Remark
+    <br />
+    <br />
+    Please process this request at: 
+    <a href="@Model.Url/request/member">
+        @Model.Url/request/member
+    </a>
+    <br />
+    <br />
+    ------------------------------------------------------
+    <br />
+    Any questions, please contact HR department.
+    <br />
+    Thanks
+</p>

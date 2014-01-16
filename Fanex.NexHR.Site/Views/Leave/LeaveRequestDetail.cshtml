@@ -1,0 +1,144 @@
+﻿@using Fanex.NexHR.Core
+@model LeaveDetailViewModel
+@{
+    Layout = null;
+    }
+<table class="tabledata">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.ScheduleStatus</th>
+            <th>Work Type</th>
+            <th>@Labels.LeaveTypeName</th>
+            <th>@Labels.HalfDay</th>
+            <th>@Labels.LeaveCount</th>
+            <th>@Labels.FromTime</th>
+            <th>@Labels.ToTime</th>
+            <th class="tdhalfday"></th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.LeaveRequestDetail != null && Model.LeaveRequestDetail.Any())
+    {
+        double totalAnnualLeave = 0;
+        double totalUnpaidLeave = 0;
+        <tbody>
+        @foreach (var item in Model.LeaveRequestDetail)
+        {
+            if (!item.IsOffOrHoliday)
+            {
+                if (item.LeaveTypeId == Constants.AnnualLeave)
+                {
+                    if (item.IsHalfDay)
+                    {
+                        totalAnnualLeave += 0.5;
+                    }
+                    else
+                    {
+                        totalAnnualLeave += 1;
+                    }
+                }
+
+                if (item.LeaveTypeId == Constants.UnpaidLeave)
+                {
+                    if (item.IsHalfDay)
+                    {
+                        totalUnpaidLeave += 0.5;
+                    }
+                    else
+                    {
+                        totalUnpaidLeave += 1;
+                    }
+                }
+            }
+            
+            <tr>
+                <td class="tdleavedate" data-date="@item.LeaveDate.ToDateMonthYearFormatedDate()">
+                    @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
+                </td>
+                <td class="tdschedulestatus">
+                    @item.ScheduleStatus
+                </td>
+                
+                @if (!item.IsOffOrHoliday)
+                {
+                    var leaveSelected = string.Empty;
+                    var offSelected = string.Empty;
+                    var workSelected = string.Empty;
+                    if(item.WorkType == 2)
+                    {
+                        leaveSelected = "selected";
+                    }
+                    else if(item.WorkType == 1)
+                    {
+                        offSelected = "selected";
+                    }
+                    else
+                    {
+                        workSelected = "selected";
+                    }
+                    <td>
+                        <select class="ddlWorkType">
+                            <option value= "2" @leaveSelected>Leave</option>
+                            <option value= "3" @workSelected>On Duty</option>
+                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper())
+                            {
+                                 <option value= "1" @offSelected>Off</option>
+                            }
+                        </select>
+                    </td> 
+                    <td>
+                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })
+                    </td>
+                    <td>
+                        <span class="tdnumberleaves">
+                            @(item.IsHalfDay ? "0.5" : "1")
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToString("HH:mm")), new { @class = "ddlfromtime" })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToString("HH:mm")), new { @class = "ddltotime" })
+                    </td>
+                    <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
+                }
+                else
+                {
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td class="tdhalfday">-</td>
+                }
+            </tr>
+        }
+        </tbody>
+        <tfoot class="footleavedetail">
+            <tr>
+                <td colspan="5">@Labels.TotalAnnualLeave: </td>
+                <td colspan="1" id="totalAnnualLeave">@totalAnnualLeave</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="5">@Labels.TotalUnpaidLeave: </td>
+                <td colspan="1" id="totalUnpaidLeave">@totalUnpaidLeave</td>
+                <td colspan="3"></td>
+            </tr>
+        </tfoot>
+    }
+    else
+    {
+        <tbody>
+            <tr>
+                <td colspan="9">@Labels.NoInfo</td>
+            </tr>
+        </tbody>
+    }
+    
+</table>
+@Url.CombresLink("leavedetailjs")

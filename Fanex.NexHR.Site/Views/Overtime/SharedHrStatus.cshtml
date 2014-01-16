@@ -1,0 +1,31 @@
+﻿@model Fanex.NexHR.Models.Request.RequestEntity
+
+@{
+    var request = (Fanex.NexHR.Models.Request.RequestEntity)Model;
+
+    switch (request.Status.Id)
+    {
+        case (byte)CurrentRequestStatus.Approved:
+            <td>
+                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-pending menu">@request.Status.ToString()</a>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+            <td>
+                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-processed menu">@request.Status.ToString()</a>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Void:
+            <td>
+                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-void menu">@request.Status.ToString()</a>
+            </td>
+            break;
+                
+        case (byte)CurrentRequestStatus.Pending:
+        case (byte)CurrentRequestStatus.Accepted:
+        case (byte)CurrentRequestStatus.NotAccepted:
+        default:
+            <td class="tooltip"> <span class="status">@request.Status.ToString()</span> </td>
+                            break;
+    }
+}

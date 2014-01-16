@@ -1,0 +1,680 @@
+﻿@model Fanex.NexHR.Models.Employee
+@{
+    ViewBag.Title = Labels.MyProfile;
+}
+@section css{
+    @Url.CombresLink("accountcss")
+}
+@section js{
+    @Url.CombresLink("accountjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a><span class="step">@ViewBag.Title</span>
+}
+@using (Html.BeginForm("Index", "Account", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    if (ViewBag.IsUpdated == true)
+    {
+    <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div>
+    }
+    <div class="leftpersonal">
+        <div class="avatarbox">
+            <div class="avatar">
+                <img src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
+            </div>
+            <div class="pinfo">
+                <span class="name">@Model.FullName</span>
+                <p class="accinfo">
+                    @Model.DomainUsername<br>
+                    <br>
+                    Staff ID: @Model.Code
+                </p>
+            </div>
+        </div>
+        <div class="personalinformation">
+            <div class="boxtitle">
+                PERSONAL INFORMATION
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        Full Name:
+                    </div>
+                    <div class="pcontent role">
+                        @Model.FullName
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Nick Name:
+                    </div>
+                    <div class="pcontent role">
+                        @Model.NickName
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Chinese Name:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.ChineseName)
+                        }
+                        else
+                        {
+                            @Model.ChineseName
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        D.O.B:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DatePickerFor(model => model.DOB)
+                        }
+                        else
+                        {
+                            @Model.DOB.ToString("dd MMM, yyyy")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Place Of Birth:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.PlaceOfBirth)
+                        }
+                        else
+                        {
+                            @Model.PlaceOfBirth
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Ethnic:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Ethnic)
+                        }
+                        else
+                        {
+                            @Model.Ethnic
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Native:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Native)
+                        }
+                        else
+                        {
+                            @Model.Native
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Religion:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Religion)
+                        }
+                        else
+                        {
+                            @Model.Religion
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Gender:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DropDownListFor(model => model.Gender, (IList<SelectListItem>)ViewBag.Genders)
+                        }
+                        else
+                        {
+                            @(Model.Gender == 1 ? "Male" : "Female")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Nationality:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DropDownListFor(model => model.CountryCode, (IList<SelectListItem>)ViewBag.Countries)
+                        }
+                        else
+                        {
+                            @ViewBag.CountryName;
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Marriage:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages)
+                        }
+                        else
+                        {
+                            @Model.MarriageName
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Card No:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.CardNo)
+                        }
+                        else
+                        {
+                            @Model.CardNo
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Date Of Issue Of ID Card:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DatePickerFor(model => model.DateOfIdCard)
+                        }
+                        else if (Model.DateOfIdCard != null)
+                        {
+                            @Model.DateOfIdCard.Value.ToString("dd MMM, yyyy")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Place Of Issue Of ID Card:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.PlaceOfIdCard)
+                        }
+                        else
+                        {
+                            @Model.PlaceOfIdCard
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Passport No:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.PassportNo)
+                        }
+                        else
+                        {
+                            @Model.PassportNo
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Passport Exp:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.DatePickerFor(model => model.PassportExp)
+                        }
+                        else if (Model.PassportExp != null)
+                        {
+                            @Model.PassportExp.Value.ToString("dd MMM, yyyy")
+
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Qualification:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Qualification)
+                        }
+                        else
+                        {
+                            @Model.Qualification
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Major:
+                    </div>
+                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Major)
+                        }
+                        else
+                        {
+                            @Model.Major
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                @if (Model.WorkingDays > 0)
+                {
+                    <div class="line">
+                        <div class="label">
+                            Working Days:
+                        </div>
+                        <div class="pcontent">
+                            @Model.WorkingDays
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                }
+                @if (Model.WorkingHours > 0)
+                {
+                    <div class="line">
+                        <div class="label">
+                            Working Hours:
+                        </div>
+                        <div class="pcontent">
+                            @Model.WorkingHours
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="rightjob">
+        <div class="personalinformation">
+            <div class="boxtitle">
+                CONTACT DETAILS
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        Email:
+                    </div>
+                    <div class="pcontent">
+                        <a href="mailto:@Model.Email">@Model.Email</a>
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Phone:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Phone)
+                        }
+                        else
+                        {
+                            @Model.Phone
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Skype:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Skype)
+                        }
+                        else
+                        {
+                            <a href="skype:@(Model.Skype)?chat">@Model.Skype</a>
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Yahoo:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Yahoo)
+                        }
+                        else
+                        {
+                            <a href="ymsgr:SendIM?@(Model.Yahoo)">@Model.Yahoo</a>
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Address:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.Address)
+                        }
+                        else
+                        {
+                            @Model.Address
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                        Current Address:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.AllowEditPersonalInformation)
+                        {
+                            @Html.TextBoxFor(model => model.CurrentAddress)
+                        }
+                        else
+                        {
+                            @Model.CurrentAddress
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+                <div class="Jobinformation">
+            <div class="boxtitle">
+                JOB INFORMATION
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label">
+                        Job Title:
+                    </div>
+                    <div class="pcontent role">
+                        @ViewBag.JobTitle
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Team:
+                    </div>
+                    <div class="pcontent role">
+                        @Model.Team.Name
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Roles:
+                    </div>
+                    <div class="pcontent role">
+                        @Model.MemberRole()
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Group Date:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.JoinedDate != null)
+                        {
+                            var date = (DateTime)Model.JoinedDate;
+                            @date.ToString("dd MMM, yyyy")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Company Date:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.CompanyDate != null)
+                        {
+                            var date = (DateTime)Model.CompanyDate;
+                            @date.ToString("dd MMM, yyyy")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label">
+                        Confirmed Date:
+                    </div>
+                    <div class="pcontent">
+                        @if (Model.ConfirmedDate != null)
+                        {
+                            var date = (DateTime)Model.ConfirmedDate;
+                            @date.ToString("dd MMM, yyyy")
+                        }
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                @if (Model.ResignedDate != null)
+                {
+                    var date = (DateTime)Model.ResignedDate;
+                    <div class="line">
+                        <div class="label">
+                            Resigned Date:
+                        </div>
+                        <div class="pcontent">
+                            @date.ToString("dd MMM, yyyy")
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                }
+                <div class="line">
+                    <div class="label">
+                        Unit:
+                    </div>
+                    <div class="pcontent role">
+                        @Model.Unit
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+        <div class="attendacereport">
+            <div class="boxtitle">
+                ATTENDANCE REPORT
+            </div>
+            <div class="boxcontent">
+                <div class="line">
+                    <div class="label2">
+                        Annual Leave Balance:
+                    </div>
+                    <div class="pcontent">
+                        @ViewBag.Working.AnnualLeaveBalance day(s)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="label2">
+                        Keep In View Balance:
+                    </div>
+                    <div class="pcontent">
+                        @ViewBag.Working.KeepInViewBalance day(s)
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                @{
+                        if (ViewBag.DefaultCalendar == true)
+                        {
+                    <div class="line">
+                        <div class="label2">
+                            Default Working Calendar:
+                        </div>
+                        <div class="pcontent">
+                            <div class="schedule">
+                                <div class="day">
+                                    Mon
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Mon
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Tue
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Tue
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Wed
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Wed
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Thu
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Thu
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Fri
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Fri
+                                </div>
+                            </div>
+                            <div class="scheduleoff">
+                                <div class="day">
+                                    Sat
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Sat
+                                </div>
+                            </div>
+                            <div class="scheduleoff">
+                                <div class="day">
+                                    Sun
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Sun
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
+                        }
+                }
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+        @if (Model.AllowEditPersonalInformation)
+        {
+        <div class="submitWrapper">
+            <div class="input">
+                <input type="submit" value="@Labels.Save" class="button-primary submit"/>
+            </div>
+        </div>
+        }
+    </div>
+}

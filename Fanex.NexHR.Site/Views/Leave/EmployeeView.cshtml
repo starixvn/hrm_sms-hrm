@@ -1,0 +1,146 @@
+﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+@{
+    ViewBag.Title = Labels.LeaveRequest;
+}
+@section css{
+    @Url.CombresLink("myrequestcss")
+}
+@section js{
+    @Url.CombresLink("empleavejs")
+}
+@{
+    ViewBag.Title = Labels.LeaveRequest;
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{ 
+    <input type="hidden" value="Leave" id="RequestType" />
+        
+    <span>Year:</span>
+    @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
+    <div class="button-icon">
+        <span class="icon plus"></span>@Html.ActionLink("Leave request", "Create")</div>
+    <br />
+
+    <table class="data" id="data">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>@Labels.RefNo1
+                </th>
+                <th>@Labels.LeaveType
+                </th>
+                <th>@Labels.From
+                </th>
+                <th>@Labels.To
+                </th>
+                <th>@Labels.Total
+                </th>
+                <th>@Labels.CreatedDate
+                </th>
+                <th>@Labels.Remark
+                </th>
+                <th>@Labels.Status
+                </th>
+                <th>@Labels.History
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int index = 1;}
+            @if (Model != null && Model.Count > 0)
+            {
+                var verifiedStatus = VerifiedStatus.Pending;
+                var approvedStatus = ApprovedStatus.Pending;
+                var processedStatus = HrStatus.Pending;
+                
+                foreach (var request in Model)
+                {
+                    verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
+                    approvedStatus = (ApprovedStatus)request.ApprovedStatus;
+                    processedStatus = (HrStatus)request.ProcessedStatus;
+                <tr id="row@(request.Id)">
+                    <td>@(index++)
+                    </td>
+                    <td>@request.RefNO
+                    </td>
+                    <td>
+                        <a class="viewdetail" 
+                        data-id="@request.Id" 
+                        data-verifier="@request.VerifiedBy.NickName"
+                        data-verifier-status="@verifiedStatus"
+                        data-verified-date="@(request.VerifiedDate.HasValue ? request.VerifiedDate.ToShortFormatedDate() : string.Empty)"
+                        data-approver="@request.ApprovedBy.NickName"
+                        data-approver-status="@approvedStatus"
+                        data-approved-date="@(request.ApprovedDate.HasValue ? request.ApprovedDate.ToShortFormatedDate() : string.Empty)"
+                        data-hr="@request.HrBy.NickName"
+                        data-hr-status="@processedStatus"
+                        data-processed-date="@(request.HrDate.HasValue ? request.HrDate.ToShortFormatedDate() : string.Empty)"
+                        href="~/Leave/Detail/@request.Id">@request.LeaveType</a>
+                    </td>
+                    @if (request.TotalDays < 1)
+                    { 
+                        <td class="ddMMyyyy highlight">@request.FromDate.ToShortFormatedDate()
+                        </td>
+                        <td class="ddMMyyyy highlight">@request.ToDate.ToShortFormatedDate()
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()
+                        </td>
+                        <td class="ddMMyyyy highlight">@request.ToDate.ToDateMonthYearFormatedDate()
+                        </td>
+                    }
+                    <td class="highlight">@request.TotalDays.ToString("0.0")
+                    </td>
+                    <td class="ddMMyyyy tooltip" title="@request.CreatedDate.ToShortFormatedDate()" >
+                        @request.CreatedDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    { 
+                        <td class="tooltip" title="@request.Remark">
+                            <span class="icon remark" alt="remark" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
+                    @Html.Partial("_SharedRequestStatus", request)
+                    <td>
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                            @Labels.View </a>
+                    </td>
+                </tr>
+                }
+
+            }
+            else
+            { 
+                @RazorHelper.DisplayNoInformation(colspan: 10);
+            }
+        </tbody>
+    </table>
+}
+@*<div id="dialogRequestDetail"></div>*@
+<div id="dialog-reason" title="Reason reedit" style="display: none;">
+    <div>
+        <span>Please input the reason for this reedit!</span>
+    </div>
+    <br />
+    <div>
+        <textarea id="txtReason" rows="2" cols="20"></textarea>
+    </div>
+</div>
+@RazorHelper.EmployeeProcessMenu()
+@RazorHelper.EmployeeReeditMenu()
+<div id="dialoghistorycontent" />

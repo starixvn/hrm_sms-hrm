@@ -1,0 +1,456 @@
+﻿// --------------------------------------------------------------------------
+// <copyright file="LeaveController.cs" company="Nexcel Solutions Vietnam">
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
+// </history>
+
+namespace Fanex.NexHR.Controllers.Request
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.ViewModels;
+
+    /// <summary>
+    /// Leave Controller.
+    /// </summary>
+    public class LeaveController : BaseController
+    {
+        private readonly ILeaveRequestService _leaveRequestService;
+        private readonly IEmployeeService _employeeService;
+        private readonly ILeaveTypeService _leaveTypeService;
+        private readonly IWorkingCalendarService _workingCalendarService;
+        #region Ctor
+        public LeaveController()
+            : this(null, null, null, null)
+        {
+        }
+
+        public LeaveController(
+            ILeaveRequestService leaveRequestService,
+            IWorkingCalendarService workingCalendarService = null,
+            IEmployeeService employeeService = null,
+            ILeaveTypeService leaveTypeService = null)
+        {
+            _leaveRequestService = leaveRequestService ?? new LeaveRequestService();
+            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            _employeeService = employeeService ?? new EmployeeService();
+            _leaveTypeService = leaveTypeService ?? new LeaveTypeService();
+        }
+        #endregion
+
+        /// <summary>
+        /// ActionResult Create.
+        /// </summary>
+        /// <returns>View Create.</returns>
+        public ActionResult Create()
+        {
+            var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
+            var employeeBalance = _leaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
+            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var leaveTypes = _leaveTypeService.GetAll();
+            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
+
+            var verifierList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            var approverList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+
+            var model = new LeaveRequestViewModel
+            {
+                LeaveTypeId = Constants.AnnualLeave,
+                Employee = employee.NickName + " (" + employee.FullName + ")",
+                DisplayName = employee.DisplayName,
+                EmployeeId = employee.Id,
+                FromDate = DateTime.Now.Date,
+                ToDate = DateTime.Now.Date,
+                TotalDays = 1,
+                By = this.CurrentUser.Id,
+                UnavailDates = listUnavailDates,
+                LeaveTypeList = leaveTypes,
+                TotalRequest = NumberRequestInMonth(),
+                VerifierList = verifierList,
+                ApproverList = approverList,
+                EmployeeBalance = employeeBalance
+            };
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Function create new request.
+        /// </summary>
+        /// <param name="request">Format request string.</param>
+        /// <param name="requestDetails">Format request detail string.</param>
+        /// <returns>Action Result.</returns>
+        [HttpPost]
+        [ValidateInput(false)] 
+        public ActionResult Create(string request, string requestDetails)
+        {
+            var errorCode = 0;
+            var message = string.Empty;
+            var leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
+            var leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            leaveRequest.RequestDetail = leaveRequestDetail;
+            leaveRequest.CreatedDate = DateTime.Now;
+            leaveRequest.CreatedBy = this.CurrentUser.Id;
+
+            _leaveRequestService.InsertLeaveRequest(leaveRequest, out errorCode, out message);
+
+            return Json(new { errorCode = errorCode, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// ActionResult Update.
+        /// </summary>
+        /// <param name="id">WorkingTimeRequest id.</param>
+        /// <returns>View update.</returns>
+        public ActionResult Update(int id)
+        {
+            var leaveRequest = _leaveRequestService.GetLeaveRequestById(id);
+            if (leaveRequest == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, leaveRequest.EmployeeId))
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
+            var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
+            var employeeBalance = _leaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, id, DateTime.Now.Date);
+            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var leaveTypes = _leaveTypeService.GetAll();
+            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
+            var verifierList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            var approverList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+
+            leaveRequest.UnavailDates = listUnavailDates;
+            leaveRequest.LeaveTypeList = leaveTypes;
+            leaveRequest.TotalRequest = NumberRequestInMonth();
+            leaveRequest.VerifierList = verifierList;
+            leaveRequest.ApproverList = approverList;
+            leaveRequest.EmployeeBalance = employeeBalance;
+
+            ViewBag.IsView = false;
+            return View(leaveRequest);
+        }
+
+        /// <summary>
+        /// Function update leave request.
+        /// </summary>
+        /// <param name="request">Format request string.</param>
+        /// <param name="requestDetails">Format request detail string.</param>
+        /// <returns>Action Result.</returns>
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Update(string request, string requestDetails)
+        {
+            var errorCode = 0;
+            var message = string.Empty;
+            var leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
+            var leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            leaveRequest.RequestDetail = leaveRequestDetail;
+            leaveRequest.CreatedBy = this.CurrentUser.Id;
+
+            _leaveRequestService.UpdateLeaveRequest(leaveRequest, out errorCode, out message);
+
+            return Json(new { errorCode = errorCode, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// ActionResult Detail.
+        /// </summary>
+        /// <param name="id">WorkingTimeRequest id.</param>
+        /// <returns>View Detail.</returns>
+        public ActionResult Detail(int id)
+        {
+            var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
+            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var leaveTypes = _leaveTypeService.GetAll();
+            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
+            var verifierList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            var approverList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+
+            var leaveRequest = _leaveRequestService.GetLeaveRequestById(id);
+            leaveRequest.UnavailDates = listUnavailDates;
+            leaveRequest.LeaveTypeList = leaveTypes;
+            leaveRequest.TotalRequest = NumberRequestInMonth();
+            leaveRequest.VerifierList = verifierList;
+            leaveRequest.ApproverList = approverList;
+
+            ViewBag.IsView = true;
+            return View(leaveRequest);
+        }
+
+        [HttpGet]
+        public ActionResult EmployeeView()
+        {
+            return EmployeeView(DateTime.Now.Year);
+        }
+
+        /// <summary>
+        /// ActionResult EmployeeView.
+        /// </summary>
+        /// <param name="year">Inputted year.</param>
+        /// <returns>View Employee's Leave Request.</returns>
+        [HttpPost]
+        public ActionResult EmployeeView(int year)
+        {
+            ViewBag.Year = year;
+            IList<RequestEntity> entityList = _leaveRequestService.GetLeaveRequests(
+                ((short)RolesEnum.Member).ToString(),
+                new DateTime(year, 1, 1),
+                new DateTime(year, 12, 31),
+                string.Empty,
+                true,
+                this.CurrentUser.Id);
+
+            return View(entityList);
+        }
+
+        public int GetLeaveType(int id)
+        {
+            return _leaveTypeService.GetLeaveType(id).IsLeaveDuringWorking ? 1 : 0;
+        }
+
+        public ActionResult GetVerifiers(int employeeId, int requestType)
+        {
+            var verifierList = _employeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Verifier, requestType);
+
+            return Json(verifierList, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetApprovers(int employeeId, int requestType)
+        {
+            var approverList = _employeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Approver, requestType);
+
+            return Json(approverList, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId)
+        {
+            var employeeBalance = _leaveRequestService.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, DateTime.Now.Date);
+
+            return Json(employeeBalance, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Action to get leave request detail base employeeId, FromDate, ToDate.
+        /// </summary>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="fromDate">From Date.</param>
+        /// <param name="toDate">The To Date.</param>
+        /// <param name="requestId">Request Id.</param>
+        /// <returns>Action Result.</returns>
+        public ActionResult LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
+        {
+            var leaveTypes = _leaveTypeService.GetAll();
+            var workingCalendars = _workingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
+            var leaveRequestDetailList = new List<LeaveDetailModel>();
+            if (requestId != -1)
+            {
+                leaveRequestDetailList = _leaveRequestService.GetLeaveRequestDetailsById(requestId);
+            }
+
+            leaveRequestDetailList = ConvertToLeaveRequestDetail(workingCalendars, leaveRequestDetailList, fromDate, toDate);
+
+            var model = new LeaveDetailViewModel
+            {
+                LeaveRequestDetail = leaveRequestDetailList,
+                LeaveTypeList = leaveTypes
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult SendReasonReeditToSupervisor(long requestId, string reason)
+        {
+            var errorMessage = string.Empty;
+            var errorCode = 0;
+
+            _leaveRequestService.SendReasonReeditToSupervisor(requestId, this.CurrentUser.Id, reason, out errorCode, out errorMessage);
+
+            return Json(new { errorCode = errorCode, errorMessage = errorMessage }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Function to convert from LeaveDetailModel get DB with WorkingCalendarModel.
+        /// </summary>
+        /// <param name="workingCalendars">List WorkingCalendarModel.</param>
+        /// <param name="leaveRequestDetailInput">List LeaveDetailModel.</param>
+        /// <param name="fromDate">From Date.</param>
+        /// <param name="toDate">The To Date.</param>
+        /// <returns>List LeaveDetail Model.</returns>
+        [NonAction]
+        private List<LeaveDetailModel> ConvertToLeaveRequestDetail(
+            IList<WorkingCalendarModel> workingCalendars,
+            IList<LeaveDetailModel> leaveRequestDetailInput,
+            DateTime fromDate,
+            DateTime toDate)
+        {
+            var leaveRequestDetailOutput = new List<LeaveDetailModel>();
+            if (fromDate <= toDate)
+            {
+                var numberDays = (toDate - fromDate).Days + 1;
+                var tempDate = DateTime.Now.Date;
+                var tempScheduleStatus = string.Empty;
+                IEnumerable<WorkingCalendarModel> tempWokingCalendars = null;
+                IEnumerable<LeaveDetailModel> tempLeaveDetailModels = null;
+                WorkingCalendarModel tempWokingCalendar = null;
+
+                for (int i = 0; i < numberDays; i++)
+                {
+                    tempLeaveDetailModels = null;
+                    tempDate = fromDate.AddDays(i);
+                    tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.LeaveDate == tempDate));
+                    tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
+
+                    if (tempWokingCalendars != null && tempWokingCalendars.Any())
+                    {
+                        tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
+                        AddLeaveRequestExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempWokingCalendar);
+                    }
+                    else
+                    {
+                        AddLeaveRequestNotExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempDate);
+                    }
+                }
+            }
+
+            return leaveRequestDetailOutput.OrderBy(t => t.LeaveDate).ThenBy(t => t.FromTime).ToList();
+        }
+
+        /// <summary>
+        /// Function to get number leave request in month.
+        /// </summary>
+        /// <returns>Number of request.</returns>
+        [NonAction]
+        private decimal NumberRequestInMonth()
+        {
+            decimal numberDaysOfRequest = 0;
+            var year = DateTime.Now.Year;
+            var month = DateTime.Now.Month;
+
+            IList<RequestEntity> entityList = _leaveRequestService.GetLeaveRequests(
+                ((short)RolesEnum.Member).ToString(),
+                new DateTime(year, month, 1),
+                new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                string.Empty,
+                true,
+                this.CurrentUser.Id);
+            if (entityList != null)
+            {
+                foreach (var request in entityList)
+                {
+                    if (request.Status.Id != (byte)CurrentRequestStatus.Rejected)
+                    {
+                        numberDaysOfRequest += request.TotalDays;
+                    }
+                }
+            }
+
+            return numberDaysOfRequest;
+        }
+
+        /// <summary>
+        /// Function to add a leave request detail with exist working calendar. 
+        /// </summary>
+        /// <param name="leaveRequestDetailOutput">Output List LeaveDetailModel.</param>
+        /// <param name="tempLeaveDetailModels">Input List LeaveDetailModel.</param>
+        /// <param name="tempWokingCalendar">WorkingCalendar Model.</param>
+        [NonAction]
+        private void AddLeaveRequestExistCalendar(
+           List<LeaveDetailModel> leaveRequestDetailOutput,
+           IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
+           WorkingCalendarModel tempWokingCalendar)
+        {
+            string tempScheduleStatus = string.Empty;
+            LeaveDetailModel tempLeaveDetailModel = null;
+            var isOffOrHoliday = tempWokingCalendar.IsOffDay || tempWokingCalendar.IsHoliday;
+
+            if (tempWokingCalendar.IsOffDay)
+            {
+                tempScheduleStatus = Labels.OffDay;
+            }
+            else if (tempWokingCalendar.IsHoliday)
+            {
+                tempScheduleStatus = Labels.Holiday;
+            }
+            else if (tempWokingCalendar.Shift != null)
+            {
+                tempScheduleStatus = tempWokingCalendar.Shift.Name;
+            }
+            else if (!tempWokingCalendar.IsLeaveDay)
+            {
+                tempScheduleStatus = Labels.NA;
+            }
+
+            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            {
+                foreach (var leaveDetail in tempLeaveDetailModels)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveDetailModel
+                {
+                    LeaveDate = tempWokingCalendar.WorkDate,
+                    ScheduleStatus = tempScheduleStatus,
+                    IsOffOrHoliday = isOffOrHoliday,
+                    LeaveTypeId = Constants.AnnualLeave,
+                    WorkType = 2
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
+
+        /// <summary>
+        /// Function to add a leave request detail with not exist working calendar.
+        /// </summary>
+        /// <param name="leaveRequestDetailOutput">Output List LeaveDetailModel.</param>
+        /// <param name="tempLeaveDetailModels">Input List LeaveDetailModel.</param>
+        /// <param name="workDate">Input the work date.</param>
+        [NonAction]
+        private void AddLeaveRequestNotExistCalendar(
+            List<LeaveDetailModel> leaveRequestDetailOutput, 
+            IEnumerable<LeaveDetailModel> tempLeaveDetailModels, 
+            DateTime workDate)
+        {
+            string tempScheduleStatus = Labels.NA;
+            LeaveDetailModel tempLeaveDetailModel = null;
+
+            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            {
+                foreach (var leaveDetail in tempLeaveDetailModels)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveDetailModel
+                {
+                    LeaveDate = workDate,
+                    ScheduleStatus = Labels.NA,
+                    LeaveTypeId = Constants.AnnualLeave,
+                    WorkType = 2
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
+    }
+}
