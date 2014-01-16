@@ -31,7 +31,7 @@ namespace Fanex.NexHR.Services.Interface
 
         Employee GetEmployeeByCode(string code);
 
-        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null);
+        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
         IList<Employee> GetEmployeesForRelatedTeam(int employeeId);
 
@@ -92,21 +92,21 @@ namespace Fanex.NexHR.Services.Interface
         bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
 
         bool UpdateAnnualLeaveTransaction(
-            long id, 
-            string description, 
+            long id,
+            string description,
             DateTime fromDate,
-            decimal deductDays, 
-            decimal creditDays, 
-            DateTime modifiedDate, 
+            decimal deductDays,
+            decimal creditDays,
+            DateTime modifiedDate,
             int modifiedBy);
 
         bool InsertAnnualLeaveTransaction(
-            int empId, 
-            string description, 
+            int empId,
+            string description,
             DateTime fromDate,
-            decimal deductDays, 
-            decimal creditDays, 
-            DateTime createdDate, 
+            decimal deductDays,
+            decimal creditDays,
+            DateTime createdDate,
             int createdBy);
 
         IList<UserChangedShift> GetUserChangedShift(DateTime date);

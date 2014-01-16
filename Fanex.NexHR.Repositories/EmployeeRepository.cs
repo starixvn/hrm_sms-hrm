@@ -149,18 +149,22 @@ namespace Fanex.NexHR.Repositories
         /// <param name="enable">Employee's status.</param>
         /// <param name="isDelete">Check available.</param>
         /// <param name="titleId">Title's id.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>A List of Employee entity.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<Employee> GetEmployees(
             string query,
             string groupIds,
             bool? enable = null,
             bool? isDelete = null,
-            int? titleId = null)
+            int? titleId = null,
+            bool? isLocal = null)
         {
             using (var db = new ObjectDb("GetEmployees"))
             {
                 var p = new DynamicParameters();
                 int? disableUsers, deleteUsers;
+                byte? localUser;
                 if (enable == true)
                 {
                     disableUsers = 0;
@@ -187,6 +191,19 @@ namespace Fanex.NexHR.Repositories
                     deleteUsers = null;
                 }
 
+                if (isLocal == false)
+                {
+                    localUser = 0;
+                }
+                else if (isLocal == true)
+                {
+                    localUser = 1;
+                }
+                else
+                {
+                    localUser = null;
+                }
+
                 p.Add("@titleId", titleId);
                 var entityList = db.Query<Employee, dynamic, Employee>(
                      (e, t) =>
@@ -195,7 +212,16 @@ namespace Fanex.NexHR.Repositories
                          return e;
                      },
                      splitOn: "TeamID",
-                     parameterValues: new { @query = query, @groupIds = groupIds, @totalRow = 0, @enable = disableUsers, @isDelete = deleteUsers, @titleId = titleId });
+                     parameterValues: new 
+                     { 
+                         @query = query,
+                         @groupIds = groupIds,
+                         @totalRow = 0,
+                         @enable = disableUsers,
+                         @isDelete = deleteUsers,
+                         @titleId = titleId,
+                         @isLocal = localUser 
+                     });
                 return entityList.ToList();
             }
         }

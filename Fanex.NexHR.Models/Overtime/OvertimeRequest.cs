@@ -61,5 +61,7 @@ namespace Fanex.NexHR.Models
         public bool IsHoliday { get; set; }
 
         public bool IsKeepInView { get; set; }
+
+        public bool IsChangeShift { get; set; }
     }
 }

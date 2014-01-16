@@ -131,7 +131,8 @@
         var NormalHours = parseFloat($('td #request_NormalHours', row).val());
         var OffHours = parseFloat($('td #request_OffHours', row).val());
         var PublicHours = parseFloat($('td #request_PublicHours', row).val());
-        var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
+        //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
+        var TotalShiftHours = parseFloat($("#WorkingHours").val());
 
         if (TotalHours >= (TotalShiftHours + 0.5)) {
             var object = $(this).first();
@@ -152,8 +153,6 @@
                     normalLitmit = parseFloat(normalLitmit.toFixed(1));
                 }
                 RangeTextBox(object, 0, normalLitmit);
-
-
             }
 
             if ($(this).attr("id") == "request_OffHours") {
@@ -173,7 +172,6 @@
                     offLimit = parseFloat(offLimit.toFixed(1));
                 }
                 RangeTextBox(object, 0, offLimit);
-
             }
 
             if ($(this).attr("id") == "request_PublicHours") {
@@ -191,7 +189,6 @@
                     publicLimit = parseFloat(publicLimit.toFixed(1));
                 }
                 RangeTextBox(object, 0, publicLimit);
-
             }
         }
         else {
@@ -199,18 +196,14 @@
         }
 
     });
-
     requestToCalculateOTHours();
-
     $('form').areYouSure();
-
 });
 
 
 function RangeTextBox(textbox, min, max) {
     var textboxValue = textbox.val();
     var check = textboxValue % 0.5 == 0;
-
     if (check) {
         var isNotInRange = (textboxValue < min) || (textboxValue > parseFloat(max));
         if (isNotInRange) {

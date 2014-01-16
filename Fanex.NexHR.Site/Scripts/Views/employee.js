@@ -75,10 +75,17 @@ function query(jobTitleId) {
         $("#group").multiselect("refresh");
     }
 
-    
+    var isLocal = $("#category").val();
+    if (isLocal == "0") {
+        isLocal = false;
+    }
+    if (isLocal == "1") {
+        isLocal = true;
+    }
+
     $.getJSON(
 	_global.root + 'api/employee/getemployees'
-	, { query: query, groupIds: groups, enable: enable, isDelete: isDelete, titleId: jobTitleId }
+	, { query: query, groupIds: groups, enable: enable, isDelete: isDelete, titleId: jobTitleId, isLocal: isLocal }
 	, function (data) {
 	    //console.log(data);
 	    if (data.length > 0) {
@@ -159,5 +166,5 @@ function exportExcel(object) {
     }
 
     location.href = url;
-    
+
 }

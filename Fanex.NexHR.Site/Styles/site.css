@@ -906,3 +906,7 @@ table.tabledata td.left
     text-align: left;
 }
 
+select.category
+{
+    min-width: 90px;
+}

@@ -14,17 +14,49 @@
     var enable = true;
 </script>
 <h2>@ViewBag.Title</h2>
-<div>
-    @Labels.Keyword
-    <input id="keyword" type="text" placeholder="@Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark" />
-    @Labels.Team
-    <select id="group" multiple="multiple" class="team-select">
-        @foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
-        { 
-            <option value="@item.Id">@item.Name</option>
-        }
-    </select>
-    <input id="query" type="button" value="Submit" />
+<div class="container_24 bunhat">
+    <div class="grid_24">
+        <div class="grid_2 gridlabel">
+            Category
+        </div>
+        <div class="grid_3">
+            @{
+                var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+            }
+            @Html.DropDownList("category", category, new { @class = "category" })
+        </div>
+        <div class="grid_2 gridlabel">
+            @Labels.Keyword
+        </div>
+        <div class="grid_7">
+            <input id="keyword" type="text" placeholder="@Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark" />
+        </div>
+        <div class="grid_1 gridlabel">
+            @Labels.Team
+        </div>
+        <div class="grid_6">
+            <select id="group" multiple="multiple" class="team-select">
+                @foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+                { 
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <input id="query" type="button" value="Submit" />
+    </div>
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="clear">
+</div>
+<div class="space">
 </div>
 <table id="data" class="data persist-area">
     <thead>
@@ -32,7 +64,8 @@
             <th>
                 #
             </th>
-            <th>@Labels.Code</th>
+            <th>@Labels.Code
+            </th>
             <th>@Labels.Nick
             </th>
             <th>@Labels.Name
@@ -44,10 +77,13 @@
             </th>
             <th>@Labels.Skype
             </th>
-            <th>@Labels.Email</th>
+            <th>@Labels.Email
+            </th>
             <th>@Labels.Phone
             </th>
-            <th>Ext No</th>
+            <th>
+                Ext No
+            </th>
             <th style="width: 80px">@Labels.GroupDate
             </th>
         </tr>
@@ -55,42 +91,36 @@
     <tbody>
     </tbody>
 </table>
-<script id="itemTemplate" type="text/x-jquery-tmpl">   
-    
-    {{if ResignedDate }}
-       
-    {{else}}
-     <tr id="row${Id}">
-            <td>
-              ${index()}
-            </td>
-            <td class="left">${Code}</td>
-            <td class="nick" data-code="${Code}">
-                <a href="/employee/detail/${Id}">${NickName}</a>
-            </td>
-            <td class="left" style="width:110px">${FullName}</td>
-            <td title="${Team["Name"]}" class="tooltip">${Team["Code"]}</td>
-            <td class="left">${JobTitle}</td>
-            <td class="left"><a href="skype:${Skype}?chat">${Skype}</a></td>
-            <td class="left"><a href="mailto:${Email}">${Email}</a></td>
-            <td title="${Phone}">
-                {{if Phone != null && Phone.indexOf(",") > 0}}
-                    ${Phone.substring(0,Phone.indexOf(","))}
-                {{else}}
-                    ${Phone}
-                {{/if}}
-            </td>
-            <td class="left">${ExtensionNo}</td>
-            <td style="width:80px">
-                {{if JoinedDate}}
-                    ${jsonToShortDate(JoinedDate)}
+<script id="itemTemplate" type="text/x-jquery-tmpl">
+    <tr id="row${Id}">
+        <td>
+            ${index()}
+        </td>
+        <td class="left">${Code}</td>
+        <td class="nick" data-code="${Code}">
+            <a href="/employee/detail/${Id}">${NickName}</a>
+        </td>
+        <td class="left" style="width:110px">${FullName}</td>
+        <td title="${Team["Name"]}" class="tooltip">${Team["Code"]}</td>
+        <td class="left">${JobTitle}</td>
+        <td class="left"><a href="skype:${Skype}?chat">${Skype}</a></td>
+        <td class="left"><a href="mailto:${Email}">${Email}</a></td>
+        <td title="${Phone}">
+            {{if Phone != null && Phone.indexOf(",") > 0}}
+                ${Phone.substring(0,Phone.indexOf(","))}
+            {{else}}
+                ${Phone}
+            {{/if}}
+        </td>
+        <td class="left">${ExtensionNo}</td>
+        <td style="width:80px">
+            {{if JoinedDate}}
+                ${jsonToShortDate(JoinedDate)}
                     
-                {{/if}}
-            </td>      
+            {{/if}}
+        </td>      
             
-        </tr>
-    {{/if}}
-         
+    </tr>    
 </script>
 <script id="mytemplate" type="text/html">
 

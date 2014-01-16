@@ -30,7 +30,7 @@
         <tbody>
             @if (Model != null)
             {
-                foreach (var request in Model)
+                foreach (OvertimeRequest request in Model)
                 {                   
                 <tr id="row@(request.Id)">
                     @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
@@ -47,31 +47,71 @@
                         @request.Schedule
                     </td>
                     <td>@request.TimeIn
-                        @*<td class="highlight">@request.ToDate.ToString("HH:mm")</td>*@
                     </td>
                     <td>@request.TimeOut
                     </td>
                     <td class="totalHours">
-                        @if(request.TotalWorkHours > 0)
+                        @if (request.TotalWorkHours > 0)
                         {
                             @request.TotalWorkHours
                         }
                     </td>
-                    @if (@request.TotalWorkHours > 0
+                    @if (request.TotalWorkHours > 0 && request.IsChangeShift
                         && (ViewBag.Update) && (string)ViewBag.RequestStatus == "Pending")
                     {
                         @Html.HiddenFor(model => request.TotalShiftHours)
+
+                        
+                        //for normal day.
+                        if (!request.IsOffDay && !request.IsHoliday)
+                        {
                         <td>
                             @Html.TextBoxFor(model => request.NormalHours, new { @class = "inputDay" })
-                            @*<span class="errmsg"></span>*@
                         </td>
-                              
+                        }
+                        else
+                        {
+                        <td>
+                            @if (request.NormalHours > 0)
+                            {
+                                @request.NormalHours
+                            }
+                        </td>
+                        }
+
+                        // for Off day.
+                        if (request.IsOffDay)
+                        {
                         <td>
                             @Html.TextBoxFor(model => request.OffHours, new { @class = "inputDay" })
                         </td>
+                        }
+                        else
+                        {
+                        <td>
+                            @if (request.OffHours > 0)
+                            {
+                                @request.OffHours
+                            }
+                        </td>
+                        }
+                        
+                        //for Public Holiday.
+                        if (request.IsHoliday)
+                        {
                         <td>
                             @Html.TextBoxFor(model => request.PublicHours, new { @class = "inputDay" })
                         </td>
+                        }
+                        else
+                        {
+                        <td>
+                            @if (request.PublicHours > 0)
+                            {
+                                @request.PublicHours
+                            }
+                        </td>
+                        }
 
                         <td>
                             @Html.TextBoxFor(model => request.Remark)
@@ -112,12 +152,12 @@
                     }
                     <td>
                         @{
-                            if(request.Status != 0)
-                            {
-                                CurrentRequestStatus status = (CurrentRequestStatus)request.Status;
-                                <span>@status</span>
-                            }
-                         }
+                    if (request.Status != 0)
+                    {
+                        CurrentRequestStatus status = (CurrentRequestStatus)request.Status;
+                            <span>@status</span>
+                    }
+                        }
                     </td>
                     @Html.HiddenFor(model => request.ShiftId)
                 </tr>
