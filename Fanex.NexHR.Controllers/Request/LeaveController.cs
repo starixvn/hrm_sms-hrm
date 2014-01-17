@@ -58,7 +58,10 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
             var employeeBalance = _leaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
-            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var listUnavailDates = _employeeService.GetUnavailableDates(
+                this.CurrentUser.Id, 
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(3).AddDays(-1));
             var leaveTypes = _leaveTypeService.GetAll();
             leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
 
@@ -124,7 +127,11 @@ namespace Fanex.NexHR.Controllers.Request
 
             var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
             var employeeBalance = _leaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, id, DateTime.Now.Date);
-            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var listUnavailDates = _employeeService.GetUnavailableDates(
+                this.CurrentUser.Id,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(3).AddDays(-1));
+
             var leaveTypes = _leaveTypeService.GetAll();
             leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
             var verifierList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
@@ -171,7 +178,11 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Detail(int id)
         {
             var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
-            var listUnavailDates = _employeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var listUnavailDates = _employeeService.GetUnavailableDates(
+                this.CurrentUser.Id,
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(3).AddDays(-1));
+
             var leaveTypes = _leaveTypeService.GetAll();
             leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
             var verifierList = _employeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);

@@ -205,15 +205,6 @@ var LeaveRequest = function ($) {
                         }
                     }
                 });
-
-                //                $.getJSON(_global.root + 'api/employee/GetRangeDate',
-                //                { employeeId: LeaveRequest.employeeId.val(), fromDate: LeaveRequest.fromDate.val(), toDate: LeaveRequest.toDate.val() },
-                //                //                async = false,
-                //                function (response) {
-                //                    if (response != null) {
-                //                        LeaveRequest.totalDays.val(response);
-                //                    }
-                //                });
             }
         },
         leaveTypeChange: function () {
@@ -227,6 +218,9 @@ var LeaveRequest = function ($) {
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 $('.time').hide();
                 LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
+
+                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
             }
             else {
                 $("#grbHalfDay").show();
@@ -234,6 +228,14 @@ var LeaveRequest = function ($) {
                 LeaveRequest.enableControlforHalfday();
                 var leaveDetailContainer = $("#tbldetail");
                 leaveDetailContainer.empty();
+
+                $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
+                    function (response) {
+                        if (response != null) {
+                            LeaveRequest.fromDate.attr("disabledDate", response.join(","));
+                            LeaveRequest.toDate.attr("disabledDate", response.join(","));
+                        }
+                    });
             }
         },
         bindHalfDay: function () {
@@ -331,7 +333,7 @@ var LeaveRequest = function ($) {
                         }
                     });
 
-                    $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
+            $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
                     function (response) {
                         if (response != null) {
                             LeaveRequest.fromDate.attr("disabledDate", response.join(","));
