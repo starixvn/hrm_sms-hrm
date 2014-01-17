@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         UserLoginModel GetUserLoginByEmployeeId(int employeeId);
 
-        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null);
+        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
         IList<Employee> GetEmployeesForRelatedTeam(int employeeId);
 
@@ -73,11 +73,11 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
 
         bool AdjustAnnualLeaves(
-            string empIds, 
-            string description, 
+            string empIds,
+            string description,
             DateTime fromDate,
-            decimal deductDays, 
-            decimal creditDays, 
+            decimal deductDays,
+            decimal creditDays,
             DateTime createdDate,
             int createdBy,
             out int errorCode,
@@ -91,20 +91,20 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool UpdateAnnualLeaveTransaction(
             long id,
-            string description, 
+            string description,
             DateTime fromDate,
-            decimal deductDays, 
-            decimal creditDays, 
-            DateTime modifiedDate, 
+            decimal deductDays,
+            decimal creditDays,
+            DateTime modifiedDate,
             int modifiedBy);
 
         bool InsertAnnualLeaveTransaction(
-            int empId, 
-            string description, 
+            int empId,
+            string description,
             DateTime fromDate,
-            decimal deductDays, 
-            decimal creditDays, 
-            DateTime createdDate, 
+            decimal deductDays,
+            decimal creditDays,
+            DateTime createdDate,
             int createdBy);
 
         IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees();

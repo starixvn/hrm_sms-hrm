@@ -36,16 +36,22 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             _employeeService = employeeService ?? new EmployeeService();
         }
 
-        public IQueryable<Employee> GetEmployees(string query, string groupIds = "", bool? enable = null, bool? isDelete = null, int? titleId = null)
+        public IQueryable<Employee> GetEmployees(
+            string query,
+            string groupIds = "", 
+            bool? enable = null,
+            bool? isDelete = null,
+            int? titleId = null,
+            bool? isLocal = null)
         {
             if (groupIds == null)
             {
                 groupIds = string.Empty;
             }
 
-            var entityList = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId).AsQueryable();
+            var entityList = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
 
-            return entityList;
+            return entityList.AsQueryable();
         }
 
         public IQueryable<Employee> GetSupervisors(string roleIds, string query, string excludeIds)
@@ -63,8 +69,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime date)
         {
             return _employeeService.GetUnavailableDates(
-                employeeId, 
-                new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1), 
+                employeeId,
+                new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1),
                 new DateTime(date.AddMonths(3).Year, date.AddMonths(3).Month, 1).AddDays(-1));
         }
 
