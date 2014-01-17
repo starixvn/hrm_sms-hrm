@@ -18,8 +18,9 @@
     //Click next link
     var next_click_allowed = true;
     $('#next').click(function (e) {
-        if (!next_click_allowed) return;
 
+        $("#blocker").show();
+        if (!next_click_allowed) return;
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromNextDate = $("#FromNextDate").val();
         var toNextDate = $("#ToNextDate").val();
@@ -27,19 +28,19 @@
         var displayDateTo = new Date(toNextDate);
         $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
         $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
-
         var group = $("#group").val() != null ? $("#group").val().join() : "";
         var title = $("#title").val() != null ? $("#title").val().join() : "";
         getWorkingCalendarDetails(fromNextDate, toNextDate, group, title);
 
         next_click_allowed = false;
-        window.setTimeout(function () { next_click_allowed = true; }, 500);
+        window.setTimeout(function () { next_click_allowed = true; $("#blocker").hide(); }, 1200);
     });
 
     //Click previous link
     var prev_click_allowed = true;
     $('#prev').click(function (e) {
         if (!prev_click_allowed) return;
+        $("#blocker").show();
 
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromPrevDate = $("#FromPreviousDate").val();
@@ -54,7 +55,7 @@
         getWorkingCalendarDetails(fromPrevDate, toPrevDate, group, title);
 
         prev_click_allowed = false;
-        window.setTimeout(function () { prev_click_allowed = true; }, 500);
+        window.setTimeout(function () { prev_click_allowed = true; $("#blocker").hide(); }, 1200);
 
     });
 
@@ -62,6 +63,7 @@
     var submit_click_allowed = true;
     $('#submit').click(function (e) {
         if (!submit_click_allowed) return;
+        $("#blocker").show();
 
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromDate = $("#OriginalFromDate").val();
@@ -76,7 +78,7 @@
         getWorkingCalendarDetails(fromDate, toDate, group, title);
 
         submit_click_allowed = false;
-        window.setTimeout(function () { submit_click_allowed = true; }, 500);
+        window.setTimeout(function () { submit_click_allowed = true; $("#blocker").hide(); }, 1200);
 
     });
 
@@ -84,16 +86,28 @@
         exportExcel();
     });
 
+    setTimeout(function () {
+        $("#blocker").hide();
+    }, 1200);
+
     function getWorkingCalendarDetails(fromDate, toDate, group, title) {
         var workingCalendarContainer = $("#workingCalendarDetails");
-        var employeeId = null;
+        var employeeId = $("#EmployeeId").val();
+        var isLocal = $("#category").val();
+        if (isLocal == "0") {
+            isLocal = 0;
+        }
+        if (isLocal == "1") {
+            isLocal = 1;
+        }
         $.get(_global.root + "calendar/WorkingCalendarDetails",
-            { "empId": employeeId, "fromDate": fromDate, "toDate": toDate, "groupId": group, "jobTitleId": title })
+            { "empId": employeeId, "fromDate": fromDate, "toDate": toDate, "groupId": group, "jobTitleId": title, isLocal: isLocal })
                     .done(function (content) {
                         workingCalendarContainer.empty();
+                        //workingCalendarContainer.html(content);
                         workingCalendarContainer.html(content).dataTable({
-                            //"bProcessing": true,
-                            "sScrollY": "570px",
+                            //                            "bprocessing": true,
+                            "sScrollY": "520px",
                             "sScrollX": "100%",
                             "sScrollXInner": "100%",
                             "bScrollCollapse": true,
@@ -110,6 +124,7 @@
                             //                            "iRightColumns": 1,
                             //                            "iRightWidth": 180
                         });
+
                     });
     }
 
@@ -125,7 +140,7 @@ function exportExcel() {
     var title = $("#title").val() != null ? $("#title").val().join() : "";
     var url = null;
 
-    url = _global.root + "export/EmployeeWorkingCalendar?fromDate=" + fromDate + "&toDate=" + toDate 
+    url = _global.root + "export/EmployeeWorkingCalendar?fromDate=" + fromDate + "&toDate=" + toDate
                         + "&group=" + group + "&title=" + title;
     location.href = url;
 }

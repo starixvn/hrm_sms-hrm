@@ -170,19 +170,27 @@ namespace Fanex.NexHR.Repositories
         /// <param name="toDate">Query To date.</param>
         /// <param name="groupId">The group identifier.</param>
         /// <param name="jobTitleId">The job title identifier.</param>
+        /// <param name="isLocal">Expat or local.</param>
         /// <returns>IList WorkingCalendarsViewModel.</returns>
-        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId)
+        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(
+            int? empId, 
+            DateTime fromDate, 
+            DateTime toDate,
+            string groupId, 
+            string jobTitleId,
+            byte? isLocal = null)
         {
             using (var db = new ObjectDb("Report_EmployeeCalendarByWeekly"))
             {
                 var list = new List<WorkingCalendarsViewModel>();
                 var ds = new DataSet();
 
-                db.AddInParameter("@empId", DbType.Int32, null);
+                db.AddInParameter("@empId", DbType.Int32, empId);
                 db.AddInParameter("@fromtime", DbType.DateTime, fromDate);
                 db.AddInParameter("@totime", DbType.DateTime, toDate);
                 db.AddInParameter("@groupids", DbType.String, groupId);
                 db.AddInParameter("@JobTitleId", DbType.String, jobTitleId);
+                db.AddInParameter("@isLocal", DbType.Byte, isLocal);
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
@@ -193,7 +201,6 @@ namespace Fanex.NexHR.Repositories
                 foreach (System.Data.DataRow row in dttWorkingCalendars.Rows)
                 {
                     var empWorkingCalendar = new WorkingCalendarsViewModel();
-
                     empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());
                     empWorkingCalendar.FullName = row["fullname"].ToString();
                     empWorkingCalendar.NickName = row["nickname"].ToString();

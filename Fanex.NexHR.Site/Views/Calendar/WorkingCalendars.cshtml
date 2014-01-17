@@ -22,50 +22,72 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 { 
-    <div class="grid_1 gridlabel">
-        Group</div>
-    <div class="grid_7">
-        <select id="group" multiple="multiple" class="team-select">
-            @foreach (Team item in ViewBag.Groups)
-            { 
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>
+    <div class="container_24 bunhat">
+        <div class="grid_24">
+            <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
+            <div class="grid_1 gridlabel">
+                Group</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    { 
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="grid_2 gridlabel">
+                Position</div>
+            <div class="grid_7">
+                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+            </div>
+            @*    <div class="grid_2 gridlabel">
+        Employee
     </div>
-    <div class="grid_2 gridlabel">
-        Position</div>
     <div class="grid_5">
-        @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+        @Html.Editor("Employee")
+        @Html.Hidden("EmployeeId")
+    </div>*@
+            <div class="grid_2 gridlabel">
+                <input type="button" value="@Labels.Submit" id="submit"/>
+            </div>
+            <div class="grid_1 gridlabel">
+                <input type="button" value="Excel" id="exportExcel" />
+            </div>
+        </div>
     </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+
     
-    <div class="grid_1 gridlabel">
+    <div class="grid_1 gridlabel" style="float: right;">
         <a href="javascript:;" id="prev"><< Prev</a> <span id="displayFrom" class="highlight-date">
         </span>- <span id="displayTo" class="highlight-date"></span><a href="javascript:;"
             id="next">Next >> </a>
         @Html.Hidden("OriginalFromDate", (DateTime)ViewBag.FromDate)
         @Html.Hidden("OriginalToDate", (DateTime)ViewBag.ToDate)
     </div>
-    
-    <div class="grid_1 gridlabel">
-        <input type="button" value="@Labels.Submit" id="submit"/>
-        <input type="button" value="Excel" id="exportExcel"/>
-    </div>
-         
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
-    
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
+    <div id="blocker">
+        <div>
+            Loading ...</div>
     </div>
 }
-<br />
 <table id="workingCalendarDetails" class="pretty">
 </table>
 <br />

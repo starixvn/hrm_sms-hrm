@@ -1,109 +1,123 @@
-table.pretty {
+table.pretty
+{
     width: 100%;
     clear: both;
 }
- 
-table.pretty td,
-table.pretty th {
+
+table.pretty td, table.pretty th
+{
     padding: 5px;
     border: 1px solid #fff;
 }
 
 /* Header cells */
-table.pretty thead th {
-    text-align: center;
-    /*background: #66a9bd;*/
+table.pretty thead th
+{
+    text-align: center; /*background: #66a9bd;*/
     min-width: 80px;
 }
 
-table.pretty thead th.weekend {
+table.pretty thead th.weekend
+{
     color: rgb(253, 2, 2);
 }
 
 /* Body cells */
-table.pretty tbody th {
-    text-align: center;
-    /*background: #91c5d4;*/
+table.pretty tbody th
+{
+    text-align: center; /*background: #91c5d4;*/
     background: none;
     border: 1px solid rgb(233, 227, 227);
     font-weight: normal;
 }
 
-table.pretty tbody th.row-left 
+table.pretty tbody th.row-left
 {
     text-align: left;
 }
 
-     
-table.pretty thead td {
+
+table.pretty thead td
+{
     text-align: center;
     background: #d5eaf0;
 }
-         
+
 /*table.pretty tbody tr.odd td {
     background: red;
 }*/
 
-/* Footer cells */ 
-table.pretty tfoot th {
+/* Footer cells */
+table.pretty tfoot th
+{
     background: #b0cc7f;
     text-align: left;
 }
-     
-table.pretty tfoot td {
+
+table.pretty tfoot td
+{
     background: #d7e1c5;
     text-align: center;
     font-weight: bold;
 }
 
-div.dataTables_wrapper {
-
+div.dataTables_wrapper
+{
 }
 
-/* Sorting Paging */ 
-table.pretty thead th.sorting_asc {
+/* Sorting Paging */
+table.pretty thead th.sorting_asc
+{
     background: #66A9BD url('images/sort_asc.png') no-repeat right center;
 }
- 
-table.pretty thead th.sorting_desc {
+
+table.pretty thead th.sorting_desc
+{
     background: #66A9BD url('images/sort_desc.png') no-repeat right center;
 }
- 
-table.pretty thead th.sorting {
+
+table.pretty thead th.sorting
+{
     background: #66A9BD url('images/sort_both.png') no-repeat right center;
 }
 
-a.paginate_button,
-a.paginate_active {
+a.paginate_button, a.paginate_active
+{
     display: inline-block;
     background-color: #608995;
     padding: 2px 6px;
     margin-left: 2px;
     cursor: pointer;
-    *cursor: hand;
+    cursor: hand;
 }
- 
-a.paginate_active {
+
+a.paginate_active
+{
     background-color: transparent;
     border: 1px solid black;
 }
- 
-a.paginate_button_disabled {
+
+a.paginate_button_disabled
+{
     color: #3d6672;
 }
-.paging_full_numbers a:active {
-    outline: none
+.paging_full_numbers a:active
+{
+    outline: none;
 }
-.paging_full_numbers a:hover {
+.paging_full_numbers a:hover
+{
     text-decoration: none;
 }
- 
-div.dataTables_paginate span>a {
+
+div.dataTables_paginate span > a
+{
     width: 15px;
     text-align: center;
 }
- 
-div.dataTables_info {
+
+div.dataTables_info
+{
     padding: 9px 6px 6px 6px;
 }
 
@@ -112,4 +126,37 @@ span.highlight-date
     color: rgb(253, 2, 2);
     margin-left: 5px;
     margin-right: 5px;
+}
+
+#blocker
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .7;
+    background-color: #000;
+    z-index: 1000;
+    overflow: auto;
+}
+#blocker div
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5em;
+    height: 2em;
+    margin: -1em 0 0 -2.5em;
+    color: #fff;
+    font-weight: bold;
+}
+
+.bunhat 
+{
+    float: none;
+}
+.container_24 .grid_24 
+{
+    width: 100%;
 }
