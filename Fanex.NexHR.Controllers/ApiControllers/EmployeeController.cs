@@ -71,7 +71,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return _employeeService.GetUnavailableDates(
                 employeeId,
                 new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1),
-                new DateTime(date.AddMonths(2).Year, date.AddMonths(2).Month, 1).AddDays(-1));
+                new DateTime(date.AddMonths(3).Year, date.AddMonths(3).Month, 1).AddDays(-1));
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)
