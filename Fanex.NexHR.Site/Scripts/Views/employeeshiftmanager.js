@@ -132,8 +132,21 @@
 	        _global.root + 'api/employee/getemployees'
 	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
 	        , function (data) {
-	            for (var i = 0; i < data.length; i++) {
-	                addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	            var object = $("#tblSupervisor tbody");
+	            var countTR = $("#tblSupervisor tbody tr");
+
+	            if (countTR.length > 0) {
+	                confirm("All employee in current list will be removed! Process?", function () {
+	                    object.empty();
+	                    for (var i = 0; i < data.length; i++) {
+	                        addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	                    }
+	                });
+	            }
+	            else {
+	                for (var i = 0; i < data.length; i++) {
+	                    addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	                }
 	            }
 	        }).error(function () {
 	            alert(_messages.errorTryAgain);

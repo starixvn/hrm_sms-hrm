@@ -16,7 +16,7 @@
 @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @id = "formEditUser" }))
 {
     <div class="bunhat">
-        @*@Html.ValidationSummary(true)*@
+        @Html.ValidationSummary(false)
         @if (ViewBag.Updated == true)
         {
             <div class="success flash">

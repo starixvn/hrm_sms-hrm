@@ -63,3 +63,8 @@ table.datasupervisor td.left
 {
     vertical-align: middle;
 }
+
+span.team
+{
+    margin-left: 20px;
+}

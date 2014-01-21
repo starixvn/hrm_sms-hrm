@@ -2,7 +2,12 @@
 	min-width: 50px !important;
 	/*width: 70px !important;*/
 }
-#DomainUsername
+#DomainUsername, #Code
 {
-	width:187px;
+	width:157px;
+}
+
+#generate
+{
+    width: 67px;
 }

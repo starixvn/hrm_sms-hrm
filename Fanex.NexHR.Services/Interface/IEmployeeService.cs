@@ -126,5 +126,7 @@ namespace Fanex.NexHR.Services.Interface
         bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
 
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
+
+        string GetNewEmployeeCode();
     }
 }
