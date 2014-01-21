@@ -31,6 +31,8 @@ namespace Fanex.NexHR.Models
 
         public bool IsLeaveDay { get; set; }
 
+        public bool IsLeaveOffDay { get; set; }
+
         public decimal LeaveDay { get; set; }
 
         public bool IsKeepInViewDay { get; set; }

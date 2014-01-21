@@ -65,6 +65,12 @@
         
         isShowCheckBox = false;
     }
+    else if (workingCalendarModel.IsLeaveOffDay)
+    {
+        valueOfInput = "Off";
+        classOfInput = "offday";
+        disabledAttribute = "disabled";
+    }
     else if (workingCalendarModel.IsOffDay)
     {
         if (workingCalendarModel.Shift != null)
@@ -74,7 +80,7 @@
         }
         else
         {
-            valueOfInput = "Off"; 
+            valueOfInput = "Off";
         }
 
         if (workingCalendarModel.IsKeepInViewDay)
