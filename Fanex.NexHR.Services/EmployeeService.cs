@@ -461,6 +461,11 @@ namespace Fanex.NexHR.Services
             return this._employeeRepository.InsertEmployeeShiftManager(shiftManagerModel, modifiedBy, out errorCode, out message);
         }
 
+        public string GetNewEmployeeCode()
+        {
+            return _employeeRepository.GetNewEmployeeCode();
+        }
+
         /// <summary>
         /// Function to validate user.
         /// </summary>

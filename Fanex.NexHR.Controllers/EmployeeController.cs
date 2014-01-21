@@ -527,6 +527,7 @@ namespace Fanex.NexHR.Controllers
                 EmployeeId = employeeId,
                 SupervisorRole = role
             };
+            ViewBag.Groups = _teamService.GetAll();
 
             return View(model);
         }

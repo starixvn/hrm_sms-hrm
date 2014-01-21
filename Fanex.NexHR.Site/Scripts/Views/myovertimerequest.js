@@ -133,18 +133,15 @@
         var PublicHours = parseFloat($('td #request_PublicHours', row).val());
         //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
+        debugger;
 
         if (TotalHours >= (TotalShiftHours + 0.5)) {
             var object = $(this).first();
-            if ($(this).attr("id") == "request_NormalHours") {
-                if (OffHours == null || OffHours == "") {
-                    OffHours = 0;
-                }
-                if (PublicHours == null || PublicHours == "") {
-                    PublicHours = 0;
-                }
-                //set max value for textbox NormalHours.
-                var normalLitmit = TotalHours - (TotalShiftHours + OffHours + PublicHours);
+            var focusedTexbox = $(this).attr("id");
+            if (focusedTexbox == "request_NormalHours"
+            || focusedTexbox == "request_OffHours" 
+            || focusedTexbox == "request_PublicHours") {
+                var normalLitmit = TotalHours - (TotalShiftHours);
 
                 if (normalLitmit < 0) {
                     normalLitmit = 0;
@@ -153,42 +150,6 @@
                     normalLitmit = parseFloat(normalLitmit.toFixed(1));
                 }
                 RangeTextBox(object, 0, normalLitmit);
-            }
-
-            if ($(this).attr("id") == "request_OffHours") {
-                if (NormalHours == null || NormalHours == "") {
-                    NormalHours = 0;
-                }
-                if (PublicHours == null || PublicHours == "") {
-                    PublicHours = 0;
-                }
-
-                var offLimit = TotalHours - (TotalShiftHours + NormalHours + PublicHours);
-
-                if (offLimit < 0) {
-                    offLimit = 0;
-                }
-                else {
-                    offLimit = parseFloat(offLimit.toFixed(1));
-                }
-                RangeTextBox(object, 0, offLimit);
-            }
-
-            if ($(this).attr("id") == "request_PublicHours") {
-                if (NormalHours == null || NormalHours == "") {
-                    NormalHours = 0;
-                }
-                if (OffHours == null || OffHours == "") {
-                    OffHours = 0;
-                }
-                var publicLimit = TotalHours - (TotalShiftHours + NormalHours + OffHours);
-                if (publicLimit < 0) {
-                    publicLimit = 0;
-                }
-                else {
-                    publicLimit = parseFloat(publicLimit.toFixed(1));
-                }
-                RangeTextBox(object, 0, publicLimit);
             }
         }
         else {

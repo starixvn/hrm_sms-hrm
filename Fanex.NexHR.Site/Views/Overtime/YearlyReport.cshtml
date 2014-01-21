@@ -10,12 +10,14 @@
 @section Breadcrumb {
     <a class="step">HR Space</a> <a class="step">@ViewBag.Title</a>
 }
-<div id="roundbar-blue">
+@*<div id="roundbar-blue">
     <ul>
         <li class="first" id="OTSummary"><a href="@Url.Action("yearlyreport", "overtime")">Overtime Report</a> </li>
         <li><a id="OTDetails" href="@Url.Action("OTExcelReport", "overtime")">Overtime Report Details</a> </li>
     </ul>
-</div>
+</div>*@
+<h2>@ViewBag.Title</h2>
+
  <div class="clear">
     </div>        
     <div class="space">

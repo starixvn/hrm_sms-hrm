@@ -71,7 +71,7 @@ namespace Fanex.NexHR.Controllers
                 Employee = employee,
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 MinAnnualBalance = minAnnualBalance.HasValue ? minAnnualBalance.Value : 0,
-                Category = category.HasValue ? category.Value : 1
+                Category = category
             };
 
             return Index(model);
@@ -110,7 +110,7 @@ namespace Fanex.NexHR.Controllers
                 model.Year,
                 empId: model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 groupIds: model.TeamIds,
-                isLocal: (byte)model.Category);
+                isLocal: (byte?)model.Category);
 
             IList<Team> teams = new List<Team>();
 

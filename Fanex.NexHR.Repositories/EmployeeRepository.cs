@@ -901,5 +901,14 @@ namespace Fanex.NexHR.Repositories
                 return errorCode;
             }
         }
+
+        public string GetNewEmployeeCode()
+        {
+            using (ObjectDb db = new ObjectDb("Employee_GetNewEmployeecode"))
+            {
+                var code = db.Query<string>().FirstOrDefault();
+                return code;
+            }
+        }
     }
 }

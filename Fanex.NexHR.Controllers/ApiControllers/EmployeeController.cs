@@ -95,5 +95,10 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         {
             return _employeeService.GetEmployeeById(id);
         }
+
+        public string GetNewEmployeeCode()
+        {
+            return _employeeService.GetNewEmployeeCode();
+        }
     }
 }

@@ -45,7 +45,22 @@
     @Html.Hidden("SupervisorTeam")
     @*@Html.DropDownList("SupervisorId", Model.SupervisorList, new { @multiple = "multiple", @class ="chosen-select", @style="width:400px;" })*@
     <a id="lknAdd" href="javascript:;">+ Add to list</a>
+
+    @if (Model.SupervisorRole == (short)RolesEnum.ActingSupervisor)
+    {
+            <span class="title team">@Labels.Team</span> <span class="control">
+        <select id="group" multiple="multiple" class="team-select">
+            @foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+            { 
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </span><span class="add"><a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all
+        members to list</a> </span>
+    }
+
 </div>
+
 <div>
     <table id="tblSupervisor" class="datasupervisor">
         <thead>

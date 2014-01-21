@@ -309,27 +309,17 @@
 
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
-    <!--<resourceSet name="myrequestjs" type="js">
-			<resource reference="sitejs"/>
-
-			<resource path="~/scripts/views/request.myrequest.js" />
-		</resourceSet>-->
 
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/workingcalendardatatable.css" />
-      <resource path="~/styles/fixtable.css" />
-      <resource path="~/scripts/chosen/chosen.css" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
       <resource path="~/scripts/datatable/FixedColumns.js" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="monthschedulecss" type="css">

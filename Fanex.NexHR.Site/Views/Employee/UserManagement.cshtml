@@ -49,11 +49,22 @@
     </div>
     <div class="space">
     </div>
-    <div class="grid_16">
+    <div class="grid_24">
         <div class="grid_2 gridlabel">
-            <br />
+            Category
         </div>
-        <div class="grid_8 gridlabel">
+        <div class="grid_3">
+            @{
+                var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+            }
+            @Html.DropDownList("category", category, new { @class = "category" })
+        </div>
+        <div class="grid_8 gridlabel usertype" id ="usertype">
             <input name="name" type="radio" id="active" checked="checked" />
             <label for="active">
                 Active Users</label>
@@ -64,10 +75,14 @@
             <label for="IsDeleted">
                 Deleted Users</label>
         </div>
+         <div class="grid_2 gridlabel">
+            <input id="query" type="button" value="@Labels.Submit" />
+        </div>
         <div class="grid_3 gridlabel">
-            <input type="button" id="basicExcel" value="Excel - Basic Info" style="width:115px;"/></div>
+            <input type="button" id="basicExcel" value="Excel - Basic Info" style="width: 115px;" /></div>
         <div class="grid_1 gridlabel">
-            <input type="button" id="detailsExcel" value="Excel - Details Info" style="width:115px;"/></div>
+            <input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px;" /></div>
+       
     </div>
     <div class="clear">
     </div>
@@ -76,9 +91,6 @@
     <div class="clear">
     </div>
     <div class="space">
-    </div>
-    <div class="grid_2 prefix_2">
-        <input id="query" type="button" value="@Labels.Submit" />
     </div>
 </div>
 <div class="space">

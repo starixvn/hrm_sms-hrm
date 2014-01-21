@@ -234,9 +234,11 @@ namespace Fanex.NexHR.Controllers
         /// <param name="toDate">Query To date.</param>
         /// <param name="groupId">The group identifier.</param>
         /// <param name="jobTitleId">The job title identifier.</param>
+        /// <param name="isLocal">Expat or local.</param>
         /// <returns>ActionResult Return Partial view Working calendar Details.</returns>
-        public ActionResult WorkingCalendarDetails(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId)
+        public ActionResult WorkingCalendarDetails(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null)
         {
+            var viewModel = new List<WorkingCalendarsViewModel>();
             int month = 0;
             int year = 0;
             var firstDateInMonth = new System.Text.StringBuilder();
@@ -248,11 +250,11 @@ namespace Fanex.NexHR.Controllers
            
             ViewBag.FromNewDate = fromDate;
             ViewBag.ToNewDate = toDate;
-            var viewModel = _workingCalendarService.GetWorkingCalendars(null, fromDate, toDate, groupId, jobTitleId);
+            viewModel = _workingCalendarService.GetWorkingCalendars(null, fromDate, toDate, groupId, jobTitleId, isLocal).ToList();
             CheckChangeShiffAndHalfDayOff(fromDate, viewModel, userChangedShift, userHalfDayOffs);
             ViewBag.UserChangeShift = userChangedShift;
             ViewBag.HalfDayOffs = userHalfDayOffs;
-           
+             
             return PartialView(viewModel);
         }
 

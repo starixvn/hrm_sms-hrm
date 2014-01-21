@@ -28,6 +28,6 @@ namespace Fanex.NexHR.ViewModels
 
         public int MinAnnualBalance { get; set; }
 
-        public int Category { get; set; }
+        public int? Category { get; set; }
     }
 }

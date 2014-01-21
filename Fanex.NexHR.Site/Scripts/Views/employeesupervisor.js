@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    $("#group").multiselect();
     $("#Supervisor").autocomplete({
         source: function (request, response) {
             var listIgnore = "";
@@ -195,8 +196,70 @@
                 currentRow.insertBefore(firstRow);
             }
         }
+    });
 
 
+    $("#lnkAddEmployeesOfTeam").live("click", function () {
+        var groups = $("#group").val() != null ? $("#group").val().join() : "";
+
+        $.getJSON(
+	        _global.root + 'api/employee/getemployees'
+	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
+	        , function (data) {
+	            var object = $("#tblSupervisor tbody");
+	            var countTR = $("#tblSupervisor tbody tr");
+
+	            if (countTR.length > 0) {
+	                confirm("All employee in current list will be removed! Process?", function () {
+	                    object.empty();
+	                    for (var i = 0; i < data.length; i++) {
+	                        addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	                    }
+	                });
+	            }
+	            else {
+	                for (var i = 0; i < data.length; i++) {
+	                    addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	                }
+                }
+
+	        }).error(function () {
+	            alert(_messages.errorTryAgain);
+	        });
     });
 
 });
+
+function addToGrid(supervisorName, supervisorId, supervisorTeam) {
+    if (supervisorId.toString().length > 0 && supervisorName.length > 0) {
+        var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
+            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td><td class="left">' + supervisorTeam + '</td><td><input class="LeaveRole" checked type="checkbox"></td><td><input class="ChangeShiftRole" checked type="checkbox">'
+                + '</td><td><input class="LateInEarlyOutRole" checked type="checkbox"></td><td><input class="CheckInOutRole" checked type="checkbox"></td><td>'
+                + '<input class="OvertimeRole" checked type="checkbox"></td><td><input class="KeepInViewRole" checked type="checkbox"></td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
+
+        var object = html.find(".lnkremove").first().click(function () {
+            confirm("Are you sure you want to remove this?", function () {
+                object.parent().parent().remove();
+            });
+        });
+
+        var isExist = false;
+
+        var supervisors = $("#tblSupervisor tbody tr");
+        for (var i = 0; i < supervisors.length; i++) {
+            var supervisor = $(supervisors[i]).children().first();
+            if (supervisorId == $(supervisor).attr("data-id")) {
+                isExist = true;
+            }
+        }
+
+        if (!isExist) {
+            if ($("#tblSupervisor tbody tr").first().length > 0) {
+                $("#tblSupervisor tbody tr").first().before(html);
+            }
+            else {
+                $("#tblSupervisor tbody").html(html);
+            }
+        }
+    }
+}

@@ -9,4 +9,13 @@
     $('#IsDefaultSchedule').click(function () {
         $("#dfsCalendar").toggle();
     });
+
+    $("#generate").on("click", function () {
+        $.ajax({
+            url: _global.root + 'api/employee/GetNewEmployeeCode',
+            success: function (data) {
+                $("#Code").val("X" + data);
+            }
+        });
+    });
 });

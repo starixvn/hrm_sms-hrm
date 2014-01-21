@@ -14,7 +14,6 @@
         defaultDate: $('#DOB').val()
     });
 
-
     $("#postform").click(function () {
         var isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');
 
@@ -49,7 +48,6 @@
         }
 
     });
-
 
     $("#resetpassword").on("click", function () {
         resetPassword();
@@ -98,10 +96,6 @@
         bindSARole(false);
     });
 
-    //	$('#RoleArray2').click(function () {
-    //		bindLeaderRole(false);
-    //	});
-
     $('#upload').click(function () {
         upload();
     });
@@ -128,7 +122,8 @@
         });
     });
 
-    var collapse = $(".boxtitle").first();
+    //    var collapse = $(".boxtitle").first();
+    var collapse = $(".boxtitle");
     var itemContent = collapse.next();
     itemContent.show();
 
@@ -146,9 +141,6 @@
             //                return $content.is(":visible") ? "-" + $header.text() : "+" + $header.text();
             //            });
         });
-
-
-
     });
 
 
@@ -170,15 +162,6 @@ function bindSARole(onload) {
         $('#RoleArray2').prop('checked', false).prop('disabled', false);
     }
 }
-
-//function bindLeaderRole(onload) {
-//	if ($('#RoleArray2').prop('checked')) {
-//		$('#RoleArray1').prop('checked', true).prop('disabled', true);
-//	}
-//	else if (!onload) {
-//		$('#RoleArray1').prop('checked', false).prop('disabled', false);
-//	}
-//}
 
 function query() {
     var query = $('#keyword').val();

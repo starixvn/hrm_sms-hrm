@@ -8,7 +8,8 @@
     @Url.CombresLink("overtimereportdetailsjs")
 }
 @section Breadcrumb {
-    <a class="step">HR Space</a> <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.OvertimeReport</a>
+    @*<a class="step">HR Space</a> <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.OvertimeReport</a>*@
+    <a class="step">HR</a> <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
 @using (Html.BeginForm())
