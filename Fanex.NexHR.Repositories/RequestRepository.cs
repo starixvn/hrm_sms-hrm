@@ -171,6 +171,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="employeeId">Employee id.</param>
         /// <param name="status">Request status.</param>
         /// <param name="logInId">Log in id.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of RequestEntity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetAllRequest(
@@ -181,14 +182,15 @@ namespace Fanex.NexHR.Repositories
             bool isDailyRequest = false,
             int? employeeId = null,
             byte? status = null,
-            int? logInId = null)
+            int? logInId = null,
+            byte? isLocal = null)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             var keyName = isDailyRequest ? "WorkingTimeRequest_GetRequestByRequestDate_AllType" : "WorkingTimeRequest_GetRequestByCreateDate_AllType";
             using (var db = new ObjectDb(keyName))
             {
                 using (IDataReader reader =
-                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId }))
+                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
                 {
                     if (reader != null)
                     {

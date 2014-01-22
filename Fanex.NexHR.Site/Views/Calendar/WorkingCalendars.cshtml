@@ -77,17 +77,19 @@
 
     
     <div class="grid_1 gridlabel" style="float: right;">
-        <a href="javascript:;" id="prev"><< Prev</a> <span id="displayFrom" class="highlight-date">
-        </span>- <span id="displayTo" class="highlight-date"></span><a href="javascript:;"
-            id="next">Next >> </a>
+        <input type="button" href="javascript:;" id="prev" value="<<" class="actionButton"/>
+            <span id="displayFrom" class="highlight-date">
+            </span>- <span id="displayTo" class="highlight-date"></span>
+        <input href="javascript:;"id="next" type="button" value=">>" class="actionButton"/>
         @Html.Hidden("OriginalFromDate", (DateTime)ViewBag.FromDate)
         @Html.Hidden("OriginalToDate", (DateTime)ViewBag.ToDate)
     </div>
+
+}
     <div id="blocker">
         <div>
             Loading ...</div>
     </div>
-}
 <table id="workingCalendarDetails" class="pretty">
 </table>
 <br />

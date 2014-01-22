@@ -55,7 +55,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
             bool isDailyRequest,
            int? employeeId = null,
            byte? status = null,
-           int? longInId = null);
+           int? longInId = null,
+            byte? isLocal = null);
 
         RequestEntity GetLateInEarlyOutRequestById(long id);
 

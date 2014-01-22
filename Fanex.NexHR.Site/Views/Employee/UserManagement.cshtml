@@ -97,9 +97,9 @@
 </div>
 <div class="clear">
 </div>
-<table id="data" class="data persist-area">
+<table id="userdata">
     <thead>
-        <tr class="persist-header">
+        <tr>
             <th>
                 #
             </th>
@@ -132,6 +132,11 @@
     <tbody>
     </tbody>
 </table>
+    <div id="blocker">
+        <div>
+            Loading ...</div>
+    </div>
+<div style="clear:both"></div>
 <input type="hidden" id="jobtitleid" value="@ViewBag.JobTitleId" />
 <input type="hidden" id="groupid" value="@ViewBag.GroupId" />
 <script id="itemTemplate" type="text/x-jquery-tmpl">   
@@ -167,9 +172,6 @@
             {{/if}}
             
         </td>
-
-        
-       
     </tr>
     
 </script>

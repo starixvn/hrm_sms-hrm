@@ -34,7 +34,8 @@ namespace Fanex.NexHR.Repositories
             bool isDailyRequest = false,
             int? employeeId = null,
             byte? status = null,
-            int? logInId = null);
+            int? logInId = null,
+            byte? isLocal = null);
 
         public abstract object GetRequestById(long requestId);
 

@@ -364,7 +364,7 @@
                         @Html.Label("Department/Team")
                     </div>
                     <div class="input">
-                        @Html.DropDownListFor(model => model.Team.Id, new SelectList(ViewBag.Groups, "Id", "Name"))
+                        @Html.DropDownListFor(model => model.Team.Id, new SelectList(ViewBag.Groups, "Id", "Name"), "--Select a Team--")
                         @Html.ValidationMessageFor(model => model.Team.Id)
                     </div>
                     <div class="clear">
@@ -375,7 +375,7 @@
                         @Html.LabelFor(model => model.JobTitleId)
                     </div>
                     <div class="input">
-                        @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), new { @style = "width : 230px;" })
+                        @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"),"--Select a Job Title--", new { @style = "width : 230px;" })
                         @Html.ValidationMessageFor(model => model.JobTitleId)
                     </div>
                     <div class="clear">

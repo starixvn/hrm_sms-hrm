@@ -295,7 +295,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
+    <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
+    <Content Include="Scripts\Views\contactlist.js" />
     <Content Include="Scripts\Views\reportovertimerequest.js" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
@@ -367,6 +369,7 @@
     <Content Include="Scripts\Views\timesheetrecord\timesheetrecord.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\annualbalance.css" />
+    <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\report.totalworkinghourmonthly.css" />
     <Content Include="Styles\memberrequestdetailpersonalspace.css" />
     <Content Include="Styles\employeerequestdetailhrspace.css" />

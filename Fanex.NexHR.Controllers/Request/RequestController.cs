@@ -91,7 +91,7 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Leader = true;
             ViewBag.Action = "Member";
-            this.GetRequests(ref request, RequestViewType.PersonalSpace, false);
+            this.GetRequests(ref request, RequestViewType.PersonalSpace, false, request.IsLocal);
 
             return View(request);
         }
@@ -120,7 +120,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
             ViewBag.Action = "EmployeeView";
-            this.GetRequests(ref request, RequestViewType.CompanySpace, false);
+            this.GetRequests(ref request, RequestViewType.CompanySpace, false, request.IsLocal);
 
             return View("HRView", request);
         }
@@ -307,8 +307,9 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="request">Request ViewModel.</param>
         /// <param name="requestViewType">Request View Types.</param>
         /// <param name="isDailyRequest">Is Daily Request.</param>
+        /// <param name="isLocal">Expat or Local user.</param>
         [NonAction]
-        private void GetRequests(ref RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
+        private void GetRequests(ref RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, byte? isLocal = null)
         {
             request.TeamCollection = _TeamService.GetAll();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
@@ -319,7 +320,7 @@ namespace Fanex.NexHR.Controllers.Request
                 loginId = this.CurrentUser.Id;
             }
 
-            var requestList = _RequestService.GetWorkingTimeRequests(request, requestViewType, isDailyRequest, loginId);
+            var requestList = _RequestService.GetWorkingTimeRequests(request, requestViewType, isDailyRequest, loginId, isLocal);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
             ViewBag.IsDailyRequest = isDailyRequest;
@@ -502,8 +503,8 @@ namespace Fanex.NexHR.Controllers.Request
             var approverList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
 
             leaveRequest.LeaveTypeList = leaveTypes;
-            leaveRequest.VerifierList = verifierList;
-            leaveRequest.ApproverList = approverList;
+            leaveRequest.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            leaveRequest.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             leaveRequest.EmployeeBalance = employeeBalance;
             leaveRequest.RequestId = requestId;
             ViewBag.ViewName = viewName;

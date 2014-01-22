@@ -143,11 +143,11 @@
             <div class="input">
                 @if (Model.VerifierList.Count > 1)
                 {
-                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierList, "OwnerId", "FullName"), "--Select a Verifier--")
+                    @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList, "--Select a Verifier--")
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierList, "OwnerId", "FullName"))
+                    @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList)
                 }
             </div>
             <div class="clear">
@@ -161,11 +161,11 @@
                 
                 @if (Model.ApproverList.Count > 1)
                 {
-                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.ApproverList, "OwnerId", "FullName"), "--Select an Approver--")
+                    @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList, "--Select an Approver--")
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.ApproverList, "OwnerId", "FullName"))
+                    @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList)
                 }
             </div>
             <div class="clear">

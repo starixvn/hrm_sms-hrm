@@ -23,6 +23,7 @@
 
     $('#query').click(function (evt) {
         evt.preventDefault();
+        $("#userdata").dataTable().fnDestroy();
         query(jobTitleId);
     });
 
@@ -33,8 +34,6 @@
     $("#detailsExcel").click(function () {
         exportExcel($(this));
     });
-
-
 });
 
 function query(jobTitleId) {
@@ -44,7 +43,7 @@ function query(jobTitleId) {
     }
 
     var query = $('#keyword').val();
-    actingButton('#query', true);
+    actingLoading('#query', true);
 
     if ($("#enable").attr("checked")) {
         enable = true;
@@ -87,12 +86,28 @@ function query(jobTitleId) {
 	_global.root + 'api/employee/getemployees'
 	, { query: query, groupIds: groups, enable: enable, isDelete: isDelete, titleId: jobTitleId, isLocal: isLocal }
 	, function (data) {
-	    //console.log(data);
 	    if (data.length > 0) {
 	        rowIndex = 1;
+	        $('#userdata tbody').children().remove();
+	        $('#itemTemplate').tmpl(data).appendTo('#userdata');
 
-	        $('#data tbody').children().remove();
-	        $('#itemTemplate').tmpl(data).appendTo('#data');
+	        $("#userdata").dataTable({
+	            "sScrollY": "580px",
+	            "sScrollX": "100%",
+	            "sScrollXInner": "100%",
+	            "bScrollCollapse": true,
+	            "bFilter": true,
+	            "bSort": true,
+	            "bSortClasses": false,
+	            "bPaginate": true,
+	            "sPaginationType": "full_numbers",
+	            "bInfo": true,
+	            "bJQueryUI": true,
+	            'bLengthChange': false,
+                //"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+	            'iDisplayLength': 50,
+	            "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [6, 7, 8]}]
+	        });
 
 	        $('.nick').tooltip({
 	            track: true,
@@ -105,8 +120,8 @@ function query(jobTitleId) {
 	        $("#title").trigger("liszt:updated");
 	    }
 	    else {
-	        $('#data tbody').children().remove();
-	        $(noInformation(12)).appendTo('#data');
+	        $('#userdata tbody').children().remove();
+	        $(noInformation(12)).appendTo('#userdata');
 	    }
 	    reloadButtonText('#query');
 	}).error(function () {
@@ -167,4 +182,16 @@ function exportExcel(object) {
 
     location.href = url;
 
+}
+
+function actingLoading(element, disabled) {
+    $(element).attr("origin-value", $(element).attr("value"));
+    $(element).attr("value", 'Processing');
+    $(element).attr("disabled", "disabled");
+}
+
+function reloadButtonText(element) {
+    $(element).attr("value", $(element).attr("origin-value"));
+    $(element).removeAttr("disabled");
+    $("#blocker").hide();
 }

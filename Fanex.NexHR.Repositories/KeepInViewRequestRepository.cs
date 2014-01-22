@@ -168,6 +168,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="employeeId">The employee identifier.</param>
         /// <param name="status">The status of keep in view.</param>
         /// <param name="logInId">The log in identifier.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>The list of keep in view requests.</returns>
         public IList<RequestEntity> GetKeepInViewRequests(
             string role,
@@ -177,7 +178,8 @@ namespace Fanex.NexHR.Repositories
             bool isDailyRequest = false,
             int? employeeId = null,
             byte? status = null,
-            int? logInId = null)
+            int? logInId = null,
+            byte? isLocal = null)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             var keyName = isDailyRequest
@@ -186,7 +188,7 @@ namespace Fanex.NexHR.Repositories
             using (var db = new ObjectDb(keyName))
             {
                 using (IDataReader reader =
-                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId }))
+                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
                 {
                     if (reader != null)
                     {

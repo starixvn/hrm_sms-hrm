@@ -66,12 +66,25 @@
     <resourceSet name="employeecss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/scripts/chosen/chosen.css" />
+      <resource path="~/styles/jquery.dataTables.css" />
     </resourceSet>
     <resourceSet name="employeejs" type="js">
       <resource path="~/scripts/libs/date.js" />
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/employee.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
+      <resource path="~/scripts/datatable/jquery.dataTables.js" />
+    </resourceSet>
+
+    <resourceSet name="contactlistcss" type="css">
+      <resource reference="sitecss"/>
+      <resource path="~/scripts/chosen/chosen.css" />
+    </resourceSet>
+    <resourceSet name="contactlistjs" type="js">
+      <resource path="~/scripts/libs/date.js" />
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/chosen/chosen.jquery.js" />
+      <resource path="~/scripts/views/contactlist.js" />
     </resourceSet>
 
     <resourceSet name="employeecreatecss" type="css">
@@ -312,14 +325,13 @@
 
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss"/>
-      <resource path="~/styles/workingcalendardatatable.css" />
+      <resource path="~/styles/jquery.dataTables.css" />
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs"/>
-      <resource path="~/scripts/datatable/jquery.dataTables.js" />
-      <resource path="~/scripts/datatable/FixedColumns.js" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
+      <resource path="~/scripts/datatable/jquery.dataTables.js" />
     </resourceSet>
 
     <resourceSet name="monthschedulecss" type="css">
