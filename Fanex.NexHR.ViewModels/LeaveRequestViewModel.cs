@@ -12,11 +12,8 @@ namespace Fanex.NexHR.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using System.Web.Mvc;
+    using Fanex.NexHR.Models;
 
     /// <summary>
     /// LeaveRequest ViewModel.
