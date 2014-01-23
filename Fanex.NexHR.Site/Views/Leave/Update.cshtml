@@ -137,7 +137,7 @@ else
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierList, "OwnerId", "FullName"))
+                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList)
             </div>
             <div class="clear">
             </div>
@@ -147,7 +147,7 @@ else
                 @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.ApproverList, "OwnerId", "FullName"))
+                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList)
             </div>
             <div class="clear">
             </div>

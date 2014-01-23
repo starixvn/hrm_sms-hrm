@@ -18,9 +18,9 @@
     //Click next link
     var next_click_allowed = true;
     $('#next').click(function (e) {
+        var element = $(this);
 
-        $("#blocker").show();
-        if (!next_click_allowed) return;
+        actingLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromNextDate = $("#FromNextDate").val();
         var toNextDate = $("#ToNextDate").val();
@@ -32,16 +32,15 @@
         var title = $("#title").val() != null ? $("#title").val().join() : "";
         getWorkingCalendarDetails(fromNextDate, toNextDate, group, title);
 
-        next_click_allowed = false;
-        window.setTimeout(function () { next_click_allowed = true; $("#blocker").hide(); }, 1200);
+        reloadButtonText(element);
     });
 
     //Click previous link
     var prev_click_allowed = true;
     $('#prev').click(function (e) {
-        if (!prev_click_allowed) return;
-        $("#blocker").show();
+        var element = $(this);
 
+        actingLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromPrevDate = $("#FromPreviousDate").val();
         var toPrevDate = $("#ToPreviousDate").val();
@@ -54,18 +53,17 @@
         var title = $("#title").val() != null ? $("#title").val().join() : "";
         getWorkingCalendarDetails(fromPrevDate, toPrevDate, group, title);
 
-        prev_click_allowed = false;
-        window.setTimeout(function () { prev_click_allowed = true; $("#blocker").hide(); }, 1200);
-
+        reloadButtonText(element);
     });
 
     //Click submit button
     var submit_click_allowed = true;
     $('#submit').click(function (e) {
-        if (!submit_click_allowed) return;
-        $("#blocker").show();
+        var element = $(this);
 
+        actingLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
+
         var fromDate = $("#OriginalFromDate").val();
         var toDate = $("#OriginalToDate").val();
         var displayDateFrom = new Date(fromDate);
@@ -77,8 +75,7 @@
         var title = $("#title").val() != null ? $("#title").val().join() : "";
         getWorkingCalendarDetails(fromDate, toDate, group, title);
 
-        submit_click_allowed = false;
-        window.setTimeout(function () { submit_click_allowed = true; $("#blocker").hide(); }, 1200);
+        reloadButtonText(element);
 
     });
 
@@ -102,30 +99,24 @@
         }
         $.get(_global.root + "calendar/WorkingCalendarDetails",
             { "empId": employeeId, "fromDate": fromDate, "toDate": toDate, "groupId": group, "jobTitleId": title, isLocal: isLocal })
-                    .done(function (content) {
-                        workingCalendarContainer.empty();
-                        //workingCalendarContainer.html(content);
-                        workingCalendarContainer.html(content).dataTable({
-                            //                            "bprocessing": true,
-                            "sScrollY": "520px",
-                            "sScrollX": "100%",
-                            "sScrollXInner": "100%",
-                            "bScrollCollapse": true,
-                            "bFilter": true,
-                            "bSort": false,
-                            "bPaginate": false,
-                            "bInfo": true,
-                            "bJQueryUI": true
-                            //"bDestroy": true
-                        });
-                        new FixedColumns(oTable, {
-                            "iLeftColumns": 2,
-                            "iLeftWidth": 250
-                            //                            "iRightColumns": 1,
-                            //                            "iRightWidth": 180
-                        });
-
-                    });
+        .done(function (content) {
+            workingCalendarContainer.empty();
+            workingCalendarContainer.html(content).dataTable({
+                "sScrollY": "520px",
+                "sScrollX": "100%",
+                "sScrollXInner": "100%",
+	            "bScrollCollapse": true,
+	            "bFilter": true,
+	            "bSort": true,
+	            "bPaginate": true,
+	            "sPaginationType": "full_numbers",
+	            "bInfo": true,
+	            "bJQueryUI": true,
+	            'bLengthChange': false,
+	            'iDisplayLength': 50,
+	            "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8]}]
+            });
+        });
     }
 
 });
@@ -143,4 +134,17 @@ function exportExcel() {
     url = _global.root + "export/EmployeeWorkingCalendar?fromDate=" + fromDate + "&toDate=" + toDate
                         + "&group=" + group + "&title=" + title;
     location.href = url;
+}
+
+function actingLoading(element, disabled) {
+//    $(element).attr("origin-value", $(element).attr("value"));
+//    $(element).attr("value", 'Processing');
+    element.attr("disabled", "disabled");
+}
+
+function reloadButtonText(element) {
+    window.setTimeout(function () {
+        element.removeAttr("disabled");
+//        element.attr("value", element.attr("origin-value")); 
+    }, 1200);
 }

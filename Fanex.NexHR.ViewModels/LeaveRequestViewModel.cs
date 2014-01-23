@@ -12,10 +12,8 @@ namespace Fanex.NexHR.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
-    using Fanex.NexHR.Core.Enums;
+    using System.Web.Mvc;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
 
     /// <summary>
     /// LeaveRequest ViewModel.
@@ -61,9 +59,9 @@ namespace Fanex.NexHR.ViewModels
 
         public IList<LeaveType> LeaveTypeList { get; set; }
 
-        public IList<SupervisorNameModel> VerifierList { get; set; }
+        public IList<SelectListItem> VerifierList { get; set; }
 
-        public IList<SupervisorNameModel> ApproverList { get; set; }
+        public IList<SelectListItem> ApproverList { get; set; }
 
         public EmployeeAnnualBalance EmployeeBalance { get; set; }
 

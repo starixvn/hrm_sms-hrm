@@ -9,7 +9,7 @@
 @Html.Hidden("ToPreviousDate", ((DateTime)ViewBag.ToNewDate).AddDays(-7))
 @Html.Hidden("FromNextDate", ((DateTime)ViewBag.FromNewDate).AddDays(7))
 @Html.Hidden("ToNextDate", ((DateTime)ViewBag.ToNewDate).AddDays(7))
-<table id="data" class="pretty">
+<table id="data">
     <thead>
         @{
             int daysInMonth = Model.Count != 0

@@ -321,8 +321,14 @@ namespace Fanex.NexHR.Services
         /// <param name="requestViewType">Type of the request view.</param>
         /// <param name="isDailyRequest">If set to <c>true</c> [is daily request].</param>
         /// <param name="loginId">The login identifier.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of request.</returns>
-        public IList<RequestEntity> GetWorkingTimeRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, int? loginId)
+        public IList<RequestEntity> GetWorkingTimeRequests(
+            RequestViewModel request, 
+            RequestViewType requestViewType, 
+            bool isDailyRequest, 
+            int? loginId, 
+            byte? isLocal = null)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             var status = request.StatusId != 0 ? new byte?((byte)request.StatusId) : null;
@@ -338,29 +344,34 @@ namespace Fanex.NexHR.Services
             switch (request.RequestType)
             {
                 case (int)RequestFilter.All:
-                    entityList = this._requestRepository.GetAllRequest(role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                    entityList = this._requestRepository.GetAllRequest(
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.Leave:
                     entityList = this._leaveRequestRepository.GetRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.ChangeShift:
                     entityList = _changeShiftRepository.GetChangeShiftRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.LateInEarlyOut:
                     entityList =
-                        _lateInEarlyOutRepository.GetLateInEarlyOutRequests(role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                        _lateInEarlyOutRepository.GetLateInEarlyOutRequests(
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.CheckInOut:
-                    entityList = _checkInOutRepository.GetCheckInOutRequests(role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                    entityList = _checkInOutRepository.GetCheckInOutRequests(
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.Overtime:
-                    entityList = _overtimeRepository.GetOvertimeRequests(role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                    entityList = _overtimeRepository.GetOvertimeRequests(
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 case (int)RequestFilter.KeepInView:
                     entityList =
-                        _keepInViewRequestRepository.GetKeepInViewRequests(role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId);
+                        _keepInViewRequestRepository.GetKeepInViewRequests(
+                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
                     break;
                 default:
                     break;

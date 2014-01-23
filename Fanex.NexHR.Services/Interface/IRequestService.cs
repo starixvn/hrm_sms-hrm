@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool Process(string command, long requestId, int roleId, int processBy, out string errorMessage);
 
-        IList<RequestEntity> GetWorkingTimeRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, int? loginId);
+        IList<RequestEntity> GetWorkingTimeRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, int? loginId, byte? isLocal = null);
 
         IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
 

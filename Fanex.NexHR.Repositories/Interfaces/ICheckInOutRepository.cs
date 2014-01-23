@@ -57,7 +57,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
             bool isDailyRequest,
             int? employeeId = null,
             byte? status = null,
-            int? logInId = null);
+            int? logInId = null,
+            byte? isLocal = null);
 
         IList<RequestEntity> GetCheckInOutRequestHistory(long requestId, int requestTypeId);
     }

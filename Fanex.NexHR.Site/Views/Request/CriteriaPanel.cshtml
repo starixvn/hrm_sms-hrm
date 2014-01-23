@@ -70,9 +70,24 @@
         <div class="space">
         </div>
         <div class="grid_2">
+            Category
+        </div>
+         <div class="grid_4">
+            @{
+                var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "All", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+            }
+            @Html.DropDownListFor(model => model.IsLocal, category)
+        </div>
+
+        <div class="grid_2">
         @Html.LabelFor(model => model.RequestType, "Request")
         </div>
-        <div class="grid_22">
+        <div class="grid_15">
             @{
             var types = new List<SelectListItem>
             {
@@ -93,7 +108,7 @@
         </div>
           <div class="space">
         </div>
-        <div class="grid_22 prefix_2">
+        <div class="grid_22 prefix_9">
             <input class="processing-submit" type="submit" value="@Labels.Submit"/>
             <input type="button" value="Excel" id="btnExcel"/>
         </div>

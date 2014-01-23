@@ -13,8 +13,10 @@ table.pretty td, table.pretty th
 /* Header cells */
 table.pretty thead th
 {
-    text-align: center; /*background: #66a9bd;*/
+    text-align: center; 
+    background: url(images/table_header_repeat.jpg) repeat-x;
     min-width: 80px;
+    color: #fff;
 }
 
 table.pretty thead th.weekend
@@ -116,40 +118,11 @@ div.dataTables_paginate span > a
     text-align: center;
 }
 
-div.dataTables_info
-{
-    padding: 9px 6px 6px 6px;
-}
-
 span.highlight-date
 {
     color: rgb(253, 2, 2);
     margin-left: 5px;
     margin-right: 5px;
-}
-
-#blocker
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: .7;
-    background-color: #000;
-    z-index: 1000;
-    overflow: auto;
-}
-#blocker div
-{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5em;
-    height: 2em;
-    margin: -1em 0 0 -2.5em;
-    color: #fff;
-    font-weight: bold;
 }
 
 .bunhat 
@@ -159,4 +132,12 @@ span.highlight-date
 .container_24 .grid_24 
 {
     width: 100%;
+}
+
+#prev, #next
+{
+    width: 30px;
+    line-height: 22px;
+    height: 22px;
+    margin-bottom: 4px;
 }

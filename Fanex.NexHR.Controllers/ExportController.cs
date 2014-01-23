@@ -232,7 +232,8 @@ namespace Fanex.NexHR.Controllers
                 model,
                 RequestViewType.HrSpace,
                 false,
-                null);
+                null,
+                model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
 

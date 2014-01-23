@@ -225,6 +225,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="empid">Employee's id.</param>
         /// <param name="status">Request's status.</param>
         /// <param name="excludedEmpID">Log in id.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of RequestEntity.</returns>
         public IList<RequestEntity> GetCheckInOutRequests(
             string role,
@@ -234,7 +235,8 @@ namespace Fanex.NexHR.Repositories
             bool isDailyRequest = false,
             int? empid = null,
             byte? status = null,
-            int? excludedEmpID = null)
+            int? excludedEmpID = null,
+            byte? isLocal = null)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             var keyName = isDailyRequest
@@ -242,7 +244,7 @@ namespace Fanex.NexHR.Repositories
                 : "WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType";
             using (var db = new ObjectDb(keyName))
             {
-                using (IDataReader reader = db.ExecuteReader(new { empid, groupIds, fromDate, toDate, status, excludedEmpID, role, SupervisorID = excludedEmpID }))
+                using (IDataReader reader = db.ExecuteReader(new { empid, groupIds, fromDate, toDate, status, excludedEmpID, role, SupervisorID = excludedEmpID, isLocal }))
                 {
                     if (reader != null)
                     {

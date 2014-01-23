@@ -99,7 +99,7 @@
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierList, "OwnerId", "FullName"), new { @disabled = "disabled" })
+                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList, new { @disabled = "disabled" })
             </div>
             <div class="clear">
             </div>
@@ -109,7 +109,7 @@
                 @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.ApproverList, "OwnerId", "FullName"), new { @disabled = "disabled" })
+                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList, new { @disabled = "disabled" })
             </div>
             <div class="clear">
             </div>

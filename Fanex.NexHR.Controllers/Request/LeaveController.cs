@@ -81,8 +81,8 @@ namespace Fanex.NexHR.Controllers.Request
                 UnavailDates = listUnavailDates,
                 LeaveTypeList = leaveTypes,
                 TotalRequest = NumberRequestInMonth(),
-                VerifierList = verifierList,
-                ApproverList = approverList,
+                VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList(),
+                ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList(),
                 EmployeeBalance = employeeBalance
             };
 
@@ -140,8 +140,8 @@ namespace Fanex.NexHR.Controllers.Request
             leaveRequest.UnavailDates = listUnavailDates;
             leaveRequest.LeaveTypeList = leaveTypes;
             leaveRequest.TotalRequest = NumberRequestInMonth();
-            leaveRequest.VerifierList = verifierList;
-            leaveRequest.ApproverList = approverList;
+            leaveRequest.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            leaveRequest.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             leaveRequest.EmployeeBalance = employeeBalance;
 
             ViewBag.IsView = false;
@@ -192,8 +192,8 @@ namespace Fanex.NexHR.Controllers.Request
             leaveRequest.UnavailDates = listUnavailDates;
             leaveRequest.LeaveTypeList = leaveTypes;
             leaveRequest.TotalRequest = NumberRequestInMonth();
-            leaveRequest.VerifierList = verifierList;
-            leaveRequest.ApproverList = approverList;
+            leaveRequest.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            leaveRequest.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
 
             ViewBag.IsView = true;
             return View(leaveRequest);

@@ -115,6 +115,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="employeeId">Employee's id.</param>
         /// <param name="status">Request's status.</param>
         /// <param name="logInId">Log in id.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List RequestEntity.</returns>
         public override IList<RequestEntity> GetRequests(
             string role,
@@ -124,7 +125,8 @@ namespace Fanex.NexHR.Repositories
             bool isDailyRequest = false,
             int? employeeId = null,
             byte? status = null,
-            int? logInId = null)
+            int? logInId = null,
+            byte? isLocal = null)
         {
             IList<RequestEntity> entityList = null;
             var keyName = isDailyRequest
@@ -133,7 +135,7 @@ namespace Fanex.NexHR.Repositories
             using (var db = new ObjectDb(keyName))
             {
                 using (IDataReader reader =
-                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId }))
+                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
                 {
                     if (reader != null)
                     {

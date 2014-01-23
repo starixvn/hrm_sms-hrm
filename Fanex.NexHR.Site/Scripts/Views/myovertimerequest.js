@@ -135,7 +135,7 @@
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
         debugger;
 
-        if (TotalHours >= (TotalShiftHours + 0.5)) {
+        if (TotalHours >= (TotalShiftHours + 1)) {
             var object = $(this).first();
             var focusedTexbox = $(this).attr("id");
             if (focusedTexbox == "request_NormalHours"

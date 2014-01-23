@@ -59,6 +59,8 @@ namespace Fanex.NexHR.ViewModels
         [Display(Name = "Team")]
         public IList<Team> TeamCollection { get; set; }
 
+        public byte? IsLocal { get; set; }
+
         /// <summary>
         /// Method GetSelectListItemTeam.
         /// </summary>
