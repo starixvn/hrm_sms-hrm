@@ -331,14 +331,14 @@
             });
 
             $(".lnkUnCheckAll").on("click", function () {
-                $("input[type='checkbox']").removeAttr("checked");
+                $("input[type='checkbox']:not(.chkIsPublic)").removeAttr("checked");
                 ScheduleArrangeDetail.hasChangeValue = true;
 
                 return false;
             });
 
             $(".lnkCheckAll").on("click", function () {
-                $("input[type='checkbox']").attr("checked", true);
+                $("input[type='checkbox']:not(.chkIsPublic)").attr("checked", true);
                 ScheduleArrangeDetail.hasChangeValue = true;
 
                 return false;
