@@ -23,6 +23,7 @@
         var action = $("#ActionRequest").val();
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+        var isLocal = $("#IsLocal").val();
 
         var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
             + "&TeamIds=" + teams + "&Employee=" + $("#Employee").val()
@@ -30,7 +31,8 @@
             + "&FromDate=" + $("#FromDate").val()
             + "&ToDate=" + $("#ToDate").val()
             + "&StatusId=" + $("#statusId").val()
-            + "&RequestType=" + requestType;
+            + "&RequestType=" + requestType
+            + "&IsLocal=" + isLocal;
 
         location.href = url;
     });
@@ -39,6 +41,7 @@
         var action = $("#ActionRequest").val() + "WorkingTimeRequest";
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+        var isLocal = $("#IsLocal").val();
 
         var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
             + "&TeamIds=" + teams + "&Employee=" + $("#Employee").val()
@@ -46,7 +49,8 @@
             + "&FromDate=" + $("#FromDate").val()
             + "&ToDate=" + $("#ToDate").val()
             + "&StatusId=" + $("#statusId").val()
-            + "&RequestType=" + requestType;
+            + "&RequestType=" + requestType
+            + "&IsLocal=" + isLocal;
 
         location.href = url;
     });

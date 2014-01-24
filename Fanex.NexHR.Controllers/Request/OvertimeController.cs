@@ -410,9 +410,9 @@ namespace Fanex.NexHR.Controllers.Request
             return View();
         }
 
-        public ActionResult OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
+        public ActionResult OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal)
         {
-            var entity = _OvertimeService.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups);
+            var entity = _OvertimeService.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups, isLocal);
             return PartialView(entity);
         }
 

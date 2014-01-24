@@ -331,6 +331,7 @@
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/employee.workingcalendars.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
     </resourceSet>
 

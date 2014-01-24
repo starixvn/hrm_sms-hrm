@@ -7,7 +7,7 @@
     $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
     $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
 
-    getWorkingCalendarDetails(fromDate, toDate);
+    getWorkingCalendarDetails($("#submit"), fromDate, toDate);
     $('#group').multiselect();
     $("#title").multiselect({
         noneSelectedText: 'Select positions',
@@ -16,11 +16,11 @@
     });
 
     //Click next link
-    var next_click_allowed = true;
+
     $('#next').click(function (e) {
         var element = $(this);
+        buttonLoading(element, true);
 
-        actingLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromNextDate = $("#FromNextDate").val();
         var toNextDate = $("#ToNextDate").val();
@@ -30,17 +30,15 @@
         $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
         var group = $("#group").val() != null ? $("#group").val().join() : "";
         var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(fromNextDate, toNextDate, group, title);
-
-        reloadButtonText(element);
+        getWorkingCalendarDetails(element, fromNextDate, toNextDate, group, title);
     });
 
     //Click previous link
-    var prev_click_allowed = true;
+
     $('#prev').click(function (e) {
         var element = $(this);
+        buttonLoading(element, true);
 
-        actingLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
         var fromPrevDate = $("#FromPreviousDate").val();
         var toPrevDate = $("#ToPreviousDate").val();
@@ -51,17 +49,16 @@
 
         var group = $("#group").val() != null ? $("#group").val().join() : "";
         var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(fromPrevDate, toPrevDate, group, title);
+        getWorkingCalendarDetails(element, fromPrevDate, toPrevDate, group, title);
 
-        reloadButtonText(element);
+        //reloadButton(element);
     });
 
     //Click submit button
-    var submit_click_allowed = true;
+
     $('#submit').click(function (e) {
         var element = $(this);
-
-        actingLoading(element, true);
+        buttonLoading(element, true);
         $("#workingCalendarDetails").dataTable().fnDestroy();
 
         var fromDate = $("#OriginalFromDate").val();
@@ -73,9 +70,7 @@
 
         var group = $("#group").val() != null ? $("#group").val().join() : "";
         var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(fromDate, toDate, group, title);
-
-        reloadButtonText(element);
+        getWorkingCalendarDetails(element, fromDate, toDate, group, title);
 
     });
 
@@ -83,13 +78,13 @@
         exportExcel();
     });
 
-    setTimeout(function () {
-        $("#blocker").hide();
-    }, 1200);
-
-    function getWorkingCalendarDetails(fromDate, toDate, group, title) {
+    function getWorkingCalendarDetails(button, fromDate, toDate, group, title) {
+        var employeeText = $("#Employee").val();
         var workingCalendarContainer = $("#workingCalendarDetails");
         var employeeId = $("#EmployeeId").val();
+        if (employeeText == "" || employeeText == null) {
+            employeeId = null;
+        }
         var isLocal = $("#category").val();
         if (isLocal == "0") {
             isLocal = 0;
@@ -105,17 +100,18 @@
                 "sScrollY": "520px",
                 "sScrollX": "100%",
                 "sScrollXInner": "100%",
-	            "bScrollCollapse": true,
-	            "bFilter": true,
-	            "bSort": true,
-	            "bPaginate": true,
-	            "sPaginationType": "full_numbers",
-	            "bInfo": true,
-	            "bJQueryUI": true,
-	            'bLengthChange': false,
-	            'iDisplayLength': 50,
-	            "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8]}]
+                "bScrollCollapse": true,
+                "bFilter": true,
+                "bSort": true,
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "bInfo": true,
+                "bJQueryUI": true,
+                'bLengthChange': false,
+                'iDisplayLength': 50,
+                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8]}]
             });
+            reload(button);
         });
     }
 
@@ -136,15 +132,14 @@ function exportExcel() {
     location.href = url;
 }
 
-function actingLoading(element, disabled) {
-//    $(element).attr("origin-value", $(element).attr("value"));
-//    $(element).attr("value", 'Processing');
+function buttonLoading(element, disabled) {
+    element.attr("origin-value", $(element).attr("value"));
+    element.attr("value", 'Processing');
     element.attr("disabled", "disabled");
 }
 
-function reloadButtonText(element) {
-    window.setTimeout(function () {
-        element.removeAttr("disabled");
-//        element.attr("value", element.attr("origin-value")); 
-    }, 1200);
+function reload(element) {
+    element.attr("value", $(element).attr("origin-value"));
+    element.removeAttr("disabled");
+    $("#blocker").hide();
 }

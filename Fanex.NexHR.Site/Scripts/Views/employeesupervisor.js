@@ -9,23 +9,45 @@
                 listIgnore += $(supervisor).attr("data-id") + ","
             }
 
-            $.ajax({
-                url: _global.root + 'api/employee/GetSupervisors',
-                data: {
-                    roleIds: $('#SupervisorRole').val(),
-                    query: $.trim(request.term),
-                    excludeIds: listIgnore,
-                    $top: 10
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
-                            value: item.Id > 0 ? item.Id : item.EmpId
-                        }
-                    }));
-                }
-            });
+            var urlAllEmployee = _global.root + 'api/employee/getemployees';
+            var params = {
+                query: $.trim(request.term),
+                $top: 10
+            }
+            if ($("#supervisorRole").val() == "True") {
+                $.ajax({
+                    url: urlAllEmployee,
+                    data: params,
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
+                                value: item.Id > 0 ? item.Id : item.EmpId
+                            }
+                        }));
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: _global.root + 'api/employee/GetSupervisors',
+                    data: {
+                        roleIds: $('#SupervisorRole').val(),
+                        query: $.trim(request.term),
+                        excludeIds: listIgnore,
+                        $top: 10
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
+                                value: item.Id > 0 ? item.Id : item.EmpId
+                            }
+                        }));
+                    }
+                });
+            }
+
         },
         minLength: 1,
         select: function (event, ui) {
@@ -68,7 +90,7 @@
             var isExist = false;
             var supervisors = $("#tblSupervisor tbody tr");
             for (var i = 0; i < supervisors.length; i++) {
-                var supervisor = $(supervisors[i]).children().first();
+                var supervisor = $(supervisors[i]).children().eq(1);
                 if (supervisorId == $(supervisor).attr("data-id")) {
                     isExist = true;
                 }
@@ -206,22 +228,9 @@
 	        _global.root + 'api/employee/getemployees'
 	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
 	        , function (data) {
-	            var object = $("#tblSupervisor tbody");
-	            var countTR = $("#tblSupervisor tbody tr");
-
-	            if (countTR.length > 0) {
-	                confirm("All employee in current list will be removed! Process?", function () {
-	                    object.empty();
-	                    for (var i = 0; i < data.length; i++) {
-	                        addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	                    }
-	                });
+	            for (var i = 0; i < data.length; i++) {
+	                addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
 	            }
-	            else {
-	                for (var i = 0; i < data.length; i++) {
-	                    addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	                }
-                }
 
 	        }).error(function () {
 	            alert(_messages.errorTryAgain);
@@ -244,10 +253,11 @@ function addToGrid(supervisorName, supervisorId, supervisorTeam) {
         });
 
         var isExist = false;
+        debugger;
 
         var supervisors = $("#tblSupervisor tbody tr");
         for (var i = 0; i < supervisors.length; i++) {
-            var supervisor = $(supervisors[i]).children().first();
+            var supervisor = $(supervisors[i]).children().eq(1);
             if (supervisorId == $(supervisor).attr("data-id")) {
                 isExist = true;
             }

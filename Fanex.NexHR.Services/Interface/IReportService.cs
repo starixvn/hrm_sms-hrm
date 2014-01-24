@@ -25,7 +25,8 @@ namespace Fanex.NexHR.Services.Interface
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
             DateTime month,
             int? empId,
-            string groupIds);
+            string groupIds,
+            byte? isLocal = null);
         
         IList<RequestsMonitoring> GetRequestMonitoring(
             DateTime fromDate,

@@ -26,7 +26,7 @@
         <div class="grid_2">
             @Labels.Month
         </div>
-        <div class="grid_7">
+        <div class="grid_6">
             <div id="DateControl">
             </div>
             <input type="hidden" id="Year" name="Year" value="@Model.Month.Year" />
@@ -34,6 +34,21 @@
             @Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
             @Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
         </div>
+
+         <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2 gridlabel">

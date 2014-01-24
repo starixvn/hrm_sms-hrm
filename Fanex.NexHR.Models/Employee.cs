@@ -182,6 +182,8 @@ namespace Fanex.NexHR.Models
 
         public bool AllowEditPersonalInformation { get; set; }
 
+        public bool IsExpatUseHoliday { get; set; }
+
         #region Contract
         public string BankAccount { get; set; }
 

@@ -1,9 +1,8 @@
 ﻿$(document).ready(function () {
-
     $("#errordialog").hide();
+
     //Save Button.
     $("#save, #savefooter").live("click", function () {
-
         var checkValidate = Validation();
         if (checkValidate == 0) {
             var OvertimeInfo = {
@@ -11,7 +10,6 @@
                 ApproverId: $("#ApproverId").val(),
                 EmpId: $("#EmpId").val()
             };
-
             var OvertimeDetails = [];
             $("#data tbody tr").each(function () {
                 OvertimeDetails.push({
@@ -36,7 +34,6 @@
                 data: { overtimeJson: OvertimeInfoJson, overtimeDetailsJson: OvertimeDetailsJson },
                 dataType: 'json',
                 success: function (response) {
-
                     if (response.success) {
                         $('form').removeClass("dirty");
                         alert("Data Saved!");
@@ -63,9 +60,7 @@
             if (checkValidate == 3) {
                 alert("Please select Verifier and Approver");
             }
-
         }
-
     });
 
     //Back Button.
@@ -78,7 +73,6 @@
         var url = _global.root + 'overtime/yearlyreport';
         $(location).attr('href', url);
     });
-
 
     //autocomplete
     $("#Employee").autocomplete({
@@ -121,28 +115,23 @@
     });
 
     //Set range for numeric textbox.
-
     var textbox = $("input[type='text'].inputDay");
-
     textbox.keyup(function () {
         var row = $(this).parent().parent();
-
         var TotalHours = parseFloat($('td:eq(4)', row).html().trim());
         var NormalHours = parseFloat($('td #request_NormalHours', row).val());
         var OffHours = parseFloat($('td #request_OffHours', row).val());
         var PublicHours = parseFloat($('td #request_PublicHours', row).val());
         //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
-        debugger;
 
-        if (TotalHours >= (TotalShiftHours + 1)) {
+        if (TotalHours >= TotalShiftHours) {
             var object = $(this).first();
             var focusedTexbox = $(this).attr("id");
             if (focusedTexbox == "request_NormalHours"
             || focusedTexbox == "request_OffHours" 
             || focusedTexbox == "request_PublicHours") {
-                var normalLitmit = TotalHours - (TotalShiftHours);
-
+                var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
                 if (normalLitmit < 0) {
                     normalLitmit = 0;
                 }
@@ -155,12 +144,10 @@
         else {
             RangeTextBox($(this), 0, 0);
         }
-
     });
     requestToCalculateOTHours();
     $('form').areYouSure();
 });
-
 
 function RangeTextBox(textbox, min, max) {
     var textboxValue = textbox.val();

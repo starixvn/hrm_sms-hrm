@@ -91,7 +91,7 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Leader = true;
             ViewBag.Action = "Member";
-            this.GetRequests(ref request, RequestViewType.PersonalSpace, false, request.IsLocal);
+            this.GetRequests(ref request, RequestViewType.PersonalSpace, false);
 
             return View(request);
         }
@@ -120,7 +120,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
             ViewBag.Action = "EmployeeView";
-            this.GetRequests(ref request, RequestViewType.CompanySpace, false, request.IsLocal);
+            this.GetRequests(ref request, RequestViewType.CompanySpace, false);
 
             return View("HRView", request);
         }
@@ -307,9 +307,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="request">Request ViewModel.</param>
         /// <param name="requestViewType">Request View Types.</param>
         /// <param name="isDailyRequest">Is Daily Request.</param>
-        /// <param name="isLocal">Expat or Local user.</param>
         [NonAction]
-        private void GetRequests(ref RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, byte? isLocal = null)
+        private void GetRequests(ref RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
             request.TeamCollection = _TeamService.GetAll();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
@@ -320,7 +319,7 @@ namespace Fanex.NexHR.Controllers.Request
                 loginId = this.CurrentUser.Id;
             }
 
-            var requestList = _RequestService.GetWorkingTimeRequests(request, requestViewType, isDailyRequest, loginId, isLocal);
+            var requestList = _RequestService.GetWorkingTimeRequests(request, requestViewType, isDailyRequest, loginId, request.IsLocal);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
             ViewBag.IsDailyRequest = isDailyRequest;

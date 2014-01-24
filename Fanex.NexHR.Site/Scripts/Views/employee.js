@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     $("#group").multiselect();
 
     var jobTitleId = $('#jobtitleid').val();
@@ -9,6 +10,7 @@
 
     $('#keyword').keyup(function (event) {
         if (event.keyCode == 13) {
+            $("#userdata").dataTable().fnDestroy();
             query(jobTitleId);
         }
     });
@@ -34,6 +36,7 @@
     $("#detailsExcel").click(function () {
         exportExcel($(this));
     });
+
 });
 
 function query(jobTitleId) {

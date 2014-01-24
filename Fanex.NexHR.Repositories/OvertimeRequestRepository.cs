@@ -539,11 +539,11 @@ namespace Fanex.NexHR.Repositories
             return entityList.ToList();
         }
 
-        public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
+        public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null)
         {
             using (ObjectDb db = new ObjectDb("Report_OvertimeDetail"))
             {
-                var entity = db.Query<OvertimeRequest>(new { fromDate, toDate, empId, JobTitleId = jobTitle, groupIds = groups }).ToList();
+                var entity = db.Query<OvertimeRequest>(new { fromDate, toDate, empId, JobTitleId = jobTitle, groupIds = groups, isLocal }).ToList();
                 return entity;
             }
         }

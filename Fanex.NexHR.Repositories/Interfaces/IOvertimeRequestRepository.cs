@@ -55,7 +55,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<OvertimeRequest> HRGetNormalOvertimeRequest(int supervisorId, int empId, DateTime requestMonth);
 
-        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups);
+        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null);
 
         IList<OvertimeRequest> GetOvertimeByRequestIds(string requestIds);
 

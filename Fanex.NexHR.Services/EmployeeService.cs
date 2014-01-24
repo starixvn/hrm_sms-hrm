@@ -229,6 +229,11 @@ namespace Fanex.NexHR.Services
                 model.Password = Encryptor.ComputeHash(_HashProvider, model.Password);
             }
 
+            if (model.IsLocal == true)
+            {
+                model.IsExpatUseHoliday = false;
+            }
+
             var updated = this._employeeRepository.Update(model, out errorCode, out message);
             if (errorCode != 0)
             {

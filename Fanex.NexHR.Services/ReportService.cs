@@ -46,15 +46,17 @@ namespace Fanex.NexHR.Services
         /// <param name="month">The month will be filtered.</param>
         /// <param name="empId">The employee identifier.</param>
         /// <param name="groupIds">The group ids.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>The list of TotalWorkingHourMonthly.</returns>
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
             DateTime month,
             int? empId,
-            string groupIds)
+            string groupIds,
+            byte? isLocal = null)
         {
             try
             {
-                var totalWorkingHourMonthly = _reportRepository.GetTotalWorkingHourMonthly(month, empId, groupIds);
+                var totalWorkingHourMonthly = _reportRepository.GetTotalWorkingHourMonthly(month, empId, groupIds, isLocal);
                 return totalWorkingHourMonthly;
             }
             catch (Exception ex)

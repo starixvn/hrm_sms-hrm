@@ -10,8 +10,10 @@
 }
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">HR</a> <span class="step"><a href="/employee/usermanagement">
-        Employee</a> </span><span class="step">Supervisor</span>
+    <a class="step" href="javascript:;">HR</a> 
+    <span class="step"> <a href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a> </span>
+    <span class="step"> <a href="/employee/edit/@Model.EmployeeId">Employee Personal Information</a> </span>
+    <span class="step">Supervisor</span>
 }
 @*<div class="filter"> 
     @Html.Label("Role Supervisor")
@@ -38,6 +40,7 @@
         if (Model.SupervisorRole == (short)RolesEnum.ActingSupervisor)
         {
         @Html.Label("Employee")
+        @Html.Hidden("supervisorRole", true)
         }
     }
     @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
