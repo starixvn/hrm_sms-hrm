@@ -70,7 +70,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             var model = new LeaveRequestViewModel
             {
-                LeaveTypeId = Constants.AnnualLeave,
+                LeaveTypeId = Constants.GeneralLeave,
                 Employee = employee.NickName + " (" + employee.FullName + ")",
                 DisplayName = employee.DisplayName,
                 EmployeeId = employee.Id,
