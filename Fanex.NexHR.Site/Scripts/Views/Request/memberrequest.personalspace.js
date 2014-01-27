@@ -26,7 +26,6 @@
         var employee = $("#Employee").val();
         var employeeId = employee == "" ? "" : $("#EmployeeId").val();
         var isLocal = $("#IsLocal").val();
-        debugger;
 
         var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
                 + "&TeamIds=" + teams + "&Employee=" + employee

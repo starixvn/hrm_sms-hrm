@@ -13,7 +13,11 @@
                 </th>
                 <th>@Labels.TimeOut
                 </th>
-                <th>@Labels.TotalHours
+                <th>
+                    Total Time
+                </th>
+                <th>
+                    Working Hours
                 </th>
                 <th>@Labels.NormalDay
                 </th>
@@ -49,6 +53,9 @@
                     <td>@request.TimeIn
                     </td>
                     <td>@request.TimeOut
+                    </td>
+                    <td>
+                        @request.TotalWorkHours_Time
                     </td>
                     <td class="totalHours">
                         @if (request.TotalWorkHours > 0)
@@ -88,7 +95,7 @@
                             @request.OffHours
                         </td>
                         }
-                        
+
                         //for Public Holiday.
                         if (request.IsHoliday)
                         {

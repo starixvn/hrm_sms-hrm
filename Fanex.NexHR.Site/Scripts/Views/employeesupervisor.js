@@ -253,8 +253,6 @@ function addToGrid(supervisorName, supervisorId, supervisorTeam) {
         });
 
         var isExist = false;
-        debugger;
-
         var supervisors = $("#tblSupervisor tbody tr");
         for (var i = 0; i < supervisors.length; i++) {
             var supervisor = $(supervisors[i]).children().eq(1);

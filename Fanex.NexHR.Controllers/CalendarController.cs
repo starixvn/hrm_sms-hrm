@@ -160,11 +160,12 @@ namespace Fanex.NexHR.Controllers
         /// <param name="toDate">The To date.</param>
         /// <param name="groupIds">Groups Id.</param>
         /// <param name="isShowWholeCompany">Is Show Whole Company.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>Action Result.</returns>
         [Authorize(Roles = "ShiftManager,HR")]
-        public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany)
+        public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
-            var shiftStatisticModels = _workingCalendarService.GetShiftStatistic(this.CurrentUser.Id, fromDate, toDate, groupIds, isShowWholeCompany);
+            var shiftStatisticModels = _workingCalendarService.GetShiftStatistic(this.CurrentUser.Id, fromDate, toDate, groupIds, isShowWholeCompany, isLocal);
 
             var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
             {

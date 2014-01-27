@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool InsertOrUpdateWorkingCalendars(ScheduleArrangeModel scheduleArrangeModel, out int errorCode, out string message);
 
-        IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany);
+        IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal);
 
         IList<WorkingScheduleModel> GetWorkingSchedule(DateTime date, int id);
 

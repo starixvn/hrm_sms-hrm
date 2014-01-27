@@ -12,8 +12,23 @@
     <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-<div class="container_24">
+<div class="container_24 bunhat">
+    <div class="grid_19">
         <div class="row">
+            <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
             <div class="grid_1">
                 @Labels.Team
             </div>
@@ -24,21 +39,28 @@
                         <option value="@team.Id">@team.Name</option>
                     }
                 </select>
-                
                 <input style="vertical-align: 0px" id="chkIsShowWholeCompany" type="checkbox" />
-                    <label for="chkIsShowWholeCompany"> Show whole company</label>
+                <label for="chkIsShowWholeCompany">
+                    Show whole company</label>
             </div>
             <div class="grid_2">
                 <input type="button" value="@Labels.Submit" id="btnSubmit"/>
             </div>
-            <div class="clear"></div>
+            <div class="clear">
+            </div>
         </div>
         @Html.HiddenFor(model => model.FromDate)
         @Html.HiddenFor(model => model.ToDate)
-
+    </div>
 </div>
-<div class="clear"></div>
-<div class="space"></div>
-<div class="clear"></div>
-<div class="space"></div>
-<div id="shiftStatistic"></div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<br />
+<div id="shiftStatistic">
+</div>

@@ -114,12 +114,18 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany)
+        public IList<ShiftStatisticModel> GetShiftStatistic(
+            int supervisorId,
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            bool isShowWholeCompany, 
+            byte? isLocal)
         {
             using (var db = new ObjectDb("ShiftMng_RptShiftSchedule"))
             {
                 var shiftStatisticModels = db.Query<ShiftStatisticModel>(
-                    new { supervisorId, fromtime = fromDate, totime = toDate, groupIds, isShowWholeCompany });
+                    new { supervisorId, fromtime = fromDate, totime = toDate, groupIds, isShowWholeCompany, isLocal });
 
                 return shiftStatisticModels.ToList();
             }

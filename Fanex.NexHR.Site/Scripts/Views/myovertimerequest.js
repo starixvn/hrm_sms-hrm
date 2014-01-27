@@ -118,7 +118,7 @@
     var textbox = $("input[type='text'].inputDay");
     textbox.keyup(function () {
         var row = $(this).parent().parent();
-        var TotalHours = parseFloat($('td:eq(4)', row).html().trim());
+        var TotalHours = parseFloat($('td:eq(5)', row).html().trim());
         var NormalHours = parseFloat($('td #request_NormalHours', row).val());
         var OffHours = parseFloat($('td #request_OffHours', row).val());
         var PublicHours = parseFloat($('td #request_PublicHours', row).val());
@@ -129,7 +129,7 @@
             var object = $(this).first();
             var focusedTexbox = $(this).attr("id");
             if (focusedTexbox == "request_NormalHours"
-            || focusedTexbox == "request_OffHours" 
+            || focusedTexbox == "request_OffHours"
             || focusedTexbox == "request_PublicHours") {
                 var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
                 if (normalLitmit < 0) {
