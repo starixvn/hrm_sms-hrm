@@ -2,7 +2,11 @@
 
 
     $('#group').multiselect();
-    $('#title').multiselect();
+    $("#title").multiselect({
+        noneSelectedText: 'Select positions',
+        selectedText: '# selected',
+        selectedList: 0
+    });
 
     GetOTReportDetails();
 
@@ -76,6 +80,13 @@ function GetOTReportDetails() {
     var jobTitle = $("#title").val() != null ? $("#title").val().join() : "";
     var fromDate = $("#fromDate").val();
     var toDate = $("#toDate").val();
+    var isLocal = $("#category").val();
+    if (isLocal == "0") {
+        isLocal = 0;
+    }
+    if (isLocal == "1") {
+        isLocal = 1;
+    }
 
     if (employee == null || employee == "") {
         empId = "";
@@ -87,7 +98,8 @@ function GetOTReportDetails() {
         "toDate": toDate,
         "empId": empId,
         "jobTitle": jobTitle,
-        "groups": groupIds
+        "groups": groupIds,
+        "isLocal": isLocal
     };
 
     $.ajax({

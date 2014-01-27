@@ -43,9 +43,23 @@
             <div class="space">
             </div>
             <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
+            <div class="grid_2 gridlabel">
                 From Date
             </div>
-            <div class="grid_6">
+            <div class="grid_4">
                 @Html.DatePicker("fromDate", DateTime.Now.AddMonths(-1))
             </div>
             <div class="grid_2 gridlabel">
@@ -55,7 +69,7 @@
                 @Html.DatePicker("toDate", DateTime.Now.Date)
             </div>
             <div class="grid_6">
-                <input type="button" value="Preview" id="submitOTDetails"/>
+                <input type="button" value="Preview" id="submitOTDetails" />
                 <input type="button" id="excel" value="Excel" />
             </div>
         </div>
@@ -69,5 +83,6 @@
     <div class="space">
     </div>
     
-    <div id="OTExcelReportDetails"></div>
+    <div id="OTExcelReportDetails">
+    </div>
 }

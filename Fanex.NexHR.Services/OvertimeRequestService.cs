@@ -194,9 +194,9 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
+        public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null)
         {
-            return _overtimeRepository.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups);
+            return _overtimeRepository.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups, isLocal);
         }
 
         /// <summary>

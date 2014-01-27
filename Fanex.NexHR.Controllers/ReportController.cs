@@ -314,6 +314,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="employee">The employee.</param>
         /// <param name="employeeId">The employee identifier.</param>
         /// <param name="isExportExcel">If set to <c>true</c> [is export excel].</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>The view of TotalWorkingHourMonthly.</returns>
         public ActionResult TotalWorkingHourMonthly(
             int? month,
@@ -321,7 +322,8 @@ namespace Fanex.NexHR.Controllers
             string teamIds,
             string employee,
             int? employeeId,
-            bool isExportExcel = false)
+            bool isExportExcel = false,
+            byte? isLocal = null)
         {
             if (!month.HasValue)
             {
@@ -345,7 +347,8 @@ namespace Fanex.NexHR.Controllers
             var totalWorkingHourMonthly = _reportService.GetTotalWorkingHourMonthly(
                 model.Month,
                 empId: string.IsNullOrEmpty(employee) ? null : employeeId,
-                groupIds: model.TeamIds);
+                groupIds: model.TeamIds,
+                isLocal: isLocal);
             var firstRecord = totalWorkingHourMonthly == null && totalWorkingHourMonthly.Count > 0 ? null : totalWorkingHourMonthly[0];
 
             if (model.IsExportExcel)

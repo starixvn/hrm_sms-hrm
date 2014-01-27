@@ -34,7 +34,7 @@
             @Html.LabelFor(model => model.FromDate)
         </div>
         <div class="grid_6">
-            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010,1,1))
+            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.ToDate)
@@ -70,11 +70,25 @@
         <div class="space">
         </div>
         <div class="grid_2">
-        @Html.LabelFor(model => model.RequestType, "Request")
+            Category
         </div>
-        <div class="grid_22">
+        <div class="grid_4">
             @{
-            var types = new List<SelectListItem>
+    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "All", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+            }
+            @Html.DropDownListFor(model => model.IsLocal, category)
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.RequestType, "Request")
+        </div>
+        <div class="grid_15">
+            @{
+    var types = new List<SelectListItem>
             {
                 new SelectListItem() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
                 new SelectListItem() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
@@ -87,15 +101,15 @@
             @Html.RadioButtonList(model => model.RequestType, types)
         </div>
         <div class="clear">
-        &nbsp;
+            &nbsp;
         </div>
         <div class="space">
         </div>
-          <div class="space">
+        <div class="space">
         </div>
         <div class="grid_22 prefix_2">
             <input class="processing-submit" type="submit" value="@Labels.Submit"/>
-            <input type="button" value="Excel" id="btnExcel"/>
+            <input type="button" value="Excel" id="btnExcel" />
         </div>
     </div>
 

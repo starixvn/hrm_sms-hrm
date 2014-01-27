@@ -62,7 +62,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool CheckInvalidOvertimes(string requestIds);
 
-        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups);
+        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null);
 
         IList<OvertimeExcelReport> OvertimeRecord(DateTime requestDate, int calendar, int? empId); 
     }

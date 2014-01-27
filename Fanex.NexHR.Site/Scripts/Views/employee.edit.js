@@ -143,6 +143,10 @@
         });
     });
 
+    $("#IsLocal").on("change", function () {
+        showExpatApplicableHoliday();
+    });
+    showExpatApplicableHoliday();
 
 });
 
@@ -233,5 +237,15 @@ function checkAuthorizeToGrantAccess() {
     var canEditUserRole = $("#Authorize").val();
     if (canEditUserRole == "False") {
         $("#userRole :input").attr("disabled", true);
+    }
+}
+
+function showExpatApplicableHoliday() {
+    var value = $("#IsLocal").val();
+    if (value == "true") {
+        $("#expatHoliday").hide();
+    }
+    else {
+        $("#expatHoliday").show();
     }
 }

@@ -10,8 +10,10 @@
 }
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">HR</a> <span class="step"><a href="~/employee">Employee</a>
-    </span><span class="step">Shift Manager</span>
+    <a class="step" href="javascript:;">HR</a> 
+    <span class="step"> <a href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a></span>
+    <span class="step"> <a href="/employee/edit/@Model.EmployeeId">Employee Personal Information</a> </span>
+    <span class="step">Shift Manager</span>
 }
 @*<div class="filter"> 
     @Html.Label("Role Supervisor")

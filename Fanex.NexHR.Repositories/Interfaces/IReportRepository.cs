@@ -41,7 +41,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
             DateTime month,
             int? empId,
-            string groupIds);
+            string groupIds,
+            byte? isLocal = null);
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(
             int year,

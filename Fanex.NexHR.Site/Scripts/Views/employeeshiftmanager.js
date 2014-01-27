@@ -6,7 +6,7 @@
             var listIgnore = "";
             var supervisors = $("#tblSupervisor").find("tbody tr");
             for (var i = 0; i < supervisors.length; i++) {
-                var supervisor = $(supervisors[i]).children().first();
+                var supervisor = $(supervisors[i]).children().eq(1);
                 listIgnore += $(supervisor).attr("data-id") + ","
             }
 
@@ -47,6 +47,7 @@
             $('#SupervisorId').val(ui.item.value);
         },
         close: function () {
+            //nickName = ui.item.label;
             $('#Supervisor').val(nickName.split("-")[0].trim());
             $('#SupervisorTeam').val(nickName.split("-")[1].trim());
         }
@@ -68,7 +69,7 @@
 
             var supervisors = $("#tblSupervisor tbody tr");
             for (var i = 0; i < supervisors.length; i++) {
-                var supervisor = $(supervisors[i]).children().first();
+                var supervisor = $(supervisors[i]).children().eq(1);
                 if (supervisorId == $(supervisor).attr("data-id")) {
                     isExist = true;
                 }
@@ -91,7 +92,7 @@
         var supervisorTeam = $("#SupervisorTeam").val();
         if (supervisorId.length > 0 && supervisorName.length > 0) {
             var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
-            +'</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
+            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
             + '<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
             var object = html.find(".lnkremove").first().click(function () {
@@ -104,7 +105,7 @@
 
             var supervisors = $("#tblSupervisor tbody tr");
             for (var i = 0; i < supervisors.length; i++) {
-                var supervisor = $(supervisors[i]).children().first();
+                var supervisor = $(supervisors[i]).children().eq(1);
                 if (supervisorId == $(supervisor).attr("data-id")) {
                     isExist = true;
                 }
@@ -132,22 +133,10 @@
 	        _global.root + 'api/employee/getemployees'
 	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
 	        , function (data) {
-	            var object = $("#tblSupervisor tbody");
-	            var countTR = $("#tblSupervisor tbody tr");
+	            for (var i = 0; i < data.length; i++) {
+	                addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+	            }
 
-	            if (countTR.length > 0) {
-	                confirm("All employee in current list will be removed! Process?", function () {
-	                    object.empty();
-	                    for (var i = 0; i < data.length; i++) {
-	                        addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	                    }
-	                });
-	            }
-	            else {
-	                for (var i = 0; i < data.length; i++) {
-	                    addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	                }
-	            }
 	        }).error(function () {
 	            alert(_messages.errorTryAgain);
 	        });

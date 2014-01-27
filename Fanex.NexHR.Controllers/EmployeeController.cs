@@ -235,7 +235,6 @@ namespace Fanex.NexHR.Controllers
         {
             CheckRoleUser(model);
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
-
             if (ModelState.IsValid)
             {
                 if (model.SubGroupArray != null && model.SubGroupArray.Contains(model.Team.Id.ToString()))

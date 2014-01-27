@@ -371,6 +371,8 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@ToDate5", DbType.DateTime, model.ToDate5);
                 db.AddInParameter("@History", DbType.String, model.History);
 
+                db.AddInParameter("@IsExpatUseHoliday", DbType.Boolean, model.IsExpatUseHoliday);
+
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
                 db.ExecuteScalar();

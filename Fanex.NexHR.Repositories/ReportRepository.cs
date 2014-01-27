@@ -191,17 +191,19 @@ namespace Fanex.NexHR.Repositories
         /// <param name="month">The month.</param>
         /// <param name="empId">The employee identifier.</param>
         /// <param name="groupIds">The group ids.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>The list of TotalWorkingHourMonthly.</returns>
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
            DateTime month,
            int? empId,
-           string groupIds)
+           string groupIds,
+            byte? isLocal = null)
         {
             using (var db = new ObjectDb("Report_EmployeeTotalWorkingHourByMonth"))
             {
                 var entityList = new List<TotalWorkingHourMonthly>();
 
-                using (IDataReader reader = db.ExecuteReader(new { reportMonth = month, empId, groupIds }))
+                using (IDataReader reader = db.ExecuteReader(new { reportMonth = month, empId, groupIds, isLocal }))
                 {
                     if (reader != null)
                     {

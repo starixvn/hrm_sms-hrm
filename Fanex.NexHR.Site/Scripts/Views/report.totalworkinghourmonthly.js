@@ -34,12 +34,21 @@
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var employee = $("#Employee").val();
         var employeeId = employee == "" ? "" : $("#EmployeeId").val();
+        var isLocal = $("#category").val();
+        if (isLocal == "0") {
+            isLocal = 0;
+        }
+        if (isLocal == "1") {
+            isLocal = 1;
+        }
+
         var url = _global.root + "report/TotalWorkingHourMonthly?Month=" + $("#Month").val()
         + "&Year=" + $("#Year").val()
         + "&TeamIds=" + teams
         + "&EmployeeId=" + employeeId
         + "&Employee=" + employee
-        + "&IsExportExcel=" + isExportExcel;
+        + "&IsExportExcel=" + isExportExcel
+        + "&isLocal=" + isLocal;
 
         location.href = url;
     }
