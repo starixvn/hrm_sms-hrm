@@ -1,0 +1,65 @@
+﻿@model TimeRecordViewModel
+@{
+    ViewBag.Title = @Labels.TimeRecord;
+}
+@section css{
+    @Url.CombresLink("timerecordcss")
+}
+@section js{
+    @Url.CombresLink("timerecordjs")
+}
+@section Breadcrumb {
+    <a class="step">HR</a> <span class="step">@ViewBag.Title</span>
+}
+<h2>@ViewBag.Title</h2>
+<div class="clear">
+</div>
+
+<div class="container_24 bunhat">
+    <div class="grid_2">
+        @Html.LabelFor(model => model.FromDate)
+    </div>
+    <div class="grid_6">
+        @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+    </div>
+    <div class="grid_2">
+        @Html.LabelFor(model => model.ToDate)
+    </div>
+    <div class="grid_4">
+        @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="grid_2">
+        @Html.LabelFor(model => model.TeamIds, Labels.Team)
+    </div>
+    <div class="grid_6">
+        @Html.DropDownListFor(model => model.TeamIds, new SelectList(Model.Teams, "Id", "Code"), new { @multiple = "multiple" })
+    </div>
+    <div class="grid_2">
+        @Html.LabelFor(model => model.Employee)
+    </div>
+    <div class="grid_4">
+        @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+        @Html.HiddenFor(model => model.EmployeeId)
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="grid_16 prefix_2">
+        <input id="btnSubmit" type="button" value="@Labels.Submit"/>
+    </div>
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div id="TimeRecordContent"></div>
+

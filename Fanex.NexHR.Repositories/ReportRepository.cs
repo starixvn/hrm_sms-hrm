@@ -16,7 +16,6 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -351,7 +350,7 @@ namespace Fanex.NexHR.Repositories
             IList<ExtensionNoModel> entityList = new List<ExtensionNoModel>();
             using (var db = new ObjectDb("ExtensionNO_GetEmployeeInfo"))
             {
-                var entity = db.Query<ExtensionNoModel>(new { isInternal = isInternal, EmpExtID = empExtID }).SingleOrDefault();
+                var entity = db.QueryEntity<ExtensionNoModel>(new { isInternal = isInternal, EmpExtID = empExtID });
 
                 return entity;
             }
@@ -507,6 +506,34 @@ namespace Fanex.NexHR.Repositories
 
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Function to get time records.
+        /// </summary>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="groupIds">Group Ids.</param>
+        /// <param name="fromDate">From Date.</param>
+        /// <param name="toDate">The To Date.</param>
+        /// <returns>List of time records.</returns>
+        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate)
+        {
+            IList<TimeRecordModel> timeRecords = null;
+
+            using (var db = new ObjectDb("TimeRecord_Get"))
+            {
+                timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
+                    (t, e, g) =>
+                       {
+                           t.Employee = e;
+                           e.Team = g;
+                           return t;
+                       },
+                       splitOn: "EmpId, GroupId",
+                       parameterValues: new { EmpId = employeeId, groupIds = groupIds, fromDate = fromDate, toDate = toDate }).ToList();
+            }
+
+            return timeRecords;
         }
     }
 }

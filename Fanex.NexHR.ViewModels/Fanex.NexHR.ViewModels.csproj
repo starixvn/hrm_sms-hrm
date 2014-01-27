@@ -63,6 +63,7 @@
     <Compile Include="ChangeShiftViewModel.cs" />
     <Compile Include="ChangeWorkingCalendarsViewModel.cs" />
     <Compile Include="OvertimeExcelReportViewModel.cs" />
+    <Compile Include="TimeRecordViewModel.cs" />
     <Compile Include="TotalWorkingHourMonthlyViewModel.cs" />
     <Compile Include="DateOfEmployeeForgotAndLateEarlyIOViewModel.cs" />
     <Compile Include="ExtensionNumberViewModel.cs" />

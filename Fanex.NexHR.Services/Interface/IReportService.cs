@@ -68,5 +68,7 @@ namespace Fanex.NexHR.Services.Interface
         bool EditExternalGroup(int groupId, string groupName);
 
         bool DeleteExternalGroup(int groupId);
+
+        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate);
     }
 }
