@@ -909,4 +909,16 @@
   <data name="PerformedBy" xml:space="preserve">
     <value>Performed By</value>
   </data>
+  <data name="TimeRecord" xml:space="preserve">
+    <value>Time Record</value>
+  </data>
+  <data name="In" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="InOut" xml:space="preserve">
+    <value>In/Out</value>
+  </data>
 </root>

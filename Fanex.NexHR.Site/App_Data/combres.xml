@@ -641,6 +641,18 @@
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/reportovertimerequest.js" />
     </resourceSet>
+
+    <resourceSet name="timerecordcss" type="css">
+      <resource reference="sitecss"/>
+      <resource path="~/styles/timerecord.css" />
+    </resourceSet>
+    <resourceSet name="timerecordjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/timerecord.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/scripts/views/date.filter.js" />
+    </resourceSet>
     
   </resourceSets>
 </combres>

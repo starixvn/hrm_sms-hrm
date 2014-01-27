@@ -68,7 +68,7 @@
                     $("#dialogSortcontent").dialog({
                         modal: true,
                         minHeight: 0,
-                        width: 576,
+                        width: 600,
                         title: 'Member List'
                     });
                 });

@@ -27,6 +27,7 @@
       <siteMapNode title="Team management" controller="team" action="index" icon="setting" />
       <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" />
       <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
+      <siteMapNode title="Time Record" controller="report" action="timerecord" icon="calendar1" roles="HR"/>
       <siteMapNode title="Reports" controller="report" action="index" icon="search" roles="HR"/>
     </siteMapNode>
     <siteMapNode title="Company space">

@@ -233,5 +233,17 @@ namespace Fanex.NexHR.Services
             string message;
             return _reportRepository.DeleteExternalGroup(groupId, out errorCode, out message);
         }
+
+        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate)
+        {
+            IList<TimeRecordModel> timeRecords = null;
+
+            if (fromDate <= toDate)
+            {
+                timeRecords = _reportRepository.GetTimeRecords(employeeId, groupIds, fromDate, toDate);
+            }
+
+            return timeRecords;
+        }
     }
 }

@@ -93,6 +93,33 @@ namespace Fanex.NexHR.Controllers
         }
 
         /// <summary>
+        /// Action to get real time record.
+        /// </summary>
+        /// <returns>Action Result.</returns>
+        [Authorize(Roles = "HR")]
+        public ActionResult TimeRecord()
+        {
+            var currentDate = DateTime.Now;
+            var teams = _teamService.GetAll();
+            var timeRecordViewModel = new TimeRecordViewModel 
+            {
+                FromDate = currentDate,
+                ToDate = currentDate,
+                Teams = teams
+            };
+
+            return View(timeRecordViewModel);
+        }
+
+        [Authorize(Roles = "HR")]
+        public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null)
+        {
+            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(employeeId, groupIds, fromDate, toDate);
+
+            return View(timeRecords);
+        }
+
+        /// <summary>
         /// Employee request monitoring in current month.
         /// </summary>
         /// <returns>Return View.</returns>

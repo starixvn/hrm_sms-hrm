@@ -1,0 +1,61 @@
+﻿@model IList<TimeRecordModel>
+@{
+    Layout = null;
+}
+<table id="data" class="data">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                @Labels.Code
+            </th>
+            <th>
+                @Labels.Nick
+            </th>
+            <th>
+                @Labels.Team
+            </th>
+            <th>
+                @Labels.TimeRecord
+            </th>
+            <th>
+                @Labels.InOut
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = 0;
+            foreach (TimeRecordModel item in Model)
+            {
+                i++; 
+                <tr>
+                    <td>@i</td>
+                    <td>
+                        @item.Employee.Code
+                    </td>
+                    <td class="tooltip" title="@item.Employee.FullName">
+                        @item.Employee.NickName
+                    </td>
+                    <td class="tooltip" title="@item.Employee.Team.Name">
+                        @item.Employee.Team.Code
+                    </td>
+                    <td>
+                        @item.RecordTime.ToShortFormatedDate()
+                    </td>
+                    <td>
+                        @item.GetInOutName()
+                    </td>
+                </tr>
+                
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 6);
+        }
+    </tbody>
+</table>

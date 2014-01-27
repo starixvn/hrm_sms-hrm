@@ -146,3 +146,8 @@ fieldset {
 {
     background: #BFF7F6;
     }
+.heightcroll
+{
+    height:500px; 
+    overflow:auto;
+    }
