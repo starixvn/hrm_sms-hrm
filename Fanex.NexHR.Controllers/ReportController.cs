@@ -322,7 +322,7 @@ namespace Fanex.NexHR.Controllers
                 empId: string.IsNullOrEmpty(employee) ? null : employeeId,
                 groupIds: model.TeamIds,
                 isLocal: isLocal);
-            var firstRecord = totalWorkingHourMonthly == null && totalWorkingHourMonthly.Count > 0 ? null : totalWorkingHourMonthly[0];
+            var firstRecord = totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any() ? totalWorkingHourMonthly[0] : null;
 
             if (model.IsExportExcel)
             {

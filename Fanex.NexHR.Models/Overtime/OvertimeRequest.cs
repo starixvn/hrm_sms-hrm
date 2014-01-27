@@ -63,5 +63,7 @@ namespace Fanex.NexHR.Models
         public bool IsKeepInView { get; set; }
 
         public bool IsChangeShift { get; set; }
+
+        public string TotalWorkHours_Time { get; set; }
     }
 }

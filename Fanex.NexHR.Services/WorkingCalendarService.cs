@@ -80,9 +80,15 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        public IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany)
+        public IList<ShiftStatisticModel> GetShiftStatistic(
+            int supervisorId, 
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            bool isShowWholeCompany,
+            byte? isLocal)
         {
-            var shiftStatisticModels = _workingCalendarRepository.GetShiftStatistic(supervisorId, fromDate, toDate, groupIds, isShowWholeCompany);
+            var shiftStatisticModels = _workingCalendarRepository.GetShiftStatistic(supervisorId, fromDate, toDate, groupIds, isShowWholeCompany, isLocal);
 
             return shiftStatisticModels;
         }

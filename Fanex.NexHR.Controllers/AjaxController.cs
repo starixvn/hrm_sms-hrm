@@ -111,7 +111,7 @@ namespace Fanex.NexHR.Controllers
             return result ? Json(true) : Json(errorMessage);
         }
 
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "Verifier,Approver,HR")]
         public JsonResult GetMembersByManager(string keyword, int? groupId = null)
         {
             var role = RolesEnum.HR;

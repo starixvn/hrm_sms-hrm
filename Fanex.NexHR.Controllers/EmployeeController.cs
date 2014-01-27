@@ -730,7 +730,6 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;
-            var abc = Utilities.Marriages;
             ViewBag.Contract = Utilities.ContractStatus;
         }
     }

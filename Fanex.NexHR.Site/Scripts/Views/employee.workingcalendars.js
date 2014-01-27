@@ -102,7 +102,7 @@
                 "sScrollXInner": "100%",
                 "bScrollCollapse": true,
                 "bFilter": true,
-                "bSort": true,
+                "bSort": false,
                 "bPaginate": true,
                 "sPaginationType": "full_numbers",
                 "bInfo": true,
