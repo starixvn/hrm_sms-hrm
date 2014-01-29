@@ -151,10 +151,9 @@
       <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="1"></Setting>
 	</Function>
     <Function Name="Group">
-        <Setting Key="GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="1"></Setting>
+        <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="1"></Setting>
-        <Setting Key="GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="1"></Setting>
-        <Setting Key="GetTeamManagedById" SpName="EmployeeGroup_GetGroupsByManagerID" DbName="nexhrx" Plain="1"></Setting>
+        <Setting Key="EmployeeGroup_GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="Employee_GetSubTeam" SpName="Employee_GetSubTeam" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="Employee_GetGroupHandleRequest" SpName="Employee_GetGroupHandleRequest" DbName="nexhrx" Plain="1"></Setting>
     </Function>

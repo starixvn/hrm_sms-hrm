@@ -1,7 +1,8 @@
 ﻿@using Fanex.NexHR.Models.Request
 @model IList<OvertimeRequest>
 @using (Html.BeginForm())
-{ 
+{
+    var isShowWarning = false; 
     <table class="data" id="data">
         <thead>
             <tr>
@@ -23,13 +24,15 @@
                 </th>
                 <th>@Labels.Remark
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @if (Model != null)
             {
-                foreach (var request in Model)
-                {                   
+                foreach (OvertimeRequest request in Model)
+                {
+                    isShowWarning = false;
                 <tr id="row@(request.Id)">
                     @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -83,6 +86,23 @@
                             <td>
                             </td>
                         }
+
+                        @if (request.TotalShiftHours != 0 && ((request.TotalWorkHours >= request.TotalShiftHours + 1)
+                            || ((request.NormalHours > request.TotalWorkHours - request.WorkingHoursContract) 
+                            && request.TotalWorkHours >= request.WorkingHoursContract)))
+                        {
+                            var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.TotalWorkHours + " / " + request.TotalShiftHours;
+                            <td>
+                                <a class="warning-icon tooltip" href="javascript:;" title="@tooltip">
+                                    <img src="../../Images/warning.png" width="16px;" height="16px;"/>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        
                     @Html.HiddenFor(model => request.ShiftId)
                 </tr>
                 }
@@ -90,7 +110,7 @@
             }
             else
             { 
-                @RazorHelper.DisplayNoInformation(colspan: 12);
+                @RazorHelper.DisplayNoInformation(colspan: 10);
             }
         </tbody>
     </table>

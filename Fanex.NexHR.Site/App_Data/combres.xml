@@ -548,7 +548,7 @@
     <resourceSet name="myovertimerequestjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/myovertimerequest.js" />
+      <resource path="~/scripts/views/Overtime/myovertimerequest.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 

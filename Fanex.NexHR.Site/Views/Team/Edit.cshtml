@@ -74,10 +74,18 @@
         <div class="input">
             @Html.TextBox("AssistantLeader", Model.AssistantLeader , new { placeholder = Messages.SearchEmployeeWatermark })
             
-           @* @Html.ValidationMessage("AssistantLeader")*@
-            
             @Html.HiddenFor(model => model.AssistantLeader)
             @Html.HiddenFor(model => model.AssistantLeaderId)
+        </div>
+    </div>
+
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.MailGroup)
+        </div>
+        <div class="input">
+            @Html.EditorFor(model => model.MailGroup)
+            @Html.ValidationMessageFor(model => model.MailGroup)
         </div>
     </div>
     

@@ -19,12 +19,20 @@ namespace Fanex.NexHR.Core
     {
         private static string _emailSetting;
         private static bool _allowSendMailToOwnerRequest;
+        private static bool _allowSendMailToHR;
+        private static bool _allowSendMailToVerifier;
+        private static bool _allowSendMailToApprover;
+        private static bool _allowSendMailToMailGroup;
         private static bool _isShowCloseBalance = true;
 
         static ConfigSettings()
         {
             _emailSetting = ConfigurationManager.AppSettings["Email"].ToString();
             _allowSendMailToOwnerRequest = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToOwnerRequest"].ToString());
+            _allowSendMailToHR = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToHR"].ToString());
+            _allowSendMailToVerifier = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToVerifier"].ToString());
+            _allowSendMailToApprover = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToApprover"].ToString());
+            _allowSendMailToMailGroup = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToMailGroup"].ToString());
             _isShowCloseBalance = Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
         }
 
@@ -36,11 +44,43 @@ namespace Fanex.NexHR.Core
             }
         }
 
+        public static bool AllowSendMailToHR
+        {
+            get
+            {
+                return _allowSendMailToHR;
+            }
+        }
+
+        public static bool AllowSendMailToVerifier
+        {
+            get
+            {
+                return _allowSendMailToVerifier;
+            }
+        }
+
+        public static bool AllowSendMailToApprover
+        {
+            get
+            {
+                return _allowSendMailToApprover;
+            }
+        }
+
         public static bool AllowSendMailToOwnerRequest
         {
             get
             {
                 return _allowSendMailToOwnerRequest;
+            }
+        }
+
+        public static bool AllowSendMailToMailGroup
+        {
+            get
+            {
+                return _allowSendMailToMailGroup;
             }
         }
 

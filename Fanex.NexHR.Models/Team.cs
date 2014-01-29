@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Models
 
         public Employee Leader { get; set; }
 
-        public Employee AssistantLeader { get; set; }        
+        public Employee AssistantLeader { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
@@ -35,5 +35,7 @@ namespace Fanex.NexHR.Models
         public int TotalLocal { get; set; }
 
         public int TotalExpat { get; set; }
+
+        public string MailGroup { get; set; }
     }
 }

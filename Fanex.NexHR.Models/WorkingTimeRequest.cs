@@ -61,5 +61,7 @@ namespace Fanex.NexHR.Models
         public int VerifierId { get; set; }
 
         public int Time { get; set; }
+
+        public int ReworkCount { get; set; }
     }
 }

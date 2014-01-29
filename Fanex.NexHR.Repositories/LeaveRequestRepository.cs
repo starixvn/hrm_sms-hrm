@@ -244,6 +244,7 @@ namespace Fanex.NexHR.Repositories
                 TotalDays = reader.ToDecimal("TotalDays"),
                 LeaveTypeId = reader.ToInt("LeaveType"),
                 RefNO = reader.ToString("RefNo"),
+                ReworkCount = reader.ToInt("ReworkCount"),
                 Requester = new Employee
                 {
                     Id = reader.To<int>("RequesterId"),

@@ -48,6 +48,8 @@ namespace Fanex.NexHR.Models
 
         public float TotalShiftHours { get; set; }
 
+        public float WorkingHoursContract { get; set; }
+
         public string TeamName { get; set; }
 
         public string Team { get; set; }

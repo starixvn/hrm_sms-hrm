@@ -309,11 +309,11 @@ namespace Fanex.NexHR.Services
         /// </returns>
         private bool CheckIsValidKeepInTimeRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager)
         {
-            if (keepInViewRequestViewModel.ShiftId <= 0)
-            {
-                modelState.AddModelError("NoShiftArrangedForThisDate", Messages.NoShiftArrangedForThisDate);
-                return false;
-            }
+            ////if (keepInViewRequestViewModel.ShiftId <= 0)
+            ////{
+            ////    modelState.AddModelError("NoShiftArrangedForThisDate", Messages.NoShiftArrangedForThisDate);
+            ////    return false;
+            ////}
 
             if (!isTopManager && (keepInViewRequestViewModel.ApproverId == null || keepInViewRequestViewModel.VerifierId == null))
             {

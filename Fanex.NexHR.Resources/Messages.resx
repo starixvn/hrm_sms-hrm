@@ -207,6 +207,9 @@
   <data name="MemoSubject" xml:space="preserve">
     <value>Memo subject</value>
   </data>
+  <data name="MessageLeaveRequestCanceled" xml:space="preserve">
+    <value>Leave request from {0} has been canceled</value>
+  </data>
   <data name="NoDataIsAvailable" xml:space="preserve">
     <value>No data is available</value>
   </data>

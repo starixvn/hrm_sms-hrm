@@ -510,6 +510,7 @@ namespace Fanex.NexHR.Repositories
                                 ToTalHours = reader.ToDecimal("ToTalHours"),
                                 ApprovedStatus = reader.ToInt("ApprovedStatus"),
                                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
+                                IsShowWarning = reader.ToBool("IsShowWarning"),
                                 Requester = new Employee
                                 {
                                     NickName = reader.To<string>("Requester"),

@@ -295,6 +295,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
+    <Content Include="Images\warning.png" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
@@ -347,7 +348,7 @@
     <Content Include="Scripts\Views\Request\keepinview.create.js" />
     <Content Include="Scripts\Views\Request\keepinview.viewlist.js" />
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
-    <Content Include="Scripts\Views\myovertimerequest.js" />
+    <Content Include="Scripts\Views\Overtime\myovertimerequest.js" />
     <Content Include="Scripts\Views\Overtime\overtimereport.js" />
     <Content Include="Scripts\Views\employeeshiftmanager.js" />
     <Content Include="Scripts\Views\employeesupervisor.js" />
@@ -1046,6 +1047,7 @@
     <Content Include="App_Data\Emails\KeepInViewApproval.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\Emails\LeaveCancelation.cshtml" />
     <None Include="combres.readme" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />

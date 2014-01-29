@@ -130,7 +130,7 @@
                 CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.hrRole);
             });
         },
-        
+
         backAction: function () {
             var isHRView = DailyOvertimeMember.isHRView.val() == "True";
             var url = _global.root + (isHRView ? "Overtime/EmployeeOvertime" : "Overtime/MemberOvertime");

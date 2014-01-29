@@ -57,26 +57,9 @@ namespace Fanex.NexHR.Services
             return team;
         }
 
-        public Team GetGroupOfEmployee(int employeeId)
-        {
-            Team team = new Team();
-
-            if (employeeId > 0)
-            {
-                team = this._teamRepository.GetGroupOfEmployee(employeeId);
-            }
-
-            return team;
-        }
-
         public IList<Team> GetAll()
         {
             return this._teamRepository.GetAll();
-        }
-
-        public IList<Team> GetTeamManagedByEmp(int managerId)
-        {
-            return this._teamRepository.GetTeamManagedByEmp(managerId);
         }
 
         public IList<Team> GetSubTeamsOfEmployee(int employeeId)

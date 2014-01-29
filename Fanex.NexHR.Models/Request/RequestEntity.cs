@@ -70,6 +70,8 @@ namespace Fanex.NexHR.Models.Request
 
         public string LeaveType { get; set; }
 
+        public int ReworkCount { get; set; }
+
         // ChangeShift
         public Shift FromShift { get; set; }
 
@@ -92,6 +94,8 @@ namespace Fanex.NexHR.Models.Request
         public decimal PublicHours { get; set; }
 
         public decimal ToTalHours { get; set; }
+
+        public bool IsShowWarning { get; set; }
 
         // Keep In View
         public string FromTime { get; set; }

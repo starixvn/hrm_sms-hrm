@@ -21,11 +21,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         Team Get(string code);
 
-        Team GetGroupOfEmployee(int employeeId);
-
         IList<Team> GetAll();
-
-        IList<Team> GetTeamManagedByEmp(int managerId);
 
         IList<Team> GetSubTeamsOfEmployee(int employeeId);
 

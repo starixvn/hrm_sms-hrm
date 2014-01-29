@@ -6,29 +6,29 @@
 <table class="tabledata">
         <thead>
             <tr class="headermenu">
-                <th colspan="21">
+                <th colspan="11">
                     <div style="float:right;">
                     @if (Roles.IsUserInRole("Verifier") && Roles.IsUserInRole("Approver"))
                     {
                          <div>
-                            <a id="lnkAccept" href="javascript:;"> Accept </a> || 
-                            <a id="lnkNotAccept" href="javascript:;"> Not Accept </a> || 
-                            <a id="lnkApprove" href="javascript:;"> Approve </a> ||
-                            <a id="lnkReject" href="javascript:;"> Reject </a>
+                            <a id="lnkAccept" href="javascript:;"> @Labels.Accept </a> || 
+                            <a id="lnkNotAccept" href="javascript:;"> @Labels.NotAccept </a> || 
+                            <a id="lnkApprove" href="javascript:;"> @Labels.Approve </a> ||
+                            <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
                     }
                     else if (Roles.IsUserInRole("Verifier"))
                     {
                         <div>
-                            <a id="lnkAccept" href="javascript:;"> Accept </a> || 
-                            <a id="lnkNotAccept" href="javascript:;"> Not Accept </a>
+                            <a id="lnkAccept" href="javascript:;"> @Labels.Accept </a> || 
+                            <a id="lnkNotAccept" href="javascript:;"> @Labels.NotAccept </a>
                         </div>
                     }
                     else if (Roles.IsUserInRole("Approver"))
                     {
                         <div>
-                            <a id="lnkApprove" href="javascript:;"> Approve </a> ||
-                            <a id="lnkReject" href="javascript:;"> Reject </a>
+                            <a id="lnkApprove" href="javascript:;"> @Labels.Approve </a> ||
+                            <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
                     }
                      
@@ -52,19 +52,22 @@
                 </th>
                 <th>@Labels.PublicHoliday
                 </th>
-                <th>Details</th>
+                <th>@Labels.Details
+                </th>
                 <th>
                     @Labels.Verifier
                 </th>
                 <th>
                     @Labels.Approver
                 </th>
+                <th>
+                </th>
             </tr>
         </thead>
         <tbody>
             @if (Model != null)
             {
-                foreach (var item in Model)
+                foreach (RequestEntity item in Model)
                 {
                 <tr>
                     <td>
@@ -104,9 +107,17 @@
 
                     @Html.Partial("SharedVerifierStatus", item)
                     @Html.Partial("SharedApproverStatus", item)
+
+                    <td>
+                        @if (item.IsShowWarning)
+                        { 
+                            <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.Id, isHRView = false })">
+                                <img src="../../Images/warning.png" width="16px;" height="16px;"/>
+                            </a>
+                        }
+                    </td>
                 </tr>
                 }
-
             }
             else
             { 

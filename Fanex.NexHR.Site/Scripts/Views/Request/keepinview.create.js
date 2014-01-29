@@ -30,7 +30,7 @@
 		        $('#shiftName').text(_messages.notAvailable);
 		        $('#Shift').val(_messages.notAvailable);
 		        $('#ShiftId').val('0');
-		        $('input[type=submit]').hide();
+		        //$('input[type=submit]').hide();
 		    }
 		});
     });

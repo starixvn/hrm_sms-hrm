@@ -100,6 +100,7 @@ namespace Fanex.NexHR.Controllers
             {
                 TeamCode = team.Code,
                 TeamName = team.Name,
+                MailGroup = team.MailGroup,
                 Leader = team.Leader.DisplayName,
                 LeaderId = team.Leader.Id,
                 AssistantLeader = team.AssistantLeader.DisplayName,

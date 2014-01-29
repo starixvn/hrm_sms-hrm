@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
@@ -303,78 +302,21 @@ namespace Fanex.NexHR.Services
             SupervisorNameModel employee = null;
             IList<SupervisorNameModel> listHr = null;
 
-            emailOfEmployee = employee != null ? employee.Email : string.Empty;
-
             _requestRepository.GetSupervisorAndHrByRequestId(requestId, ref employee, ref verifier, ref approver, ref listHr);
 
-            CheckMailApprover(approver, ref mailTo, ref sendToNickName);
-            CheckMailVerifier(verifier, ref mailTo, ref sendToNickName);
-
-            if (listHr != null && listHr.Any())
-            {
-                mailCC = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
-            }
-
-            GetEmailToAndCC(ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (!string.IsNullOrWhiteSpace(mailTo))
-            {
-                mailCC = GetEmailCC(mailCC, emailOfEmployee);
-            }
+            GetMailApprover(approver, ref mailTo, ref sendToNickName);
+            GetMailVerifier(verifier, ref mailTo, ref sendToNickName);
+            GetMailHR(listHr, ref mailTo, ref mailCC, ref sendToNickName);
+            GetMailOwnerRequest(employee, ref mailTo, ref mailCC, ref sendToNickName);
+            GetMailGroup(employee, ref mailTo, ref mailCC, ref sendToNickName);
         }
 
-        /// <summary>
-        /// Function to get EmailCC base Config setting.
-        /// </summary>
-        /// <param name="mailCC">Current mailCC.</param>
-        /// <param name="emailOfEmployee">Email of employee.</param>
-        /// <returns>EmailCC String.</returns>
-        private string GetEmailCC(string mailCC, string emailOfEmployee)
+        private void GetMailApprover(SupervisorNameModel approver, ref string mailTo, ref string sendToNickName)
         {
-            if (!string.IsNullOrWhiteSpace(emailOfEmployee) && ConfigSettings.AllowSendMailToOwnerRequest)
+            if (ConfigSettings.AllowSendMailToApprover && approver != null)
             {
-                if (string.IsNullOrWhiteSpace(mailCC))
-                {
-                    mailCC = emailOfEmployee;
-                }
-                else
-                {
-                    mailCC += ";" + emailOfEmployee;
-                }
-            }
-
-            return mailCC;
-        }
-
-        /// <summary>
-        /// Function to get email to and email CC with business.
-        /// </summary>
-        /// <param name="mailTo">Mail To in and out.</param>
-        /// <param name="mailCC">Mail CC in and out.</param>
-        /// <param name="sendToNickName">Nick name of person email send to.</param>
-        private void GetEmailToAndCC(ref string mailTo, ref string mailCC, ref string sendToNickName)
-        {
-            if (!string.IsNullOrWhiteSpace(mailTo))
-            {
-                if (mailTo.EndsWith(";"))
-                {
-                    mailTo = mailTo.Substring(0, mailTo.Length - 1);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(mailCC))
-            {
-                if (mailCC.EndsWith(";"))
-                {
-                    mailCC = mailTo.Substring(0, mailTo.Length - 1);
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(mailTo) && !string.IsNullOrWhiteSpace(mailCC))
-            {
-                mailTo = mailCC;
-                mailCC = string.Empty;
-                sendToNickName = Labels.HR;
+                mailTo = approver.Email;
+                sendToNickName = approver.NickName;
             }
         }
 
@@ -384,31 +326,97 @@ namespace Fanex.NexHR.Services
         /// <param name="verifier">Verifier Object.</param>
         /// <param name="mailTo">Email to output.</param>
         /// <param name="sendToNickName">Nick name of person email send to.</param>
-        private void CheckMailVerifier(SupervisorNameModel verifier, ref string mailTo, ref string sendToNickName)
+        private void GetMailVerifier(SupervisorNameModel verifier, ref string mailTo, ref string sendToNickName)
         {
-            if (verifier == null)
+            if (ConfigSettings.AllowSendMailToVerifier && verifier != null)
             {
-                //// this.Process(Commands.Approve.EnumToString(), model.RequestId, model.EmployeeId, out errorMessage);
-            }
-            else
-            {
-                mailTo += verifier.Email + ";";
-                if (string.IsNullOrWhiteSpace(sendToNickName))
+                if (string.IsNullOrWhiteSpace(mailTo))
                 {
+                    mailTo = verifier.Email;
                     sendToNickName = verifier.NickName;
+                }
+                else
+                {
+                    mailTo += ";" + verifier.Email;
                 }
             }
         }
 
-        private void CheckMailApprover(SupervisorNameModel approver, ref string mailTo, ref string sendToNickName)
+        /// <summary>
+        /// Function to get all emails of HR.
+        /// </summary>
+        /// <param name="listHr">Emails of HR.</param>
+        /// <param name="mailTo">Output mail to.</param>
+        /// <param name="mailCC">Output mail cc.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        private void GetMailHR(IList<SupervisorNameModel> listHr, ref string mailTo, ref string mailCC, ref string sendToNickName)
         {
-            if (approver == null)
+            if (ConfigSettings.AllowSendMailToHR && listHr != null && listHr.Any())
             {
+                var mailHRs = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
+                if (string.IsNullOrWhiteSpace(mailTo))
+                {
+                    mailTo = mailHRs;
+                    sendToNickName = Labels.HR;
+                }
+                else
+                {
+                    mailCC = mailHRs;
+                }
             }
-            else
+        }
+
+        /// <summary>
+        /// Function to get email of Owner request.
+        /// </summary>
+        /// <param name="employee">Employee which create request.</param>
+        /// <param name="mailTo">Output mail to.</param>
+        /// <param name="mailCC">Output mail cc.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        private void GetMailOwnerRequest(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        {
+            if (ConfigSettings.AllowSendMailToOwnerRequest && employee != null)
             {
-                mailTo = approver.Email + ";";
-                sendToNickName = approver.NickName;
+                if (string.IsNullOrWhiteSpace(mailTo))
+                {
+                    mailTo = employee.Email;
+                    sendToNickName = employee.NickName;
+                }
+                else if (string.IsNullOrWhiteSpace(mailCC))
+                {
+                    mailCC = employee.Email;
+                }
+                else
+                {
+                    mailCC += ";" + employee.Email;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to get email group.
+        /// </summary>
+        /// <param name="employee">Employee which create request.</param>
+        /// <param name="mailTo">Output mail to.</param>
+        /// <param name="mailCC">Output mail cc.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        private void GetMailGroup(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        {
+            if (ConfigSettings.AllowSendMailToMailGroup && employee != null)
+            {
+                if (string.IsNullOrWhiteSpace(mailTo))
+                {
+                    mailTo = employee.MailGroup;
+                    sendToNickName = Labels.All;
+                }
+                else if (string.IsNullOrWhiteSpace(mailCC))
+                {
+                    mailCC = employee.MailGroup;
+                }
+                else
+                {
+                    mailCC += ";" + employee.MailGroup;
+                }
             }
         }
 

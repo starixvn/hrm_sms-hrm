@@ -101,7 +101,7 @@
                 @Html.DatePickerFor(model => model.FromDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(3).AddDays(-1),
-                unavailDates: Model.UnavailDates)
+                unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
                 <span class="time hide">
                     @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
                 </span>
@@ -115,7 +115,7 @@
                 @Html.LabelFor(model => model.ToDate, Labels.ToDate)
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.ToDate, unavailDates: Model.UnavailDates)
+                @Html.DatePickerFor(model => model.ToDate)
                 <span class="time hide">
                     @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
                 </span>

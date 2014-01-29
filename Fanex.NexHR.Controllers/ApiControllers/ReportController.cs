@@ -78,7 +78,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         {
             var fromDate = new DateTime(model.Year, model.Month, 1);
             var toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
-            return _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.Type, model.EmpId);
+            var timesheets = _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.Type, model.EmpId);
+            return timesheets;
         }
 
         /// <summary>

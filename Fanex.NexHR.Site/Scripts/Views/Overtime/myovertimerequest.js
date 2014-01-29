@@ -17,7 +17,7 @@
                     Schedule: $('#request_ShiftId', this).val(),
                     TimeIn: $('td:eq(2)', this).html().trim(),
                     TimeOut: $('td:eq(3)', this).html().trim(),
-                    TotalWorkHours: $('td:eq(4)', this).html().trim() != "" ? $('td:eq(4)', this).html().trim() : 0,
+                    TotalWorkHours: $('td:eq(5)', this).html().trim() != "" ? $('td:eq(5)', this).html().trim() : 0,
                     NormalHours: $('td #request_NormalHours', this).val(),
                     OffHours: $('td #request_OffHours', this).val(),
                     PublicHours: $('td #request_PublicHours', this).val(),
@@ -131,14 +131,22 @@
             if (focusedTexbox == "request_NormalHours"
             || focusedTexbox == "request_OffHours"
             || focusedTexbox == "request_PublicHours") {
-                var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
-                if (normalLitmit < 0) {
-                    normalLitmit = 0;
+                if (focusedTexbox == "request_NormalHours") {
+                    var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
+                    if (normalLitmit < 0) {
+                        normalLitmit = 0;
+                    }
+                    else {
+                        normalLitmit = parseFloat(normalLitmit.toFixed(1));
+                    }
+
+                    RangeTextBox(object, 0, normalLitmit);
                 }
                 else {
-                    normalLitmit = parseFloat(normalLitmit.toFixed(1));
+                    var offOrHolidayLimit = TotalHours + 0.5;
+                    offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(1));
+                    RangeTextBox(object, 0, offOrHolidayLimit);
                 }
-                RangeTextBox(object, 0, normalLitmit);
             }
         }
         else {

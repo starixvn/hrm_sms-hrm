@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
@@ -32,7 +31,7 @@ namespace Fanex.NexHR.Repositories
         /// <returns>Team entity.</returns>
         public Team Get(int id)
         {
-            using (var db = new ObjectDb("GetGroup"))
+            using (var db = new ObjectDb("EmployeeGroup_GetGroup"))
             {
                 var team = new Team();
 
@@ -77,18 +76,9 @@ namespace Fanex.NexHR.Repositories
 
         public Team Get(string code)
         {
-            using (var db = new ObjectDb("GetGroup"))
+            using (var db = new ObjectDb("EmployeeGroup_GetGroup"))
             {
                 var entity = db.Query<Team>(new { code }).FirstOrDefault();
-                return entity;
-            }
-        }
-
-        public Team GetGroupOfEmployee(int employeeId)
-        {
-            using (var db = new ObjectDb("GetGroupOfEmployee"))
-            {
-                var entity = db.Query<Team>(new { employeeId }).FirstOrDefault();
                 return entity;
             }
         }
@@ -99,7 +89,7 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List of Team.</returns>
         public IList<Team> GetAll()
         {
-            using (var db = new ObjectDb("GetGroups"))
+            using (var db = new ObjectDb("EmployeeGroup_GetGroups"))
             {
                 IList<Team> entityList = new List<Team>();
 
@@ -114,6 +104,7 @@ namespace Fanex.NexHR.Repositories
                                 Id = reader.ToInt("GroupId"),
                                 Code = reader.ToString("Code"),
                                 Name = reader.ToString("Name"),
+                                MailGroup = reader.ToString("MailGroup"),
                                 Leader = new Employee
                                 {
                                     NickName = reader.ToString("LeaderNickName"),
@@ -152,6 +143,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@GroupId", DbType.Int32, model.Id);
                 db.AddInParameter("@Code", DbType.String, model.TeamCode);
                 db.AddInParameter("@Name", DbType.String, model.TeamName);
+                db.AddInParameter("@MailGroup", DbType.String, model.MailGroup);
                 db.AddInParameter("@LeaderId", DbType.Int32, model.LeaderId);
                 db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, model.ModifiedDate);
@@ -165,15 +157,6 @@ namespace Fanex.NexHR.Repositories
                 {
                     return false;
                 }
-            }
-        }
-
-        public IList<Team> GetTeamManagedByEmp(int managerId)
-        {
-            using (var db = new ObjectDb("GetTeamManagedById"))
-            {
-                var entityList = db.Query<Team>(new { managerId }).ToList();
-                return entityList;
             }
         }
 
@@ -199,6 +182,7 @@ namespace Fanex.NexHR.Repositories
             {
                 db.AddInParameter("@Code", DbType.String, model.TeamCode);
                 db.AddInParameter("@Name", DbType.String, model.TeamName);
+                db.AddInParameter("@MailGroup", DbType.String, model.MailGroup);
                 db.AddInParameter("@LeaderId", DbType.Int32, model.LeaderId);
                 db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
                 db.AddInParameter("@CreatedDate", DbType.DateTime, model.CreatedDate);

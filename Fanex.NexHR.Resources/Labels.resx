@@ -921,4 +921,7 @@
   <data name="InOut" xml:space="preserve">
     <value>In/Out</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
 </root>

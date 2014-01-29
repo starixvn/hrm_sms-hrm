@@ -59,6 +59,7 @@ namespace Fanex.NexHR.Services
         private const string _EmailTemplatePathForOvertime = "~/app_data/emails/OvertimeApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
+        private const string _EmailTemplatePathForLeaveCancelation = "~/app_data/emails/LeaveCancelation.cshtml";
 
         #endregion
 
@@ -224,9 +225,6 @@ namespace Fanex.NexHR.Services
         public bool Process(string command, long requestId, int roleId, int processBy, out string errorMessage)
         {
             var request = this._requestRepository.GetWorkingTimeRequest(requestId);
-            var employee = this._employeeRepository.GetEmployeeById(request.RequesterId);
-            var processUser = this._employeeRepository.GetEmployeeById(processBy);
-
             string message;
             int code = this._requestRepository.ProcessRequest(
                 command, requestId, roleId, processBy, DateTime.Now, out message);
@@ -234,10 +232,9 @@ namespace Fanex.NexHR.Services
             if (code == 0)
             {
                 var templateEmailPathForRequester = HttpContext.Current.Server.MapPath(_EmailTemplatePathForRequester);
-                var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType);
 
                 var sendMailTask = new Task(()
-                    => this.SendMailProcess(command, request, employee, processUser, templateEmailPathForRequester, templateEmailPathForRelated));
+                    => this.SendMailProcess(command, request, processBy, templateEmailPathForRequester));
                 sendMailTask.Start();
                 sendMailTask.LogExceptions();
             }
@@ -264,23 +261,8 @@ namespace Fanex.NexHR.Services
         public bool ProcessOvertime(string command, long requestId, int roleId, int processBy, out string errorMessage)
         {
             string message;
-            int code = this._requestRepository.ProcessOvertime(command, requestId, roleId, processBy, DateTime.Now, out message);
-
-            ////if (code == 0)
-            ////{
-            ////    var request = this._overtimeRepository.GetRequestById((int)requestId);
-            ////    var templateEmailPath = GetEmailTemplatePath((short)RequestTypes.Overtime);
-
-            ////    var taskSendMail = new Task(() => this.SendMailOvertimeProcess(command, request, processBy, templateEmailPath));
-            ////    taskSendMail.Start();
-            ////}
-            ////else
-            ////{
-            ////    errorMessage = message;
-            ////    return false;
-            ////}
-
             errorMessage = string.Empty;
+            int code = this._requestRepository.ProcessOvertime(command, requestId, roleId, processBy, DateTime.Now, out message);
             return true;
         }
 
@@ -310,6 +292,14 @@ namespace Fanex.NexHR.Services
         public bool DeleteWorkingTimeRequest(int id)
         {
             Check.Argument.IsNotNegativeOrZero(id, "id");
+            var request = this._requestRepository.GetWorkingTimeRequest(id);
+
+            if (request != null && request.RequestType == (short)RequestTypes.Leave && request.ReworkCount > 0)
+            {
+                var templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
+                var taskSendMail = new Task(() => this.SendMailLeaveCancelationProcess(request, templateEmailPath));
+                taskSendMail.Start();
+            }
 
             return this._requestRepository.DeleteWorkingTimeRequest(id);
         }
@@ -491,47 +481,19 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="command">The command.</param>
         /// <param name="request">The request.</param>
-        /// <param name="employee">The employee.</param>
-        /// <param name="processUser">The process user.</param>
+        /// <param name="processBy">The process user.</param>
         /// <param name="templateEmailPathForRequester">The template email path for requester.</param>
-        /// <param name="templateEmailPathForRelated">The template email path for related.</param>
         private void SendMailProcess(
             string command,
             WorkingTimeRequest request,
-            Employee employee,
-            Employee processUser,
-            string templateEmailPathForRequester,
-            string templateEmailPathForRelated)
+            int processBy,
+            string templateEmailPathForRequester)
         {
-            SupervisorNameModel verifier = null;
-            SupervisorNameModel approver = null;
-            SupervisorNameModel employeeSupervisorNameModel = null;
-            IList<SupervisorNameModel> listHr = null;
+            var employee = this._employeeRepository.GetEmployeeById(request.RequesterId);
+            var processUser = this._employeeRepository.GetEmployeeById(processBy);
             command = this.GetPassiveNameOfCommand(command);
-            var mailTo = string.Empty;
-            var mailCc = string.Empty;
-            var receiverNickName = string.Empty;
-            var emailOfEmployee = employee != null ? employee.Email : string.Empty;
 
-            _requestRepository.GetSupervisorAndHrByRequestId(request.RequestId, ref employeeSupervisorNameModel, ref verifier, ref approver, ref listHr);
-
-            this.AddApproverToListOfReceiver(approver, ref mailTo, ref receiverNickName);
-            this.AddVerifierToListOfReceiver(verifier, ref mailTo, ref receiverNickName);
-
-            if (listHr != null && listHr.Count > 0)
-            {
-                for (int i = 0; i < listHr.Count; i++)
-                {
-                    if (!string.IsNullOrEmpty(listHr[i].Email))
-                    {
-                        mailCc += listHr[i].Email + ";";
-                    }
-                }
-            }
-
-            this.GetEmailToAndCC(ref mailTo, ref mailCc, ref receiverNickName);
             this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
-            this.SendToRelatedPeople(command, processUser, request, employee, templateEmailPathForRelated, mailTo, mailCc);
         }
 
         /// <summary>
@@ -843,6 +805,80 @@ namespace Fanex.NexHR.Services
                 LeaveName = request.LeaveName,
                 Url = this._baseUrl,
                 Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail when leave request has been canceled.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="templateEmailPath">Path of template.</param>
+        private void SendMailLeaveCancelationProcess(WorkingTimeRequest request, string templateEmailPath)
+        {
+            SupervisorNameModel verifier = null;
+            SupervisorNameModel approver = null;
+            SupervisorNameModel employee = null;
+            IList<SupervisorNameModel> listHr = null;
+
+            _requestRepository.GetSupervisorAndHrByRequestId(request.RequestId, ref employee, ref verifier, ref approver, ref listHr);
+
+            var subject = string.Format(Messages.MessageLeaveRequestCanceled, employee.NickName);
+            var mailTo = string.Empty;
+            if (listHr != null && listHr.Any())
+            {
+                mailTo = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
+            }
+
+            if (string.IsNullOrWhiteSpace(mailTo))
+            {
+                this.SendMailLeaveCancelation(employee, request, subject, mailTo, string.Empty, templateEmailPath);
+            }
+        }
+
+        /// <summary>
+        /// Function to send mail leave request to other staff which related group.
+        /// </summary>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void SendMailLeaveCancelation(
+            SupervisorNameModel employee,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string sendCc,
+            string templateEmailPath)
+        {
+            var body = Utilities.ReadTextFile(templateEmailPath);
+
+            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
+            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
+
+            var bodyContent = new
+            {
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                ForDate = forDate,
+                Remark = request.Remark,
+                LeaveName = request.LeaveName,
             };
 
             try

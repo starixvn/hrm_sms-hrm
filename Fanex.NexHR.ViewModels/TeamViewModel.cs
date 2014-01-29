@@ -11,7 +11,7 @@ namespace Fanex.NexHR.ViewModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
+    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Resources;
 
     /// <summary>
@@ -28,6 +28,9 @@ namespace Fanex.NexHR.ViewModels
         [Required]
         [Display(Name = "Name", ResourceType = typeof(Labels))]
         public string TeamName { get; set; }
+
+        [Email]
+        public string MailGroup { get; set; }
 
         [Required]
         [Display(Name = "Leader", ResourceType = typeof(Labels))]
