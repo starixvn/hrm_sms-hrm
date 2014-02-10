@@ -153,8 +153,16 @@ $(document).ready(function(){
 	$('.processing-submit').click(function (evt) {
 		actingButton('.processing-submit', true);
 	});
+
+    backToPreviousPageAction();
 });
 
+function backToPreviousPageAction() {
+    $("#backPrevious").click(function () {
+        parent.history.back();
+        return false;
+    });
+}
 
 function checkBadDates(mydate) {
 	var isEnable = true;
@@ -267,6 +275,11 @@ function jsonToDate(jsonDate) {
 function jsonToShortDate(jsonDate) {
 	var date = Date.parse(jsonDate);
 	return date.format("dd mmm, yyyy");
+}
+
+function jsonToDetailsDate(jsonDate) {
+	var date = Date.parse(jsonDate);
+	return date.format("ddd, dd mmm, yyyy");
 }
 
 function jsonTojsDate(jsonDate) {

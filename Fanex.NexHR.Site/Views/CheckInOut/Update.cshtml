@@ -132,7 +132,8 @@
                 @Html.Hidden("OutTime")
                 @Html.Hidden("RequestType", (int)RequestTypes.CheckIn)
                 <input type="submit" value="@Labels.Update"/>
-                <a href="@Url.Action("employeeview", "checkinout")" class="button">@Labels.Back</a>
+                @*<a href="@Url.Action("employeeview", "checkinout")" class="button">@Labels.Back</a>*@
+                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     }

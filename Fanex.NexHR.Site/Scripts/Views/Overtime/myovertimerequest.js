@@ -64,14 +64,9 @@
     });
 
     //Back Button.
-    $("#back, #backfooter").click(function () {
-        var url = _global.root + 'overtime/employeeview';
-        $(location).attr('href', url);
-    });
-
-    $("#backHrReport").click(function () {
-        var url = _global.root + 'overtime/yearlyreport';
-        $(location).attr('href', url);
+    $("#back, #backfooter, #backHrReport").click(function () {
+        parent.history.back();
+        return false;
     });
 
     //autocomplete
