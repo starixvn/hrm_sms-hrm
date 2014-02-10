@@ -187,7 +187,7 @@
     <tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
         <td>${index()}</td>
         <td class="ddMMyyyy">            
-            ${jsonToShortDate(AttendanceDate)}
+            ${jsonToDetailsDate(AttendanceDate)}
         </td>
         <td title="${FullName}" class="left tooltip">
             ${NickName}

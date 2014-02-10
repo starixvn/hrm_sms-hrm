@@ -194,7 +194,8 @@
             <div class="grid_17">
                 @Html.AntiForgeryToken()
                 <input type="submit" value="Save" class="button-primary submit" />
-                <a href="@Url.Action("index", "memo")" class="button">@Labels.Back</a>
+                @*<a href="@Url.Action("index", "memo")" class="button">@Labels.Back</a>*@
+                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     </div>

@@ -190,7 +190,8 @@
                         <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
-                <a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>
+                @*<a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>*@
+                    <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
             <div class="clear">
             </div>

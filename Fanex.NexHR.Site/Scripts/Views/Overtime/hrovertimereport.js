@@ -2,11 +2,6 @@
 
     //checkForNormalOrFiscalCalendar();
     GetHRMonthlyOvertimeReportDetails();
-    //Back Button.
-    $("#back").click(function () {
-        var url = _global.root + 'overtime/yearlyreport';
-        $(location).attr('href', url);
-    });
 
     $("#fromDate").attr('readonly', 'readonly');
     $("#toDate").attr('readonly', 'readonly');
