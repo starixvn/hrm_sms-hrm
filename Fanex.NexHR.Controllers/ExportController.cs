@@ -254,7 +254,7 @@ namespace Fanex.NexHR.Controllers
             var requestList = _requestService.GetWorkingTimeRequests(
                 model,
                 RequestViewType.PersonalSpace,
-                false,
+                model.IsDailyRequest,
                 this.CurrentUser.Id);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
@@ -275,7 +275,7 @@ namespace Fanex.NexHR.Controllers
             var requestList = _requestService.GetWorkingTimeRequests(
                 model,
                 RequestViewType.HrSpace,
-                false,
+                model.IsDailyRequest,
                 null);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
