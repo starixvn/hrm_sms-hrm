@@ -120,13 +120,12 @@
         //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
 
-        if (TotalHours >= TotalShiftHours) {
             var object = $(this).first();
             var focusedTexbox = $(this).attr("id");
             if (focusedTexbox == "request_NormalHours"
             || focusedTexbox == "request_OffHours"
             || focusedTexbox == "request_PublicHours") {
-                if (focusedTexbox == "request_NormalHours") {
+                if (focusedTexbox == "request_NormalHours" && TotalHours >= TotalShiftHours) {
                     var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
                     if (normalLitmit < 0) {
                         normalLitmit = 0;
@@ -143,10 +142,6 @@
                     RangeTextBox(object, 0, offOrHolidayLimit);
                 }
             }
-        }
-        else {
-            RangeTextBox($(this), 0, 0);
-        }
     });
     requestToCalculateOTHours();
     $('form').areYouSure();
@@ -154,6 +149,9 @@
 
 function RangeTextBox(textbox, min, max) {
     var textboxValue = textbox.val();
+    console.log("aaa");
+    console.log(min);
+    console.log(max);
     var check = textboxValue % 0.5 == 0;
     if (check) {
         var isNotInRange = (textboxValue < min) || (textboxValue > parseFloat(max));
