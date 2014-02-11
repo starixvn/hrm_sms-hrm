@@ -3,20 +3,17 @@
 @{
     ViewBag.Title = "Attendance report";
 }
-
 @section css{
     @Url.CombresLink("attendancereportcss")
 }
 @section js{
     @Url.CombresLink("attendancereportjs")
 }
-
 @section Breadcrumb {
     <a class="step">Member Request</a> <span class="step">@ViewBag.Title</span>
 }
-
-<h2>Attendance report</h2>
-
+<h2>
+    Attendance report</h2>
 <div class="container_24 bunhat">
     @using (Html.BeginGetForm())
     {
@@ -56,21 +53,23 @@
             @*<input type="text" id="pickdate" />*@
         </div>
         <div class="grid_2">
-            To date 
+            To date
         </div>
         <div class="grid_4">
             @Html.DatePicker("ToDate", Model.ToDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
         
-        <div class="clear"></div>
-        <div class="space"></div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
         
         <div class="grid_2">
             @Html.LabelFor(model => model.Type, "Request")
         </div>
         <div class="grid_4">
             @{
-    var types = new List<SelectListItem>
+        var types = new List<SelectListItem>
                 {
                     new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilterEnums.All).ToString()},
                     new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilterEnums.MissingCheckIn).ToString()},
@@ -89,8 +88,8 @@
         <div class="grid_6">
             @if (Model.IsMember)
             {
-               <span class="isMember">@Model.TeamName</span>
-               @Html.HiddenFor(model => model.CurrentUserId)
+                <span class="isMember">@Model.TeamName</span>
+                @Html.HiddenFor(model => model.CurrentUserId)
             }
             else
             {
@@ -111,34 +110,55 @@
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
         
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="clear"></div>
-        <div class="space"></div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
         
-        <div class="grid_2">&nbsp</div>
-        
+        <div class="grid_2 gridlabel">
+            Category
+        </div>
         <div class="grid_4">
+            @{
+            var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+            }
+            @Html.DropDownList("category", category, new { @class = "category" })
+        </div>
+        
+
+        
+        <div class="grid_4" style="margin-top:5px;">
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
         
-        <div class="grid_2">&nbsp</div>
+        <div class="grid_2">
+            &nbsp</div>
         
         <div class="grid_6">
             <input type="button" value="@Labels.Submit" id="view"/>
-            <input type="button" value="Excel" id="btnExcel"/>
+            <input type="button" value="Excel" id="btnExcel" />
         </div>
-        <div class="clear"></div>
+        <div class="clear">
+        </div>
     }
 </div>
-
-<div class="clear"></div>
-<div class="space"></div>
-
+<div class="clear">
+</div>
+<div class="space">
+</div>
 <table id="data" class="data persist-area">
     <thead>
-        <tr class = "persist-header">
+        <tr class="persist-header">
             <th>
                 #
             </th>

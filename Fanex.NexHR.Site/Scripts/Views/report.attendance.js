@@ -59,6 +59,7 @@ $(document).ready(function () {
     $("#btnExcel").click(function () {
         var groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
         var currentUserId = $("#CurrentUserId").val();
+        var isLocal = $("#category").val();
         var url = _global.root + "export/Attendance?"
             + "FromDate=" + $("#FromDate").val()
             + "&ToDate=" + $("#ToDate").val()
@@ -68,7 +69,8 @@ $(document).ready(function () {
             + "&Type=" + $("#Type").val()
             + "&DateOption=" + $("#Date").val()
             + "&ExcludeDeletedUsers=" + $("#ExcludeUserDelete").val()
-            + "&CurrentUserId=" + currentUserId;
+            + "&CurrentUserId=" + currentUserId
+            + "&IsLocal=" + isLocal;
         location.href = url;
     });
     view();
@@ -86,6 +88,7 @@ function view() {
 
     var groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
     var currentUserId = $("#CurrentUserId").val();
+    var isLocal = $("#category").val();
 
     $.getJSON("/api/report/getemployeeattendances",
     {
@@ -97,7 +100,8 @@ function view() {
         "Type": $("#Type").val(),
         "DateOption": $("#Date").val(),
         "ExcludeDeletedUsers": $("#ExcludeUserDelete").val(),
-        "CurrentUserId": currentUserId
+        "CurrentUserId": currentUserId,
+        "IsLocal": isLocal
     },
 
     //$('form').serialize(), 

@@ -67,17 +67,33 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 model.Type, 
                 model.EmpId, 
                 model.GroupIds, 
-                model.ExcludeDeletedUsers ? 1 : 0);
+                model.ExcludeDeletedUsers ? 1 : 0,
+                model.IsLocal);
 
             return employeeAttendance;
         }
 
+        /// <summary>
+        /// Method View TimeSheet.
+        /// </summary>
+        /// <param name="model">TimesheetViewModel model.</param>
+        /// <returns>List of EmployeeAttendanceModel.</returns>
         [HttpGet]
         [HttpPost]
         public IList<EmployeeAttendanceModel> Timesheet([FromUri]TimesheetViewModel model)
         {
             var fromDate = new DateTime(model.Year, model.Month, 1);
-            var toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
+            var toDate = new DateTime();
+            
+            if (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year)
+            {
+                toDate = DateTime.Now.Date;
+            }
+            else
+            {
+                toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
+            }
+
             var timesheets = _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.Type, model.EmpId);
             return timesheets;
         }

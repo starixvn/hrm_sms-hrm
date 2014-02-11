@@ -112,9 +112,9 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "HR")]
-        public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null)
+        public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
-            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(employeeId, groupIds, fromDate, toDate);
+            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(employeeId, groupIds, fromDate, toDate, isLocal);
 
             return View(timeRecords);
         }

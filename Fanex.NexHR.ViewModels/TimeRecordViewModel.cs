@@ -29,5 +29,7 @@ namespace Fanex.NexHR.ViewModels
         public string TeamIds { get; set; }
 
         public IList<Team> Teams { get; set; }
+
+        public byte? IsLocal { get; set; }
     }
 }

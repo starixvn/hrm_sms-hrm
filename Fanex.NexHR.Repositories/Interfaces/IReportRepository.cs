@@ -23,7 +23,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
             short type,
             int? empId = null,
             string groupIds = null,
-            int? excludeDeletedUsers = 1);
+            int? excludeDeletedUsers = 1,
+            byte? isLocal = null);
 
         IList<RequestsMonitoring> GetRequestMonitoring(
             DateTime fromDate,
@@ -68,6 +69,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool DeleteExternalGroup(int groupId, out int errorCode, out string message);
 
-        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate);
+        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
     }
 }

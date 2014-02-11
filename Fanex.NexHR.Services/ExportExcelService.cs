@@ -538,19 +538,36 @@ namespace Fanex.NexHR.Services
                         row.GetCell(9).SetCellValue(item.Holiday);
                         row.GetCell(10).SetCellValue(item.Tax);
                         var indexCount = 0;
+                        double defaultCellValue = 0.0;
                         for (int i = 1; i <= totalHeaderDateCell; i++)
                         {
                             var data = item.OvertimeDailyReport[indexCount];
                             if (i % 2 == 0)
                             {
                                 var cellValue = data.TotalOvertimeType2;
-                                row.GetCell(i + 10).SetCellValue(cellValue);
+                                if (string.IsNullOrEmpty(cellValue))
+                                {
+                                    row.GetCell(i + 10).SetCellValue(defaultCellValue);
+                                }
+                                else
+                                {
+                                    row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
+                                }
+                                
                                 indexCount++;
                             }
 
                             if (i % 2 == 1)
                             {
-                                row.GetCell(i + 10).SetCellValue(data.TotalOvertimeType1);
+                                var cellValue = data.TotalOvertimeType1;
+                                if (string.IsNullOrEmpty(cellValue))
+                                {
+                                    row.GetCell(i + 10).SetCellValue(defaultCellValue);
+                                }
+                                else
+                                {
+                                    row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
+                                }
                             }
                         }
 

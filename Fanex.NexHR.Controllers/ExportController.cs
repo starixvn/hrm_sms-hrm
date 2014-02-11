@@ -119,7 +119,8 @@ namespace Fanex.NexHR.Controllers
                     model.Type,
                     model.EmpId,
                     model.GroupIds,
-                    model.ExcludeDeletedUsers ? 1 : 0);
+                    model.ExcludeDeletedUsers ? 1 : 0,
+                    model.IsLocal);
 
             var hssfworkbook = _exportService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
 
