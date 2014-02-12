@@ -17,7 +17,7 @@ namespace Fanex.NexHR.Core.Enums
     public enum WorkTypes : short
     {
         /// <summary>
-        /// Off item.
+        /// Off day item.
         /// </summary>
         [StringValue("Off")]
         Off = 1,

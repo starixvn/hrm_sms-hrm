@@ -15,6 +15,7 @@
         requestId: null,
         annualBalance: null,
         keepInViewBalance: null,
+        currentLeaveBalance: null,
 
         init: function () {
             LeaveRequest.verifierId = $("#VerifierId");
@@ -32,6 +33,7 @@
             LeaveRequest.requestId = $("#RequestId");
             LeaveRequest.annualBalance = $("#lblAnnualBalance");
             LeaveRequest.keepInViewBalance = $("#lblKeepInViewBalance");
+            LeaveRequest.currentLeaveBalance = $("#lblCurrentLeaveBalance");
 
             LeaveRequest.autocomplete();
             LeaveRequest.totalDays.prop('readonly', true);
@@ -266,7 +268,7 @@
             if (x >= 24) {
                 x = x - 24;
             }
-            
+
             if (x < 10) {
                 hour = "0" + x;
             }
@@ -324,6 +326,7 @@
                         if (response != null) {
                             LeaveRequest.annualBalance.html(response.AnnualBalance);
                             LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
+                            LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
                         }
                     });
 

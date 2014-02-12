@@ -162,7 +162,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <summary>
         /// ActionResult Detail.
         /// </summary>
-        /// <param name="id">WorkingTimeRequest id.</param>
+        /// <param name="requestId">WorkingTimeRequest id.</param>
         /// <returns>View Detail.</returns>
         public ActionResult Detail(int requestId)
         {
