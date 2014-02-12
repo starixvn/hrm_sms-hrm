@@ -30,5 +30,7 @@ namespace Fanex.NexHR.ViewModels
         public int? EmployeeId { get; set; }
 
         public bool IsExportExcel { get; set; }
+
+        public byte? IsLocal { get; set; }
     }
 }
