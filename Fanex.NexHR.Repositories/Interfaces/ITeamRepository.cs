@@ -11,26 +11,19 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     public interface ITeamRepository
     {
-        Team Get(int id);
-
-        Team Get(string code);
+        Team GetById(int teamId);
 
         IList<Team> GetAll();
 
-        IList<Team> GetSubTeamsOfEmployee(int employeeId);
-
         int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
 
-        bool UpdateTeam(TeamViewModel model);
+        bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
 
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedBy, out int errorCode, out string message);
-
-        IList<Team> GetTeamsHandleRequestsOfEmployee(int employeeId);
     }
 }

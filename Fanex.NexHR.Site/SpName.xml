@@ -154,6 +154,13 @@
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="EmployeeGroup_GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="1"></Setting>
+      <Setting Key="Group_Select" SpName="Group_Select" DbName="nexhrx" Plain="1">
+        <Mapping DataField="groupId" ObjectProperty="Id"/>
+        <Mapping DataField="LeaderNickName" ObjectProperty="NickName"/>
+        <Mapping DataField="LeaderFullName" ObjectProperty="FullName"/>
+        <Mapping DataField="AssistantLeaderNickName" ObjectProperty="NickName"/>
+        <Mapping DataField="AssistantLeaderFullName" ObjectProperty="FullName"/>
+      </Setting>
         <Setting Key="Employee_GetSubTeam" SpName="Employee_GetSubTeam" DbName="nexhrx" Plain="1"></Setting>
         <Setting Key="Employee_GetGroupHandleRequest" SpName="Employee_GetGroupHandleRequest" DbName="nexhrx" Plain="1"></Setting>
     </Function>

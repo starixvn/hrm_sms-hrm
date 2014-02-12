@@ -18,13 +18,7 @@ namespace Fanex.NexHR.Services.Interface
     {
         Team Get(int teamId);
 
-        Team Get(string code);
-
         IList<Team> GetAll();
-
-        IList<Team> GetSubTeamsOfEmployee(int employeeId);
-
-        IList<Team> GetTeamsHandleRequestsOfEmployee(int employeeId);
 
         int AddNewTeam(TeamViewModel model);
 
