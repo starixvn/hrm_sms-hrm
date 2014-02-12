@@ -48,8 +48,8 @@
             <option selected="@(status == 0)" value="0">All</option>
         }
         <option selected="@(status == (byte)CurrentRequestStatus.Pending)" value="@Convert.ToByte(CurrentRequestStatus.Pending)">@Labels.Pending</option>
-        <option selected="@(status == (byte)CurrentRequestStatus.Accepted)" value="@Convert.ToByte(CurrentRequestStatus.Accepted)">@Labels.Accepted</option>
-        <option selected="@(status == (byte)CurrentRequestStatus.NotAccepted)" value="@Convert.ToByte(CurrentRequestStatus.NotAccepted)">@Labels.NotAccepted</option>
+        <option selected="@(status == (byte)CurrentRequestStatus.Verified)" value="@Convert.ToByte(CurrentRequestStatus.Verified)">@Labels.Verified</option>
+        <option selected="@(status == (byte)CurrentRequestStatus.NotVerified)" value="@Convert.ToByte(CurrentRequestStatus.NotVerified)">@Labels.NotVerified</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Approved)" value="@Convert.ToByte(CurrentRequestStatus.Approved)">@Labels.Approved</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Rejected)" value="@Convert.ToByte(CurrentRequestStatus.Rejected)">@Labels.Rejected</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Processed)" value="@Convert.ToByte(CurrentRequestStatus.Processed)">@Labels.Processed</option>
@@ -178,9 +178,9 @@
 @helper VerifierAndApproverMenu()
     {
     <ul id="verifierMenu" class="hide">
-        <li class="accepted"><a command="Accept" href="javascript:;">@Fanex.NexHR.Resources.Labels.Accept</a>
+        <li class="accepted"><a command="Accept" href="javascript:;">@Fanex.NexHR.Resources.Labels.Verified</a>
         </li>
-        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Fanex.NexHR.Resources.Labels.NotAccept</a>
+        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Fanex.NexHR.Resources.Labels.NotVerified</a>
         </li>
     </ul>
     <ul id="approverMenu" class="hide">
@@ -200,9 +200,9 @@
 @helper VerifierAndApproverOvertimeMenu()
     {
     <ul id="verifierPendingMenu" class="hide">
-        <li class="accepted"><a command="Accept" href="javascript:;">@Labels.Accepted</a>
+        <li class="accepted"><a command="Accept" href="javascript:;">@Labels.Verified</a>
         </li>
-        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Labels.NotAccepted</a>
+        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
         </li>
     </ul>
     <ul id="acceptedMenu" class="hide">

@@ -927,4 +927,10 @@
   <data name="On" xml:space="preserve">
     <value>On</value>
   </data>
+  <data name="NotVerified" xml:space="preserve">
+    <value>Not Verified</value>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>Verified</value>
+  </data>
 </root>

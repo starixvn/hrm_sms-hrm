@@ -66,7 +66,7 @@
         {
             switch (Model.MonthlyOvertime.Status.Id)
             {
-                case (byte)CurrentRequestStatus.Accepted:
+                case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnApprove" value="Approve"/>
                     <input type="button" id="btnReject" value="Reject"/>
                     break;
@@ -85,14 +85,14 @@
             switch (Model.MonthlyOvertime.Status.Id)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" id="btnAccept" value="Accept"/>
-                    <input type="button" id="btnNotAccept" value="Not Accept"/>
+                    <input type="button" id="btnAccept" value="Verified"/>
+                    <input type="button" id="btnNotAccept" value="Not Verified"/>
                     break;
-                case (byte)CurrentRequestStatus.Accepted:
+                case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnVerifierReset" value="Reset"/>
                     @*<input type="button" id="btnNotAccept" value="Not Accept"/>*@
                     break;
-                case (byte)CurrentRequestStatus.NotAccepted:
+                case (byte)CurrentRequestStatus.NotVerified:
                     <input type="button" id="btnVerifierReset" value="Reset"/>
                     @*<input type="button" id="btnAccept" value="Accept"/>*@
                     break;
@@ -136,7 +136,7 @@
         {
             switch (Model.MonthlyOvertime.Status.Id)
             {
-                case (byte)CurrentRequestStatus.Accepted:
+                case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnApproveFooter" value="Approve"/>
                     <input type="button" id="btnRejectFooter" value="Reject"/>
                     break;
@@ -155,14 +155,14 @@
             switch (Model.MonthlyOvertime.Status.Id)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" id="btnAcceptFooter" value="Accept"/>
-                    <input type="button" id="btnNotAcceptFooter" value="Not Accept"/>
+                    <input type="button" id="btnAcceptFooter" value="Verified"/>
+                    <input type="button" id="btnNotAcceptFooter" value="Not Verified"/>
                     break;
-                case (byte)CurrentRequestStatus.Accepted:
+                case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnVerifierResetFooter" value="Reset"/>
                     @*<input type="button" id="btnNotAcceptFooter" value="Not Accept"/>*@
                     break;
-                case (byte)CurrentRequestStatus.NotAccepted:
+                case (byte)CurrentRequestStatus.NotVerified:
                     <input type="button" id="btnVerifierResetFooter" value="Reset"/>
                     @*<input type="button" id="btnAcceptFooter" value="Accept"/>*@
                     break;

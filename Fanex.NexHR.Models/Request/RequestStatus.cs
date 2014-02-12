@@ -25,10 +25,10 @@ namespace Fanex.NexHR.Models.Request
                 {
                     case (byte)CurrentRequestStatus.Pending:
                         return Labels.Pending;
-                    case (byte)CurrentRequestStatus.Accepted:
-                        return Labels.Accepted;
-                    case (byte)CurrentRequestStatus.NotAccepted:
-                        return Labels.NotAccepted;
+                    case (byte)CurrentRequestStatus.Verified:
+                        return Labels.Verified;
+                    case (byte)CurrentRequestStatus.NotVerified:
+                        return Labels.NotVerified;
                     case (byte)CurrentRequestStatus.Approved:
                         return Labels.Approved;
                     case (byte)CurrentRequestStatus.Rejected:

@@ -22,8 +22,8 @@
             break;
                 
         case (byte)CurrentRequestStatus.Pending:
-        case (byte)CurrentRequestStatus.Accepted:
-        case (byte)CurrentRequestStatus.NotAccepted:
+        case (byte)CurrentRequestStatus.Verified:
+        case (byte)CurrentRequestStatus.NotVerified:
         default:
             <td class="tooltip"> <span class="status">@request.Status.ToString()</span> </td>
                             break;

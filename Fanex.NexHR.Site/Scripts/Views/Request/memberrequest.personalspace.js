@@ -88,12 +88,12 @@ function bindMenu(element, menu) {
 	function (command, eventElement) {
 	    switch (command) {
 	        case 'Accept':
-	            confirm('Are you sure you want to accept?', function () {
+	            confirm('Are you sure you want to verify?', function () {
 	                processRequest(command, eventElement);
 	            });
 	            break;
 	        case 'NotAccept':
-	            confirm('Are you sure you dont want to accept?', function () {
+	            confirm('Are you sure you dont want to verify?', function () {
 	                processRequest(command, eventElement);
 	            });
 	            break;

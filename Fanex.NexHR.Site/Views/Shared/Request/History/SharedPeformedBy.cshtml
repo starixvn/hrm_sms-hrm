@@ -9,8 +9,8 @@ switch (request.Status.Id)
                 @request.Requester.NickName
             </td>
         break;
-    case (byte)CurrentRequestStatus.Accepted:
-    case (byte)CurrentRequestStatus.NotAccepted:
+    case (byte)CurrentRequestStatus.Verified:
+    case (byte)CurrentRequestStatus.NotVerified:
             <td>
                 @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())
             </td>

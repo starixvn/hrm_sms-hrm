@@ -12,12 +12,12 @@
                         <a roleid="@Convert.ToInt32(RolesEnum.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-pending menu">@request.Status.ToString()</a>
                     </td>
                 break;
-            case (byte)CurrentRequestStatus.Accepted:
+            case (byte)CurrentRequestStatus.Verified:
                    <td>
                         <a roleid="@Convert.ToInt32(RolesEnum.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-accepted menu">@request.Status.ToString()</a>
                     </td>
                 break;
-            case (byte)CurrentRequestStatus.NotAccepted:
+            case (byte)CurrentRequestStatus.NotVerified:
                 <td>
                         <a roleid="@Convert.ToInt32(RolesEnum.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-notAccepted menu">@request.Status.ToString()</a>
                 </td>
