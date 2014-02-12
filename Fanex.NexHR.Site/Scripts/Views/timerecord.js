@@ -16,6 +16,7 @@
             TimeRecord.employeeId = $("#EmployeeId");
             TimeRecord.employee = $("#Employee");
             TimeRecord.btnSubmit = $("#btnSubmit");
+            TimeRecord.IsLocal = $("#IsLocal");
 
             TimeRecord.teamIds.multiselect();
             TimeRecord.fillData();
@@ -36,12 +37,14 @@
             var groups = TimeRecord.teamIds.val();
             var groupIds = groups != null ? groups.join() : "";
             var employeeId = TimeRecord.employeeId.val();
+            var isLocal = TimeRecord.IsLocal.val();
 
             var params = {
                 "fromDate": TimeRecord.fromDate.val(),
                 "toDate": TimeRecord.toDate.val(),
                 "employeeId": ((employeeId == 0) ? null : employeeId),
-                "groupIds": groupIds
+                "groupIds": groupIds,
+                "isLocal": isLocal
             };
 
             if (TimeRecord.timeRecordContent.length > 0) {

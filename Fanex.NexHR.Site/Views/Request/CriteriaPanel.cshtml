@@ -42,6 +42,19 @@
         <div class="grid_4">
             @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
         </div>
+        <div class="grid_1">
+            @Labels.On
+        </div>
+         <div class="grid_4">
+            @{
+                var filteringDateType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Effected Date", Value = "true"}, 
+                        new SelectListItem() {Text = "Created Date", Value = "false"},
+                    };
+            }
+            @Html.DropDownListFor(model => model.IsDailyRequest, filteringDateType)
+        </div>
         <div class="clear">
         </div>
         <div class="space">
@@ -108,7 +121,7 @@
         </div>
           <div class="space">
         </div>
-        <div class="grid_22 prefix_9">
+        <div class="prefix_9">
             <input class="processing-submit" type="submit" value="@Labels.Submit"/>
             <input type="button" value="Excel" id="btnExcel"/>
         </div>

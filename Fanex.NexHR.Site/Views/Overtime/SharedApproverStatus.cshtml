@@ -6,7 +6,7 @@
     {
         switch (request.Status.Id)
         {
-            case (byte)CurrentRequestStatus.Accepted:
+            case (byte)CurrentRequestStatus.Verified:
                 <td>
                     <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
                 </td>
@@ -22,7 +22,7 @@
                 </td>
                 break;
             case (byte)CurrentRequestStatus.Pending:
-            case (byte)CurrentRequestStatus.NotAccepted:
+            case (byte)CurrentRequestStatus.NotVerified:
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
             default:

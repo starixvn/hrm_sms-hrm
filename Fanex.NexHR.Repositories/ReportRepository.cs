@@ -35,6 +35,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="empId">Employee's id.</param>
         /// <param name="groupIds">Group's id.</param>
         /// <param name="excludeDeletedUsers">Exclude deleted users.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of EmployeeAttendanceModel.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
@@ -43,7 +44,8 @@ namespace Fanex.NexHR.Repositories
             short type,
             int? empId = null,
             string groupIds = null,
-            int? excludeDeletedUsers = 1)
+            int? excludeDeletedUsers = 1,
+            byte? isLocal = null)
         {
             var listAttendance = new List<EmployeeAttendanceModel>();
             EmployeeAttendanceModel currentAttendance = new EmployeeAttendanceModel();
@@ -83,7 +85,7 @@ namespace Fanex.NexHR.Repositories
                         return currentAttendance;
                     },
                     "RequestType",
-                    new { fromTime, toTime, type, empId, groupIds, excludeUserDelete = excludeDeletedUsers });
+                    new { fromTime, toTime, type, empId, groupIds, excludeUserDelete = excludeDeletedUsers, isLocal });
             }
 
             return listAttendance;
@@ -515,8 +517,9 @@ namespace Fanex.NexHR.Repositories
         /// <param name="groupIds">Group Ids.</param>
         /// <param name="fromDate">From Date.</param>
         /// <param name="toDate">The To Date.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of time records.</returns>
-        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate)
+        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal)
         {
             IList<TimeRecordModel> timeRecords = null;
 
@@ -530,7 +533,7 @@ namespace Fanex.NexHR.Repositories
                            return t;
                        },
                        splitOn: "EmpId, GroupId",
-                       parameterValues: new { EmpId = employeeId, groupIds = groupIds, fromDate = fromDate, toDate = toDate }).ToList();
+                       parameterValues: new { EmpId = employeeId, groupIds = groupIds, fromDate = fromDate, toDate = toDate, isLocal }).ToList();
             }
 
             return timeRecords;

@@ -26,6 +26,7 @@
         var employee = $("#Employee").val();
         var employeeId = employee == "" ? "" : $("#EmployeeId").val();
         var isLocal = $("#IsLocal").val();
+        var isDailyRequest = $("#IsDailyRequest").val();
 
         var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
                 + "&TeamIds=" + teams + "&Employee=" + employee
@@ -34,7 +35,8 @@
                 + "&ToDate=" + $("#ToDate").val()
                 + "&StatusId=" + $("#statusId").val()
                 + "&RequestType=" + requestType
-                + "&IsLocal=" + isLocal;
+                + "&IsLocal=" + isLocal
+                + "&IsDailyRequest=" + isDailyRequest;
 
         location.href = url;
     });
@@ -45,6 +47,7 @@
         var employee = $("#Employee").val();
         var employeeId = employee == "" ? "" : $("#EmployeeId").val();
         var isLocal = $("#IsLocal").val();
+        var isDailyRequest = $("#IsDailyRequest").val();
 
         var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
                 + "&TeamIds=" + teams + "&Employee=" + employee
@@ -53,8 +56,8 @@
                 + "&ToDate=" + $("#ToDate").val()
                 + "&StatusId=" + $("#statusId").val()
                 + "&RequestType=" + requestType
-                + "&IsLocal=" + isLocal;
-
+                + "&IsLocal=" + isLocal
+                + "&IsDailyRequest=" + isDailyRequest;
         location.href = url;
     });
 });
@@ -85,12 +88,12 @@ function bindMenu(element, menu) {
 	function (command, eventElement) {
 	    switch (command) {
 	        case 'Accept':
-	            confirm('Are you sure you want to accept?', function () {
+	            confirm('Are you sure you want to verify?', function () {
 	                processRequest(command, eventElement);
 	            });
 	            break;
 	        case 'NotAccept':
-	            confirm('Are you sure you dont want to accept?', function () {
+	            confirm('Are you sure you dont want to verify?', function () {
 	                processRequest(command, eventElement);
 	            });
 	            break;

@@ -18,9 +18,9 @@
             <tr>
                 <th>@Fanex.NexHR.Resources.Labels.Pending
                 </th>
-                <th>@Fanex.NexHR.Resources.Labels.Accepted
+                <th>@Fanex.NexHR.Resources.Labels.Verified
                 </th>
-                <th>@Fanex.NexHR.Resources.Labels.NotAccepted
+                <th>@Fanex.NexHR.Resources.Labels.NotVerified
                 </th>
             </tr>
         </thead>
@@ -33,7 +33,8 @@
             FromDate = DateTime.Now.AddDays(-7),
             StatusId = (byte)CurrentRequestStatus.Pending,
             TeamIds = string.Empty
-        };    
+        };
+        var minRequestDate = DateTime.Now.AddMonths(-4).Date;
             }
             <tr>
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.CheckInOut
@@ -42,6 +43,7 @@
                     @if (item.TotalPendingCheckInOutRequest > 0)
                     {
                         requestModel.RequestType = 1;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
                     }
                     else
@@ -61,6 +63,7 @@
                     @if (item.TotalPendingLateInEarlyOutRequest > 0)
                     {
                         requestModel.RequestType = 2;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
                     }
                     else
@@ -80,6 +83,7 @@
                     @if (item.TotalPendingChangeShiftRequest > 0)
                     {
                         requestModel.RequestType = 3;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
                     }
                     else
@@ -99,6 +103,7 @@
                     @if (item.TotalPendingLeaveRequest > 0)
                     {
                         requestModel.RequestType = 4;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
                     }
                     else
@@ -120,6 +125,7 @@
                     @if (item.TotalPendingKIVRequest > 0)
                     {
                         requestModel.RequestType = 5;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKIVRequest.ToString()</a>
                     }
                     else
@@ -165,7 +171,8 @@
             FromDate = DateTime.Now.AddDays(-7),
             StatusId = (byte)CurrentRequestStatus.Pending,
             TeamIds = string.Empty
-        };    
+        };
+        var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
             }
             <tr>
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.CheckInOut
@@ -174,6 +181,7 @@
                     @if (item.TotalPendingCheckInOutRequest > 0)
                     {
                         requestModel.RequestType = 1;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
                     }
                     else
@@ -193,6 +201,7 @@
                     @if (item.TotalPendingLateInEarlyOutRequest > 0)
                     {
                         requestModel.RequestType = 2;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
                     }
                     else
@@ -212,6 +221,7 @@
                     @if (item.TotalPendingChangeShiftRequest > 0)
                     {
                         requestModel.RequestType = 3;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
                     }
                     else
@@ -231,6 +241,7 @@
                     @if (item.TotalPendingLeaveRequest > 0)
                     {
                         requestModel.RequestType = 4;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
                     }
                     else
@@ -251,6 +262,7 @@
                     @if (item.TotalPendingKIVRequest > 0)
                     {
                         requestModel.RequestType = 5;
+                        requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKIVRequest.ToString()</a>
                     }
                     else

@@ -1645,6 +1645,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Verified.
+        /// </summary>
+        public static string NotVerified {
+            get {
+                return ResourceManager.GetString("NotVerified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Work.
         /// </summary>
         public static string NotWork {
@@ -1686,6 +1695,15 @@ namespace Fanex.NexHR.Resources {
         public static string OffDay {
             get {
                 return ResourceManager.GetString("OffDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        public static string On {
+            get {
+                return ResourceManager.GetString("On", resourceCulture);
             }
         }
         
@@ -2437,6 +2455,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verified.
+        /// </summary>
+        public static string Verified {
+            get {
+                return ResourceManager.GetString("Verified", resourceCulture);
+            }
+        }
+        
+ /// <summary>
         ///   Looks up a localized string similar to Update my leave request.
         /// </summary>
         public static string UpdateLeaveRequest {
@@ -2444,7 +2471,6 @@ namespace Fanex.NexHR.Resources {
                 return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
             }
         }
-        
         /// <summary>
         ///   Looks up a localized string similar to Verified by.
         /// </summary>

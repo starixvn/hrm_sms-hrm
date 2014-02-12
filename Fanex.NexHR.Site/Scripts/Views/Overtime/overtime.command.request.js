@@ -47,12 +47,12 @@
                 });
         },
         acceptRequest: function (command, requestId, roleId) {
-            confirm('Are you sure you want to accept?', function () {
+            confirm('Are you sure you want to vefiry?', function () {
                 CommandOvertime.commandProcessRequest(command, requestId, roleId);
             });
         },
         notAcceptRequest: function (command, requestId, roleId) {
-            confirm('Are you sure you dont want to accept?', function () {
+            confirm('Are you sure you dont want to verify?', function () {
                 CommandOvertime.commandProcessRequest(command, requestId, roleId);
             });
         },

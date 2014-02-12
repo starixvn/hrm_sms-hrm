@@ -9,8 +9,8 @@ switch (request.Status.Id)
             <a requestid="@request.Id" href="javascript:void(0);" class="tooltip @request.Status.ToString()" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
         </td>
         break;
-    case (byte)CurrentRequestStatus.Accepted:
-    case (byte)CurrentRequestStatus.NotAccepted:
+    case (byte)CurrentRequestStatus.Verified:
+    case (byte)CurrentRequestStatus.NotVerified:
         <td>
             <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
         </td>

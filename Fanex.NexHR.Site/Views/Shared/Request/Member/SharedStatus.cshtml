@@ -25,8 +25,8 @@ switch (request.Status.Id)
             </td>  
         }
         break;
-    case (byte)CurrentRequestStatus.Accepted:
-    case (byte)CurrentRequestStatus.NotAccepted:
+    case (byte)CurrentRequestStatus.Verified:
+    case (byte)CurrentRequestStatus.NotVerified:
         if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
         {
             <td>

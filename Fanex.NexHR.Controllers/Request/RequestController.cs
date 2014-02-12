@@ -91,7 +91,7 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Leader = true;
             ViewBag.Action = "Member";
-            this.GetRequests(ref request, RequestViewType.PersonalSpace, false);
+            this.GetRequests(ref request, RequestViewType.PersonalSpace, request.IsDailyRequest);
 
             return View(request);
         }
@@ -106,7 +106,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Action = "HRView";
-            this.GetRequests(ref request, RequestViewType.HrSpace, false);
+            this.GetRequests(ref request, RequestViewType.HrSpace, request.IsDailyRequest);
 
             return View(request);
         }
@@ -120,7 +120,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
             ViewBag.Action = "EmployeeView";
-            this.GetRequests(ref request, RequestViewType.CompanySpace, false);
+            this.GetRequests(ref request, RequestViewType.CompanySpace, request.IsDailyRequest);
 
             return View("HRView", request);
         }

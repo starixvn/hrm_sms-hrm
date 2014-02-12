@@ -87,6 +87,7 @@ namespace Fanex.NexHR.Services
         /// <param name="empId">Employee Id.</param>
         /// <param name="groupIds">Group list.</param>
         /// <param name="excludeDeletedUsers">Is exclude user deleted.</param>
+        /// <param name="isLocal">Expat or Local.</param>
         /// <returns>EmployeeAttendanceModel List object.</returns>
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
             DateTime fromTime,
@@ -94,7 +95,8 @@ namespace Fanex.NexHR.Services
             short type,
             int? empId = null,
             string groupIds = null,
-            int? excludeDeletedUsers = 1)
+            int? excludeDeletedUsers = 1,
+            byte? isLocal = null)
         {
             var employeeAttendance = _reportRepository.GetEmployeeAttendanceReport(
                 fromTime, 
@@ -102,7 +104,8 @@ namespace Fanex.NexHR.Services
                 type,
                 empId,
                 groupIds,
-                excludeDeletedUsers);
+                excludeDeletedUsers,
+                isLocal);
 
             return employeeAttendance;
         }
@@ -236,13 +239,13 @@ namespace Fanex.NexHR.Services
             return _reportRepository.DeleteExternalGroup(groupId, out errorCode, out message);
         }
 
-        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate)
+        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal)
         {
             IList<TimeRecordModel> timeRecords = null;
 
             if (fromDate <= toDate)
             {
-                timeRecords = _reportRepository.GetTimeRecords(employeeId, groupIds, fromDate, toDate);
+                timeRecords = _reportRepository.GetTimeRecords(employeeId, groupIds, fromDate, toDate, isLocal);
             }
 
             return timeRecords;

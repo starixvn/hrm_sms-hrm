@@ -6,14 +6,14 @@
 
     $("#btnAccept").click(function (e) {
         e.preventDefault();
-        confirm('Are you sure you want to accept?', function () {
+        confirm('Are you sure you want to verify?', function () {
             processRequest("Accept", "#btnAccept");
         });
     });
 
     $("#btnNotAccept").click(function (e) {
         e.preventDefault();
-        confirm('Are you sure you dont want to accept?', function () {
+        confirm('Are you sure you dont want to verify?', function () {
             processRequest("NotAccept", "#btnNotAccept");
         });
     });

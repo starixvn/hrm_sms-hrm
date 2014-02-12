@@ -41,7 +41,8 @@ namespace Fanex.NexHR.Services.Interface
             short type,
             int? empId = null,
             string groupIds = null,
-            int? excludeDeletedUsers = 1);
+            int? excludeDeletedUsers = 1,
+            byte? isLocal = null);
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(
             int year,
@@ -69,6 +70,6 @@ namespace Fanex.NexHR.Services.Interface
 
         bool DeleteExternalGroup(int groupId);
 
-        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate);
+        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
     }
 }

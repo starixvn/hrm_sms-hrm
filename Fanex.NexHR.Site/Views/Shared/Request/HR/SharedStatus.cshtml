@@ -9,7 +9,7 @@ if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
         <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
     </td>
 }
-else if (request.Status.Id == (byte)CurrentRequestStatus.Accepted || request.Status.Id == (byte)CurrentRequestStatus.NotAccepted)
+else if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
 {
     <td>
         @*<a class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@

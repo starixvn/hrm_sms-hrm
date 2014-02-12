@@ -31,6 +31,7 @@ namespace Fanex.NexHR.ViewModels
             this.TeamIds = null;
             this.EmployeeId = -1;
             this.RequestType = (int)RequestFilter.All;
+            this.IsDailyRequest = true;
         }
 
         public int DateOption { get; set; }
@@ -60,6 +61,8 @@ namespace Fanex.NexHR.ViewModels
         public IList<Team> TeamCollection { get; set; }
 
         public byte? IsLocal { get; set; }
+
+        public bool IsDailyRequest { get; set; }
 
         /// <summary>
         /// Method GetSelectListItemTeam.

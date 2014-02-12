@@ -91,10 +91,10 @@ namespace Fanex.NexHR.ViewModels
                     {
                         case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Pending:
                             return Labels.Pending.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Accepted:
-                            return Labels.Accepted.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.NotAccepted:
-                            return Labels.NotAccepted.ToLower();
+                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Verified:
+                            return Labels.Verified.ToLower();
+                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.NotVerified:
+                            return Labels.NotVerified.ToLower();
                         case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Approved:
                             return Labels.Approved.ToLower();
                         case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Rejected:

@@ -20,14 +20,14 @@ namespace Fanex.NexHR.Core.Enums
         /// <summary>
         /// Accepted item.
         /// </summary>
-        [StringValue("Accepted")]
-        Accepted = 2,
+        [StringValue("Verified")]
+        Verified = 2,
 
         /// <summary>
         /// NotAccepted item.
         /// </summary>
-        [StringValue("NotAccepted")]
-        NotAccepted = 3,
+        [StringValue("NotVerified")]
+        NotVerified = 3,
 
         /// <summary>
         /// Approved item.

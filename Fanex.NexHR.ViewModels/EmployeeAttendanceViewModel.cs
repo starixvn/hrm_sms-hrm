@@ -42,5 +42,7 @@ namespace Fanex.NexHR.ViewModels
         public string TeamName { get; set; }
 
         public int CurrentUserId { get; set; }
+
+        public byte? IsLocal { get; set; }
     }
 }

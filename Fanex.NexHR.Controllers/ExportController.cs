@@ -119,7 +119,8 @@ namespace Fanex.NexHR.Controllers
                     model.Type,
                     model.EmpId,
                     model.GroupIds,
-                    model.ExcludeDeletedUsers ? 1 : 0);
+                    model.ExcludeDeletedUsers ? 1 : 0,
+                    model.IsLocal);
 
             var hssfworkbook = _exportService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
 
@@ -254,7 +255,7 @@ namespace Fanex.NexHR.Controllers
             var requestList = _requestService.GetWorkingTimeRequests(
                 model,
                 RequestViewType.PersonalSpace,
-                false,
+                model.IsDailyRequest,
                 this.CurrentUser.Id);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
@@ -275,7 +276,7 @@ namespace Fanex.NexHR.Controllers
             var requestList = _requestService.GetWorkingTimeRequests(
                 model,
                 RequestViewType.HrSpace,
-                false,
+                model.IsDailyRequest,
                 null);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
