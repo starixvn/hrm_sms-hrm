@@ -5,13 +5,15 @@
 if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
 {
     <td>
-        <a href="javascript:void(0);" class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
+        @*<a href="javascript:void(0);" class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>*@
+        <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
     </td>
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.Accepted || request.Status.Id == (byte)CurrentRequestStatus.NotAccepted)
 {
     <td>
-        <a class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+        @*<a class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
+        <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
     </td>   
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Status.Id == (byte)CurrentRequestStatus.Rejected)
@@ -25,8 +27,9 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Sta
     else
     {
         <td>
-            <a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-        </td>   
+            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
+            <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+        </td>
     }
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.Processed || request.Status.Id == (byte)CurrentRequestStatus.Void)
@@ -40,7 +43,8 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Processed || request.St
     else
     {
         <td>
-            <a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
+            <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</span>
         </td> 
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
 @{
-    ViewBag.Title = Labels.LeaveRequest;
+    ViewBag.Title = Labels.MyLeaveRequest;
 }
 @section css{
     @Url.CombresLink("myrequestcss")
@@ -9,7 +9,7 @@
     @Url.CombresLink("empleavejs")
 }
 @{
-    ViewBag.Title = Labels.LeaveRequest;
+    ViewBag.Title = Labels.MyLeaveRequest;
 }
 @section Breadcrumb {
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
@@ -18,14 +18,12 @@
 @using (Html.BeginForm())
 { 
     <input type="hidden" value="Leave" id="RequestType" />
-        
-    <span>Year:</span>
+    <span>@Labels.Year:</span>
     @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
     <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
     <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("Leave request", "Create")</div>
+        <span class="icon plus"></span>@Html.ActionLink(Labels.LeaveRequest, "Create")</div>
     <br />
-
     <table class="data" id="data">
         <thead>
             <tr>
@@ -82,7 +80,7 @@
                         data-hr="@request.HrBy.NickName"
                         data-hr-status="@processedStatus"
                         data-processed-date="@(request.HrDate.HasValue ? request.HrDate.ToShortFormatedDate() : string.Empty)"
-                        href="~/Leave/Detail/@request.Id">@request.LeaveType</a>
+                        href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType</a>
                     </td>
                     @if (request.TotalDays < 1)
                     { 
@@ -111,9 +109,7 @@
                     }
                     else
                     {
-                        <td>
-                            -
-                        </td>
+                        <td>-</td>
                     }
                     @Html.Partial("_SharedRequestStatus", request)
                     <td>
@@ -122,7 +118,6 @@
                     </td>
                 </tr>
                 }
-
             }
             else
             { 
@@ -131,10 +126,9 @@
         </tbody>
     </table>
 }
-@*<div id="dialogRequestDetail"></div>*@
-<div id="dialog-reason" title="Reason reedit" style="display: none;">
+<div id="dialog-reason" title="@Labels.ReasonReedit">
     <div>
-        <span>Please input the reason for this reedit!</span>
+        <span>@Messages.ReasonReedit</span>
     </div>
     <br />
     <div>

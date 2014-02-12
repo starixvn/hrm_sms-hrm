@@ -497,7 +497,6 @@ namespace Fanex.NexHR.Controllers.Request
             var employee = _EmployeeService.GetEmployeeById(currentUserId);
             var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(currentUserId, requestId, DateTime.Now.Date);
             var leaveTypes = _LeaveTypeService.GetAll();
-            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
             var verifierList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
             var approverList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
 

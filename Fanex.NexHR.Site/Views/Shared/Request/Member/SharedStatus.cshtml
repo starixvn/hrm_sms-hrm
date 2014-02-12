@@ -20,7 +20,8 @@ switch (request.Status.Id)
         else
         {
             <td>
-                <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+                @*<a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>*@
+                <span>@request.Status.ToString()</span>
             </td>  
         }
         break;
@@ -32,10 +33,16 @@ switch (request.Status.Id)
                 <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
             </td>
         }
-        else
+        else if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
         { 
             <td>
                 <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            </td>
+        }
+        else
+        {
+            <td>
+                <span>@request.Status.ToString()</span>
             </td>
         }
         break;
@@ -49,20 +56,23 @@ switch (request.Status.Id)
         }
         else
         {
-             <td>
-                <a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <td>
+                <span>@request.Status.ToString()</span>
+                @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
             </td> 
         }
         break;
     case (byte)CurrentRequestStatus.Processed:
     case (byte)CurrentRequestStatus.Void:
         <td>
-            <a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <span>@request.Status.ToString()</span>
+            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
         </td> 
-                                                                                                                                                    break;
+             break;
     default:
      <td>
-        <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+        @*<a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>*@
+        <span>@request.Status.ToString()</span>
     </td>   
         break;
 }

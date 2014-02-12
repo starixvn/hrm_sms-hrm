@@ -24,6 +24,8 @@ namespace Fanex.NexHR.Core
 
         public const int WeddingLeave = 6;
 
+        public const int NumberMonthsInFutureCanLeaveRequest = 4;
+
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.
         /// </summary>

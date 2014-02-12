@@ -117,6 +117,12 @@
     {
         classOfInput = "shift";
     }
+    
+    if (workingCalendarModel.IsOvertime)
+    {
+        disabledAttribute = "disabled";
+        isShowCheckBox = false;
+    }
 
     if (workingCalendarModel.LeaveType != null && workingCalendarModel.LeaveType2 == null)
     {
@@ -143,7 +149,7 @@
         classOfInput += " " + classOfleavetype;
     }
 
-    if (workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-7))
+    if (workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-14))
     {
         isShowCheckBox = false;
         disabledAttribute = "disabled";

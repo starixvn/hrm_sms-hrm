@@ -70,6 +70,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annual leave day(s) balance.
+        /// </summary>
+        public static string AnnualBalance {
+            get {
+                return ResourceManager.GetString("AnnualBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change shift request from {0} {1} by {2}.
         /// </summary>
         public static string ApprovalNotificationChangeShiftSubject {
@@ -174,6 +183,15 @@ namespace Fanex.NexHR.Resources {
         public static string CheckInOutEmailSubject {
             get {
                 return ResourceManager.GetString("CheckInOutEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current annual leave day(s) balance can be used.
+        /// </summary>
+        public static string CurrentALCanBeUsed {
+            get {
+                return ResourceManager.GetString("CurrentALCanBeUsed", resourceCulture);
             }
         }
         
@@ -304,6 +322,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep in view day(s) balance.
+        /// </summary>
+        public static string KeepInViewBalance {
+            get {
+                return ResourceManager.GetString("KeepInViewBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Late in/early out request from.
         /// </summary>
         public static string LateInEarlyOutEmailSubject {
@@ -336,6 +363,15 @@ namespace Fanex.NexHR.Resources {
         public static string MessageLeaveRequestCanceled {
             get {
                 return ResourceManager.GetString("MessageLeaveRequestCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve already requested for Leave &lt;strong&gt;{0} day(s)&lt;/strong&gt; since {1}.
+        /// </summary>
+        public static string MessageNumberRequestInMonth {
+            get {
+                return ResourceManager.GetString("MessageNumberRequestInMonth", resourceCulture);
             }
         }
         
@@ -390,6 +426,15 @@ namespace Fanex.NexHR.Resources {
         public static string ProcessSubject {
             get {
                 return ResourceManager.GetString("ProcessSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input the reason for this reedit!.
+        /// </summary>
+        public static string ReasonReedit {
+            get {
+                return ResourceManager.GetString("ReasonReedit", resourceCulture);
             }
         }
         

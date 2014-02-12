@@ -1,6 +1,6 @@
 ﻿@model Fanex.NexHR.ViewModels.LeaveRequestViewModel
 @{
-    ViewBag.Title = "New Leave Request";
+    ViewBag.Title = Labels.NewLeaveRequest;
 }
 @section css{
     @Url.CombresLink("leavecss")
@@ -10,203 +10,178 @@
 }
 @section Breadcrumb {
     <a class="step">Personal</a>
-    <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.LeaveRequest</a>
+    <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
+<h2>@Labels.Create</h2>
 <div class="bunhat">
-    @using (Html.BeginForm())
-    {
-        @Html.HiddenFor(model => model.EmployeeId)
-        @Html.Hidden("RequestType", (int)RequestTypes.Leave)
-        @Html.Hidden("RequestId", -1)
-
-        @Html.ValidationSummary()
-
-        <div class="validation-summary-errors" id="errors-model-state">
-        </div>
+    @Html.HiddenFor(model => model.EmployeeId)
+    @Html.Hidden("RequestType", (int)RequestTypes.Leave)
+    @Html.Hidden("RequestId", -1)
+    @Html.ValidationSummary()
+    <div class="validation-summary-errors" id="errors-model-state">
+    </div>
         
-        if (Model.TotalRequest > 0)
-        { 
-        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-            <p>
-                <a href="@Url.Action("EmployeeView")">You've already requested for Leave <strong>@Model.TotalRequest
-                    day(s)</strong> since @DateTime.Now.ToString("MMM yyyy")</a>
-            </p>
-        </div>
-        }
-        
-       @* <div class="formrow">
-            <span>Annual leave day(s) balance:</span>  <span id="lblAnnualBalance">@Model.AnnualLeaveBalance.ToString("0.#")</span> ---- 
-            <span>Keep in view day(s) balance:</span><span id="lblKeepInViewBalance">@Model.KeepInViewBalance.ToString("0.#")</span>
-        </div>*@
-        
-        
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
-            </div>
-            <div class="input">
-                @if (Roles.IsUserInRole("ActingSupervisor"))
-                { 
-                    @Html.EditorFor(model => model.Employee)
-                }
-                else
-                {
-                    @Html.Label(Model.Employee)
-                }
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.LeaveTypeId, Labels.LeaveType)
-            </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name"))
-                @Html.HiddenFor(model => model.LeaveTypeName)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        
-        <div id="grbHalfDay" class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.HalfDayOff)
-            </div>
-            <div class="input">
-                @Html.CheckBoxFor(model => model.HalfDayOff)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        @*<div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.RefNo, Labels.RefNo1)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.RefNo)
-                
-            </div>
-            <div class="clear">
-            </div>
-        </div>*@
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FromDate, Labels.FromDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.FromDate,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(3).AddDays(-1),
-                unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
-                <span class="time hide">
-                    @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
-                </span>
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ToDate, Labels.ToDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.ToDate)
-                <span class="time hide">
-                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
-                </span>
-                
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        
-        <div id="grbTotalDay" class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.TotalDays, Labels.TotalDays, new { id = "lblTotalDay" })
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.TotalDays)
-                
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
-            </div>
-            <div class="input">
-                @if (Model.VerifierList.Count > 1)
-                {
-                    @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList, "--Select a Verifier--")
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList)
-                }
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
-            </div>
-            <div class="input">
-                
-                @if (Model.ApproverList.Count > 1)
-                {
-                    @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList, "--Select an Approver--")
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList)
-                }
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Remark)
-            </div>
-            <div class="input">
-                @Html.TextAreaFor(model => model.Remark)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-            </div>
-            <div class="input">
-                ※ <span class="infobalance">Annual leave day(s) balance:</span>  <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.AnnualBalance.ToString("0.#")</span> &nbsp
-                ※ <span class="infobalance">Keep in view day(s) balance:</span>  <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeBalance.KeepInViewBalance.ToString("0.#")</span> &nbsp
-                <br />
-                ※ <span class="infobalance">Current annual leave day(s) balance can be used:</span>  <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div id="tbldetail"></div>
-        </div>
-        @Html.HiddenFor(model => model.DisplayName)
-        <div class="formrow">
-            <div class="label">
-                &nbsp;
-            </div>
-            <div class="input">
-                <input id="btnSubmit" type="button" value="@Labels.Request" class="button-primary submit"/>
-                <a href="@Url.Action("employeeview", "leave")" class="button">@Labels.Back</a>
-            </div>
-            <div class="clear">
-            </div>
-        </div>
+    @if (Model.TotalRequest > 0)
+    { 
+    <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+        <p>
+            <a href="@Url.Action("EmployeeView")">
+                @Html.Raw(string.Format(Messages.MessageNumberRequestInMonth, Model.TotalRequest, DateTime.Now.ToString("MMM yyyy")))
+            </a>
+        </p>
+    </div>
     }
+        
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="input">
+            @if (Roles.IsUserInRole("ActingSupervisor"))
+            { 
+                @Html.EditorFor(model => model.Employee)
+            }
+            else
+            {
+                @Html.Label(Model.Employee)
+            }
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.LeaveTypeId, Labels.LeaveType)
+        </div>
+        <div class="input">
+            @Html.DropDownListFor(model => model.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name"))
+            @Html.HiddenFor(model => model.LeaveTypeName)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div id="grbHalfDay" class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.HalfDayOff)
+        </div>
+        <div class="input">
+            @Html.CheckBoxFor(model => model.HalfDayOff)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.FromDate, Labels.FromDate)
+        </div>
+        <div class="input">
+            @Html.DatePickerFor(model => model.FromDate,
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
+            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1),
+            unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
+            <span class="time hide">
+                @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
+            </span>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.ToDate, Labels.ToDate)
+        </div>
+        <div class="input">
+            @Html.DatePickerFor(model => model.ToDate)
+            <span class="time hide">
+                @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+            </span>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div id="grbTotalDay" class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.TotalDays, Labels.TotalDays, new { id = "lblTotalDay" })
+        </div>
+        <div class="input">
+            @Html.EditorFor(model => model.TotalDays)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
+        </div>
+        <div class="input">
+            @if (Model.VerifierList.Count > 1)
+            {
+                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList, Labels.SelectVerifier)
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList)
+            }
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
+        </div>
+        <div class="input">
+            @if (Model.ApproverList.Count > 1)
+            {
+                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList, Labels.SelectApprover)
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList)
+            }
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Remark)
+        </div>
+        <div class="input">
+            @Html.TextAreaFor(model => model.Remark)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+        </div>
+        <div class="input">
+            ※ <span class="infobalance">@Messages.AnnualBalance:</span>
+            <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.AnnualBalance.ToString("0.#")</span> &nbsp
+            ※ <span class="infobalance">@Messages.KeepInViewBalance:</span>
+            <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeBalance.KeepInViewBalance.ToString("0.#")</span> &nbsp
+            <br />
+            ※ <span class="infobalance">@Messages.CurrentALCanBeUsed:</span>
+            <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div id="tbldetail"></div>
+    </div>
+    @Html.HiddenFor(model => model.DisplayName)
+    <div class="formrow">
+        <div class="label">
+            &nbsp;
+        </div>
+        <div class="input">
+            <input id="btnSubmit" type="button" value="@Labels.Request" class="button-primary submit"/>
+            <a href="@Url.Action("employeeview", "leave")" class="button">@Labels.Back</a>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
 </div>

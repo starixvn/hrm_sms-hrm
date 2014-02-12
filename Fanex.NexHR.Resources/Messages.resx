@@ -120,6 +120,9 @@
   <data name="AdjustSuccessfully" xml:space="preserve">
     <value>Adjust successfully</value>
   </data>
+  <data name="AnnualBalance" xml:space="preserve">
+    <value>Annual leave day(s) balance</value>
+  </data>
   <data name="ApprovalNotificationChangeShiftSubject" xml:space="preserve">
     <value>Change shift request from {0} {1} by {2}</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="CheckInOutEmailSubject" xml:space="preserve">
     <value>Check in/out request from</value>
+  </data>
+  <data name="CurrentALCanBeUsed" xml:space="preserve">
+    <value>Current annual leave day(s) balance can be used</value>
   </data>
   <data name="DeletedUser" xml:space="preserve">
     <value>User was deleted.</value>
@@ -198,6 +204,9 @@
   <data name="JobTitle" xml:space="preserve">
     <value>job title</value>
   </data>
+  <data name="KeepInViewBalance" xml:space="preserve">
+    <value>Keep in view day(s) balance</value>
+  </data>
   <data name="LateInEarlyOutEmailSubject" xml:space="preserve">
     <value>Late in/early out request from</value>
   </data>
@@ -209,6 +218,9 @@
   </data>
   <data name="MessageLeaveRequestCanceled" xml:space="preserve">
     <value>Leave request from {0} has been canceled</value>
+  </data>
+  <data name="MessageNumberRequestInMonth" xml:space="preserve">
+    <value>You've already requested for Leave &lt;strong&gt;{0} day(s)&lt;/strong&gt; since {1}</value>
   </data>
   <data name="NoDataIsAvailable" xml:space="preserve">
     <value>No data is available</value>
@@ -227,6 +239,9 @@
   </data>
   <data name="ProcessSubject" xml:space="preserve">
     <value>Your {0} request {1} {2} by {3}</value>
+  </data>
+  <data name="ReasonReedit" xml:space="preserve">
+    <value>Please input the reason for this reedit!</value>
   </data>
   <data name="ReeditSubject" xml:space="preserve">
     <value>Reedit leave request from</value>

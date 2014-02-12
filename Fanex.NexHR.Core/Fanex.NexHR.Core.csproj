@@ -137,6 +137,7 @@
     <Compile Include="Enums\RequestTypes.cs" />
     <Compile Include="Enums\RolesEnum.cs" />
     <Compile Include="Enums\StringValueAttribute.cs" />
+    <Compile Include="Enums\WorkTypes.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HSSFSheetExtensions.cs" />
     <Compile Include="JsonConverter.cs" />

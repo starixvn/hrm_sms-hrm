@@ -1,5 +1,4 @@
-﻿
-var LeaveRequestView = function ($) {
+﻿var LeaveRequestView = function ($) {
     return {
         dialogReason: null,
         requestId: null,
@@ -8,18 +7,6 @@ var LeaveRequestView = function ($) {
             LeaveRequestView.dialogReason = $("#dialog-reason");
             LeaveRequestView.bindMenu('.Pending', 'pendingMenu');
             LeaveRequestView.bindMenu('.reedit', 'reeditMenu');
-            //            $(".viewdetail").click(function () {
-            //                var url = _global.root + "leave/detail/" + $(this).attr("data-id");
-            //                $.get(url, function (data) {
-            //                    $('#dialogRequestDetail').html(data);
-            //                    $("#dialogRequestDetail").dialog({
-            //                        modal: true,
-            //                        minHeight: 700,
-            //                        width: 1100,
-            //                        title: 'Leave Request Detail'
-            //                    });
-            //                });
-            //            });
 
             LeaveRequestView.dialogReason.dialog({
                 autoOpen: false,
@@ -59,18 +46,6 @@ var LeaveRequestView = function ($) {
                 showURL: false,
                 bodyHandler: function () {
                     var object = $(this);
-                    //                    var result = getMessageDetail(
-                    //                        object.attr('data-requesttype'),
-                    //                        object.attr('data-fromdate'),
-                    //                        object.attr('data-todate'),
-                    //                        object.attr('data-createddate'),
-                    //                        object.attr('data-fromshift'),
-                    //                        object.attr('data-toshift'),
-                    //                        object.attr('data-leavetype'),
-                    //                        object.attr('data-totaldays'),
-                    //                        object.attr('data-totalmins'),
-                    //                        object.attr('data-ottype'),
-                    //                        object.attr('data-isothours'));
 
                     return "<div class='tooltip'>"
                         + "<table class='table-tooltip checkinout'>"
@@ -101,7 +76,7 @@ var LeaveRequestView = function ($) {
         },
         cancelRequest: function (id) {
             confirm('Are you sure you want to cancel this request?', function () {
-                $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function (data) {
+                $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function () {
                     $('#row' + id).remove();
                     autoIndex();
                 });
@@ -113,7 +88,7 @@ var LeaveRequestView = function ($) {
 
             switch (command) {
                 case 'Edit':
-                    location.href = _global.root + requestType + "/Update/" + requestId;
+                    location.href = _global.root + requestType + "/Update?requestId=" + requestId;
                     break;
                 case 'Reedit':
                     LeaveRequestView.requestId = requestId;
@@ -131,7 +106,7 @@ var LeaveRequestView = function ($) {
                 LeaveRequestView.processRequest(command, eventElement);
             });
         },
-        reEditRequest: function (requestType, requestId) {
+        reEditRequest: function () {
             confirm('Are you sure you want to reedit this request?', function () {
                 LeaveRequestView.dialogReason.dialog("open");
 
@@ -147,7 +122,7 @@ var LeaveRequestView = function ($) {
                 data: { requestId: LeaveRequestView.requestId, reason: reason },
                 success: function (response) {
                     if (response.errorCode === 0) {
-                        location.href = _global.root + requestType + "/Update/" + LeaveRequestView.requestId;
+                        location.href = _global.root + requestType + "/Update?requestId=" + LeaveRequestView.requestId;
                     }
                     else {
                         alert("There are some error during processed. Please try again.");

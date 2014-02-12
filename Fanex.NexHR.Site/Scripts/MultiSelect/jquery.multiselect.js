@@ -33,7 +33,7 @@
             classes: '',
             checkAllText: 'Check all',
             uncheckAllText: 'Uncheck all',
-            noneSelectedText: 'Select teams',
+            noneSelectedText: 'Select options',
             selectedText: '# selected',
             selectedList: 0,
             show: null,

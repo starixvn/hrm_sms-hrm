@@ -2,13 +2,13 @@
 @model LeaveDetailViewModel
 @{
     Layout = null;
-    }
+}
 <table class="tabledata">
     <thead>
         <tr>
             <th>@Labels.Date</th>
             <th>@Labels.ScheduleStatus</th>
-            <th>Work Type</th>
+            <th>@Labels.WorkType</th>
             <th>@Labels.LeaveTypeName</th>
             <th>@Labels.HalfDay</th>
             <th>@Labels.LeaveCount</th>
@@ -22,7 +22,7 @@
         double totalAnnualLeave = 0;
         double totalUnpaidLeave = 0;
         <tbody>
-        @foreach (var item in Model.LeaveRequestDetail)
+        @foreach (LeaveDetailModel item in Model.LeaveRequestDetail)
         {
             if (!item.IsOffOrHoliday)
             {
@@ -64,11 +64,11 @@
                     var leaveSelected = string.Empty;
                     var offSelected = string.Empty;
                     var workSelected = string.Empty;
-                    if(item.WorkType == 2)
+                    if (item.WorkType == (int)WorkTypes.Leave)
                     {
                         leaveSelected = "selected";
                     }
-                    else if(item.WorkType == 1)
+                    else if (item.WorkType == (int)WorkTypes.Off)
                     {
                         offSelected = "selected";
                     }
