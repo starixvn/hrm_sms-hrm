@@ -17,7 +17,7 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IRequestService
     {
-        bool DeleteWorkingTimeRequest(int id);
+        bool DeleteWorkingTimeRequest(long id);
 
         bool Process(string command, long requestId, int roleId, int processBy, out string errorMessage);
 

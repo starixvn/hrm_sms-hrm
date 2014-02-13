@@ -9,14 +9,11 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -232,99 +229,18 @@ namespace Fanex.NexHR.Services
         /// <param name="isUpdate">Is update or insert.</param>
         private void SendMailForLateInEarlyOutSuccessfully(LateInEarlyOutRequestViewModel model, long requestId, bool isUpdate)
         {
-            SupervisorNameModel verifier = null;
-            SupervisorNameModel approver = null;
-            SupervisorNameModel employee = null;
-            IList<SupervisorNameModel> listHr = null;
             var mailTo = string.Empty;
             var mailCC = string.Empty;
             var sendToNickName = string.Empty;
-            var emailOfEmployee = employee != null ? employee.Email : string.Empty;
 
-            _requestRepository.GetSupervisorAndHrByRequestId(requestId, ref employee, ref verifier, ref approver, ref listHr);
-
-            CheckReceiverEmail(verifier, approver, listHr, ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (string.IsNullOrWhiteSpace(mailTo) && !string.IsNullOrWhiteSpace(mailCC))
-            {
-                mailTo = mailCC;
-                mailCC = string.Empty;
-                sendToNickName = Labels.HR;
-            }
+            GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
 
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                if (mailTo.EndsWith(";"))
-                {
-                    mailTo = mailTo.Substring(0, mailTo.Length - 1);
-                }
-
-                mailCC = GetEmailCC(mailCC, emailOfEmployee);
                 var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
                 var taskSendMail = new Task(() => this.SendMailForLateInEarlyOutRequest(model, requestId, isUpdate, templateEmailPath, mailTo, mailCC, sendToNickName));
                 taskSendMail.Start();
             }
-        }
-
-        /// <summary>
-        /// Checks the receiver email.
-        /// </summary>
-        /// <param name="verifier">The verifier.</param>
-        /// <param name="approver">The approver.</param>
-        /// <param name="listHr">The list HR.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCC">The mail cc.</param>
-        /// <param name="sendToNickName">Name of the send to nick.</param>
-        private void CheckReceiverEmail(
-            SupervisorNameModel verifier, 
-            SupervisorNameModel approver, 
-            IList<SupervisorNameModel> listHr, 
-            ref string mailTo, 
-            ref string mailCC, 
-            ref string sendToNickName)
-        {
-            if (approver != null)
-            {
-                mailTo = approver.Email + ";";
-                sendToNickName = approver.NickName;
-            }
-
-            if (verifier != null)
-            {
-                mailTo += verifier.Email + ";";
-                if (string.IsNullOrWhiteSpace(sendToNickName))
-                {
-                    sendToNickName = verifier.NickName;
-                }
-            }
-
-            if (listHr != null && listHr.Any())
-            {
-                mailCC = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
-            }
-        }
-
-        /// <summary>
-        /// Function to get EmailCC base Config setting.
-        /// </summary>
-        /// <param name="mailCC">Current mailCC.</param>
-        /// <param name="emailOfEmployee">Email of employee.</param>
-        /// <returns>EmailCC String.</returns>
-        private string GetEmailCC(string mailCC, string emailOfEmployee)
-        {
-            if (!string.IsNullOrWhiteSpace(emailOfEmployee) && ConfigSettings.AllowSendMailToOwnerRequest)
-            {
-                if (string.IsNullOrWhiteSpace(mailCC))
-                {
-                    mailCC = emailOfEmployee;
-                }
-                else
-                {
-                    mailCC += ";" + emailOfEmployee;
-                }
-            }
-
-            return mailCC;
         }
 
         /// <summary>

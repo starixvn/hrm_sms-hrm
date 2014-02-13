@@ -214,6 +214,9 @@
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 $('.time').hide();
                 LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
+
+                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
             }
             else {
                 $("#grbHalfDay").show();

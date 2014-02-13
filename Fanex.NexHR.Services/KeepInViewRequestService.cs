@@ -11,16 +11,11 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -197,20 +192,6 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Deletes the keep in view request.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>
-        /// Indicate the delete action is successful or not.
-        /// </returns>
-        public bool DeleteKeepInViewRequestById(long id)
-        {
-            Check.Argument.IsNotNegativeOrZero(id, "id");
-
-            return this._keepInViewRequestRepository.DeleteWorkingTimeRequest(id);
-        }
-
-        /// <summary>
         /// Gets the keep in view request.
         /// </summary>
         /// <param name="role">The role identifier.</param>
@@ -365,124 +346,17 @@ namespace Fanex.NexHR.Services
         /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
         private void SendMailForSuccessfulKeepInViewRequest(KeepInViewRequestViewModel keepInViewRequestViewModel, long requestId, bool isUpdate)
         {
-            SupervisorNameModel verifier = null;
-            SupervisorNameModel approver = null;
-            SupervisorNameModel employee = null;
-            IList<SupervisorNameModel> listHr = null;
-
             var mailTo = string.Empty;
-            var mailCc = string.Empty;
-            var receiverNickName = string.Empty;
-            var emailOfEmployee = employee != null ? employee.Email : string.Empty;
+            var mailCC = string.Empty;
+            var sendToNickName = string.Empty;
 
-            _requestRepository.GetSupervisorAndHrByRequestId(requestId, ref employee, ref verifier, ref approver, ref listHr);
-
-            this.AddApproverToReceivers(approver, ref mailTo, ref receiverNickName);
-            this.AddVerifierToReceivers(verifier, ref mailTo, ref receiverNickName);
-
-            if (listHr != null && listHr.Count > 0)
-            {
-                for (int i = 0; i < listHr.Count; i++)
-                {
-                    if (!string.IsNullOrEmpty(listHr[i].Email))
-                    {
-                        mailCc += listHr[i].Email + ";";
-                    }
-                }
-            }
-
-            this.GetEmailToAndCC(ref mailTo, ref mailCc, ref receiverNickName);
+            GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
 
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                mailCc = this.GetEmailCC(mailCc, emailOfEmployee);
                 var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-                var sendMailTask = new Task(() => this.ProcessSendMail(keepInViewRequestViewModel, receiverNickName, isUpdate, templateEmailPath, mailTo, mailCc));
-                sendMailTask.Start();
-                sendMailTask.LogExceptions();
-            }
-        }
-
-        /// <summary>
-        /// Function to get EmailCC base Config setting.
-        /// </summary>
-        /// <param name="mailCC">Current mailCC.</param>
-        /// <param name="emailOfEmployee">Email of employee.</param>
-        /// <returns>EmailCC String.</returns>
-        private string GetEmailCC(string mailCC, string emailOfEmployee)
-        {
-            if (!string.IsNullOrWhiteSpace(emailOfEmployee) && ConfigSettings.AllowSendMailToOwnerRequest)
-            {
-                if (string.IsNullOrWhiteSpace(mailCC))
-                {
-                    mailCC = emailOfEmployee;
-                }
-                else
-                {
-                    mailCC += ";" + emailOfEmployee;
-                }
-            }
-
-            return mailCC;
-        }
-
-        /// <summary>
-        /// Function to get email to and email CC with business.
-        /// </summary>
-        /// <param name="mailTo">Mail To in and out.</param>
-        /// <param name="mailCC">Mail CC in and out.</param>
-        /// <param name="receiverNickName">Nick name of person email send to.</param>
-        private void GetEmailToAndCC(ref string mailTo, ref string mailCC, ref string receiverNickName)
-        {
-            if (!string.IsNullOrWhiteSpace(mailTo))
-            {
-                mailTo = mailTo.Substring(0, mailTo.Length - 1);
-            }
-
-            if (!string.IsNullOrWhiteSpace(mailCC))
-            {
-                mailCC = mailCC.Substring(0, mailCC.Length - 1);
-            }
-
-            if (string.IsNullOrWhiteSpace(mailTo) && !string.IsNullOrWhiteSpace(mailCC))
-            {
-                mailTo = mailCC;
-                mailCC = string.Empty;
-                receiverNickName = Labels.HR;
-            }
-        }
-
-        /// <summary>
-        /// Adds the verifier to list of receiver.
-        /// </summary>
-        /// <param name="verifier">The verifier.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="receiverNickName">NickName of the receiver.</param>
-        private void AddVerifierToReceivers(SupervisorNameModel verifier, ref string mailTo, ref string receiverNickName)
-        {
-            if (verifier != null)
-            {
-                mailTo += verifier.Email + ";";
-
-                if (string.IsNullOrWhiteSpace(receiverNickName))
-                {
-                    receiverNickName = verifier.NickName;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds the approver to list of receiver.
-        /// </summary>
-        /// <param name="approver">The approver.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="receiverNickName">NickName of the receiver.</param>
-        private void AddApproverToReceivers(SupervisorNameModel approver, ref string mailTo, ref string receiverNickName)
-        {
-            if (approver != null)
-            {
-                mailTo += approver.Email + ";";
-                receiverNickName = approver.NickName;
+                var taskSendMail = new Task(() => this.ProcessSendMail(keepInViewRequestViewModel, sendToNickName, isUpdate, templateEmailPath, mailTo, mailCC));
+                taskSendMail.Start();
             }
         }
 

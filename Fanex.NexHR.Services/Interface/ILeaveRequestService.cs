@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool UpdateLeaveRequest(LeaveRequestModel model, out int errorCode, out string message);
 
-        bool DeleteWorkingTimeRequest(int id);
+        bool DeleteWorkingTimeRequest(long id);
 
         IList<RequestEntity> GetLeaveRequests(
             string role,

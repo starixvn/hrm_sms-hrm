@@ -188,7 +188,7 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public bool Delete(long id)
         {
-            return _KeepInViewRequestService.DeleteKeepInViewRequestById(id);
+            return _KeepInViewRequestService.DeleteWorkingTimeRequest(id);
         }
     }
 }

@@ -47,10 +47,12 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         void GetSupervisorAndHrByRequestId(
             long requestId,
+            int action,
             ref SupervisorNameModel employee,
             ref SupervisorNameModel verifier, 
             ref SupervisorNameModel approver, 
-            ref IList<SupervisorNameModel> listHr);
+            ref IList<SupervisorNameModel> listHr,
+            ref EmailSettingsModel emailSettings);
 
         int ProcessOvertime(
             string command,
