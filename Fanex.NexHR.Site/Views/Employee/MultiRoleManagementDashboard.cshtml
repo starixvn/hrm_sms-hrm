@@ -5,19 +5,20 @@
 {
     if (item.RoleId == (int)RolesEnum.Verifier)
     {
-    <h4>Verification List</h4>
+    <h4>
+        Verification List</h4>
     <table class="data" id="myspace">
         <thead>
             <tr>
                 <th rowspan="2" class="firstColumn">@Fanex.NexHR.Resources.Labels.Request
+                </th>
+                <th rowspan="2">@Fanex.NexHR.Resources.Labels.Pending
                 </th>
                 <th colspan="3" class="center">
                     @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToString("dd MMM, yyyy")
                 </th>
             </tr>
             <tr>
-                <th>@Fanex.NexHR.Resources.Labels.Pending
-                </th>
                 <th>@Fanex.NexHR.Resources.Labels.Verified
                 </th>
                 <th>@Fanex.NexHR.Resources.Labels.NotVerified
@@ -32,7 +33,8 @@
             ToDate = DateTime.Now,
             FromDate = DateTime.Now.AddDays(-7),
             StatusId = (byte)CurrentRequestStatus.Pending,
-            TeamIds = string.Empty
+            TeamIds = string.Empty,
+            IsDailyRequest = false
         };
         var minRequestDate = DateTime.Now.AddMonths(-4).Date;
             }
@@ -116,10 +118,8 @@
                 <td>@item.TotalRejectLeaveRequest
                 </td>
             </tr>
-
             <tr>
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
-
                 </td>
                 <td>
                     @if (item.TotalPendingKIVRequest > 0)
@@ -143,19 +143,20 @@
     }
     if (item.RoleId == (int)RolesEnum.Approver)
     { 
-     <h4>Approval List</h4>
+    <h4>
+        Approval List</h4>
     <table class="data" id="myspace">
         <thead>
             <tr>
                 <th rowspan="2" class="firstColumn">@Fanex.NexHR.Resources.Labels.Request
+                </th>
+                <th rowspan="2">@Fanex.NexHR.Resources.Labels.Pending
                 </th>
                 <th colspan="3" class="center">
                     @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToString("dd MMM, yyyy")
                 </th>
             </tr>
             <tr>
-                <th>@Fanex.NexHR.Resources.Labels.Pending
-                </th>
                 <th>@Fanex.NexHR.Resources.Labels.Approved
                 </th>
                 <th>@Fanex.NexHR.Resources.Labels.Rejected
@@ -170,7 +171,8 @@
             ToDate = DateTime.Now,
             FromDate = DateTime.Now.AddDays(-7),
             StatusId = (byte)CurrentRequestStatus.Pending,
-            TeamIds = string.Empty
+            TeamIds = string.Empty,
+            IsDailyRequest = false
         };
         var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
             }
@@ -256,7 +258,6 @@
             </tr>
             <tr>
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
-
                 </td>
                 <td>
                     @if (item.TotalPendingKIVRequest > 0)
@@ -275,7 +276,6 @@
                 <td>@item.TotalRejecteKIVRequest
                 </td>
             </tr>
-
         </tbody>
     </table>
     }

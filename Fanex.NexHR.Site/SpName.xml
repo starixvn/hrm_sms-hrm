@@ -97,7 +97,6 @@
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_OvertimeType" SpName="WorkingTimeRequest_GetRequestByRequestDate_OvertimeType" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_KeepInViewType" SpName="WorkingTimeRequest_GetRequestByRequestDate_KeepInViewType" DbName="nexhrx" Plain="1"></Setting>
-    <Setting Key="Employee_GetMembesByManager" SpName="Employee_GetMembesByManager" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="EmployeeCalendar_GetChangedShift" SpName="EmployeeCalendar_GetChangedShift" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="EmployeeGroup_Insert" SpName="Group_Insert" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="EmployeeGroup_Update" SpName="Group_Update" DbName="nexhrx" Plain="1"></Setting>
@@ -106,6 +105,8 @@
     <Setting Key="WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="EmployeeCalendar_SetOffDayForAllEmployees" SpName="EmployeeCalendar_SetOffDayForAllEmployees" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="1"></Setting>
+    <Setting Key="Employee_GetMembesByManager" SpName="Employee_GetMembesByManager" DbName="nexhrx" Plain="1">
+    </Setting>
 
     <Setting Key="EmployeeCalendar_GetByDateRange" SpName="EmployeeCalendar_GetByDateRange" DbName="nexhrx" Plain="1">
       <Mapping DataField="EmpId" ObjectProperty="Id"/>
