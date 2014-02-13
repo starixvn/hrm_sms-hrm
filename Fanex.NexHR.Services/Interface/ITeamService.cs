@@ -18,15 +18,11 @@ namespace Fanex.NexHR.Services.Interface
     {
         Team Get(int teamId);
 
-        Team Get(string code);
-
         IList<Team> GetAll();
 
-        IList<Team> GetTeamsHandleRequestsOfEmployee(int employeeId);
+        int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
 
-        int AddNewTeam(TeamViewModel model);
-
-        bool UpdateTeam(TeamViewModel model);
+        bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
 
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message);
     }

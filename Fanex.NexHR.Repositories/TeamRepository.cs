@@ -27,59 +27,23 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Get Team by id.
         /// </summary>
-        /// <param name="id">Team's id.</param>
+        /// <param name="teamId">Team's id.</param>
         /// <returns>Team entity.</returns>
-        public Team Get(int id)
+        public Team GetById(int teamId)
         {
-            using (var db = new ObjectDb("EmployeeGroup_GetGroup"))
+            using (var db = new ObjectDb("Group_Select"))
             {
-                var team = new Team();
-
-                using (IDataReader reader = db.ExecuteReader())
-                {
-                    if (reader != null)
-                    {
-                        while (reader.Read())
+                var team = db.QueryEntity<Team, Employee, Employee, Team>(
+                        (t, ld, asld) =>
                         {
-                            team = new Team
-                            {
-                                Id = reader.ToInt("Id"),
-                                Code = reader.ToString("Code"),
-                                Name = reader.ToString("Name"),
-                                CreatedDate = reader.ToDateTime("CreatedDate"),
-                                ModifiedDate = reader.ToDateTime("ModifiedDate"),
-                                Modifier = new Employee
-                                {
-                                    Id = reader.To<int>("ModiedBy")
-                                },
-
-                                Leader = new Employee
-                                {
-                                    NickName = reader.ToString("LeaderNickName"),
-                                    FullName = reader.ToString("LeaderFullName"),
-                                    Id = reader.ToInt("LeaderId"),
-                                },
-                                AssistantLeader = new Employee
-                                {
-                                    NickName = reader.ToString("AssistantLeaderNickName"),
-                                    FullName = reader.ToString("AssistantLeaderFullName"),
-                                    Id = reader.ToInt("AssistantLeaderId")
-                                }
-                            };
-                        }
-                    }
-                }
+                            t.Leader = ld;
+                            t.AssistantLeader = asld;
+                            return t;
+                        },
+                        splitOn: "leaderID, AssistantLeaderId",
+                        parameters: new { groupId = teamId });
 
                 return team;
-            }
-        }
-
-        public Team Get(string code)
-        {
-            using (var db = new ObjectDb("EmployeeGroup_GetGroup"))
-            {
-                var entity = db.Query<Team>(new { code }).FirstOrDefault();
-                return entity;
             }
         }
 
@@ -89,45 +53,18 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List of Team.</returns>
         public IList<Team> GetAll()
         {
-            using (var db = new ObjectDb("EmployeeGroup_GetGroups"))
+            using (var db = new ObjectDb("Group_Select"))
             {
-                IList<Team> entityList = new List<Team>();
-
-                using (IDataReader reader = db.ExecuteReader())
-                {
-                    if (reader != null)
-                    {
-                        while (reader.Read())
+                var teams = db.Query<Team, Employee, Employee, Team>(
+                        (t, ld, asld) =>
                         {
-                            var entity = new Team
-                            {
-                                Id = reader.ToInt("GroupId"),
-                                Code = reader.ToString("Code"),
-                                Name = reader.ToString("Name"),
-                                MailGroup = reader.ToString("MailGroup"),
-                                Leader = new Employee
-                                {
-                                    NickName = reader.ToString("LeaderNickName"),
-                                    FullName = reader.ToString("LeaderFullName"),
-                                    Id = reader.ToInt("LeaderId"),
-                                },
-                                AssistantLeader = new Employee
-                                {
-                                    NickName = reader.To<string>("AssistantLeaderNickName"),
-                                    FullName = reader.To<string>("AssistantLeaderFullName"),
-                                    Id = reader.To<int>("AssistantLeaderId")
-                                },
-                                NoOfMembers = reader.To<int>("NoOfMembers"),
-                                TotalExpat = reader.To<int>("TotalExpat"),
-                                TotalLocal = reader.To<int>("TotalLocal")
-                            };
+                            t.Leader = ld;
+                            t.AssistantLeader = asld;
+                            return t;
+                        },
+                        splitOn: "leaderID, AssistantLeaderId").ToList();
 
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-
-                return entityList;
+                return teams;
             }
         }
 
@@ -135,8 +72,10 @@ namespace Fanex.NexHR.Repositories
         /// Method update Team.
         /// </summary>
         /// <param name="model">Team ViewModel.</param>
+        /// <param name="errorCode">Error code.</param>
+        /// <param name="message">Error message.</param>
         /// <returns>Boolean to check status.</returns>
-        public bool UpdateTeam(TeamViewModel model)
+        public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
         {
             using (var db = new ObjectDb("EmployeeGroup_Update"))
             {
@@ -148,15 +87,14 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, model.ModifiedDate);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, model.ModifiedBy);
+                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
+                db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                try
-                {
-                    return db.ExecuteNonQuery() != 0;
-                }
-                catch
-                {
-                    return false;
-                }
+                db.ExecuteNonQuery();
+                errorCode = (int)db.GetParameterValue("ErrCode");
+                message = db.GetParameterValue("ErrMsg") as string;
+
+                return errorCode == 0;
             }
         }
 
@@ -164,7 +102,7 @@ namespace Fanex.NexHR.Repositories
         /// Method Add new Team.
         /// </summary>
         /// <param name="model">Team ViewModel.</param>
-        /// /// <param name="errorCode">Error code.</param>
+        /// <param name="errorCode">Error code.</param>
         /// <param name="message">Error Message.</param>
         /// <returns>Value of error code.</returns>
         public int AddNewTeam(TeamViewModel model, out int errorCode, out string message)
@@ -203,7 +141,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@GroupID", DbType.Int32, id);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
-
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
@@ -213,15 +150,6 @@ namespace Fanex.NexHR.Repositories
                 errorCode = (int)db.GetParameterValue("ErrCode");
 
                 return result;
-            }
-        }
-
-        public IList<Team> GetTeamsHandleRequestsOfEmployee(int employeeId)
-        {
-            using (var db = new ObjectDb("Employee_GetGroupHandleRequest"))
-            {
-                var entityList = db.Query<Team>(new { id = employeeId }).ToList();
-                return entityList;
             }
         }
     }

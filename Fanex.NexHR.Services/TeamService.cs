@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.Caching;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -25,12 +24,10 @@ namespace Fanex.NexHR.Services
     public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
-        private ICache _cacheManager;
 
         public TeamService(ITeamRepository teamRespository = null)
         {
             this._teamRepository = teamRespository ?? new TeamRepository();
-            this._cacheManager = CacheService.CreateInstance();
         }
 
         public Team Get(int teamId)
@@ -45,43 +42,24 @@ namespace Fanex.NexHR.Services
             return team;
         }
 
-        public Team Get(string code)
-        {
-            Team team = new Team();
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                var allTeams = this.GetAll();
-                team = allTeams.Single(t => t.Code == code);
-            }
-
-            return team;
-        }
-
         public IList<Team> GetAll()
         {
             return this._teamRepository.GetAll();
         }
 
-        public int AddNewTeam(TeamViewModel model)
+        public int AddNewTeam(TeamViewModel model, out int errorCode, out string message)
         {
-            int errorCode;
-            string message;
             return this._teamRepository.AddNewTeam(model, out errorCode, out message);
         }
 
-        public bool UpdateTeam(TeamViewModel model)
+        public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
         {
-            return this._teamRepository.UpdateTeam(model);
+            return this._teamRepository.UpdateTeam(model, out errorCode, out message);
         }
 
         public bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message)
         {
             return this._teamRepository.DeleteTeam(id, modifiedDate, modifiedby, out errCode, out message);
-        }
-
-        public IList<Team> GetTeamsHandleRequestsOfEmployee(int employeeId)
-        {
-            return this._teamRepository.GetTeamsHandleRequestsOfEmployee(employeeId);
         }
     }
 }
