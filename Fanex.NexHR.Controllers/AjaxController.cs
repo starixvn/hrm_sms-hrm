@@ -215,7 +215,10 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public int AddNewTeam(TeamViewModel model)
         {
-            return _teamService.AddNewTeam(model);
+            var errorCode = 0;
+            var message = string.Empty;
+
+            return _teamService.AddNewTeam(model, out errorCode, out message);
         }
 
         /// <summary>

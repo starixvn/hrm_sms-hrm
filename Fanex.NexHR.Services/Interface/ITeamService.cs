@@ -20,9 +20,9 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<Team> GetAll();
 
-        int AddNewTeam(TeamViewModel model);
+        int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
 
-        bool UpdateTeam(TeamViewModel model);
+        bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
 
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message);
     }

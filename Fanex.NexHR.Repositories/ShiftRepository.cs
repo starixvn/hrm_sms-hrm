@@ -33,7 +33,7 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb("EmployeeCalendar_GetShiftByDate"))
             {
-                var shiftData = db.Query<Shift>(new { empId, date }).FirstOrDefault();
+                var shiftData = db.QueryEntity<Shift>(new { empId, date });
                 return shiftData;
             }
         }

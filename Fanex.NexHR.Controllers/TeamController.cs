@@ -65,12 +65,18 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var errorCode = _teamService.AddNewTeam(model);
+                var errorCode = 0;
+                var message = string.Empty;
+                _teamService.AddNewTeam(model, out errorCode, out message);
                 if (errorCode != 0) 
                 {
                     if (errorCode == 100)
                     {
                         ModelState.AddModelError(string.Empty, Resources.Messages.DuplicateTeamCode);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, message);
                     }
                 }
                 else
@@ -122,12 +128,16 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
+                var errorCode = 0;
+                var message = string.Empty;
+
                 if (string.IsNullOrEmpty(model.AssistantLeader))
                 {
                     model.AssistantLeaderId = null;
                 }
 
-                var result = _teamService.UpdateTeam(model);
+                var result = _teamService.UpdateTeam(model, out errorCode, out message);
+
                 ViewBag.Updated = result;
             }
             else

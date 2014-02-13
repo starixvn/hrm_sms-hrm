@@ -73,7 +73,7 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="model">Team ViewModel.</param>
         /// <returns>Boolean to check status.</returns>
-        public bool UpdateTeam(TeamViewModel model)
+        public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
         {
             using (var db = new ObjectDb("EmployeeGroup_Update"))
             {
@@ -85,15 +85,14 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, model.ModifiedDate);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, model.ModifiedBy);
+                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
+                db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                try
-                {
-                    return db.ExecuteNonQuery() != 0;
-                }
-                catch
-                {
-                    return false;
-                }
+                db.ExecuteNonQuery();
+                errorCode = (int)db.GetParameterValue("ErrCode");
+                message = db.GetParameterValue("ErrMsg") as string;
+
+                return errorCode == 0;
             }
         }
 
@@ -140,7 +139,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@GroupID", DbType.Int32, id);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
-
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 

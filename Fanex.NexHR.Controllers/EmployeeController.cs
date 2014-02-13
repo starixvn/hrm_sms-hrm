@@ -193,18 +193,7 @@ namespace Fanex.NexHR.Controllers
                 model.ListCountryCode.Add(new SelectListItem { Text = item.CountryName, Value = item.CountryCode });
             }
 
-            var subTeams = _teamService.GetSubTeamsOfEmployee(id);
             var subGroups = string.Empty;
-            if (subTeams != null && subTeams.Count > 0)
-            {
-                foreach (var team in subTeams)
-                {
-                    subGroups += team.Id + ",";
-                }
-
-                subGroups = subGroups.Substring(0, subGroups.Length - 1);
-            }
-
             CheckAdminUserRole();
             model.SubGroups = subGroups;
 
