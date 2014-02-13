@@ -1,5 +1,4 @@
-﻿
-var LeaveRequest = function ($) {
+﻿var LeaveRequest = function ($) {
     return {
         verifierId: null,
         approverId: null,
@@ -16,6 +15,7 @@ var LeaveRequest = function ($) {
         requestId: null,
         annualBalance: null,
         keepInViewBalance: null,
+        currentLeaveBalance: null,
 
         init: function () {
             LeaveRequest.verifierId = $("#VerifierId");
@@ -33,12 +33,12 @@ var LeaveRequest = function ($) {
             LeaveRequest.requestId = $("#RequestId");
             LeaveRequest.annualBalance = $("#lblAnnualBalance");
             LeaveRequest.keepInViewBalance = $("#lblKeepInViewBalance");
+            LeaveRequest.currentLeaveBalance = $("#lblCurrentLeaveBalance");
 
             LeaveRequest.autocomplete();
             LeaveRequest.totalDays.prop('readonly', true);
             $("#errors-model-state").hide();
             $(".datepicker").datepicker().attr('readonly', 'readonly');
-
             // for edit
             LeaveRequest.enableControlForEdit();
             LeaveRequest.bindLeaveRequestDetailForEdit();
@@ -61,12 +61,8 @@ var LeaveRequest = function ($) {
 
             $('#btnSubmit').click(function (evt) {
                 evt.preventDefault();
-
                 LeaveRequest.removeErrorMsg(false);
-                //                if ($(".validation-summary-errors ul li").length == 0) {
-                //                    alert("aaa");
                 LeaveRequest.saveLeaveRequest();
-                //                }
             });
 
             LeaveRequest.fromTime.change(function () {
@@ -218,9 +214,6 @@ var LeaveRequest = function ($) {
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 $('.time').hide();
                 LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
-
-                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
             }
             else {
                 $("#grbHalfDay").show();
@@ -270,15 +263,18 @@ var LeaveRequest = function ($) {
         setValueforToTime: function () {
             var arr = LeaveRequest.fromTime.val().split(':');
             var x = parseInt(arr[0].trim(), 10);
-            x = x + 4;
-            if (x >= 24)
-                x = x - 24;
-
             var hour = "";
-            if (x < 10)
+            x = x + 4;
+            if (x >= 24) {
+                x = x - 24;
+            }
+
+            if (x < 10) {
                 hour = "0" + x;
-            else
+            }
+            else {
                 hour = x;
+            }
 
             LeaveRequest.toTime.val(hour + ":" + arr[1]);
             LeaveRequest.totalDays.val(0.5);
@@ -330,6 +326,7 @@ var LeaveRequest = function ($) {
                         if (response != null) {
                             LeaveRequest.annualBalance.html(response.AnnualBalance);
                             LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
+                            LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
                         }
                     });
 
@@ -385,12 +382,7 @@ var LeaveRequest = function ($) {
         showSuccessMsg: function (msg, url, msec) {
             var msgWrp = $('.validation-summary-valid').addClass('success').find('ul:first');
             msgWrp.append("<li>" + LeaveRequest.htmlDecode(msg) + "</li>");
-            //            setTimeout(function () {
-            //                location.href = _global.root + url;
-            //            }, 4000);
-
             confirm('Successfull!\nPress OK to continue', function () {
-                //document.location = _global.root + "leave/EmployeeView/" + year;
                 location.href = _global.root + url;
             });
         },
@@ -436,8 +428,6 @@ var LeaveRequest = function ($) {
             var start = $("[name='FromDate']").datepicker('getDate');
             var end = $("[name='ToDate']").datepicker('getDate');
             var days = (end - start) / 1000 / 60 / 60 / 24;
-
-            //console.log(empName != undefined);
 
             if (empName != undefined && (empName == null || empName == "")) {
                 errorString.push("* The Employee field is required.");

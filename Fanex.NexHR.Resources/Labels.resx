@@ -225,7 +225,7 @@
   <data name="LeaderViewCheckInOut" xml:space="preserve">
     <value>Leader's View Request Check In/Out</value>
   </data>
-  <data name="LeaveRequest" xml:space="preserve">
+  <data name="MyLeaveRequest" xml:space="preserve">
     <value>My Leave Request(s)</value>
   </data>
   <data name="Month" xml:space="preserve">
@@ -366,7 +366,7 @@
   <data name="LeaveType" xml:space="preserve">
     <value>Leave Type</value>
   </data>
-  <data name="MyLeaveRequest" xml:space="preserve">
+  <data name="EmployeeLeaveRequest" xml:space="preserve">
     <value>Employee's Leave Request</value>
   </data>
   <data name="Remark" xml:space="preserve">
@@ -932,5 +932,32 @@
   </data>
   <data name="Verified" xml:space="preserve">
     <value>Verified</value>
+  </data>
+ <data name="LeaveRequestDetail" xml:space="preserve">
+    <value>Leave request details</value>
+  </data>
+  <data name="LeaveRequest" xml:space="preserve">
+    <value>Leave request</value>
+  </data>
+  <data name="NewLeaveRequest" xml:space="preserve">
+    <value>New leave request</value>
+  </data>
+  <data name="ReasonReedit" xml:space="preserve">
+    <value>Reason reedit</value>
+  </data>
+  <data name="SelectApprover" xml:space="preserve">
+    <value>--Select an Approver--</value>
+  </data>
+  <data name="SelectVerifier" xml:space="preserve">
+    <value>--Select a Verifier--</value>
+  </data>
+  <data name="UpdateLeaveRequest" xml:space="preserve">
+    <value>Update my leave request</value>
+  </data>
+  <data name="WorkType" xml:space="preserve">
+    <value>Work type</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
   </data>
 </root>

@@ -341,7 +341,8 @@ namespace Fanex.NexHR.Controllers
                 Employee = employee,
                 Month = new DateTime(year.Value, month.Value, 1),
                 EmployeeId = string.IsNullOrEmpty(employee) ? null : employeeId,
-                IsExportExcel = isExportExcel
+                IsExportExcel = isExportExcel,
+                IsLocal = isLocal
             };
 
             var totalWorkingHourMonthly = _reportService.GetTotalWorkingHourMonthly(

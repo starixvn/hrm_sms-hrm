@@ -10,9 +10,11 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
 
     /// <summary>
@@ -24,17 +26,21 @@ namespace Fanex.NexHR.Services
 
         public LeaveTypeService(ILeaveTypeRepository leaveTypeRepository = null)
         {
-            this._leaveTypeRepository = leaveTypeRepository ?? new LeaveTypeRepository();    
+            this._leaveTypeRepository = leaveTypeRepository ?? new LeaveTypeRepository();
         }
 
         public IList<LeaveType> GetAll()
         {
-            return this._leaveTypeRepository.GetAll();
+            var leaveTypes = _leaveTypeRepository.GetAll();
+            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
+
+            return leaveTypes;
         }
 
         public LeaveType GetLeaveType(int id)
         {
-            return this._leaveTypeRepository.GetLeaveType(id);
+            var leaveType = _leaveTypeRepository.GetLeaveType(id);
+            return leaveType;
         }
     }
 }

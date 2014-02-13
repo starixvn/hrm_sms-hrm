@@ -45,7 +45,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@FromDate", DbType.DateTime, leaveRequest.FromDate);
                 db.AddInParameter("@ToDate", DbType.DateTime, leaveRequest.ToDate);
                 db.AddInParameter("@TotalDays", DbType.Decimal, leaveRequest.TotalDays);
-                db.AddInParameter("@CreatedDate", DbType.DateTime, leaveRequest.CreatedDate);
+                db.AddInParameter("@CreatedDate", DbType.DateTime, DateTime.Now);
                 db.AddInParameter("@CreatedBy", DbType.Int32, leaveRequest.CreatedBy);
                 db.AddInParameter("@VerifierId", DbType.Int32, leaveRequest.VerifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, leaveRequest.ApproverId);
@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@ToDate", DbType.DateTime, leaveRequest.ToDate);
                 db.AddInParameter("@TotalDays", DbType.Decimal, leaveRequest.TotalDays);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, DateTime.Now);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, leaveRequest.CreatedBy);
+                db.AddInParameter("@ModifiedBy", DbType.Int32, leaveRequest.ModifiedBy);
                 db.AddInParameter("@VerifierId", DbType.Int32, leaveRequest.VerifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, leaveRequest.ApproverId);
                 db.AddInParameter("@RefNo", DbType.String, leaveRequest.RefNo);

@@ -47,7 +47,7 @@
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
                 }
-                @Html.DropDownList("category", category, new { @class = "category" })
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
             </div>
         <div class="clear"></div>
         <div class="space"></div>

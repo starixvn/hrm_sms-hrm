@@ -13,11 +13,11 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Employee Controller API.
@@ -71,7 +71,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return _employeeService.GetUnavailableDates(
                 employeeId,
                 new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1),
-                new DateTime(date.AddMonths(3).Year, date.AddMonths(3).Month, 1).AddDays(-1));
+                new DateTime(date.AddMonths(3).Year, date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).Month, 1).AddDays(-1));
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)

@@ -45,9 +45,9 @@ namespace Fanex.NexHR.Models
 
         public int? ApproverId { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
         public int CreatedBy { get; set; }
+
+        public int ModifiedBy { get; set; }
 
         public IList<LeaveDetailModel> RequestDetail { get; set; }
 
