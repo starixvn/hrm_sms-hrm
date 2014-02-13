@@ -62,35 +62,6 @@
         $("#DOB").val(date.format("dd mmm yyyy"));
     });
 
-    $('#SubGroupArray' + $('#Team_Id').val()).prop('checked', false);
-    $('#Team_Id').change(function () {
-        var id = $(this).val();
-        $('#SubGroupArray' + id).prop('checked', false);
-    });
-
-    $('input[name=SubGroupArray]').change(function () {
-
-        var id = $(this).val();
-        var teamId = $('#Team_Id').val();
-        if (id == teamId) {
-            $(this).prop('checked', false);
-        }
-
-        if (!$(this).prop('checked')) {
-            $('#LeaderGroupsArray' + id).prop('checked', false);
-        }
-    });
-
-    $('input[name=LeaderGroupsArray]').change(function () {
-        var id = $(this).val();
-        var teamId = $('#Team_Id').val();
-
-        if (id != teamId && $('#SubGroupArray' + id).prop('checked') == false) {
-            $(this).prop('checked', false);
-            alert('Teams\' leaders receive request must be the main team or other team(s)');
-        }
-    });
-
     bindSARole(true);
     $('#RoleArray7').click(function () {
         bindSARole(false);
@@ -122,7 +93,6 @@
         });
     });
 
-    //    var collapse = $(".boxtitle").first();
     var collapse = $(".boxtitle");
     var itemContent = collapse.next();
     itemContent.show();
@@ -133,9 +103,6 @@
         $content = $header.next();
         //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
         $content.slideToggle(500, function () {
-            //execute this after slideToggle is done
-            //change text of header based on visibility of content div
-
             //            $header.text(function () {
             //                //change text based on condition
             //                return $content.is(":visible") ? "-" + $header.text() : "+" + $header.text();

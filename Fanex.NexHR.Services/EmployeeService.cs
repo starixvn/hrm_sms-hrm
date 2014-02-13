@@ -52,17 +52,6 @@ namespace Fanex.NexHR.Services
             return this._shiftRepository.GetAll();
         }
 
-        public IList<Employee> GetLeaders(int employeeId)
-        {
-            IList<Employee> leaders = new List<Employee>();
-            if (employeeId > 0)
-            {
-                leaders = this._employeeRepository.GetLeaders(employeeId);
-            }
-
-            return leaders;
-        }
-
         public Employee GetEmployeeById(int? employeeId = null)
         {
             return this._employeeRepository.GetEmployeeById(employeeId);

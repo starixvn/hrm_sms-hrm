@@ -57,8 +57,6 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<Employee> GetAll();
 
-        IList<Employee> GetLeaders(int id);
-
         bool Insert(ModelStateDictionary modelState, CreateEmployeeViewModel model);
 
         bool Delete(int id, DateTime resignedDate);

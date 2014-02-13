@@ -184,31 +184,27 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
+            string verifier;
+            string approver;
+            string shiftManager;
+            string actingSupervisor;
             var model = _employeeService.GetEmployeeById(id);
-            model.ListCountryCode = new List<SelectListItem>();
-
             var countryList = _employeeService.GetAllCountry();
+
+            model.ListCountryCode = new List<SelectListItem>();
             foreach (var item in countryList)
             {
                 model.ListCountryCode.Add(new SelectListItem { Text = item.CountryName, Value = item.CountryCode });
             }
 
-            var subGroups = string.Empty;
             CheckAdminUserRole();
-            model.SubGroups = subGroups;
-
-            string verifier;
-            string approver;
-            string shiftManager;
-            string actingSupervisor;
             GetListSupervisorName(id, out verifier, out approver, out shiftManager, out actingSupervisor);
-
             model.Verifier = verifier;
             model.Approver = approver;
             model.EmpShiftList = shiftManager;
             model.ActingEmpList = actingSupervisor;
-
             this.ComposeViewBagsForEditEmployee();
+
             return View(model);
         }
 
@@ -222,15 +218,17 @@ namespace Fanex.NexHR.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Employee model)
         {
-            CheckRoleUser(model);
+            string verifier;
+            string approver;
+            string shiftManager;
+            string actingSupervisor;
+            var countryList = _employeeService.GetAllCountry();
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
+            model.ListCountryCode = new List<SelectListItem>();
+            CheckRoleUser(model);
+
             if (ModelState.IsValid)
             {
-                if (model.SubGroupArray != null && model.SubGroupArray.Contains(model.Team.Id.ToString()))
-                {
-                    model.SubGroupArray = model.SubGroupArray.Where(i => i != model.Team.Id.ToString()).ToArray();
-                }
-
                 var result = _employeeService.Update(model, ModelState);
                 if (result != 0)
                 {
@@ -252,22 +250,20 @@ namespace Fanex.NexHR.Controllers
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            var countryList = _employeeService.GetAllCountry();
-            model.ListCountryCode = new List<SelectListItem>();
             foreach (var item in countryList)
             {
                 model.ListCountryCode.Add(new SelectListItem { Text = item.CountryName, Value = item.CountryCode });
             }
 
-            string verifier, approver, shiftManager, actingSupervisor;
             GetListSupervisorName(model.Id, out verifier, out approver, out shiftManager, out actingSupervisor);
             model.Verifier = verifier;
             model.Approver = approver;
             model.EmpShiftList = shiftManager;
             model.ActingEmpList = actingSupervisor;
-            CheckAdminUserRole();
 
+            CheckAdminUserRole();
             this.ComposeViewBagsForEditEmployee();
+
             return View(model);
         }
 

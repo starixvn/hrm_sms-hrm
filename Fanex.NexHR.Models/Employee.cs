@@ -113,9 +113,6 @@ namespace Fanex.NexHR.Models
 
         public Employee Modifier { get; set; }
 
-        [Display(Name = "Other team(s)")]
-        public string SubGroups { get; set; } ////remove
-
         [Display(Name = "Teams' leaders receive requests")]
         public string LeaderGroups { get; set; } ////remove
 
@@ -274,24 +271,6 @@ namespace Fanex.NexHR.Models
             set
             {
                 Roles = Utilities.StringArrayToString(value);
-            }
-        }
-
-        public string[] SubGroupArray
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(SubGroups))
-                {
-                    return null;
-                }
-
-                return SubGroups.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            set
-            {
-                SubGroups = Utilities.StringArrayToString(value);
             }
         }
 

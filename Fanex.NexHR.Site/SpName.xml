@@ -36,7 +36,6 @@
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="WorkingTimeRequest_ResetRequest_byMember" SpName="WorkingTimeRequest_ResetRequest_byMember" DbName="nexhrx" Plain="1"></Setting>
     
-    <Setting Key="Employee_GetLeaders" SpName="Employee_GetLeaders" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="1">
       <Mapping DataField="GroupId" ObjectProperty="Id"/>
       <Mapping DataField="GroupCode" ObjectProperty="Code"/>
@@ -161,8 +160,6 @@
         <Mapping DataField="AssistantLeaderNickName" ObjectProperty="NickName"/>
         <Mapping DataField="AssistantLeaderFullName" ObjectProperty="FullName"/>
       </Setting>
-        <Setting Key="Employee_GetSubTeam" SpName="Employee_GetSubTeam" DbName="nexhrx" Plain="1"></Setting>
-        <Setting Key="Employee_GetGroupHandleRequest" SpName="Employee_GetGroupHandleRequest" DbName="nexhrx" Plain="1"></Setting>
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="nexhrx" Plain="1"></Setting>
