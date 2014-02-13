@@ -12,7 +12,7 @@ $(document).ready(function () {
                     response($.map(data, function (item) {
                         return {
                             label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.Id
+                            value: item.Id != 0 ? item.Id : item.EmpId
                         }
                     }));
                 }

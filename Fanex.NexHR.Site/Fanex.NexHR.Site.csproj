@@ -966,7 +966,6 @@
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
     <Content Include="Views\UI\Welcome.cshtml" />
     <Content Include="Views\UI\GlobalScript.cshtml" />
-    <Content Include="Views\Employee\ManagementDashboard.cshtml" />
     <Content Include="Views\Request\CriteriaPanel.cshtml" />
     <Content Include="Views\UI\StatusDropDownList.cshtml" />
     <Content Include="Views\LateInEarlyOut\EmployeeView.cshtml" />

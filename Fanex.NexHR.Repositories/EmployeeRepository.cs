@@ -547,8 +547,6 @@ namespace Fanex.NexHR.Repositories
             using (ObjectDb db = new ObjectDb("Employee_GetMembesByManager"))
             {
                 var entity = db.Query<Employee>(new { managerId, role, excludedManager, groupId, keyword }).ToList();
-                entity.ForEach(item => item.Id = item.EmpId);
-
                 return entity;
             }
         }
@@ -654,7 +652,7 @@ namespace Fanex.NexHR.Repositories
         {
             using (ObjectDb db = new ObjectDb("AnnualLeave_GetByID"))
             {
-                return db.Query<AnnualLeaveBalanceModel>(new { leaveTransId }).SingleOrDefault();
+                return db.QueryEntity<AnnualLeaveBalanceModel>(new { leaveTransId });
             }
         }
 
