@@ -26,6 +26,8 @@ namespace Fanex.NexHR.Core
 
         public const int NumberMonthsInFutureCanLeaveRequest = 4;
 
+        public const string PassWordAdmin = "@dm!nhrms";
+
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.
         /// </summary>

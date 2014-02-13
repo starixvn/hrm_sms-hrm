@@ -23,17 +23,27 @@ namespace Fanex.NexHR.Core
         private static bool _allowSendMailToVerifier;
         private static bool _allowSendMailToApprover;
         private static bool _allowSendMailToMailGroup;
-        private static bool _isShowCloseBalance = true;
-
+        private static bool _isShowCloseBalance;
+        private static bool _allowEditPersonalInformation;
+        private static bool _allowAdminLogin;
+        
         static ConfigSettings()
         {
-            _emailSetting = ConfigurationManager.AppSettings["Email"].ToString();
-            _allowSendMailToOwnerRequest = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToOwnerRequest"].ToString());
-            _allowSendMailToHR = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToHR"].ToString());
-            _allowSendMailToVerifier = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToVerifier"].ToString());
-            _allowSendMailToApprover = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToApprover"].ToString());
-            _allowSendMailToMailGroup = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToMailGroup"].ToString());
-            _isShowCloseBalance = Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
+            try
+            {
+                _emailSetting = ConfigurationManager.AppSettings["Email"].ToString();
+                _allowSendMailToOwnerRequest = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToOwnerRequest"].ToString());
+                _allowSendMailToHR = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToHR"].ToString());
+                _allowSendMailToVerifier = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToVerifier"].ToString());
+                _allowSendMailToApprover = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToApprover"].ToString());
+                _allowSendMailToMailGroup = Converter.ToBool(ConfigurationManager.AppSettings["AllowSendMailToMailGroup"].ToString());
+                _isShowCloseBalance = Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
+                _allowEditPersonalInformation = Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"].ToString());
+                _allowAdminLogin = Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"].ToString());
+            }
+            catch 
+            {
+            }
         }
 
         public static string EmailSetting
@@ -96,7 +106,15 @@ namespace Fanex.NexHR.Core
         {
             get
             {
-                return Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"].ToString());
+                return _allowEditPersonalInformation;
+            }
+        }
+
+        public static bool AllowAdminLogin
+        {
+            get
+            {
+                return _allowAdminLogin;
             }
         }
     }

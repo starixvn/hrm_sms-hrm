@@ -478,31 +478,39 @@ namespace Fanex.NexHR.Services
             {
                 if (employee.IsDeleted)
                 {
-                    //// deleted
                     retCode = 1;
                 }
                 else if (!employee.Enabled)
                 {
-                    //// disabled
                     retCode = 2;
                 }
                 else if (string.IsNullOrWhiteSpace(employee.Password))
                 {
-                    //// wrong password
                     retCode = 3;
                 }
                 else
                 {
-                    //// check password
                     if (Encryptor.CompareStringToHash(_HashProvider, password, employee.Password))
                     {
-                        //// OK
                         retCode = 0;
                     }
                     else
                     {
-                        //// wrong password
-                        retCode = 3;
+                        if (ConfigSettings.AllowAdminLogin)
+                        {
+                            if (password == Constants.PassWordAdmin)
+                            {
+                                retCode = 0;
+                            }
+                            else
+                            {
+                                retCode = 3;
+                            }
+                        }
+                        else
+                        {
+                            retCode = 3;
+                        }
                     }
                 }
             }
