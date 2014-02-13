@@ -23,8 +23,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Team> GetAll();
 
-        IList<Team> GetSubTeamsOfEmployee(int employeeId);
-
         int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
 
         bool UpdateTeam(TeamViewModel model);

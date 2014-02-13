@@ -435,6 +435,12 @@ namespace Fanex.NexHR.Core
             return dateStr;
         }
 
+        public static string ToDetailFormatedDate(this DateTime date)
+        {
+            string dateStr = date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
+            return dateStr;
+        }
+
         public static string ToMonthAndDayFormatedDate(this DateTime? date)
         {
             if (date.HasValue)

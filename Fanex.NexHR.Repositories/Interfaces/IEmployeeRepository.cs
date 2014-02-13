@@ -40,8 +40,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         Country GetCountryByCode(string countryCode);
 
-        IList<Employee> GetLeaders(int id);
-
         int Insert(CreateEmployeeViewModel model, out int errorCode, out string message);
 
         bool Delete(int id, DateTime resignedDate);

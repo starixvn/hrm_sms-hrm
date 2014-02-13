@@ -34,14 +34,14 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb("GetEmployee"))
             {
-                var entity = db.Query<Employee, dynamic, Employee>(
+                var entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
                             return e;
                         },
                         splitOn: "TeamID",
-                        parameterValues: new { Empid = employeeId }).FirstOrDefault();
+                        parameters: new { Empid = employeeId });
 
                 return entity;
             }
@@ -56,14 +56,14 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb("Employee_GetEmployeeByCode"))
             {
-                Employee entity = db.Query<Employee, dynamic, Employee>(
+                Employee entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
                             return e;
                         },
                         splitOn: "TeamID",
-                        parameterValues: new { code = code }).FirstOrDefault();
+                        parameters: new { code = code });
 
                 return entity;
             }
@@ -233,14 +233,6 @@ namespace Fanex.NexHR.Repositories
                 var entityList = db.Query<Employee>(new { empId = employeeId }).ToList();
 
                 return entityList;
-            }
-        }
-
-        public IList<Employee> GetLeaders(int employeeId)
-        {
-            using (var db = new ObjectDb("Employee_GetLeaders"))
-            {
-                return db.Query<Employee>(new { id = employeeId }).ToList();
             }
         }
 
@@ -435,7 +427,7 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb("EmployeeShift_Get"))
             {
-                return db.Query<EmployeeShift>(new { empID }).FirstOrDefault();
+                return db.QueryEntity<EmployeeShift>(new { empID });
             }
         }
 
@@ -456,6 +448,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@friShift", DbType.Int32, model.FriShift);
                 db.AddInParameter("@satShift", DbType.Int32, model.SatShift);
                 db.AddInParameter("@sunShift", DbType.Int32, model.SunShift);
+
                 return db.ExecuteNonQuery() != 0;
             }
         }
@@ -496,7 +489,7 @@ namespace Fanex.NexHR.Repositories
             using (var db = new ObjectDb("Report_EmployeeDashBoard"))
             {
                 var date = DateTime.Now.ToShortDateString();
-                return db.Query<MySpaceViewModel>(new { empid, date }).FirstOrDefault();
+                return db.QueryEntity<MySpaceViewModel>(new { empid, date });
             }
         }
 
@@ -543,6 +536,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@ShiftID", DbType.Int32, shift);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
+
                 return db.ExecuteNonQuery() != 0;
             }
         }
@@ -554,6 +548,7 @@ namespace Fanex.NexHR.Repositories
             {
                 var entity = db.Query<Employee>(new { managerId, role, excludedManager, groupId, keyword }).ToList();
                 entity.ForEach(item => item.Id = item.EmpId);
+
                 return entity;
             }
         }

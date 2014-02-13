@@ -160,15 +160,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Team> GetSubTeamsOfEmployee(int employeeId)
-        {
-            using (var db = new ObjectDb("Employee_GetSubTeam"))
-            {
-                var entityList = db.Query<Team>(new { empId = employeeId }).ToList();
-                return entityList;
-            }
-        }
-
         /// <summary>
         /// Method Add new Team.
         /// </summary>

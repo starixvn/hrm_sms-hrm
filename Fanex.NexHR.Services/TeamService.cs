@@ -62,11 +62,6 @@ namespace Fanex.NexHR.Services
             return this._teamRepository.GetAll();
         }
 
-        public IList<Team> GetSubTeamsOfEmployee(int employeeId)
-        {
-            return this._teamRepository.GetSubTeamsOfEmployee(employeeId);
-        }
-
         public int AddNewTeam(TeamViewModel model)
         {
             int errorCode;

@@ -95,7 +95,7 @@
                         <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
-                else if (Model.Status == (byte)CurrentRequestStatus.Accepted || (Model.Status == (byte)CurrentRequestStatus.NotAccepted))
+                else if (Model.Status == (byte)CurrentRequestStatus.Verified || (Model.Status == (byte)CurrentRequestStatus.NotVerified))
                 {
                     if (Model.VerifierId.HasValue && Model.VerifierId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
