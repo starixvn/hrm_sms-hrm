@@ -72,6 +72,8 @@ namespace Fanex.NexHR.Repositories
         /// Method update Team.
         /// </summary>
         /// <param name="model">Team ViewModel.</param>
+        /// <param name="errorCode">Error code.</param>
+        /// <param name="message">Error message.</param>
         /// <returns>Boolean to check status.</returns>
         public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
         {
@@ -100,7 +102,7 @@ namespace Fanex.NexHR.Repositories
         /// Method Add new Team.
         /// </summary>
         /// <param name="model">Team ViewModel.</param>
-        /// /// <param name="errorCode">Error code.</param>
+        /// <param name="errorCode">Error code.</param>
         /// <param name="message">Error Message.</param>
         /// <returns>Value of error code.</returns>
         public int AddNewTeam(TeamViewModel model, out int errorCode, out string message)
