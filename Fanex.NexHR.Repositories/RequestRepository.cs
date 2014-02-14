@@ -275,25 +275,30 @@ namespace Fanex.NexHR.Repositories
         /// Function to get list supervisor related with request.
         /// </summary>
         /// <param name="requestId">Request id.</param>
+        /// <param name="action">Action process request.</param>
         /// <param name="employee">Output Employee.</param>
         /// <param name="verifier">Output Verifier.</param>
         /// <param name="approver">Output Approver.</param>
         /// <param name="listHr">Output SupervisorNameModel list.</param>
+        /// <param name="emailSettings">Email settings.</param>
         public void GetSupervisorAndHrByRequestId(
             long requestId,
+            int action,
             ref SupervisorNameModel employee,
             ref SupervisorNameModel verifier,
             ref SupervisorNameModel approver,
-            ref IList<SupervisorNameModel> listHr)
+            ref IList<SupervisorNameModel> listHr,
+            ref EmailSettingsModel emailSettings)
         {
             using (IObjectDb db = new ObjectDb("EmployeeSupervisor_GetListSupervisorRequestID"))
             {
-                using (var multi = db.QueryMultiple(new { requestId = requestId }))
+                using (var multi = db.QueryMultiple(new { requestId = requestId, action = action }))
                 {
                     employee = multi.Read<SupervisorNameModel>().FirstOrDefault();
                     verifier = multi.Read<SupervisorNameModel>().FirstOrDefault();
                     approver = multi.Read<SupervisorNameModel>().FirstOrDefault();
                     listHr = multi.Read<SupervisorNameModel>().ToList();
+                    emailSettings = multi.Read<EmailSettingsModel>().FirstOrDefault();
                 }
             }
         }

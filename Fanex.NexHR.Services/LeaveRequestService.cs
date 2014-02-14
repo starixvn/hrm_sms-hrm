@@ -11,10 +11,10 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -71,7 +71,9 @@ namespace Fanex.NexHR.Services
 
                 if (errorCode == 0)
                 {
-                    SendMailForLeaveSuccessfully(model, requestId, isUpdate: false);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForLeaveSuccessfully(model, templateEmailPath, isUpdate: false));
+                    taskSendMail.Start();
                 }
 
                 return requestId;
@@ -84,12 +86,21 @@ namespace Fanex.NexHR.Services
             }
         }
 
+        /// <summary>
+        /// Function to update leave request.
+        /// </summary>
+        /// <param name="model">LeaveRequest Model.</param>
+        /// <param name="errorCode">Error Code.</param>
+        /// <param name="message">Error message.</param>
+        /// <returns>Result of update.</returns>
         public bool UpdateLeaveRequest(LeaveRequestModel model, out int errorCode, out string message)
         {
             var result = _leaveRequestRepository.Update(model, out errorCode, out message);
             if (result)
             {
-                SendMailForLeaveSuccessfully(model, model.RequestId, isUpdate: true);
+                var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                var taskSendMail = new Task(() => this.SendMailForLeaveSuccessfully(model, templateEmailPath, isUpdate: false));
+                taskSendMail.Start();
             }
 
             return result;
@@ -221,23 +232,12 @@ namespace Fanex.NexHR.Services
         /// <param name="errorMessage">Error Message.</param>
         public void SendReasonReeditToSupervisor(long requestId, int processBy, string reason, out int errorCode, out string errorMessage)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-            var emailOfEmployee = string.Empty;
-
             this._leaveRequestRepository.ResetByUser(requestId, processBy, out errorCode, out errorMessage);
             if (errorCode == 0)
             {
-                GetMailToAndMailCC(requestId, ref mailTo, ref mailCC, ref sendToNickName, ref emailOfEmployee);
-                var leaveRequest = GetLeaveRequestById(requestId);
-
-                if (!string.IsNullOrWhiteSpace(mailTo))
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_ReeditReasonEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForReeditRequest(leaveRequest, reason, sendToNickName, templateEmailPath, mailTo, mailCC));
-                    taskSendMail.Start();
-                }
+                var templateEmailPath = HttpContext.Current.Server.MapPath(_ReeditReasonEmailTpl);
+                var taskSendMail = new Task(() => this.SendMailForReSetSuccessfully(requestId, reason, templateEmailPath));
+                taskSendMail.Start();
             }
         }
 
@@ -268,155 +268,40 @@ namespace Fanex.NexHR.Services
         /// Function to send mail for saved success for leave request.
         /// </summary>
         /// <param name="model">LeaveRequest ViewModel.</param>
-        /// <param name="requestId">Request Id.</param>
+        /// <param name="templateEmailPath">Path of template email.</param>
         /// <param name="isUpdate">Is update or insert.</param>
-        private void SendMailForLeaveSuccessfully(LeaveRequestModel model, long requestId, bool isUpdate)
+        private void SendMailForLeaveSuccessfully(LeaveRequestModel model, string templateEmailPath, bool isUpdate)
         {
             var mailTo = string.Empty;
             var mailCC = string.Empty;
             var sendToNickName = string.Empty;
-            var emailOfEmployee = string.Empty;
 
-            GetMailToAndMailCC(requestId, ref mailTo, ref mailCC, ref sendToNickName, ref emailOfEmployee);
+            GetMailToAndMailCC(model.RequestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
 
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                var taskSendMail = new Task(() => this.SendMailForLeaveRequest(model, sendToNickName, isUpdate, templateEmailPath, mailTo, mailCC));
-                taskSendMail.Start();
+                this.SendMailForLeaveRequest(model, sendToNickName, isUpdate, templateEmailPath, mailTo, mailCC);
             }
         }
 
         /// <summary>
-        /// Function to get mail to and mail cc of request.
+        /// Function to send mail for leave request reset success.
         /// </summary>
         /// <param name="requestId">Request Id.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="emailOfEmployee">Email of employee made request.</param>
-        private void GetMailToAndMailCC(long requestId, ref string mailTo, ref string mailCC, ref string sendToNickName, ref string emailOfEmployee)
+        /// <param name="reason">Reason to reedit.</param>
+        /// <param name="templateEmailPath">Path of template email.</param>
+        private void SendMailForReSetSuccessfully(long requestId, string reason, string templateEmailPath)
         {
-            SupervisorNameModel verifier = null;
-            SupervisorNameModel approver = null;
-            SupervisorNameModel employee = null;
-            IList<SupervisorNameModel> listHr = null;
+            var mailTo = string.Empty;
+            var mailCC = string.Empty;
+            var sendToNickName = string.Empty;
 
-            _requestRepository.GetSupervisorAndHrByRequestId(requestId, ref employee, ref verifier, ref approver, ref listHr);
-
-            GetMailApprover(approver, ref mailTo, ref sendToNickName);
-            GetMailVerifier(verifier, ref mailTo, ref sendToNickName);
-            GetMailHR(listHr, ref mailTo, ref mailCC, ref sendToNickName);
-            GetMailOwnerRequest(employee, ref mailTo, ref mailCC, ref sendToNickName);
-            GetMailGroup(employee, ref mailTo, ref mailCC, ref sendToNickName);
-        }
-
-        private void GetMailApprover(SupervisorNameModel approver, ref string mailTo, ref string sendToNickName)
-        {
-            if (ConfigSettings.AllowSendMailToApprover && approver != null)
+            GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit, ref mailTo, ref mailCC, ref sendToNickName);
+            
+            if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                mailTo = approver.Email;
-                sendToNickName = approver.NickName;
-            }
-        }
-
-        /// <summary>
-        /// Function to check verifier.
-        /// </summary>
-        /// <param name="verifier">Verifier Object.</param>
-        /// <param name="mailTo">Email to output.</param>
-        /// <param name="sendToNickName">Nick name of person email send to.</param>
-        private void GetMailVerifier(SupervisorNameModel verifier, ref string mailTo, ref string sendToNickName)
-        {
-            if (ConfigSettings.AllowSendMailToVerifier && verifier != null)
-            {
-                if (string.IsNullOrWhiteSpace(mailTo))
-                {
-                    mailTo = verifier.Email;
-                    sendToNickName = verifier.NickName;
-                }
-                else
-                {
-                    mailTo += ";" + verifier.Email;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Function to get all emails of HR.
-        /// </summary>
-        /// <param name="listHr">Emails of HR.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailHR(IList<SupervisorNameModel> listHr, ref string mailTo, ref string mailCC, ref string sendToNickName)
-        {
-            if (ConfigSettings.AllowSendMailToHR && listHr != null && listHr.Any())
-            {
-                var mailHRs = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
-                if (string.IsNullOrWhiteSpace(mailTo))
-                {
-                    mailTo = mailHRs;
-                    sendToNickName = Labels.HR;
-                }
-                else
-                {
-                    mailCC = mailHRs;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Function to get email of Owner request.
-        /// </summary>
-        /// <param name="employee">Employee which create request.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailOwnerRequest(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
-        {
-            if (ConfigSettings.AllowSendMailToOwnerRequest && employee != null)
-            {
-                if (string.IsNullOrWhiteSpace(mailTo))
-                {
-                    mailTo = employee.Email;
-                    sendToNickName = employee.NickName;
-                }
-                else if (string.IsNullOrWhiteSpace(mailCC))
-                {
-                    mailCC = employee.Email;
-                }
-                else
-                {
-                    mailCC += ";" + employee.Email;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Function to get email group.
-        /// </summary>
-        /// <param name="employee">Employee which create request.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailGroup(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
-        {
-            if (ConfigSettings.AllowSendMailToMailGroup && employee != null)
-            {
-                if (string.IsNullOrWhiteSpace(mailTo))
-                {
-                    mailTo = employee.MailGroup;
-                    sendToNickName = Labels.All;
-                }
-                else if (string.IsNullOrWhiteSpace(mailCC))
-                {
-                    mailCC = employee.MailGroup;
-                }
-                else
-                {
-                    mailCC += ";" + employee.MailGroup;
-                }
+                var leaveRequest = GetLeaveRequestById(requestId);
+                this.SendMailForReeditRequest(leaveRequest, reason, sendToNickName, templateEmailPath, mailTo, mailCC);
             }
         }
 

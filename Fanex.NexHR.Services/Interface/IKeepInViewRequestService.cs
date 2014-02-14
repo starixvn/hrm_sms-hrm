@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -21,7 +20,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool UpdateKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager);
 
-        bool DeleteKeepInViewRequestById(long id);
+        bool DeleteWorkingTimeRequest(long id);
 
         RequestEntity GetKeepInViewRequestById(long id);
 
