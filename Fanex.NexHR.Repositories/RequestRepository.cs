@@ -42,6 +42,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="requestId">Request id.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="processedBy">Processed by.</param>
+        /// <param name="remark">Reason to proceed.</param>
         /// <param name="processedDate">Processed date.</param>
         /// <param name="message">Message comment.</param>
         /// <returns>
@@ -52,13 +53,18 @@ namespace Fanex.NexHR.Repositories
             long requestId,
             int roleId,
             int processedBy,
+            string remark,
             DateTime processedDate,
             out string message)
         {
             string key = this.GetSpKeyForProcessRequest(command);
-
             using (ObjectDb db = new ObjectDb(key))
             {
+                if (command != Commands.Reset.ToString())
+                {
+                    db.AddInParameter("@Comment", DbType.String, remark);
+                }
+
                 db.AddInParameter("@RequestID", DbType.Int64, requestId);
                 db.AddInParameter("@ProcessedBy", DbType.Int32, processedBy);
                 db.AddInParameter("@ProcessedDate", DbType.DateTime, processedDate);

@@ -219,16 +219,17 @@ namespace Fanex.NexHR.Services
         /// <param name="requestId">Request id.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="processBy">Process By.</param>
+        /// <param name="remark">Reason to proceed.</param>
         /// <param name="errorMessage">Error message.</param>
         /// <returns>
         /// Return boolean.
         /// </returns>
-        public bool Process(string command, long requestId, int roleId, int processBy, out string errorMessage)
+        public bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage)
         {
             var request = this._requestRepository.GetWorkingTimeRequest(requestId);
             string message;
             int code = this._requestRepository.ProcessRequest(
-                command, requestId, roleId, processBy, DateTime.Now, out message);
+                command, requestId, roleId, processBy, remark, DateTime.Now, out message);
 
             if (code == 0)
             {

@@ -128,10 +128,14 @@
             <div class="label">
             </div>
             <div class="input">
-                ※ <span class="infobalance">Annual leave day(s) balance:</span>  <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.AnnualBalance.ToString("0.#")</span> &nbsp
-                ※ <span class="infobalance">Keep in view day(s) balance:</span>  <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeBalance.KeepInViewBalance.ToString("0.#")</span> &nbsp
+                ※ <span class="infobalance">Annual leave day(s) balance:</span> <span class="numberbalance"
+                    id="lblAnnualBalance">@Model.EmployeeBalance.AnnualBalance.ToString("0.#")</span>
+                &nbsp ※ <span class="infobalance">Keep in view day(s) balance:</span> <span class="numberbalance"
+                    id="lblKeepInViewBalance">@Model.EmployeeBalance.KeepInViewBalance.ToString("0.#")</span>
+                &nbsp
                 <br />
-                ※ <span class="infobalance">Current annual leave day(s) balance can be used:</span>  <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
+                ※ <span class="infobalance">Current annual leave day(s) balance can be used:</span>
+                <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
             </div>
             <div class="clear">
             </div>
@@ -156,18 +160,17 @@
                 &nbsp;
             </div>
             <div class="input">
-                
                 @if (Model.Status == (byte)CurrentRequestStatus.Pending)
                 {
                     if (Model.ApproverId == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                     else if (Model.VerifierId == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnAccept" type="button" value="@Labels.Accept" class="button-primary submit" requestId="@Model.RequestId"/>
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnNotAccept" type="button" value="@Labels.NotAccept" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnAccept" type="button" value="@Labels.Accept" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnNotAccept" type="button" value="@Labels.NotAccept" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 else if (Model.Status == (byte)CurrentRequestStatus.Verified || (Model.Status == (byte)CurrentRequestStatus.NotVerified))
@@ -175,25 +178,37 @@
                     if (Model.ApproverId == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
                         
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                     else if (Model.VerifierId == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 else if (Model.Status == (byte)CurrentRequestStatus.Approved || (Model.Status == (byte)CurrentRequestStatus.Rejected))
                 {
                     if (Model.ApproverId == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
-                @*<a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>*@
-                    <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
             <div class="clear">
+            </div>
+        </div>
+        
+        <div id="confirmedDialog">
+            <div class="formrow">
+                <div class="label">
+                    Remark
+                </div>
+                <div class="input">
+                    @Html.TextArea("reasonToProcess")
+                </div>
+                <div class="clear">
+                </div>
             </div>
         </div>
     }

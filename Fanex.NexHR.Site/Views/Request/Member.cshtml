@@ -16,7 +16,6 @@
 <div>
     @Html.Partial("CriteriaPanel", Model)
 </div>
-
 @*select view here*@
 @switch (Model.RequestType)
 {
@@ -49,4 +48,16 @@
         Html.RenderPartial("Request/Member/MemberKeepInViewRequest", entityKeepInView);
         break;
 }
-<div id="dialoghistorycontent"/>
+<div id="dialoghistorycontent" />
+<div id="confirmedDialog">
+    <div class="formrow">
+        <div class="label">
+            Remark
+        </div>
+        <div class="input">
+            @Html.TextArea("reasonToProcess")
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>

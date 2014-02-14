@@ -25,6 +25,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
             long requestId,
             int roleId,
             int processedBy,
+            string remark,
             DateTime processedDate,
             out string message);
 
