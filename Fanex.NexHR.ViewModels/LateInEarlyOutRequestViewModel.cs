@@ -36,6 +36,8 @@ namespace Fanex.NexHR.ViewModels
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
+        [Required]
+        [Range(1, 150, ErrorMessage = "The Minute field must be between 1 and 150")]
         public int Minute { get; set; }
 
         [Required]

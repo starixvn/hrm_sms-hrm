@@ -10,13 +10,12 @@
     @Url.CombresLink("lateinearlyoutjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a>
-    <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
-     <a class="step">@ViewBag.Title</a>
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
-@{ Html.EnableClientValidation(false); }
+    @{ Html.EnableClientValidation(false); }
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary()
@@ -28,7 +27,8 @@
         <input type="hidden" id="year" value="@ViewBag.Year" />
         }
         
-         <div id="model-state-error" class="ui-state-error ui-corner-all" style="padding: 0.7em; color:Red;">
+        <div id="model-state-error" class="ui-state-error ui-corner-all" style="padding: 0.7em;
+            color: Red;">
             @Labels.CannotCreateRequest
         </div>
         
@@ -68,8 +68,15 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1),
                 unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
-                @*@Html.DropDownListFor(model => model.Minute, Utilities.LateInOutTimeSteps(15))*@
-                 @Html.Html5Number(0, 150, 1, Model.Minute, new { Name = "Minute", MaxLength = "3", id = "Minute" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Minute)
+            </div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.Minute)
             </div>
         </div>
         
@@ -90,20 +97,6 @@
                 @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
             </div>
         </div>
-@*
-        <div class="formrow">
-            <div class="label">
-                @Fanex.NexHR.Resources.Labels.Date
-            </div>
-            <div class="input">
-                 @Html.DatePickerFor(model => model.ForDate,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
-                unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
-                @Html.DropDownList("Minute", Utilities.MinuteSteps(15))
-
-            </div>
-        </div>*@
         
         <div class="formrow">
             <div class="label">
@@ -127,7 +120,6 @@
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Update"/>
-                @*<a href="@Url.Action("employeeview", "lateinearlyout")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

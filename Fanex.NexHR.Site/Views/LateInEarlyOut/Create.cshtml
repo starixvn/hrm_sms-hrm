@@ -1,49 +1,45 @@
 ﻿@model Fanex.NexHR.ViewModels.LateInEarlyOutRequestViewModel
-@using System.Web.Mvc.Html5;
 @{
     ViewBag.Title = Labels.NewLateInEarlyOutRequest;
 }
-
 @section css{
     @Url.CombresLink("lateinearlyoutcss")
 }
 @section js{
     @Url.CombresLink("lateinearlyoutjs")
 }
-
 @section Breadcrumb {
-    <a class="step">Personal</a> 
-    <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 <div class="bunhat">
-@{ Html.EnableClientValidation(false); }
+    @{ Html.EnableClientValidation(false); }
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary()
 
         if (ViewBag.Requested == true)
         {
-            <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div>
-            <input type="hidden" id="successed" value="true" />
-            <input type="hidden" id="year" value="@ViewBag.Year" />
+        <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div>
+        <input type="hidden" id="successed" value="true" />
+        <input type="hidden" id="year" value="@ViewBag.Year" />
         }
         
-         <div id="model-state-error" class="ui-state-error ui-corner-all" style="padding: 0.7em; color:Red;">
+        <div id="model-state-error" class="ui-state-error ui-corner-all" style="padding: 0.7em;
+            color: Red;">
             @Labels.CannotCreateRequest
         </div>
 
         if (ViewBag.TotalRequest >= 2)
         {
 
-            <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-                <p>
-                    <a href="@Url.Action("EmployeeView")">
-                You've already requested for Late in/early out @ViewBag.TotalRequest times
-                since @DateTime.Now.ToString("MMM yyyy")</a>
-                </p>
-            </div>
+        <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+            <p>
+                <a href="@Url.Action("EmployeeView")">You've already requested for Late in/early out
+                    @ViewBag.TotalRequest times since @DateTime.Now.ToString("MMM yyyy")</a>
+            </p>
+        </div>
         }
         
         <div class="formrow">
@@ -52,7 +48,8 @@
             </div>
             <div class="input">
                 @Html.RadioButtonList(model => model.Type, Utilities.LateInEarlyOutTypes)
-                <div class="clear"></div>
+                <div class="clear">
+                </div>
             </div>
         </div>
         
@@ -74,9 +71,15 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1),
                 unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
-               
-                @*@Html.DropDownListFor(model => model.Minute, Utilities.LateInOutTimeSteps(15))*@
-                @Html.Html5Number(0, 150, 1, Model.Minute, new { Name = "Minute", MaxLength = "3", id = "Minute" })
+            </div>
+        </div>
+        
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Minute)
+            </div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.Minute)
             </div>
         </div>
         
@@ -85,15 +88,14 @@
                 @Html.LabelFor(model => model.Verifier)*
             </div>
             <div class="input">
-               @if (Model.Verifier.Count() > 1)
-               {
+                @if (Model.Verifier.Count() > 1)
+                {
                     @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, "--Select a Verifier--", new { @class = "dropdown" })
-               }
-               else
-               {
+                }
+                else
+                {
                     @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
-               }
-               
+                }
             </div>
         </div>
         
@@ -110,7 +112,6 @@
                 {
                     @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
                 }
-              
             </div>
         </div>
         
@@ -134,8 +135,8 @@
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Request"/>
-                @*<a href="~/lateinearlyout/employeeview" class="button">@Labels.Back</a>*@
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+                @*<a href="~/lateinearlyout/employeeview" class="button">@Labels.Back</a>*@ <a href="javascript:;"
+                    class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     }

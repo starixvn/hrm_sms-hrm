@@ -1,6 +1,4 @@
-﻿#Minute {
-	min-width: 40px !important;
-}
+﻿
 #Employee {
 	min-width: 165px !important;
 }
@@ -9,4 +7,9 @@
 }
 #FromTime, #ToTime {
 	min-width:60px;
+}
+
+input#Minute
+{
+    width: 30px;
 }
