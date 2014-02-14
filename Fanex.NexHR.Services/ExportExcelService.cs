@@ -508,35 +508,43 @@ namespace Fanex.NexHR.Services
             var rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
             var rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
             var rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
+            var numberCount = 1;
+            var numberStart = 0;
             foreach (var overtime in model)
             {
                 if (overtime.Name != null && overtime.ListOvertimeEntity.Count > 0)
                 {
-                    sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
+                    if (rowIndex <= _RowStartBodyOvertimeRecord)
+                    {
+                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
+                    }
+                    
                     var rowTeam = sheet.GetRow(rowIndex);
                     rowTeam.Height = rowTeamHeight;
                     var cellTeam = rowTeam.GetCell(0);
                     cellTeam.SetCellValue(overtime.Name.ToUpper());
-                    sheet.MergeCells(rowIndex, 0, rowIndex, 3);
+                    sheet.MergeCells(rowIndex, 0, rowIndex, 2);
                     rowIndex++;
-
+                    numberStart = rowIndex + 1;
                     foreach (var item in overtime.ListOvertimeEntity)
                     {
                         rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
                         sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                         var row = sheet.GetRow(rowIndex);
                         row.Height = rowHeight;
-                        row.GetCell(0).SetCellValue(rowIndex - _RowStartBodyOvertimeRecord + 1);
+                        row.GetCell(0).SetCellValue(numberCount);
                         row.GetCell(1).SetCellValue(item.EmpCode);
                         row.GetCell(2).SetCellValue(item.Fullname);
                         row.GetCell(3).SetCellValue(item.Nickname);
                         row.GetCell(4).SetCellValue(item.Team);
                         row.GetCell(5).SetCellValue(item.TotalWorkDays);
                         row.GetCell(6).SetCellValue(item.UnpaidLeave);
+
                         row.GetCell(7).SetCellValue(item.Normal);
                         row.GetCell(8).SetCellValue(item.Offday);
                         row.GetCell(9).SetCellValue(item.Holiday);
                         row.GetCell(10).SetCellValue(item.Tax);
+
                         var indexCount = 0;
                         double defaultCellValue = 0.0;
                         for (int i = 1; i <= totalHeaderDateCell; i++)
@@ -573,7 +581,31 @@ namespace Fanex.NexHR.Services
 
                         rowIndex++;
                         index++;
+                        numberCount++;
                     }
+                    
+                    var cellCountMemberInTeam = rowTeam.GetCell(3);
+                    cellCountMemberInTeam.SetCellValue(numberCount - 1);
+
+                    sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
+                    var rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
+
+                    var cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
+                    var cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
+                    var cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
+                    var cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
+                    string formulaNormal = "SUM(H{0}:H{1})";
+                    string formulaOff = "SUM(I{0}:I{1})";
+                    string formulaPH = "SUM(J{0}:J{1})";
+                    string formulaTax = "SUM(K{0}:K{1})";
+
+                    string data1 = Convert.ToString(numberStart);
+                    string data2 = Convert.ToString(rowIndex);
+                    cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
+                    cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
+                    cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
+                    cellSumTax.CellFormula = string.Format(formulaTax, data1, data2);
+                    numberCount = 1;
                 }
             }
 

@@ -710,16 +710,7 @@ namespace Fanex.NexHR.Repositories
         {
             using (ObjectDb db = new ObjectDb("AnnualLeave_InsertTransaction"))
             {
-                return db.ExecuteNonQuery(new
-                {
-                    empId,
-                    description,
-                    fromDate,
-                    deductDays,
-                    creditDays,
-                    createdDate,
-                    createdBy
-                }) != 0;
+                return db.ExecuteNonQuery(new { empId, description, fromDate, deductDays, creditDays, createdDate, createdBy }) != 0;
             }
         }
 
@@ -889,6 +880,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
+
                 db.ExecuteScalar();
                 errorCode = (int)db.GetParameterValue("ErrCode");
                 message = db.GetParameterValue("ErrMsg") as string;

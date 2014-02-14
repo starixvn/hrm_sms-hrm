@@ -75,7 +75,8 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1),
                 unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
                
-                @Html.DropDownListFor(model => model.Minute, Utilities.LateInOutTimeSteps(15))
+                @*@Html.DropDownListFor(model => model.Minute, Utilities.LateInOutTimeSteps(15))*@
+                @Html.Html5Number(0, 150, 1, Model.Minute, new { Name = "Minute", MaxLength = "3", id = "Minute" })
             </div>
         </div>
         
