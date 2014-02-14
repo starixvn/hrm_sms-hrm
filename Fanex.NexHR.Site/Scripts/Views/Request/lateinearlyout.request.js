@@ -2,7 +2,7 @@
 
     $("#model-state-error").hide();
     $("#Date").attr('readonly', 'readonly');
-    $('#Minute').prop('readonly', true);
+    //$('#Minute').prop('readonly', true);
     //Process redirect to My late in/earlt out request.
     var successed = $("#successed").val();
     var year = $("#year").val();
