@@ -42,33 +42,30 @@ namespace Fanex.NexHR.Repositories
         /// <param name="message">Error message.</param>
         /// <returns>Return request id.</returns>
         public long InsertCheckInOutRequest(
-           int empId,
-           int requestType,
-           string remark,
-           DateTime requestDate,
-           DateTime createdDate,
-           int createdBy,
-           int? verifierId,
-           int? approverId,
+            int empId,
+            int requestType,
+            string remark,
+            DateTime requestDate,
+            DateTime createdDate,
+            int createdBy,
+            int? verifierId,
+            int? approverId,
             string refNo,
             DateTime attendantDate,
-           out int errorCode,
-           out string message)
+            out int errorCode,
+            out string message)
         {
             using (var db = new ObjectDb("WorkingTimeRequest_Insert_CheckInOutRequest"))
             {
                 db.AddInParameter("@EmpId", DbType.Int32, empId);
                 db.AddInParameter("@RequestType", DbType.Int16, requestType);
                 db.AddInParameter("@Remark", DbType.String, remark);
-
                 db.AddInParameter("@OnDate", DbType.DateTime, attendantDate);
                 db.AddInParameter("@CheckTime", DbType.DateTime, requestDate);
                 db.AddInParameter("@CreatedDate", DbType.DateTime, createdDate);
                 db.AddInParameter("@CreatedBy", DbType.Int32, createdBy);
-
                 db.AddInParameter("@VerifierId", DbType.Int32, verifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, approverId);
-
                 db.AddInParameter("@RefNo", DbType.String, refNo);
 
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
@@ -117,7 +114,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@EmpId", DbType.Int32, empId);
                 db.AddInParameter("@RequestType", DbType.Int16, requestType);
                 db.AddInParameter("@Remark", DbType.String, remark);
-
                 db.AddInParameter("@OnDate", DbType.DateTime, attendantDate);
                 db.AddInParameter("@CheckTime", DbType.DateTime, requestDate);
                 db.AddInParameter("@RefNo", DbType.String, refNo);

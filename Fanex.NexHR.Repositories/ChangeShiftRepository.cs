@@ -89,7 +89,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@VerifierId", DbType.Int32, model.VerifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, model.ApproverId);
                 db.AddInParameter("@HRId", DbType.Int32, null);
-
                 db.AddInParameter("@ListDetail", DbType.Xml, model.Value);
 
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
@@ -116,7 +115,6 @@ namespace Fanex.NexHR.Repositories
         /// <param name="excludedEmpID">Log in id.</param>
         /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of RequestEntity.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetChangeShiftRequests(
             string role,
             DateTime fromDate,
@@ -292,6 +290,7 @@ namespace Fanex.NexHR.Repositories
                     FullName = reader.To<string>("FullNameHrBy"),
                 }
             };
+
             return entity;
         }
     }

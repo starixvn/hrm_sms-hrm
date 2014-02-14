@@ -61,18 +61,13 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@EmpId", DbType.Int32, empId);
                 db.AddInParameter("@RequestType", DbType.Int16, requestType);
                 db.AddInParameter("@Remark", DbType.String, remark);
-
                 db.AddInParameter("@OnDate", DbType.DateTime, requestDate);
-
                 db.AddInParameter("@LateInMins", DbType.Int32, lateInMins);
                 db.AddInParameter("@EarlyOutMins", DbType.Int32, earlyOutMins);
-
                 db.AddInParameter("@CreatedDate", DbType.DateTime, createdDate);
                 db.AddInParameter("@CreatedBy", DbType.Int32, createdBy);
-
                 db.AddInParameter("@VerifierId", DbType.Int32, verifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, approverId);
-
                 db.AddInParameter("@HRId", DbType.Int32, null);
 
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
@@ -115,7 +110,7 @@ namespace Fanex.NexHR.Repositories
             DateTime modifiedDate,
             int modifiedBy,
             out int errorCode,
-           out string message,
+            out string message,
             int? lateInMins = null,
             int? earlyOutMins = null)
         {
@@ -125,15 +120,11 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@EmpId", DbType.Int32, empId);
                 db.AddInParameter("@RequestType", DbType.Int16, requestType);
                 db.AddInParameter("@Remark", DbType.String, remark);
-
                 db.AddInParameter("@OnDate", DbType.DateTime, requestDate);
-
                 db.AddInParameter("@VerifierId", DbType.Int32, verifierId);
                 db.AddInParameter("@ApproverId", DbType.Int32, approverId);
-
                 db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
                 db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
-
                 db.AddInParameter("@LateinMins", DbType.Int32, lateInMins);
                 db.AddInParameter("@EarlyOutMins", DbType.Int32, earlyOutMins);
 
@@ -161,7 +152,6 @@ namespace Fanex.NexHR.Repositories
         /// <param name="logInId">Log in id.</param>
         /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of RequestEntity.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetLateInEarlyOutRequests(
             string role,
             DateTime fromDate,
