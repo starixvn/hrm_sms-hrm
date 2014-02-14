@@ -564,7 +564,7 @@ namespace Fanex.NexHR.Services
 
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                this.SendToRelatedPeople(command, processUser, request, employee, templateEmailPathForRelated, mailTo, mailCC);
+                this.SendToRelatedPeople(command, processUser, request, employee, sendToNickName, mailTo, mailCC, templateEmailPathForRelated);
             }
         }
 
@@ -975,47 +975,49 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="employee">Employee which made request.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="mailCc">The mail cc.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendToRelatedPeople(
             string command,
             Employee processUser,
             WorkingTimeRequest request,
             Employee employee,
-            string templateEmailPath,
+            string sendToNickName,
             string mailTo,
-            string mailCc)
+            string mailCc,
+            string templateEmailPath)
         {
             switch (request.RequestType)
             {
                 case (short)RequestTypes.CheckIn:
                     var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, mailTo, mailCc, templateEmailPath);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
                 case (short)RequestTypes.CheckOut:
                     var subjectCheckOut = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, mailTo, mailCc, templateEmailPath);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
                 case (short)RequestTypes.LateIn:
                     var subjectLateIn = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, mailTo, mailCc, true, templateEmailPath);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, sendToNickName, mailTo, mailCc, true, templateEmailPath);
                     break;
                 case (short)RequestTypes.EarlyOut:
                     var subjectEarlyOut = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, mailTo, mailCc, false, templateEmailPath);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, sendToNickName, mailTo, mailCc, false, templateEmailPath);
                     break;
                 case (short)RequestTypes.ChangeShift:
                     var subjectChangeShift = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
-                    ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, mailTo, mailCc, templateEmailPath);
+                    ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
                 case (short)RequestTypes.Leave:
                     var subjectLeave = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
-                    LeaveRelatedMail(command, employee, processUser, request, subjectLeave, mailTo, mailCc, templateEmailPath);
+                    LeaveRelatedMail(command, employee, processUser, request, subjectLeave, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
                 case (short)RequestTypes.KeepInView:
                     var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
-                    KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, mailTo, mailCc, templateEmailPath);
+                    KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
             }
         }
@@ -1028,6 +1030,7 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="subject">Subject of email.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="mailCc">Email CC List.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
@@ -1037,6 +1040,7 @@ namespace Fanex.NexHR.Services
             Employee processUser,
             WorkingTimeRequest request,
             string subject,
+            string sendToNickName,
             string mailTo,
             string mailCc,
             string templateEmailPath)
@@ -1045,6 +1049,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
@@ -1080,6 +1085,7 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="subject">Subject of email.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="mailCc">Email CC List.</param>
         /// <param name="isLateIn">Is late in or early out.</param>
@@ -1090,6 +1096,7 @@ namespace Fanex.NexHR.Services
             Employee processUser,
             WorkingTimeRequest request,
             string subject,
+            string sendToNickName,
             string mailTo,
             string mailCc,
             bool isLateIn,
@@ -1100,6 +1107,7 @@ namespace Fanex.NexHR.Services
 
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType == (short)RequestTypes.LateIn
@@ -1137,6 +1145,7 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="subject">Subject of email.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="mailCc">Email CC List.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
@@ -1146,6 +1155,7 @@ namespace Fanex.NexHR.Services
             Employee processUser,
             WorkingTimeRequest request,
             string subject,
+            string sendToNickName,
             string mailTo,
             string mailCc,
             string templateEmailPath)
@@ -1153,6 +1163,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
@@ -1189,6 +1200,7 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="subject">Subject of email.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="sendCc">Email CC List.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
@@ -1198,6 +1210,7 @@ namespace Fanex.NexHR.Services
             Employee processUser,
             WorkingTimeRequest request,
             string subject,
+            string sendToNickName,
             string mailTo,
             string sendCc,
             string templateEmailPath)
@@ -1209,6 +1222,7 @@ namespace Fanex.NexHR.Services
 
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
@@ -1244,6 +1258,7 @@ namespace Fanex.NexHR.Services
         /// <param name="processUser">Employee which changed status request.</param>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="subject">Subject of email.</param>
+        /// <param name="sendToNickName">Nick name which mail send to.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="mailCc">Email CC List.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
@@ -1253,6 +1268,7 @@ namespace Fanex.NexHR.Services
             Employee processUser,
             WorkingTimeRequest request,
             string subject,
+            string sendToNickName,
             string mailTo,
             string mailCc,
             string templateEmailPath)
@@ -1261,6 +1277,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
