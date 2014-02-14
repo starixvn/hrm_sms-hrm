@@ -233,9 +233,9 @@ namespace Fanex.NexHR.Services
             if (code == 0)
             {
                 var templateEmailPathForRequester = HttpContext.Current.Server.MapPath(_EmailTemplatePathForRequester);
+                var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType);
 
-                var sendMailTask = new Task(()
-                    => this.SendMailProcess(command, request, processBy, templateEmailPathForRequester));
+                var sendMailTask = new Task(() => this.SendMailProcess(command, request, processBy, templateEmailPathForRequester, templateEmailPathForRelated));
                 sendMailTask.Start();
                 sendMailTask.LogExceptions();
             }
@@ -386,7 +386,15 @@ namespace Fanex.NexHR.Services
         /// <param name="mailTo">Output mail to.</param>
         /// <param name="mailCC">Output mail cc.</param>
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        public void GetMailToAndMailCC(long requestId, int action, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        /// <param name="isSendForRequester">Send mail to requester or no.</param>
+        /// <returns>Setting allow send to requester or no.</returns>
+        public bool GetMailToAndMailCC(
+            long requestId, 
+            int action, 
+            ref string mailTo, 
+            ref string mailCC, 
+            ref string sendToNickName,
+            bool isSendForRequester = true)
         {
             SupervisorNameModel verifier = null;
             SupervisorNameModel approver = null;
@@ -411,7 +419,7 @@ namespace Fanex.NexHR.Services
                 GetMailHR(listHr, ref mailTo, ref mailCC, ref sendToNickName);
             }
 
-            if (emailSettings.AllowSendUser)
+            if (isSendForRequester && emailSettings.AllowSendUser)
             {
                 GetMailOwnerRequest(employee, ref mailTo, ref mailCC, ref sendToNickName);
             }
@@ -420,6 +428,8 @@ namespace Fanex.NexHR.Services
             {
                 GetMailGroup(employee, ref mailTo, ref mailCC, ref sendToNickName);
             }
+
+            return emailSettings.AllowSendUser;
         }
 
         /// <summary>
@@ -528,17 +538,92 @@ namespace Fanex.NexHR.Services
         /// <param name="request">The request.</param>
         /// <param name="processBy">The process user.</param>
         /// <param name="templateEmailPathForRequester">The template email path for requester.</param>
+        /// <param name="templateEmailPathForRelated">The template email path for send to related people.</param>
         private void SendMailProcess(
             string command,
             WorkingTimeRequest request,
             int processBy,
-            string templateEmailPathForRequester)
+            string templateEmailPathForRequester,
+            string templateEmailPathForRelated)
         {
             var employee = this._employeeRepository.GetEmployeeById(request.RequesterId);
             var processUser = this._employeeRepository.GetEmployeeById(processBy);
+            var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 
-            this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
+            var mailTo = string.Empty;
+            var mailCC = string.Empty;
+            var sendToNickName = string.Empty;
+
+            var allowSendRequester = GetMailToAndMailCC(request.RequestId, action, ref mailTo, ref mailCC, ref sendToNickName, isSendForRequester: false);
+
+            if (allowSendRequester)
+            {
+                this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
+            }
+
+            if (!string.IsNullOrWhiteSpace(mailTo))
+            {
+                this.SendToRelatedPeople(command, processUser, request, employee, templateEmailPathForRelated, mailTo, mailCC);
+            }
+        }
+
+        /// <summary>
+        /// Function ro get action setting send mail for process request.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="command">Process of request.</param>
+        /// <returns>Action setting send mail.</returns>
+        private int GetActionProcessRequest(WorkingTimeRequest request, string command)
+        {
+            var action = (int)SettingsSendMail.New;
+            if (command == Commands.Accept.ToString())
+            {
+                action = (int)SettingsSendMail.Verify;
+            }
+
+            if (command == Commands.NotAccept.ToString())
+            {
+                action = (int)SettingsSendMail.NotVerify;
+            }
+
+            if (command == Commands.Approve.ToString())
+            {
+                action = (int)SettingsSendMail.Approve;
+            }
+
+            if (command == Commands.Reject.ToString())
+            {
+                action = (int)SettingsSendMail.Reject;
+            }
+
+            if (command == Commands.Process.ToString())
+            {
+                action = (int)SettingsSendMail.Process;
+            }
+
+            if (command == Commands.Void.ToString())
+            {
+                action = (int)SettingsSendMail.Void;
+            }
+
+            if (command == Commands.Reset.ToString())
+            {
+                if (request.Status == (byte)CurrentRequestStatus.Verified || request.Status == (byte)CurrentRequestStatus.NotVerified)
+                {
+                    action = (int)SettingsSendMail.Reset1;
+                }
+                else if (request.Status == (byte)CurrentRequestStatus.Approved || request.Status == (byte)CurrentRequestStatus.Rejected)
+                {
+                    action = (int)SettingsSendMail.Reset2;
+                }
+                else 
+                {
+                    action = (int)SettingsSendMail.Reset3;
+                }
+            }
+
+            return action;
         }
 
         /// <summary>
@@ -842,6 +927,387 @@ namespace Fanex.NexHR.Services
                     mailCC += ";" + employee.MailGroup;
                 }
             }
+        }
+
+        /// <summary>
+        /// Function to get path of email template.
+        /// </summary>
+        /// <param name="requestType">Request type.</param>
+        /// <returns>Path of email template.</returns>
+        private string GetEmailTemplatePath(short requestType)
+        {
+            var path = string.Empty;
+            switch (requestType)
+            {
+                case (short)RequestTypes.CheckIn:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
+                    break;
+                case (short)RequestTypes.CheckOut:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
+                    break;
+                case (short)RequestTypes.LateIn:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
+                    break;
+                case (short)RequestTypes.EarlyOut:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
+                    break;
+                case (short)RequestTypes.ChangeShift:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShift);
+                    break;
+                case (short)RequestTypes.Leave:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
+                    break;
+                case (short)RequestTypes.Overtime:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForOvertime);
+                    break;
+                case (short)RequestTypes.KeepInView:
+                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);
+                    break;
+            }
+
+            return path;
+        }
+
+        /// <summary>
+        /// Function to send mail to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="mailCc">The mail cc.</param>
+        private void SendToRelatedPeople(
+            string command,
+            Employee processUser,
+            WorkingTimeRequest request,
+            Employee employee,
+            string templateEmailPath,
+            string mailTo,
+            string mailCc)
+        {
+            switch (request.RequestType)
+            {
+                case (short)RequestTypes.CheckIn:
+                    var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, mailTo, mailCc, templateEmailPath);
+                    break;
+                case (short)RequestTypes.CheckOut:
+                    var subjectCheckOut = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, mailTo, mailCc, templateEmailPath);
+                    break;
+                case (short)RequestTypes.LateIn:
+                    var subjectLateIn = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, mailTo, mailCc, true, templateEmailPath);
+                    break;
+                case (short)RequestTypes.EarlyOut:
+                    var subjectEarlyOut = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, mailTo, mailCc, false, templateEmailPath);
+                    break;
+                case (short)RequestTypes.ChangeShift:
+                    var subjectChangeShift = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
+                    ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, mailTo, mailCc, templateEmailPath);
+                    break;
+                case (short)RequestTypes.Leave:
+                    var subjectLeave = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
+                    LeaveRelatedMail(command, employee, processUser, request, subjectLeave, mailTo, mailCc, templateEmailPath);
+                    break;
+                case (short)RequestTypes.KeepInView:
+                    var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
+                    KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, mailTo, mailCc, templateEmailPath);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Function to send mail check in out request to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="mailCc">Email CC List.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void CheckInOutRelatedMail(
+            string command,
+            Employee employee,
+            Employee processUser,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string mailCc,
+            string templateEmailPath)
+        {
+            var shift = this._shiftRepository.GetByDate(employee.Id, request.FromDate);
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            var bodyContent = new
+            {
+                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
+                Time = HourFormat(request.FromDate),
+                Shift = shift != null ? shift.Name : string.Empty,
+                Url = this._baseUrl,
+                Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                mailCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail late in, early out request to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="mailCc">Email CC List.</param>
+        /// <param name="isLateIn">Is late in or early out.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void LateInEarlyOutRelatedMail(
+            string command,
+            Employee employee,
+            Employee processUser,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string mailCc,
+            bool isLateIn,
+            string templateEmailPath)
+        {
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate.Value);
+
+            var bodyContent = new
+            {
+                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                RequestType = request.RequestType == (short)RequestTypes.LateIn
+                                ? "a " + Resources.Labels.LateIn.ToLower()
+                                : "an " + Resources.Labels.EarlyOut.ToLower(),
+                ForDate = forDate,
+                Minute = isLateIn ? ("+" + request.Time) : ("-" + request.Time),
+                Remark = request.Remark,
+                Url = this._baseUrl,
+                Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                mailCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail change shift request to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="mailCc">Email CC List.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void ChangeShiftRelatedMail(
+            string command,
+            Employee employee,
+            Employee processUser,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string mailCc,
+            string templateEmailPath)
+        {
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            var bodyContent = new
+            {
+                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
+                FromDate = request.FromDate.ToDateMonthYearFormatedDate(),
+                ToDate = request.ToDate.ToDateMonthYearFormatedDate(),
+                Remark = request.Remark,
+                Url = this._baseUrl,
+                Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                mailCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail leave request to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void LeaveRelatedMail(
+            string command,
+            Employee employee,
+            Employee processUser,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string sendCc,
+            string templateEmailPath)
+        {
+            var body = Utilities.ReadTextFile(templateEmailPath);
+
+            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
+            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
+
+            var bodyContent = new
+            {
+                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                ForDate = forDate,
+                Remark = request.Remark,
+                LeaveName = request.LeaveName,
+                Url = this._baseUrl,
+                Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail keep in view request to other staff which related group.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="employee">Employee which made request.</param>
+        /// <param name="processUser">Employee which changed status request.</param>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="subject">Subject of email.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="mailCc">Email CC List.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void KeepInViewRelatedMail(
+            string command,
+            Employee employee,
+            Employee processUser,
+            WorkingTimeRequest request,
+            string subject,
+            string mailTo,
+            string mailCc,
+            string templateEmailPath)
+        {
+            var shift = this._shiftRepository.GetByDate(employee.Id, request.OnDate);
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            var bodyContent = new
+            {
+                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                Date = request.OnDate.ToDateMonthYearFormatedDate(),
+                Shift = shift != null ? shift.Name : string.Empty,
+                Remark = request.Remark,
+                Url = this._baseUrl,
+                Action = command
+            };
+
+            try
+            {
+                body = RazorEngine.Razor.Parse(body, bodyContent);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
+            }
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                mailCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to get string date for late in, early out request.
+        /// </summary>
+        /// <param name="fromDate">The From date.</param>
+        /// <param name="toDate">The To date.</param>
+        /// <returns>String detail date.</returns>
+        private string GetStringDateForLateInEarlyOutRequest(DateTime fromDate, DateTime toDate)
+        {
+            var date = string.Empty;
+
+            if (toDate == null || (toDate - fromDate).Days == 0)
+            {
+                date = fromDate.ToDateMonthYearFormatedDate();
+            }
+            else
+            {
+                date = "from " + fromDate.ToDateMonthYearFormatedDate() + " to " + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            return date;
         }
     }
 }
