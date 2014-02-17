@@ -16,7 +16,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Late In Early Out Request Service.
     /// </summary>
     public interface ILateInEarlyOutRequestService
     {

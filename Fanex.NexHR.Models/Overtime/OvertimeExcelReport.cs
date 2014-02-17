@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Models.Overtime
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Overtime Excel Report Model.
     /// </summary>
     public class OvertimeExcelReport
     {

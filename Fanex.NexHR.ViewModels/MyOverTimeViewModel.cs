@@ -14,7 +14,7 @@ namespace Fanex.NexHR.ViewModels
     using Fanex.NexHR.Models;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// My Overtime ViewModel.
     /// </summary>
     public class MyOverTimeViewModel
     {

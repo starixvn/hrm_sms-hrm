@@ -86,10 +86,10 @@ namespace Fanex.NexHR.Controllers
 
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
-        public JsonResult ProcessRequest(string command, long requestId, int roleId)
+        public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
             string errorMessage;
-            var result = _requestService.Process(command, requestId, roleId, this.CurrentUser.Id, out errorMessage);
+            var result = _requestService.Process(command, requestId, roleId, this.CurrentUser.Id, remark, out errorMessage);
             return result ? Json(true) : Json(errorMessage);
         }
 

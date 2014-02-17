@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// LateInEarlyOutRequest Service.
     /// </summary>
     public class LateInEarlyOutRequestService : RequestService, ILateInEarlyOutRequestService
     {

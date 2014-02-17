@@ -25,7 +25,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Change Shift Request Service.
     /// </summary>
     public class ChangeShiftRequestService : RequestService, IChangeShiftRequestService
     {

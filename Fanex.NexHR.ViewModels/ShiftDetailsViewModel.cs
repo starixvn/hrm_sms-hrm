@@ -16,7 +16,7 @@ namespace Fanex.NexHR.ViewModels
     using Fanex.NexHR.Models;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Shift Details ViewModel.
     /// </summary>
     public class ShiftDetailsViewModel
     {

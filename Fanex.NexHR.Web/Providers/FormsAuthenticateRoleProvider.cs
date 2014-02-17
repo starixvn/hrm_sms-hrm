@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Web.Providers
     using Fanex.NexHR.Services.Interface;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Forms Authenticate Role Provider.
     /// </summary>
     public class FormsAuthenticateRoleProvider : RoleProvider
     {

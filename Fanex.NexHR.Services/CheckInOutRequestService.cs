@@ -25,7 +25,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Check In Out Request Service.
     /// </summary>
     public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
     {

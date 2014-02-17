@@ -11,7 +11,7 @@ namespace Fanex.NexHR.ViewModels
     using Fanex.NexHR.Models.Request;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Overtime Report ViewModel.
     /// </summary>
     public class OvertimeReportViewModel
     {

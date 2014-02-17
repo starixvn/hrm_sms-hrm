@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Overtime Request Service.
     /// </summary>
     public interface IOvertimeRequestService
     {

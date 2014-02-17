@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Change shit repository.
     /// </summary>
     public interface IChangeShiftRepository
     {

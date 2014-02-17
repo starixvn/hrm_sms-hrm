@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Late In Early Out Repository.
     /// </summary>
     public class LateInEarlyOutRepository : ILateInEarlyOutRepository
     {

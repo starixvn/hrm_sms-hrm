@@ -12,7 +12,7 @@ namespace Fanex.NexHR.ViewModels
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Overtime Annual Report.
     /// </summary>
     public class OvertimeAnnualReport
     {

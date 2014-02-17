@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Controllers.Support
     using Fanex.NexHR.ViewModels.TimesheetRecord;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Time Sheet Record Controller.
     /// </summary>
     public class TimeSheetRecordController : BaseController
     {

@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.ViewModels.TimesheetRecord;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Support Service.
     /// </summary>
     public interface ISupportService
     {

@@ -16,7 +16,7 @@ namespace Fanex.NexHR.Core.Security
     using Fanex.NexHR.Core.Enums;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Using encryption algorithm to encrypt.
     /// </summary>
     public static class Encryptor
     {

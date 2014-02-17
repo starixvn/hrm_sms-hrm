@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Core.Enums
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// ENUM Employee Contract Status.
     /// </summary>
     public enum EmployeeContractStatus
     {

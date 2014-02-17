@@ -10,7 +10,7 @@ namespace Fanex.NexHR.ViewModels
     using Fanex.NexHR.Models;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Extension Number ViewModel.
     /// </summary>
     public class ExtensionNumberViewModel
     {
