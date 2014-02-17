@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.ViewModels.TimesheetRecord;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Support Repository.
     /// </summary>
     public class SupportRepository : ISupportRepository
     {

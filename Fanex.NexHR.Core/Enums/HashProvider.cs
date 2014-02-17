@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Core.Enums
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// ENUM Hash Provider.
     /// </summary>
     public enum HashProvider
     {

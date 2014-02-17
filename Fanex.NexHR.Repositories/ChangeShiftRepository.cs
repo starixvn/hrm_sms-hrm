@@ -23,7 +23,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Change shift Repository.
     /// </summary>
     public class ChangeShiftRepository : RequestRepository, IChangeShiftRepository
     {

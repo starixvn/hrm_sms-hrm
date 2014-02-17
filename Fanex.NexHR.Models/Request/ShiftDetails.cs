@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Models.Request
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Shift Details Model.
     /// </summary>
     public class ShiftDetails
     {

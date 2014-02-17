@@ -10,7 +10,7 @@ namespace Fanex.NexHR.ViewModels.TimesheetRecord
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Time sheet record ViewModel.
     /// </summary>
     public class TimeSheetRecordViewModel
     {

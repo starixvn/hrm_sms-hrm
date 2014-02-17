@@ -9,7 +9,7 @@ namespace Fanex.NexHR.Models
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Extension Number Model.
     /// </summary>
     public class ExtensionNoModel
     {

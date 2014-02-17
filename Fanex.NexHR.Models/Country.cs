@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Models
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Country Model.
     /// </summary>
     public class Country : EntityBase<int>
     {

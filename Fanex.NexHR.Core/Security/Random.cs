@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Core.Security
     using System.Security.Cryptography;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Class Random.
     /// </summary>
     public static class Random
     {

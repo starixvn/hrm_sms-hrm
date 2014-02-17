@@ -14,7 +14,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using Fanex.NexHR.Models.Request;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Late In Early Out Repository.
     /// </summary>
     public interface ILateInEarlyOutRepository
     {

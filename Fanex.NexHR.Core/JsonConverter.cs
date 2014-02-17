@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Core
     using System.Text;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Convert from JSON format to Object and vice versa.
     /// </summary>
     public class JsonConverter
     {

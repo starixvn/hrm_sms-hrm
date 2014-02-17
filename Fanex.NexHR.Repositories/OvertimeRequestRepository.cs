@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Overtime Request Repository.
     /// </summary>
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {

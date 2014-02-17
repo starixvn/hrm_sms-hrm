@@ -27,7 +27,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
     using NPOI.SS.Util;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// TotalWorkingHourMonthlyExporting Service.
     /// </summary>
     public class TotalWorkingHourMonthlyExporting : ITotalWorkingHourMonthlyExporting
     {

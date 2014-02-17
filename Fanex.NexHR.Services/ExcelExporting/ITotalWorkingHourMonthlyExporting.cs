@@ -17,7 +17,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
     using NPOI.HSSF.UserModel;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Interface Total Working Hour Monthly Exporting.
     /// </summary>
     public interface ITotalWorkingHourMonthlyExporting
     {

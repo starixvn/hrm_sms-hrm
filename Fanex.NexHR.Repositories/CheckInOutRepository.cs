@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Check in out repository.
     /// </summary>
     public class CheckInOutRepository : RequestRepository, ICheckInOutRepository
     {
