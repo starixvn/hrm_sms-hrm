@@ -25,13 +25,11 @@ namespace Fanex.NexHR.Repositories
     public class MemoService : IMemoService
     {
         private readonly IMemoRepository _memoRepository;
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
 
         public MemoService(IMemoRepository memoRepository = null, IEmployeeRepository employeeRepository = null, IEmailService emailService = null)
         {
             this._memoRepository = memoRepository ?? new MemoRepository();
-            this._employeeRepository = employeeRepository ?? new EmployeeRepository();
             this._emailService = emailService ?? new EmailService();
         }
 
@@ -39,7 +37,6 @@ namespace Fanex.NexHR.Repositories
         {
             IList<Memo> entityList = null;
             entityList = this._memoRepository.GetAll(model.Content, model.Year, model.Category);
-
             return entityList;
         }
 

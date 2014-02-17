@@ -32,14 +32,12 @@ namespace Fanex.NexHR.Services
         private const string _ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly IRequestRepository _requestRepository;
         private readonly IChangeShiftRepository _changeShiftRepository;
         private string _baseUrl;
 
         public ChangeShiftRequestService()
         {
             this._employeeRepository = new EmployeeRepository();
-            this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
             this._changeShiftRepository = new ChangeShiftRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
@@ -53,7 +51,6 @@ namespace Fanex.NexHR.Services
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._requestRepository = requestRepository;
             this._changeShiftRepository = changeShiftRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }

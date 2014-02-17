@@ -30,21 +30,18 @@ namespace Fanex.NexHR.Services
         private const HashProvider _HashProvider = HashProvider.SHA1;
 
         private readonly IShiftRepository _shiftRepository;
-        private readonly ITeamService _teamService;
         private IEmployeeRepository _employeeRepository;
 
         public EmployeeService()
         {
             this._employeeRepository = new EmployeeRepository();
             this._shiftRepository = new ShiftRepository();
-            this._teamService = new TeamService();
         }
 
         public EmployeeService(IEmployeeRepository employeeRepository, IShiftRepository shifRepository)
         {
             this._employeeRepository = employeeRepository;
             this._shiftRepository = shifRepository;
-            this._teamService = new TeamService();
         }
 
         public IList<Shift> GetAllShifts()

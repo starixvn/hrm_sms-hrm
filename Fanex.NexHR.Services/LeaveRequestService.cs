@@ -31,15 +31,11 @@ namespace Fanex.NexHR.Services
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
         private const string _ReeditReasonEmailTpl = "~/app_data/emails/ReeditRequest.cshtml";
         private readonly LeaveRequestRepository _leaveRequestRepository;
-        private readonly IRequestRepository _requestRepository;
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
 
         public LeaveRequestService()
         {
             this._leaveRequestRepository = new LeaveRequestRepository();
-            this._requestRepository = new RequestRepository();
-            this._employeeRepository = new EmployeeRepository();
             this._emailService = new EmailService();
         }
 
@@ -50,8 +46,6 @@ namespace Fanex.NexHR.Services
             IEmailService emailService)
         {
             this._leaveRequestRepository = leaveRequestRepository;
-            this._requestRepository = requestRepository;
-            this._employeeRepository = employeeRepository;
             this._emailService = emailService;
         }
 

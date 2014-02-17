@@ -66,7 +66,6 @@ namespace Fanex.NexHR.Services
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly ILeaveTypeRepository _leaveTypeRepository;
         private readonly IShiftRepository _shiftRepository;
         private readonly IRequestRepository _requestRepository;
         private readonly ICheckInOutRepository _checkInOutRepository;
@@ -82,7 +81,6 @@ namespace Fanex.NexHR.Services
             this._employeeRepository = new EmployeeRepository();
             this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
-            this._leaveTypeRepository = new LeaveTypeRepository();
             this._shiftRepository = new ShiftRepository();
             this._checkInOutRepository = new CheckInOutRepository();
             this._changeShiftRepository = new ChangeShiftRepository();
@@ -109,7 +107,6 @@ namespace Fanex.NexHR.Services
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._leaveTypeRepository = leaveTypeRepository;
             this._requestRepository = requestRepository;
             this._shiftRepository = shiftRepository;
             this._checkInOutRepository = checkInOutRepository;

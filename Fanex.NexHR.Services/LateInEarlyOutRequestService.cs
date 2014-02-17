@@ -27,16 +27,12 @@ namespace Fanex.NexHR.Services
     public class LateInEarlyOutRequestService : RequestService, ILateInEarlyOutRequestService
     {
         private const string _LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly IRequestRepository _requestRepository;
         private readonly ILateInEarlyOutRepository _lateInEarlyOutRepository;
         private string _baseUrl;
 
         public LateInEarlyOutRequestService()
         {
-            this._employeeRepository = new EmployeeRepository();
-            this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
             this._lateInEarlyOutRepository = new LateInEarlyOutRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
@@ -48,9 +44,7 @@ namespace Fanex.NexHR.Services
             IRequestRepository requestRepository,
             ILateInEarlyOutRepository lateInEarlyOutRepository)
         {
-            this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._requestRepository = requestRepository;
             this._lateInEarlyOutRepository = lateInEarlyOutRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }

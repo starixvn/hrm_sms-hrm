@@ -29,23 +29,13 @@ namespace Fanex.NexHR.Services
     public class KeepInViewRequestService : RequestService, IKeepInViewRequestService
     {
         private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly ILeaveTypeService _leaveTypeService;
-        private readonly IShiftService _shiftService;
         private readonly IKeepInViewRequestRepository _keepInViewRequestRepository;
-        private readonly IRequestRepository _requestRepository;
-        private string _baseUrl;
 
         public KeepInViewRequestService()
         {
-            this._employeeRepository = new EmployeeRepository();
             this._keepInViewRequestRepository = new KeepInViewRequestRepository();
             this._emailService = new EmailService();
-            this._leaveTypeService = new LeaveTypeService();
-            this._shiftService = new ShiftService();
-            this._requestRepository = new RequestRepository();
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public KeepInViewRequestService(
@@ -56,13 +46,8 @@ namespace Fanex.NexHR.Services
             IShiftService shiftService,
             IRequestRepository requestRepository)
         {
-            this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._leaveTypeService = leaveTypeService;
             this._keepInViewRequestRepository = keepInViewRequestRepository;
-            this._shiftService = shiftService;
-            this._requestRepository = requestRepository;
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         /// <summary>

@@ -30,16 +30,12 @@ namespace Fanex.NexHR.Services
     public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
     {
         private const string _CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly IRequestRepository _requestRepository;
         private readonly ICheckInOutRepository _checkInOutRepository;
         private string _baseUrl;
 
         public CheckInOutRequestService()
         {
-            this._employeeRepository = new EmployeeRepository();
-            this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
             this._checkInOutRepository = new CheckInOutRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
@@ -51,9 +47,7 @@ namespace Fanex.NexHR.Services
             IRequestRepository requestRepository,
             ICheckInOutRepository checkInOutRepository)
         {
-            this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._requestRepository = requestRepository;
             this._checkInOutRepository = checkInOutRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
