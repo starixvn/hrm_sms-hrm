@@ -27,7 +27,6 @@ namespace Fanex.NexHR.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly ITeamService _teamService;
         private readonly IShiftService _shiftService;
         private readonly ILookupDataService _lookupDataService;
 
@@ -40,12 +39,10 @@ namespace Fanex.NexHR.Controllers
 
         public AccountController(
             IEmployeeService employeeService = null,
-            ITeamService teamService = null,
             ILookupDataService lookupDataService = null,
             IShiftService shiftService = null)
         {
             _employeeService = employeeService ?? new EmployeeService();
-            _teamService = teamService ?? new TeamService();
             _lookupDataService = lookupDataService ?? new LookupDataService();
             _shiftService = shiftService ?? new ShiftService();
         }

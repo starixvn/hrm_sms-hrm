@@ -66,7 +66,7 @@ namespace Fanex.NexHR.Repositories
                     {
                         while (reader.Read())
                         {
-                            var entity = this.FillDataForGettingLeaveRequest(reader);
+                            var entity = FillDataForGettingLeaveRequest(reader);
                             entityList.Add(entity);
                         }
                     }

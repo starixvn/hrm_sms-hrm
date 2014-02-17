@@ -24,16 +24,8 @@ namespace Fanex.NexHR.Controllers
     [Authorize]
     public class UIController : BaseController
     {
-        private readonly ICache _cacheManager;
-
         public UIController()
-            : this(null)
         {
-        }
-
-        public UIController(ICache cacheManager)
-        {
-            _cacheManager = cacheManager ?? CacheService.CreateInstance();
         }
 
         [ChildActionOnly]
