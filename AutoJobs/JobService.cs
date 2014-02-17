@@ -41,7 +41,7 @@ namespace AutoJobs
         
         private static readonly string _SenderEmail = ConfigurationManager.AppSettings["Email.Sender"].ToString();
         private static readonly string _SenderName = ConfigurationManager.AppSettings["Email.SenderName"].ToString();
-        private static readonly string _TemplateEmail = ConfigurationManager.AppSettings["EmailTemplate"].ToString();
+        ////private static readonly string _TemplateEmail = ConfigurationManager.AppSettings["EmailTemplate"].ToString();
         //// Do not send email forget check in out for these employees
         private static readonly List<string> _IgnoreList = new List<string> { "sean", "joe" };
         private Timer _updateCounterTimer = null;

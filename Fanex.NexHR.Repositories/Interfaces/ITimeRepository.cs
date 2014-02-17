@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.6.20">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Repositories.Interface
+namespace Fanex.NexHR.Repositories.Interfaces
 {
     public interface ITimeRepository
     {

@@ -122,7 +122,6 @@
     <Compile Include="ApiControllers\EmployeeController.cs" />
     <Compile Include="ApiControllers\HolidayController.cs" />
     <Compile Include="ApiControllers\JobTitleController.cs" />
-    <Compile Include="ApiControllers\MemoController.cs" />
     <Compile Include="ApiControllers\ReportController.cs" />
     <Compile Include="ApiControllers\ShiftController.cs" />
     <Compile Include="AuthController.cs" />

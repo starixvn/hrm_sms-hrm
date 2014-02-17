@@ -10,7 +10,7 @@
 namespace Fanex.NexHR.Repositories
 {
     using Fanex.Data;
-    using Fanex.NexHR.Repositories.Interface;
+    using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>
     /// Time Repository.
