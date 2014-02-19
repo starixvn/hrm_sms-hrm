@@ -134,7 +134,17 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
             ViewBag.Action = "DailyView";
-            this.GetRequests(ref request, RequestViewType.CompanySpace, true);
+
+            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
+            request.IsMember = employee.IsMember();
+            
+            if (request.IsMember)
+            {
+                request.Team = employee.Team.Name;
+                request.TeamIds = employee.Team.Id.ToString();
+            }
+
+            this.GetRequests(ref request, RequestViewType.CompanySpace, request.IsDailyRequest);
 
             return View("DailyRequestsView", request);
         }

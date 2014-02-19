@@ -87,7 +87,7 @@
                         </select>
                     </td> 
                     <td>
-                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
+                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
                     </td>
                     <td>
                         @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })

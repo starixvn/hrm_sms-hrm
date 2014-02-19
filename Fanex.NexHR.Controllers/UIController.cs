@@ -113,50 +113,13 @@ namespace Fanex.NexHR.Controllers
             NavigationViewModel sectionItem)
         {
             string personal = "Personal";
-            string humanResourceSpace = "HR space";
-            string companySpace = "Company space";
-
             string overtime = "My overtime";
-            string annualLeaveBalance = "Annual leave balance";
-            string createAccount = "Create account";
-            string dailyRequest = "Daily requests";
 
             if (sectionNode.Title.ToUpper() == personal.ToUpper())
             {
-                if (user.CanOT == false)
+                if (!user.CanOT)
                 {
                     sectionItem.Childs.RemoveAll(row => row.Title.ToUpper() == overtime.ToUpper());
-                }
-            }
-
-            if (sectionNode.Title.ToUpper() == humanResourceSpace.ToUpper())
-            {
-                var canCreateAccount = userRole.Any(x => x == (int)RolesEnum.SystemAdmin);
-                if (!canCreateAccount)
-                {
-                    sectionItem.Childs.RemoveAll(row => row.Title.ToUpper() == createAccount.ToUpper());
-                }
-            }
-
-            if (sectionNode.Title.ToUpper() == companySpace.ToUpper())
-            {
-                var canViewDailyRequest = userRole.Any(
-                    x => x == (int)RolesEnum.Verifier
-                    || x == (int)RolesEnum.Approver
-                    || x == (int)RolesEnum.ShiftManager
-                    || x == (int)RolesEnum.ActingSupervisor
-                    || x == (int)RolesEnum.HR);
-                var canViewAnnualLeaveBalance = userRole.Any(x => x == (int)RolesEnum.Verifier
-                    || x == (int)RolesEnum.Approver
-                    || x == (int)RolesEnum.HR);
-                if (!canViewDailyRequest)
-                {
-                    sectionItem.Childs.RemoveAll(row => row.Title.ToUpper() == dailyRequest.ToUpper());
-                }
-
-                if (!canViewAnnualLeaveBalance)
-                {
-                    sectionItem.Childs.RemoveAll(row => row.Title.ToUpper() == annualLeaveBalance.ToUpper());
                 }
             }
         }

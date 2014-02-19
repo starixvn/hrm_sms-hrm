@@ -102,5 +102,10 @@ namespace Fanex.NexHR.Models
             var userRoles = System.Web.Security.Roles.GetRolesForUser();
             return roles.Any(role => userRoles.Contains(role));
         }
+
+        public bool IsMember()
+        {
+            return Roles == null || Roles == string.Empty || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member);
+        }
     }
 }

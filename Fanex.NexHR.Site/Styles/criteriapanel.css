@@ -8,3 +8,7 @@ select {
 #Employee {
 	width:140px;
 }
+.teamname
+{
+    line-height: 26px;
+    }
