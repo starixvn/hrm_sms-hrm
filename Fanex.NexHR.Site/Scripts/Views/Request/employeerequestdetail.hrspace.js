@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    $("#confirmedDialog").hide();
+    var ConfirmedDialog = $("#confirmedDialog");
     $("#tblchangeshift tbody tr").each(function () {
         var selected = $(this).find("input[name='item.ShiftId']").val();
         $('td select', this).val(selected);
@@ -6,16 +8,42 @@
 
     $("#btnProcess").click(function (e) {
         e.preventDefault();
-        confirm('Are you sure you want to process?', function () {
-            processRequest("Process", "#btnProcess");
+        ConfirmedDialog.dialog({
+            height: 210,
+            width: 430,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    var remark = $("#reasonToProcess").val();
+                    processRequest("Process", "#btnProcess", remark);
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
         });
+        ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to process?');
+
     });
 
     $("#btnVoid").click(function (e) {
         e.preventDefault();
-        confirm('Are you sure you want to void?', function () {
-            processRequest("Void", "#btnVoid");
+        ConfirmedDialog.dialog({
+            height: 210,
+            width: 430,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    var remark = $("#reasonToProcess").val();
+                    processRequest("Void", "#btnVoid", remark);
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
         });
+        ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to void?');
+
     });
 
     $("#btnReset").click(function (e) {
@@ -29,13 +57,13 @@
         showLeaveDetail($("#EmployeeId").val(), $("#FromDate").val(), $("#ToDate").val(), $("#RequestId").val());
 });
 
-function processRequest(command, eventElement) {
+function processRequest(command, eventElement, remark) {
     var requestId = $(eventElement).attr('requestId');
     var roleId = $(eventElement).attr('roleId');
     showMessage('Processing');
     $.post(_global.root + 'ajax/processrequest',
 	{
-	    command: command, requestId: requestId, roleId: roleId
+	    command: command, requestId: requestId, roleId: roleId, remark: remark
 	},
 		function (response) {
 		    fadeOutMessage();
@@ -60,6 +88,7 @@ function showLeaveDetail(employeeId, fromDate, toDate, requestId) {
                             $("input").attr("disabled", "disabled");
                             $("input[type='button']").removeAttr("disabled");
                             $("textarea").attr("readonly", "readonly");
+                            $("#confirmedDialog textarea").removeAttr('readonly');
                             $("select").attr("disabled", "disabled");
                             $(".tdhalfday").hide();
                         });
