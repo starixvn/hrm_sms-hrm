@@ -12,15 +12,14 @@ namespace Fanex.NexHR.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Request Repository.
@@ -311,6 +310,7 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <returns>The data object of RequestEntity.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private RequestEntity FillDataForGettingKeepInViewRequest(IDataReader reader)
         {
             var entity = new RequestEntity
