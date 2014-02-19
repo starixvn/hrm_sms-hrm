@@ -337,7 +337,9 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 foreach (var request in entityList)
                 {
-                    if (request.Status.Id != (byte)CurrentRequestStatus.Rejected)
+                    if (request.Status.Id != (byte)CurrentRequestStatus.NotVerified 
+                        && request.Status.Id != (byte)CurrentRequestStatus.Rejected
+                        && request.Status.Id != (byte)CurrentRequestStatus.Void)
                     {
                         numberDaysOfRequest += request.TotalDays;
                     }

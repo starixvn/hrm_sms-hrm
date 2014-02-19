@@ -29,6 +29,9 @@
             @{int index = 1;}
             @foreach (var request in Model)
             {
+                var requestDate = request.IsHalfDay
+                        ? (request.RequestedDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime + " - " + request.ToTime + ")")
+                        : request.RequestedDate.ToDateMonthYearFormatedDate();
                 <tr id="row@(request.Id)">
                     <td>@(index++)
                     </td>
@@ -38,7 +41,7 @@
                     </td>
                     <td>@request.Shift
                     </td>
-                    <td class="ddMMyyyyhhmm">@request.RequestedDate.ToShortFormatedDate()
+                    <td class="ddMMyyyyhhmm">@requestDate
                     </td>
                     <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
                     </td>

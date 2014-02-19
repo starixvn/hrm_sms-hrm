@@ -12,15 +12,14 @@ namespace Fanex.NexHR.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Request Repository.
@@ -300,8 +299,8 @@ namespace Fanex.NexHR.Repositories
                     Id = reader.To<int>("ApproverID")
                 },
                 CrossDay = toTime.DayOfYear > fromTime.DayOfYear ? true : false,
-                FromTime = fromTime.ToString("hh:mm"),
-                ToTime = toTime.ToString("hh:mm")
+                FromTime = fromTime.ToString("HH:mm"),
+                ToTime = toTime.ToString("HH:mm")
             };
             return entity;
         }
@@ -311,6 +310,7 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <returns>The data object of RequestEntity.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private RequestEntity FillDataForGettingKeepInViewRequest(IDataReader reader)
         {
             var entity = new RequestEntity
@@ -318,6 +318,9 @@ namespace Fanex.NexHR.Repositories
                 Id = reader.ToLong("RequestId"),
                 Type = new RequestType { Id = reader.ToShort("RequestType") },
                 RequestedDate = reader.ToDateTime("OnDate"),
+                IsHalfDay = reader.ToBool("IsHalfDay"),
+                FromTime = reader.ToDateTime("FromTime").ToString("HH:mm"),
+                ToTime = reader.ToDateTime("ToTime").ToString("HH:mm"),
                 Remark = reader.ToString("Remark"),
                 Shift = reader.ToString("Shift"),
                 CreatedDate = reader.ToDateTime("CreatedDate"),

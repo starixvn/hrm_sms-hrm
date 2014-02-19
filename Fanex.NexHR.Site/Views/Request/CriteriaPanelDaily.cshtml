@@ -42,6 +42,19 @@
         <div class="grid_4">
             @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
         </div>
+        <div class="grid_1">
+            @Labels.On
+        </div>
+         <div class="grid_4">
+            @{
+                var filteringDateType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Effected Date", Value = "true"}, 
+                        new SelectListItem() {Text = "Created Date", Value = "false"},
+                    };
+            }
+            @Html.DropDownListFor(model => model.IsDailyRequest, filteringDateType)
+        </div>
         <div class="clear">
         </div>
         <div class="space">
@@ -56,7 +69,14 @@
             @Html.LabelFor(model => model.TeamCollection)
         </div>
         <div class="grid_6">
-            @Html.DropDownList("TeamId", Model.GetSelecListItemTeam(), new { @multiple = "multiple" })
+            @if (Model.IsMember)
+            {
+                <span class="teamname">@Model.Team</span>
+            }
+            else
+            {
+                @Html.DropDownList("TeamId", Model.GetSelecListItemTeam(), new { @multiple = "multiple" })
+            }
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.Employee)
@@ -74,7 +94,7 @@
         </div>
         <div class="grid_4">
             @{
-    var category = new List<SelectListItem>
+            var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "All", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"}, 
@@ -88,7 +108,7 @@
         </div>
         <div class="grid_15">
             @{
-    var types = new List<SelectListItem>
+            var types = new List<SelectListItem>
             {
                 new SelectListItem() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
                 new SelectListItem() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},

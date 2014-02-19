@@ -25,7 +25,7 @@
       <siteMapNode title="Requests Statistics" controller="report" action="HRRequestMonitoring" icon="search" roles="HR"/>
       <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
       <siteMapNode title="Team management" controller="team" action="index" icon="setting" />
-      <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" />
+      <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" roles="SystemAdmin"/>
       <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
       <siteMapNode title="Time Record" controller="report" action="timerecord" icon="calendar1" roles="HR"/>
       <siteMapNode title="Reports" controller="report" action="index" icon="search" roles="HR"/>
@@ -33,10 +33,9 @@
     <siteMapNode title="Company space">
       <siteMapNode title="Contact list" controller="employee" action="index" icon="users" />
       <siteMapNode title="Working calendars" controller="calendar" action="workingcalendars" icon="calendar" />
-      <!--<siteMapNode title="Employees' requests" controller="request" action="employeeview"  icon="user1" />-->
-      <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1" />
+      <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1"/>
       <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
-      <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6" />
+      <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6" roles="Approver, Verifier, HR"/>
       <!--<siteMapNode title="Leave summary" controller="report" action="leavesummary" icon="calendar4" />-->
       <!--<siteMapNode title="Total working hours" controller="report" action="totalworkinghours" icon="clock" />-->
       <siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />

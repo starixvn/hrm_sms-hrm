@@ -55,6 +55,8 @@ namespace Fanex.NexHR.ViewModels
 
         public string TeamIds { get; set; }
 
+        public string Team { get; set; }
+
         public int RequestType { get; set; }
 
         [Display(Name = "Team")]
@@ -63,6 +65,8 @@ namespace Fanex.NexHR.ViewModels
         public byte? IsLocal { get; set; }
 
         public bool IsDailyRequest { get; set; }
+
+        public bool IsMember { get; set; }
 
         /// <summary>
         /// Method GetSelectListItemTeam.
