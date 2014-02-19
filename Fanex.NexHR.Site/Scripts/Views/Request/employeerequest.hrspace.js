@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     // menu
     $("#TeamId").multiselect();
+    $("#confirmedDialog").hide();
 
     bindMenu('.hr-actions', 'hrMenu');
     bindMenu('.hr-actions-reset', 'resetMenu');
@@ -60,12 +61,12 @@
     });
 });
 
-function processRequest(command, eventElement) {
+function processRequest(command, eventElement, remark) {
     var requestId = $(eventElement).attr('requestId');
     var roleId = $(eventElement).attr('roleId');
     showMessage('Processing');
     $.post(_global.root + 'ajax/processrequest',
-	{ command: command, requestId: requestId, roleId: roleId },
+	{ command: command, requestId: requestId, roleId: roleId, remark: remark },
 		function (response) {
 		    fadeOutMessage();
 		    if (response != true) {
@@ -84,16 +85,43 @@ function bindMenu(element, menu) {
         menu: menu
     },
 	function (command, eventElement) {
+	    var ConfirmedDialog = $("#confirmedDialog");
 	    switch (command) {
 	        case 'Process':
-	            confirm('Are you sure you want to process?', function () {
-	                processRequest(command, eventElement);
+	            ConfirmedDialog.dialog({
+	                height: 210,
+	                width: 430,
+	                modal: true,
+	                buttons: {
+	                    "OK": function () {
+	                        var remark = $("#reasonToProcess").val();
+	                        processRequest(command, eventElement, remark);
+	                    },
+	                    "Cancel": function () {
+	                        $(this).dialog("close");
+	                    }
+	                }
 	            });
+	            ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to process?');
+
 	            break;
 	        case 'Void':
-	            confirm('Are you sure you want to void?', function () {
-	                processRequest(command, eventElement);
+	            ConfirmedDialog.dialog({
+	                height: 210,
+	                width: 430,
+	                modal: true,
+	                buttons: {
+	                    "OK": function () {
+	                        var remark = $("#reasonToProcess").val();
+	                        processRequest(command, eventElement, remark);
+	                    },
+	                    "Cancel": function () {
+	                        $(this).dialog("close");
+	                    }
+	                }
 	            });
+	            ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to void?');
+
 	            break;
 	        case 'Reset':
 	            confirm('Are you sure you want to reset?', function () {
