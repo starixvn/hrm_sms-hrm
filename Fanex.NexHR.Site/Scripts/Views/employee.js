@@ -40,7 +40,6 @@
 });
 
 function query(jobTitleId) {
-
     if (jobTitleId == undefined || jobTitleId == '') {
         jobTitleId = $('#title').val();
     }
@@ -123,6 +122,17 @@ function query(jobTitleId) {
 	        $("#title").trigger("liszt:updated");
 	    }
 	    else {
+            $("#userdata").dataTable({
+	            "bScrollCollapse": false,
+	            "bFilter": false,
+	            "bSort": false,
+	            "bSortClasses": false,
+	            "bPaginate": false,
+	            "bInfo": false,
+	            "bJQueryUI": true,
+	            'bLengthChange': false
+	        });
+
 	        $('#userdata tbody').children().remove();
 	        $(noInformation(12)).appendTo('#userdata');
 	    }

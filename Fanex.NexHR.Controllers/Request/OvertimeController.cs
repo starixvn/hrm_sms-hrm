@@ -441,8 +441,8 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetVerifierApproverList(int id, MyOverTimeViewModel viewModel)
         {
-            var verifierList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, (int)RequestTypes.LateIn);
-            var approverList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, (int)RequestTypes.LateIn);
+            var verifierList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, (int)RequestTypes.Overtime);
+            var approverList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, (int)RequestTypes.Overtime);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
