@@ -48,7 +48,15 @@
             ScheduleArrangeDetail.lnkSave = $(".lnkSave");
 
             window.onbeforeunload = ScheduleArrangeDetail.confirmExit;
-            ScheduleArrangeDetail.shiftAutocomplete();
+            //ScheduleArrangeDetail.shiftAutocomplete();
+            //ScheduleArrangeDetail.shiftAutocomplete($(".shift").first());
+
+            $(".shift").on("focus", function () {
+                var $this = $(this);
+                if (!$this.hasClass("ui-autocomplete-input")) {
+                    ScheduleArrangeDetail.shiftAutocomplete($this);
+                }
+            });
 
             ScheduleArrangeDetail.lnkSave.on("click", function () {
                 ScheduleArrangeDetail.saveArrangeSchedule();
@@ -391,6 +399,7 @@
                     var inputShifts = thisObject.parent().parent().find("input:not(:disabled)");
                     inputShifts.val(shiftCode);
                     inputShifts.attr("data-shiftid", shiftId);
+                    inputShifts.removeClass("offday");
 
                     ScheduleArrangeDetail.hasChangeValue = true;
                 }
@@ -670,9 +679,10 @@
                 });
             }
         },
-        shiftAutocomplete: function () {
+        shiftAutocomplete: function (evt) {
             var shiftCode = "";
-            $(".shift").autocomplete({
+            //$(".shift").autocomplete({
+            evt.autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: _global.root + 'Calendar/GetShift',

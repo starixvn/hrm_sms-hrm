@@ -915,3 +915,25 @@ div .usertype
 {
     line-height: 34px;
 }
+
+div.confirm div.labelRemark
+{
+    width: 70px;
+    float: left;
+    color: #636363;
+    line-height: 32px;
+    }
+div.confirm
+{
+    padding-top: 10px;
+    }
+div.confirm div.inputRemark
+{
+    margin-left: 70px;
+    line-height: 32px;
+    }
+div.confirm div.inputRemark textarea
+{
+    min-width: 314px;
+    min-height: 75px;
+}

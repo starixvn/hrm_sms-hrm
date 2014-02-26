@@ -262,6 +262,7 @@
         {
             foreach (ScheduleArrangeViewModel scheduleModel in Model.ScheduleArranges)
             {
+                
                 var isPublic = scheduleModel.MondaySchedule.IsPublic ? "checked" : string.Empty;
                 <tr>
                     <td>
@@ -286,11 +287,12 @@
                     @RenderShiftInput(scheduleModel.FridaySchedule, "chkFriday multiple")
                     @RenderShiftInput(scheduleModel.SaturdaySchedule, "chkSaturday multiple")
                     @RenderShiftInput(scheduleModel.SundaySchedule, "chkSunday multiple")
-                    
                     <td>
                         <input class="chkIsPublic" @isPublic type="checkbox"/>
                     </td>
-                    <td><a class="lnkSaveRow" href="javascript:;"><img src="../../Images/icon-save.png"/></a></td>
+                    <td>
+                        <a class="lnkSaveRow" href="javascript:;"><img src="../../Images/icon-save.png"/></a>
+                    </td>
                     @if (string.IsNullOrWhiteSpace(scheduleModel.MondaySchedule.ModifierName))
                     {
                          <td></td>

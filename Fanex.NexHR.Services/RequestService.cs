@@ -407,14 +407,24 @@ namespace Fanex.NexHR.Services
                 GetMailApprover(approver, ref mailTo, ref sendToNickName);
             }
 
-            if (emailSettings.AllowSendVerifier && !verifier.Email.Equals(approver.Email, StringComparison.OrdinalIgnoreCase))
+            if (emailSettings.AllowSendVerifier 
+                && !(approver != null && verifier != null && verifier.Email.Equals(approver.Email, StringComparison.OrdinalIgnoreCase)))
             {
                 GetMailVerifier(verifier, ref mailTo, ref sendToNickName);
             }
 
             if (emailSettings.AllowSendHR)
             {
-                listHr = listHr.Where(t => (t.Email != verifier.Email && t.Email != approver.Email)).ToList();
+                if (verifier != null)
+                {
+                    listHr = listHr.Where(t => t.Email != verifier.Email).ToList();
+                }
+
+                if (approver != null)
+                {
+                    listHr = listHr.Where(t => t.Email != approver.Email).ToList();
+                }
+                
                 GetMailHR(listHr, ref mailTo, ref mailCC, ref sendToNickName);
             }
 
