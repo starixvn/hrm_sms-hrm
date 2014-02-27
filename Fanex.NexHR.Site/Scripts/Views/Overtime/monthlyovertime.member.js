@@ -117,9 +117,10 @@
             if (memberOvertimeContainer.length > 0) {
                 $.get(_global.root + "Overtime/" + action, params)
                         .done(function (content) {
-                            memberOvertimeContainer.empty();
-                            memberOvertimeContainer.html(content);
-                        });
+                                memberOvertimeContainer.empty();
+                                memberOvertimeContainer.html(content);
+                                requestToCalculateOTHours();
+                            });
             }
         }
     };
@@ -127,4 +128,31 @@
 
 $(document).ready(function () {
     MemberOvertime.init();
+    requestToCalculateOTHours();
 });
+
+function requestToCalculateOTHours() {
+    var sumNormal = calculateTotalOTHours($(".sumnormal"));
+    $("#sumnormal").text(sumNormal.toFixed(2));
+
+    var sumOff = calculateTotalOTHours($(".sumoff"));
+    $("#sumoff").text(sumOff.toFixed(2));
+
+    var sumPublic = calculateTotalOTHours($(".sumpublic"));
+    $("#sumpublic").text(sumPublic.toFixed(2));
+}
+
+function calculateTotalOTHours(selector) {
+    var sumResult = 0;
+    debugger;
+    var formUpdate = $("#formUpdateOT").val();
+    selector.each(function () {
+        var value = $(this).text().trim();
+        if (value != "") {
+            if (!isNaN(value) && value.lenght != 0) {
+                sumResult += parseFloat(value);
+            }
+        }
+    });
+    return sumResult;
+}
