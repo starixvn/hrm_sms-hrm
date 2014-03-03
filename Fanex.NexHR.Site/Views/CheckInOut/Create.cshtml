@@ -92,7 +92,7 @@
                 @Fanex.NexHR.Resources.Labels.RequestTime
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now, unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
                 @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute" })
