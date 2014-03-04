@@ -78,7 +78,7 @@
                 Attendant date
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now, unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
             </div>
         </div>
         
