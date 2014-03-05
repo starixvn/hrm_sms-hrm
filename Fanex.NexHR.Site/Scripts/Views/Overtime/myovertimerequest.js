@@ -126,19 +126,20 @@
             || focusedTexbox == "request_OffHours"
             || focusedTexbox == "request_PublicHours") {
             if (focusedTexbox == "request_NormalHours" && TotalHours >= TotalShiftHours) {
-                var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
+                var normalLitmit = (TotalHours - TotalShiftHours) + 0.25;
+                
                 if (normalLitmit < 0) {
                     normalLitmit = 0;
                 }
                 else {
-                    normalLitmit = parseFloat(normalLitmit.toFixed(1));
+                    normalLitmit = parseFloat(normalLitmit.toFixed(2));
                 }
 
                 RangeTextBox(object, 0, normalLitmit);
             }
             else {
-                var offOrHolidayLimit = TotalHours + 0.5;
-                offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(1));
+                var offOrHolidayLimit = TotalHours + 0.25;
+                offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(2));
                 RangeTextBox(object, 0, offOrHolidayLimit);
             }
         }
