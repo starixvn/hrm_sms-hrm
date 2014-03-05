@@ -56,19 +56,19 @@
                         @request.TotalWorkHours
                     </td>
                    
-                        <td>
+                        <td class="sumnormal">
                             @if (request.NormalHours > 0)
                             {
                                 @request.NormalHours
                             }
                         </td>
-                        <td>
+                        <td class="sumoff">
                             @if (request.OffHours > 0)
                             {
                                 @request.OffHours
                             }
                         </td>
-                        <td>
+                        <td class="sumpublic">
                             @if (request.PublicHours > 0)
                             {
                                 @request.PublicHours
@@ -113,5 +113,29 @@
                 @RazorHelper.DisplayNoInformation(colspan: 10);
             }
         </tbody>
+        <tfoot>
+            <tr class="sum">
+                <td colspan="1" class="sumhours">@Labels.TotalOvertimeHours:
+                </td>
+                <td colspan="1">
+                </td>
+                <td colspan="1">
+                </td>
+                <td colspan="1">
+                </td>
+                <td colspan="1" >
+                </td>
+                <td colspan="1" id="sumnormal">
+                </td>
+                <td colspan="1" id="sumoff">
+                </td>
+                <td colspan="1" id="sumpublic">
+                </td>
+                <td colspan="1">
+                </td>
+                <td colspan="1">
+                </td>
+            </tr>
+        </tfoot>
     </table>
 }

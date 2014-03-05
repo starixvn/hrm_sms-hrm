@@ -23,7 +23,7 @@
     //search onload
     query(jobTitleId);
 
-    $('#query').click(function (evt) {
+    $('#query').live("click", function (evt) {
         evt.preventDefault();
         $("#userdata").dataTable().fnDestroy();
         query(jobTitleId);
@@ -122,6 +122,7 @@ function query(jobTitleId) {
 	        $("#title").trigger("liszt:updated");
 	    }
 	    else {
+	        $('#userdata tbody').children().remove();
             $("#userdata").dataTable({
 	            "bScrollCollapse": false,
 	            "bFilter": false,
@@ -132,9 +133,6 @@ function query(jobTitleId) {
 	            "bJQueryUI": true,
 	            'bLengthChange': false
 	        });
-
-	        $('#userdata tbody').children().remove();
-	        $(noInformation(12)).appendTo('#userdata');
 	    }
 	    reloadButtonText('#query');
 	}).error(function () {

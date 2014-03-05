@@ -120,32 +120,45 @@
         //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
 
-            var object = $(this).first();
-            var focusedTexbox = $(this).attr("id");
-            if (focusedTexbox == "request_NormalHours"
+        var object = $(this).first();
+        var focusedTexbox = $(this).attr("id");
+        if (focusedTexbox == "request_NormalHours"
             || focusedTexbox == "request_OffHours"
             || focusedTexbox == "request_PublicHours") {
-                if (focusedTexbox == "request_NormalHours" && TotalHours >= TotalShiftHours) {
-                    var normalLitmit = (TotalHours - TotalShiftHours) + 0.5;
-                    if (normalLitmit < 0) {
-                        normalLitmit = 0;
-                    }
-                    else {
-                        normalLitmit = parseFloat(normalLitmit.toFixed(1));
-                    }
-
-                    RangeTextBox(object, 0, normalLitmit);
+            if (focusedTexbox == "request_NormalHours" && TotalHours >= TotalShiftHours) {
+                var normalLitmit = (TotalHours - TotalShiftHours) + 0.25;
+                
+                if (normalLitmit < 0) {
+                    normalLitmit = 0;
                 }
                 else {
-                    var offOrHolidayLimit = TotalHours + 0.5;
-                    offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(1));
-                    RangeTextBox(object, 0, offOrHolidayLimit);
+                    normalLitmit = parseFloat(normalLitmit.toFixed(2));
                 }
+
+                RangeTextBox(object, 0, normalLitmit);
             }
+            else {
+                var offOrHolidayLimit = TotalHours + 0.25;
+                offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(2));
+                RangeTextBox(object, 0, offOrHolidayLimit);
+            }
+        }
+        checkIsUpdateForm();
     });
-    requestToCalculateOTHours();
+
+    checkIsUpdateForm();
     $('form').areYouSure();
 });
+
+function checkIsUpdateForm() {
+    var formUpdate = $("#formUpdateOT").val();
+    if (formUpdate == "True") {
+        requestToCalculateOTHoursFormUpdate();
+    }
+    else {
+        requestToCalculateOTHours();
+    }
+}
 
 function RangeTextBox(textbox, min, max) {
     var textboxValue = textbox.val();
@@ -179,14 +192,28 @@ function RangeTextBox(textbox, min, max) {
 
 function calculateTotalOTHours(selector) {
     var sumResult = 0;
-    selector.each(function () {
-        var value = $(this).text().trim();
-        if (value != "") {
-            if (!isNaN(value) && value.lenght != 0) {
-                sumResult += parseFloat(value);
+    var formUpdate = $("#formUpdateOT").val();
+
+    if (formUpdate == "True") {
+        selector.each(function () {
+            var value = $(this).val().trim();
+            if (value != "") {
+                if (!isNaN(value) && value.lenght != 0) {
+                    sumResult += parseFloat(value);
+                }
             }
-        }
-    });
+        });
+    }
+    else {
+        selector.each(function () {
+            var value = $(this).text().trim();
+            if (value != "") {
+                if (!isNaN(value) && value.lenght != 0) {
+                    sumResult += parseFloat(value);
+                }
+            }
+        });
+    }
     return sumResult;
 }
 
@@ -201,6 +228,19 @@ function requestToCalculateOTHours() {
     $("#sumoff").text(sumOff.toFixed(2));
 
     var sumPublic = calculateTotalOTHours($(".sumpublic"));
+    $("#sumpublic").text(sumPublic.toFixed(2));
+}
+
+//calculate Total Overtime in Update screen
+
+function requestToCalculateOTHoursFormUpdate() {
+    var sumNormal = calculateTotalOTHours($("input.sumnormal"));
+    $("#sumnormal").text(sumNormal.toFixed(2));
+
+    var sumOff = calculateTotalOTHours($("input.sumoff"));
+    $("#sumoff").text(sumOff.toFixed(2));
+
+    var sumPublic = calculateTotalOTHours($("input.sumpublic"));
     $("#sumpublic").text(sumPublic.toFixed(2));
 }
 
