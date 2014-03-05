@@ -63,5 +63,7 @@ namespace Fanex.NexHR.Models
         public int Time { get; set; }
 
         public int ReworkCount { get; set; }
+
+        public string ToShiftName { get; set; }
     }
 }
