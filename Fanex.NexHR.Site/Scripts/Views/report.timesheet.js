@@ -98,6 +98,7 @@ function index() {
 
 function getMessageDetail(requestType, fromDate, toDate, createddate, fromShift, toShift, leaveType, totalDays, totalMins, overtimeType, isOvertimeHours) {
     var result = '';
+    dontBlock = true;
     $.ajax({
         url: _global.root + "ajax/GetMessageDetailRequest",
         async: false,
@@ -110,6 +111,6 @@ function getMessageDetail(requestType, fromDate, toDate, createddate, fromShift,
             result = data;
         }
     });
-
+    dontBlock = false;
     return result;
 }

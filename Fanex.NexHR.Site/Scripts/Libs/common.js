@@ -56,6 +56,7 @@ function confirm(message, callback, options) {
 	$confirm.dialog($.extend({}, defaults, options));
 }
 
+var dontBlock = false;
 $(document).ready(function(){
 
 	$('.tooltip').tipsy({
@@ -155,7 +156,12 @@ $(document).ready(function(){
 	});
 
     backToPreviousPageAction();
-}).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+}).ajaxStart(function(){
+    if(!dontBlock)
+    {
+        $.blockUI();
+    }
+    }).ajaxStop($.unblockUI);
 
 function backToPreviousPageAction() {
     $("#backPrevious").click(function () {
