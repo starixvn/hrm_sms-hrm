@@ -155,7 +155,7 @@ $(document).ready(function(){
 	});
 
     backToPreviousPageAction();
-});
+}).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
 function backToPreviousPageAction() {
     $("#backPrevious").click(function () {

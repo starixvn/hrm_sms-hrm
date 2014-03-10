@@ -299,6 +299,7 @@
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\warning.png" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
+    <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
     <Content Include="Scripts\Views\reportovertimerequest.js" />

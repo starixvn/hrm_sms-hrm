@@ -97,7 +97,7 @@ function query(jobTitleId) {
 	            delay: 0,
 	            showURL: false,
 	            bodyHandler: function () {
-	                return '<img src="/employee/avatar/' + $(this).attr('data-code') + '" />';
+	                return '<img width=64px; height=64px; src="/employee/avatar/' + $(this).attr('data-code') + '" />';
 	            }
 	        });
 	        $("#title").trigger("liszt:updated");

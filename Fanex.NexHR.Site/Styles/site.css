@@ -937,3 +937,8 @@ div.confirm div.inputRemark textarea
     min-width: 314px;
     min-height: 75px;
 }
+.img-employee
+{
+   width: 64px;
+   height: 64px; 
+}
