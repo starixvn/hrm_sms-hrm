@@ -135,12 +135,17 @@ namespace Fanex.NexHR.Controllers
         public ActionResult LeaveSummary(LeaveSummaryViewModel model)
         {
             string fileName = "LeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            byte? isLocal = null;
+            if (model.Category != null)
+            {
+                isLocal = (byte)model.Category;
+            }
 
             IList<LeaveSummary> leaveSummary = _reportService.GetAnnualLeaveBalanceReport(
                 model.Year,
-                empId: model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds,
-                isLocal: (byte)model.Category);
+                model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                model.TeamIds,
+                isLocal);
 
             var teams = _teamService.GetAll();
             var leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(leaveSummary, teams);
