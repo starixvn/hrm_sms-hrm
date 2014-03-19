@@ -370,7 +370,6 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="requestId">Request Id.</param>
         /// <param name="isHRView">Is HR view or Verifier/Approver view.</param>
         /// <returns>Action Result.</returns>
-        [Authorize(Roles = "Verifier, Approver, HR")]
         public ActionResult MemberDailyOvertime(int requestId, bool isHRView)
         {
             IList<OvertimeRequest> overtimeDaily = null;
