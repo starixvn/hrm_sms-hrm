@@ -223,8 +223,7 @@ namespace Fanex.NexHR.Services
                 Leader = sendToNickName,
                 Member = model.DisplayName,
                 RequestId = requestId,
-                FromDate = model.FromDate.ToDateMonthYearFormatedDate(),
-                ToDate = model.ToDate.ToDateMonthYearFormatedDate(),
+                ForDate = GetMessageDateString(model.FromDate, model.ToDate),
                 Remark = model.Remark,
                 Url = this._baseUrl
             };

@@ -93,8 +93,17 @@ function query(jobTitleId) {
 	        $('#userdata tbody').children().remove();
 	        $('#itemTemplate').tmpl(data).appendTo('#userdata');
 
+	        $('.nick').tooltip({
+	            track: true,
+	            delay: 0,
+	            showURL: false,
+	            bodyHandler: function () {
+	                return '<img width=64px; height=64px; src="/employee/avatar/' + $(this).attr('data-code') + '" />';
+	            }
+	        });
+
 	        $("#userdata").dataTable({
-	            "sScrollY": "580px",
+	            "sScrollY": "530px",
 	            "sScrollX": "100%",
 	            "sScrollXInner": "100%",
 	            "bScrollCollapse": true,
@@ -106,18 +115,9 @@ function query(jobTitleId) {
 	            "bInfo": true,
 	            "bJQueryUI": true,
 	            'bLengthChange': false,
-                //"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+	            //"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
 	            'iDisplayLength': 50,
-	            "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [6, 7, 8]}]
-	        });
-
-	        $('.nick').tooltip({
-	            track: true,
-	            delay: 0,
-	            showURL: false,
-	            bodyHandler: function () {
-	                return '<img src="/employee/avatar/' + $(this).attr('data-code') + '" />';
-	            }
+	            "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [7, 8, 9]}]
 	        });
 	        $("#title").trigger("liszt:updated");
 	    }

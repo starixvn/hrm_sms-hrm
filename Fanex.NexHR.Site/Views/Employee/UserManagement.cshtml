@@ -88,10 +88,6 @@
     </div>
     <div class="space">
     </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
 </div>
 <div class="space">
 </div>
@@ -116,7 +112,10 @@
                 @Labels.Team
             </th>
             <th>
-                Job title
+                @Labels.GroupDate
+            </th>
+            <th>
+                @Labels.JobTitle
             </th>
             <th>
                 Authority Level
@@ -132,10 +131,10 @@
     <tbody>
     </tbody>
 </table>
-    <div id="blocker">
+@*    <div id="blocker">
         <div>
             Loading ...</div>
-    </div>
+    </div>*@
 <div style="clear:both"></div>
 <input type="hidden" id="jobtitleid" value="@ViewBag.JobTitleId" />
 <input type="hidden" id="groupid" value="@ViewBag.GroupId" />
@@ -152,9 +151,12 @@
         </td>
         <td class="left">${FullName}</td>
         <td title="${Team["Name"]}" class="tooltip">${Team["Name"]}</td>  
-
+        <td class="right" style="width:80px">
+            {{if JoinedDate}}
+                ${jsonToShortDate(JoinedDate)}
+            {{/if}}
+        </td>
         <td class="left">${JobTitle}</td>
-        
         <td class="left">${MemberRoleAbbreviation}</td>
               
         <td style="width: 45px;">

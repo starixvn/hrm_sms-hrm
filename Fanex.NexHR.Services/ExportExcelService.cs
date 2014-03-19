@@ -1725,7 +1725,7 @@ namespace Fanex.NexHR.Services
 
             if (request.FromDate.HasValue && request.ToDate.HasValue)
             {
-                date = RequestService.GetMessageDateforLeaveRequest(request.FromDate.Value, request.ToDate.Value);
+                date = RequestService.GetMessageDateString(request.FromDate.Value, request.ToDate.Value);
             }
 
             switch (request.RequestType.Id)
@@ -1789,7 +1789,7 @@ namespace Fanex.NexHR.Services
         private string GetRequestDetail(RequestEntity request)
         {
             var detail = string.Empty;
-            var date = RequestService.GetMessageDateforLeaveRequest(request.FromDate, request.ToDate);
+            var date = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
 
             switch (request.Type.Id)
             {

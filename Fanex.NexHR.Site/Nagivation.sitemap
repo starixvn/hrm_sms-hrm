@@ -21,7 +21,7 @@
     <siteMapNode title="HR space" roles="HR" >
       <siteMapNode title="Employees' requests" controller="request" action="hrview" icon="user1" roles="HR" />
       <siteMapNode title="Employees' Overtimes" controller="overtime" action="EmployeeOvertime" icon="user1" roles="HR" />
-      <siteMapNode title="Overtime Report" controller="overtime" action="YearlyReport" icon="calendar1" roles="HR" />
+      <!--<siteMapNode title="Overtime Report" controller="overtime" action="YearlyReport" icon="calendar1" roles="HR" />-->
       <siteMapNode title="Requests Statistics" controller="report" action="HRRequestMonitoring" icon="search" roles="HR"/>
       <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
       <siteMapNode title="Team management" controller="team" action="index" icon="setting" />

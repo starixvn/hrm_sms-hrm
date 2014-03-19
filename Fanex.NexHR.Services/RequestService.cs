@@ -154,10 +154,10 @@ namespace Fanex.NexHR.Services
                     msg.AppendFormat(_MsgCheckInOut, HourFormat(request.FromDate), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
                 case (int)RequestTypes.LateIn:
-                    msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateforLeaveRequest(request.FromDate, request.ToDate));
+                    msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
                 case (int)RequestTypes.EarlyOut:
-                    msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateforLeaveRequest(request.FromDate, request.ToDate));
+                    msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
                 case (int)RequestTypes.Overtime:
                     message = GetMessageForOvertime(request);
@@ -179,7 +179,7 @@ namespace Fanex.NexHR.Services
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">The To date.</param>
         /// <returns>Date detail.</returns>
-        public static string GetMessageDateforLeaveRequest(DateTime fromDate, DateTime toDate)
+        public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
         {
             string result = string.Empty;
             if ((toDate - fromDate).Days > 0)
@@ -488,7 +488,7 @@ namespace Fanex.NexHR.Services
         private static string GetMessageForLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
-            var leaveDate = GetMessageDateforLeaveRequest(request.FromDate, request.ToDate);
+            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
 
             if (request.TotalDays > 1)
             {
@@ -496,12 +496,12 @@ namespace Fanex.NexHR.Services
             }
             else if (request.TotalDays == 1)
             {
-                messageDetail = string.Format(_MsgLeaveOneDay, GetMessageDateforLeaveRequest(request.FromDate, request.ToDate));
+                messageDetail = string.Format(_MsgLeaveOneDay, GetMessageDateString(request.FromDate, request.ToDate));
             }
             else if ((request.TotalDays - (decimal)0.5) == 0)
             {
                 messageDetail = string.Format(
-                    _MsgLeaveHalfDay, GetMessageDateforLeaveRequest(request.FromDate, request.ToDate), HourFormat(request.FromDate), HourFormat(request.ToDate));
+                    _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), HourFormat(request.FromDate), HourFormat(request.ToDate));
             }
             else
             {
@@ -1170,15 +1170,15 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
+            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
+            var forDate = GetMessageDateString(request.FromDate, toDate);
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
-                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
-                FromDate = request.FromDate.ToDateMonthYearFormatedDate(),
-                ToDate = request.ToDate.ToDateMonthYearFormatedDate(),
+                ForDate = forDate,
                 Remark = request.Remark,
                 Url = this._baseUrl,
                 Action = command

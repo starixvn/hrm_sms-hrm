@@ -28,7 +28,7 @@
 <div class="clear"></div>
 <div class="space"></div>
 
-<div  class="grid_5">
+@*<div  class="grid_5">
     @Labels.TotalWorkingDays @DateTime.Now.ToString("MMM yyyy"):<strong> @Model.TotalWorkDays days</strong>
 </div>
 <div class="clear"></div>
@@ -39,8 +39,8 @@
 </div>
 <div class="clear"></div>
 <div class="space"></div>
-
-<div class="grid_5">
+*@
+@*<div class="grid_5">
     @Labels.CountForgotCheckInOut : 
     @if (Model.ForgotInOut > 0)
     {
@@ -64,7 +64,7 @@
     {
         <strong>@(Model.LateInEarlyOut)</strong>
     }
-</div>
+</div>*@
 
 <ul id="forgotCheckInOutMenu" class="hide">
 @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
