@@ -3,6 +3,11 @@
     $(".dropdown").chosen();
     $('#JobTitleId').chosen();
 
+    bindSARole(true);
+    $('#RoleArray7').click(function () {
+        bindSARole(false);
+    });
+
     //checkUserIsSystemAdmin
     checkAuthorizeToGrantAccess();
 
@@ -60,11 +65,6 @@
         var date = new Date(year, month - 1, day);
 
         $("#DOB").val(date.format("dd mmm yyyy"));
-    });
-
-    bindSARole(true);
-    $('#RoleArray7').click(function () {
-        bindSARole(false);
     });
 
     $('#upload').click(function () {
@@ -203,7 +203,9 @@ function resetPassword() {
 function checkAuthorizeToGrantAccess() {
     var canEditUserRole = $("#Authorize").val();
     if (canEditUserRole == "False") {
-        $("#userRole :input").attr("disabled", true);
+        $('#RoleArray7').unbind("click");
+        $("#userRole label").attr('onclick', 'return false');
+        $("#userRole label").last().hide();
     }
 }
 
