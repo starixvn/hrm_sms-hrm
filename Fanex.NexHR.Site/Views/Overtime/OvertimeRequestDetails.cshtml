@@ -63,7 +63,9 @@
                             @request.TotalWorkHours
                         }
                     </td>
-                    @if (request.TotalWorkHours > 0 && (ViewBag.Update) && (string)ViewBag.RequestStatus == "Pending")
+                    @if (request.TotalWorkHours > 0 && (ViewBag.Update)
+                        && !request.IsKeepInView
+                        && (string)ViewBag.RequestStatus == "Pending")
                     {
                         @Html.HiddenFor(model => request.TotalShiftHours)
 

@@ -358,6 +358,42 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change shift request from {0} has been canceled.
+        /// </summary>
+        public static string MessageChangeShiftRequest {
+            get {
+                return ResourceManager.GetString("MessageChangeShiftRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request from {1} has been canceled.
+        /// </summary>
+        public static string MessageCheckInOutRequest {
+            get {
+                return ResourceManager.GetString("MessageCheckInOutRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep in view request from {0} has been canceled.
+        /// </summary>
+        public static string MessageKeepInViewRequest {
+            get {
+                return ResourceManager.GetString("MessageKeepInViewRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request from {1} has been canceled.
+        /// </summary>
+        public static string MessageLateInEarlyOutRequest {
+            get {
+                return ResourceManager.GetString("MessageLateInEarlyOutRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Leave request from {0} has been canceled.
         /// </summary>
         public static string MessageLeaveRequestCanceled {

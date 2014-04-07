@@ -216,6 +216,18 @@
   <data name="MemoSubject" xml:space="preserve">
     <value>Memo subject</value>
   </data>
+  <data name="MessageChangeShiftRequest" xml:space="preserve">
+    <value>Change shift request from {0} has been canceled</value>
+  </data>
+  <data name="MessageCheckInOutRequest" xml:space="preserve">
+    <value>{0} request from {1} has been canceled</value>
+  </data>
+  <data name="MessageKeepInViewRequest" xml:space="preserve">
+    <value>Keep in view request from {0} has been canceled</value>
+  </data>
+  <data name="MessageLateInEarlyOutRequest" xml:space="preserve">
+    <value>{0} request from {1} has been canceled</value>
+  </data>
   <data name="MessageLeaveRequestCanceled" xml:space="preserve">
     <value>Leave request from {0} has been canceled</value>
   </data>

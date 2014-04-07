@@ -4,7 +4,7 @@
 
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
-        $.post(_global.root + 'keepinview/delete' + "/" + id, function (data) {
+        $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function (data) {
             $('#row' + id).remove();
             autoIndex();
         });

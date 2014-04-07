@@ -36,7 +36,7 @@
                 2
             </td>
             <td class="firstColumn">
-                @Html.ActionLink(Labels.TotalWorkingHourMonthly, "totalworkinghourmonthly", "report")
+                @Html.ActionLink("Total Working Hour Monthly", "totalworkinghourmonthly", "report")
             </td>
         </tr>
         <tr>
@@ -44,7 +44,7 @@
                 3
             </td>
             <td class="firstColumn">
-                @Html.ActionLink("Overtime Record Report", "OvertimeReport", "report")
+                @Html.ActionLink("Monthly summary OT", "OvertimeReport", "report")
             </td>
         </tr>
         <tr>
@@ -52,15 +52,15 @@
                 4
             </td>
             <td class="firstColumn">
-                @Html.ActionLink("Overtime HR Report Details", "OTExcelReport", "overtime")
+                @Html.ActionLink("Yearly OT summary", "YearlyReport", "overtime")
             </td>
         </tr>
-         <tr>
+        <tr>
             <td>
                 5
             </td>
             <td class="firstColumn">
-                @Html.ActionLink("Overtime Report", "YearlyReport", "overtime")
+                @Html.ActionLink("OT Data", "OTExcelReport", "overtime")
             </td>
         </tr>
          <tr>
@@ -68,7 +68,7 @@
                 6
             </td>
             <td class="firstColumn">
-                @Html.ActionLink("Total Working Hours", "totalworkinghours", "report")
+                @Html.ActionLink("Attendance Statistic", "totalworkinghours", "report")
             </td>
         </tr>
     </tbody>

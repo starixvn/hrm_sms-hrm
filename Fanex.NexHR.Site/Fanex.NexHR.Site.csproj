@@ -1040,8 +1040,6 @@
     <Content Include="App_Data\Emails\ChangeShiftApproval.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOutApproval.cshtml" />
     <Content Include="App_Data\Emails\CheckInOutApproval.cshtml" />
-    <Content Include="App_Data\Emails\Overtime.Request.cshtml" />
-    <Content Include="App_Data\Emails\OvertimeApproval.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewRequest.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1050,6 +1048,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Emails\LeaveCancelation.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShiftCancelation.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOutCancelation.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOutCancelation.cshtml" />
+    <Content Include="App_Data\Emails\KeepInViewCancelation.cshtml" />
     <None Include="combres.readme" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />

@@ -45,7 +45,7 @@
                     <td class="left">
                         <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.LeaveType</a>
                     </td>
-                    @if (request.TotalDays == (decimal)0.5)
+                    @if (request.TotalDays == (decimal)0.5 && request.LeaveTypeId != Constants.GeneralLeave)
                     { 
                         <td class="ddMMyyyy highlight">@request.FromDate.ToShortFormatedDate()
                         </td>

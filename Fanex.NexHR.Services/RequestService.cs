@@ -36,6 +36,7 @@ namespace Fanex.NexHR.Services
         private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
         private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
         private const string _MsgLeaveOneDay = "<span class='req leave'>{0}</span> 1 day";
+        private const string _MsgGeneralLeaveHalfDay = "<span class='req leave'>{0}</span> 0.5 day";
         private const string _MsgLeaveDuringWorking = "<span class='req leave'>{0} ({1}-{2})</span> {3} minutes";
         private const string _MsgChangeShift = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
@@ -59,6 +60,10 @@ namespace Fanex.NexHR.Services
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
         private const string _EmailTemplatePathForLeaveCancelation = "~/app_data/emails/LeaveCancelation.cshtml";
+        private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
+        private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
+        private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
+        private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
 
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
 
@@ -293,14 +298,16 @@ namespace Fanex.NexHR.Services
             Check.Argument.IsNotNegativeOrZero(id, "id");
             var request = this._requestRepository.GetWorkingTimeRequest(id);
 
-            if (request != null && request.RequestType == (short)RequestTypes.Leave && request.ReworkCount > 0)
+            if (request != null)
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
-                var taskSendMail = new Task(() => this.SendMailLeaveCancelationProcess(request, templateEmailPath));
+                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType);
+                var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
                 taskSendMail.Start();
+
+                return this._requestRepository.DeleteWorkingTimeRequest(id);
             }
 
-            return this._requestRepository.DeleteWorkingTimeRequest(id);
+            return false;
         }
 
         /// <summary>
@@ -408,7 +415,9 @@ namespace Fanex.NexHR.Services
             }
 
             if (emailSettings.AllowSendVerifier 
-                && !(approver != null && verifier != null && verifier.Email.Equals(approver.Email, StringComparison.OrdinalIgnoreCase)))
+                && !(approver != null && verifier != null
+                && !string.IsNullOrWhiteSpace(verifier.Email) && !string.IsNullOrWhiteSpace(approver.Email)
+                && verifier.Email.Equals(approver.Email, StringComparison.OrdinalIgnoreCase)))
             {
                 GetMailVerifier(verifier, ref mailTo, ref sendToNickName);
             }
@@ -500,8 +509,15 @@ namespace Fanex.NexHR.Services
             }
             else if ((request.TotalDays - (decimal)0.5) == 0)
             {
-                messageDetail = string.Format(
+                if (request.LeaveTypeId == Constants.GeneralLeave)
+                {
+                    messageDetail = string.Format(_MsgGeneralLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate));
+                }
+                else
+                {
+                    messageDetail = string.Format(
                     _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), HourFormat(request.FromDate), HourFormat(request.ToDate));
+                }
             }
             else
             {
@@ -696,61 +712,269 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Function to send mail when leave request has been canceled.
+        /// Function to get email template path when cancel a request.
+        /// </summary>
+        /// <param name="requestType">Request type.</param>
+        /// <returns>Email template.</returns>
+        private string GetEmailTemplatePathForCancelRequest(short requestType)
+        {
+            string templateEmailPath;
+
+            switch (requestType)
+            {
+                case (short)RequestTypes.Leave:
+                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
+                    break;
+                case (short)RequestTypes.ChangeShift:
+                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
+                    break;
+                case (short)RequestTypes.LateIn:
+                case (short)RequestTypes.EarlyOut:
+                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOutCancelation);
+                    break;
+                case (short)RequestTypes.CheckIn:
+                case (short)RequestTypes.CheckOut:
+                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOutCancelation);
+                    break;
+                case (short)RequestTypes.KeepInView:
+                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInViewCancelation);
+                    break;
+                default:
+                    templateEmailPath = string.Empty;
+                    break;
+            }
+
+            return templateEmailPath;
+        }
+
+        /// <summary>
+        /// Function to send mail when a request has been canceled.
         /// </summary>
         /// <param name="request">WorkingTime Request.</param>
-        /// <param name="templateEmailPath">Path of template.</param>
-        private void SendMailLeaveCancelationProcess(WorkingTimeRequest request, string templateEmailPath)
+        /// <param name="templateEmailPath">Path of email template.</param>
+        private void SendMailForCancelRequest(WorkingTimeRequest request, string templateEmailPath)
         {
             var mailTo = string.Empty;
             var mailCC = string.Empty;
             var sendToNickName = string.Empty;
-            var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester);
+            var actionSendMail = (request.RequestType == (short)RequestTypes.Leave && request.ReworkCount > 0)
+                ? (int)SettingsSendMail.Delete
+                : (int)SettingsSendMail.Cancel;
 
-            GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Delete, ref mailTo, ref mailCC, ref sendToNickName);
-
+            this.GetMailToAndMailCC(request.RequestId, actionSendMail, ref mailTo, ref mailCC, ref sendToNickName);
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                this.SendMailLeaveCancelation(request, subject, mailTo, string.Empty, templateEmailPath);
+                switch (request.RequestType)
+                {
+                    case (short)RequestTypes.Leave:
+                        this.SendMailForCancelLeaveRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        break;
+                    case (short)RequestTypes.ChangeShift:
+                        this.SendMailForCancelChangeShiftRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        break;
+                    case (short)RequestTypes.LateIn:
+                    case (short)RequestTypes.EarlyOut:
+                        this.SendMailForCancelLateInEarlyOutRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        break;
+                    case (short)RequestTypes.CheckIn:
+                    case (short)RequestTypes.CheckOut: 
+                        this.SendMailForCancelCheckInOutRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        break;
+                    case (short)RequestTypes.KeepInView:
+                        this.SendMailForCancelKeepInViewRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        break;
+                }
             }
         }
 
         /// <summary>
-        /// Function to send mail leave request to other staff which related group.
+        /// Function to send mail when cancel a leave request.
         /// </summary>
         /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
         /// <param name="mailTo">The mail to.</param>
         /// <param name="sendCc">Email CC List.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
-        private void SendMailLeaveCancelation(
+        private void SendMailForCancelLeaveRequest(
             WorkingTimeRequest request,
-            string subject,
             string mailTo,
             string sendCc,
+            string sendToNickName,
             string templateEmailPath)
         {
-            var body = Utilities.ReadTextFile(templateEmailPath);
-
+            var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester);
             var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
             var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
 
             var bodyContent = new
             {
+                SendToNickName = sendToNickName,
                 Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
                 ForDate = forDate,
                 Remark = request.Remark,
                 LeaveName = request.LeaveName,
             };
 
-            try
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            body = RazorEngine.Razor.Parse(body, bodyContent);
+            
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail when cancel a change shift request.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void SendMailForCancelChangeShiftRequest(
+            WorkingTimeRequest request,
+            string mailTo,
+            string sendCc,
+            string sendToNickName,
+            string templateEmailPath)
+        {
+            var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester);
+            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
+            var forDate = GetMessageDateString(request.FromDate, toDate);
+            var bodyContent = new
             {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
+                SendToNickName = sendToNickName,
+                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                ForDate = forDate,
+                Remark = request.Remark
+            };
+
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            body = RazorEngine.Razor.Parse(body, bodyContent);
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail when cancel a(an) late in, early out request.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void SendMailForCancelLateInEarlyOutRequest(
+            WorkingTimeRequest request,
+            string mailTo,
+            string sendCc,
+            string sendToNickName,
+            string templateEmailPath)
+        {
+            var requestType = request.RequestType == (short)RequestTypes.LateIn
+                ? Resources.Labels.LateIn
+                : Resources.Labels.EarlyOut;
+
+            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, requestType, request.Requester);
+            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate.Value);
+            var bodyContent = new
             {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+                SendToNickName = sendToNickName,
+                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                ForDate = forDate,
+                RequestType = requestType,
+                Minute = request.RequestType == (short)RequestTypes.LateIn ? ("+" + request.Time) : ("-" + request.Time),
+                Remark = request.Remark
+            };
+
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            body = RazorEngine.Razor.Parse(body, bodyContent);
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail when cancel a check in/out request.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void SendMailForCancelCheckInOutRequest(
+            WorkingTimeRequest request,
+            string mailTo,
+            string sendCc,
+            string sendToNickName,
+            string templateEmailPath)
+        {
+            var requestType = request.RequestType == (short)RequestTypes.CheckIn
+                ? Resources.Labels.CheckIn
+                : Resources.Labels.CheckOut;
+
+            var subject = string.Format(Messages.MessageCheckInOutRequest, requestType, request.Requester);
+
+            var bodyContent = new
+            {
+                SendToNickName = sendToNickName,
+                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
+                Time = HourFormat(request.RequestTime),
+                Shift = request.ShiftName,
+                Remark = request.Remark
+            };
+
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            body = RazorEngine.Razor.Parse(body, bodyContent);
+
+            this._emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                mailTo,
+                sendCc,
+                subject,
+                body);
+        }
+
+        /// <summary>
+        /// Function to send mail when cancel a keep in view request.
+        /// </summary>
+        /// <param name="request">WorkingTime Request.</param>
+        /// <param name="mailTo">The mail to.</param>
+        /// <param name="sendCc">Email CC List.</param>
+        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
+        /// <param name="templateEmailPath">Path of Email template.</param>
+        private void SendMailForCancelKeepInViewRequest(
+            WorkingTimeRequest request,
+            string mailTo,
+            string sendCc,
+            string sendToNickName,
+            string templateEmailPath)
+        {
+            var subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester);
+            var bodyContent = new
+            {
+                SendToNickName = sendToNickName,
+                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                Date = request.OnDate.ToDateMonthYearFormatedDate(),
+                Shift = request.ShiftName,
+                Remark = request.Remark
+            };
+
+            var body = Utilities.ReadTextFile(templateEmailPath);
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1180,7 +1404,6 @@ namespace Fanex.NexHR.Services
                 RequestType = request.RequestType.RequestTypeToText().ToLower(),
                 ForDate = forDate,
                 Remark = request.Remark,
-                Url = this._baseUrl,
                 Action = command
             };
 

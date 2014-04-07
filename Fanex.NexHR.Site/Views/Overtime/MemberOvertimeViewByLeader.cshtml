@@ -11,8 +11,8 @@
                     @if (Roles.IsUserInRole("Verifier") && Roles.IsUserInRole("Approver"))
                     {
                          <div>
-                            <a id="lnkAccept" href="javascript:;"> @Labels.Accept </a> || 
-                            <a id="lnkNotAccept" href="javascript:;"> @Labels.NotAccept </a> || 
+                            <a id="lnkAccept" href="javascript:;"> Verify </a> || 
+                            <a id="lnkNotAccept" href="javascript:;"> Not verify </a> || 
                             <a id="lnkApprove" href="javascript:;"> @Labels.Approve </a> ||
                             <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
@@ -139,6 +139,10 @@
                 <td colspan="1" id="sumoff">
                 </td>
                 <td colspan="1" id="sumpublic">
+                </td>
+                <td colspan="1">
+                </td>
+                <td colspan="1">
                 </td>
                 <td colspan="1">
                 </td>

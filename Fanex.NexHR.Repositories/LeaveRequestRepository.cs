@@ -282,6 +282,7 @@ namespace Fanex.NexHR.Repositories
                 FromDate = reader.ToDateTime("FromDate"),
                 ToDate = reader.ToDateTime("ToDate"),
                 TotalDays = reader.ToDecimal("TotalDays"),
+                LeaveTypeId = reader.ToInt("LeaveTypeId"),
                 LeaveType = reader.ToString("LeaveType"),
                 Remark = reader.ToString("Remark"),
                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),

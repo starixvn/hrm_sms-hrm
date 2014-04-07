@@ -45,7 +45,7 @@ function eventAfterChangeEmployee() {
         if (response != null) {
             var options = "";
             for (var i = 0; i < response.length; i++) {
-                options += "<option value='" + response[i].OwnerId + "'>" + response[i].FullName + "</option>"
+                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
             }
 
             $("#VerifierId").empty();
@@ -58,7 +58,7 @@ function eventAfterChangeEmployee() {
         if (response != null) {
             var options = "";
             for (var i = 0; i < response.length; i++) {
-                options += "<option value='" + response[i].OwnerId + "'>" + response[i].FullName + "</option>"
+                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
             }
             $("#ApproverId").empty();
             $("#ApproverId").html(options);

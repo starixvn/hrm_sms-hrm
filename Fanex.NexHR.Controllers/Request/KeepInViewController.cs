@@ -27,9 +27,6 @@ namespace Fanex.NexHR.Controllers.Request
     [Authorize]
     public class KeepInViewController : RequestController
     {
-        private const int _ONE_WEEK = 7;
-        private const int _ONE_MONTH = 1;
-
         public KeepInViewController()
             : base()
         {
@@ -41,8 +38,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Create.</returns>
         public ActionResult Create()
         {
-            var fromDate = DateTime.Now.AddDays(-_ONE_WEEK);
-            var toDate = DateTime.Now.AddMonths(_ONE_MONTH);
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
             var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
             var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
@@ -74,6 +71,10 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public ActionResult Create(KeepInViewRequestViewModel keepInViewRequestViewModel)
         {
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
             var currentUserId = this.CurrentUser.Id;
             var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
@@ -84,6 +85,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             ViewBag.Requested = _KeepInViewRequestService.InsertKeepInViewRequest(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
+            ViewBag.UnavailableDates = unavailableDates;
 
             return View(keepInViewRequestViewModel);
         }
@@ -95,6 +97,10 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Update.</returns>
         public ActionResult Update(long id)
         {
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
             var request = _KeepInViewRequestService.GetKeepInViewRequestById(id);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
             {
@@ -127,6 +133,7 @@ namespace Fanex.NexHR.Controllers.Request
                 ToTime = request.ToTime
             };
 
+            ViewBag.UnavailableDates = unavailableDates;
             return View(viewModel);
         }
 
@@ -138,6 +145,10 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public ActionResult Update(KeepInViewRequestViewModel keepInViewRequestViewModel)
         {
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
             var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
@@ -147,6 +158,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             ViewBag.Updated = _KeepInViewRequestService.UpdateKeepInViewRequest(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
+            ViewBag.UnavailableDates = unavailableDates;
 
             return View(keepInViewRequestViewModel);
         }
@@ -188,7 +200,7 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public bool Delete(long id)
         {
-            return _KeepInViewRequestService.DeleteWorkingTimeRequest(id);
+            return _RequestService.DeleteWorkingTimeRequest(id);
         }
     }
 }

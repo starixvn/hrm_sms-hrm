@@ -78,15 +78,21 @@ namespace Fanex.NexHR.Core.Enums
         Edit = 11,
 
         /// <summary>
-        /// Delete Action.
+        /// Cancel Action.
         /// </summary>
-        [StringValue("Delete")]
-        Delete = 12,
+        [StringValue("Cancel")]
+        Cancel = 12,
 
         /// <summary>
         /// Reedit Action.
         /// </summary>
         [StringValue("Reedit")]
-        Reedit = 13
+        Reedit = 13,
+
+        /// <summary>
+        /// Delete Action.
+        /// </summary>
+        [StringValue("Delete")]
+        Delete = 14
     }
 }

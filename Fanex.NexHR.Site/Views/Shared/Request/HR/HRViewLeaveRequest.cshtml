@@ -69,7 +69,7 @@
                              }
                          }
                     </td>
-                    @if (request.TotalDays < 1)
+                    @if (request.TotalDays < 1 && request.LeaveTypeId != Constants.GeneralLeave)
                     { 
                         <td class="ddMMyyyy highlight">@request.FromDate.ToShortFormatedDate()
                         </td>

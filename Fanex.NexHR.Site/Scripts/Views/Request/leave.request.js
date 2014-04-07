@@ -16,8 +16,12 @@
         annualBalance: null,
         keepInViewBalance: null,
         currentLeaveBalance: null,
+        generalLeaveType: null,
+        maternityLeaveType: null,
 
         init: function () {
+            LeaveRequest.generalLeaveType = "0";
+            LeaveRequest.maternityLeaveType = "12";
             LeaveRequest.verifierId = $("#VerifierId");
             LeaveRequest.approverId = $("#ApproverId");
             LeaveRequest.leaveTypeId = $("#LeaveTypeId");
@@ -208,31 +212,42 @@
             var fromDate = LeaveRequest.fromDate.val();
             var toDate = LeaveRequest.toDate.val();
             var employeeId = LeaveRequest.employeeId.val();
-            if (leaveType == "0") {
-                $("#grbHalfDay").hide();
-                $("#grbTotalDay").hide();
-                LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
-                $('.time').hide();
-                LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
+            var maxDate = new Date(LeaveRequest.fromDate.attr("maxDate"));
+            var newMaxDate = new Date(maxDate);
 
-                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+            if (leaveType == LeaveRequest.maternityLeaveType) {
+                newMaxDate = new Date(new Date(maxDate).setMonth(maxDate.getMonth() + 2));
             }
             else {
-                $("#grbHalfDay").show();
-                $("#grbTotalDay").show();
-                LeaveRequest.enableControlforHalfday();
-                var leaveDetailContainer = $("#tbldetail");
-                leaveDetailContainer.empty();
+                if (leaveType == LeaveRequest.generalLeaveType) {
+                    $("#grbHalfDay").hide();
+                    $("#grbTotalDay").hide();
+                    LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
+                    $('.time').hide();
+                    LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
 
-                $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
+                    LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                    LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+                }
+                else {
+                    $("#grbHalfDay").show();
+                    $("#grbTotalDay").show();
+                    LeaveRequest.enableControlforHalfday();
+                    var leaveDetailContainer = $("#tbldetail");
+                    leaveDetailContainer.empty();
+
+                    $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
                     function (response) {
                         if (response != null) {
                             LeaveRequest.fromDate.attr("disabledDate", response.join(","));
                             LeaveRequest.toDate.attr("disabledDate", response.join(","));
                         }
                     });
+                }
             }
+
+            LeaveRequest.fromDate.datepicker("option", "maxDate", newMaxDate);
+            LeaveRequest.toDate.datepicker("option", "maxDate", newMaxDate);
         },
         bindHalfDay: function () {
             LeaveRequest.enableControlforHalfday();
@@ -346,7 +361,7 @@
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].FullName + "</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
                             }
 
                             LeaveRequest.verifierId.empty();
@@ -359,7 +374,7 @@
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].FullName + "</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
                             }
 
                             LeaveRequest.approverId.empty();

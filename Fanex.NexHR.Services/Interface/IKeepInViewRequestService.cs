@@ -20,8 +20,6 @@ namespace Fanex.NexHR.Services.Interface
 
         bool UpdateKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager);
 
-        bool DeleteWorkingTimeRequest(long id);
-
         RequestEntity GetKeepInViewRequestById(long id);
 
         IList<RequestEntity> GetKeepInViewRequests(

@@ -364,14 +364,14 @@ namespace Fanex.NexHR.Services
         {
             var bodyTemplate = Utilities.ReadTextFile(emailTemplatePath);
             string subject = (isUpdate ? Messages.UpdatedKeepInViewEmailSubject : Messages.InsertedKeepInViewEmailSubject) + " " + keepInViewRequestViewModel.Employee;
-            subject += " on " + keepInViewRequestViewModel.Date.ToString("yyyy/MM/dd");
+            subject += " on " + keepInViewRequestViewModel.Date.ToDateMonthYearFormatedDate();
 
             var content = new
             {
                 LeaderName = receiverNickName,
                 MemberName = keepInViewRequestViewModel.DisplayName,
                 RequestId = keepInViewRequestViewModel.Id,
-                Date = keepInViewRequestViewModel.Date.ToString("yyyy/MM/dd"),
+                Date = keepInViewRequestViewModel.Date.ToDateMonthYearFormatedDate(),
                 Shift = keepInViewRequestViewModel.Shift,
                 Remark = keepInViewRequestViewModel.Remark,
                 Url = this.BaseUrl
