@@ -407,7 +407,7 @@ namespace Fanex.NexHR.Services
             if (retCode == 0)
             {
                 string hashPassword = Encryptor.ComputeHash(_HashProvider, password);
-                retCode = this._employeeRepository.ChangePassword(empId, hashPassword);
+                retCode = this._employeeRepository.ChangePassword(empId, hashPassword, false);
             }
 
             return retCode;
@@ -417,7 +417,7 @@ namespace Fanex.NexHR.Services
         {
             Employee employee = this.GetEmployeeById(empId);
             string hashPassword = Encryptor.ComputeHash(_HashProvider, originalPassword);
-            return this._employeeRepository.ChangePassword(empId, hashPassword);
+            return this._employeeRepository.ChangePassword(empId, hashPassword, true);
         }
 
         public IList<Country> GetAllCountry()
@@ -455,6 +455,13 @@ namespace Fanex.NexHR.Services
         public string GetNewEmployeeCode()
         {
             return _employeeRepository.GetNewEmployeeCode();
+        }
+
+        public int UpdatePasswordResetStatus(int empId, bool passwordReset)
+        {
+            int errorCode;
+            string message;
+            return _employeeRepository.UpdatePasswordResetStatus(empId, passwordReset, out errorCode, out message);
         }
 
         /// <summary>
