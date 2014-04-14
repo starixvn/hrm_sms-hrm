@@ -25,15 +25,6 @@ namespace Fanex.NexHR.Controllers.Request
     [Authorize]
     public class CheckInOutController : RequestController
     {
-        #region Ctor
-
-        public CheckInOutController()
-            : base(null, null, null, null)
-        {
-        }
-
-        #endregion Ctor
-
         [HttpGet]
         public ActionResult EmployeeView()
         {
@@ -50,13 +41,17 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.Year = year;
 
-            IList<RequestEntity> entityList = _CheckInOutRequestService.GetCheckInOutRequests(
-                ((short)RolesEnum.Member).ToString(),
+            IList<RequestEntity> entityList = _RequestService.GetRequests(
+                RequestViewType.CompanySpace,
+                (int)RequestFilter.CheckInOut,
                 new DateTime(year, 1, 1),
                 new DateTime(year, 12, 31),
                 string.Empty,
+                0,
                 true,
-                this.CurrentUser.Id);
+                this.CurrentUser.Id,
+                null,
+                null);
 
             return View(entityList);
         }
@@ -73,9 +68,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var id = this.CurrentUser.Id;
             var listUnavailDates = _EmployeeService.GetUnavailableDates(id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
-            ViewBag.UnavailDates = listUnavailDates;
             var employee = _EmployeeService.GetEmployeeById(id);
-            ViewBag.Shifts = _ShiftService.GetAll();
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = employee.NickName,
@@ -97,24 +90,14 @@ namespace Fanex.NexHR.Controllers.Request
 
             viewModel.Shift = (shift == null) ? string.Empty : shift.Name;
             //// Count number of Check in/out request in current month.
-            int year = DateTime.Now.Year;
-            int month = DateTime.Now.Month;
-            int numberOfRequest = 0;
-            IList<RequestEntity> entityList = _CheckInOutRequestService.GetCheckInOutRequests(
-                ((short)RolesEnum.Member).ToString(),
-                new DateTime(year, month, 1),
-                new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                string.Empty,
-                true,
-                this.CurrentUser.Id);
-            foreach (var request in entityList)
-            {
-                if (request.Status.Id != (byte)CurrentRequestStatus.Rejected)
-                {
-                    numberOfRequest++;
-                }
-            }
 
+            var currentDate = DateTime.Now.Date;
+            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+            var numberOfRequest = _RequestService.GetNumberOfRequest((int)RequestFilter.CheckInOut, this.CurrentUser.Id, fromDate, toDate);
+
+            ViewBag.Shifts = _ShiftService.GetAll();
+            ViewBag.UnavailDates = listUnavailDates;
             ViewBag.TotalRequest = numberOfRequest;
 
             return View(viewModel);
@@ -141,7 +124,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (ModelState.IsValid)
             {
-                ViewBag.Requested = _CheckInOutRequestService.InsertCheckInOutRequest(ModelState, model);
+                ViewBag.Requested = _CheckInOutRequestService.Insert(ModelState, model);
             }
 
             return View(model);
@@ -159,7 +142,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             ViewBag.Shifts = _ShiftService.GetAll();
 
-            var request = _CheckInOutRequestService.GetCheckInOutRequestById(id);
+            var request = _CheckInOutRequestService.GetRequestById(id);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -208,15 +191,10 @@ namespace Fanex.NexHR.Controllers.Request
             GetVerifierApproverList(id, model);
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _CheckInOutRequestService.UpdateCheckInOutRequest(ModelState, model);
+                ViewBag.Updated = _CheckInOutRequestService.Update(ModelState, model);
             }
 
             return View(model);
-        }
-
-        public ActionResult Delete()
-        {
-            return View();
         }
 
         /// <summary>

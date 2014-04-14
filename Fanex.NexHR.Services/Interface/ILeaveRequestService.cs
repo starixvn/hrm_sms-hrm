@@ -12,32 +12,19 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
     public interface ILeaveRequestService
     {
-        long InsertLeaveRequest(LeaveRequestModel model, out int errorCode, out string message);
+        long Insert(LeaveRequestModel model, out int errorCode, out string message);
 
-        bool UpdateLeaveRequest(LeaveRequestModel model, out int errorCode, out string message);
+        bool Update(LeaveRequestModel model, out int errorCode, out string message);
 
         bool DeleteWorkingTimeRequest(long id);
 
-        IList<RequestEntity> GetLeaveRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null);
-
         List<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
 
-        LeaveRequestViewModel GetLeaveRequestById(long id);
-
-        IList<RequestEntity> GetHistoricLeaveRequests(long requestId, int requestTypeId);
+        LeaveRequestViewModel GetRequestById(long id);
 
         void SendReasonReeditToSupervisor(long requestId, int processBy, string reason, out int errorCode, out string errorMessage);
 

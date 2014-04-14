@@ -8,7 +8,6 @@
 // </history>
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Models.Request;
@@ -16,22 +15,10 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IKeepInViewRequestService
     {
-        bool InsertKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager);
+        bool Insert(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
 
-        bool UpdateKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager);
-
-        RequestEntity GetKeepInViewRequestById(long id);
-
-        IList<RequestEntity> GetKeepInViewRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null);
-
-        IList<RequestEntity> GetHistoricKeepInViewRequests(long requestId, int requestTypeId);
+        bool Update(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
+        
+        RequestEntity GetRequestById(long id);
     }
 }

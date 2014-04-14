@@ -63,7 +63,7 @@
             @Html.LabelFor(model => model.StatusId)
         </div>
         <div class="grid_4">
-            @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "statusId")
+            @RazorHelper.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: false, controlName: "statusId")
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.TeamCollection)

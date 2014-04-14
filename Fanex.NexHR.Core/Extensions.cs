@@ -547,7 +547,7 @@ namespace Fanex.NexHR.Core
         }
 
         #endregion
-        private static string CreatePageNode(string url, int pageNumber, bool isActive = false)
+        public static string CreatePageNode(string url, int pageNumber, bool isActive = false)
         {
             return isActive
                 ? "<li><a class='active' href='javascript:;'>" + pageNumber + "</a></li>"

@@ -85,7 +85,7 @@ namespace Fanex.NexHR.Site
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         [ValidateInput(false)]
-        private void Application_Error(object sender, EventArgs e)
+        protected void Application_Error(object sender, EventArgs e)
         {
             ////var exception = Server.GetLastError().GetBaseException();
             ////LogService.Error(exception.Message, exception);

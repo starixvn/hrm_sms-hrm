@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Services
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
         private const string _ReeditReasonEmailTpl = "~/app_data/emails/ReeditRequest.cshtml";
-        private readonly LeaveRequestRepository _leaveRequestRepository;
+        private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly IEmailService _emailService;
 
         public LeaveRequestService()
@@ -39,11 +39,7 @@ namespace Fanex.NexHR.Services
             this._emailService = new EmailService();
         }
 
-        public LeaveRequestService(
-            LeaveRequestRepository leaveRequestRepository,
-            IRequestRepository requestRepository,
-            IEmployeeRepository employeeRepository,
-            IEmailService emailService)
+        public LeaveRequestService(ILeaveRequestRepository leaveRequestRepository, IEmailService emailService)
         {
             this._leaveRequestRepository = leaveRequestRepository;
             this._emailService = emailService;
@@ -56,7 +52,7 @@ namespace Fanex.NexHR.Services
         /// <param name="errorCode">Error Code.</param>
         /// <param name="message">Error message.</param>
         /// <returns>Result of insert.</returns>
-        public long InsertLeaveRequest(LeaveRequestModel model, out int errorCode, out string message)
+        public long Insert(LeaveRequestModel model, out int errorCode, out string message)
         {
             if (model.FromDate <= model.ToDate)
             {
@@ -87,7 +83,7 @@ namespace Fanex.NexHR.Services
         /// <param name="errorCode">Error Code.</param>
         /// <param name="message">Error message.</param>
         /// <returns>Result of update.</returns>
-        public bool UpdateLeaveRequest(LeaveRequestModel model, out int errorCode, out string message)
+        public bool Update(LeaveRequestModel model, out int errorCode, out string message)
         {
             var result = _leaveRequestRepository.Update(model, out errorCode, out message);
             if (result)
@@ -98,44 +94,6 @@ namespace Fanex.NexHR.Services
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Function to get leave request.
-        /// </summary>
-        /// <param name="role">Role of user.</param>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">List group Id.</param>
-        /// <param name="isDailyRequest">Is query from daily request.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="status">Status of request.</param>
-        /// <param name="loginId">User login.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetLeaveRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? loginId = null)
-        {
-            IList<RequestEntity> entityList = null;
-            try
-            {
-                if (fromDate <= toDate)
-                {
-                    entityList = this._leaveRequestRepository.GetRequests(role, fromDate, toDate, groupIds, isDailyRequest, employeeId, status, loginId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
         }
 
         public List<LeaveDetailModel> GetLeaveRequestDetailsById(long id)
@@ -153,15 +111,14 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="id">Leave request id.</param>
         /// <returns>LeaveRequest ViewModel.</returns>
-        public LeaveRequestViewModel GetLeaveRequestById(long id)
+        public LeaveRequestViewModel GetRequestById(long id)
         {
             LeaveRequestViewModel request = null;
-
             try
             {
                 if (id > 0)
                 {
-                    var requestEntity = (RequestEntity)_leaveRequestRepository.GetRequestById(id);
+                    var requestEntity = (RequestEntity)_leaveRequestRepository.GetRequestById(id, (int)RequestFilter.Leave);
                     if (requestEntity != null)
                     {
                         request = new LeaveRequestViewModel
@@ -193,27 +150,6 @@ namespace Fanex.NexHR.Services
             }
 
             return request;
-        }
-
-        /// <summary>
-        /// Function to get Leave request history.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoricLeaveRequests(long requestId, int requestTypeId)
-        {
-            IList<RequestEntity> entityList = null;
-            try
-            {
-                entityList = (List<RequestEntity>)this._leaveRequestRepository.GetHistoryRequest(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
         }
 
         /// <summary>
@@ -294,7 +230,7 @@ namespace Fanex.NexHR.Services
             
             if (!string.IsNullOrWhiteSpace(mailTo))
             {
-                var leaveRequest = GetLeaveRequestById(requestId);
+                var leaveRequest = GetRequestById(requestId);
                 this.SendMailForReeditRequest(leaveRequest, reason, sendToNickName, templateEmailPath, mailTo, mailCC);
             }
         }

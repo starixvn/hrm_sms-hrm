@@ -12,32 +12,30 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Interface Change shit repository.
     /// </summary>
     public interface IChangeShiftRepository
     {
-        long InsertChangeShiftRequest(ChangeShiftViewModel model, out int errorCode, out string message);
+        long Insert(object model, out int errorCode, out string message);
 
-        long UpdateChangeShiftRequest(ChangeShiftViewModel model, out int errorCode, out string message);
+        bool Update(object model, out int errorCode, out string message);
 
-        IList<RequestEntity> GetChangeShiftRequests(
+        IList<RequestEntity> GetRequests(
+            int requestType,
             string role,
             DateTime fromDate,
             DateTime toDate,
             string groupIds,
-            bool isDailyRequest,
+            string status,
+            bool isDailyRequest = false,
             int? employeeId = null,
-            byte? status = null,
             int? logInId = null,
             byte? isLocal = null);
 
-        RequestEntity GetChangeShiftRequestById(long id);
+        RequestEntity GetRequestById(long id, int requestTypeId);
 
-        List<ShiftDetails> GetShiftDetailsById(long id);
-
-        IList<RequestEntity> GetHistoricChangeShiftRequests(long requestId, int requestTypeId);
+        List<ShiftDetails> GetChangeShiftDetailsById(long id);
     }
 }

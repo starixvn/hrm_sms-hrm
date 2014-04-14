@@ -24,7 +24,7 @@
         
     @if (Model.TotalRequest > 0)
     { 
-    <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+    <div class="ui-state-error ui-corner-all">
         <p>
             <a href="@Url.Action("EmployeeView")">
                 @Html.Raw(string.Format(Messages.MessageNumberRequestInMonth, Model.TotalRequest, DateTime.Now.ToString("MMM yyyy")))

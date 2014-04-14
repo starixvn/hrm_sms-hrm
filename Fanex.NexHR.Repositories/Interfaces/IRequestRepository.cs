@@ -33,14 +33,15 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         WorkingTimeRequest GetWorkingTimeRequest(long workingTimeId);
 
-        IList<RequestEntity> GetAllRequest(
+        IList<RequestEntity> GetRequests(
+            int requestType,
             string role,
             DateTime fromDate,
             DateTime toDate,
             string groupIds,
+            string status,
             bool isDailyRequest,
             int? employeeId = null,
-            byte? status = null,
             int? logInId = null, 
             byte? isLocal = null);
 

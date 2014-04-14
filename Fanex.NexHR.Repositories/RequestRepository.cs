@@ -169,34 +169,39 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method Get all request.
         /// </summary>
+        /// <param name="requestType">Request Type.</param>
         /// <param name="role">Employee's role id.</param>
         /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Get to date.</param>
+        /// <param name="toDate">The to date.</param>
         /// <param name="groupIds">Group's id.</param>
+        /// <param name="status">Request status.</param>
         /// <param name="isDailyRequest">Is Daily request.</param>
         /// <param name="employeeId">Employee id.</param>
-        /// <param name="status">Request status.</param>
         /// <param name="logInId">Log in id.</param>
         /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of RequestEntity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<RequestEntity> GetAllRequest(
+        public IList<RequestEntity> GetRequests(
+            int requestType,
             string role,
             DateTime fromDate,
             DateTime toDate,
             string groupIds,
+            string status,
             bool isDailyRequest = false,
             int? employeeId = null,
-            byte? status = null,
             int? logInId = null,
             byte? isLocal = null)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
-            var keyName = isDailyRequest ? "WorkingTimeRequest_GetRequestByRequestDate_AllType" : "WorkingTimeRequest_GetRequestByCreateDate_AllType";
+            var keyName = isDailyRequest
+                        ? "WorkingTimeRequest_GetRequestByRequestDate_AllType"
+                        : "WorkingTimeRequest_GetRequestByCreateDate_AllType";
+
             using (var db = new ObjectDb(keyName))
             {
-                using (IDataReader reader =
-                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
+                using (IDataReader reader = db.ExecuteReader(
+                    new { requestType, empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
                 {
                     if (reader != null)
                     {
@@ -209,10 +214,10 @@ namespace Fanex.NexHR.Repositories
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
                                 Type = new RequestType { Id = reader.ToShort("RequestType") },
                                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
-                                RequestedDate = reader.ToDateTime("RequestDate"),
+                                RequestedDate = reader.ToDateTime("FromDate"),
                                 Requester = new Employee
                                 {
-                                    Id = reader.To<int>("empID"),
+                                    Id = reader.To<int>("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team
@@ -256,7 +261,8 @@ namespace Fanex.NexHR.Repositories
                                 Remark = reader.ToString("Remark"),
                                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
-                                HrDate = reader.ToDateTime("HrDate")
+                                HrDate = reader.ToDateTime("HrDate"),
+                                RefNO = reader.ToString("RefNo")
                             };
                             entityList.Add(entity);
                         }

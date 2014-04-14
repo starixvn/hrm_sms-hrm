@@ -17,7 +17,6 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -28,7 +27,7 @@ namespace Fanex.NexHR.Controllers.Request
     [Authorize]
     public class RequestController : BaseController
     {
-        #region private services
+        #region protected services
         protected readonly IEmployeeService _EmployeeService;
         protected readonly IShiftService _ShiftService;
         protected readonly ILeaveTypeService _LeaveTypeService;
@@ -40,11 +39,12 @@ namespace Fanex.NexHR.Controllers.Request
         protected readonly ILateInEarlyOutRequestService _LateInEarlyOutRequestService;
         protected readonly ILeaveRequestService _LeaveRequestService;
         protected readonly IOvertimeRequestService _OvertimeService;
+        protected readonly IWorkingCalendarService _WorkingCalendarService;
         #endregion
 
         #region Ctor
         public RequestController()
-            : this(null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -59,7 +59,8 @@ namespace Fanex.NexHR.Controllers.Request
             ICheckInOutRequestService checkInOutRequestService = null,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService = null,
             ILeaveRequestService leaveRequestService = null,
-            IOvertimeRequestService overtimeService = null)
+            IOvertimeRequestService overtimeService = null,
+            IWorkingCalendarService workingCalendarService = null)
         {
             _EmployeeService = employeeService ?? new EmployeeService();
             _ShiftService = shiftService ?? new ShiftService();
@@ -72,6 +73,7 @@ namespace Fanex.NexHR.Controllers.Request
             _LateInEarlyOutRequestService = lateInEarlyOutRequestService ?? new LateInEarlyOutRequestService();
             _LeaveRequestService = leaveRequestService ?? new LeaveRequestService();
             _OvertimeService = overtimeService ?? new OvertimeRequestService();
+            _WorkingCalendarService = workingCalendarService ?? new WorkingCalendarService();
         }
         #endregion
 
@@ -88,11 +90,13 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult Member(RequestViewModel request)
         {
+            request.IsMember = true;
+            
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Leader = true;
             ViewBag.Action = "Member";
-            this.GetRequests(ref request, RequestViewType.PersonalSpace, request.IsDailyRequest);
 
+            this.GetRequests(request, RequestViewType.PersonalSpace, request.IsDailyRequest);
             return View(request);
         }
 
@@ -104,25 +108,18 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "HR")]
         public ActionResult HRView(RequestViewModel request)
         {
+            if (request.StatusId == -1)
+            {
+                request.StatusId = 0;
+                request.IsDailyRequest = true;
+                request.FromDate = request.ToDate;
+            }
+
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Action = "HRView";
-            this.GetRequests(ref request, RequestViewType.HrSpace, request.IsDailyRequest);
+            this.GetRequests(request, RequestViewType.HrSpace, request.IsDailyRequest);
 
             return View(request);
-        }
-
-        /// <summary>
-        /// ActionResult EmployeeView.
-        /// </summary>
-        /// <param name="request">Request ViewModel.</param>
-        /// <returns>View Employee.</returns>
-        public ActionResult EmployeeView(RequestViewModel request)
-        {
-            ViewBag.IsAllowChangeStatus = false;
-            ViewBag.Action = "EmployeeView";
-            this.GetRequests(ref request, RequestViewType.CompanySpace, request.IsDailyRequest);
-
-            return View("HRView", request);
         }
 
         /// <summary>
@@ -132,19 +129,24 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View DailyRequest.</returns>
         public ActionResult DailyView(RequestViewModel request)
         {
-            ViewBag.IsAllowChangeStatus = false;
-            ViewBag.Action = "DailyView";
-
+            if (request.StatusId == -1)
+            {
+                request.StatusId = 0;
+                request.IsDailyRequest = true;
+                request.FromDate = request.ToDate;
+            }
+            
             var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
             request.IsMember = employee.IsMember();
-            
             if (request.IsMember)
             {
                 request.Team = employee.Team.Name;
                 request.TeamIds = employee.Team.Id.ToString();
             }
 
-            this.GetRequests(ref request, RequestViewType.CompanySpace, request.IsDailyRequest);
+            this.GetRequests(request, RequestViewType.CompanySpace, request.IsDailyRequest);
+            ViewBag.IsAllowChangeStatus = false;
+            ViewBag.Action = "DailyView";
 
             return View("DailyRequestsView", request);
         }
@@ -157,28 +159,11 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View HumanResourceViewHistory.</returns>
         public ActionResult HRViewHistory(long id, int type)
         {
-            switch (type)
-            {
-                case (int)RequestFilter.CheckInOut:
-                    GetCheckInOutRequestHistory(id, type);
-                    break;
-                case (int)RequestFilter.LateInEarlyOut:
-                    GetLateInEarlyOutRequestHistory(id, type);
-                    break;
-                case (int)RequestFilter.ChangeShift:
-                    GetChangeShiftRequestHistory(id, type);
-                    break;
-                case (int)RequestFilter.Leave:
-                    GetLeaveRequestHistory(id, type);
-                    break;
-                case (int)RequestFilter.KeepInView:
-                    GeKeepInViewRequestHistory(id, type);
-                    break;
-            }
+            IList<RequestEntity> entityList = _RequestService.GetHistoryRequest(id, type);
 
             ViewBag.requestId = id;
             ViewBag.requestType = type;
-
+            ViewBag.EntityList = entityList;
             return View();
         }
 
@@ -318,7 +303,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="requestViewType">Request View Types.</param>
         /// <param name="isDailyRequest">Is Daily Request.</param>
         [NonAction]
-        private void GetRequests(ref RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
+        private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
             request.TeamCollection = _TeamService.GetAll();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
@@ -329,46 +314,21 @@ namespace Fanex.NexHR.Controllers.Request
                 loginId = this.CurrentUser.Id;
             }
 
-            var requestList = _RequestService.GetWorkingTimeRequests(request, requestViewType, isDailyRequest, loginId, request.IsLocal);
+            var requestList = _RequestService.GetRequests(
+                requestViewType, 
+                request.RequestType, 
+                request.FromDate, 
+                request.ToDate, 
+                request.TeamIds, 
+                request.StatusId, 
+                isDailyRequest, 
+                request.EmployeeId, 
+                loginId, 
+                request.IsLocal);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
             ViewBag.IsDailyRequest = isDailyRequest;
             ViewBag.EntityList = requestList;
-        }
-
-        [NonAction]
-        private void GetLeaveRequestHistory(long requestId, int requestType)
-        {
-            IList<RequestEntity> entityList = _LeaveRequestService.GetHistoricLeaveRequests(requestId, requestType);
-            ViewBag.EntityList = entityList;
-        }
-
-        [NonAction]
-        private void GetChangeShiftRequestHistory(long requestId, int requestType)
-        {
-            IList<RequestEntity> entityList = _ChangeShiftRequestService.GetHistoricChangeShiftRequests(requestId, requestType);
-            ViewBag.EntityList = entityList;
-        }
-
-        [NonAction]
-        private void GetLateInEarlyOutRequestHistory(long requestId, int requestType)
-        {
-            IList<RequestEntity> entityList = _LateInEarlyOutRequestService.GetHistoricLateInEarlyOutRequests(requestId, requestType);
-            ViewBag.EntityList = entityList;
-        }
-
-        [NonAction]
-        private void GetCheckInOutRequestHistory(long requestId, int requestType)
-        {
-            IList<RequestEntity> entityList = _CheckInOutRequestService.GetHistoricCheckInOutRequests(requestId, requestType);
-            ViewBag.EntityList = entityList;
-        }
-
-        [NonAction]
-        private void GeKeepInViewRequestHistory(long requestId, int requestType)
-        {
-            IList<RequestEntity> entityList = _KeepInViewRequestService.GetHistoricKeepInViewRequests(requestId, requestType);
-            ViewBag.EntityList = entityList;
         }
 
         /// <summary>
@@ -392,16 +352,16 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>
         /// The view model of HRViewChangeShiftDetail.
         /// </returns>
-        private ActionResult HRViewChangeShiftDetail(int requestId, string viewName)
+        private ActionResult HRViewChangeShiftDetail(long requestId, string viewName)
         {
-            var shift = _ChangeShiftRequestService.GetChangeShiftRequestById(requestId);
+            var changeShift = _ChangeShiftRequestService.GetRequestById(requestId);
 
-            if (shift == null)
+            if (changeShift == null)
             {
                 return RedirectToAction(viewName);
             }
 
-            var model = ViewChangeShiftDetail(requestId, viewName, shift);
+            var model = ViewChangeShiftDetail(requestId, viewName, changeShift);
             return View("HRViewDetail", model);
         }
 
@@ -415,7 +375,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         private ActionResult MemberChangeShiftDetail(int requestId, string viewName)
         {
-            var shift = _ChangeShiftRequestService.GetChangeShiftRequestById(requestId);
+            var shift = _ChangeShiftRequestService.GetRequestById(requestId);
 
             if (shift == null)
             {
@@ -433,13 +393,13 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="viewName">Name of the view.</param>
         /// <param name="shift">The shift.</param>
         /// <returns>The model of ChangeShiftViewModel.</returns>
-        private ChangeShiftViewModel ViewChangeShiftDetail(int requestId, string viewName, RequestEntity shift)
+        private ChangeShiftViewModel ViewChangeShiftDetail(long requestId, string viewName, RequestEntity shift)
         {
             var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
             ViewBag.UnavailDates = listUnavailDates;
-            var shiftDetails = _ChangeShiftRequestService.GetShiftDetailsById(requestId);
+            var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(requestId);
             var shifts = _ShiftService.GetAll();
-            var employee = _EmployeeService.GetEmployeeById(shift.EmpId);
+            var employee = _EmployeeService.GetEmployeeById(shift.Requester.Id);
             ViewBag.Shift = shifts;
             var model = new ChangeShiftViewModel();
             if (shift != null && shiftDetails != null)
@@ -463,7 +423,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         private ActionResult HRViewLeaveDetail(int requestId, string viewName)
         {
-            var leaveRequest = _LeaveRequestService.GetLeaveRequestById(requestId);
+            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
 
             if (leaveRequest == null)
             {
@@ -484,7 +444,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         private ActionResult MemberLeaveDetail(int requestId, string viewName)
         {
-            var leaveRequest = _LeaveRequestService.GetLeaveRequestById(requestId);
+            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
 
             if (leaveRequest == null)
             {

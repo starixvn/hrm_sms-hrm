@@ -15,15 +15,15 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>
     /// LeaveRequest Repository.
     /// </summary>
-    public class LeaveRequestRepository : BaseRequestRepository
+    public class LeaveRequestRepository : BaseRequestRepository, ILeaveRequestRepository
     {
         /// <summary>
         /// Function to insert leave request.
@@ -104,54 +104,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Method get leave request.
-        /// </summary>
-        /// <param name="role">Employee's role id.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Request to date.</param>
-        /// <param name="groupIds">Group's id.</param>
-        /// <param name="isDailyRequest">Is daily request.</param>
-        /// <param name="employeeId">Employee's id.</param>
-        /// <param name="status">Request's status.</param>
-        /// <param name="logInId">Log in id.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>List RequestEntity.</returns>
-        public override IList<RequestEntity> GetRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null,
-            byte? isLocal = null)
-        {
-            IList<RequestEntity> entityList = null;
-            var keyName = isDailyRequest
-                ? "WorkingTimeRequest_GetRequestByRequestDate_LeaveType"
-                : "WorkingTimeRequest_GetRequestByCreateDate_LeaveType";
-            using (var db = new ObjectDb(keyName))
-            {
-                using (IDataReader reader =
-                    db.ExecuteReader(new { empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
-                {
-                    if (reader != null)
-                    {
-                        entityList = new List<RequestEntity>();
-                        while (reader.Read())
-                        {
-                            var entity = this.FillDataForGettingLeaveRequest(reader);
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-            }
-
-            return entityList;
-        }
-
         public List<LeaveDetailModel> GetLeaveRequestDetailsById(long requestId)
         {
             using (ObjectDb db = new ObjectDb("WorkingTimeRequest_GetLeaveRequestDetailByRequestID"))
@@ -159,33 +111,6 @@ namespace Fanex.NexHR.Repositories
                 var leaveRequestDetails = db.Query<LeaveDetailModel>(new { RequestID = requestId }).ToList();
                 return leaveRequestDetails;
             }
-        }
-
-        /// <summary>
-        /// Function to get leave request by id.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <returns>Request Entity.</returns>
-        public override object GetRequestById(long requestId)
-        {
-            IList<RequestEntity> entityList = null;
-            using (ObjectDb db = new ObjectDb(Constants.WorkingTimeRequestGetAllByRequestID))
-            {
-                using (IDataReader reader = db.ExecuteReader(new { RequestId = requestId }))
-                {
-                    if (reader != null)
-                    {
-                        entityList = new List<RequestEntity>();
-                        while (reader.Read())
-                        {
-                            var entity = this.FillDataForGettingLeaveRequestById(reader);
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-            }
-
-            return entityList.FirstOrDefault();
         }
 
         public EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay)
@@ -222,107 +147,6 @@ namespace Fanex.NexHR.Repositories
 
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Fills the data for getting leave request by identifier.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <returns>The object data of RequestEntity.</returns>
-        private RequestEntity FillDataForGettingLeaveRequestById(IDataReader reader)
-        {
-            var entity = new RequestEntity
-            {
-                Id = reader.ToInt("RequestId"),
-                Type = new RequestType { Id = reader.ToShort("RequestType") },
-                FromDate = reader.ToDateTime("FromDate"),
-                ToDate = reader.ToDateTime("ToDate"),
-                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                EmpId = reader.ToInt("RequesterID"),
-                Remark = reader.ToString("Remark"),
-                IsHalfDay = reader.ToDouble("TotalDays") == 0.5,
-                TotalDays = reader.ToDecimal("TotalDays"),
-                LeaveTypeId = reader.ToInt("LeaveType"),
-                RefNO = reader.ToString("RefNo"),
-                ReworkCount = reader.ToInt("ReworkCount"),
-                Requester = new Employee
-                {
-                    Id = reader.To<int>("RequesterId"),
-                    NickName = reader.To<string>("Requester"),
-                    FullName = reader.To<string>("FullNameRequester"),
-                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                },
-                VerifiedBy = new Employee
-                {
-                    NickName = reader.To<string>("VerifierBy"),
-                    FullName = reader.To<string>("FullNameVerifierBy"),
-                    Id = reader.To<int>("VerifierID")
-                },
-                ApprovedBy = new Employee
-                {
-                    NickName = reader.To<string>("ApproverBy"),
-                    FullName = reader.To<string>("FullNameApproverBy"),
-                    Id = reader.To<int>("ApproverID")
-                }
-            };
-            return entity;
-        }
-
-        /// <summary>
-        /// Fills the data for getting leave request.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <returns>The object data of RequestEntity.</returns>
-        private RequestEntity FillDataForGettingLeaveRequest(IDataReader reader)
-        {
-            var entity = new RequestEntity
-            {
-                Id = reader.ToInt("RequestId"),
-                Type = new RequestType { Id = reader.ToShort("RequestType") },
-                FromDate = reader.ToDateTime("FromDate"),
-                ToDate = reader.ToDateTime("ToDate"),
-                TotalDays = reader.ToDecimal("TotalDays"),
-                LeaveTypeId = reader.ToInt("LeaveTypeId"),
-                LeaveType = reader.ToString("LeaveType"),
-                Remark = reader.ToString("Remark"),
-                TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
-                CreatedDate = reader.ToDateTime("CreatedDate"),
-                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                RefNO = reader.ToString("RefNo"),
-                ApprovedDate = reader.ToDateTime2("ApprovedDate"),
-                VerifiedDate = reader.ToDateTime2("VerifiedDate"),
-                HrDate = reader.ToDateTime2("HrDate"),
-                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                ProcessedStatus = reader.ToInt("HRStatus"),
-                RequestedDate = reader.ToDateTime("FromDate"),
-                Requester = new Employee
-                {
-                    NickName = reader.To<string>("Requester"),
-                    FullName = reader.To<string>("FullNameRequester"),
-                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                },
-                ModifiedBy = new Employee { Id = reader.To<int>("ModifiedByID"), NickName = reader.To<string>("ModifiedBy"), FullName = reader.To<string>("FullNameModified") },
-                VerifiedBy = new Employee
-                {
-                    Id = reader.To<int>("VerifierID"),
-                    NickName = reader.To<string>("VerifierBy"),
-                    FullName = reader.To<string>("FullNameVerifierBy"),
-                },
-                ApprovedBy = new Employee
-                {
-                    Id = reader.To<int>("ApproverID"),
-                    NickName = reader.To<string>("ApproverBy"),
-                    FullName = reader.To<string>("FullNameApproverBy"),
-                },
-                HrBy = new Employee
-                {
-                    Id = reader.To<int>("HrId"),
-                    NickName = reader.To<string>("HrBy"),
-                    FullName = reader.To<string>("FullNameHrBy"),
-                }
-            };
-            return entity;
         }
     }
 }

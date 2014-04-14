@@ -39,10 +39,6 @@
         IList<RequestEntity> entityCheckInOut = ViewBag.EntityList;
         Html.RenderPartial("Request/Member/MemberCheckInOutRequest", entityCheckInOut);
         break;
-    case (int)RequestFilter.Overtime: // Overtime Request
-        IList<RequestEntity> entityOvertime = ViewBag.EntityList;
-        Html.RenderPartial("Request/Member/MemberOvertimeRequest", entityOvertime);
-        break;
     case (int)RequestFilter.KeepInView: // Keep In View Request
         IList<RequestEntity> entityKeepInView = ViewBag.EntityList;
         Html.RenderPartial("Request/Member/MemberKeepInViewRequest", entityKeepInView);

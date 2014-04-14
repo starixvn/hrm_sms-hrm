@@ -7,7 +7,6 @@
 namespace Fanex.NexHR.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Threading.Tasks;
     using System.Web;
@@ -39,9 +38,7 @@ namespace Fanex.NexHR.Services
         }
 
         public LateInEarlyOutRequestService(
-            IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            IRequestRepository requestRepository,
             ILateInEarlyOutRepository lateInEarlyOutRepository)
         {
             this._emailService = emailService;
@@ -55,7 +52,7 @@ namespace Fanex.NexHR.Services
         /// <param name="modelState">ModelState Dictionary.</param>
         /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
         /// <returns>Result of insert.</returns>
-        public bool InsertLateInEarlyOutRequest(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
+        public bool Insert(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
         {
             int errorCode;
             string message;
@@ -67,19 +64,7 @@ namespace Fanex.NexHR.Services
                 model.ToDate = Utilities.AddTimeToDate(model.ToDate, model.ToTime);
             }
 
-            var requestId = this._lateInEarlyOutRepository.InsertLateInEarlyOutRequest(
-                model.EmployeeId,
-                model.Type,
-                model.Remark,
-                DateTime.Now,
-                model.By,
-                model.VerifierId,
-                model.ApproverId,
-                out errorCode,
-                out message,
-                model.Date,
-                lateInMins: lateInMins,
-                earlyOutMins: earlyOutMins);
+            var requestId = this._lateInEarlyOutRepository.Insert(model, out errorCode, out message);
             if (errorCode == 0)
             {
                 SendMailForLateInEarlyOutSuccessfully(model, requestId, isUpdate: false);
@@ -99,7 +84,7 @@ namespace Fanex.NexHR.Services
         /// <param name="modelState">ModelState Dictionary.</param>
         /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
         /// <returns>Result of update.</returns>
-        public bool UpdateLateInEarlyOutRequest(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
+        public bool Update(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
         {
             if (modelState.IsValid)
             {
@@ -113,20 +98,7 @@ namespace Fanex.NexHR.Services
 
                 int errorCode;
                 string message;
-                var updated = this._lateInEarlyOutRepository.UpdateLateInEarlyOutRequest(
-                    Convert.ToInt32(model.Id),
-                    model.EmployeeId,
-                    model.Type,
-                    model.Remark,
-                    model.Date,
-                    model.VerifierId,
-                    model.ApproverId,
-                    DateTime.Now,
-                    model.EmployeeId,
-                    out errorCode,
-                    out message,
-                    lateInMins: lateInMins,
-                    earlyOutMins: earlyOutMins);
+                var updated = this._lateInEarlyOutRepository.Update(model, out errorCode, out message);
 
                 if (updated)
                 {
@@ -146,73 +118,14 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        /// <summary>
-        /// Function to get late in, early out request.
-        /// </summary>
-        /// <param name="role">Role of user.</param>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">List group Id.</param>
-        /// <param name="isDailyRequest">Is query from daily request.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="status">Status of request.</param>
-        /// <param name="loginId">User login.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetLateInEarlyOutRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? loginId = null)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                if (fromDate <= toDate)
-                {
-                    entityList = this._lateInEarlyOutRepository.GetLateInEarlyOutRequests(role, fromDate, toDate, groupIds, isDailyRequest, employeeId, status, loginId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        public RequestEntity GetLateInEarlyOutRequestById(long id)
+        public RequestEntity GetRequestById(long id)
         {
             if (id > 0)
             {
-                return this._lateInEarlyOutRepository.GetLateInEarlyOutRequestById(id);
+                return this._lateInEarlyOutRepository.GetRequestById(id, (int)RequestFilter.LateInEarlyOut);
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Function to get Late in, early out request history.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoricLateInEarlyOutRequests(long requestId, int requestTypeId)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                entityList = this._lateInEarlyOutRepository.GetHistoricLateInEarlyOutRequests(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
         }
 
         /// <summary>

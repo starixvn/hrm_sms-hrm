@@ -13,7 +13,6 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
 
     public interface IRequestService
     {
@@ -21,7 +20,21 @@ namespace Fanex.NexHR.Services.Interface
 
         bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage);
 
-        IList<RequestEntity> GetWorkingTimeRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest, int? loginId, byte? isLocal = null);
+        IList<RequestEntity> GetRequests(
+            RequestViewType requestViewType,
+            int requestType,
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            int statusId,
+            bool isDailyRequest = false,
+            int? employeeId = null,
+            int? loginId = null,
+            byte? isLocal = null);
+
+        decimal GetNumberOfRequest(int requestType, int employeeId, DateTime fromDate, DateTime toDate);
+
+        IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId);
 
         IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
 

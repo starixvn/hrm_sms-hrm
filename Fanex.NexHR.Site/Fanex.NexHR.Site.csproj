@@ -1061,8 +1061,6 @@
     <Content Include="Views\Overtime\ViewDetails.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
     <Content Include="Views\Overtime\Update.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberOvertimeRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewOvertimeRequest.cshtml" />
     <Content Include="Views\Shared\Request\History\ViewOvertimeRequestHistory.cshtml" />
     <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />
     <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />

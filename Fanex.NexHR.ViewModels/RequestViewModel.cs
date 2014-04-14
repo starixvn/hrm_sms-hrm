@@ -24,14 +24,14 @@ namespace Fanex.NexHR.ViewModels
     {
         public RequestViewModel()
         {
-            this.StatusId = 0;
-            this.FromDate = DateTime.Now.Date;
+            this.StatusId = -1;
+            this.FromDate = DateTime.Now.AddDays(-60);
             this.ToDate = DateTime.Now.Date;
-            this.DateOption = 1;
+            this.DateOption = 0;
             this.TeamIds = null;
             this.EmployeeId = -1;
             this.RequestType = (int)RequestFilter.All;
-            this.IsDailyRequest = true;
+            this.IsDailyRequest = false;
         }
 
         public int DateOption { get; set; }

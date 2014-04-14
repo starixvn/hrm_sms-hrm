@@ -46,7 +46,6 @@ namespace Fanex.NexHR.Services
         public ChangeShiftRequestService(
             IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            IRequestRepository requestRepository,
             IChangeShiftRepository changeShiftRepository)
         {
             this._employeeRepository = employeeRepository;
@@ -61,13 +60,13 @@ namespace Fanex.NexHR.Services
         /// <param name="modelState">ModelState Dictionary.</param>
         /// <param name="model">ChangeShift ViewModel.</param>
         /// <returns>Result of insert.</returns>
-        public bool InsertChangeShiftRequest(ModelStateDictionary modelState, ChangeShiftViewModel model)
+        public bool Insert(ModelStateDictionary modelState, ChangeShiftViewModel model)
         {
             if (modelState.IsValid)
             {
                 int errorCode;
                 string message;
-                var requestId = this._changeShiftRepository.InsertChangeShiftRequest(model, out errorCode, out message);
+                var requestId = this._changeShiftRepository.Insert(model, out errorCode, out message);
                 if (errorCode == 0)
                 {
                     SendMailForChangeShiftSuccessfully(model, requestId, false);
@@ -92,14 +91,14 @@ namespace Fanex.NexHR.Services
         /// <param name="modelState">ModelState Dictionary.</param>
         /// <param name="model">ChangeShift ViewModel.</param>
         /// <returns>Result of update.</returns>
-        public bool UpdateChangeShiftRequest(ModelStateDictionary modelState, ChangeShiftViewModel model)
+        public bool Update(ModelStateDictionary modelState, ChangeShiftViewModel model)
         {
             if (modelState.IsValid)
             {
                 int errorCode;
                 string message;
-                var updated = this._changeShiftRepository.UpdateChangeShiftRequest(model, out errorCode, out message);
-                if (updated == 0)
+                var result = this._changeShiftRepository.Update(model, out errorCode, out message);
+                if (result)
                 {
                     SendMailForChangeShiftSuccessfully(model, model.Id, true);
                 }
@@ -114,83 +113,24 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        /// <summary>
-        /// Function to get change shift request.
-        /// </summary>
-        /// <param name="role">Role of user.</param>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">List group Id.</param>
-        /// <param name="isDailyRequest">Is query from daily request.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="status">Status of request.</param>
-        /// <param name="loginId">User login.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetChangeShiftRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? loginId = null)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                if (fromDate <= toDate)
-                {
-                    entityList = this._changeShiftRepository.GetChangeShiftRequests(role, fromDate, toDate, groupIds, isDailyRequest, employeeId, status, loginId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        public RequestEntity GetChangeShiftRequestById(long id)
+        public RequestEntity GetRequestById(long id)
         {
             if (id > 0)
             {
-                return this._changeShiftRepository.GetChangeShiftRequestById(id);
+                return this._changeShiftRepository.GetRequestById(id, (int)RequestFilter.ChangeShift);
             }
 
             return null;
         }
 
-        public List<ShiftDetails> GetShiftDetailsById(long id)
+        public List<ShiftDetails> GetChangeShiftDetailsById(long id)
         {
             if (id > 0)
             {
-                return this._changeShiftRepository.GetShiftDetailsById(id);
+                return this._changeShiftRepository.GetChangeShiftDetailsById(id);
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Function to get Change shift request history.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoricChangeShiftRequests(long requestId, int requestTypeId)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                entityList = this._changeShiftRepository.GetHistoricChangeShiftRequests(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
         }
 
         /// <summary>

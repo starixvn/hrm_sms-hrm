@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
@@ -39,12 +38,8 @@ namespace Fanex.NexHR.Services
         }
 
         public KeepInViewRequestService(
-            IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            ILeaveTypeService leaveTypeService,
-            IKeepInViewRequestRepository keepInViewRequestRepository,
-            IShiftService shiftService,
-            IRequestRepository requestRepository)
+            IKeepInViewRequestRepository keepInViewRequestRepository)
         {
             this._emailService = emailService;
             this._keepInViewRequestRepository = keepInViewRequestRepository;
@@ -54,49 +49,30 @@ namespace Fanex.NexHR.Services
         /// Inserts the keep in view request.
         /// </summary>
         /// <param name="modelState">State of the model.</param>
-        /// <param name="keepInViewRequestViewModel">The keep in view request view model.</param>
+        /// <param name="model">The keep in view request view model.</param>
         /// <param name="isTopManager">If set to <c>true</c> [is top manager].</param>
         /// <returns>
         /// Indicate the insert action is successful or not.
         /// </returns>
-        public bool InsertKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager)
+        public bool Insert(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager)
         {
             if (!modelState.IsValid)
             {
                 return false;
             }
 
-            if (!this.CheckIsValidKeepInTimeRequest(modelState, keepInViewRequestViewModel, isTopManager))
+            if (!this.CheckIsValidKeepInTimeRequest(modelState, model, isTopManager))
             {
                 return false;
             }
 
             int errorCode;
             string message;
-            DateTime? fromTime = null;
-            DateTime? toTime = null;
-            this.ConvertFromTimeAndToTimeFromStringFormatToDateTimeFormat(keepInViewRequestViewModel, ref fromTime, ref toTime);
-
-            var requestId = this._keepInViewRequestRepository.InsertKeepInViewRequest(
-                keepInViewRequestViewModel.EmployeeId,
-                (short)RequestTypes.KeepInView,
-                keepInViewRequestViewModel.Remark,
-                keepInViewRequestViewModel.Date,
-                keepInViewRequestViewModel.HalfDay,
-                keepInViewRequestViewModel.ShiftId,
-                fromTime,
-                toTime,
-                keepInViewRequestViewModel.By,
-                DateTime.Now,
-                keepInViewRequestViewModel.VerifierId,
-                keepInViewRequestViewModel.ApproverId,
-                keepInViewRequestViewModel.RefNo,
-                out errorCode,
-                out message);
+            var requestId = this._keepInViewRequestRepository.Insert(model, out errorCode, out message);
 
             if (errorCode == 0)
             {
-                SendMailForSuccessfulKeepInViewRequest(keepInViewRequestViewModel, requestId, isUpdate: false);
+                SendMailForSuccessfulKeepInViewRequest(model, requestId, isUpdate: false);
                 return true;
             }
 
@@ -108,50 +84,30 @@ namespace Fanex.NexHR.Services
         /// Updates the keep in view request.
         /// </summary>
         /// <param name="modelState">State of the model.</param>
-        /// <param name="keepInViewRequestViewModel">The keep in view request view model.</param>
+        /// <param name="model">The keep in view request view model.</param>
         /// <param name="isTopManager">If set to <c>true</c> [is top manager].</param>
         /// <returns>
         /// Indicate the update action is successful or not.
         /// </returns>
-        public bool UpdateKeepInViewRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager)
+        public bool Update(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager)
         {
             if (!modelState.IsValid)
             {
                 return false;
             }
 
-            if (!this.CheckIsValidKeepInTimeRequest(modelState, keepInViewRequestViewModel, isTopManager))
+            if (!this.CheckIsValidKeepInTimeRequest(modelState, model, isTopManager))
             {
                 return false;
             }
 
             int errorCode;
             string message;
-            DateTime? fromTime = null;
-            DateTime? toTime = null;
-            this.ConvertFromTimeAndToTimeFromStringFormatToDateTimeFormat(keepInViewRequestViewModel, ref fromTime, ref toTime);
-
-            var updated = this._keepInViewRequestRepository.UpdateKeepInViewRequest(
-                keepInViewRequestViewModel.Id,
-                keepInViewRequestViewModel.EmployeeId,
-                (short)RequestTypes.KeepInView,
-                keepInViewRequestViewModel.Remark,
-                keepInViewRequestViewModel.Date,
-                keepInViewRequestViewModel.HalfDay,
-                keepInViewRequestViewModel.ShiftId,
-                fromTime,
-                toTime,
-                keepInViewRequestViewModel.EmployeeId,
-                DateTime.Now,
-                keepInViewRequestViewModel.VerifierId,
-                keepInViewRequestViewModel.ApproverId,
-                keepInViewRequestViewModel.RefNo,
-                out errorCode,
-                out message);
+            var updated = this._keepInViewRequestRepository.Update(model, out errorCode, out message);
 
             if (updated)
             {
-                this.SendMailForSuccessfulKeepInViewRequest(keepInViewRequestViewModel, keepInViewRequestViewModel.Id, isUpdate: true);
+                this.SendMailForSuccessfulKeepInViewRequest(model, model.Id, isUpdate: true);
                 return true;
             }
 
@@ -166,102 +122,14 @@ namespace Fanex.NexHR.Services
         /// <returns>
         /// The RequestEntity entity.
         /// </returns>
-        public RequestEntity GetKeepInViewRequestById(long id)
+        public RequestEntity GetRequestById(long id)
         {
             if (id > 0)
             {
-                return this._keepInViewRequestRepository.GetKeepInViewRequestById(id);
+                return this._keepInViewRequestRepository.GetRequestById(id, (int)RequestFilter.KeepInView);
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the keep in view request.
-        /// </summary>
-        /// <param name="role">The role identifier.</param>
-        /// <param name="fromDate">Get result by From Date.</param>
-        /// <param name="toDate">Get result by To Date.</param>
-        /// <param name="groupIds">The group ids.</param>
-        /// <param name="isDailyRequest">If set to <c>true</c> [is daily request].</param>
-        /// <param name="employeeId">The employee identifier.</param>
-        /// <param name="status">Get result by Status.</param>
-        /// <param name="loginId">The login identifier.</param>
-        /// <returns>The list of RequestEntity.</returns>
-        public IList<RequestEntity> GetKeepInViewRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? loginId = null)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                if (fromDate <= toDate)
-                {
-                    entityList = this._keepInViewRequestRepository.GetKeepInViewRequests(role, fromDate, toDate, groupIds, isDailyRequest, employeeId, status, loginId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        /// <summary>
-        /// Function to get Keep in view request history.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoricKeepInViewRequests(long requestId, int requestTypeId)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                entityList = this._keepInViewRequestRepository.GetHistoricKeepInViewRequests(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        /// <summary>
-        /// Converts from time and to time from string format to date time format.
-        /// </summary>
-        /// <param name="keepInViewRequestViewModel">The keep in view request view model.</param>
-        /// <param name="fromTime">From time for output.</param>
-        /// <param name="toTime">To time for output.</param>
-        private void ConvertFromTimeAndToTimeFromStringFormatToDateTimeFormat(
-            KeepInViewRequestViewModel keepInViewRequestViewModel,
-            ref DateTime? fromTime,
-            ref DateTime? toTime)
-        {
-            if (keepInViewRequestViewModel.HalfDay)
-            {
-                string[] fromTimeArray = keepInViewRequestViewModel.FromTime.Split(':');
-                string[] toTimeArray = keepInViewRequestViewModel.ToTime.Split(':');
-                fromTime = new DateTime(keepInViewRequestViewModel.Date.Year, keepInViewRequestViewModel.Date.Month, keepInViewRequestViewModel.Date.Day);
-                toTime = new DateTime(keepInViewRequestViewModel.Date.Year, keepInViewRequestViewModel.Date.Month, keepInViewRequestViewModel.Date.Day);
-
-                fromTime = fromTime.Value.AddHours(this.ConvertHourFromStringToDouble(fromTimeArray[0])).AddMinutes(Convert.ToDouble(fromTimeArray[1]));
-
-                if (keepInViewRequestViewModel.CrossDay)
-                {
-                    toTime = toTime.Value.AddDays(1);
-                }
-
-                toTime = toTime.Value.AddHours(this.ConvertHourFromStringToDouble(toTimeArray[0])).AddMinutes(Convert.ToDouble(toTimeArray[1]));
-            }
         }
 
         /// <summary>
@@ -292,12 +160,13 @@ namespace Fanex.NexHR.Services
                 string[] fromTimeArray = keepInViewRequestViewModel.FromTime.Split(':');
                 string[] toTimeArray = keepInViewRequestViewModel.ToTime.Split(':');
 
-                if (this.ConvertHourFromStringToDouble(fromTimeArray[0]) > this.ConvertHourFromStringToDouble(toTimeArray[0]))
+                if (_keepInViewRequestRepository.ConvertHourFromStringToDouble(fromTimeArray[0]) > _keepInViewRequestRepository.ConvertHourFromStringToDouble(toTimeArray[0]))
                 {
                     modelState.AddModelError("FromTimeShouldBeLessThanToTime", Messages.FromTimeShouldBeLessThanToTime);
                     return false;
                 }
-                else if (this.ConvertHourFromStringToDouble(fromTimeArray[0]) == this.ConvertHourFromStringToDouble(toTimeArray[0])
+                else if (_keepInViewRequestRepository.ConvertHourFromStringToDouble(fromTimeArray[0]) 
+                    == _keepInViewRequestRepository.ConvertHourFromStringToDouble(toTimeArray[0])
                     && Convert.ToInt32(fromTimeArray[1]) > Convert.ToInt32(toTimeArray[1]))
                 {
                     modelState.AddModelError("FromTimeShouldBeLessThanToTime", Messages.FromTimeShouldBeLessThanToTime);
@@ -306,21 +175,6 @@ namespace Fanex.NexHR.Services
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Converts the hour from string to double.
-        /// </summary>
-        /// <param name="hour">The input hour for converting.</param>
-        /// <returns>The double format of hour.</returns>
-        private double ConvertHourFromStringToDouble(string hour)
-        {
-            if (hour.StartsWith("0"))
-            {
-                hour = hour.Substring(1);
-            }
-
-            return Convert.ToDouble(hour);
         }
 
         /// <summary>

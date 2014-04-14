@@ -1,6 +1,18 @@
 ﻿$(document).ready(function() {
 	// menu
-	bindMenu('.Pending', 'pendingMenu');
+    bindMenu('.Pending', 'pendingMenu');
+    $(".viewhistory").click(function () {
+        var url = $(this).attr("id");
+        $.get(url, function (data) {
+            $('#dialoghistorycontent').html(data);
+            $("#dialoghistorycontent").dialog({
+                modal: true,
+                minHeight: 0,
+                width: 1100,
+                title: 'Request History'
+            });
+        });
+    });
 });
 
 function cancelRequest(id) {

@@ -17,7 +17,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -234,11 +233,16 @@ namespace Fanex.NexHR.Controllers
         {
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            var requestList = _requestService.GetWorkingTimeRequests(
-                model,
+            var requestList = _requestService.GetRequests(
                 RequestViewType.HrSpace,
-                false,
-                null,
+                model.RequestType,
+                model.FromDate,
+                model.ToDate,
+                model.TeamIds,
+                model.StatusId,
+                model.IsDailyRequest, 
+                model.EmployeeId,
+                null, 
                 model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
@@ -257,11 +261,17 @@ namespace Fanex.NexHR.Controllers
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            var requestList = _requestService.GetWorkingTimeRequests(
-                model,
+            var requestList = _requestService.GetRequests(
                 RequestViewType.PersonalSpace,
+                model.RequestType,
+                model.FromDate,
+                model.ToDate,
+                model.TeamIds,
+                model.StatusId,
                 model.IsDailyRequest,
-                this.CurrentUser.Id);
+                model.EmployeeId,
+                null,
+                model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
@@ -278,11 +288,17 @@ namespace Fanex.NexHR.Controllers
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            var requestList = _requestService.GetWorkingTimeRequests(
-                model,
+            var requestList = _requestService.GetRequests(
                 RequestViewType.HrSpace,
+                model.RequestType,
+                model.FromDate,
+                model.ToDate,
+                model.TeamIds,
+                model.StatusId,
                 model.IsDailyRequest,
-                null);
+                model.EmployeeId,
+                null,
+                model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
@@ -298,11 +314,17 @@ namespace Fanex.NexHR.Controllers
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            var requestList = _requestService.GetWorkingTimeRequests(
-                model,
+            var requestList = _requestService.GetRequests(
                 RequestViewType.CompanySpace,
-                false,
-                this.CurrentUser.Id);
+                model.RequestType,
+                model.FromDate,
+                model.ToDate,
+                model.TeamIds,
+                model.StatusId,
+                model.IsDailyRequest,
+                model.EmployeeId,
+                null,
+                model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
@@ -318,11 +340,17 @@ namespace Fanex.NexHR.Controllers
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            var requestList = _requestService.GetWorkingTimeRequests(
-                model,
+            var requestList = _requestService.GetRequests(
                 RequestViewType.CompanySpace,
-                true,
-                this.CurrentUser.Id);
+                model.RequestType,
+                model.FromDate,
+                model.ToDate,
+                model.TeamIds,
+                model.StatusId,
+                model.IsDailyRequest,
+                model.EmployeeId,
+                null,
+                model.IsLocal);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);

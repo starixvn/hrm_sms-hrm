@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Threading.Tasks;
     using System.Web;
@@ -42,9 +41,7 @@ namespace Fanex.NexHR.Services
         }
 
         public CheckInOutRequestService(
-            IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            IRequestRepository requestRepository,
             ICheckInOutRepository checkInOutRepository)
         {
             this._emailService = emailService;
@@ -58,7 +55,7 @@ namespace Fanex.NexHR.Services
         /// <param name="modelState">State of the model.</param>
         /// <param name="model">The CheckInOutRequestViewModel.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool InsertCheckInOutRequest(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
+        public bool Insert(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
         {
             if (modelState.IsValid)
             {
@@ -66,19 +63,7 @@ namespace Fanex.NexHR.Services
                 model.AttendantDate = model.AttendantDate + new TimeSpan(model.Hour, model.Minute, 0);
                 int errorCode;
                 string message;
-                var requestId = this._checkInOutRepository.InsertCheckInOutRequest(
-                    model.EmployeeId,
-                    model.Type,
-                    model.Remark,
-                    model.ForDate,
-                    DateTime.Now,
-                    model.By,
-                    model.VerifierId,
-                    model.ApproverId,
-                    model.RefNO,
-                    model.AttendantDate,
-                    out errorCode,
-                    out message);
+                var requestId = this._checkInOutRepository.Insert(model, out errorCode, out message);
 
                 if (errorCode != 0)
                 {
@@ -99,99 +84,20 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Function to get check in, check out request.
-        /// </summary>
-        /// <param name="role">Role of user.</param>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">List group Id.</param>
-        /// <param name="isDailyRequest">Is query from daily request.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="status">Status of request.</param>
-        /// <param name="loginId">User login.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetCheckInOutRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? loginId = null)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                if (fromDate <= toDate)
-                {
-                    entityList = this._checkInOutRepository.GetCheckInOutRequests(role, fromDate, toDate, groupIds, isDailyRequest, employeeId, status, loginId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        public RequestEntity GetCheckInOutRequestById(long id)
-        {
-            if (id > 0)
-            {
-                return this._checkInOutRepository.GetCheckInOutRequestById(id);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Function to get Check in, check out request history.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
-        /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoricCheckInOutRequests(long requestId, int requestTypeId)
-        {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            try
-            {
-                entityList = this._checkInOutRepository.GetCheckInOutRequestHistory(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
-            return entityList;
-        }
-
-        /// <summary>
         /// Updates the check in out.
         /// </summary>
         /// <param name="modelState">State of the model.</param>
         /// <param name="model">The CheckInOutRequestViewModel.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool UpdateCheckInOutRequest(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
+        public bool Update(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
         {
             if (modelState.IsValid)
             {
                 model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
                 model.AttendantDate = model.AttendantDate + new TimeSpan(model.Hour, model.Minute, 0);
-
-                var updated = this._checkInOutRepository.UpdateCheckInOutRequest(
-                     Convert.ToInt32(model.Id),
-                     model.EmployeeId,
-                     model.Type,
-                     model.Remark,
-                     model.ForDate,
-                     model.VerifierId,
-                     model.ApproverId,
-                     DateTime.Now,
-                     model.EmployeeId,
-                     model.RefNO,
-                     model.AttendantDate);
+                int errorCode;
+                string message;
+                var updated = this._checkInOutRepository.Update(model, out errorCode, out message);
 
                 if (updated)
                 {
@@ -206,6 +112,16 @@ namespace Fanex.NexHR.Services
             }
 
             return false;
+        }
+
+        public RequestEntity GetRequestById(long id)
+        {
+            if (id > 0)
+            {
+                return this._checkInOutRepository.GetRequestById(id, (int)RequestFilter.CheckInOut);
+            }
+
+            return null;
         }
 
         /// <summary>

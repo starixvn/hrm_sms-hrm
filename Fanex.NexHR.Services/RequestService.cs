@@ -25,7 +25,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// RequestService Class.
@@ -73,12 +72,7 @@ namespace Fanex.NexHR.Services
         private readonly IEmailService _emailService;
         private readonly IShiftRepository _shiftRepository;
         private readonly IRequestRepository _requestRepository;
-        private readonly ICheckInOutRepository _checkInOutRepository;
-        private readonly IChangeShiftRepository _changeShiftRepository;
-        private readonly ILateInEarlyOutRepository _lateInEarlyOutRepository;
-        private readonly LeaveRequestRepository _leaveRequestRepository;
-        private readonly IKeepInViewRequestRepository _keepInViewRequestRepository;
-        private readonly IOvertimeRequestRepository _overtimeRepository;
+        private readonly BaseRequestRepository _baseRequestRepository;
         private string _baseUrl;
 
         public RequestService()
@@ -87,12 +81,7 @@ namespace Fanex.NexHR.Services
             this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
             this._shiftRepository = new ShiftRepository();
-            this._checkInOutRepository = new CheckInOutRepository();
-            this._changeShiftRepository = new ChangeShiftRepository();
-            this._lateInEarlyOutRepository = new LateInEarlyOutRepository();
-            this._leaveRequestRepository = new LeaveRequestRepository();
-            this._keepInViewRequestRepository = new KeepInViewRequestRepository();
-            this._overtimeRepository = new OvertimeRequestRepository();
+            this._baseRequestRepository = new BaseRequestRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -103,23 +92,13 @@ namespace Fanex.NexHR.Services
             IRequestRepository requestRepository,
             IShiftRepository shiftRepository,
             IShiftService shiftService,
-            ICheckInOutRepository checkInOutRepository,
-            IChangeShiftRepository changeShiftRepository,
-            ILateInEarlyOutRepository lateInEarlyOutRepository,
-            LeaveRequestRepository leaveRequestRepository,
-            IKeepInViewRequestRepository keepInViewRequestRepository,
-            IOvertimeRequestRepository overtimeRepository)
+            BaseRequestRepository baseRequestRepository)
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
             this._requestRepository = requestRepository;
             this._shiftRepository = shiftRepository;
-            this._checkInOutRepository = checkInOutRepository;
-            this._changeShiftRepository = changeShiftRepository;
-            this._lateInEarlyOutRepository = lateInEarlyOutRepository;
-            this._leaveRequestRepository = leaveRequestRepository;
-            this._keepInViewRequestRepository = keepInViewRequestRepository;
-            this._overtimeRepository = overtimeRepository;
+            this._baseRequestRepository = baseRequestRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -164,12 +143,8 @@ namespace Fanex.NexHR.Services
                 case (int)RequestTypes.EarlyOut:
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
-                case (int)RequestTypes.Overtime:
-                    message = GetMessageForOvertime(request);
-                    msg.Append(message);
-                    break;
                 case (int)RequestTypes.KeepInView:
-                    msg.AppendFormat(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    msg.AppendFormat(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
                     break;
                 default:
                     break;
@@ -313,64 +288,114 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Gets the working time requests.
         /// </summary>
-        /// <param name="request">The request.</param>
         /// <param name="requestViewType">Type of the request view.</param>
+        /// <param name="requestType">Request Type.</param>
+        /// <param name="fromDate">From Date.</param>
+        /// <param name="toDate">The To Date.</param>
+        /// <param name="groupIds">Group Ids.</param>
+        /// <param name="statusId">Status Id.</param>
         /// <param name="isDailyRequest">If set to <c>true</c> [is daily request].</param>
+        /// <param name="employeeId">The employee is searched.</param>
         /// <param name="loginId">The login identifier.</param>
         /// <param name="isLocal">Expat or Local.</param>
         /// <returns>List of request.</returns>
-        public IList<RequestEntity> GetWorkingTimeRequests(
-            RequestViewModel request, 
-            RequestViewType requestViewType, 
-            bool isDailyRequest, 
-            int? loginId, 
+        public IList<RequestEntity> GetRequests(
+            RequestViewType requestViewType,
+            int requestType,
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            int statusId,
+            bool isDailyRequest = false,
+            int? employeeId = null,
+            int? loginId = null,
             byte? isLocal = null)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-            var status = request.StatusId != 0 ? new byte?((byte)request.StatusId) : null;
-            var employeeId = request.EmployeeId > 0 ? new int?(request.EmployeeId) : null;
-            string role = string.Empty;
-            role = CheckRoleAccordingToRequestType(requestViewType, role);
-
-            if (request.FromDate > request.ToDate)
+            if (fromDate > toDate)
             {
-                return entityList;
+                return null;
             }
 
-            switch (request.RequestType)
+            IList<RequestEntity> entityList;
+            string statusIds;
+            if (statusId == -1)
             {
-                case (int)RequestFilter.All:
-                    entityList = this._requestRepository.GetAllRequest(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.Leave:
-                    entityList = this._leaveRequestRepository.GetRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.ChangeShift:
-                    entityList = _changeShiftRepository.GetChangeShiftRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.LateInEarlyOut:
-                    entityList =
-                        _lateInEarlyOutRepository.GetLateInEarlyOutRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.CheckInOut:
-                    entityList = _checkInOutRepository.GetCheckInOutRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.Overtime:
-                    entityList = _overtimeRepository.GetOvertimeRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                case (int)RequestFilter.KeepInView:
-                    entityList =
-                        _keepInViewRequestRepository.GetKeepInViewRequests(
-                        role, request.FromDate, request.ToDate, request.TeamIds, isDailyRequest, employeeId, status, loginId, isLocal);
-                    break;
-                default:
-                    break;
+                // status = -1 --> pending and verified (1,2)
+                statusIds = "1,2"; 
+            }
+            else if (statusId == 0)
+            {
+                statusIds = string.Empty;
+            }
+            else
+            {
+                statusIds = statusId.ToString();
+            }
+
+            if (employeeId.HasValue && employeeId.Value == -1)
+            {
+                employeeId = null;
+            }
+
+            string role = CheckRoleAccordingToRequestType(requestViewType);
+            entityList = _requestRepository.GetRequests(requestType, role, fromDate, toDate, groupIds, statusIds, isDailyRequest, employeeId, loginId, isLocal);
+
+            return entityList;
+        }
+
+        /// <summary>
+        /// Function to get number of request in date range.
+        /// </summary>
+        /// <param name="requestType">Request Type.</param>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">The To date.</param>
+        /// <returns>Numbers of request.</returns>
+        public decimal GetNumberOfRequest(int requestType, int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            decimal numberDays = 0;
+            string role = ((int)RolesEnum.Member).ToString();
+            var requests = _requestRepository.GetRequests(requestType, role, fromDate, toDate, string.Empty, string.Empty, true, employeeId, null, null);
+
+            var requestsValid = requests.Where(
+                t => (t.Status.Id != (byte)CurrentRequestStatus.NotVerified 
+                    && t.Status.Id != (byte)CurrentRequestStatus.Rejected
+                    && t.Status.Id != (byte)CurrentRequestStatus.Void));
+
+            if (requestsValid != null && requestsValid.Any())
+            {
+                if (requestType == (int)RequestFilter.Leave)
+                {
+                    foreach (RequestEntity request in requestsValid)
+                    {
+                        numberDays += request.TotalDays;
+                    }
+                }
+                else
+                {
+                    numberDays = requestsValid.Count();
+                }
+            }
+            
+            return numberDays;
+        }
+
+        /// <summary>
+        /// Function to get Change shift request history.
+        /// </summary>
+        /// <param name="requestId">Request Id.</param>
+        /// <param name="requestTypeId">Request type Id.</param>
+        /// <returns>RequestEntity List.</returns>
+        public IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId)
+        {
+            IList<RequestEntity> entityList = null;
+            try
+            {
+                entityList = this._baseRequestRepository.GetHistoryRequest(requestId, requestTypeId);
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
             return entityList;
@@ -533,7 +558,7 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="request">Request Entity.</param>
         /// <returns>Return detail of overtime request.</returns>
-        private static string GetMessageForOvertime(RequestEntity request)
+        private string GetMessageForOvertime(RequestEntity request)
         {
             var messageDetail = string.Empty;
             var overtime = new OvertimeType { Id = request.OvertimeType }.Name;
@@ -988,10 +1013,10 @@ namespace Fanex.NexHR.Services
         /// Method check Role.
         /// </summary>
         /// <param name="requestViewType">RequestViewType model.</param>
-        /// <param name="role">Initialize role.</param>
         /// <returns>Role after check.</returns>
-        private string CheckRoleAccordingToRequestType(RequestViewType requestViewType, string role)
+        private string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
         {
+            var role = string.Empty;
             if (requestViewType == RequestViewType.PersonalSpace)
             {
                 role = ((int)RolesEnum.Verifier).ToString() + "," + ((int)RolesEnum.Approver).ToString();
@@ -1000,7 +1025,7 @@ namespace Fanex.NexHR.Services
             {
                 role = ((int)RolesEnum.HR).ToString();
             }
-            else if (requestViewType == RequestViewType.CompanySpace)
+            else
             {
                 role = ((int)RolesEnum.Member).ToString();
             }

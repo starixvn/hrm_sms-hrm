@@ -11,14 +11,10 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -27,11 +23,6 @@ namespace Fanex.NexHR.Controllers.Request
     [Authorize]
     public class KeepInViewController : RequestController
     {
-        public KeepInViewController()
-            : base()
-        {
-        }
-
         /// <summary>
         /// ActionResult Create.
         /// </summary>
@@ -83,7 +74,7 @@ namespace Fanex.NexHR.Controllers.Request
             keepInViewRequestViewModel.VerifierList = verifiers;
             keepInViewRequestViewModel.ApproverList = approvers;
 
-            ViewBag.Requested = _KeepInViewRequestService.InsertKeepInViewRequest(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
+            ViewBag.Requested = _KeepInViewRequestService.Insert(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
             ViewBag.UnavailableDates = unavailableDates;
 
@@ -101,7 +92,7 @@ namespace Fanex.NexHR.Controllers.Request
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
 
-            var request = _KeepInViewRequestService.GetKeepInViewRequestById(id);
+            var request = _KeepInViewRequestService.GetRequestById(id);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -156,7 +147,7 @@ namespace Fanex.NexHR.Controllers.Request
             keepInViewRequestViewModel.VerifierList = verifiers;
             keepInViewRequestViewModel.ApproverList = approvers;
 
-            ViewBag.Updated = _KeepInViewRequestService.UpdateKeepInViewRequest(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
+            ViewBag.Updated = _KeepInViewRequestService.Update(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
             ViewBag.UnavailableDates = unavailableDates;
 
@@ -181,13 +172,17 @@ namespace Fanex.NexHR.Controllers.Request
             var fromDate = new DateTime(year, 1, 1);
             var toDate = new DateTime(year, 12, 31);
 
-            IList<RequestEntity> entityList = _KeepInViewRequestService.GetKeepInViewRequests(
-                ((short)RolesEnum.Member).ToString(),
-                fromDate,
-                toDate,
+            IList<RequestEntity> entityList = _RequestService.GetRequests(
+                RequestViewType.CompanySpace,
+                (int)RequestFilter.KeepInView,
+                new DateTime(year, 1, 1),
+                new DateTime(year, 12, 31),
                 string.Empty,
+                0,
                 true,
-                this.CurrentUser.Id);
+                this.CurrentUser.Id,
+                null,
+                null);
 
             return View(entityList);
         }

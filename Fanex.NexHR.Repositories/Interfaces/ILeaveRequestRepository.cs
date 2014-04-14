@@ -16,27 +16,25 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
     public interface ILeaveRequestRepository
     {
-        long InsertLeaveRequest(LeaveRequestModel model, out int errorCode, out string message);
+        long Insert(object model, out int errorCode, out string message);
 
-        bool UpdateLeaveRequest(LeaveRequestModel model, out int errorCode, out string message);
+        bool Update(object model, out int errorCode, out string message);
 
-        bool DeleteWorkingTimeRequest(long id);
-
-        IList<RequestEntity> GetLeaveRequests(
+        IList<RequestEntity> GetRequests(
+            int requestType,
             string role,
             DateTime fromDate,
             DateTime toDate,
             string groupIds,
-            bool isDailyRequest,
+            string status,
+            bool isDailyRequest = false,
             int? employeeId = null,
-            byte? status = null,
-            int? logInId = null);
+            int? logInId = null,
+            byte? isLocal = null);
+
+        RequestEntity GetRequestById(long id, int requestTypeId);
 
         List<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
-
-        RequestEntity GetLeaveRequestById(long id);
-
-        IList<RequestEntity> GetHistoricLeaveRequests(long requestId, int requestTypeId);
 
         EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay);
 

@@ -45,12 +45,6 @@ namespace Fanex.NexHR.Core.Enums
         /// KeepInView item.
         /// </summary>
         [StringValue("KeepInView")]
-        KeepInView = 5,
-
-        /// <summary>
-        /// Overtime item.
-        /// </summary>
-        [StringValue("Overtime")]
-        Overtime = 6
+        KeepInView = 5
     }
 }

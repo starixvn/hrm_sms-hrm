@@ -18,48 +18,22 @@ namespace Fanex.NexHR.Repositories.Interfaces
     /// </summary>
     public interface ILateInEarlyOutRepository
     {
-        long InsertLateInEarlyOutRequest(
-            int empId,
-            short requestType,
-            string remark,
-            DateTime createdDate,
-            int createdBy,
-            int? verifierId,
-            int? approverId,
-            out int errorCode,
-            out string message,
-            DateTime requestDate,
-            int? lateInMins = null,
-            int? earlyOutMins = null);
+        long Insert(object model, out int errorCode, out string message);
 
-        bool UpdateLateInEarlyOutRequest(
-            int requestId,
-            int empId,
-            int? requestType,
-            string remark,
-            DateTime requestDate,
-            int? verifierId,
-            int? approverId,
-            DateTime modifiedDate,
-            int modifiedBy,
-            out int errorCode,
-            out string message,
-            int? lateInMins = null,
-            int? earlyOutMins = null);
+        bool Update(object model, out int errorCode, out string message);
 
-        IList<RequestEntity> GetLateInEarlyOutRequests(
-           string role,
-           DateTime fromDate,
-           DateTime toDate,
-           string groupIds,
-            bool isDailyRequest,
-           int? employeeId = null,
-           byte? status = null,
-           int? longInId = null,
+        IList<RequestEntity> GetRequests(
+            int requestType,
+            string role,
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            string status,
+            bool isDailyRequest = false,
+            int? employeeId = null,
+            int? logInId = null,
             byte? isLocal = null);
 
-        RequestEntity GetLateInEarlyOutRequestById(long id);
-
-        IList<RequestEntity> GetHistoricLateInEarlyOutRequests(long requestId, int requestTypeId);
+        RequestEntity GetRequestById(long id, int requestTypeId);
     }
 }

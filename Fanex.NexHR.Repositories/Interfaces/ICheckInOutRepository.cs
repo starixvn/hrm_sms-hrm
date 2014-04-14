@@ -11,8 +11,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Fanex.NexHR.Models.Request;
 
     /// <summary>
@@ -20,46 +18,22 @@ namespace Fanex.NexHR.Repositories.Interfaces
     /// </summary>
     public interface ICheckInOutRepository
     {
-        long InsertCheckInOutRequest(
-           int empId,
-           int requestType,
-           string remark,
-           DateTime requestDate,
-           DateTime createdDate,
-           int createdBy,
-           int? verifierId,
-           int? approverId,
-           string refNo,
-            DateTime attendantDate,
-           out int errorCode,
-           out string message);
+        long Insert(object model, out int errorCode, out string message);
 
-        bool UpdateCheckInOutRequest(
-            int requestId,
-            int empId,
-            int? requestType,
-            string remark,
-            DateTime requestDate,
-            int? verifierId,
-            int? approverId,
-            DateTime modifiedDate,
-            int modifiedBy,
-            string refNo,
-            DateTime attendantDate);
+        bool Update(object model, out int errorCode, out string message);
 
-        RequestEntity GetCheckInOutRequestById(long id);
-
-        IList<RequestEntity> GetCheckInOutRequests(
+        IList<RequestEntity> GetRequests(
+            int requestType,
             string role,
             DateTime fromDate,
             DateTime toDate,
             string groupIds,
-            bool isDailyRequest,
+            string status,
+            bool isDailyRequest = false,
             int? employeeId = null,
-            byte? status = null,
             int? logInId = null,
             byte? isLocal = null);
 
-        IList<RequestEntity> GetCheckInOutRequestHistory(long requestId, int requestTypeId);
+        RequestEntity GetRequestById(long id, int requestTypeId);
     }
 }

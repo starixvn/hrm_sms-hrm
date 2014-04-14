@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Models.Request;
@@ -20,24 +19,12 @@ namespace Fanex.NexHR.Services.Interface
     /// </summary>
     public interface IChangeShiftRequestService
     {
-        bool InsertChangeShiftRequest(ModelStateDictionary modelState, ChangeShiftViewModel model);
+        bool Insert(ModelStateDictionary modelState, ChangeShiftViewModel model);
 
-        bool UpdateChangeShiftRequest(ModelStateDictionary modelState, ChangeShiftViewModel model);
+        bool Update(ModelStateDictionary modelState, ChangeShiftViewModel model);
 
-        IList<RequestEntity> GetChangeShiftRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null);
+        RequestEntity GetRequestById(long id);
 
-        RequestEntity GetChangeShiftRequestById(long id);
-
-        List<ShiftDetails> GetShiftDetailsById(long id);
-
-        IList<RequestEntity> GetHistoricChangeShiftRequests(long requestId, int requestTypeId);
+        List<ShiftDetails> GetChangeShiftDetailsById(long id);
     }
 }

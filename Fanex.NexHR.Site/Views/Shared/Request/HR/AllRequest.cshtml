@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+﻿@using Fanex.NexHR.Services
+@model IList<Fanex.NexHR.Models.Request.RequestEntity>
 <table class="data persist-area">
     <thead>
         <tr class="persist-header">
@@ -109,7 +110,7 @@
                         }
                     </td>
                     <td class="left">
-                        @Html.Raw(Fanex.NexHR.Services.RequestService.ToRequestMessage(request))
+                        @Html.Raw(RequestService.ToRequestMessage(request))
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
                     { 

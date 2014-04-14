@@ -733,7 +733,7 @@ span.req.overtime
 
 span.req.keepinview
 {
-	background-color: #FFAEC9;
+	background-color: #DB61DB;
 }
 
 span.req.mytimesheet-pending
@@ -942,3 +942,7 @@ div.confirm div.inputRemark textarea
    width: 64px;
    height: 64px; 
 }
+.ui-state-error a
+{
+    padding-left: 10px;
+    }

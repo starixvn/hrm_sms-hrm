@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Models.Request
     /// </summary>
     public class RequestType : EntityBase<short>
     {
-        public new string Name         
+        public new string Name
         {
             get 
             {
@@ -44,8 +44,6 @@ namespace Fanex.NexHR.Models.Request
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
                     case (int)RequestTypes.KeepInView:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
-                    case (int)RequestTypes.Overtime:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.Overtime;
                     default:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;
                 }
@@ -70,8 +68,6 @@ namespace Fanex.NexHR.Models.Request
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
                     case (int)RequestTypes.KeepInView:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
-                    case (int)RequestTypes.Overtime:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.Overtime;
                     default:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;
                 }

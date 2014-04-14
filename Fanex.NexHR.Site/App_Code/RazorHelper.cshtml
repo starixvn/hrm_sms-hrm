@@ -40,12 +40,17 @@
         </td>
     </tr>
 }
-@helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, string controlName = "status")
+@helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, bool isShowPendingAndVerified = true, string controlName = "status")
     {
     <select name="@controlName" id="@controlName">
         @if (isShowAll)
         { 
             <option selected="@(status == 0)" value="0">All</option>
+        }
+        
+        @if (isShowPendingAndVerified)
+        { 
+            <option selected="@(status == -1)" value="-1">Pending & Verified</option>
         }
         <option selected="@(status == (byte)CurrentRequestStatus.Pending)" value="@Convert.ToByte(CurrentRequestStatus.Pending)">@Labels.Pending</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Verified)" value="@Convert.ToByte(CurrentRequestStatus.Verified)">@Labels.Verified</option>
