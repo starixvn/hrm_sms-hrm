@@ -70,6 +70,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
 
+        int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
+
         bool AdjustAnnualLeaves(
             string empIds,
             string description,
@@ -117,7 +119,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy);
 
-        int ChangePassword(int empId, string password);
+        int ChangePassword(int empId, string password, bool? passwordReset);
 
         bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
 

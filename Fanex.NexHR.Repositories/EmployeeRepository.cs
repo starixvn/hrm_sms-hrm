@@ -777,15 +777,16 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="empId">Employee's id.</param>
         /// <param name="password">Current password.</param>
+        /// <param name="passwordReset">Check password is reset or not.</param>
         /// <returns>An number to check status.</returns>
-        public int ChangePassword(int empId, string password)
+        public int ChangePassword(int empId, string password, bool? passwordReset)
         {
             int effectedRow = -1;
             using (var db = new ObjectDb("Employee_ChangePassword"))
             {
                 db.AddInParameter("@empId", DbType.Int32, empId);
                 db.AddInParameter("@password", DbType.String, password);
-
+                db.AddInParameter("@PasswordReset", DbType.Boolean, passwordReset);
                 try
                 {
                     db.ExecuteNonQuery();
@@ -895,6 +896,31 @@ namespace Fanex.NexHR.Repositories
             {
                 var code = db.Query<string>().FirstOrDefault();
                 return code;
+            }
+        }
+
+        /// <summary>
+        /// Update Status for Password reset.
+        /// </summary>
+        /// <param name="empId">Employee id.</param>
+        /// <param name="passwordReset">Password reset status.</param>
+        /// <param name="errorCode">Error code.</param>
+        /// <param name="message">Error message.</param>
+        /// <returns>Error code to check.</returns>
+        public int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message)
+        {
+            using (ObjectDb db = new ObjectDb("Employee_UpdatePasswordRestStatusByEmpId"))
+            {
+                db.AddInParameter("@empId", DbType.Int32, empId);
+                db.AddInParameter("@PasswordReset", DbType.Boolean, passwordReset);
+                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
+                db.AddOutParameter("@ErrMsg", DbType.String, 200);
+
+                db.ExecuteScalar();
+                errorCode = (int)db.GetParameterValue("ErrCode");
+                message = db.GetParameterValue("ErrMsg") as string;
+
+                return errorCode;
             }
         }
     }

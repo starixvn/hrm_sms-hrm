@@ -181,6 +181,8 @@ namespace Fanex.NexHR.Models
 
         public bool IsExpatUseHoliday { get; set; }
 
+        public bool PasswordReset { get; set; } 
+
         #region Contract
         public string BankAccount { get; set; }
 

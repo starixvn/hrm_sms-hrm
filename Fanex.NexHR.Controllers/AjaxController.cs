@@ -302,5 +302,10 @@ namespace Fanex.NexHR.Controllers
         {
             return _reportService.EditExternalGroup(extId, groupName);
         }
+
+        public int UpdatePasswordResetStatus(bool status)
+        {
+            return _employeeService.UpdatePasswordResetStatus(this.CurrentUser.Id, status);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿@model MySpaceViewModel
-
 @section css{
     @Url.CombresLink("myspacecss")
 }
@@ -9,25 +8,25 @@
 @{
     ViewBag.Title = "Dashboard";
 }
-
 @section Breadcrumb {
     <a class="step" href="#">Personal</a> <span class="step">@ViewBag.Title</span>
 }
-
-
 <h2>@Labels.MySpace</h2>
-<div  class="grid_5">
+@Html.Hidden("ChangePassword", (bool)ViewBag.ResetPassword)
+<div class="grid_5">
     @Labels.AnualLeaveBalance:<strong> @Model.AnnualLeaveBalance day(s)</strong>
 </div>
-<div class="clear"></div>
-<div class="space"></div>
-
-<div  class="grid_5">
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="grid_5">
     Keep In View Balance:<strong> @Model.KeepInViewBalance day(s)</strong>
 </div>
-<div class="clear"></div>
-<div class="space"></div>
-
+<div class="clear">
+</div>
+<div class="space">
+</div>
 @*<div  class="grid_5">
     @Labels.TotalWorkingDays @DateTime.Now.ToString("MMM yyyy"):<strong> @Model.TotalWorkDays days</strong>
 </div>
@@ -39,8 +38,7 @@
 </div>
 <div class="clear"></div>
 <div class="space"></div>
-*@
-@*<div class="grid_5">
+*@ @*<div class="grid_5">
     @Labels.CountForgotCheckInOut : 
     @if (Model.ForgotInOut > 0)
     {
@@ -65,29 +63,28 @@
         <strong>@(Model.LateInEarlyOut)</strong>
     }
 </div>*@
-
 <ul id="forgotCheckInOutMenu" class="hide">
-@foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
-{
-    if (item.IsMissingCheckIn || item.IsMissingCheckOut)
+    @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
     {
-         <li class="forgotCheckInOutMenuItem"><a command="/checkinout/create?suggestedDate=@item.AttendanceDate&isMissingCheckIn=@item.IsMissingCheckIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
+        if (item.IsMissingCheckIn || item.IsMissingCheckOut)
+        {
+        <li class="forgotCheckInOutMenuItem"><a command="/checkinout/create?suggestedDate=@item.AttendanceDate&isMissingCheckIn=@item.IsMissingCheckIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
+        }
     }
-}
 </ul>
-
 <ul id="lateInEarlyOutMenu" class="hide">
-@foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
-{
-    if (item.IsLateIn || item.IsEarlyOut)
+    @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
     {
-         <li class="lateInEarlyOutMenuItem"><a command="/lateinearlyout/create?suggestedDate=@item.AttendanceDate&isLateIn=@item.IsLateIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
+        if (item.IsLateIn || item.IsEarlyOut)
+        {
+        <li class="lateInEarlyOutMenuItem"><a command="/lateinearlyout/create?suggestedDate=@item.AttendanceDate&isLateIn=@item.IsLateIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
+        }
     }
-}
 </ul>
-
-<div class="clear"></div>
-<div class="space"></div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
 <table class="data" id="myspace">
     <thead>
         <tr>
@@ -112,7 +109,6 @@
             <td>
                 @Model.TotalCheckInOutRequest
             </td>
-
             <td>
                 @if (Model.TotalPendingCheckInOutRequest > 0)
                 { 
@@ -144,7 +140,6 @@
                     <span>0</span>
                 }
             </td>
-
             <td>
                 @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
             </td>
@@ -166,7 +161,6 @@
                     <span>0</span>
                 }
             </td>
-
             <td>
                 @Html.ActionLink(Labels.Request, "create", "changeshift")
             </td>
@@ -188,12 +182,10 @@
                     <span>0</span>
                 }
             </td>
-
-            <td>                    
+            <td>
                 @Html.ActionLink(Labels.Request, "create", "leave")
             </td>
         </tr>
-
         <tr>
             <td class="firstColumn">
                 @Labels.KeepInView
@@ -211,15 +203,25 @@
                     <span>0</span>
                 }
             </td>
-
-            <td>                    
+            <td>
                 @Html.ActionLink(Labels.Request, "create", "KeepInView")
             </td>
         </tr>
-
     </tbody>
 </table>
-<div class="space"></div>
+<div class="space">
+</div>
+<div id="changePasswordDialog" title="Change Password">
+    <fieldset>
+        <h5>
+            The password for your account has been recently reset. For security reasons please
+            change it now.
+        </h5>
+        <label class="checkbox">
+            <input type="checkbox" name="chk-change" id="chk-change" />
+            Don't show me this again
+        </label>
+    </fieldset>
+</div>
 @*Management dashboard*@
 @Html.Action("ManagementDashboard")
-

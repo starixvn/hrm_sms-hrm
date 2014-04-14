@@ -126,5 +126,7 @@ namespace Fanex.NexHR.Services.Interface
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
 
         string GetNewEmployeeCode();
+
+        int UpdatePasswordResetStatus(int empId, bool passwordReset);
     }
 }

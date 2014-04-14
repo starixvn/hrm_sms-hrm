@@ -382,9 +382,13 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult MySpace()
         {
-            var model = _employeeService.GetMySpace(this.CurrentUser.Id);
+            var employeeId = this.CurrentUser.Id;
+            var model = _employeeService.GetMySpace(employeeId);
             var dateOfEmployeeForgotAndLateEarlyIO = _employeeService.GetDateOfEmployeeForgotAndLateEarlyIO(this.CurrentUser.Id);
             model.DateOfEmployeeForgotAndLateEarlyIO = dateOfEmployeeForgotAndLateEarlyIO;
+            var employee = this._employeeService.GetEmployeeById(employeeId);
+            ViewBag.ResetPassword = employee.PasswordReset;
+
             return View(model);
         }
 

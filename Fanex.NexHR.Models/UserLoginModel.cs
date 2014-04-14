@@ -46,6 +46,8 @@ namespace Fanex.NexHR.Models
 
         public bool CanOT { get; set; }
 
+        public bool PasswordReset { get; set; }
+
         public IList<short> RoleList
         {
             get
