@@ -3,7 +3,8 @@
 
 @{
     var request = (RequestEntity)Model;
-    if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
+    if (request.ApprovedBy.Id != Convert.ToInt32(ViewBag.CurrentUserId) 
+        && request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
     {
         switch (request.Status.Id)
         {

@@ -14,7 +14,7 @@
     <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="GetEmployeeByDomainUserName" SpName="Employee_GetEmployeeByDomain" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="Employee_GetNewEmployeecode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="1"></Setting>
-    <Setting Key="Employee_UpdatePasswordRestStatusByEmpId" SpName="Employee_UpdatePasswordRestStatusByEmpId" DbName="nexhrx" Plain="1"></Setting>
+    <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="nexhrx" Plain="1"></Setting>
 
     <Setting Key="Employee_Information_Insert" SpName="Employee_Information_Insert" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="Employee_Delete" SpName="Employee_Delete" DbName="nexhrx" Plain="1"></Setting>

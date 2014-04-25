@@ -66,7 +66,6 @@ namespace Fanex.NexHR.Controllers.Request
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
 
-            var currentUserId = this.CurrentUser.Id;
             var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;

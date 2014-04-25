@@ -575,11 +575,7 @@ namespace Fanex.NexHR.Core
                 var valueList = values is string[]
                 ? values as string[]
                 : values.ToString().Split(new[] { ',' });
-                IEnumerable source = values as IEnumerable;
-                HashSet<string> set = new HashSet<string>(
-                   from value in source.Cast<object>()
-                   select Convert.ToString(value, CultureInfo.CurrentCulture),
-                   StringComparer.OrdinalIgnoreCase);
+
                 List<SelectListItem> list = new List<SelectListItem>();
                 foreach (SelectListItem item in selectList)
                 {

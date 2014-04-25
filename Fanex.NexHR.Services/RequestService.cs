@@ -88,10 +88,8 @@ namespace Fanex.NexHR.Services
         public RequestService(
             IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            ILeaveTypeRepository leaveTypeRepository,
             IRequestRepository requestRepository,
             IShiftRepository shiftRepository,
-            IShiftService shiftService,
             BaseRequestRepository baseRequestRepository)
         {
             this._employeeRepository = employeeRepository;
@@ -241,7 +239,7 @@ namespace Fanex.NexHR.Services
         {
             string message;
             errorMessage = string.Empty;
-            int code = this._requestRepository.ProcessOvertime(command, requestId, roleId, processBy, DateTime.Now, out message);
+            this._requestRepository.ProcessOvertime(command, requestId, roleId, processBy, DateTime.Now, out message);
             return true;
         }
 
@@ -257,9 +255,8 @@ namespace Fanex.NexHR.Services
         public bool ProcessOvertime(string command, string requestIds, int processBy, out string errorMessage)
         {
             string message;
-            int code = this._requestRepository.ProcessOvertime(command, requestIds, processBy, DateTime.Now, out message);
-
             errorMessage = string.Empty;
+            this._requestRepository.ProcessOvertime(command, requestIds, processBy, DateTime.Now, out message);
             return true;
         }
 
@@ -548,34 +545,6 @@ namespace Fanex.NexHR.Services
             {
                 messageDetail = string.Format(
                     _MsgLeaveDuringWorking, leaveDate, HourFormat(request.FromDate), HourFormat(request.ToDate), (request.ToDate - request.FromDate).TotalMinutes);
-            }
-
-            return messageDetail;
-        }
-
-        /// <summary>
-        /// Function to get message for overtime request.
-        /// </summary>
-        /// <param name="request">Request Entity.</param>
-        /// <returns>Return detail of overtime request.</returns>
-        private string GetMessageForOvertime(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-            var overtime = new OvertimeType { Id = request.OvertimeType }.Name;
-            if (request.IsOvertimeHours)
-            {
-                messageDetail = string.Format(
-                    _MsgOvertimeHours,
-                    request.FromDate.ToDateMonthYearFormatedDate(),
-                    HourFormat(request.FromDate),
-                    HourFormat(request.ToDate),
-                    request.TotalDays.ToString("0.#"),
-                    overtime);
-            }
-            else
-            {
-                var shift = request.FromShift != null ? request.FromShift.Name : string.Empty;
-                messageDetail = string.Format(_MsgOvertimeShift, request.FromDate.ToDateMonthYearFormatedDate(), shift, overtime);
             }
 
             return messageDetail;

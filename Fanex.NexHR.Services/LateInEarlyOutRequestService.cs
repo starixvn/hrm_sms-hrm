@@ -56,8 +56,6 @@ namespace Fanex.NexHR.Services
         {
             int errorCode;
             string message;
-            int? lateInMins = model.Type == (short)RequestTypes.LateIn ? (int?)model.Minute : null;
-            int? earlyOutMins = model.Type == (short)RequestTypes.EarlyOut ? (int?)model.Minute : null;
             if (!string.IsNullOrEmpty(model.FromTime) && !string.IsNullOrEmpty(model.ToTime))
             {
                 model.FromDate = Utilities.AddTimeToDate(model.FromDate, model.FromTime);
@@ -88,8 +86,6 @@ namespace Fanex.NexHR.Services
         {
             if (modelState.IsValid)
             {
-                int? lateInMins = model.Type == (short)RequestTypes.LateIn ? (int?)model.Minute : null;
-                int? earlyOutMins = model.Type == (short)RequestTypes.EarlyOut ? (int?)model.Minute : null;
                 if (!string.IsNullOrEmpty(model.FromTime) && !string.IsNullOrEmpty(model.ToTime))
                 {
                     model.FromDate = Utilities.AddTimeToDate(model.FromDate, model.FromTime);
@@ -169,7 +165,6 @@ namespace Fanex.NexHR.Services
             string mailCC,
             string sendToNickName)
         {
-            var forDate = GetStringDateForLateInEarlyOutRequest(model.FromDate, model.ToDate);
             var subject = (isUpdate ? Messages.UpdatedLateInEarlyOutEmailSubject : Messages.LateInEarlyOutEmailSubject) + " " + model.Employee
                 + " on " + model.Date.ToDateMonthYearFormatedDate();
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
@@ -191,7 +186,7 @@ namespace Fanex.NexHR.Services
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
-                string.Empty,
+                mailCC,
                 subject,
                 body);
         }

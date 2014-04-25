@@ -9,13 +9,7 @@
 
 namespace Fanex.NexHR.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Security;
-    using Fanex.Caching;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Error Controller.
@@ -23,7 +17,7 @@ namespace Fanex.NexHR.Controllers
     [Authorize]
     public class ErrorController : Controller
     {
-        public ActionResult Index(int errorCode)
+        public ActionResult Index()
         {
             return View();
         }

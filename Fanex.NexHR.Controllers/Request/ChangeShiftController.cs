@@ -11,12 +11,10 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -185,13 +183,13 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public JsonResult Update(string shiftJson, string shiftDetailJson, int requestId)
         {
-            var shift = JsonConverter.JsonExtensionMethod.FromJson<ChangeShiftViewModel>(shiftJson);
-            shift.ShiftDetails = JsonConverter.JsonExtensionMethod.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
-            shift.By = this.CurrentUser.Id;
-            shift.Id = requestId;
+            var changeShift = JsonConverter.JsonExtensionMethod.FromJson<ChangeShiftViewModel>(shiftJson);
+            changeShift.ShiftDetails = JsonConverter.JsonExtensionMethod.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
+            changeShift.By = this.CurrentUser.Id;
+            changeShift.Id = requestId;
 
-            var update = _ChangeShiftRequestService.Update(ModelState, shift);
-            return Json(new { success = true });
+            var result = _ChangeShiftRequestService.Update(ModelState, changeShift);
+            return Json(new { success = result });
         }
 
         /// <summary>

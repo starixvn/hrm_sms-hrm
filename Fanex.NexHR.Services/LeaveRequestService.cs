@@ -96,7 +96,7 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        public List<LeaveDetailModel> GetLeaveRequestDetailsById(long id)
+        public IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id)
         {
             if (id > 0)
             {
@@ -293,8 +293,6 @@ namespace Fanex.NexHR.Services
         {
             // send email(s)
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-
-            string forDate = GetStringDateForLeaveRequest(model.FromDate, model.ToDate, model.TotalDays);
             string subject = Messages.ReeditSubject + " " + model.DisplayName;
 
             if (model.TotalDays > 1)

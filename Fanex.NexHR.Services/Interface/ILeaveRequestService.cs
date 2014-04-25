@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Services.Interface
 
         bool DeleteWorkingTimeRequest(long id);
 
-        List<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
+        IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
 
         LeaveRequestViewModel GetRequestById(long id);
 

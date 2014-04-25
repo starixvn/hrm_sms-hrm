@@ -10,12 +10,13 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     public interface IEmployeeRepository
     {
+        string NewEmployeeCode { get; }
+
         IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType);
 
         IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role);
@@ -66,7 +67,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
 
-        IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId = null);
+        IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId);
 
         IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
 
@@ -126,7 +127,5 @@ namespace Fanex.NexHR.Repositories.Interfaces
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy, out int errorCode, out string message);
 
         IList<SupervisorNameModel> GetEmployeeCanClaimOvertime();
-
-        string GetNewEmployeeCode();
     }
 }

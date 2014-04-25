@@ -14,8 +14,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Fanex.Caching;
-    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -76,7 +75,6 @@ namespace Fanex.NexHR.Controllers
                 if (sectionNode.Roles.Count == 0
                     || this.CurrentUser.IsInRoles(sectionNode.Roles.Cast<string>().ToList<string>()))
                 {
-                    var s = sectionNode.Roles.Cast<string>().ToList<string>();
                     var sectionItem = new NavigationViewModel(sectionNode);
                     navigationItemList.Add(sectionItem);
 
@@ -92,7 +90,7 @@ namespace Fanex.NexHR.Controllers
                         }
                     }
 
-                    CheckRoleForDisplayNavigationItem(sectionNode, user, userRole, sectionItem);
+                    CheckRoleForDisplayNavigationItem(sectionNode, user, sectionItem);
                 }
             }
 
@@ -108,8 +106,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="sectionItem">NavigationViewModel entity.</param>
         private static void CheckRoleForDisplayNavigationItem(
             SiteMapNode sectionNode,
-            Models.UserLoginModel user,
-            IList<short> userRole,
+            UserLoginModel user,
             NavigationViewModel sectionItem)
         {
             string personal = "Personal";

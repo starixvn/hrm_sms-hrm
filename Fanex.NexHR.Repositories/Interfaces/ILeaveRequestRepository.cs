@@ -34,7 +34,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         RequestEntity GetRequestById(long id, int requestTypeId);
 
-        List<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
+        IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
 
         EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay);
 

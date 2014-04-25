@@ -67,10 +67,6 @@ namespace Fanex.NexHR.Models
 
                 return result;
             }
-
-            set
-            {
-            }
         }
 
         /// <summary>

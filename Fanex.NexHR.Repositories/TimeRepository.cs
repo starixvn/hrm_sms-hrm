@@ -25,14 +25,7 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb("TimeRecord_ImportData"))
             {
-                try
-                {
-                    return db.ExecuteNonQuery() != 0;
-                }
-                catch
-                {
-                    return false;
-                }
+                return db.ExecuteNonQuery() != 0;
             }
         }
     }

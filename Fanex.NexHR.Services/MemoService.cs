@@ -27,7 +27,7 @@ namespace Fanex.NexHR.Repositories
         private readonly IMemoRepository _memoRepository;
         private readonly IEmailService _emailService;
 
-        public MemoService(IMemoRepository memoRepository = null, IEmployeeRepository employeeRepository = null, IEmailService emailService = null)
+        public MemoService(IMemoRepository memoRepository = null, IEmailService emailService = null)
         {
             this._memoRepository = memoRepository ?? new MemoRepository();
             this._emailService = emailService ?? new EmailService();

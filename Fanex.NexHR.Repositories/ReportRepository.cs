@@ -334,7 +334,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                var result = db.ExecuteScalar();
+                db.ExecuteScalar();
                 message = db.GetParameterValue("ErrMsg") as string;
                 errorCode = (int)db.GetParameterValue("ErrCode");
 
@@ -349,7 +349,6 @@ namespace Fanex.NexHR.Repositories
 
         public ExtensionNoModel GetEmployeeExtensionNoById(bool isInternal, int empExtID)
         {
-            IList<ExtensionNoModel> entityList = new List<ExtensionNoModel>();
             using (var db = new ObjectDb("ExtensionNO_GetEmployeeInfo"))
             {
                 var entity = db.QueryEntity<ExtensionNoModel>(new { isInternal = isInternal, EmpExtID = empExtID });
@@ -381,7 +380,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                var result = db.ExecuteScalar();
+                db.ExecuteScalar();
                 message = db.GetParameterValue("ErrMsg") as string;
                 errorCode = (int)db.GetParameterValue("ErrCode");
 
@@ -438,7 +437,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                var result = db.ExecuteScalar();
+                db.ExecuteScalar();
                 message = db.GetParameterValue("ErrMsg") as string;
                 errorCode = (int)db.GetParameterValue("ErrCode");
 
@@ -469,7 +468,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
-                var result = db.ExecuteScalar();
+                db.ExecuteScalar();
                 message = db.GetParameterValue("ErrMsg") as string;
                 errorCode = (int)db.GetParameterValue("ErrCode");
 

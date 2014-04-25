@@ -43,13 +43,6 @@ namespace Fanex.NexHR.Controllers
 
                 if (!Request.IsAjaxRequest())
                 {
-                    string url = string.Empty;
-                    var uri = Request.UrlReferrer ?? Request.Url;
-                    if (uri != null && uri.Host == Request.Url.Host)
-                    {
-                        url = string.Format("/?url={0}", Url.Encode(uri.ToString()));
-                    }
-
                     filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
                 }
                 else

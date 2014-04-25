@@ -236,7 +236,7 @@ namespace Fanex.NexHR.Repositories
                 HrDate = reader.ToDateTime("HrDate"),
                 Requester = new Employee
                 {
-                    Id = ColumnExists(reader, "RequesterId") ? reader.To<int>("RequesterId") : 0,
+                    Id = this.ColumnExists(reader, "RequesterId") ? reader.To<int>("RequesterId") : 0,
                     NickName = reader.To<string>("Requester"),
                     FullName = reader.To<string>("FullNameRequester"),
                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
@@ -332,7 +332,7 @@ namespace Fanex.NexHR.Repositories
                 TotalMins = reader.ToInt("Time"),
                 FromDate = reader.ToDateTime("FromDate"),
                 ToDate = reader.ToDateTime("ToDate"),
-                TotalDaysRequestInMonth = ColumnExists(reader, "TotalDaysRequest") ? reader.ToDecimal("TotalDaysRequest") : 0,
+                TotalDaysRequestInMonth = this.ColumnExists(reader, "TotalDaysRequest") ? reader.ToDecimal("TotalDaysRequest") : 0,
                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
                 HrDate = reader.ToDateTime("HrDate"),
@@ -386,6 +386,7 @@ namespace Fanex.NexHR.Repositories
                 Id = reader.ToInt("RequestId"),
                 Type = new RequestType { Id = reader.ToShort("RequestType") },
                 FromShift = new Shift { Name = reader.ToString("Shift") },
+                FromDate = reader.ToDateTime("FromDate"),
                 RequestedDate = reader.ToDateTime("RequestTime"),
                 CreatedDate = reader.ToDateTime("CreatedDate"),
                 Status = new RequestStatus { Id = reader.ToByte("Status") },
@@ -421,7 +422,7 @@ namespace Fanex.NexHR.Repositories
                     NickName = reader.To<string>("HrBy"),
                     FullName = reader.To<string>("FullNameHrBy")
                 },
-                TotalDaysRequestInMonth = ColumnExists(reader, "TotalDaysRequest") ? reader.ToDecimal("TotalDaysRequest") : 0,
+                TotalDaysRequestInMonth = this.ColumnExists(reader, "TotalDaysRequest") ? reader.ToDecimal("TotalDaysRequest") : 0,
                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
                 HrDate = reader.ToDateTime("HrDate")
@@ -523,7 +524,7 @@ namespace Fanex.NexHR.Repositories
                 HrDate = reader.ToDateTime("HrDate"),
                 Requester = new Employee
                 {
-                    Id = ColumnExists(reader, "RequesterId") ? reader.To<int>("RequesterId") : 0,
+                    Id = this.ColumnExists(reader, "RequesterId") ? reader.To<int>("RequesterId") : 0,
                     NickName = reader.To<string>("Requester"),
                     FullName = reader.To<string>("FullNameRequester"),
                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }

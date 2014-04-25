@@ -17,6 +17,8 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IEmployeeService
     {
+        string NewEmployeeCode { get; }
+
         IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType);
 
         IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role);
@@ -124,8 +126,6 @@ namespace Fanex.NexHR.Services.Interface
         bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
 
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
-
-        string GetNewEmployeeCode();
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset);
     }

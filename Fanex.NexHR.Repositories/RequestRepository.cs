@@ -214,7 +214,7 @@ namespace Fanex.NexHR.Repositories
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
                                 Type = new RequestType { Id = reader.ToShort("RequestType") },
                                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
-                                RequestedDate = reader.ToDateTime("FromDate"),
+                                RequestedDate = reader.ToDateTime("RequestDate"),
                                 Requester = new Employee
                                 {
                                     Id = reader.To<int>("RequesterID"),

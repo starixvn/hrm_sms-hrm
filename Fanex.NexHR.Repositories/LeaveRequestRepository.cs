@@ -104,7 +104,7 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public List<LeaveDetailModel> GetLeaveRequestDetailsById(long requestId)
+        public IList<LeaveDetailModel> GetLeaveRequestDetailsById(long requestId)
         {
             using (ObjectDb db = new ObjectDb("WorkingTimeRequest_GetLeaveRequestDetailByRequestID"))
             {

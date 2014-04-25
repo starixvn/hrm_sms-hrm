@@ -252,10 +252,6 @@ namespace Fanex.NexHR.Models
 
                 return result;
             }
-
-            set
-            {
-            }
         }
 
         public string[] RoleArray
@@ -315,7 +311,6 @@ namespace Fanex.NexHR.Models
                 }
                 else
                 {
-                    var lastItem = RoleList.Last();
                     foreach (var item in RoleList)
                     {
                         switch (item)
@@ -393,7 +388,6 @@ namespace Fanex.NexHR.Models
             }
             else
             {
-                var lastItem = RoleList.Last();
                 foreach (var item in RoleList)
                 {
                     switch (item)

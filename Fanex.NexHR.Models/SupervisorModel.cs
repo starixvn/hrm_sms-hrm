@@ -22,10 +22,6 @@ namespace Fanex.NexHR.Models
             {
                 return Leaves == 1 ? true : false;
             }
-
-            set
-            {
-            }
         }
 
         public bool HasChangeShiftRequest
@@ -33,10 +29,6 @@ namespace Fanex.NexHR.Models
             get
             {
                 return ChangeShifts == 1 ? true : false;
-            }
-
-            set 
-            {
             }
         }
 
@@ -46,10 +38,6 @@ namespace Fanex.NexHR.Models
             {
                 return LateInEarlyOuts == 1 ? true : false;
             }
-
-            set 
-            { 
-            }
         }
 
         public bool HasCheckInOutRequest
@@ -57,10 +45,6 @@ namespace Fanex.NexHR.Models
             get
             {
                 return CheckInOuts == 1 ? true : false;
-            }
-
-            set 
-            {
             }
         }
 
@@ -70,10 +54,6 @@ namespace Fanex.NexHR.Models
             {
                 return Overtimes == 1 ? true : false;
             }
-
-            set 
-            { 
-            }
         }
 
         public bool HasKeepInViewRequest
@@ -82,10 +62,6 @@ namespace Fanex.NexHR.Models
             {
                 return KeepInViews == 1 ? true : false;
             }
-
-            set 
-            { 
-            }
         }
 
         public bool HasArrangeShiftRequest
@@ -93,10 +69,6 @@ namespace Fanex.NexHR.Models
             get
             {
                 return ArrangeShifts == 1 ? true : false;
-            }
-
-            set
-            {
             }
         }
 

@@ -25,6 +25,19 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
+        public string NewEmployeeCode 
+        {
+            get 
+            {
+                var code = string.Empty;
+                using (ObjectDb db = new ObjectDb("Employee_GetNewEmployeecode"))
+                {
+                    code = db.QueryEntity<string>();
+                }
+
+                return code;
+            }
+        }
         /// <summary>
         /// Method get Employee.
         /// </summary>
@@ -541,7 +554,7 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId = null)
+        public IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId)
         {
             int excludedManager = 0;
             using (ObjectDb db = new ObjectDb("Employee_GetMembesByManager"))
@@ -781,23 +794,14 @@ namespace Fanex.NexHR.Repositories
         /// <returns>An number to check status.</returns>
         public int ChangePassword(int empId, string password, bool? passwordReset)
         {
-            int effectedRow = -1;
             using (var db = new ObjectDb("Employee_ChangePassword"))
             {
                 db.AddInParameter("@empId", DbType.Int32, empId);
                 db.AddInParameter("@password", DbType.String, password);
                 db.AddInParameter("@PasswordReset", DbType.Boolean, passwordReset);
-                try
-                {
-                    db.ExecuteNonQuery();
-                    effectedRow = 0;
-                }
-                catch
-                {
-                }
+                var result = db.ExecuteNonQuery();
+                return result;
             }
-
-            return effectedRow;
         }
 
         public IList<Country> GetAllCountry()
@@ -890,15 +894,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public string GetNewEmployeeCode()
-        {
-            using (ObjectDb db = new ObjectDb("Employee_GetNewEmployeecode"))
-            {
-                var code = db.Query<string>().FirstOrDefault();
-                return code;
-            }
-        }
-
         /// <summary>
         /// Update Status for Password reset.
         /// </summary>
@@ -909,7 +904,7 @@ namespace Fanex.NexHR.Repositories
         /// <returns>Error code to check.</returns>
         public int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message)
         {
-            using (ObjectDb db = new ObjectDb("Employee_UpdatePasswordRestStatusByEmpId"))
+            using (ObjectDb db = new ObjectDb("Employee_UpdatePasswordResetStatusByEmpId"))
             {
                 db.AddInParameter("@empId", DbType.Int32, empId);
                 db.AddInParameter("@PasswordReset", DbType.Boolean, passwordReset);

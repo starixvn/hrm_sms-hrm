@@ -527,7 +527,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="employeeId">Employee Id.</param>
         /// <param name="isLocal">Expat or local.</param>
         /// <returns>View OvertimeReport.</returns>
-        public ActionResult OvertimeReport(int? month, int? year, int? employeeId, bool? isLocal)
+        public ActionResult OvertimeReport(int? month, int? year)
         {
             if (!month.HasValue)
             {

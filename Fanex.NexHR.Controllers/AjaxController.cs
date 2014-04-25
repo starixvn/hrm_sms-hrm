@@ -232,7 +232,7 @@ namespace Fanex.NexHR.Controllers
         {
             int errCode;
             string errMsg;
-            var result = _teamService.DeleteTeam(id, DateTime.Now, this.CurrentUser.Id, out errCode, out errMsg);
+            _teamService.DeleteTeam(id, DateTime.Now, this.CurrentUser.Id, out errCode, out errMsg);
 
             if (errCode != 0)
             {

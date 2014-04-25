@@ -44,6 +44,14 @@ namespace Fanex.NexHR.Services
             this._shiftRepository = shifRepository;
         }
 
+        public string NewEmployeeCode
+        {
+            get
+            {
+                return _employeeRepository.NewEmployeeCode;
+            }
+        }
+
         public IList<Shift> GetAllShifts()
         {
             return this._shiftRepository.GetAll();
@@ -415,7 +423,6 @@ namespace Fanex.NexHR.Services
 
         public int ResetPassword(int empId, string originalPassword)
         {
-            Employee employee = this.GetEmployeeById(empId);
             string hashPassword = Encryptor.ComputeHash(_HashProvider, originalPassword);
             return this._employeeRepository.ChangePassword(empId, hashPassword, true);
         }
@@ -450,11 +457,6 @@ namespace Fanex.NexHR.Services
             int errorCode;
             string message;
             return this._employeeRepository.InsertEmployeeShiftManager(shiftManagerModel, modifiedBy, out errorCode, out message);
-        }
-
-        public string GetNewEmployeeCode()
-        {
-            return _employeeRepository.GetNewEmployeeCode();
         }
 
         public int UpdatePasswordResetStatus(int empId, bool passwordReset)

@@ -994,7 +994,6 @@ namespace Fanex.NexHR.Services
             var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendar");
             var rowIndex = _RowStartBodyWorkingCalendar;
             var rowCopy = _RowStartBodyWorkingCalendar;
-            var height = sheet.GetRow(_RowStartBodyOvertimeReport);
 
             ICell cellFromDate = null;
             ICell cellToDate = null;

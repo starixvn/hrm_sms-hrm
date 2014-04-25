@@ -41,7 +41,7 @@ namespace Fanex.NexHR.Core
         /// <param name="sheetName">The sheet name.</param>
         public static void RemoveSheet(this IWorkbook workbook, string sheetName)
         {
-            var sheet = workbook.GetSheet("Sheet1");
+            var sheet = workbook.GetSheet(sheetName);
 
             if (sheet != null)
             {

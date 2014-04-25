@@ -464,7 +464,6 @@ namespace Fanex.NexHR.Controllers.Request
         private void ViewLeaveDetail(int requestId, string viewName, LeaveRequestViewModel leaveRequest)
         {
             var currentUserId = leaveRequest.EmployeeId;
-            var employee = _EmployeeService.GetEmployeeById(currentUserId);
             var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(currentUserId, requestId, DateTime.Now.Date);
             var leaveTypes = _LeaveTypeService.GetAll();
             var verifierList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);

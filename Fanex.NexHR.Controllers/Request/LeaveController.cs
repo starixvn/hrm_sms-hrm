@@ -18,8 +18,6 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -154,7 +152,6 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Detail.</returns>
         public ActionResult Detail(int requestId)
         {
-            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
             var leaveTypes = _LeaveTypeService.GetAll();
             var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
@@ -237,7 +234,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var leaveTypes = _LeaveTypeService.GetAll();
             var workingCalendars = _WorkingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
-            var leaveRequestDetailList = new List<LeaveDetailModel>();
+            IList<LeaveDetailModel> leaveRequestDetailList = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
                 leaveRequestDetailList = _LeaveRequestService.GetLeaveRequestDetailsById(requestId);
@@ -285,7 +282,6 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 var numberDays = (toDate - fromDate).Days + 1;
                 var tempDate = DateTime.Now.Date;
-                var tempScheduleStatus = string.Empty;
                 IEnumerable<WorkingCalendarModel> tempWokingCalendars = null;
                 IEnumerable<LeaveDetailModel> tempLeaveDetailModels = null;
                 WorkingCalendarModel tempWokingCalendar = null;
