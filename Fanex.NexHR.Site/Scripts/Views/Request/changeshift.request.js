@@ -82,7 +82,7 @@
     $("input[name='submit']").click(function () {
         checkIsTopManager();
         var shift = {
-            Employee: $("#EmployeeId").val(),
+            EmployeeId: $("#EmployeeId").val(),
             FromDate: $("#FromDate").val(),
             ToDate: $("#ToDate").val(),
             Remark: $("#Remark").val(),
