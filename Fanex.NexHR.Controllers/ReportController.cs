@@ -524,8 +524,6 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <param name="month">Request month.</param>
         /// <param name="year">Request year.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="isLocal">Expat or local.</param>
         /// <returns>View OvertimeReport.</returns>
         public ActionResult OvertimeReport(int? month, int? year)
         {

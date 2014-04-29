@@ -38,6 +38,7 @@ namespace Fanex.NexHR.Repositories
                 return code;
             }
         }
+
         /// <summary>
         /// Method get Employee.
         /// </summary>

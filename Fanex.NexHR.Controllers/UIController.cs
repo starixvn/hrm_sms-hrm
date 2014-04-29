@@ -102,7 +102,6 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <param name="sectionNode">SiteMap Node.</param>
         /// <param name="user">UserLoginModel entity.</param>
-        /// <param name="userRole">User's role.</param>
         /// <param name="sectionItem">NavigationViewModel entity.</param>
         private static void CheckRoleForDisplayNavigationItem(
             SiteMapNode sectionNode,
