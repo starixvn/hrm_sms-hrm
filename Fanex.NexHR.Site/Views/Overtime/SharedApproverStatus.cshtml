@@ -15,7 +15,7 @@
                 if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
                 {
                     <td>
-                        <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-approved menu">@request.Status.ToString()</a>
+                        <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
                     </td>
                 }
                 break;

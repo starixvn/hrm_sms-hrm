@@ -66,6 +66,13 @@
         {
             switch (Model.MonthlyOvertime.Status.Id)
             {
+                case (byte)CurrentRequestStatus.Pending:
+                    if (Model.MonthlyOvertime.VerifiedBy.Id == Model.CurrentUserId)
+                    {
+                        <input type="button" id="btnApprove" value="Approve"/>
+                        <input type="button" id="btnReject" value="Reject"/>
+                    }
+                    break;
                 case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnApprove" value="Approve"/>
                     <input type="button" id="btnReject" value="Reject"/>

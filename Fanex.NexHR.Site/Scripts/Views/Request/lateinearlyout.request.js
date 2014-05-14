@@ -17,8 +17,7 @@
         $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
 				function (response) {
 				    if (response != null) {
-				        $("#FromDate").attr("disabledDate", response.join(","));
-				        $("#ToDate").attr("disabledDate", response.join(","));
+				        $("#Date").attr("disableddate", response.join(","));
 				        shiftChange();
 				    }
 				}

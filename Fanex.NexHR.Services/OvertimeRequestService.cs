@@ -188,11 +188,28 @@ namespace Fanex.NexHR.Services
             var employees = _employeeRepository.GetEmployeeCanClaimOvertime();
             if (employees != null)
             {
-                employees = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).ToList();
-                var mailTo = string.Join(";", employees.Select(x => x.Email));
-                this._emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                List<string> emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
+                var emails = SplitList(emailList, 100);
+
+                foreach (List<string> list in emails)
+                {
+                    var mailTo = string.Join(";", list);
+                    this._emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                }
             }
         }
+
+        private static List<List<string>> SplitList(List<string> locations, int nSize)
+        {
+            List<List<string>> emails = new List<List<string>>();
+
+            for (int i = 0; i < locations.Count; i += nSize)
+            {
+                emails.Add(locations.GetRange(i, Math.Min(nSize, locations.Count - i)));
+            }
+
+            return emails;
+        } 
 
         public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null)
         {

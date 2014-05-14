@@ -44,19 +44,8 @@ function query(jobTitleId) {
 
     var query = $('#keyword').val();
     actingButton('#query', true);
-
-    if ($("#enable").attr("checked")) {
-        enable = true;
-    }
-    else {
-        if ($("#active").attr("checked")) {
-            enable = false;
-        }
-        else {
-            enable = null;
-        }
-    }
-
+    enable = false;
+    
     var isDelete = null;
     if ($("#IsDeleted").attr("checked")) {
         isDelete = true;

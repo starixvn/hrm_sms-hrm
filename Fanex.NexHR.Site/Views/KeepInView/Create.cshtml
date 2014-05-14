@@ -16,7 +16,7 @@
 <div class="bunhat">
     @using (Html.BeginForm())
     {
-    
+        @Html.Hidden("RequestType", (int)RequestTypes.KeepInView)
         @Html.ValidationSummary()
 
         if (ViewBag.Requested == true)
