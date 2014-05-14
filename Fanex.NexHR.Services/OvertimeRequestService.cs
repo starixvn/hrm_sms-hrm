@@ -183,6 +183,11 @@ namespace Fanex.NexHR.Services
             return memberOvertime;
         }
 
+        /// <summary>
+        /// Function to send mail to reminder claim OT.
+        /// </summary>
+        /// <param name="subject">The subject mail.</param>
+        /// <param name="content">The content mail.</param>
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             var employees = _employeeRepository.GetEmployeeCanClaimOvertime();
@@ -198,18 +203,6 @@ namespace Fanex.NexHR.Services
                 }
             }
         }
-
-        private static List<List<string>> SplitList(List<string> locations, int nSize)
-        {
-            List<List<string>> emails = new List<List<string>>();
-
-            for (int i = 0; i < locations.Count; i += nSize)
-            {
-                emails.Add(locations.GetRange(i, Math.Min(nSize, locations.Count - i)));
-            }
-
-            return emails;
-        } 
 
         public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null)
         {
@@ -271,5 +264,17 @@ namespace Fanex.NexHR.Services
 
             return isInvalid;
         }
+
+        private List<List<string>> SplitList(List<string> locations, int size)
+        {
+            List<List<string>> emails = new List<List<string>>();
+
+            for (int i = 0; i < locations.Count; i += size)
+            {
+                emails.Add(locations.GetRange(i, Math.Min(size, locations.Count - i)));
+            }
+
+            return emails;
+        } 
     }
 }
