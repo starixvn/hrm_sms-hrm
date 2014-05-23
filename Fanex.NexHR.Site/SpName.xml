@@ -6,6 +6,8 @@
     </Setting>
     <Setting Key="GetEmployees" SpName="Employee_GetEmployees" DbName="nexhrx" Plain="1">
       <Mapping DataField="EmpId" ObjectProperty="Id"/>
+			<Mapping DataField="IdCardNumber" ObjectProperty="CardNo"/>
+			<Mapping DataField="PermanentAddress" ObjectProperty="Address"/>
     </Setting>
 
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="1"></Setting>
