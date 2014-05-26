@@ -488,8 +488,6 @@ namespace Fanex.NexHR.Controllers
                         ModelState.AddModelError(string.Empty, Resources.Messages.DisabledUser);
                         break;
 
-                    case -1:
-                    case 3:
                     default: // wrong password
                         ModelState.AddModelError(string.Empty, Resources.Messages.WrongPassword);
                         break;

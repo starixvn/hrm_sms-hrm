@@ -800,8 +800,13 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@empId", DbType.Int32, empId);
                 db.AddInParameter("@password", DbType.String, password);
                 db.AddInParameter("@PasswordReset", DbType.Boolean, passwordReset);
-                var result = db.ExecuteNonQuery();
-                return result;
+                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
+                db.AddOutParameter("@ErrMsg", DbType.String, 200);
+
+                db.ExecuteNonQuery();
+                int errorCode = (int)db.GetParameterValue("ErrCode");
+
+                return errorCode;
             }
         }
 
