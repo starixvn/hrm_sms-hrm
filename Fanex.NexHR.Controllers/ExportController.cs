@@ -163,6 +163,32 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        /// <summary>
+        /// Method Export yearly overtime report.
+        /// </summary>
+        /// <param name="year">Year to export.</param>
+        /// <param name="team">Team filter.</param>
+        /// <param name="empId">Employee filter.</param>
+        /// <param name="calendar">Calendar type.</param>
+        /// <returns>Action Result.</returns>
+        public ActionResult YearlyOvertimeReport(int year, string team, int? empId, int? calendar)
+        {
+            string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            IList<OvertimeAnnualReport> entity = null;
+            if (calendar == 1)
+            {
+                entity = this._overtimeService.GetYearlyOvertimeReport(year, team, empId, this.CurrentUser.Id, null);
+            }
+            else
+            {
+                entity = this._overtimeService.GetYearlyOvertimeReportByNormalCalendar(year, team, empId, this.CurrentUser.Id, null);
+            }
+
+            var hssfworkbook = _exportService.ExportYearlyOvertimeReport(entity, year, calendar);
+
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
         public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId)
         {
             string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";

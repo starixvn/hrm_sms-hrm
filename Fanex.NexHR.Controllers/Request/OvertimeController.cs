@@ -198,17 +198,18 @@ namespace Fanex.NexHR.Controllers.Request
             var currentUserId = this.CurrentUser.Id;
             ViewBag.Year = year;
             ViewBag.Calendar = calendar;
+            IList<OvertimeAnnualReport> listEntity = null;
 
             if (calendar == 1)
             {
-                var listEntity = this._OvertimeService.GetYearlyOvertimeReport(year, team, empId, currentUserId, null);
-                return PartialView("YearlyReportDetails", listEntity);
+                listEntity = this._OvertimeService.GetYearlyOvertimeReport(year, team, empId, currentUserId, null);
             }
             else
             {
-                var listEntity = this._OvertimeService.GetYearlyOvertimeReportByNormalCalendar(year, team, empId, currentUserId, null);
-                return PartialView("YearlyReportDetails", listEntity);
+                listEntity = this._OvertimeService.GetYearlyOvertimeReportByNormalCalendar(year, team, empId, currentUserId, null);
             }
+
+            return PartialView("YearlyReportDetails", listEntity);
         }
 
         /// <summary>

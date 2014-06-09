@@ -41,10 +41,12 @@ namespace Fanex.NexHR.Services
         private const int _RowStartBodyOvertimeReport = 4;
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
+        private const int _RowStartBodyYearlyOvertimeReport = 5;
         private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _OvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\OvertimeReportTemplate.xls";
+        private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
         private const string _EmployeeBasicInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeBasicInfoTemplate.xls";
         private const string _EmployeeDetailsInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeDetailsInfoTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
@@ -85,7 +87,6 @@ namespace Fanex.NexHR.Services
             cell.SetCellValue(titleString);
             cell.CellStyle = workbook.CreateCellStyle();
             cell.CellStyle.SetFont(font);
-
             sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 12));
 
             // header
@@ -518,7 +519,7 @@ namespace Fanex.NexHR.Services
                     {
                         sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
                     }
-                    
+
                     var rowTeam = sheet.GetRow(rowIndex);
                     rowTeam.Height = rowTeamHeight;
                     var cellTeam = rowTeam.GetCell(0);
@@ -561,7 +562,7 @@ namespace Fanex.NexHR.Services
                                 {
                                     row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
                                 }
-                                
+
                                 indexCount++;
                             }
 
@@ -583,7 +584,7 @@ namespace Fanex.NexHR.Services
                         index++;
                         numberCount++;
                     }
-                    
+
                     var cellCountMemberInTeam = rowTeam.GetCell(3);
                     cellCountMemberInTeam.SetCellValue(numberCount - 1);
 
@@ -745,6 +746,134 @@ namespace Fanex.NexHR.Services
                 index++;
             }
 
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
+        /// <summary>
+        /// Method Export Yearly Overtime Report.
+        /// </summary>
+        /// <param name="requestList">OvertimeAnnualReport Entities.</param>
+        /// <param name="year">Year to export.</param>
+        /// <param name="calendar">Calendar type.</param>
+        /// <returns>HSSF Workbook.</returns>
+        public HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReport> requestList, int year, int? calendar)
+        {
+            HSSFWorkbook hssfworkbook;
+            var templatePath = HttpContext.Current.Server.MapPath(_YearlyOvertimeReportFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "YearlyOvertimeReport");
+            var rowIndex = _RowStartBodyYearlyOvertimeReport;
+            var rowCopy = _RowStartBodyYearlyOvertimeReport;
+
+            string calendarType = string.Empty;
+            int index = 1;
+            float totalYearlyOTHours = 0;
+            var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
+
+            if (calendar == 1)
+            {
+                calendarType = "Fiscal Calendar";
+            }
+            else
+            {
+                calendarType = "Normal Calendar";
+            }
+
+            // Header
+            var rowHeader = sheet.GetRow(3);
+            rowHeader.Height = height;
+            var cellYear = rowHeader.GetCell(4);
+            cellYear.SetCellValue("Overtime Summary In " + year + " (" + calendarType + ")");
+
+            foreach (var item in requestList)
+            {
+                rowCopy = _RowStartBodyYearlyOvertimeReport + (index % 2);
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
+                float totalHours = 0;
+                var cellNo = row.GetCell(0);
+                var cellDepartment = row.GetCell(1);
+                var cellFullName = row.GetCell(2);
+                var cellNickName = row.GetCell(3);
+                var cellJan = row.GetCell(4);
+                var cellFeb = row.GetCell(5);
+                var cellMar = row.GetCell(6);
+                var cellApr = row.GetCell(7);
+                var cellMay = row.GetCell(8);
+                var cellJun = row.GetCell(9);
+                var cellJul = row.GetCell(10);
+                var cellAug = row.GetCell(11);
+                var cellSept = row.GetCell(12);
+                var cellOct = row.GetCell(13);
+                var cellNov = row.GetCell(14);
+                var cellDec = row.GetCell(15);
+                var cellTotal = row.GetCell(16);
+
+                cellNo.SetCellValue(index);
+                cellDepartment.SetCellValue(item.Team);
+                cellFullName.SetCellValue(item.FullName);
+                cellNickName.SetCellValue(item.NickName);
+
+                cellJan.SetCellValue(item.Jan);
+                cellFeb.SetCellValue(item.Feb);
+                cellMar.SetCellValue(item.Mar);
+                cellApr.SetCellValue(item.Apr);
+                cellMay.SetCellValue(item.May);
+                cellJun.SetCellValue(item.Jun);
+                cellJul.SetCellValue(item.Jul);
+                cellAug.SetCellValue(item.Aug);
+                cellSept.SetCellValue(item.Sep);
+                cellOct.SetCellValue(item.Oct);
+                cellNov.SetCellValue(item.Nov);
+                cellDec.SetCellValue(item.Dec);
+
+                totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jun + item.Aug + item.Sep
+                    + item.Oct + item.Oct + item.Nov + item.Dec;
+
+                cellTotal.SetCellValue(totalHours);
+                totalYearlyOTHours += totalHours;
+                index++;
+                rowIndex++;
+            }
+
+            //// Footer
+            sheet.CopyRow(templateSheet, _RowStartBodyYearlyOvertimeReport + 2, rowIndex);
+            var rowFooter = sheet.GetRow(rowIndex);
+            rowFooter.Height = height;
+            var cellFooterJan = rowFooter.GetCell(4);
+            var cellFooterFeb = rowFooter.GetCell(5);
+            var cellFooterMar = rowFooter.GetCell(6);
+            var cellFooterApr = rowFooter.GetCell(7);
+            var cellFooterMay = rowFooter.GetCell(8);
+            var cellFooterJun = rowFooter.GetCell(9);
+            var cellFooterJul = rowFooter.GetCell(10);
+            var cellFooterAug = rowFooter.GetCell(11);
+            var cellFooterSept = rowFooter.GetCell(12);
+            var cellFooterOct = rowFooter.GetCell(13);
+            var cellFooterNov = rowFooter.GetCell(14);
+            var cellFooterDec = rowFooter.GetCell(15);
+            var cellFooterTotal = rowFooter.GetCell(16);
+            cellFooterJan.SetCellValue(requestList.Sum(x => x.Jan));
+            cellFooterFeb.SetCellValue(requestList.Sum(x => x.Feb));
+            cellFooterMar.SetCellValue(requestList.Sum(x => x.Mar));
+            cellFooterApr.SetCellValue(requestList.Sum(x => x.Apr));
+            cellFooterMay.SetCellValue(requestList.Sum(x => x.May));
+            cellFooterJun.SetCellValue(requestList.Sum(x => x.Jun));
+            cellFooterJul.SetCellValue(requestList.Sum(x => x.Jul));
+            cellFooterAug.SetCellValue(requestList.Sum(x => x.Aug));
+            cellFooterSept.SetCellValue(requestList.Sum(x => x.Sep));
+            cellFooterOct.SetCellValue(requestList.Sum(x => x.Oct));
+            cellFooterNov.SetCellValue(requestList.Sum(x => x.Nov));
+            cellFooterDec.SetCellValue(requestList.Sum(x => x.Dec));
+            cellFooterTotal.SetCellValue(totalYearlyOTHours);
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;

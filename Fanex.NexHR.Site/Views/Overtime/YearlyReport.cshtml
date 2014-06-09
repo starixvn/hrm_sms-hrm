@@ -1,14 +1,15 @@
 ﻿@{
-    ViewBag.Title = Labels.OvertimeReport;
+	ViewBag.Title = Labels.OvertimeReport;
 }
 @section css{
-    @Url.CombresLink("overtimereportcss")
+	@Url.CombresLink("overtimereportcss")
 }
 @section js{
-    @Url.CombresLink("overtimereportjs")
+	@Url.CombresLink("overtimereportjs")
 }
 @section Breadcrumb {
-    <a class="step">HR Space</a> <a class="step">@ViewBag.Title</a>
+	<a class="step">HR Space</a>
+	<a class="step">@ViewBag.Title</a>
 }
 @*<div id="roundbar-blue">
     <ul>
@@ -17,71 +18,75 @@
     </ul>
 </div>*@
 <h2>@ViewBag.Title</h2>
-
- <div class="clear">
-    </div>        
-    <div class="space">
-    </div> 
-    <div class="clear">
-    </div>        
-    <div class="space">
-    </div> 
-
-
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
 @using (Html.BeginForm())
 {
-    <div class="container_24 bunhat">
-        <div class="grid_24">
-            <div class="grid_1 gridlabel">
-                Year:
-            </div>
-            <div class="grid_2">
-                @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-            </div>
-            <div class="grid_2 gridlabel">
-                Calendar:
-            </div>
-            <div class="grid_3">
-                @{
-    var calendarType = new List<SelectListItem>
+	<div class="container_24 bunhat">
+		<div class="grid_24">
+			<div class="grid_1 gridlabel">
+				Year:
+			</div>
+			<div class="grid_2">
+				@Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+			</div>
+			<div class="grid_2 gridlabel">
+				Calendar:
+			</div>
+			<div class="grid_3">
+				@{
+	var calendarType = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "Fiscal", Value = "1"}, 
                         new SelectListItem() {Text = "Normal", Value = "0"},
                     };
-                }
-                @Html.DropDownList("calendar", calendarType)
-            </div>
-            <div class="grid_1 gridlabel">@Labels.Team</div>
-            <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
-                    { 
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="grid_2 gridlabel">
-                Employee
-            </div>
-            <div class="grid_5">
-                @Html.Editor("Employee")
-                @Html.Hidden("EmpId")
-            </div>
-            <div class="grid_2 gridlabel">
-                <input type="button" value="@Labels.Submit" id="submit"/>
-            </div>
-        </div>
-    </div>
-    <div class="clear">
-    </div>        
-    <div class="space">
-    </div> 
-    <div class="clear">
-    </div>        
-    <div class="space">
-    </div> 
+				}
+				@Html.DropDownList("calendar", calendarType)
+			</div>
+			<div class="grid_1 gridlabel">@Labels.Team</div>
+			<div class="grid_6">
+				<select id="group" multiple="multiple" class="team-select">
+					@foreach (Team item in ViewBag.Groups)
+	 { 
+						<option value="@item.Id">@item.Name</option>
+	 }
+				</select>
+			</div>
+			<div class="grid_2 gridlabel">
+				Employee
+			</div>
+			<div class="grid_4">
+				@Html.Editor("Employee")
+				@Html.Hidden("EmpId")
+			</div>
+			<div class="clear">
+			</div>
+			<div class="space">
+			</div>
+			<div class="clear">
+			</div>
+			<div class="grid_5">
+				<input type="button" value="@Labels.Submit" id="submit"/>
+				<input type="button" id="excel" value="Excel" />
+			</div>
+		</div>
+	</div>
+	<div class="clear">
+	</div>        
+	<div class="space">
+	</div> 
+	<div class="clear">
+	</div>        
+	<div class="space">
+	</div> 
     
-    <div class="formrow" id="yearlyReportDetails">
-    </div>
+	<div class="formrow" id="yearlyReportDetails">
+	</div>
     
 }

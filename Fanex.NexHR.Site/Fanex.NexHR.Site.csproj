@@ -1131,6 +1131,7 @@
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Report\TimeRecordDetail.cshtml" />
     <Content Include="Views\Shared\ConfirmedProcessRequest.cshtml" />
+    <None Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

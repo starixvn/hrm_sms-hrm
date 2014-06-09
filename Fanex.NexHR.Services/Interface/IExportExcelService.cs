@@ -29,6 +29,8 @@ namespace Fanex.NexHR.Services.Interface
 
         HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate);
 
+        HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReport> requestList, int year, int? calendar);
+
         HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord);
 
         HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees);
