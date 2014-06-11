@@ -144,7 +144,6 @@ function requestToCalculateOTHours() {
 
 function calculateTotalOTHours(selector) {
     var sumResult = 0;
-    debugger;
     var formUpdate = $("#formUpdateOT").val();
     selector.each(function () {
         var value = $(this).text().trim();
