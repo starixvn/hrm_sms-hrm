@@ -579,21 +579,21 @@ namespace Fanex.NexHR.Controllers
             HttpContext.Session["CurrentUser"] = currentUser;
         }
 
-         /// <summary>
-         /// Method check Role User.
-         /// </summary>
-         /// <param name="model">Employee Model.</param>
-         private void CheckRoleUser(Employee model)
-         {
-             if (model.RoleList != null && model.RoleList.Count == 1)
-             {
-                 if (int.Parse(model.Roles) == (int)RolesEnum.SystemAdmin)
-                 {
-                     var roleList = Enum.GetValues(typeof(RolesEnum)).Cast<RolesEnum>().Select(x => (int)x).ToList();
-                     roleList.RemoveAt(0);
-                     model.Roles = string.Join(",", roleList);
-                 }
-             }
+        /// <summary>
+        /// Method check Role User.
+        /// </summary>
+        /// <param name="model">Employee Model.</param>
+        private void CheckRoleUser(Employee model)
+        {
+            if (model.RoleList != null && model.RoleList.Count == 1)
+            {
+                if (int.Parse(model.Roles) == (int)RolesEnum.SystemAdmin)
+                {
+                    var roleList = Enum.GetValues(typeof(RolesEnum)).Cast<RolesEnum>().Select(x => (int)x).ToList();
+                    roleList.RemoveAt(0);
+                    model.Roles = string.Join(",", roleList);
+                }
+            }
 
             if (model.RoleList == null)
             {
@@ -617,10 +617,10 @@ namespace Fanex.NexHR.Controllers
             List<string> listShiftName = new List<string>();
             List<string> listActingName = new List<string>();
 
-             var verifierList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, 5);
-             var approverList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, 5);
-             var shiftMonitorList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ShiftManager, 0);
-             var actingList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ActingSupervisor, 5);
+            var verifierList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, 5);
+            var approverList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, 5);
+            var shiftMonitorList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ShiftManager, 0);
+            var actingList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ActingSupervisor, 5);
 
             listVerifierName = verifierList.Count > 3 ? verifierList.Select(x => x.NickName).Take(3).ToList() : verifierList.Select(x => x.NickName).ToList();
             if (verifierList.Count > 3)
@@ -652,14 +652,14 @@ namespace Fanex.NexHR.Controllers
                 listActingName.Add("...");
             }
 
-             actingSupervisor = string.Join(", ", listActingName);
+            actingSupervisor = string.Join(", ", listActingName);
         }
 
         /// <summary>
         /// Function to convert User login to Employee.
         /// </summary>
-         /// <param name="userLogin">UserLogin Model.</param>
-         /// <returns>Employee Object.</returns>
+        /// <param name="userLogin">UserLogin Model.</param>
+        /// <returns>Employee Object.</returns>
         private Employee ConvertUserToEmployee(UserLoginModel userLogin)
         {
             var employee = new Employee
@@ -688,7 +688,7 @@ namespace Fanex.NexHR.Controllers
 
             ViewBag.Authorize = authorize;
         }
-        
+
         [NonAction]
         private DateTime GetEndOfWeek(DateTime currentDate)
         {
@@ -717,7 +717,6 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;
-            ViewBag.Contract = Utilities.ContractStatus;
         }
     }
 }

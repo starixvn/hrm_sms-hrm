@@ -1015,20 +1015,8 @@ namespace Fanex.NexHR.Services
             ICell cellCategory = null;
             ICell cellBankAccount = null;
             ICell cellTaxCode = null;
-
             ICell cellSocialInsuranceNo = null;
             ICell cellRegisteredHospital = null;
-            ICell cellContract1 = null;
-            ICell cellContract1Date = null;
-            ICell cellContract2 = null;
-            ICell cellContract2Date = null;
-            ICell cellContract3 = null;
-            ICell cellContract3Date = null;
-            ICell cellContract4 = null;
-            ICell cellContract4Date = null;
-            ICell cellContract5 = null;
-            ICell cellContract5Date = null;
-            ICell cellHistory = null;
 
             var index = 1;
             foreach (var item in employees)
@@ -1081,17 +1069,6 @@ namespace Fanex.NexHR.Services
                     ref cellTaxCode,
                     ref cellSocialInsuranceNo,
                     ref cellRegisteredHospital,
-                    ref cellContract1,
-                    ref cellContract1Date,
-                    ref cellContract2,
-                    ref cellContract2Date,
-                    ref cellContract3,
-                    ref cellContract3Date,
-                    ref cellContract4,
-                    ref cellContract4Date,
-                    ref cellContract5,
-                    ref cellContract5Date,
-                    ref cellHistory,
                     item,
                     row);
                 rowIndex++;
@@ -1249,17 +1226,6 @@ namespace Fanex.NexHR.Services
         /// <param name="cellTaxCode">Cell Tax Code.</param>
         /// <param name="cellSocialInsuranceNo">Cell Social Insurance No.</param>
         /// <param name="cellRegisteredHospital">Cell Registered Hospital.</param>
-        /// <param name="cellContract1">Cell Contract 1.</param>
-        /// <param name="cellContract1Date">Cell Contract1 Date.</param>
-        /// <param name="cellContract2">Cell Contract 2.</param>
-        /// <param name="cellContract2Date">Cell Contract2 Date.</param>
-        /// <param name="cellContract3">Cell Contract 3.</param>
-        /// <param name="cellContract3Date">Cell Contract3 Date.</param>
-        /// <param name="cellContract4">Cell Contract 4.</param>
-        /// <param name="cellContract4Date">Cell Contract4 Date.</param>
-        /// <param name="cellContract5">Cell Contract 5.</param>
-        /// <param name="cellContract5Date">Cell Contract5 Date.</param>
-        /// <param name="cellHistory">Cell History.</param>
         /// <param name="item">Employee entity.</param>
         /// <param name="row">Row to render data.</param>
         private void RenderBodyEmployeeDetailsInfo(
@@ -1306,17 +1272,6 @@ namespace Fanex.NexHR.Services
             ref ICell cellTaxCode,
             ref ICell cellSocialInsuranceNo,
             ref ICell cellRegisteredHospital,
-            ref ICell cellContract1,
-            ref ICell cellContract1Date,
-            ref ICell cellContract2,
-            ref ICell cellContract2Date,
-            ref ICell cellContract3,
-            ref ICell cellContract3Date,
-            ref ICell cellContract4,
-            ref ICell cellContract4Date,
-            ref ICell cellContract5,
-            ref ICell cellContract5Date,
-            ref ICell cellHistory,
             Employee item,
             IRow row)
         {
@@ -1364,19 +1319,7 @@ namespace Fanex.NexHR.Services
             cellBankAccount = row.GetCell(38);
             cellTaxCode = row.GetCell(39);
             cellSocialInsuranceNo = row.GetCell(40);
-
             cellRegisteredHospital = row.GetCell(41);
-            cellContract1 = row.GetCell(42);
-            cellContract1Date = row.GetCell(43);
-            cellContract2 = row.GetCell(44);
-            cellContract2Date = row.GetCell(45);
-            cellContract3 = row.GetCell(46);
-            cellContract3Date = row.GetCell(47);
-            cellContract4 = row.GetCell(48);
-            cellContract4Date = row.GetCell(49);
-            cellContract5 = row.GetCell(50);
-            cellContract5Date = row.GetCell(51);
-            cellHistory = row.GetCell(52);
 
             string gender = string.Empty;
             string category = string.Empty;
@@ -1444,25 +1387,6 @@ namespace Fanex.NexHR.Services
             cellTaxCode.SetCellValue(item.TaxCode);
             cellSocialInsuranceNo.SetCellValue(item.SocialInsuranceNo);
             cellRegisteredHospital.SetCellValue(item.RegisteredHospital);
-
-            ////contract
-            var contractDate1 = item.FromDate1.ToDateMonthYearFormatedDate() + " - " + item.ToDate1.ToDateMonthYearFormatedDate();
-            var contractDate2 = item.FromDate2.ToDateMonthYearFormatedDate() + " - " + item.ToDate2.ToDateMonthYearFormatedDate();
-            var contractDate3 = item.FromDate3.ToDateMonthYearFormatedDate() + " - " + item.ToDate3.ToDateMonthYearFormatedDate();
-            var contractDate4 = item.FromDate4.ToDateMonthYearFormatedDate() + " - " + item.ToDate4.ToDateMonthYearFormatedDate();
-            var contractDate5 = item.FromDate5.ToDateMonthYearFormatedDate() + " - " + item.ToDate5.ToDateMonthYearFormatedDate();
-
-            cellContract1.SetCellValue(((EmployeeContractStatus)item.Contract1).ToString());
-            cellContract1Date.SetCellValue(contractDate1);
-            cellContract2.SetCellValue(((EmployeeContractStatus)item.Contract2).ToString());
-            cellContract2Date.SetCellValue(contractDate2);
-            cellContract3.SetCellValue(((EmployeeContractStatus)item.Contract3).ToString());
-            cellContract3Date.SetCellValue(contractDate3);
-            cellContract4.SetCellValue(((EmployeeContractStatus)item.Contract4).ToString());
-            cellContract4Date.SetCellValue(contractDate4);
-            cellContract5.SetCellValue(((EmployeeContractStatus)item.Contract5).ToString());
-            cellContract5Date.SetCellValue(contractDate5);
-            cellHistory.SetCellValue(item.History);
         }
 
         /// <summary>

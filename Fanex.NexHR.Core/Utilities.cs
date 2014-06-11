@@ -84,36 +84,6 @@ namespace Fanex.NexHR.Core
             }
         }
 
-        public static IList<SelectListItem> ContractStatus
-        {
-            get
-            {
-                return new List<SelectListItem>
-                    {
-                         new SelectListItem 
-                        {
-                            Text = "--Select Contract Type--",
-                            Value = ((byte)EmployeeContractStatus.Default).ToString()
-                        },
-                        new SelectListItem 
-                        {
-                            Text = EmployeeContractStatus.Probation.ToString(),
-                            Value = ((byte)EmployeeContractStatus.Probation).ToString()
-                        },
-                        new SelectListItem 
-                        {
-                            Text = EmployeeContractStatus.Definite.ToString(),
-                            Value = ((byte)EmployeeContractStatus.Definite).ToString()
-                        },
-                        new SelectListItem 
-                        {
-                            Text = EmployeeContractStatus.Indefinite.ToString(),
-                            Value = ((byte)EmployeeContractStatus.Indefinite).ToString()
-                        }
-                    };
-            }
-        }
-
         public static DateTime AddTimeToDate(DateTime dateTime, string time)
         {
             var times = time.Split(new[] { ':' });

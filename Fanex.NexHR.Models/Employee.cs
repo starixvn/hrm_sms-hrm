@@ -192,43 +192,6 @@ namespace Fanex.NexHR.Models
 
         public string RegisteredHospital { get; set; }
 
-        [Display(Name = "Contract 1")]
-        public byte Contract1 { get; set; }
-
-        public DateTime? FromDate1 { get; set; }
-
-        public DateTime? ToDate1 { get; set; }
-
-        [Display(Name = "Contract 2")]
-        public byte Contract2 { get; set; }
-
-        public DateTime? FromDate2 { get; set; }
-
-        public DateTime? ToDate2 { get; set; }
-
-        [Display(Name = "Contract 3")]
-        public byte Contract3 { get; set; }
-
-        public DateTime? FromDate3 { get; set; }
-
-        public DateTime? ToDate3 { get; set; }
-
-        [Display(Name = "Contract 4")]
-        public byte Contract4 { get; set; }
-
-        public DateTime? FromDate4 { get; set; }
-
-        public DateTime? ToDate4 { get; set; }
-
-        [Display(Name = "Contract 5")]
-        public byte Contract5 { get; set; }
-
-        public DateTime? FromDate5 { get; set; }
-
-        public DateTime? ToDate5 { get; set; }
-
-        public string History { get; set; }
-
         public string ExtensionNo { get; set; }
 
         #endregion

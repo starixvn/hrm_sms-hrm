@@ -84,7 +84,8 @@ namespace Fanex.NexHR.Services
 
         public IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null)
         {
-            return this._employeeRepository.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            IList<Employee> employees = this._employeeRepository.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            return employees;
         }
 
         public IList<Employee> GetEmployeesForRelatedTeam(int employeeId)

@@ -189,19 +189,19 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId)
+        public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId);
+            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
             var hssfworkbook = _exportService.ExportEmployeeBasicInfo(entity);
 
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult EmployeeDetailsInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId)
+        public ActionResult EmployeeDetailsInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeDetailsInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId);
+            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
             var hssfworkbook = _exportService.ExportEmployeeDetailsInfo(entity);
 
             return ExcelFile(hssfworkbook, fileName);

@@ -124,7 +124,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\Commands.cs" />
-    <Compile Include="Enums\EmployeeContractStatus.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
     <Compile Include="Enums\AttendanceFilterEnums.cs" />
     <Compile Include="Enums\OvertimeTypes.cs" />

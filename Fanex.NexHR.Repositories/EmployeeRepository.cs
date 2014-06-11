@@ -359,24 +359,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@TaxCode", DbType.String, model.TaxCode);
                 db.AddInParameter("@SocialInsuranceNo", DbType.String, model.SocialInsuranceNo);
                 db.AddInParameter("@RegisteredHospital", DbType.String, model.RegisteredHospital);
-
-                db.AddInParameter("@Contract1", DbType.Byte, model.Contract1);
-                db.AddInParameter("@FromDate1", DbType.DateTime, model.FromDate1);
-                db.AddInParameter("@ToDate1", DbType.DateTime, model.ToDate1);
-                db.AddInParameter("@Contract2", DbType.Byte, model.Contract2);
-                db.AddInParameter("@FromDate2", DbType.DateTime, model.FromDate2);
-                db.AddInParameter("@ToDate2", DbType.DateTime, model.ToDate2);
-                db.AddInParameter("@Contract3", DbType.Byte, model.Contract3);
-                db.AddInParameter("@FromDate3", DbType.DateTime, model.FromDate3);
-                db.AddInParameter("@ToDate3", DbType.DateTime, model.ToDate3);
-                db.AddInParameter("@Contract4", DbType.Byte, model.Contract4);
-                db.AddInParameter("@FromDate4", DbType.DateTime, model.FromDate4);
-                db.AddInParameter("@ToDate4", DbType.DateTime, model.ToDate4);
-                db.AddInParameter("@Contract5", DbType.Byte, model.Contract5);
-                db.AddInParameter("@FromDate5", DbType.DateTime, model.FromDate5);
-                db.AddInParameter("@ToDate5", DbType.DateTime, model.ToDate5);
-                db.AddInParameter("@History", DbType.String, model.History);
-
                 db.AddInParameter("@IsExpatUseHoliday", DbType.Boolean, model.IsExpatUseHoliday);
 
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
