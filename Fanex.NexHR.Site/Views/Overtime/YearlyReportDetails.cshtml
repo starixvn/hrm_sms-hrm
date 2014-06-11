@@ -44,7 +44,7 @@
             @*Fiscal Calendar*@
             @if (ViewBag.Calendar == 1)
             {
-                <tr>
+                <tr class="overtime-header">
                     <th>
                         <a href="@Url.Action("HRMonthlyReport", "Overtime", new { month = 1, year = ViewBag.Year })">
                             @Labels.Jan

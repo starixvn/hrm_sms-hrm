@@ -128,3 +128,14 @@ input#Employee
 {
     margin-left: 30px;
 }
+
+table thead tr.overtime-header th
+{
+	background: rgb(102, 100, 100);;
+}
+
+table thead tr.overtime-header th a
+{
+	color: rgb(148, 177, 247);
+}
+
