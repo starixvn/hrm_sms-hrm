@@ -79,7 +79,7 @@
         <div class="input">
             @Html.DatePickerFor(model => model.FromDate,
             new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(12).AddDays(-1),
+                     new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1),
             unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
             <span class="time hide">
                 @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
