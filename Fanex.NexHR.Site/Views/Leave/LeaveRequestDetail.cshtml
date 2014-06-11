@@ -80,9 +80,9 @@
                         <select class="ddlWorkType">
                             <option value= "2" @leaveSelected>Leave</option>
                             <option value= "3" @workSelected>On Duty</option>
-                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper())
+                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkTypes.Off)
                             {
-                                 <option value= "1" @offSelected>Off</option>
+                                <option value= "1" @offSelected>Off</option>
                             }
                         </select>
                     </td> 

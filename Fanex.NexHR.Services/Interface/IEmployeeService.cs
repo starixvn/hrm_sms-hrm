@@ -81,6 +81,8 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);
 
+        IList<DateTime> GetOffAndHoliday(int empId, DateTime fromDate, DateTime toDate);
+
         IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null);
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);

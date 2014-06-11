@@ -327,6 +327,13 @@ namespace Fanex.NexHR.Services
             return unavailableDates;
         }
 
+        public IList<DateTime> GetOffAndHoliday(int empId, DateTime fromDate, DateTime toDate)
+        {
+            IList<DateTime> dates = this._employeeRepository.GetOffDateAndHolidayDate(empId, fromDate, toDate);
+
+            return dates;
+        }
+
         public IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null)
         {
             return this._employeeRepository.GetHrLeaderDashboard(date, employeeId);

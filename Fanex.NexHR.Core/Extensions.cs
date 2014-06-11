@@ -209,7 +209,7 @@ namespace Fanex.NexHR.Core
             var list = new List<SelectListItem>();
             var toYear = DateTime.Now.GetMaxDate().Year;
 
-            for (var i = toYear; i >= fromYear; i--)
+            for (var i = toYear + 1; i >= fromYear; i--)
             {
                 list.Add(new SelectListItem
                 {

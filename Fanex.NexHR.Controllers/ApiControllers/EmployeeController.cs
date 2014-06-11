@@ -61,17 +61,43 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return employees;
         }
 
-        public int GetRangeDate(int employeeId, DateTime fromDate, DateTime toDate)
+        public int GetRangeDate(int leaveTypeId, int employeeId, DateTime fromDate, DateTime toDate)
         {
-            return _employeeService.GetDateRange(employeeId, fromDate, toDate);
+            var numberDays = 0;
+            switch (leaveTypeId)
+            {
+                case Constants.MaternityLeave:
+                    numberDays = (toDate - fromDate).Days + 1;
+                    break;
+                case Constants.UnpaidLeave:
+                case Constants.BusinessTrip:
+                    IEnumerable<DateTime> dates = _employeeService.GetOffAndHoliday(employeeId, fromDate, toDate);
+                    numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
+                    break;
+                default:
+                    numberDays = _employeeService.GetDateRange(employeeId, fromDate, toDate);
+                    break;
+            }
+
+            return numberDays;
         }
 
-        public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime date)
+        public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime date, int? leaveTypeId = null)
         {
-            return _employeeService.GetUnavailableDates(
-                employeeId,
-                new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1),
-                new DateTime(date.AddMonths(3).Year, date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).Month, 1).AddDays(-1));
+            IEnumerable<DateTime> dates = null;
+            var fromDate = new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1);
+            var toDate = new DateTime(date.AddMonths(3).Year, date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).Month, 1).AddDays(-1);
+
+            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave || leaveTypeId.Value == Constants.BusinessTrip))
+            {
+                dates = _employeeService.GetOffAndHoliday(employeeId, fromDate, toDate);
+            }
+            else
+            {
+                dates = _employeeService.GetUnavailableDates(employeeId, fromDate, toDate);
+            }
+
+            return dates;
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)

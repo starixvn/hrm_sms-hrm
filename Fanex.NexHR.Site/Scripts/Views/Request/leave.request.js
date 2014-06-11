@@ -52,12 +52,12 @@
             });
             LeaveRequest.fromDate.change(function () {
                 var isHalfday = LeaveRequest.halfDayOff.attr("checked");
-                LeaveRequest.dateChange(isHalfday, true);
+                LeaveRequest.dateChange(isHalfday);
 
             });
             LeaveRequest.toDate.change(function () {
                 var isHalfday = LeaveRequest.halfDayOff.attr("checked");
-                LeaveRequest.dateChange(isHalfday, false);
+                LeaveRequest.dateChange(isHalfday);
             });
             LeaveRequest.leaveTypeId.change(function () {
                 LeaveRequest.leaveTypeChange();
@@ -169,7 +169,7 @@
                 }
             });
         },
-        dateChange: function (isHalfDay, isFromDate) {
+        dateChange: function (isHalfDay) {
             var leaveType = LeaveRequest.leaveTypeId.val();
             var fromDate = LeaveRequest.fromDate.val();
             var toDate = LeaveRequest.toDate.val();
@@ -194,6 +194,7 @@
                 $.ajax({
                     url: _global.root + 'api/employee/GetRangeDate',
                     data: {
+                        leaveTypeId: LeaveRequest.leaveTypeId.val(),
                         employeeId: LeaveRequest.employeeId.val(),
                         fromDate: LeaveRequest.fromDate.val(),
                         toDate: LeaveRequest.toDate.val()
@@ -203,6 +204,20 @@
                         if (response != null) {
                             LeaveRequest.totalDays.val(response);
                         }
+                    }
+                });
+
+                $.getJSON(_global.root + 'leave/GetAnnualLeaveAndKeepInViewBalance',
+                {
+                    employeeId: LeaveRequest.employeeId.val(),
+                    requestId: LeaveRequest.requestId.val(),
+                    toDate: LeaveRequest.toDate.val()
+                },
+                function (response) {
+                    if (response != null) {
+                        LeaveRequest.annualBalance.html(response.AnnualBalance);
+                        LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
+                        LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
                     }
                 });
             }
@@ -215,28 +230,37 @@
             var maxDate = new Date(LeaveRequest.fromDate.attr("maxDate"));
             var newMaxDate = new Date(maxDate);
 
-            if (leaveType == LeaveRequest.maternityLeaveType) {
-                newMaxDate = new Date(new Date(maxDate).setMonth(maxDate.getMonth() + 2));
+            if (leaveType == LeaveRequest.generalLeaveType) {
+                $("#grbHalfDay").hide();
+                $("#grbTotalDay").hide();
+                LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
+                $('.time').hide();
+                LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
+
+                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
             }
             else {
-                if (leaveType == LeaveRequest.generalLeaveType) {
-                    $("#grbHalfDay").hide();
-                    $("#grbTotalDay").hide();
-                    LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
-                    $('.time').hide();
-                    LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
+                $("#grbHalfDay").show();
+                $("#grbTotalDay").show();
+                LeaveRequest.enableControlforHalfday();
+                var leaveDetailContainer = $("#tbldetail");
+                leaveDetailContainer.empty();
 
+                if (leaveType == LeaveRequest.maternityLeaveType) {
+                    var tempDate = new Date(LeaveRequest.fromDate.attr("minDate"));
+                    tempDate = new Date(new Date(tempDate).setMonth(tempDate.getMonth() + 8));
+                    newMaxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
                     LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
                     LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
                 }
                 else {
-                    $("#grbHalfDay").show();
-                    $("#grbTotalDay").show();
-                    LeaveRequest.enableControlforHalfday();
-                    var leaveDetailContainer = $("#tbldetail");
-                    leaveDetailContainer.empty();
-
-                    $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: LeaveRequest.employeeId.val(), date: new Date().toDateString() },
+                    $.getJSON(_global.root + 'api/employee/GetUnavailableDates',
+                    {
+                        employeeId: LeaveRequest.employeeId.val(),
+                        date: new Date().toDateString(),
+                        leaveTypeId: leaveType
+                    },
                     function (response) {
                         if (response != null) {
                             LeaveRequest.fromDate.attr("disabledDate", response.join(","));
@@ -244,7 +268,10 @@
                         }
                     });
                 }
+
+                LeaveRequest.dateChange(false);
             }
+
 
             LeaveRequest.fromDate.datepicker("option", "maxDate", newMaxDate);
             LeaveRequest.toDate.datepicker("option", "maxDate", newMaxDate);
@@ -361,7 +388,7 @@
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>"
                             }
 
                             LeaveRequest.verifierId.empty();
@@ -374,7 +401,7 @@
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName +  ")</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>"
                             }
 
                             LeaveRequest.approverId.empty();

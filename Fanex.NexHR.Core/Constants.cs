@@ -22,6 +22,8 @@ namespace Fanex.NexHR.Core
 
         public const int BusinessTrip = 9;
 
+        public const int MaternityLeave = 12;
+
         public const int WeddingLeave = 6;
 
         public const int NumberMonthsInFutureCanLeaveRequest = 4;

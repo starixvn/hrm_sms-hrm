@@ -215,9 +215,10 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(approverList, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId)
+        public ActionResult GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime? toDate)
         {
-            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, DateTime.Now.Date);
+            var effectDate = toDate.HasValue ? toDate.Value : DateTime.Now.Date;
+            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, effectDate);
 
             return Json(employeeBalance, JsonRequestBehavior.AllowGet);
         }
