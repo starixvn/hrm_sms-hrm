@@ -125,7 +125,7 @@
                         location.href = _global.root + requestType + "/Update?requestId=" + LeaveRequestView.requestId;
                     }
                     else {
-                        alert("There are some error during processed. Please try again.");
+                        alert(response.errorMessage);
                     }
                 }
             });
