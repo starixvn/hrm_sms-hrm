@@ -34,6 +34,7 @@
                 <th>@Labels.Shift</th>
                 <th>Request Date Time</th>
                 <th>@Labels.CreatedDate</th>
+                <th>@Labels.Remark</th>
                 <th>@Labels.Status</th>
                 <th>@Labels.History</th>
             </tr>
@@ -57,7 +58,18 @@
                         </td>
                         <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
                         </td>
-                            
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        { 
+                            <td class="tooltip" title="@request.Remark">
+                                <span class="icon remark" alt="remark" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                -
+                            </td>
+                        }
                         @Html.Partial("_SharedRequestStatus", request)
 
                         <td>

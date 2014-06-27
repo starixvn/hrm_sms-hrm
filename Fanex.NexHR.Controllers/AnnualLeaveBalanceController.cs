@@ -11,8 +11,8 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Security;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
@@ -53,7 +53,6 @@ namespace Fanex.NexHR.Controllers
         /// <param name="minAnnualBalance">Min Annual Balance.</param>
         /// <param name="category">Employee category.</param>
         /// <returns>Index View.</returns>
-        [Authorize(Roles = "Verifier,Approver,HR")]
         public ActionResult Index(
             string teamIds,
             string employee,
@@ -63,6 +62,14 @@ namespace Fanex.NexHR.Controllers
             int? category = null)
         {
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
+
+            if (!employeeId.HasValue 
+                && !Roles.IsUserInRole(RolesEnum.HR.ToString())
+                && !Roles.IsUserInRole(RolesEnum.Verifier.ToString())
+                && !Roles.IsUserInRole(RolesEnum.Approver.ToString()))
+            {
+                employeeId = this.CurrentUser.Id;
+            }
 
             var model = new LeaveSummaryViewModel
             {
@@ -83,29 +90,10 @@ namespace Fanex.NexHR.Controllers
         /// <param name="model">LeaveSummary ViewModel.</param>
         /// <returns>View Index.</returns>
         [HttpPost]
-        [Authorize(Roles = "Verifier,Approver,HR")]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
-            var authorize = false;
-            var listRole = this.CurrentUser.RoleList;
-            if (listRole != null)
-            {
-                authorize = listRole.Any(x => x == (int)RolesEnum.HR);
-            }
-
-            ViewBag.Authorize = authorize;
-
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-
-            if (model == null)
-            {
-                model = new LeaveSummaryViewModel
-                {
-                    Year = DateTime.Now.Year,
-                    EmployeeId = -1
-                };
-            }
-
+           
             IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(
                 model.Year,
                 empId: model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
@@ -113,7 +101,6 @@ namespace Fanex.NexHR.Controllers
                 isLocal: (byte?)model.Category);
 
             IList<Team> teams = new List<Team>();
-
             teams = _teamService.GetAll();
 
             ViewBag.Groups = teams;

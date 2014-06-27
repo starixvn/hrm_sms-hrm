@@ -35,7 +35,7 @@
       <siteMapNode title="Working calendars" controller="calendar" action="workingcalendars" icon="calendar" />
       <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1"/>
       <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
-      <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6" roles="Approver, Verifier, HR"/>
+      <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6"/>
       <!--<siteMapNode title="Leave summary" controller="report" action="leavesummary" icon="calendar4" />-->
       <!--<siteMapNode title="Total working hours" controller="report" action="totalworkinghours" icon="clock" />-->
       <siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />

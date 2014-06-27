@@ -17,6 +17,8 @@
             </th>
             <th>@Labels.CreatedDate
             </th>
+            <th>@Labels.Remark
+            </th>
             <th>@Labels.Status
             </th>
             <th>@Labels.History
@@ -45,6 +47,18 @@
                     </td>
                     <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
                     </td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    { 
+                        <td class="tooltip" title="@request.Remark">
+                            <span class="icon remark" alt="remark" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
                    @Html.Partial("Request/HR/SharedStatus", request)
                     <td>
                         <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">

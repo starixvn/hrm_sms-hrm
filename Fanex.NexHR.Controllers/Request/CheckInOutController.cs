@@ -167,7 +167,8 @@ namespace Fanex.NexHR.Controllers.Request
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
                 RefNO = request.RefNO,
-                AttendantDate = request.FromDate
+                AttendantDate = request.FromDate,
+                Remark = request.Remark
             };
 
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);

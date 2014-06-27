@@ -12,6 +12,10 @@
     <a class="step">HR</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
+@if (Roles.IsUserInRole(RolesEnum.HR.ToString())
+    || Roles.IsUserInRole(RolesEnum.Verifier.ToString())
+    || Roles.IsUserInRole(RolesEnum.Approver.ToString()))
+{ 
 <div class="container_24 bunhat">
     @using (Html.BeginForm())
     {
@@ -26,15 +30,6 @@
                 <option selected="@(ViewBag.Category == 1)"  value="1">Local</option>
                 <option selected="@(ViewBag.Category == 0)"  value="0">Expat</option>
             </select>
-
-               @* @{
-        var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-                }
-                @Html.DropDownListFor(model => model.Category, category, new { @class = "category" })*@
             </div>
             <div class="grid_1 gridlabel">
                 @Html.LabelFor(model => model.Year)
@@ -68,7 +63,6 @@
                     selected = "selected";
                 }
             }
-                        
                         <option @selected value="@team.Id">@team.Name</option> 
         }
                     }
@@ -100,7 +94,7 @@
                             <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>
                         </div>
                     }
-                    @if ((bool)ViewBag.Authorize)
+                    @if (Roles.IsUserInRole("HR"))
                     {
                         <div class="button-icon">
                             <span class="icon plus"></span><a href="javascript:;" id="addadj">Adjustment</a>
@@ -109,20 +103,16 @@
                 </div>
             </div>
         </div>
-
-
-        
         <div class="clear">
         </div>        
         <div class="space">
-        </div>  
-        
-               
-        
+        </div>
     }
 </div>
 <div class="clear">
 </div>
+}
+
 <table class="data persist-area">
     <thead class="persist-header">
         <tr>
@@ -139,7 +129,7 @@
             <th rowspan="2">
                 Balance of AL @Model.Year
             </th>
-            @if ((bool)ViewBag.Authorize)
+            @if (Roles.IsUserInRole("HR"))
             {
                 <th rowspan="2">@Labels.Edit
                 </th>
@@ -397,7 +387,7 @@
                     }  
                         }
                     </td>
-                    @if ((bool)ViewBag.Authorize)
+                    @if (Roles.IsUserInRole("HR"))
                     {
                         <td>
                             <a href="~/annualleavebalance/employee/@leave.Employee.Id">

@@ -393,6 +393,7 @@ namespace Fanex.NexHR.Repositories
                 Status = new RequestStatus { Id = reader.ToByte("Status") },
                 EmpId = reader.ToInt("RequesterID"),
                 RefNO = reader.ToString("RefNo"),
+                Remark = reader.ToString("Remark"),
                 Requester = new Employee
                 {
                     NickName = reader.To<string>("Requester"),
