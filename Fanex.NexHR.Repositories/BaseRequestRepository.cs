@@ -380,6 +380,7 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <returns>The data object of RequestEntity.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private RequestEntity FillDataForCheckInOutRequest(IDataReader reader)
         {
             var entity = new RequestEntity
