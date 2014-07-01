@@ -172,6 +172,15 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "SystemAdmin")]
+        [HttpPost]
+        public bool Delete(int shiftId)
+        {
+            var errorCode = 0;
+            var message = string.Empty;
+            return _shiftService.Delete(shiftId, out errorCode, out message);
+        }
+
         /// <summary>
         /// Function to get hour of a text.
         /// </summary>

@@ -29,5 +29,7 @@ namespace Fanex.NexHR.Services.Interface
         int Insert(Shift model, out int errorCode, out string message);
 
         bool Update(Shift model, out int errorCode, out string message);
+
+        bool Delete(int shiftId, out int errorCode, out string message);
     }
 }

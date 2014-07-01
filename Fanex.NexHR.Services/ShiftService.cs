@@ -141,5 +141,10 @@ namespace Fanex.NexHR.Services
         {
             return this._shiftRepository.Update(model, out errorCode, out message);
         }
+
+        public bool Delete(int shiftId, out int errorCode, out string message)
+        {
+            return this._shiftRepository.Delete(shiftId, out errorCode, out message);
+        }
     }
 }
