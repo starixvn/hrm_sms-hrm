@@ -12,28 +12,47 @@
 @section Breadcrumb {
     <a class="step">Company</a> <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginGetForm())
+{
+        <span style="padding-right: 5px; vertical-align:8px;">@Labels.Status</span>
+        @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.LeaveTypeList, "Id", "Name"))
+        <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
+    if (Roles.IsUserInRole("HR"))
+    { 
+            <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
+    }
+}
+
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
 <div class="grid_24">
-@RazorHelper.ShiftInfoTable(Model)
-    @*<table class="shift_table">
+    <table class="shift_table">
         <thead>
             <tr>
                 <th class="left">
-                    Shift
+                    @Labels.Shift
                 </th>
                 <th>
-                    Checkin time
+                    @Labels.In
                 </th>
                 <th>
-                    Checkout time
+                    @Labels.Out
                 </th>
-                <th>
-                    Break
-                </th>
+                 @if (Roles.IsUserInRole("HR"))
+                 { 
+                    <th>@Labels.Edit</th>
+                 }
             </tr>
         </thead>
         <tbody>
-            @foreach (Fanex.NexHR.Models.Shift item in Model)
+            @foreach (Shift item in Model)
             {
                 <tr>
                     <td class="left">@item.Name
@@ -41,12 +60,16 @@
                     <td>@item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
                     </td>
                     <td>
-                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- "+item.EndCheckOutTime)
+                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
                     </td>
-                    <td>@((item.BreakTimeMins == 0) ? "N" : item.BreakTimeMins.ToString() + "'")
-                    </td>
-                </tr> 
+                    @if (Roles.IsUserInRole("HR"))
+                    {
+                        <td class="cmd">
+                            <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })"><img src="~/Styles/Images/edit-icon.png" /></a>
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
-    </table>*@
+    </table>
 </div>

@@ -1,0 +1,93 @@
+﻿@using System.Web.Mvc.Html5
+@model ShiftViewModel
+
+@{
+    ViewBag.Title = @Labels.EditShift;
+}
+
+@section css{
+    @Url.CombresLink("shiftcss")
+}
+@section js{
+    @Url.CombresLink("shiftjs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "shift")">@Labels.ShiftManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2>@Labels.Create</h2>
+
+@using (Html.BeginForm())
+{
+<div class="bunhat">
+    @Html.ValidationSummary(true)
+    @if ((bool)ViewBag.Successed)
+    {
+    <div class="success">@Messages.ShiftUpdated</div> 
+    }
+    @Html.HiddenFor(model => model.ShiftId)
+    @Html.HiddenFor(model => model.IsUsed)
+    @Html.Hidden("Successed", (bool)ViewBag.Successed)
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Name)*
+        </div>
+        <div class="input">
+            @Html.EditorFor(model => model.Name, new { maxlength = "20"})
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
+    
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn)*
+        </div>
+        <div class="input">
+            @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn" })
+            :
+            @Html.Html5Number(0, 59, 1, Model.MuniteTimeIn, new { Name = "MuniteTimeIn", MaxLength = "2", id = "MuniteTimeIn" })
+            @Html.CheckBoxFor(model => model.IsInAfterDay)
+            @Html.LabelFor(model => model.IsInAfterDay)
+        </div>
+    </div>
+
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut)*
+        </div>
+        <div class="input">
+            @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut" })
+            :
+            @Html.Html5Number(0, 59, 1, Model.MuniteTimeOut, new { Name = "MuniteTimeOut", MaxLength = "2", id = "MuniteTimeOut" })
+            @Html.CheckBoxFor(model => model.IsOutAfterDay)
+            @Html.LabelFor(model => model.IsOutAfterDay)
+        </div>
+    </div>
+    
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.IsDisabled, "Disabled")*
+        </div>
+        <div class="input">
+             @Html.CheckBoxFor(model => model.IsDisabled)
+        </div>
+    </div>
+
+    <div class="formrow">
+        <div class="label">
+        </div>
+        <div class="input">
+            <input type="submit" value="@Labels.Save"/>
+            @if (!Model.IsUsed)
+            { 
+                <a href="@Url.Action("index", "shift")" class="button">@Labels.Delete</a>
+            }
+            
+            <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>
+        </div>
+    </div>
+
+</div>
+}

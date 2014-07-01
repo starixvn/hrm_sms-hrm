@@ -16,12 +16,18 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IShiftService
     {
-        IList<Shift> GetAll();
+        IList<Shift> GetAll(bool isShowAll = false);
 
         IList<Shift> GetByQuery(string query);
 
         IList<SelectListItem> GetSelectList();
 
         Shift GetByDate(int employeeId, DateTime date);
+
+        Shift GetById(int shiftId);
+
+        int Insert(Shift model, out int errorCode, out string message);
+
+        bool Update(Shift model, out int errorCode, out string message);
     }
 }

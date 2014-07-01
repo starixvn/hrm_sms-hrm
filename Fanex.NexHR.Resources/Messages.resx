@@ -276,6 +276,12 @@
   <data name="SearchEmployeeWatermark" xml:space="preserve">
     <value>full name or nick name</value>
   </data>
+  <data name="ShiftCreated" xml:space="preserve">
+    <value>Shift's created successfully!</value>
+  </data>
+  <data name="ShiftUpdated" xml:space="preserve">
+    <value>Shift's updated successfully!</value>
+  </data>
   <data name="StopEditRequest" xml:space="preserve">
     <value>You now can't edit your request cause' it was</value>
   </data>

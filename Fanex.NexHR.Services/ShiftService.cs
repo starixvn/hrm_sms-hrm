@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.Caching;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -23,14 +22,11 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class ShiftService : IShiftService
     {
-        private const string _CacheKeyAllShift = "ShiftService_AllShift";
         private readonly IShiftRepository _shiftRepository;
-        private readonly ICache _cacheManager;
 
         public ShiftService(IShiftRepository shiftRepository = null)
         {
             this._shiftRepository = shiftRepository ?? new ShiftRepository();
-            this._cacheManager = CacheService.CreateInstance();
         }
 
         public ShiftService()
@@ -41,18 +37,14 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get all shift.
         /// </summary>
+        /// <param name="isShowAll">Is show all or no.</param>
         /// <returns>Shift List.</returns>
-        public IList<Shift> GetAll()
+        public IList<Shift> GetAll(bool isShowAll = false)
         {
-            var allShifts = this._cacheManager.Get<IList<Shift>>(_CacheKeyAllShift);
-            if (allShifts == null || allShifts.Count <= 0)
+            var allShifts = this._shiftRepository.GetAll();
+            if (!isShowAll)
             {
-                allShifts = this._shiftRepository.GetAll();
-
-                if (allShifts != null && allShifts.Count > 0)
-                {
-                    this._cacheManager.Set<IList<Shift>>(_CacheKeyAllShift, allShifts, TimeSpan.FromHours(1));
-                }
+                allShifts = allShifts.Where(t => t.IsDisabled == false).ToList();
             }
 
             return allShifts;
@@ -122,6 +114,26 @@ namespace Fanex.NexHR.Services
             }
 
             return null;
+        }
+
+        public Shift GetById(int shiftId)
+        {
+            if (shiftId > 0)
+            {
+                return this._shiftRepository.GetById(shiftId);
+            }
+
+            return null;
+        }
+
+        public int Insert(Shift model, out int errorCode, out string message)
+        {
+            return this._shiftRepository.Insert(model, out errorCode, out message);
+        }
+
+        public bool Update(Shift model, out int errorCode, out string message)
+        {
+            return this._shiftRepository.Update(model, out errorCode, out message);
         }
     }
 }

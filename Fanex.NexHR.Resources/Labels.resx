@@ -933,7 +933,7 @@
   <data name="Verified" xml:space="preserve">
     <value>Verified</value>
   </data>
- <data name="LeaveRequestDetail" xml:space="preserve">
+  <data name="LeaveRequestDetail" xml:space="preserve">
     <value>Leave request details</value>
   </data>
   <data name="LeaveRequest" xml:space="preserve">
@@ -959,5 +959,17 @@
   </data>
   <data name="Year" xml:space="preserve">
     <value>Year</value>
+  </data>
+  <data name="AddNewShift" xml:space="preserve">
+    <value>Add new shift</value>
+  </data>
+  <data name="CompanySpace" xml:space="preserve">
+    <value>Company Space</value>
+  </data>
+  <data name="ShiftManagement" xml:space="preserve">
+    <value>Shift management</value>
+  </data>
+  <data name="EditShift" xml:space="preserve">
+    <value>Edit shift</value>
   </data>
 </root>

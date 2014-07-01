@@ -18,5 +18,11 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<Shift> GetAll();
 
         Shift GetByDate(int employeeId, DateTime date);
+
+        Shift GetById(int shiftId);
+
+        int Insert(Shift model, out int errorCode, out string message);
+
+        bool Update(Shift model, out int errorCode, out string message);
     }
 }

@@ -490,7 +490,7 @@
       <resource path="~/scripts/views/team.edit.js" />
       <!--<resource path="~/scripts/views/team.js" />-->
     </resourceSet>
-
+    
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/employee.search.in.company.js" />
@@ -656,6 +656,15 @@
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
+
+    <resourceSet name="shiftcss" type="css">
+      <resource reference="sitecss"/>
+      <resource path="~/styles/shift.css" />
+    </resourceSet>
     
+    <resourceSet name="shiftjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/shift.js" />
+    </resourceSet>
   </resourceSets>
 </combres>

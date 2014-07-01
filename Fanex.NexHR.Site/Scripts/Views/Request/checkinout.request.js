@@ -95,12 +95,10 @@
     var year = $("#year").val();
 
     if (successed == "true") {
-        if (successed == "true") {
-            $('form').removeClass("dirty");
-            confirm('Successfull!\nPress OK to continue', function () {
-                document.location = _global.root + "checkinout/EmployeeView/" + year;
-            });
-        }
+        $('form').removeClass("dirty");
+        confirm('Successfull!\nPress OK to continue', function () {
+            document.location = _global.root + "checkinout/EmployeeView/" + year;
+        });
     }
 
     updateZeroPrefix();

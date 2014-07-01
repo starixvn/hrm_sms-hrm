@@ -142,6 +142,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new shift.
+        /// </summary>
+        public static string AddNewShift {
+            get {
+                return ResourceManager.GetString("AddNewShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjust.
         /// </summary>
         public static string Adjust {
@@ -457,6 +466,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Space.
+        /// </summary>
+        public static string CompanySpace {
+            get {
+                return ResourceManager.GetString("CompanySpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content.
         /// </summary>
         public static string Content {
@@ -714,6 +732,15 @@ namespace Fanex.NexHR.Resources {
         public static string EditMemo {
             get {
                 return ResourceManager.GetString("EditMemo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit shift.
+        /// </summary>
+        public static string EditShift {
+            get {
+                return ResourceManager.GetString("EditShift", resourceCulture);
             }
         }
         
@@ -2140,6 +2167,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift management.
+        /// </summary>
+        public static string ShiftManagement {
+            get {
+                return ResourceManager.GetString("ShiftManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Manager.
         /// </summary>
         public static string ShiftManager {
@@ -2455,6 +2491,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update my leave request.
+        /// </summary>
+        public static string UpdateLeaveRequest {
+            get {
+                return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verified.
         /// </summary>
         public static string Verified {
@@ -2463,14 +2508,6 @@ namespace Fanex.NexHR.Resources {
             }
         }
         
- /// <summary>
-        ///   Looks up a localized string similar to Update my leave request.
-        /// </summary>
-        public static string UpdateLeaveRequest {
-            get {
-                return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
-            }
-        }
         /// <summary>
         ///   Looks up a localized string similar to Verified by.
         /// </summary>

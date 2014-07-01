@@ -180,6 +180,9 @@
         </Setting>
         <Setting Key="EmployeeCalendar_GetShiftByDate" SpName="EmployeeCalendar_GetShiftByDate" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="EmployeeCalendar_Update" SpName="EmployeeCalendar_Update" DbName="nexhrx" Plain="0"></Setting>
+      <Setting Key="Shift_Insert" SpName="Shift_Insert" DbName="nexhrx" Plain="0"></Setting>
+      <Setting Key="Shift_Update" SpName="Shift_Update" DbName="nexhrx" Plain="0"></Setting>
+      <Setting Key="Shift_GetById" SpName="Shift_GetById" DbName="nexhrx" Plain="0"></Setting>
     </Function>
     <Function Name="WorkingTimeRequest">
         <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>

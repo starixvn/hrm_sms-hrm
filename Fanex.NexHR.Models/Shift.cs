@@ -9,6 +9,8 @@
 
 namespace Fanex.NexHR.Models
 {
+    using System;
+
     /// <summary>
     /// Shift Class.
     /// </summary>
@@ -31,5 +33,21 @@ namespace Fanex.NexHR.Models
         public string EndBreakTime { get; set; }
 
         public bool CrossDay { get; set; }
+
+        public bool IsInAfterDay { get; set; }
+
+        public bool IsOutAfterDay { get; set; }
+
+        public bool IsDisabled { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public int ModifiedBy { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
+
+        public bool IsUsed { get; set; }
     }
 }
