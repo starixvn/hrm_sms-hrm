@@ -34,10 +34,17 @@ namespace Fanex.NexHR.Controllers
             _shiftService = shiftService ?? new ShiftService();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? statusId = 1)
         {
-            var shifts = _shiftService.GetAll(isShowAll: true);
-            return View(shifts);
+            var model = new ShiftByStatusViewModel
+            {
+                StatusId = statusId.Value
+            };
+
+            var shifts = _shiftService.GetAll(statusId.Value);
+            model.Shifts = shifts;
+
+            return View(model);
         }
 
         [Authorize(Roles = "SystemAdmin")]

@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -37,14 +38,19 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get all shift.
         /// </summary>
-        /// <param name="isShowAll">Is show all or no.</param>
+        /// <param name="statusId">Status Id.</param>
         /// <returns>Shift List.</returns>
-        public IList<Shift> GetAll(bool isShowAll = false)
+        public IList<Shift> GetAll(int statusId = 1)
         {
             var allShifts = this._shiftRepository.GetAll();
-            if (!isShowAll)
+
+            if (statusId == (int)ShiftStatus.Active)
             {
                 allShifts = allShifts.Where(t => t.IsDisabled == false).ToList();
+            }
+            else if (statusId == (int)ShiftStatus.Disabled)
+            {
+                allShifts = allShifts.Where(t => t.IsDisabled == true).ToList();
             }
 
             return allShifts;

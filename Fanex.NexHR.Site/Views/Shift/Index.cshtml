@@ -1,7 +1,7 @@
-﻿@model IList<Fanex.NexHR.Models.Shift>
+﻿@model ShiftByStatusViewModel
 
 @section css{
-    @Url.CombresLink("sitecss")
+    @Url.CombresLink("shiftcss")
 }
 @section js{
     @Url.CombresLink("sitejs")
@@ -12,15 +12,15 @@
 @section Breadcrumb {
     <a class="step">Company</a> <span class="step">@ViewBag.Title</span>
 }
-
+<h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 {
-        <span style="padding-right: 5px; vertical-align:8px;">@Labels.Status</span>
-        @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.LeaveTypeList, "Id", "Name"))
-        <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
+    <span style="padding-right: 5px;">@Labels.Status</span>
+    @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
+    <input type="submit" id="submit" value="@Labels.Submit"/>
     if (Roles.IsUserInRole("HR"))
     { 
-            <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
+        <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
     }
 }
 
@@ -33,8 +33,8 @@
 <div class="space">
 </div>
 <div class="grid_24">
-    <table class="shift_table">
-        <thead>
+    <table id="tblShift" class="data persist-area">
+        <thead class ="persist-header">
             <tr>
                 <th class="left">
                     @Labels.Shift
@@ -45,14 +45,16 @@
                 <th>
                     @Labels.Out
                 </th>
-                 @if (Roles.IsUserInRole("HR"))
+                 @if (Roles.IsUserInRole("SystemAdmin"))
                  { 
                     <th>@Labels.Edit</th>
                  }
             </tr>
         </thead>
         <tbody>
-            @foreach (Shift item in Model)
+        @if (Model.Shifts != null && Model.Shifts.Any())
+        {
+            foreach (Shift item in Model.Shifts)
             {
                 <tr>
                     <td class="left">@item.Name
@@ -62,7 +64,7 @@
                     <td>
                         @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
                     </td>
-                    @if (Roles.IsUserInRole("HR"))
+                    @if (Roles.IsUserInRole("SystemAdmin"))
                     {
                         <td class="cmd">
                             <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })"><img src="~/Styles/Images/edit-icon.png" /></a>
@@ -70,6 +72,11 @@
                     }
                 </tr>
             }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 7);
+        }
         </tbody>
     </table>
 </div>
