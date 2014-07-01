@@ -40,10 +40,8 @@ namespace Fanex.NexHR.Controllers
             {
                 StatusId = statusId.Value
             };
-
             var shifts = _shiftService.GetAll(statusId.Value);
             model.Shifts = shifts;
-
             return View(model);
         }
 
