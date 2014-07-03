@@ -368,6 +368,66 @@ namespace Fanex.NexHR.Controllers
         }
 
         /// <summary>
+        /// Total Working Hour Weekly.
+        /// </summary>
+        /// <param name="startDate">Query from Date.</param>
+        /// <param name="endDate">Query to Date.</param>
+        /// <param name="employee">Employee Display name.</param>
+        /// <param name="teamIds">List of team id.</param>
+        /// <param name="employeeId">Employee id.</param>
+        /// <param name="isLocal">Expat or local.</param>
+        /// <param name="requestData">Request data or not.</param>
+        /// <param name="isExcel">Is exported excel.</param>
+        /// <returns>The view of TotalWorkingHourWeekly.</returns>
+        public ActionResult TotalWorkingHourWeekly(
+            DateTime? startDate,
+            DateTime? endDate,
+            string employee,
+            string teamIds,
+            int? employeeId,
+            byte? isLocal = null,
+            bool requestData = false,
+            bool isExcel = false)
+        {
+            if (startDate == null && endDate == null)
+            {
+                var dayDiff = DayOfWeek.Monday - DateTime.Now.DayOfWeek;
+                startDate = DateTime.Now.AddDays(dayDiff);
+                endDate = startDate.Value.AddDays(6);
+            }
+
+            ViewBag.Groups = _teamService.GetAll();
+            ViewBag.TeamIds = teamIds;
+
+            var model = new TotalWorkingHourWeeklyViewModel
+            {
+                EmployeeId = employeeId,
+                Employee = employee,
+                StartDate = startDate.Value.ToString("dd MMM, yyyy"),
+                EndDate = endDate.Value.ToString("dd MMM, yyyy"),
+                IsLocal = isLocal,
+                TeamIds = teamIds
+            };
+
+            if (requestData)
+            {
+                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = _reportService.GetTotalWorkingHourWeekly(employeeId, startDate.Value, endDate.Value, teamIds, isLocal);
+                TotalWorkingHourMonthly firstRecord = totalWorkingHourWeekly != null && totalWorkingHourWeekly.Any() ? totalWorkingHourWeekly[0] : null;
+                ViewBag.EntityList = totalWorkingHourWeekly;
+                ViewBag.FirstRecord = firstRecord;
+
+                if (isExcel)
+                {
+                    string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+                    var hssfworkbook = _exportExcelService.ExportTotalWorkingHourMonthly(totalWorkingHourWeekly, firstRecord);
+                    return ExcelFile(hssfworkbook, fileName);
+                }
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
         /// ActionResult LeaveSummary.
         /// </summary>
         /// <param name="teamIds">Team's id.</param>

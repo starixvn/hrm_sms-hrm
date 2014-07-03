@@ -424,6 +424,16 @@
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/report.totalworkinghourmonthly.js" />
     </resourceSet>
+
+		<resourceSet name="totalworkinghourweeklycss" type="css">
+			<resource reference="sitecss"/>
+			<resource path="~/styles/report.totalworkinghourmonthly.css" />
+		</resourceSet>
+		<resourceSet name="totalworkinghourweeklyjs" type="js">
+			<resource reference="sitejs"/>
+			<resource path="~/scripts/views/employee.search.in.company.js" />
+			<resource path="~/scripts/views/report.totalworkinghourweekly.js" />
+		</resourceSet>
     
     <resourceSet name="memberrequestpersonalspacecss" type="css">
       <resource reference="sitecss"/>

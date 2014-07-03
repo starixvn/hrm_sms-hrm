@@ -66,6 +66,18 @@ namespace Fanex.NexHR.Services
             }
         }
 
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
+            int? empId,
+            DateTime fromTime,
+            DateTime toTime,
+            string groupIds,
+            byte? isLocal = null)
+        {
+            IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = null;
+            totalWorkingHourWeekly = _reportRepository.GetTotalWorkingHourWeekly(empId, fromTime, toTime, groupIds, isLocal);
+            return totalWorkingHourWeekly;
+        }
+
         public IList<RequestsMonitoring> GetRequestMonitoring(
             DateTime fromDate,
             DateTime toDate,

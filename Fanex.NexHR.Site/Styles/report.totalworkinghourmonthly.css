@@ -5,3 +5,19 @@
 #Employee {
 	width:140px;
 }
+
+ #StartDate, #EndDate
+{
+	width: 80px;
+}
+
+.custom-weekpicker
+{
+	position: fixed;
+	z-index: 1000;
+}
+
+#weekPickerImg
+{
+	margin-bottom: 4px;
+}

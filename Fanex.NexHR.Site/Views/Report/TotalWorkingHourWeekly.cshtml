@@ -1,0 +1,145 @@
+﻿@using Fanex.NexHR.Resources
+@model Fanex.NexHR.ViewModels.TotalWorkingHourWeeklyViewModel
+@{
+	ViewBag.Title = "Total Working Hour Weekly";
+}
+@section css{
+	@Url.CombresLink("totalworkinghourweeklycss")
+	@Url.CombresLink("managerequestscss")
+}
+@section js{
+	@Url.CombresLink("totalworkinghourweeklyjs")
+}
+@section Breadcrumb {
+	<a class="step">HR</a>
+	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+	<a class="step">@ViewBag.Title</a>
+}
+@using (Html.BeginForm())
+{        
+	<div class="container_24 bunhat">
+		<div class="grid_1">
+			@Html.Label("Week")
+		</div>
+		<div class="grid_6">
+			@Html.TextBoxFor(model => model.StartDate)
+			@Html.TextBoxFor(model => model.EndDate)
+			<img id="weekPickerImg" src="../../images/calendar.png" />
+			<div class="week-picker">
+			</div>
+		</div>
+		<div class="grid_2 gridlabel">
+			Category
+		</div>
+		<div class="grid_4">
+			@{
+	var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+			}
+			@Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
+		</div>
+		<div class="clear">
+		</div>
+		<div class="space">
+		</div>
+		<div class="grid_1">
+			@Html.Label("Team", new { @class = "lableteam" })
+		</div>
+		<div class="grid_6">
+			<select id="TeamId" multiple="multiple" name="TeamId">
+				@{
+	var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
+	var selected = string.Empty;
+	foreach (Team team in ViewBag.Groups)
+	{
+		selected = string.Empty;
+		if (teamIds != null)
+		{
+			int pos = Array.IndexOf(teamIds, team.Id.ToString());
+			if (pos > -1)
+			{
+				selected = "selected";
+			}
+		}
+                        
+					<option @selected value="@team.Id">@team.Name</option> 
+	}
+				}
+			</select>
+		</div>
+		<div class="grid_2">
+			@Html.LabelFor(model => model.Employee)
+		</div>
+		<div class="grid_4">
+			@Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+			@Html.HiddenFor(model => model.EmployeeId)
+		</div>
+		<div class="grid_5">
+			<input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit"/>
+			<input id="btnExcel" type="submit" value="Excel" />
+		</div>
+		<div class="clear">
+		</div>
+	</div>
+}
+@if (ViewBag.EntityList != null && ViewBag.EntityList.Count > 0)
+{
+    var firstRecord = (TotalWorkingHourMonthly)ViewBag.FirstRecord;
+    <table class="data persist-area">
+    <thead>
+        <tr class = "persist-header">
+            <th>#</th>
+            <th>@Labels.StaffId</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.FullNameNick</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.CountWorkDay</th>
+            @{
+                for (int i = 0; i < firstRecord.WorkingHours.Count; i++)
+                  {
+                    <th>@firstRecord.WorkingHours[i]</th>
+                  }
+            }
+        </tr>
+    </thead>
+   
+@if (ViewBag.EntityList.Count > 1)
+{
+    <tbody>
+    @{int index = 0;}
+    @foreach (TotalWorkingHourMonthly item in ViewBag.EntityList)
+    {
+        if (index == 0)
+        {
+            index++;
+        }
+        else
+        {
+            <tr>
+                <td>@(index++)
+                </td>
+                <td class="left">@item.StaffId</td>
+                <td class="left">@item.Section</td>
+                <td class="left">@item.FullNameNick</td>
+                <td class="left">@item.Nick</td>
+                <td>@item.CountWorkDay.ToString("0.0")</td>        
+                @for (int i = 0; i < item.WorkingHours.Count; i++)
+                  {
+                    <td>@item.WorkingHours[i]</td>
+                  }            
+            </tr>  
+        }
+    }
+    </tbody>
+}
+else
+{ 
+    @RazorHelper.DisplayNoInformation(colspan: firstRecord.WorkingHours.Count + 6);
+}
+              
+</table>
+}

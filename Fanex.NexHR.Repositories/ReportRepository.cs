@@ -237,6 +237,57 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
+        /// Get Total Working Hour Weekly.
+        /// </summary>
+        /// <param name="empId">Employee Id.</param>
+        /// <param name="fromDate">From Date.</param>
+        /// <param name="toDate">Query to date.</param>
+        /// <param name="groupIds">Group Ids.</param>
+        /// <param name="isLocal">Local or expat.</param>
+        /// <returns>TotalWorkingHourMonthly Model.</returns>
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
+            int? empId,
+            DateTime fromDate,
+            DateTime toDate,
+            string groupIds,
+            byte? isLocal = null)
+        {
+            using (var db = new ObjectDb("Report_EmployeeTotalWorkingHourByWeek"))
+            {
+                var entityList = new List<TotalWorkingHourMonthly>();
+
+                using (IDataReader reader = db.ExecuteReader(new { empId, fromDate, toDate, groupIds, isLocal }))
+                {
+                    if (reader != null)
+                    {
+                        while (reader.Read())
+                        {
+                            var entity = new TotalWorkingHourMonthly
+                            {
+                                StaffId = Convert.ToString(reader.GetValue(0)),
+                                Section = Convert.ToString(reader.GetValue(1)),
+                                FullNameNick = Convert.ToString(reader.GetValue(2)),
+                                Nick = Convert.ToString(reader.GetValue(3)),
+                                CountWorkDay = Convert.ToDecimal(reader.GetValue(4)),
+                            };
+
+                            entity.WorkingHours = new List<string>();
+                            for (int i = 5; i < reader.FieldCount; i++)
+                            {
+                                var workingHour = reader.GetValue(i);
+                                entity.WorkingHours.Add(Convert.ToString(workingHour));
+                            }
+
+                            entityList.Add(entity);
+                        }
+                    }
+                }
+
+                return entityList;
+            }
+        }
+
+        /// <summary>
         /// Method get annual leave balance.
         /// </summary>
         /// <param name="year">Year to get.</param>
@@ -526,11 +577,11 @@ namespace Fanex.NexHR.Repositories
             {
                 timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
                     (t, e, g) =>
-                       {
-                           t.Employee = e;
-                           e.Team = g;
-                           return t;
-                       },
+                    {
+                        t.Employee = e;
+                        e.Team = g;
+                        return t;
+                    },
                        splitOn: "EmpId, GroupId",
                        parameterValues: new { EmpId = employeeId, groupIds = groupIds, fromDate = fromDate, toDate = toDate, isLocal }).ToList();
             }
