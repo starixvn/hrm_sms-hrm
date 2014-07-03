@@ -883,6 +883,31 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
+        /// Method Order for Shift Manager.
+        /// </summary>
+        /// <param name="memberOrder">MemberScheduleOrder Model.</param>
+        /// <param name="errorCode">Error code returned.</param>
+        /// <param name="message">Error Message returned.</param>
+        /// <returns>Error code.</returns>
+        public int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message)
+        {
+            using (ObjectDb db = new ObjectDb("EmployeeSupervisor_UpdateOrderShiftArrange"))
+            {
+                db.AddInParameter("@SupervisorId", DbType.Int32, memberOrder.SupervisorId);
+                db.AddInParameter("@EmployeeOrders", DbType.String, memberOrder.MemberOrderXML);
+                db.AddInParameter("@ModifiedBy", DbType.Int32, memberOrder.ModifiedBy);
+                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
+                db.AddOutParameter("@ErrMsg", DbType.String, 200);
+
+                db.ExecuteScalar();
+                errorCode = (int)db.GetParameterValue("ErrCode");
+                message = db.GetParameterValue("ErrMsg") as string;
+
+                return errorCode;
+            }
+        }
+
+        /// <summary>
         /// Update Status for Password reset.
         /// </summary>
         /// <param name="empId">Employee id.</param>

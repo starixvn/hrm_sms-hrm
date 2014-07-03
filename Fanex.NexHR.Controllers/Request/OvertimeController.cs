@@ -330,6 +330,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="statusId">Status Id.</param>
         /// <returns>Action Result.</returns>
         [Authorize(Roles = "Verifier, Approver")]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -352,6 +353,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="statusId">Status Id.</param>
         /// <returns>Action Result.</returns>
         [Authorize(Roles = "HR")]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)

@@ -93,3 +93,7 @@ table.datasupervisor td.left
 {
     vertical-align: middle;
 }
+ .ordercode
+ {
+     width: 50px !important;
+     }

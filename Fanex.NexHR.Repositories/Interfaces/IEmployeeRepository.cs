@@ -126,6 +126,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy, out int errorCode, out string message);
 
+        int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message);
+
         IList<SupervisorNameModel> GetEmployeeCanClaimOvertime();
     }
 }

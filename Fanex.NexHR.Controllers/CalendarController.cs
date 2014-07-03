@@ -279,20 +279,24 @@ namespace Fanex.NexHR.Controllers
         /// <summary>
         /// Action to order schedule member.
         /// </summary>
-        /// <param name="employeeIds">List Employee Ids.</param>
+        /// <param name="employeeOrders">Employee Orders.</param>
         /// <returns>Boolean to check.</returns>
         [HttpPost]
-        public ActionResult MemberScheduleInOrder(string employeeIds)
+        public ActionResult MemberScheduleInOrder(string employeeOrders)
         {
-            var shiftArrange = new ShiftManagerViewModel
+            var errorCode = 0;
+            var message = string.Empty;
+            var employeeOrdersDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<MemberOrderModel>(employeeOrders);
+            var memberOrders = new MemberScheduleOrderModel
             {
-                EmployeeId = this.CurrentUser.Id,
-                SupervisorRole = (short)RolesEnum.ShiftManager,
-                RoleShiftArrange = employeeIds
+                SupervisorId = this.CurrentUser.Id,
+                MemberOrders = employeeOrdersDetail,
+                ModifiedBy = this.CurrentUser.Id
             };
-            var result = _employeeService.InsertEmployeeShiftManager(shiftArrange, this.CurrentUser.Id);
 
-            return Json(new { result = result == 0 }, JsonRequestBehavior.AllowGet);
+            _employeeService.UpdateOrderShiftArrange(memberOrders, out errorCode, out message);
+
+            return Json(new { errorCode, message }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

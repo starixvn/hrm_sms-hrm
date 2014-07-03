@@ -95,5 +95,7 @@ namespace Fanex.NexHR.Models
         public int Overtimes { get; set; }
 
         public int ArrangeShifts { get; set; }
+
+        public string OrderCode { get; set; }
     }
 }

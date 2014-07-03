@@ -129,6 +129,8 @@ namespace Fanex.NexHR.Services.Interface
 
         int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
 
+        int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message);
+
         int UpdatePasswordResetStatus(int empId, bool passwordReset);
     }
 }

@@ -8,28 +8,32 @@
             ScheduleArrangeSort.btnCancel = $("#btnCancel");
 
             ScheduleArrangeSort.btnSave.on("click", function () {
-                var employeeIds = "";
+                var employeeOrders = [];
                 var employees = $("#tblSupervisor").find("tbody tr");
 
                 for (var i = 0; i < employees.length; i++) {
-                    var employeeTR = $(employees[i]).children().eq(1);
-                    var employeeId = employeeTR.attr("data-id");
-                    employeeIds += employeeId + ",";
+                    var employeeId = $(employees[i]).children().eq(2).attr("data-id");
+                    var orderCode = $($(employees[i]).find("input.ordercode").first()).val();
+
+                    employeeOrders.push({
+                        EmployeeId: employeeId,
+                        OrderCode: $.trim(orderCode)
+                    });
                 }
 
                 $.ajax({
                     type: 'POST',
                     url: _global.root + 'calendar/MemberScheduleInOrder',
                     data: {
-                        employeeIds: employeeIds
+                        employeeOrders: JSON.stringify(employeeOrders)
                     },
                     success: function (data) {
-                        if (data) {
+                        if (data.errorCode == 0) {
                             //alert("Saved success!");
                             location.href = _global.root + "Calendar/arrangeschedule";
                         }
                         else {
-                            alert("An error occurred!");
+                            alert(data.message);
                         }
                     }
                 });

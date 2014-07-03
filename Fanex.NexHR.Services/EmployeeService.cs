@@ -467,6 +467,11 @@ namespace Fanex.NexHR.Services
             return this._employeeRepository.InsertEmployeeShiftManager(shiftManagerModel, modifiedBy, out errorCode, out message);
         }
 
+        public int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message)
+        {
+            return this._employeeRepository.UpdateOrderShiftArrange(memberOrder, out errorCode, out message);
+        }
+
         public int UpdatePasswordResetStatus(int empId, bool passwordReset)
         {
             int errorCode;

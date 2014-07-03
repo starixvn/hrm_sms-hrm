@@ -152,6 +152,7 @@
       <Setting Key="EmployeeSupervisor_InsertEmpMngShiftList" SpName="EmployeeSupervisor_InsertEmpMngShiftList" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
+      <Setting Key="EmployeeSupervisor_UpdateOrderShiftArrange" SpName="EmployeeSupervisor_UpdateOrderShiftArrange" DbName="nexhrx" Plain="0"></Setting>
 	</Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>

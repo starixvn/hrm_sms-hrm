@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.ViewModels.ShiftManagerViewModel
+﻿@model ShiftManagerViewModel
 @{
     ViewBag.Title = "Update Shift Manager";
     Layout = null;
@@ -10,6 +10,9 @@
     <table id="tblSupervisor" class="datasupervisor">
         <thead>
             <tr>
+                <th>
+                    Order Code
+                </th>
                 <th rowspan="2" class="supervisor">
                     Priority
                 </th>
@@ -27,6 +30,9 @@
                 foreach (var item in Model.ShiftManagerList)
                 {
                 <tr>
+                    <td>
+                        <input type="text" class="ordercode" value="@item.OrderCode"/>
+                    </td>
                     <td>
                         <a href="javascript:;" class="up">Up |</a> <a href="javascript:;" class="down">Down
                             |</a> <a href="javascript:;" class="moveTop">Top</a>

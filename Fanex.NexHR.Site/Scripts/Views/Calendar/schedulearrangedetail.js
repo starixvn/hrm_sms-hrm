@@ -85,13 +85,15 @@
 
             $(".lnkOffAndNoShift").on("click", function () {
                 if ($("input[type='checkbox'].multiple:checked").length > 0) {
-                    var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']");
+                    var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']:not(.holiday)");
                     objectSelected.addClass("offday");
                     for (var i = 0; i < objectSelected.length; i++) {
                         $(objectSelected[i]).val("Off");
                         $(objectSelected[i]).removeAttr("data-shiftid");
                     }
 
+                    var trObject = objectSelected.parent().parent();
+                    ScheduleArrangeDetail.checkWarningRow(trObject);
                     ScheduleArrangeDetail.hasChangeValue = true;
                 }
                 else {
@@ -254,10 +256,10 @@
                     "Ok": function () {
                         var shiftCode = $.trim($("#shiftmulti").val());
                         var shiftId = $("#shiftmulti").attr("data-shiftid");
-                        var isOffday = $("#chkIsShiftInOffday").attr("checked") == "checked";
-                        var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']");
+                        var isOffday = $("#chkIsShiftInOffday").attr("checked") === "checked" || shiftCode.toLowerCase() === "off";
+                        var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']:not(.holiday)");
 
-                        if (shiftId != "undefined" && shiftCode.length > 0) {
+                        if (shiftId != "undefined" && shiftCode.length > 0 && shiftCode.toLowerCase() !== "off") {
                             objectSelected.val(shiftCode);
                             objectSelected.attr("data-shiftid", shiftId);
                         }
@@ -272,6 +274,8 @@
                             objectSelected.removeClass("offday");
                         }
 
+                        var trObject = objectSelected.parent().parent();
+                        ScheduleArrangeDetail.checkWarningRow(trObject);
                         ScheduleArrangeDetail.hasChangeValue = true;
                         $(this).dialog("close");
                     },
@@ -354,7 +358,7 @@
 
             $(".lnkOffday").on("click", function () {
                 if ($("input[type='checkbox'].multiple:checked").length > 0) {
-                    var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']");
+                    var objectSelected = $("input[type='checkbox'].multiple:checked").parent().prev().find("input[type='text']:not(.holiday)");
                     objectSelected.addClass("offday");
                     for (var i = 0; i < objectSelected.length; i++) {
                         if ($.trim($(objectSelected[i]).val()).length == 0) {
@@ -362,6 +366,8 @@
                         }
                     }
 
+                    var trObject = objectSelected.parent().parent();
+                    ScheduleArrangeDetail.checkWarningRow(trObject);
                     ScheduleArrangeDetail.hasChangeValue = true;
                 }
                 else {
@@ -381,6 +387,8 @@
                         }
                     }
 
+                    var trObject = objectSelected.parent().parent();
+                    ScheduleArrangeDetail.checkWarningRow(trObject);
                     ScheduleArrangeDetail.hasChangeValue = true;
                 }
                 else {
