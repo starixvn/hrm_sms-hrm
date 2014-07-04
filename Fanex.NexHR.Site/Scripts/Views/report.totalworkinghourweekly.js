@@ -3,10 +3,6 @@
 	$("#StartDate, #EndDate").attr('readonly', true);
 	$('.week-picker').hide();
 
-	$("#weekPickerImg").click(function () {
-		$('.week-picker').toggle();
-	});
-
 	$("#btnSubmit").click(function (e) {
 		e.preventDefault();
 		submitForm(false);
@@ -15,6 +11,17 @@
 	$("#btnExcel").click(function (e) {
 		e.preventDefault();
 		submitForm(true);
+	});
+
+	$(document).click(function (e) {
+		var ele = $(e.toElement);
+		var elementId = ele.attr("id");
+		if (elementId == "weekPickerImg" || elementId == "StartDate" || elementId == "EndDate") {
+			$('.week-picker').toggle();
+		}
+		else {
+			$('.week-picker').hide();
+		}
 	});
 
 	function submitForm(isExcel) {
