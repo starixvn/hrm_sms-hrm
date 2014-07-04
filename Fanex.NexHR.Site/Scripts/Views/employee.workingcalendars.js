@@ -14,7 +14,6 @@
 	});
 
 	//Click next link
-
 	$('#next').click(function (e) {
 		destroyDatatable($(this));
 		var fromNextDate = $("#FromNextDate").val();
@@ -24,26 +23,21 @@
 	});
 
 	//Click previous link
-
 	$('#prev').click(function (e) {
 		destroyDatatable($(this));
 		var fromPrevDate = $("#FromPreviousDate").val();
 		var toPrevDate = $("#ToPreviousDate").val();
 		var object = prepareDataToQuery(fromPrevDate, toPrevDate);
 		getWorkingCalendarDetails($(this), fromPrevDate, toPrevDate, object.group, object.title);
-
-		//reloadButton(element);
 	});
 
 	//Click submit button
-
 	$('#submit').click(function (e) {
 		destroyDatatable($(this));
 		var fromDate = $("#StartDate").val();
 		var toDate = $("#EndDate").val();
 		var object = prepareDataToQuery(fromDate, toDate);
 		getWorkingCalendarDetails($(this), fromDate, toDate, object.group, object.title);
-
 	});
 
 	function prepareDataToQuery(fromPrevOrNexDate, toPrevOrNexDate) {
@@ -106,7 +100,6 @@
         	reload(button);
         });
 	}
-
 });
 
 function exportExcel() {
