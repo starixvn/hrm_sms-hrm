@@ -1,119 +1,111 @@
 ﻿$(document).ready(function () {
 
-    var fromDate = $("#OriginalFromDate").val();
-    var toDate = $("#OriginalToDate").val();
-    var displayDateFrom = new Date(fromDate);
-    var displayDateTo = new Date(toDate);
-    $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
-    $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
+	var fromDate = $("#OriginalFromDate").val();
+	var toDate = $("#OriginalToDate").val();
+	$("#displayFrom, #StartDate").text($.datepicker.formatDate('d M, yy', new Date(fromDate)));
+	$("#displayTo, #EndDate").text($.datepicker.formatDate('d M, yy', new Date(toDate)));
 
-    getWorkingCalendarDetails($("#submit"), fromDate, toDate);
-    $('#group').multiselect();
-    $("#title").multiselect({
-        noneSelectedText: 'Select positions',
-        selectedText: '# selected',
-        selectedList: 0
-    });
+	getWorkingCalendarDetails($("#submit"), fromDate, toDate);
+	$('#group').multiselect();
+	$("#title").multiselect({
+		noneSelectedText: 'Select positions',
+		selectedText: '# selected',
+		selectedList: 0
+	});
 
-    //Click next link
+	//Click next link
 
-    $('#next').click(function (e) {
-        var element = $(this);
-        buttonLoading(element, true);
+	$('#next').click(function (e) {
+		destroyDatatable($(this));
+		var fromNextDate = $("#FromNextDate").val();
+		var toNextDate = $("#ToNextDate").val();
+		var object = prepareDataToQuery(fromNextDate, toNextDate);
+		getWorkingCalendarDetails($(this), fromNextDate, toNextDate, object.group, object.title);
+	});
 
-        $("#workingCalendarDetails").dataTable().fnDestroy();
-        var fromNextDate = $("#FromNextDate").val();
-        var toNextDate = $("#ToNextDate").val();
-        var displayDateFrom = new Date(fromNextDate);
-        var displayDateTo = new Date(toNextDate);
-        $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
-        $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
-        var group = $("#group").val() != null ? $("#group").val().join() : "";
-        var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(element, fromNextDate, toNextDate, group, title);
-    });
+	//Click previous link
 
-    //Click previous link
+	$('#prev').click(function (e) {
+		destroyDatatable($(this));
+		var fromPrevDate = $("#FromPreviousDate").val();
+		var toPrevDate = $("#ToPreviousDate").val();
+		var object = prepareDataToQuery(fromPrevDate, toPrevDate);
+		getWorkingCalendarDetails($(this), fromPrevDate, toPrevDate, object.group, object.title);
 
-    $('#prev').click(function (e) {
-        var element = $(this);
-        buttonLoading(element, true);
+		//reloadButton(element);
+	});
 
-        $("#workingCalendarDetails").dataTable().fnDestroy();
-        var fromPrevDate = $("#FromPreviousDate").val();
-        var toPrevDate = $("#ToPreviousDate").val();
-        var displayDateFrom = new Date(fromPrevDate);
-        var displayDateTo = new Date(toPrevDate);
-        $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
-        $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
+	//Click submit button
 
-        var group = $("#group").val() != null ? $("#group").val().join() : "";
-        var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(element, fromPrevDate, toPrevDate, group, title);
+	$('#submit').click(function (e) {
+		destroyDatatable($(this));
+		var fromDate = $("#StartDate").val();
+		var toDate = $("#EndDate").val();
+		var object = prepareDataToQuery(fromDate, toDate);
+		getWorkingCalendarDetails($(this), fromDate, toDate, object.group, object.title);
 
-        //reloadButton(element);
-    });
+	});
 
-    //Click submit button
+	function prepareDataToQuery(fromPrevOrNexDate, toPrevOrNexDate) {
+		var dataObject = {};
+		var displayDateFrom = $.datepicker.formatDate('d M, yy', new Date(fromPrevOrNexDate));
+		var displayDateTo = $.datepicker.formatDate('d M, yy', new Date(toPrevOrNexDate));
+		$("#displayFrom").text(displayDateFrom);
+		$("#displayTo").text(displayDateTo);
+		$("#StartDate").val(displayDateFrom);
+		$("#EndDate").val(displayDateTo);
+		var group = $("#group").val() != null ? $("#group").val().join() : "";
+		var title = $("#title").val() != null ? $("#title").val().join() : "";
+		dataObject = { group: group, title: title };
 
-    $('#submit').click(function (e) {
-        var element = $(this);
-        buttonLoading(element, true);
-        $("#workingCalendarDetails").dataTable().fnDestroy();
+		return dataObject;
+	}
 
-        var fromDate = $("#OriginalFromDate").val();
-        var toDate = $("#OriginalToDate").val();
-        var displayDateFrom = new Date(fromDate);
-        var displayDateTo = new Date(toDate);
-        $("#displayFrom").text($.datepicker.formatDate('d M, yy', displayDateFrom));
-        $("#displayTo").text($.datepicker.formatDate('d M, yy', displayDateTo));
+	function destroyDatatable(element) {
+		buttonLoading(element, true);
+		$("#workingCalendarDetails").dataTable().fnDestroy();
+	}
 
-        var group = $("#group").val() != null ? $("#group").val().join() : "";
-        var title = $("#title").val() != null ? $("#title").val().join() : "";
-        getWorkingCalendarDetails(element, fromDate, toDate, group, title);
+	$("#exportExcel").click(function () {
+		exportExcel();
+	});
 
-    });
-
-    $("#exportExcel").click(function () {
-        exportExcel();
-    });
-
-    function getWorkingCalendarDetails(button, fromDate, toDate, group, title) {
-        var employeeText = $("#Employee").val();
-        var workingCalendarContainer = $("#workingCalendarDetails");
-        var employeeId = $("#EmployeeId").val();
-        if (employeeText == "" || employeeText == null) {
-            employeeId = null;
-        }
-        var isLocal = $("#category").val();
-        if (isLocal == "0") {
-            isLocal = 0;
-        }
-        if (isLocal == "1") {
-            isLocal = 1;
-        }
-        $.get(_global.root + "calendar/WorkingCalendarDetails",
+	function getWorkingCalendarDetails(button, fromDate, toDate, group, title) {
+		var employeeText = $("#Employee").val();
+		var workingCalendarContainer = $("#workingCalendarDetails");
+		var employeeId = $("#EmployeeId").val();
+		if (employeeText == "" || employeeText == null) {
+			employeeId = null;
+		}
+		var isLocal = $("#category").val();
+		if (isLocal == "0") {
+			isLocal = 0;
+		}
+		if (isLocal == "1") {
+			isLocal = 1;
+		}
+		$.get(_global.root + "calendar/WorkingCalendarDetails",
             { "empId": employeeId, "fromDate": fromDate, "toDate": toDate, "groupId": group, "jobTitleId": title, isLocal: isLocal })
         .done(function (content) {
-            workingCalendarContainer.empty();
-            workingCalendarContainer.html(content).dataTable({
-                "sScrollY": "520px",
-                "sScrollX": "100%",
-                "sScrollXInner": "100%",
-                "bScrollCollapse": true,
-                "bFilter": true,
-                "bSort": false,
-                "bPaginate": true,
-                "sPaginationType": "full_numbers",
-                "bInfo": true,
-                "bJQueryUI": true,
-                'bLengthChange': false,
-                'iDisplayLength': 50,
-                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8]}]
-            });
-            reload(button);
+        	workingCalendarContainer.empty();
+        	workingCalendarContainer.html(content).dataTable({
+        		"sScrollY": "520px",
+        		"sScrollX": "100%",
+        		"sScrollXInner": "100%",
+        		"bScrollCollapse": true,
+        		"bFilter": true,
+        		"bSort": false,
+        		"bPaginate": true,
+        		"sPaginationType": "full_numbers",
+        		"bInfo": true,
+        		"bJQueryUI": true,
+        		'bLengthChange': false,
+        		'iDisplayLength': 50,
+        		"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8]}]
+        	});
+        	reload(button);
         });
-    }
+	}
 
 });
 

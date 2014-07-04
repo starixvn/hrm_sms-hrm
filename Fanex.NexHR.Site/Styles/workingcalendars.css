@@ -63,3 +63,8 @@
 {
     color: #ED4646;
 }
+
+#StartDate, #EndDate
+{
+	width: 80px;
+}

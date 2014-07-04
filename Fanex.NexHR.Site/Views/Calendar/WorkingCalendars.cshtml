@@ -1,12 +1,12 @@
 ﻿@model IList<Fanex.NexHR.ViewModels.WorkingCalendarsViewModel>
 @section css{
-    @Url.CombresLink("workingcalendarscss")
+	@Url.CombresLink("workingcalendarscss")
 }
 @section js{
-    @Url.CombresLink("workingcalendarsjs")
+	@Url.CombresLink("workingcalendarsjs")
 }
 @{
-    ViewBag.Title = "Working calendars";
+	ViewBag.Title = "Working calendars";
 }
 @*@{
     //Set max month we can select in MonthPick
@@ -17,79 +17,103 @@
     maxDate.AppendFormat("{0}/{1}/1", Year, Month);
 }*@
 @section Breadcrumb {
-    <a class="step">Company</a> <span class="step">@ViewBag.Title</span>
+	<a class="step">Company</a>
+	<span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
-{ 
-    <div class="container_24 bunhat">
-        <div class="grid_24">
-            <div class="grid_2 gridlabel">
-                Category
-            </div>
-            <div class="grid_3">
-                @{
-    var category = new List<SelectListItem>
+{
+	var displayFrom = ((DateTime)ViewBag.FromDate).ToString("dd MMM, yyyy");
+	var displayTo = ((DateTime)ViewBag.ToDate).ToString("dd MMMM, yyyy");
+	<div class="container_24 bunhat">
+		<div class="grid_24">
+			<div class="grid_2 gridlabel">
+				@Html.Label("Week")
+			</div>
+			<div class="grid_7">
+				@Html.TextBox("StartDate", displayFrom, new { @class = "startDateOfWeek" })
+				@Html.TextBox("EndDate", displayTo, new { @class = "endDateOfWeek" })
+				<img class="weekPickerImg" src="~/images/calendar.png" />
+				<div class="week-picker">
+				</div>
+			</div>
+
+			<div class="grid_2 gridlabel">
+				Group</div>
+			<div class="grid_6">
+				<select id="group" multiple="multiple" class="team-select">
+					@foreach (Team item in ViewBag.Groups)
+	 { 
+						<option value="@item.Id">@item.Name</option>
+	 }
+				</select>
+			</div>
+
+			<div class="grid_2 gridlabel">
+				Position</div>
+			<div class="grid_6">
+				@Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+			</div>
+
+
+			
+			<div class="clear">
+			</div>
+			<div class="space">
+			</div>
+			<div class="clear">
+			</div>
+			
+
+
+			<div class="grid_2 gridlabel">
+				Employee
+			</div>
+			<div class="grid_7">
+				@Html.Editor("Employee")
+				@Html.Hidden("EmployeeId")
+			</div>
+
+
+									<div class="grid_2 gridlabel">
+				Category
+			</div>
+			<div class="grid_3">
+				@{
+	var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"}, 
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
-                }
-                @Html.DropDownList("category", category, new { @class = "category" })
-            </div>
-            <div class="grid_1 gridlabel">
-                Group</div>
-            <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
-                    { 
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="grid_2 gridlabel">
-                Position</div>
-            <div class="grid_7">
-                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
-            </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="clear">
-            </div>
-            <div class="grid_2 gridlabel">
-                Employee
-            </div>
-            <div class="grid_7">
-                @Html.Editor("Employee")
-                @Html.Hidden("EmployeeId")
-            </div>
-            <div class="grid_2 gridlabel">
-                <input type="button" value="@Labels.Submit" id="submit"/>
-            </div>
-            <div class="grid_1 gridlabel">
-                <input type="button" value="Excel" id="exportExcel" />
-            </div>
-        </div>
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
+				}
+				@Html.DropDownList("category", category, new { @class = "category" })
+			</div>
+
+			<div class="grid_2 gridlabel">
+				<input type="button" value="@Labels.Submit" id="submit"/>
+			</div>
+			<div class="grid_1 gridlabel">
+				<input type="button" value="Excel" id="exportExcel" />
+			</div>
+		</div>
+	</div>
+	<div class="clear">
+	</div>
+	<div class="space">
+	</div>
+	<div class="clear">
+	</div>
 
     
-    <div class="grid_1 gridlabel" style="float: right;">
-        <input type="button" href="javascript:;" id="prev" value="<<" class="actionButton" />
-        <span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
-        </span>
-        <input href="javascript:;" id="next" type="button" value=">>" class="actionButton" />
-        @Html.Hidden("OriginalFromDate", (DateTime)ViewBag.FromDate)
-        @Html.Hidden("OriginalToDate", (DateTime)ViewBag.ToDate)
-    </div>
+	<div class="grid_1 gridlabel" style="float: right;">
+		<a id="prev" class="lnkPrevious" href="javascript:;">&lt;&lt; Previous </a>
+		<span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
+		</span>
+		<a id="next" class="lnkNext" href="javascript:;">Next &gt;&gt; </a>
+		@Html.Hidden("OriginalFromDate", (DateTime)ViewBag.FromDate)
+		@Html.Hidden("OriginalToDate", (DateTime)ViewBag.ToDate)
+	</div>
 
 }
 @*<div id="blocker">
@@ -100,20 +124,20 @@
 </table>
 <br />
 <div class="container_24" id="colordef">
-    <div class="grid_2 holiday tooltip" title="Public Holiday">
-        PH</div>
-    <div class="grid_2 offday tooltip" title="Off Day">
-        OFF</div>
-    <div class="grid_2 leaveday annualleave tooltip alpha" title="Annual Leave">
-        AL</div>
-    <div class="grid_2 leaveday unpaidleave tooltip alpha" title="Unpaid Leave">
-        UPL</div>
-    <div class="grid_2 leaveday businesstrip tooltip" title="Business Trip">
-        BT</div>
-    <div class="grid_2 leaveday weddingleave tooltip" title="Wedding Leave">
-        WL</div>
-    <div class="grid_2 leaveday leavehalfday2 tooltip" title="2 Leave half day">
-        H/H</div>
-    <div class="grid_2 changeshift tooltip" title="Change Shift">
-        CS</div>
+	<div class="grid_2 holiday tooltip" title="Public Holiday">
+		PH</div>
+	<div class="grid_2 offday tooltip" title="Off Day">
+		OFF</div>
+	<div class="grid_2 leaveday annualleave tooltip alpha" title="Annual Leave">
+		AL</div>
+	<div class="grid_2 leaveday unpaidleave tooltip alpha" title="Unpaid Leave">
+		UPL</div>
+	<div class="grid_2 leaveday businesstrip tooltip" title="Business Trip">
+		BT</div>
+	<div class="grid_2 leaveday weddingleave tooltip" title="Wedding Leave">
+		WL</div>
+	<div class="grid_2 leaveday leavehalfday2 tooltip" title="2 Leave half day">
+		H/H</div>
+	<div class="grid_2 changeshift tooltip" title="Change Shift">
+		CS</div>
 </div>
