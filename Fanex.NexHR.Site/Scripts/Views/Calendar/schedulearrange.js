@@ -21,7 +21,8 @@
             ScheduleArrange.fromDate = $("#FromDate");
             ScheduleArrange.toDate = $("#ToDate");
             ScheduleArrange.submit = $("#btnSubmit");
-            ScheduleArrange.currentWeek = $("#btnCurrentWeek");
+            //ScheduleArrange.currentWeek = $("#btnCurrentWeek");
+            ScheduleArrange.currentWeek = $("#lnkCurrentWeek");
             ScheduleArrange.btnSave = $("#btnSave");
             ScheduleArrange.scheduleContent = $("#scheduleContent");
 
@@ -38,24 +39,6 @@
 
                 if (ScheduleArrangeDetail.hasChangeValue) {
                     confirm(ScheduleArrange.messageComfirm, function () {
-                        
-                        ScheduleArrange.queryAction(ScheduleArrangeDetail.currentFromDate.val(),
-                        ScheduleArrangeDetail.currentToDate.val(), ScheduleArrange.employeeId.val());
-                    });
-                }
-                else {
-                    ScheduleArrange.queryAction(ScheduleArrangeDetail.currentFromDate.val(),
-                        ScheduleArrangeDetail.currentToDate.val(), ScheduleArrange.employeeId.val());
-                }
-            });
-
-            ScheduleArrange.currentWeek.on("click", function () {
-                if ($.trim(ScheduleArrange.employee.val()).length == 0) {
-                    ScheduleArrange.employeeId.val("");
-                }
-
-                if (ScheduleArrangeDetail.hasChangeValue) {
-                    confirm(ScheduleArrange.messageComfirm, function () {
                         ScheduleArrange.queryAction(ScheduleArrange.fromDate.val(),
                         ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
                     });
@@ -65,6 +48,28 @@
                         ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
                 }
             });
+
+            ScheduleArrange.currentWeek.on("click", function () {
+                ScheduleArrange.fromDate.val($("#CurrentStartDateOfWeek").val());
+                ScheduleArrange.toDate.val($("#CurrentEndDateOfWeek").val());
+            });
+
+            //            ScheduleArrange.currentWeek.on("click", function () {
+            //                if ($.trim(ScheduleArrange.employee.val()).length == 0) {
+            //                    ScheduleArrange.employeeId.val("");
+            //                }
+
+            //                if (ScheduleArrangeDetail.hasChangeValue) {
+            //                    confirm(ScheduleArrange.messageComfirm, function () {
+            //                        ScheduleArrange.queryAction(ScheduleArrange.fromDate.val(),
+            //                        ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
+            //                    });
+            //                }
+            //                else {
+            //                    ScheduleArrange.queryAction(ScheduleArrange.fromDate.val(),
+            //                        ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
+            //                }
+            //            });
 
             ScheduleArrange.btnSave.on("click", function () {
                 ScheduleArrangeDetail.saveArrangeSchedule();

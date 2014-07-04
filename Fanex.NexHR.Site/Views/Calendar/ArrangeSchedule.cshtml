@@ -52,20 +52,41 @@
                     }
                 </select>
             </div>
+
+            <div class="grid_2">
+                @Html.Label("Week")
+            </div>
+            <div class="grid_8">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate())
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate())
+                <img id="weekPickerImg" src="../../images/calendar.png" />
+
+                <a href="javascript:;" id="lnkCurrentWeek" title="Current week">
+                    Current week
+                </a>
+                <div class="week-picker">
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="clear"></div>
+        <div class="space"></div>
+
+        <div class="row">
             <div class="grid_2 prefix_2">
                 <input type="button" value="@Labels.Submit" id="btnSubmit"/>
             </div>
-            <div class="grid_3">
+            @*<div class="grid_3">
                 <input style="width:115px;" type="button" value="Current Week" id="btnCurrentWeek"/>
-            </div>
+            </div>*@
             <div class="grid_2">
                 <input type="button" value="@Labels.Save" id="btnSave"/>
             </div>
             <div class="clear"></div>
         </div>
-        @Html.HiddenFor(model => model.FromDate)
-        @Html.HiddenFor(model => model.ToDate)
-    
+        @Html.Hidden("CurrentStartDateOfWeek", Model.FromDate.ToDateMonthYearFormatedDate())
+        @Html.Hidden("CurrentEndDateOfWeek", Model.ToDate.ToDateMonthYearFormatedDate())
 </div>
 <div class="clear"></div>
 <div class="space"></div>

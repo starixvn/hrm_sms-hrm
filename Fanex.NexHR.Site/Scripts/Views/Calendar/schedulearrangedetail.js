@@ -595,6 +595,9 @@
             });
         },
         queryNextAction: function () {
+            ScheduleArrange.fromDate.val(ScheduleArrangeDetail.nextFromDate.val());
+            ScheduleArrange.toDate.val(ScheduleArrangeDetail.nextToDate.val());
+
             var groups = ScheduleArrangeDetail.groupId.val();
             var groupIds = groups != null ? groups.join() : "";
             var jobTitle = ScheduleArrangeDetail.jobTitle.val();
@@ -604,6 +607,9 @@
                         ScheduleArrangeDetail.nextToDate.val(), ScheduleArrangeDetail.employeeId.val(), groupIds, jobTitles);
         },
         queryPreviousAction: function () {
+            ScheduleArrange.fromDate.val(ScheduleArrangeDetail.previousFromDate.val());
+            ScheduleArrange.toDate.val(ScheduleArrangeDetail.previousToDate.val());
+
             var groups = ScheduleArrangeDetail.groupId.val();
             var groupIds = groups != null ? groups.join() : "";
             var jobTitle = ScheduleArrangeDetail.jobTitle.val();

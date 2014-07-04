@@ -151,3 +151,8 @@ fieldset {
     height:500px; 
     overflow:auto;
     }
+    
+#FromDate, #ToDate
+{
+    width: 80px;
+    }
