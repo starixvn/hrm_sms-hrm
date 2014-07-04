@@ -5,6 +5,8 @@
 	$("#displayFrom, #StartDate").text($.datepicker.formatDate('d M, yy', new Date(fromDate)));
 	$("#displayTo, #EndDate").text($.datepicker.formatDate('d M, yy', new Date(toDate)));
 
+	$("#displayTo, #EndDate").attr('readonly', 'readonly');
+
 	getWorkingCalendarDetails($("#submit"), fromDate, toDate);
 	$('#group').multiselect();
 	$("#title").multiselect({
