@@ -840,18 +840,18 @@ table.table-tooltip tr td.col2
 
 button.ui-multiselect
 {
-    background: -moz-linear-gradient(center top , #fff 0%, #fff 100%) repeat scroll 0 0 transparent;
-     border: 1px solid #C8C8C8;
-     text-align: left;
-     padding: 4px 4px 4px 4px;
-     line-height: 15px;
-     background: none;
-     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
+    background: #fff !important;
+    border: 1px solid #C8C8C8;
+    text-align: left;
+    padding: 4px 4px 4px 4px;
+    line-height: 15px;
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
     }
 button.ui-multiselect:hover
 {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0);
-    background: -moz-linear-gradient(center top , #fff 0%, #fff 100%) repeat scroll 0 0 transparent;
+    background: #fff;
     }
 button.ui-multiselect span
 {
