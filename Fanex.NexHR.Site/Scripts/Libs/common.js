@@ -654,11 +654,10 @@ function updateTableHeaders() {
 		}
 
 		$('.floatingHeader').width(widthspace);
-		var left = $('table thead tr:first').position()["left"];
+		var left = $('table.persist-area thead tr:first').position()["left"];
 
-
-         var isShowLeftMenu = $("#toggle-left-navigation").hasClass("large-next");
-         var widthLeftMenu = isShowLeftMenu ? 190 : 0;
+        var isShowLeftMenu = $("#toggle-left-navigation").hasClass("large-next");
+        var widthLeftMenu = isShowLeftMenu ? 190 : 0;
 
 		$(".persist-area").each(function () {
 			var el = $(this),
@@ -714,14 +713,13 @@ $(function () {
 		firstDay: 1,
 		showOn: "button",
 		buttonImageOnly: true,
-		buttonImage: "../../images/calendar.png",
 		onSelect: function (dateText, inst) {
 			var date = $(this).datepicker('getDate');
 			startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
 			endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
 			var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
-			$('#StartDate').val($.datepicker.formatDate(dateFormat, startDate, inst.settings));
-			$('#EndDate').val($.datepicker.formatDate(dateFormat, endDate, inst.settings));
+			$('.startDateOfWeek').val($.datepicker.formatDate(dateFormat, startDate, inst.settings));
+			$('.endDateOfWeek').val($.datepicker.formatDate(dateFormat, endDate, inst.settings));
 			selectCurrentWeek();
 			$('.week-picker').hide();
 		},
@@ -735,8 +733,24 @@ $(function () {
 			selectCurrentWeek();
 		}
 	});
-
+    
 	$('.week-picker .ui-datepicker-calendar tr').live('mousemove', function () { $(this).find('td a').addClass('ui-state-hover'); });
 	$('.week-picker .ui-datepicker-calendar tr').live('mouseleave', function () { $(this).find('td a').removeClass('ui-state-hover'); });
 	$('.week-picker .ui-datepicker').addClass('custom-weekpicker');
+    $('.week-picker').hide();
+
+    $(document).click(function (e) {
+        var ele = $(e.target) ? $(e.target) : $(e.toElement);
+        if (ele.hasClass("weekPickerImg") || ele.hasClass("startDateOfWeek") || ele.hasClass("endDateOfWeek")) {
+            $('.week-picker').toggle();
+        }
+        else {
+            var elementParent = ele.parents();
+            if (!(elementParent.hasClass('ui-datepicker-next') || elementParent.hasClass('ui-datepicker-prev') || elementParent.hasClass("hasDatepicker"))) {
+                $('.week-picker').hide();
+            }
+        }
+    });
 });
+
+

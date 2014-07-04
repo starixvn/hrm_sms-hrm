@@ -57,13 +57,9 @@
                 @Html.Label("Week")
             </div>
             <div class="grid_8">
-                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate())
-                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate())
-                <img id="weekPickerImg" src="../../images/calendar.png" />
-
-                <a href="javascript:;" id="lnkCurrentWeek" title="Current week">
-                    Current week
-                </a>
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(), new { @class = "startDateOfWeek", @readonly = "readonly"})
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(), new { @class = "endDateOfWeek", @readonly = "readonly" })
+                <img class="weekPickerImg" src="~/images/calendar.png" />
                 <div class="week-picker">
                 </div>
             </div>
@@ -77,9 +73,9 @@
             <div class="grid_2 prefix_2">
                 <input type="button" value="@Labels.Submit" id="btnSubmit"/>
             </div>
-            @*<div class="grid_3">
+            <div class="grid_3">
                 <input style="width:115px;" type="button" value="Current Week" id="btnCurrentWeek"/>
-            </div>*@
+            </div>
             <div class="grid_2">
                 <input type="button" value="@Labels.Save" id="btnSave"/>
             </div>

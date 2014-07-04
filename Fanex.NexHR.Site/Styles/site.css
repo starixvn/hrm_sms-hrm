@@ -948,3 +948,8 @@ div.confirm div.inputRemark textarea
 {
     padding-left: 10px;
     }
+.custom-weekpicker
+{
+	position: fixed;
+	z-index: 1000;
+}

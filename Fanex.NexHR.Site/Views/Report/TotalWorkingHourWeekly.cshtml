@@ -22,9 +22,9 @@
 			@Html.Label("Week")
 		</div>
 		<div class="grid_6">
-			@Html.TextBoxFor(model => model.StartDate)
-			@Html.TextBoxFor(model => model.EndDate)
-			<img id="weekPickerImg" src="../../images/calendar.png" />
+			@Html.TextBoxFor(model => model.StartDate, new { @class = "startDateOfWeek" })
+			@Html.TextBoxFor(model => model.EndDate, new { @class = "endDateOfWeek" })
+			<img class="weekPickerImg" src="~/images/calendar.png" />
 			<div class="week-picker">
 			</div>
 		</div>

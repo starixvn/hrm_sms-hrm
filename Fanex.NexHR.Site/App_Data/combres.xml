@@ -302,7 +302,6 @@
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
     <resourceSet name="schedulearrangedetailjs" type="js">
-      <resource path="~/scripts/libs/common.js" />
       <resource path="~/scripts/views/Calendar/schedulearrangedetail.js" />
     </resourceSet>
 
