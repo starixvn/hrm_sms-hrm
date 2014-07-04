@@ -14,13 +14,19 @@
 	});
 
 	$(document).click(function (e) {
-		var ele = $(e.toElement);
+		var ele = $(e.target) ? $(e.target) : $(e.toElement);
+		var acb = ele.parents();
 		var elementId = ele.attr("id");
 		if (elementId == "weekPickerImg" || elementId == "StartDate" || elementId == "EndDate") {
 			$('.week-picker').toggle();
 		}
 		else {
-			$('.week-picker').hide();
+			var elementParent = ele.parents();
+			if (elementParent.hasClass('ui-datepicker-next') || elementParent.hasClass('ui-datepicker-prev') || elementParent.hasClass("hasDatepicker")) {
+			}
+			else {
+				$('.week-picker').hide();
+			}
 		}
 	});
 
