@@ -19,7 +19,8 @@
         + "&Employee=" + $("#Employee").val()
         + "&EmployeeId=" + $("#EmployeeId").val()
         + "&DateOption=" + $("#Date").val()
-        + "&IsExportExcel=" + isExportExcel;
+        + "&IsExportExcel=" + isExportExcel
+        + "&IsLocal=" + $("#IsLocal").val();
 
         location.href = url;
     }

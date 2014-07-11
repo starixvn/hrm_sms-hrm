@@ -39,8 +39,9 @@ namespace Fanex.NexHR.Services
         /// Function to get all shift.
         /// </summary>
         /// <param name="statusId">Status Id.</param>
+        /// <param name="isShowOff">Is Show Off.</param>
         /// <returns>Shift List.</returns>
-        public IList<Shift> GetAll(int statusId = 1)
+        public IList<Shift> GetAll(int statusId = 1, bool isShowOff = false)
         {
             var allShifts = this._shiftRepository.GetAll();
 
@@ -53,6 +54,17 @@ namespace Fanex.NexHR.Services
                 allShifts = allShifts.Where(t => t.IsDisabled == true).ToList();
             }
 
+            if (isShowOff)
+            {
+                var offDay = new Shift
+                {
+                    Code = "Off",
+                    Id = -1
+                };
+
+                allShifts.Insert(0, offDay);
+            }
+
             return allShifts;
         }
 
@@ -60,25 +72,11 @@ namespace Fanex.NexHR.Services
         /// Function to get shifts by query.
         /// </summary>
         /// <param name="query">Condition query.</param>
+        /// <param name="isShowOff">Is Show Off.</param>
         /// <returns>Shift List.</returns>
-        public IList<Shift> GetByQuery(string query)
+        public IList<Shift> GetByQuery(string query, bool isShowOff)
         {
-            IList<Shift> shifts = new List<Shift>();
-
-            var actualShifts = this.GetAll();
-
-            foreach (var shift in actualShifts)
-            {
-                shifts.Add(shift);
-            }
-
-            var offDay = new Shift
-            {
-                Code = "Off",
-                Id = -1
-            };
-
-            shifts.Insert(0, offDay);
+            IList<Shift> shifts = this.GetAll(isShowOff: isShowOff);
             query = query.ToUpper();
 
             if (shifts != null && shifts.Any())

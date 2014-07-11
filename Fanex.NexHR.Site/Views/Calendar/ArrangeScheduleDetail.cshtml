@@ -189,17 +189,17 @@
         <tr class="headerFilter">
             <th colspan="21">
                 <div style="float:left;">
-                    <a class="lnkPrevious" href="javascript:;"> << Previous </a> ||
-                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span> 
-                    || <a class="lnkNext" href="javascript:;"> Next >> </a>  
-                </div>
-                <div style="float:right;">
                     <a class="lnkSave" href="javascript:;" title="Save all"><img src="../../Images/icon-save.png"/></a> &nbsp; ||
                     <a class="lnkCheckAll" href="javascript:;"> Check all </a> ||
                     <a class="lnkUnCheckAll" href="javascript:;"> Uncheck all </a> ||
                     <a class="lnkOffAndNoShift" href="javascript:;"> Off No Shift </a> ||
                     <a class="lnkOffday" href="javascript:;"> Offday OT</a> ||
-                    <a class="lnkUnOffday" href="javascript:;"> Workday </a> 
+                    <a class="lnkUnOffday" href="javascript:;"> Workday </a>
+                </div>
+                <div style="float:right;">
+                    <a class="lnkPrevious" href="javascript:;"> << Previous </a> ||
+                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span> 
+                    || <a class="lnkNext" href="javascript:;"> Next >> </a>
                 </div>
             </th>
         </tr>

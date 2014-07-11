@@ -145,14 +145,15 @@ namespace Fanex.NexHR.Repositories
         /// <param name="toDate">Get to date.</param>
         /// <param name="empId">Employee's id.</param>
         /// <param name="groupIds">Group's id.</param>
+        /// <param name="isLocal">Is expat or local.</param>
         /// <returns>List of TotalWorkingHours.</returns>
-        public IList<TotalWorkingHours> GetWorkingHoursList(DateTime fromDate, DateTime toDate, int? empId, string groupIds)
+        public IList<TotalWorkingHours> GetWorkingHoursList(DateTime fromDate, DateTime toDate, int? empId, string groupIds, byte? isLocal = null)
         {
             using (var db = new ObjectDb("Report_WorkingHoursSummary"))
             {
                 var entityList = new List<TotalWorkingHours>();
 
-                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, empId, groupIds }))
+                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, empId, groupIds, isLocal }))
                 {
                     if (reader != null)
                     {
@@ -199,7 +200,7 @@ namespace Fanex.NexHR.Repositories
            DateTime month,
            int? empId,
            string groupIds,
-            byte? isLocal = null)
+           byte? isLocal = null)
         {
             using (var db = new ObjectDb("Report_EmployeeTotalWorkingHourByMonth"))
             {

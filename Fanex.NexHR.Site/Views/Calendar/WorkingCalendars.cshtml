@@ -20,6 +20,11 @@
 	<a class="step">Company</a>
 	<span class="step">@ViewBag.Title</span>
 }
+<div style="float:right">
+<a href="~/Holiday/index">Holiday</a>
+||
+<a href="~/Shift/index">Shift</a>
+</div>
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 {
@@ -79,7 +84,7 @@
 				Category
 			</div>
 			<div class="grid_3">
-				@{
+				@*@{
 	var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
@@ -88,6 +93,8 @@
                     };
 				}
 				@Html.DropDownList("category", category, new { @class = "category" })
+*@
+                @RazorHelper.CategoryDropDownList("category", "category", "")
 			</div>
 
 			<div class="grid_2 gridlabel">

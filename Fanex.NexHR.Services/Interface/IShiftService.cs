@@ -16,9 +16,9 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IShiftService
     {
-        IList<Shift> GetAll(int statusId = 1);
+        IList<Shift> GetAll(int statusId = 1, bool isShowOff = false);
 
-        IList<Shift> GetByQuery(string query);
+        IList<Shift> GetByQuery(string query, bool isShowOff);
 
         IList<SelectListItem> GetSelectList();
 

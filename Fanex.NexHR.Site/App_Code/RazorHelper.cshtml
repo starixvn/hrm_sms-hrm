@@ -25,6 +25,16 @@
         }
     </select>
 }
+
+@helper CategoryDropDownList(string id, string classHTML = "", string selectedId = "")
+    {
+    <select id="@id" class="@classHTML">
+        <option selected=@(string.IsNullOrWhiteSpace(selectedId)) value="">-- All --</option>
+        <option selected=@(selectedId == "0") value="0">Expat</option>
+        <option selected=@(selectedId == "1") value="1">Local</option>
+    </select>
+}
+
 @helper DisplayNoInformation(int colspan)
     {
     <tr>

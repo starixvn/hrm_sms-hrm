@@ -15,7 +15,9 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -88,9 +90,8 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             ViewBag.TotalRequest = numberOfRequest;
-            ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.UnavailDates = listUnavailDates;
-
+            
             return View(model);
         }
 
@@ -114,7 +115,6 @@ namespace Fanex.NexHR.Controllers.Request
                 {
                     foreach (ModelError error in item.Errors)
                     {
-                        ////ModelState.AddModelError(string.Empty, error.ErrorMessage);
                         return Json(new { success = false, errors = error.ErrorMessage });
                     }
                 }
@@ -139,21 +139,19 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(id);
-            var shifts = _ShiftService.GetAll();
             var employee = _EmployeeService.GetEmployeeById(changeShift.Requester.Id);
-            ViewBag.Shift = shifts;
             var model = new ChangeShiftViewModel();
             if (changeShift != null && shiftDetails != null)
             {
-                List<ShiftDetailsViewModel> lstShiftDeatails = new List<ShiftDetailsViewModel>();
-                foreach (var item in shiftDetails)
+                var lstShiftDeatails = new List<ShiftDetailsViewModel>();
+                foreach (ShiftDetails item in shiftDetails)
                 {
-                    ShiftDetailsViewModel shiftDetail = new ShiftDetailsViewModel
+                    var shiftDetail = new ShiftDetailsViewModel
                     {
                         Date = item.OnDate.ToString("MM/dd/yyyy"),
                         FromShift = item.FromShiftID,
                         ToShift = item.ToShiftID,
-                        ScheduleStatus = item.FromShift,
+                        ScheduleStatus = item.FromShiftID == -1 ? Labels.Off : item.FromShift,
                         ChangeToShiftCode = item.ToShift,
                         Remark = item.Remark,
                         ShiftId = item.ToShiftID,
@@ -176,6 +174,8 @@ namespace Fanex.NexHR.Controllers.Request
                 };
             }
 
+            var shifts = _ShiftService.GetAll(isShowOff: true);
+            ViewBag.Shift = shifts;
             GetVerifierApproverList(employee.Id, model);
             return View(model);
         }
@@ -201,41 +201,49 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>Action Result.</returns>
         public ActionResult ChangeShiftDetails(int employeeId, DateTime fromDate, DateTime toDate)
         {
-            List<ShiftDetailsViewModel> lstmodel = new List<ShiftDetailsViewModel>();
-            var shifts = _ShiftService.GetAll();
+            var model = new List<ShiftDetailsViewModel>();
+            var workingCalendars = _WorkingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
+            var shifts = _ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
-            var dayDiff = 0;
-            List<DateTime> listDateTime = new List<DateTime>();
-            listDateTime.Add(fromDate);
-            if (toDate >= fromDate)
-            {
-                dayDiff = toDate.Subtract(fromDate).Days;
 
-                for (int i = 1; i <= dayDiff; i++)
-                {
-                    var days = fromDate.AddDays(i);
-                    listDateTime.Add(days);
-                }
-            }
-
-            var unavailableDate = _EmployeeService.GetUnavailableDates(employeeId, fromDate, toDate).ToList();
-            listDateTime.RemoveAll(i => unavailableDate.Contains(i));
-            foreach (var item in listDateTime)
+            foreach (WorkingCalendarModel item in workingCalendars)
             {
-                var shift = _ShiftService.GetByDate(employeeId, item);
-                var model = new ShiftDetailsViewModel
+                var shiftDetail = new ShiftDetailsViewModel
                 {
-                    Date = item.ToString("ddd, MMM d, yyyy"),
-                    ////Date = String.Format("{0:ddd, MMM d, yyyy}", item),
+                    Date = item.WorkDate.ToString("ddd, MMM d, yyyy"),
                     Remark = string.Empty,
-                    ScheduleStatus = shift.Name,
-                    FromShift = shift.ShiftID,
+                    ScheduleStatus = GetScheduleStatus(item),
+                    FromShift = item.IsOffDay ? -1 : (item.Shift != null ? item.Shift.Id : 0),
                     HasData = false
                 };
-                lstmodel.Add(model);
+                model.Add(shiftDetail);
             }
 
-            return PartialView("ChangeShiftDetails", lstmodel);
+            return PartialView("ChangeShiftDetails", model);
+        }
+
+        /// <summary>
+        /// Function to get schedule status.
+        /// </summary>
+        /// <param name="model">WorkingCalendar Model.</param>
+        /// <returns>Schedule status.</returns>
+        private string GetScheduleStatus(WorkingCalendarModel model)
+        {
+            var schedule = string.Empty;
+            if (model.IsOffDay)
+            {
+                schedule = Labels.Off;
+            }
+            else if (!model.IsHoliday && !model.IsLeaveDay && !model.IsKeepInViewDay && !model.IsChangeShift && model.Shift != null)
+            {
+                schedule = model.Shift.Name;
+            }
+            else
+            {
+                schedule = Labels.NA;
+            }
+
+            return schedule;
         }
 
         /// <summary>

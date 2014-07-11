@@ -184,9 +184,9 @@ namespace Fanex.NexHR.Controllers
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetShift(string query)
+        public ActionResult GetShift(string query, bool isShowOff = false)
         {
-            var shifts = _shiftService.GetByQuery(query.Trim());
+            var shifts = _shiftService.GetByQuery(query.Trim(), isShowOff);
 
             return Json(shifts, JsonRequestBehavior.AllowGet);
         }

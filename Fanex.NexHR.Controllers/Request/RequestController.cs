@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -398,7 +399,7 @@ namespace Fanex.NexHR.Controllers.Request
             var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
             ViewBag.UnavailDates = listUnavailDates;
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(requestId);
-            var shifts = _ShiftService.GetAll();
+            var shifts = _ShiftService.GetAll(isShowOff: true);
             var employee = _EmployeeService.GetEmployeeById(shift.Requester.Id);
             ViewBag.Shift = shifts;
             var model = new ChangeShiftViewModel();
@@ -499,7 +500,7 @@ namespace Fanex.NexHR.Controllers.Request
                     Date = item.OnDate.ToString("MM/dd/yyyy"),
                     FromShift = item.FromShiftID,
                     ToShift = item.ToShiftID,
-                    ScheduleStatus = item.FromShift,
+                    ScheduleStatus = item.FromShiftID == -1 ? Labels.Off : item.FromShift,
                     ChangeToShiftCode = item.ToShift,
                     Remark = item.Remark,
                     ShiftId = item.ToShiftID,

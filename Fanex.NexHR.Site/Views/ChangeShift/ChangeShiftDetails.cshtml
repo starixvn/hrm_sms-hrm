@@ -1,4 +1,4 @@
-﻿@model List<Fanex.NexHR.ViewModels.ShiftDetailsViewModel>
+﻿@model List<ShiftDetailsViewModel>
 
 @section css{
     @Url.CombresLink("changeshiftcss")
@@ -14,7 +14,7 @@
                 Schedule status
             </th>
             <th rowspan="1">
-                Change to shift
+                Change to
             </th>
             <th rowspan="1">
                 Remark
@@ -22,24 +22,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (ShiftDetailsViewModel item in Model)
         {
             <tr class='left'>
                 <td>@item.Date</td>
                 <td>@item.ScheduleStatus</td>
-                <td>
-                    @Html.DropDownListFor(model => item.ToShift, new SelectList(ViewBag.Shift, "Id", "Code"), new { @class="item_ToShift"})
-                </td>
-                <td>@Html.TextBoxFor(model => item.Remark) </td>
-            
+                @if (item.ScheduleStatus == null || item.ScheduleStatus.Equals(Labels.NA))
+                { 
+                    <td>-</td>
+                    <td>-</td>
+                }
+                else
+                { 
+                    <td>
+                        @Html.DropDownListFor(model => item.ToShift, new SelectList(ViewBag.Shift, "Id", "Code"), new { @class = "item_ToShift" })
+                    </td>
+                    <td>@Html.TextBoxFor(model => item.Remark) </td>
+                }
+
                 @Html.HiddenFor(model => item.FromShift)
-
                 @Html.HiddenFor(model => item.ShiftId)
-
                 @Html.HiddenFor(model => item.HasData)
-                 
             </tr>
-           
         }
     </tbody>
 </table>

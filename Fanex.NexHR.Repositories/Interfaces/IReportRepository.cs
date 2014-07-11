@@ -37,7 +37,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
             DateTime fromDate,
             DateTime toDate,
             int? empId,
-            string groupIds);
+            string groupIds,
+            byte? isLocal = null);
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
             DateTime month,

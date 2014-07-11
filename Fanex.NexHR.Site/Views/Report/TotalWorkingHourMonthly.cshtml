@@ -39,15 +39,7 @@
                 Category
             </div>
             <div class="grid_3">
-                @{
-                    var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-                }
-                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
+                @RazorHelper.CategoryDropDownList("IsLocal", Model.IsLocal.ToString())
             </div>
         <div class="clear"></div>
         <div class="space"></div>

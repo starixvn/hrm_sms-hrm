@@ -39,13 +39,7 @@ table.tabledata thead tr.headermenu th
     text-decoration: underline;
     font-style: italic;
 }
-.header-title
-{
-    font-family: Abel,Arial,Helvetica, "myriad Pro" ,tahoma;
-    font-size: 1.8em;
-    text-shadow: 0 0 1px #DDDDDD;
-    font-weight: bold;
-}
+
 #txtSubjectMail
 {
     width: 350px;

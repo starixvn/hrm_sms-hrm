@@ -238,6 +238,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="dateOption">Date Options.</param>
         /// <param name="employeeId">Employee Id.</param>
         /// <param name="isExportExcel">Is exported to Excel.</param>
+        /// <param name="isLocal">Is Expat or local.</param>
         /// <returns>View TotalWorkingHours.</returns>
         public ActionResult TotalWorkingHours(
             string teamIds,
@@ -246,7 +247,8 @@ namespace Fanex.NexHR.Controllers
             DateTime? toDate = null,
             int? dateOption = null,
             int? employeeId = null,
-            bool isExportExcel = false)
+            bool isExportExcel = false,
+            byte? isLocal = null)
         {
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
@@ -259,7 +261,8 @@ namespace Fanex.NexHR.Controllers
                 ToDate = toDate.HasValue ? toDate.Value : new DateTime(year, month, DateTime.DaysInMonth(year, month)),
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 IsExportExcel = isExportExcel,
-                DateOption = dateOption.HasValue ? dateOption.Value : 5
+                DateOption = dateOption.HasValue ? dateOption.Value : 5,
+                IsLocal = isLocal
             };
 
             return TotalWorkingHours(model);
@@ -298,7 +301,8 @@ namespace Fanex.NexHR.Controllers
                 model.FromDate,
                 model.ToDate,
                 empId: (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds);
+                groupIds: model.TeamIds,
+                isLocal: model.IsLocal);
 
             ViewBag.EntityList = totalWorkingHours;
 

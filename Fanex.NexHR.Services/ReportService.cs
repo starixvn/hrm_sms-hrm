@@ -33,9 +33,10 @@ namespace Fanex.NexHR.Services
             DateTime fromDate,
             DateTime toDate,
             int? empId,
-            string groupIds) 
+            string groupIds,
+            byte? isLocal = null) 
         {
-            var totalWorkingHours = _reportRepository.GetWorkingHoursList(fromDate, toDate, empId, groupIds);
+            var totalWorkingHours = _reportRepository.GetWorkingHoursList(fromDate, toDate, empId, groupIds, isLocal);
 
             return totalWorkingHours;
         }

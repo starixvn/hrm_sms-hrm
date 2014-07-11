@@ -38,8 +38,8 @@
       <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6"/>
       <!--<siteMapNode title="Leave summary" controller="report" action="leavesummary" icon="calendar4" />-->
       <!--<siteMapNode title="Total working hours" controller="report" action="totalworkinghours" icon="clock" />-->
-      <siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />
-      <siteMapNode title="Shift info" controller="shift" action="index" icon="calendar3" />
+      <!--<siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />
+      <siteMapNode title="Shift info" controller="shift" action="index" icon="calendar3" />-->
       <siteMapNode title="Extension numbers" controller="report" action="extensionno" icon="mobile" />
       <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
     </siteMapNode>

@@ -953,3 +953,10 @@ div.confirm div.inputRemark textarea
 	position: fixed;
 	z-index: 1000;
 }
+.header-title
+{
+    font-family: Abel,Arial,Helvetica, "myriad Pro" ,tahoma;
+    font-size: 1.8em;
+    text-shadow: 0 0 1px #DDDDDD;
+    font-weight: bold;
+}

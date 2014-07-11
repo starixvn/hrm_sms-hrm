@@ -125,9 +125,16 @@
 
                 if (isShiftOrOffDay) {
                     if (isOffDay) {
-                        object.addClass("offday");
-                        object.removeAttr("data-shiftid");
-                        object.val(shiftCode);
+                        if (!object.hasClass("holiday")) {
+                            object.addClass("offday");
+                            object.removeAttr("data-shiftid");
+                            object.val(shiftCode);
+                        }
+                        else {
+                            object.removeClass("offday");
+                            object.removeAttr("data-shiftid");
+                            object.val("");
+                        }
                     }
                     else {
                         object.removeClass("offday");
@@ -588,7 +595,10 @@
                 type: 'POST',
                 dataType: "json",
                 url: _global.root + 'Calendar/GetShift',
-                data: { query: " " },
+                data: {
+                    query: " ",
+                    isShowOff: true
+                },
                 success: function (data) {
                     ScheduleArrangeDetail.allShifts = data;
                 }
@@ -695,13 +705,13 @@
         },
         shiftAutocomplete: function (evt) {
             var shiftCode = "";
-            //$(".shift").autocomplete({
             evt.autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: _global.root + 'Calendar/GetShift',
                         data: {
-                            query: request.term
+                            query: request.term,
+                            isShowOff: !evt.hasClass("holiday")
                         },
                         success: function (data) {
                             response($.map(data, function (item) {
