@@ -19,7 +19,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
-    using Fanex.NexHR.Criteria.Report.WorkingCalendar;
 
     /// <summary>
     /// Report Controller.
@@ -435,6 +434,17 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Working Calendar Summary.
+        /// </summary>
+        /// <param name="employeeId">Employee id.</param>
+        /// <param name="employee">Employee full name.</param>
+        /// <param name="fromDate">Query from date.</param>
+        /// <param name="toDate">Query to date.</param>
+        /// <param name="teamIds">List of tem id.</param>
+        /// <param name="jobTitleId">Job title id.</param>
+        /// <param name="isLocal">Expat Or Local.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult WorkingCalendarSummary(
              int? employeeId,
              string employee,
@@ -449,6 +459,7 @@ namespace Fanex.NexHR.Controllers
                 fromDate = DateTime.Now.Date;
                 toDate = DateTime.Now.Date;
             }
+
             var model = new WorkingCalendarSummaryViewModel()
             {
                 Employee = employee,
