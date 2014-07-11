@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAnalysis", "CodeAnalysi
 		CodeAnalysis\CodeAnalysisConfiguration.xml = CodeAnalysis\CodeAnalysisConfiguration.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Criteria", "Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj", "{089B8314-1793-403B-ADA8-E83E842C275E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,16 @@ Global
 		{E0F23F85-57F1-408B-8DE7-2C47516BC84B}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E0F23F85-57F1-408B-8DE7-2C47516BC84B}.Release|x86.ActiveCfg = Release|x86
 		{E0F23F85-57F1-408B-8DE7-2C47516BC84B}.Release|x86.Build.0 = Release|x86
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +182,7 @@ Global
 		{2493CFDA-E539-4F5C-BE9D-4AE823E42473} = {2E6B8649-5225-47A3-A3F8-9FB7197F3A33}
 		{7789CD20-1DC9-4077-921C-2548023BBC62} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
 		{5955CE2D-B3DC-48C2-B3B4-CCEE2DB5B35F} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
+		{089B8314-1793-403B-ADA8-E83E842C275E} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
 		{89E66795-E15A-41B8-9684-35B05739C1F7} = {5DAA8E26-3353-4C6C-84DA-78261FEE6D7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
