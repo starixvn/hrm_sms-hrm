@@ -216,6 +216,20 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        public ActionResult WorkingCalendarSummary(
+            DateTime? fromDate,
+            DateTime? toDate,
+            string group,
+            string title,
+            int? employeeId,
+            byte? isLocal = null)
+        {
+            string fileName = "WorkingCalendarSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            HSSFWorkbook hssfworkbook = null;
+
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
         /// <summary>
         /// Employee Overtime Record.
         /// </summary>

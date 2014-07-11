@@ -1,0 +1,91 @@
+﻿@model Fanex.NexHR.ViewModels.WorkingCalendarSummaryViewModel
+@section css{
+	@Url.CombresLink("workingcalendarscss")
+}
+@section js{
+	@Url.CombresLink("workingcalendarsummaryjs")
+}
+@{
+    ViewBag.Title = "Working Calendar Summary";
+}
+
+@section Breadcrumb {
+	<a class="step">HR</a>
+	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+	<a class="step">@ViewBag.Title</a>
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+	@Html.Hidden("defaultFromDate", (string)ViewBag.DefaultFromDate)
+	@Html.Hidden("defaultToDate", (string)ViewBag.DefaultToDate)
+    <div class="container_24 bunhat">
+        <div class="grid_24">
+            <div class="grid_2 gridlabel">@Labels.Employee</div>
+            <div class="grid_7">
+                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+				@Html.HiddenFor(model => model.EmployeeId)
+            </div>
+            <div class="grid_2 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+					{ 
+                        <option value="@item.Id">@item.Name</option>
+					}
+                </select>
+            </div>
+            <div class="grid_1 gridlabel">@Labels.Title</div>
+            <div class="grid_5">
+                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+					var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
+            <div class="grid_2 gridlabel">
+                From Date
+            </div>
+            <div class="grid_4">
+				@Html.DatePickerFor(model => model.FromDate, unavailDates: Model.UnavailDates)
+            </div>
+            <div class="grid_2 gridlabel">
+                To Date
+            </div>
+            <div class="grid_4">
+               @Html.DatePickerFor(model => model.ToDate, unavailDates: Model.UnavailDates)
+            </div>
+            <div class="grid_6">
+                <input type="button" id="excel" value="Excel" />
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+}

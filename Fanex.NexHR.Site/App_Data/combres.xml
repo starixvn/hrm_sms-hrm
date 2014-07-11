@@ -336,6 +336,12 @@
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
     </resourceSet>
 
+		<resourceSet name="workingcalendarsummaryjs" type="js">
+			<resource reference="sitejs"/>
+			<resource path="~/scripts/views/employee.workingcalendarsummary.js" />
+			<resource path="~/scripts/views/employee.search.in.company.js" />
+		</resourceSet>
+
     <resourceSet name="monthschedulecss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/fullcalendar.css" />

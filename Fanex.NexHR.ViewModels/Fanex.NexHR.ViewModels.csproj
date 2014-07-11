@@ -116,6 +116,7 @@
     <Compile Include="MySpaceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TotalWorkingHoursViewModel.cs" />
+    <Compile Include="WorkingCalendarSummaryViewModel.cs" />
     <Compile Include="WorkingCalendarsViewModel.cs" />
     <Compile Include="WorkingScheduleModel.cs" />
   </ItemGroup>

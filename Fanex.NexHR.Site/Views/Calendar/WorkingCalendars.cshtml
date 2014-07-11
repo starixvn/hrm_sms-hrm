@@ -8,14 +8,6 @@
 @{
 	ViewBag.Title = "Working calendars";
 }
-@*@{
-    //Set max month we can select in MonthPick
-    int Month = 12;
-    int Year = DateTime.Now.GetMaxDate().Year;
-
-    var maxDate = new System.Text.StringBuilder();
-    maxDate.AppendFormat("{0}/{1}/1", Year, Month);
-}*@
 @section Breadcrumb {
 	<a class="step">Company</a>
 	<span class="step">@ViewBag.Title</span>

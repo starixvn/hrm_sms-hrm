@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
+    using Fanex.NexHR.Criteria.Report.WorkingCalendar;
 
     /// <summary>
     /// Report Controller.
@@ -30,17 +31,20 @@ namespace Fanex.NexHR.Controllers
         private readonly ITeamService _teamService;
         private readonly IExportExcelService _exportExcelService;
         private readonly IEmployeeService _employeeService;
+        private readonly ILookupDataService _lookupDataService;
 
         public ReportController(
             IReportService reportSevice = null,
             ITeamService teamService = null,
             IExportExcelService exportExcelService = null,
-            IEmployeeService employeeService = null)
+            IEmployeeService employeeService = null,
+            ILookupDataService lookupDataService = null)
         {
             this._reportService = reportSevice ?? new ReportService();
             this._teamService = teamService ?? new TeamService();
             this._exportExcelService = exportExcelService ?? new ExportExcelService();
             this._employeeService = employeeService ?? new EmployeeService();
+            this._lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
         public ReportController()
@@ -427,6 +431,45 @@ namespace Fanex.NexHR.Controllers
                     return ExcelFile(hssfworkbook, fileName);
                 }
             }
+
+            return View(model);
+        }
+
+        public ActionResult WorkingCalendarSummary(
+             int? employeeId,
+             string employee,
+             DateTime? fromDate,
+             DateTime? toDate,
+             string teamIds,
+             string jobTitleId,
+             byte? isLocal = null)
+        {
+            if (fromDate == null && toDate == null)
+            {
+                fromDate = DateTime.Now.Date;
+                toDate = DateTime.Now.Date;
+            }
+            var model = new WorkingCalendarSummaryViewModel()
+            {
+                Employee = employee,
+                EmployeeId = employeeId,
+                FromDate = fromDate.Value.ToString("dd MMM, yyyy"),
+                ToDate = toDate.Value.ToString("dd MMM, yyyy"),
+                IsLocal = isLocal,
+                JobTitleId = jobTitleId,
+                TeamIds = teamIds
+            };
+
+            ViewBag.Groups = _teamService.GetAll();
+            ViewBag.DefaultFromDate = model.FromDate;
+            ViewBag.DefaultToDate = model.ToDate;
+            var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
+            ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+            {
+                Text = j.Name,
+                Value = j.Id.ToString(),
+                Selected = j.Id.ToString() == string.Empty
+            }).ToList();
 
             return View(model);
         }
