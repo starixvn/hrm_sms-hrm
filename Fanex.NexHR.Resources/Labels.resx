@@ -972,4 +972,13 @@
   <data name="EditShift" xml:space="preserve">
     <value>Edit shift</value>
   </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="SendTo" xml:space="preserve">
+    <value>Send To</value>
+  </data>
 </root>

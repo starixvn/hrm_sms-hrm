@@ -29,6 +29,7 @@
       <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
       <siteMapNode title="Time Record" controller="report" action="timerecord" icon="calendar1" roles="HR"/>
       <siteMapNode title="Reports" controller="report" action="index" icon="search" roles="HR"/>
+      <siteMapNode title="Message" controller="message" action="index" icon="user1" roles="HR"/>
     </siteMapNode>
     <siteMapNode title="Company space">
       <siteMapNode title="Contact list" controller="employee" action="index" icon="users" />

@@ -54,9 +54,7 @@ namespace Fanex.NexHR.Repositories
                 if (memo != null && memo.Type == 1)
                 {
                     memo.AttachFile = memo.Contents;
-                    //memo.Contents = "<a href='" + HttpUtility.HtmlEncode(memo.AttachFile) + "'> " 
-                    //    + HttpUtility.HtmlEncode(memo.AttachFile.Split('/')[memo.AttachFile.Split('/').Length - 1]) + "</a>";
-                }
+               }
             }
 
             return memo;

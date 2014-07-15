@@ -163,6 +163,7 @@
     <Compile Include="HomeController.cs" />
     <Compile Include="JobTitleController.cs" />
     <Compile Include="MemoController.cs" />
+    <Compile Include="MessageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportController.cs" />
     <Compile Include="Request\ChangeShiftController.cs" />

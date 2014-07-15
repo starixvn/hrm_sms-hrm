@@ -681,5 +681,16 @@
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/shift.js" />
     </resourceSet>
+
+	<resourceSet name="messagecss" type="css">
+		<resource reference="sitecss"/>
+		<resource path="~/styles/message.css" />
+	</resourceSet>
+
+	<resourceSet name="messagejs" type="js">
+		<resource reference="sitejs"/>
+		<resource path="~/scripts/views/message.js" />
+		<resource path="~/scripts/views/message.edit.js" />
+	</resourceSet>
   </resourceSets>
 </combres>

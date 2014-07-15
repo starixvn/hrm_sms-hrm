@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="BaseRequestRepository.cs" />
     <Compile Include="Interfaces\IKeepInViewRequestRepository.cs" />
+    <Compile Include="Interfaces\IMessageRepository.cs" />
     <Compile Include="Interfaces\IOvertimeRequestRepository.cs" />
     <Compile Include="Interfaces\ISupportRepository.cs" />
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="LeaveRequestRepository.cs" />
     <Compile Include="LeaveTypeRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
+    <Compile Include="MessageRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs" />
     <Compile Include="RequestRepository.cs" />
     <Compile Include="SupportRepository.cs" />

@@ -267,4 +267,7 @@
     <Setting Key="AnnualLeave_ResetMultipleTransactions" SpName="AnnualLeave_ResetMultipleTransactions" DbName="nexhrx" Plain="0">
     </Setting>
   </Function>
+	<Function Name="Message">
+		<Setting Key="Message_GetByCreator" SpName="Message_GetByCreator" DbName="nexhrx" Plain="0"></Setting>
+	</Function>
 </Functions>

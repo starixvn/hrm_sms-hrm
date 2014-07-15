@@ -79,6 +79,7 @@
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Request\CheckInOutRequestModel.cs" />

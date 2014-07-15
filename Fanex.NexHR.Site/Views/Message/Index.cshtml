@@ -1,0 +1,76 @@
+﻿@model Fanex.NexHR.ViewModels.MessageViewModel
+@using Fanex.NexHR.Resources;
+
+@{
+	ViewBag.Title = @Labels.Message;
+}
+@section css{
+    @Url.CombresLink("messagecss")
+}
+@section js{
+    @Url.CombresLink("messagejs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Message</a> <span class="step">@ViewBag.Title</span>
+}
+
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{
+	if (Roles.IsUserInRole("HR"))
+	{
+		<div class="button-icon">
+			<span class="icon plus"></span>@Html.ActionLink("Create new Message", "Create")
+		</div>
+	}
+	
+	<table id="messageTable" class="data persist-area" style="width: 878px;">
+		<thead>
+			<tr>
+				<th>#
+				</th>
+				<th>@Labels.Subject
+				</th>
+				<th>@Labels.Category
+				</th>
+				<th>@Labels.SendTo
+				</th>
+				<th>@Labels.CreatedDate
+				</th>
+				@if (Roles.IsUserInRole("HR"))
+				{
+					<th>@Labels.Edit
+					</th>
+					<th>@Labels.Delete
+					</th>
+				}
+			</tr>
+		</thead>
+		@if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
+		{
+			<tbody>
+				@{int index = 1;}
+				@foreach (MessageViewModel message in ViewBag.Messages)
+				{
+					<tr>
+						<td>@(index++)
+						</td>
+						<td>@message.Subject
+						</td>
+						<td>@message.Category
+						</td>
+						<td>@message.SendTo
+						</td>
+						<td>@message.CreatedDate
+						</td>
+					</tr>
+		}
+			</tbody>
+		}
+		else
+		{
+			@RazorHelper.DisplayNoInformation(7)
+		}
+	</table>
+}
