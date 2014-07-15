@@ -1167,6 +1167,7 @@
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourWeekly.cshtml" />
     <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
+    <None Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

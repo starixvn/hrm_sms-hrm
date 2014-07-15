@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
+    <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />

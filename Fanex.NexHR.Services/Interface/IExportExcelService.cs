@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
@@ -40,5 +41,7 @@ namespace Fanex.NexHR.Services.Interface
         HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportEmployeeOvertimeRecord(List<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate);
+
+        HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> overtimes, DateTime fromDate, DateTime toDate);
     }
 }

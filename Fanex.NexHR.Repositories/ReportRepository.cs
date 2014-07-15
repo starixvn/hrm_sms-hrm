@@ -16,7 +16,9 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -588,6 +590,17 @@ namespace Fanex.NexHR.Repositories
             }
 
             return timeRecords;
+        }
+
+        public IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria)
+        {
+            IList<WorkingCalendarSummary> calendars = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                calendars = db.Query<WorkingCalendarSummary>(criteria.GetSpParams()).ToList();
+            }
+
+            return calendars;
         }
     }
 }

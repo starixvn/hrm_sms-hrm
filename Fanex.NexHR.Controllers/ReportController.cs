@@ -14,7 +14,9 @@ namespace Fanex.NexHR.Controllers
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -444,6 +446,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="teamIds">List of tem id.</param>
         /// <param name="jobTitleId">Job title id.</param>
         /// <param name="isLocal">Expat Or Local.</param>
+        /// <param name="isExcel">View Only Or Export Excel.</param>
         /// <returns>Action Result.</returns>
         public ActionResult WorkingCalendarSummary(
              int? employeeId,
@@ -452,7 +455,8 @@ namespace Fanex.NexHR.Controllers
              DateTime? toDate,
              string teamIds,
              string jobTitleId,
-             byte? isLocal = null)
+             byte? isLocal = null,
+             bool isExcel = false)
         {
             if (fromDate == null && toDate == null)
             {
@@ -481,6 +485,25 @@ namespace Fanex.NexHR.Controllers
                 Value = j.Id.ToString(),
                 Selected = j.Id.ToString() == string.Empty
             }).ToList();
+
+            if (isExcel)
+            {
+                var criteria = new GetEmployeeWorkingCalendarByDateCriteria()
+                {
+                    EmployeeId = model.EmployeeId,
+                    FromDate = fromDate.Value,
+                    ToDate = toDate.Value,
+                    GroupIds = model.TeamIds,
+                    IsLocal = model.IsLocal,
+                    JobTitleId = model.JobTitleId
+                };
+
+                List<WorkingCalendarSummary> calendars = _reportService.CalendarSummaryList(criteria).ToList();
+
+                string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+                var hssfworkbook = _exportExcelService.ExportWorkingCalendarSummary(calendars, fromDate.Value, toDate.Value);
+                return ExcelFile(hssfworkbook, fileName);
+            }
 
             return View(model);
         }

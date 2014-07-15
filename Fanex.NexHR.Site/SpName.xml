@@ -50,6 +50,7 @@
     <Setting Key="RequestMonitoring" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByMonth" SpName="Report_EmployeeCalendarByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="Report_DateOfEmployeeForgotAndLateEarlyIO" SpName="Report_DateOfEmployeeForgotAndLateEarlyIO" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByMonth" SpName="Report_EmployeeTotalWorkingHourByMonth" DbName="nexhrx" Plain="0"></Setting>
 		<Setting Key="Report_EmployeeTotalWorkingHourByWeek" SpName="Report_EmployeeTotalWorkingHourByWeek" DbName="nexhrx" Plain="0"></Setting>

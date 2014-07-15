@@ -11,7 +11,9 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interface;
@@ -262,6 +264,17 @@ namespace Fanex.NexHR.Services
             }
 
             return timeRecords;
+        }
+
+        public IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria)
+        {
+            IList<WorkingCalendarSummary> calendars = null;
+            if (criteria.IsValid())
+            {
+                calendars = _reportRepository.CalendarSummaryList(criteria);
+            }
+
+            return calendars;
         }
     }
 }

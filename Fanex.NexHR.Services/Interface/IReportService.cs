@@ -11,7 +11,9 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.ViewModels;
 
     public interface IReportService
@@ -79,5 +81,7 @@ namespace Fanex.NexHR.Services.Interface
         bool DeleteExternalGroup(int groupId);
 
         IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
+
+        IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria);
     }
 }

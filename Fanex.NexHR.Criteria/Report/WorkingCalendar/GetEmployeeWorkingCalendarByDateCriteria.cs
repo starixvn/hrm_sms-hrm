@@ -17,13 +17,13 @@ namespace Fanex.NexHR.Criteria.Report.WorkingCalendar
     /// </summary>
     public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     {
-        public int? EmpId { get; set; }
+        public int? EmployeeId { get; set; }
 
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
 
-        public string GroupId { get; set; }
+        public string GroupIds { get; set; }
 
         public string JobTitleId { get; set; }
 
@@ -36,7 +36,7 @@ namespace Fanex.NexHR.Criteria.Report.WorkingCalendar
 
         public override string GetSettingKey()
         {
-            return string.Empty;
+            return "Report_EmployeeCalendarByDateRange";
         }
     }
 }

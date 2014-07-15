@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -25,7 +26,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
@@ -51,6 +51,7 @@ namespace Fanex.NexHR.Services
         private const string _EmployeeDetailsInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeDetailsInfoTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
+        private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
 
         private const string _MsgLeave = "{1} ({0} days)";
         private const string _MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
@@ -285,6 +286,127 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
+        /// Method Export Total Working Calendar Summary.
+        /// </summary>
+        /// <param name="calendars">List of Working Calendar Entity.</param>
+        /// <param name="fromDate">Export From Date.</param>
+        /// <param name="toDate">Export To Date.</param>
+        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
+        public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
+        {
+            HSSFWorkbook hssfworkbook;
+
+            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWorkingCalendarSummaryFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendarSummary");
+
+            var rowDate = sheet.GetRow(1);
+            rowDate.GetCell(2).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
+            rowDate.GetCell(4).SetCellValue(toDate.ToString("dd MMM, yyyy"));
+
+            var rowIndex = _RowStartBodyWorkingCalendar;
+            var rowCopy = _RowStartBodyWorkingCalendar;
+            var height = sheet.GetRow(_RowStartBodyWorkingCalendar).Height;
+            var index = 1;
+            int countItem = 0;
+            int totalCellInRow = 0;
+            int startColumn = 5;
+
+            var groupWorkingCalendarBySchedule = calendars.GroupBy(
+                x => new 
+            {
+                EmpId = x.EmpId,
+                NickName = x.NickName, 
+                FullName = x.FullName, 
+                Group = x.Name 
+            },
+            x => new { WorkDate = x.WorkDate, Schedule = x.Schedule })
+                .Select(x => new { EmployeeInfo = x.Key, Calendar = x.ToList() })
+                .ToList();
+
+            if (groupWorkingCalendarBySchedule != null)
+            {
+                var firstItemInGroup = groupWorkingCalendarBySchedule[0];
+                if (firstItemInGroup.Calendar.Any())
+                {
+                    countItem = firstItemInGroup.Calendar.Count;
+                    totalCellInRow = countItem + startColumn;
+
+                    var rowHeaderDate = sheet.GetRow(3);
+                    var rowHeaderDay = sheet.GetRow(4);
+                    rowHeaderDate.Height = height;
+                    rowHeaderDay.Height = height;
+
+                    var templeteCellHeader = rowHeaderDate.GetCell(5);
+                    var customCellWidth = 3071;
+
+                    for (int i = 5; i < totalCellInRow; i++)
+                    {
+                        var cellHeaderDate = rowHeaderDate.CreateCell(i);
+                        var cellHeaderDay = rowHeaderDay.CreateCell(i);
+
+                        cellHeaderDate.CellStyle = templeteCellHeader.CellStyle;
+                        cellHeaderDay.CellStyle = templeteCellHeader.CellStyle;
+
+                        cellHeaderDate.Sheet.SetColumnWidth(i, customCellWidth);
+                        cellHeaderDay.Sheet.SetColumnWidth(i, customCellWidth);
+                    }
+
+                    // Row Header Date
+                    rowHeaderDate.GetCell(0).SetCellValue("#");
+                    rowHeaderDate.GetCell(1).SetCellValue("ID");
+                    rowHeaderDate.GetCell(2).SetCellValue("Full Name");
+                    rowHeaderDate.GetCell(3).SetCellValue("Nick Name");
+                    rowHeaderDate.GetCell(4).SetCellValue("Team");
+
+                    foreach (var item in firstItemInGroup.Calendar)
+                    {
+                        if (startColumn < totalCellInRow)
+                        {
+                            rowHeaderDate.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("dd MMM, yyyy"));
+                            rowHeaderDay.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("ddd"));
+                        }
+
+                        startColumn++;
+                    }
+                }
+
+                foreach (var item in groupWorkingCalendarBySchedule)
+                {
+                    rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                    var row = sheet.GetRow(rowIndex);
+                    var templeteCellInfo = row.GetCell(5);
+
+                    row.GetCell(0).SetCellValue(index);
+                    row.GetCell(1).SetCellValue(item.EmployeeInfo.EmpId);
+                    row.GetCell(2).SetCellValue(item.EmployeeInfo.FullName);
+                    row.GetCell(3).SetCellValue(item.EmployeeInfo.NickName);
+                    row.GetCell(4).SetCellValue(item.EmployeeInfo.Group);
+
+                    for (int i = 5; i < totalCellInRow; i++)
+                    {
+                        var cell = row.CreateCell(i);
+                        cell.CellStyle = templeteCellInfo.CellStyle;
+                        row.GetCell(i).SetCellValue(item.Calendar[i - 5].Schedule);
+                    }
+
+                    rowIndex++;
+                    index++;
+                }
+            }
+
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
+        /// <summary>
         /// Function to Export attendance report.
         /// </summary>
         /// <param name="attendanceList">List EmployeeAttendanceModel need export.</param>
@@ -384,45 +506,25 @@ namespace Fanex.NexHR.Services
                         var row = sheet.GetRow(rowIndex);
                         row.Height = height;
 
-                        var cellNo = row.GetCell(0);
-                        var cellNick = row.GetCell(1);
-                        var cellName = row.GetCell(2);
-                        var cellLastYear = row.GetCell(3);
-                        var cellCurrentYear = row.GetCell(4);
-                        var cellJan = row.GetCell(5);
-                        var cellFeb = row.GetCell(6);
-                        var cellMar = row.GetCell(7);
-                        var cellApr = row.GetCell(8);
-                        var cellMay = row.GetCell(9);
-                        var cellJun = row.GetCell(10);
-                        var cellJul = row.GetCell(11);
-                        var cellAug = row.GetCell(12);
-                        var cellSep = row.GetCell(13);
-                        var cellOct = row.GetCell(14);
-                        var cellNov = row.GetCell(15);
-                        var cellDec = row.GetCell(16);
-                        var cellBalance = row.GetCell(17);
-                        var cellRemark = row.GetCell(18);
-
-                        cellNo.SetCellValue(index);
-                        cellNick.SetCellValue(leaveSummary.Employee.NickName);
-                        cellName.SetCellValue(leaveSummary.Employee.FullName);
-                        cellLastYear.SetCellValue(leaveSummary.AnnualLeaveLastYear);
-                        cellCurrentYear.SetCellValue(leaveSummary.AnnualLeaveCurrentYear);
-                        cellJan.SetCellValue(leaveSummary.Jan);
-                        cellFeb.SetCellValue(leaveSummary.Feb);
-                        cellMar.SetCellValue(leaveSummary.Mar);
-                        cellApr.SetCellValue(leaveSummary.Apr);
-                        cellMay.SetCellValue(leaveSummary.May);
-                        cellJun.SetCellValue(leaveSummary.Jun);
-                        cellJul.SetCellValue(leaveSummary.Jul);
-                        cellAug.SetCellValue(leaveSummary.Aug);
-                        cellSep.SetCellValue(leaveSummary.Sep);
-                        cellOct.SetCellValue(leaveSummary.Oct);
-                        cellNov.SetCellValue(leaveSummary.Nov);
-                        cellDec.SetCellValue(leaveSummary.Dec);
-                        cellBalance.SetCellValue(leaveSummary.LeaveBalance);
-                        cellRemark.SetCellValue(leaveSummary.Remark);
+                        row.GetCell(0).SetCellValue(index);
+                        row.GetCell(1).SetCellValue(leaveSummary.Employee.NickName);
+                        row.GetCell(2).SetCellValue(leaveSummary.Employee.FullName);
+                        row.GetCell(3).SetCellValue(leaveSummary.AnnualLeaveLastYear);
+                        row.GetCell(4).SetCellValue(leaveSummary.AnnualLeaveCurrentYear);
+                        row.GetCell(5).SetCellValue(leaveSummary.Jan);
+                        row.GetCell(6).SetCellValue(leaveSummary.Feb);
+                        row.GetCell(7).SetCellValue(leaveSummary.Mar);
+                        row.GetCell(8).SetCellValue(leaveSummary.Apr);
+                        row.GetCell(9).SetCellValue(leaveSummary.May);
+                        row.GetCell(10).SetCellValue(leaveSummary.Jun);
+                        row.GetCell(11).SetCellValue(leaveSummary.Jul);
+                        row.GetCell(12).SetCellValue(leaveSummary.Aug);
+                        row.GetCell(13).SetCellValue(leaveSummary.Sep);
+                        row.GetCell(14).SetCellValue(leaveSummary.Oct);
+                        row.GetCell(15).SetCellValue(leaveSummary.Nov);
+                        row.GetCell(16).SetCellValue(leaveSummary.Dec);
+                        row.GetCell(17).SetCellValue(leaveSummary.LeaveBalance);
+                        row.GetCell(18).SetCellValue(leaveSummary.Remark);
 
                         index++;
                         rowIndex++;
@@ -799,46 +901,29 @@ namespace Fanex.NexHR.Services
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
                 float totalHours = 0;
-                var cellNo = row.GetCell(0);
-                var cellDepartment = row.GetCell(1);
-                var cellFullName = row.GetCell(2);
-                var cellNickName = row.GetCell(3);
-                var cellJan = row.GetCell(4);
-                var cellFeb = row.GetCell(5);
-                var cellMar = row.GetCell(6);
-                var cellApr = row.GetCell(7);
-                var cellMay = row.GetCell(8);
-                var cellJun = row.GetCell(9);
-                var cellJul = row.GetCell(10);
-                var cellAug = row.GetCell(11);
-                var cellSept = row.GetCell(12);
-                var cellOct = row.GetCell(13);
-                var cellNov = row.GetCell(14);
-                var cellDec = row.GetCell(15);
-                var cellTotal = row.GetCell(16);
 
-                cellNo.SetCellValue(index);
-                cellDepartment.SetCellValue(item.Team);
-                cellFullName.SetCellValue(item.FullName);
-                cellNickName.SetCellValue(item.NickName);
+                row.GetCell(0).SetCellValue(index);
+                row.GetCell(1).SetCellValue(item.Team);
+                row.GetCell(2).SetCellValue(item.FullName);
+                row.GetCell(3).SetCellValue(item.NickName);
 
-                cellJan.SetCellValue(item.Jan);
-                cellFeb.SetCellValue(item.Feb);
-                cellMar.SetCellValue(item.Mar);
-                cellApr.SetCellValue(item.Apr);
-                cellMay.SetCellValue(item.May);
-                cellJun.SetCellValue(item.Jun);
-                cellJul.SetCellValue(item.Jul);
-                cellAug.SetCellValue(item.Aug);
-                cellSept.SetCellValue(item.Sep);
-                cellOct.SetCellValue(item.Oct);
-                cellNov.SetCellValue(item.Nov);
-                cellDec.SetCellValue(item.Dec);
+                row.GetCell(4).SetCellValue(item.Jan);
+                row.GetCell(5).SetCellValue(item.Feb);
+                row.GetCell(6).SetCellValue(item.Mar);
+                row.GetCell(7).SetCellValue(item.Apr);
+                row.GetCell(8).SetCellValue(item.May);
+                row.GetCell(9).SetCellValue(item.Jun);
+                row.GetCell(10).SetCellValue(item.Jul);
+                row.GetCell(11).SetCellValue(item.Aug);
+                row.GetCell(12).SetCellValue(item.Sep);
+                row.GetCell(13).SetCellValue(item.Oct);
+                row.GetCell(14).SetCellValue(item.Nov);
+                row.GetCell(15).SetCellValue(item.Dec);
 
                 totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jun + item.Aug + item.Sep
                     + item.Oct + item.Oct + item.Nov + item.Dec;
 
-                cellTotal.SetCellValue(totalHours);
+                row.GetCell(16).SetCellValue(totalHours);
                 totalYearlyOTHours += totalHours;
                 index++;
                 rowIndex++;
@@ -848,32 +933,21 @@ namespace Fanex.NexHR.Services
             sheet.CopyRow(templateSheet, _RowStartBodyYearlyOvertimeReport + 2, rowIndex);
             var rowFooter = sheet.GetRow(rowIndex);
             rowFooter.Height = height;
-            var cellFooterJan = rowFooter.GetCell(4);
-            var cellFooterFeb = rowFooter.GetCell(5);
-            var cellFooterMar = rowFooter.GetCell(6);
-            var cellFooterApr = rowFooter.GetCell(7);
-            var cellFooterMay = rowFooter.GetCell(8);
-            var cellFooterJun = rowFooter.GetCell(9);
-            var cellFooterJul = rowFooter.GetCell(10);
-            var cellFooterAug = rowFooter.GetCell(11);
-            var cellFooterSept = rowFooter.GetCell(12);
-            var cellFooterOct = rowFooter.GetCell(13);
-            var cellFooterNov = rowFooter.GetCell(14);
-            var cellFooterDec = rowFooter.GetCell(15);
-            var cellFooterTotal = rowFooter.GetCell(16);
-            cellFooterJan.SetCellValue(requestList.Sum(x => x.Jan));
-            cellFooterFeb.SetCellValue(requestList.Sum(x => x.Feb));
-            cellFooterMar.SetCellValue(requestList.Sum(x => x.Mar));
-            cellFooterApr.SetCellValue(requestList.Sum(x => x.Apr));
-            cellFooterMay.SetCellValue(requestList.Sum(x => x.May));
-            cellFooterJun.SetCellValue(requestList.Sum(x => x.Jun));
-            cellFooterJul.SetCellValue(requestList.Sum(x => x.Jul));
-            cellFooterAug.SetCellValue(requestList.Sum(x => x.Aug));
-            cellFooterSept.SetCellValue(requestList.Sum(x => x.Sep));
-            cellFooterOct.SetCellValue(requestList.Sum(x => x.Oct));
-            cellFooterNov.SetCellValue(requestList.Sum(x => x.Nov));
-            cellFooterDec.SetCellValue(requestList.Sum(x => x.Dec));
-            cellFooterTotal.SetCellValue(totalYearlyOTHours);
+
+            rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
+            rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));
+            rowFooter.GetCell(6).SetCellValue(requestList.Sum(x => x.Mar));
+            rowFooter.GetCell(7).SetCellValue(requestList.Sum(x => x.Apr));
+            rowFooter.GetCell(8).SetCellValue(requestList.Sum(x => x.May));
+            rowFooter.GetCell(9).SetCellValue(requestList.Sum(x => x.Jun));
+            rowFooter.GetCell(10).SetCellValue(requestList.Sum(x => x.Jul));
+            rowFooter.GetCell(11).SetCellValue(requestList.Sum(x => x.Aug));
+            rowFooter.GetCell(12).SetCellValue(requestList.Sum(x => x.Sep));
+            rowFooter.GetCell(13).SetCellValue(requestList.Sum(x => x.Oct));
+            rowFooter.GetCell(14).SetCellValue(requestList.Sum(x => x.Nov));
+            rowFooter.GetCell(15).SetCellValue(requestList.Sum(x => x.Dec));
+            rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
+
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;
