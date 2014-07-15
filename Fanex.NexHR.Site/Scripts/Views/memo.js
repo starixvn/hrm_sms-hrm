@@ -1,23 +1,18 @@
-﻿/// <reference path="../Libs/jquery.min.js" />
-/// <reference path="../Libs/fxHeader.js" />
+﻿'use strict';
+/*global _global, autoIndex*/
+/*exported deleteMemo*/
 
-//$(document).ready(function () {
-//    fxheaderInit("memo",200,1,0);    
-//    fxheader();
+function deleteComplete(evt) {
+	if (evt.target.status === 200) {
+		if ($('#allAttachFile').children().length === 0) {
+			$('#attach').hide();
+			$("#AttachFile").val("");
+			$("#Contents").val("");
+		}
+	}
+}
 
-// });
-
-function deleteMemo(id, fileName, type) {
-
-	confirm('Are you sure you want to delete this memo?', function () {
-		$.post(_global.root + 'ajax/deletememo', { id: id }, function (data) {
-			$('#row_' + id).remove();
-			autoIndex();
-			if(type == 1)
-				deleteMemoFile(fileName);
-		});
-
-	});
+function uploadFailed() {
 }
 
 function deleteMemoFile(fileName) {
@@ -31,13 +26,20 @@ function deleteMemoFile(fileName) {
 	xhr.send(fd);
 }
 
-function uploadFailed(evt) {
-}
+function deleteMemo(id, allFiles, type) {
 
-function deleteComplete(evt) {
-	if (evt.target.status == 200) {
-		$('#attach').hide();
-		$("#AttachFile").val("");
-		$("#Contents").val("");
-	}
+	confirm('Are you sure you want to delete this memo?', function () {
+		$.post(_global.root + 'ajax/deletememo', { id: id }, function () {
+			$('#row_' + id).remove();
+			autoIndex();
+			if (type === 1) {
+				var attachFiles = allFiles.split(";");
+
+				for (var i = 0; i < attachFiles.length; i++) {
+					deleteMemoFile(attachFiles[i]);
+				}
+			}
+		});
+
+	});
 }
