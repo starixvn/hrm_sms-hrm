@@ -263,11 +263,23 @@ namespace Fanex.NexHR.Services.ExcelExporting
             cell1.SetCellValue(content);
         }
 
+        /// <summary>
+        /// Method Create UnFreezeHeaderCell.
+        /// </summary>
+        /// <param name="row">Row in sheet.</param>
+        /// <param name="columnIndex">Column Index.</param>
+        /// <param name="content">Content to be filled in column.</param>
         private void CreateUnfreezeHeaderCell(IRow row, int columnIndex, string content)
         {
+            string currentHeaderDate = content.Split('(')[1].Split(')')[0];
             var cell1 = row.CreateCell(columnIndex);
             cell1.CellStyle = _unfreezeHeaderCellStyle;
             cell1.SetCellValue(content);
+
+            if (currentHeaderDate == "Sat" || currentHeaderDate == "Sun")
+            {
+                cell1.CellStyle = _headerCellStyle;
+            }
         }
 
         private IFont CreateHeaderFont()

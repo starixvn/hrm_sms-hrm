@@ -112,6 +112,25 @@ namespace Fanex.NexHR.ViewModels
             }
         }
 
+        public bool IsWeekend 
+        {
+            get
+            {
+                if (AttendanceDate != null)
+                {
+                    string date = AttendanceDate.Value.ToString("ddd");
+                    if (date == "Sat" || date == "Sun")
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return false;
+            }
+        }
+
         public List<EmployeeAttendanceRequest> RequestList { get; set; }
     }
 }

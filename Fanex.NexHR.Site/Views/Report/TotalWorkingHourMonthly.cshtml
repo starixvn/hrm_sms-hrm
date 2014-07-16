@@ -100,8 +100,16 @@
             @{
                 for (int i = 0; i < firstRecord.WorkingHours.Count; i++)
                   {
-                    <th>@firstRecord.WorkingHours[i]</th>
-                  }
+					var stringDate = firstRecord.WorkingHours[i].Split('(')[1].Split(')')[0].Trim();
+					if (stringDate == "Sat" || stringDate == "Sun")
+					{
+						<th class="weekend">@firstRecord.WorkingHours[i]</th>
+					}
+					else
+					{
+						<th>@firstRecord.WorkingHours[i]</th>
+					}
+				  }
             }
         </tr>
     </thead>
@@ -111,13 +119,13 @@
     <tbody>
     @{int index = 0;}
     @foreach (TotalWorkingHourMonthly item in ViewBag.EntityList)
-    {
-        if (index == 0)
-        {
-            index++;
-        }
-        else
-        {
+	{
+		if (index == 0)
+		{
+			index++;
+		}
+		else
+		{
             <tr>
                 <td>@(index++)
                 </td>
@@ -127,12 +135,12 @@
                 <td class="left">@item.Nick</td>
                 <td>@item.CountWorkDay.ToString("0.0")</td>        
                 @for (int i = 0; i < item.WorkingHours.Count; i++)
-                  {
+				{
                     <td>@item.WorkingHours[i]</td>
-                  }            
+				}            
             </tr>  
-        }
-    }
+		}
+	}
     </tbody>
 }
 else

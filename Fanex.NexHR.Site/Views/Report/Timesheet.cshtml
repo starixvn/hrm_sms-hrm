@@ -105,9 +105,13 @@
 <script id="itemTemplate" type="text/x-jquery-tmpl">
     <tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
         <td>${index()}</td>
-        <td>
-            ${jsonToShortDate(AttendanceDate)}
-        </td>
+
+		{{if IsWeekend == true}}
+            <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
+        {{else}}
+			<td>${jsonToDetailsDate(AttendanceDate)}</td>
+        {{/if}}
+
         <td title="${FullName}" class="tooltip">
             ${NickName}
         </td>

@@ -206,9 +206,13 @@
 <script id="itemTemplate" type="text/x-jquery-tmpl">
     <tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
         <td>${index()}</td>
-        <td class="ddMMyyyy">            
-            ${jsonToDetailsDate(AttendanceDate)}
-        </td>
+
+		{{if IsWeekend == true}}
+            <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
+        {{else}}
+			<td>${jsonToDetailsDate(AttendanceDate)}</td>
+        {{/if}}
+
         <td title="${FullName}" class="left tooltip">
             ${NickName}
         </td>

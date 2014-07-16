@@ -14,3 +14,8 @@
 {
 	margin-bottom: 4px;
 }
+
+table.data th.weekend
+{
+	color: #F7819F !important;
+}

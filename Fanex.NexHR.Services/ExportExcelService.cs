@@ -337,16 +337,20 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "AttendanceReport");
 
+            var cellTemplate = sheet.GetRow(1).GetCell(1);
+
             //// render body
             var rowIndex = _RowStartBodyAttendance;
+            var index = 1;
             var rowCopy = _RowStartBodyAttendance;
             var height = sheet.GetRow(_RowStartBodyAttendance).Height;
 
             foreach (var item in attendanceList)
             {
-                rowCopy = RenderBodyAttendance(templateSheet, sheet, rowIndex, rowCopy, height, item);
+                rowCopy = RenderBodyAttendance(templateSheet, sheet, rowIndex, rowCopy, height, item, index);
 
                 rowIndex++;
+                index++;
             }
             //// end render body
 
@@ -1608,8 +1612,9 @@ namespace Fanex.NexHR.Services
         /// <param name="rowCopy">Row Index to copy.</param>
         /// <param name="height">Height of row.</param>
         /// <param name="item">Employee Attendance Model.</param>
+        /// <param name="index">No of row.</param>
         /// <returns>Index of Row Copy.</returns>
-        private int RenderBodyAttendance(ISheet templateSheet, ISheet sheet, int rowIndex, int rowCopy, short height, EmployeeAttendanceModel item)
+        private int RenderBodyAttendance(ISheet templateSheet, ISheet sheet, int rowIndex, int rowCopy, short height, EmployeeAttendanceModel item, int index)
         {
             var requests = string.Empty;
 
@@ -1619,7 +1624,14 @@ namespace Fanex.NexHR.Services
             }
             else
             {
-                rowCopy = _RowStartBodyAttendance + ((rowIndex - _RowStartBodyAttendance) % 2);
+                if (item.IsWeekend)
+                {
+                    rowCopy = 6 + (index % 2);
+                }
+                else
+                {
+                    rowCopy = _RowStartBodyAttendance + (index % 2);
+                }
             }
 
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
@@ -1641,78 +1653,8 @@ namespace Fanex.NexHR.Services
             var cellOvertime = row.GetCell(13);
             var cellNotes = row.GetCell(14);
 
-            FillValueBodyAttendance(
-                rowIndex,
-                height,
-                item,
-                ref requests,
-                row,
-                cellNo,
-                cellDate,
-                cellCode,
-                cellNick,
-                cellName,
-                cellTeam,
-                cellShift,
-                cellCheckIn,
-                cellCheckOut,
-                cellTotalHours,
-                cellLateIn,
-                cellEarlyOut,
-                cellRequest,
-                cellOvertime,
-                cellNotes);
-
-            return rowCopy;
-        }
-
-        /// <summary>
-        /// Fill Value of Body Attendance report.
-        /// </summary>
-        /// <param name="rowIndex">The rowIndex.</param>
-        /// <param name="height">The height of row.</param>
-        /// <param name="item">EmployeeAttendance Model.</param>
-        /// <param name="requests">Request list in this item.</param>
-        /// <param name="row">The row to render data.</param>
-        /// <param name="cellNo">The cellNo.</param>
-        /// <param name="cellDate">The cellDate.</param>
-        /// <param name="cellCode">The cellCode.</param>
-        /// <param name="cellNick">The cellNick.</param>
-        /// <param name="cellName">The cellName.</param>
-        /// <param name="cellTeam">The cellTeam.</param>
-        /// <param name="cellShift">The cellShift.</param>
-        /// <param name="cellCheckIn">The cellCheckIn.</param>
-        /// <param name="cellCheckOut">The cellCheckOut.</param>
-        /// <param name="cellTotalHours">The cellTotalHours.</param>
-        /// <param name="cellLateIn">The cellLateIn.</param>
-        /// <param name="cellEarlyOut">The cellEarlyOut.</param>
-        /// <param name="cellRequest">The cellRequest.</param>
-        /// <param name="cellOvertime">The cellOvertime.</param>
-        /// <param name="cellNotes">The cellNotes.</param>
-        private void FillValueBodyAttendance(
-            int rowIndex,
-            short height,
-            EmployeeAttendanceModel item,
-            ref string requests,
-            IRow row,
-            ICell cellNo,
-            ICell cellDate,
-            ICell cellCode,
-            ICell cellNick,
-            ICell cellName,
-            ICell cellTeam,
-            ICell cellShift,
-            ICell cellCheckIn,
-            ICell cellCheckOut,
-            ICell cellTotalHours,
-            ICell cellLateIn,
-            ICell cellEarlyOut,
-            ICell cellRequest,
-            ICell cellOvertime,
-            ICell cellNotes)
-        {
-            cellNo.SetCellValue(rowIndex - _RowStartBodyAttendance + 1);
-            cellDate.SetCellValue(item.AttendanceDate);
+            cellNo.SetCellValue(index);
+            cellDate.SetCellValue(item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy"));
             cellCode.SetCellValue(item.Code);
             cellNick.SetCellValue(item.NickName);
             cellName.SetCellValue(item.FullName);
@@ -1723,7 +1665,6 @@ namespace Fanex.NexHR.Services
             cellTotalHours.SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
             cellLateIn.SetCellValue(Utilities.MinuteToTime(item.LateIn));
             cellEarlyOut.SetCellValue(Utilities.MinuteToTime(item.EarlyOut));
-
             cellNotes.SetCellValue(item.Notes);
 
             if (item.RequestList.Count > 0)
@@ -1748,6 +1689,8 @@ namespace Fanex.NexHR.Services
             {
                 cellOvertime.SetCellValue(item.FormattedOvertimeStatus + " (" + item.OvertimeHours.ToString() + ")");
             }
+
+            return rowCopy;
         }
 
         /// <summary>

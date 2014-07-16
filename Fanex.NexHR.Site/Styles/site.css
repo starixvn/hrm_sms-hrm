@@ -960,3 +960,8 @@ div.confirm div.inputRemark textarea
     text-shadow: 0 0 1px #DDDDDD;
     font-weight: bold;
 }
+
+.weekend
+{
+	color: #F7819F;
+}
