@@ -1171,11 +1171,10 @@
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourWeekly.cshtml" />
     <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
-    <None Include="ExcelTemplates\HrRequestStatisticTemplate.xls" />
-    <None Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\HrRequestStatisticTemplate.xls" />
+    <Content Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
     <Content Include="Views\Report\RequestMonitoringDetails.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
-    <None Include="ExcelTemplates\HrRequestStatisticTemplate.xls" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
