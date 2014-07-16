@@ -687,12 +687,15 @@
 	<resourceSet name="messagecss" type="css">
 		<resource reference="sitecss"/>
 		<resource path="~/styles/message.css" />
+		<resource path="~/scripts/chosen/chosen.css" />
 	</resourceSet>
 
 	<resourceSet name="messagejs" type="js">
 		<resource reference="sitejs"/>
 		<resource path="~/scripts/views/message.js" />
 		<resource path="~/scripts/views/message.edit.js" />
+		<resource path="~/scripts/Tiny_mce/tiny_mce_src.js" />
+		<resource path="~/scripts/chosen/chosen.jquery.js" />
 	</resourceSet>
   </resourceSets>
 </combres>

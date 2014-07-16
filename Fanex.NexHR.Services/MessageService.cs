@@ -23,16 +23,18 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class MessageService : IMessageService
     {
-        private IMessageRepository _messageRepository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IBaseRepository _baseRepository;
 
         public MessageService()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public MessageService(IMessageRepository messageRepository)
+        public MessageService(IMessageRepository messageRepository, IBaseRepository baseRepository)
         {
             _messageRepository = messageRepository ?? new MessageRepository();
+            _baseRepository = baseRepository ?? new BaseRepository();
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Fanex.NexHR.Services
         public IList<MessageViewModel> GetMessageByCreator(GetMessageByCreatorCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<MessageViewModel> messages = null;
+            IList<MessageViewModel> messages = new List<MessageViewModel>();
 
             if (criteria.IsValid())
             {
@@ -57,7 +59,7 @@ namespace Fanex.NexHR.Services
                         Subject = rawMessageItem.Subject,
                         Category = rawMessageItem.Category,
                         CreatedDate  = rawMessageItem.CreatedDate,
-                        SendTo = rawMessageItem.SentTo
+                        SendTo = rawMessageItem.SendTo
                     };
 
                     messages.Add(messageItem);
@@ -65,6 +67,24 @@ namespace Fanex.NexHR.Services
             }
 
             return messages;
+        }
+
+        /// <summary>
+        /// Insert new Message.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult InsertMessageByCreator(InsertMessageCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                _baseRepository.Insert(criteria);
+            }
+
+            return commandResult;
         }
     }
 }

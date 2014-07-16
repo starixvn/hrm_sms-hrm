@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Message;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -19,5 +20,7 @@ namespace Fanex.NexHR.Services.Interface
     public interface IMessageService
     {
         IList<MessageViewModel> GetMessageByCreator(GetMessageByCreatorCriteria criteria);
+
+        CommandResult InsertMessageByCreator(InsertMessageCriteria criteria);
     }
 }

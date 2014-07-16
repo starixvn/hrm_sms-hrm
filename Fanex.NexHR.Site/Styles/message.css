@@ -1,2 +1,9 @@
-﻿body {
+﻿.employee 
+{
+	width: 130px!important;
+}
+
+.send-to-group 
+{
+	line-height: 26px;
 }

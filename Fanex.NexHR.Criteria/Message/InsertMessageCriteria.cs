@@ -34,5 +34,15 @@ namespace Fanex.NexHR.Criteria.Message
         public int CreatedBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public override string GetSettingKey()
+        {
+            return "Message_Insert";
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 }

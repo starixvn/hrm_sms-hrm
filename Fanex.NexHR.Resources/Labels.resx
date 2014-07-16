@@ -981,4 +981,19 @@
   <data name="SendTo" xml:space="preserve">
     <value>Send To</value>
   </data>
+  <data name="CreateMessage" xml:space="preserve">
+    <value>Create Message</value>
+  </data>
+  <data name="HRSpace" xml:space="preserve">
+    <value>HR Space</value>
+  </data>
+  <data name="Override" xml:space="preserve">
+    <value>override</value>
+  </data>
+  <data name="ToEmployee" xml:space="preserve">
+    <value>To Employee</value>
+  </data>
+  <data name="ToGroup" xml:space="preserve">
+    <value>To Group</value>
+  </data>
 </root>

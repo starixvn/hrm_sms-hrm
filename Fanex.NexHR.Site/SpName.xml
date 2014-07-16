@@ -269,5 +269,6 @@
   </Function>
 	<Function Name="Message">
 		<Setting Key="Message_GetByCreator" SpName="Message_GetByCreator" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Message_Insert" SpName="Message_Insert" DbName="nexhrx" Plain="0"></Setting>
 	</Function>
 </Functions>

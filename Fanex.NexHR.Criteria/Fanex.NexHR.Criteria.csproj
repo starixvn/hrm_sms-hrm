@@ -66,6 +66,7 @@
     <Compile Include="Message\InsertMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
+    <Compile Include="ResultCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
