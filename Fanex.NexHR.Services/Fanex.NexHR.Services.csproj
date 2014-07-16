@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelExporting\ITotalWorkingHourMonthlyExporting.cs" />
+    <Compile Include="ExcelExporting\ReportExporting.cs" />
     <Compile Include="ExcelExporting\TotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="Interface\IMessageService.cs" />
     <Compile Include="Interface\IOvertimeRequestService.cs" />

@@ -32,7 +32,10 @@ namespace Fanex.NexHR.Repositories.Interfaces
             DateTime toDate,
             int maxRequest,
             int role,
-            int employeeID);
+            int? employeeId,
+            int loginUserId,
+            string groupIds,
+            byte? isLocal = null);
 
         IList<TotalWorkingHours> GetWorkingHoursList(
             DateTime fromDate,

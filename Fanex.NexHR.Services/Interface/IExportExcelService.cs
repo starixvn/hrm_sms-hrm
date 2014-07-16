@@ -43,5 +43,7 @@ namespace Fanex.NexHR.Services.Interface
         HSSFWorkbook ExportEmployeeOvertimeRecord(List<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> overtimes, DateTime fromDate, DateTime toDate);
+
+        HSSFWorkbook ExportHrRequestStatistic(List<RequestsMonitoring> overtimes, DateTime fromDate, DateTime toDate);
     }
 }

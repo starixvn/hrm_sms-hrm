@@ -42,6 +42,7 @@ namespace Fanex.NexHR.Services
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
         private const int _RowStartBodyYearlyOvertimeReport = 5;
+        
         private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
@@ -51,7 +52,6 @@ namespace Fanex.NexHR.Services
         private const string _EmployeeDetailsInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeDetailsInfoTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
-        private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
 
         private const string _MsgLeave = "{1} ({0} days)";
         private const string _MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
@@ -295,113 +295,24 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
+            ReportExporting exportExcel = new ReportExporting();
+            hssfworkbook = exportExcel.ExportWorkingCalendarSummary(calendars, fromDate, toDate);
 
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWorkingCalendarSummaryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
+            return hssfworkbook;
+        }
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendarSummary");
-
-            var rowDate = sheet.GetRow(1);
-            rowDate.GetCell(2).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            rowDate.GetCell(4).SetCellValue(toDate.ToString("dd MMM, yyyy"));
-
-            var rowIndex = _RowStartBodyWorkingCalendar;
-            var rowCopy = _RowStartBodyWorkingCalendar;
-            var height = sheet.GetRow(_RowStartBodyWorkingCalendar).Height;
-            var index = 1;
-            int countItem = 0;
-            int totalCellInRow = 0;
-            int startColumn = 5;
-
-            var groupWorkingCalendarBySchedule = calendars.GroupBy(
-                x => new 
-            {
-                EmpId = x.EmpId,
-                NickName = x.NickName, 
-                FullName = x.FullName, 
-                Group = x.Name 
-            },
-            x => new { WorkDate = x.WorkDate, Schedule = x.Schedule })
-                .Select(x => new { EmployeeInfo = x.Key, Calendar = x.ToList() })
-                .ToList();
-
-            if (groupWorkingCalendarBySchedule != null)
-            {
-                var firstItemInGroup = groupWorkingCalendarBySchedule[0];
-                if (firstItemInGroup.Calendar.Any())
-                {
-                    countItem = firstItemInGroup.Calendar.Count;
-                    totalCellInRow = countItem + startColumn;
-
-                    var rowHeaderDate = sheet.GetRow(3);
-                    var rowHeaderDay = sheet.GetRow(4);
-                    rowHeaderDate.Height = height;
-                    rowHeaderDay.Height = height;
-
-                    var templeteCellHeader = rowHeaderDate.GetCell(5);
-                    var customCellWidth = 3071;
-
-                    for (int i = 5; i < totalCellInRow; i++)
-                    {
-                        var cellHeaderDate = rowHeaderDate.CreateCell(i);
-                        var cellHeaderDay = rowHeaderDay.CreateCell(i);
-
-                        cellHeaderDate.CellStyle = templeteCellHeader.CellStyle;
-                        cellHeaderDay.CellStyle = templeteCellHeader.CellStyle;
-
-                        cellHeaderDate.Sheet.SetColumnWidth(i, customCellWidth);
-                        cellHeaderDay.Sheet.SetColumnWidth(i, customCellWidth);
-                    }
-
-                    // Row Header Date
-                    rowHeaderDate.GetCell(0).SetCellValue("#");
-                    rowHeaderDate.GetCell(1).SetCellValue("ID");
-                    rowHeaderDate.GetCell(2).SetCellValue("Full Name");
-                    rowHeaderDate.GetCell(3).SetCellValue("Nick Name");
-                    rowHeaderDate.GetCell(4).SetCellValue("Team");
-
-                    foreach (var item in firstItemInGroup.Calendar)
-                    {
-                        if (startColumn < totalCellInRow)
-                        {
-                            rowHeaderDate.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("dd MMM, yyyy"));
-                            rowHeaderDay.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("ddd"));
-                        }
-
-                        startColumn++;
-                    }
-                }
-
-                foreach (var item in groupWorkingCalendarBySchedule)
-                {
-                    rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
-                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                    var row = sheet.GetRow(rowIndex);
-                    var templeteCellInfo = row.GetCell(5);
-
-                    row.GetCell(0).SetCellValue(index);
-                    row.GetCell(1).SetCellValue(item.EmployeeInfo.EmpId);
-                    row.GetCell(2).SetCellValue(item.EmployeeInfo.FullName);
-                    row.GetCell(3).SetCellValue(item.EmployeeInfo.NickName);
-                    row.GetCell(4).SetCellValue(item.EmployeeInfo.Group);
-
-                    for (int i = 5; i < totalCellInRow; i++)
-                    {
-                        var cell = row.CreateCell(i);
-                        cell.CellStyle = templeteCellInfo.CellStyle;
-                        row.GetCell(i).SetCellValue(item.Calendar[i - 5].Schedule);
-                    }
-
-                    rowIndex++;
-                    index++;
-                }
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
+        /// <summary>
+        /// Method Export HR Request Statistic.
+        /// </summary>
+        /// <param name="requests">List of Request Monitoring Entity.</param>
+        /// <param name="fromDate">Export From Date.</param>
+        /// <param name="toDate">Export To Date.</param>
+        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
+        public HSSFWorkbook ExportHrRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
+        {
+            HSSFWorkbook hssfworkbook;
+            ReportExporting exportExcel = new ReportExporting();
+            hssfworkbook = exportExcel.ExportHrRequestStatistic(requests, fromDate, toDate);
 
             return hssfworkbook;
         }

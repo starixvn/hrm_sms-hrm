@@ -106,7 +106,7 @@ namespace Fanex.NexHR.Controllers
         {
             var currentDate = DateTime.Now;
             var teams = _teamService.GetAll();
-            var timeRecordViewModel = new TimeRecordViewModel 
+            var timeRecordViewModel = new TimeRecordViewModel
             {
                 FromDate = currentDate,
                 ToDate = currentDate,
@@ -131,37 +131,21 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult HrRequestMonitoring()
         {
-            return HrRequestMonitoring(null);
-        }
-
-        /// <summary>
-        /// ActionResult HumanResourceRequestMonitoring.
-        /// </summary>
-        /// <param name="model">RequestsMonitoring ViewModel.</param>
-        /// <returns>View Human resource RequestMonitoring.</returns>
-        [HttpPost]
-        [Authorize(Roles = "HR")]
-        public ActionResult HrRequestMonitoring(RequestsMonitoringViewModel model)
-        {
             var authorize = false;
-            if (model == null)
+            var year = DateTime.Now.Year;
+            var month = DateTime.Now.Month;
+            var entityList = new List<RequestsMonitoring>();
+
+            var model = new RequestsMonitoringViewModel
             {
-                var year = DateTime.Now.Year;
-                var month = DateTime.Now.Month;
-                model = new RequestsMonitoringViewModel
-                {
-                    FromDate = new DateTime(year, month, 1),
-                    ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    MaxRequest = 2,
-                    DateOption = 0
-                };
-            }
+                FromDate = new DateTime(year, month, 1),
+                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                MaxRequest = 2,
+                DateOption = 0
+            };
 
-            ViewBag.FromDate = model.FromDate;
-            ViewBag.ToDate = model.ToDate;
-            ViewBag.isLeader = false;
-
-            ViewBag.EntityList = new List<RequestsMonitoring>();
+            ViewBag.Groups = _teamService.GetAll();
+            ViewBag.CurrentUserId = this.CurrentUser.Id;
 
             var listRole = CurrentUser.RoleList;
             if (listRole != null)
@@ -171,10 +155,66 @@ namespace Fanex.NexHR.Controllers
 
             if (authorize)
             {
-                ViewBag.EntityList = _reportService.GetRequestMonitoring(model.FromDate, model.ToDate, model.MaxRequest, (int)RolesEnum.HR, this.CurrentUser.Id);
+                entityList = _reportService.GetRequestMonitoring(
+                    model.FromDate,
+                    model.ToDate,
+                    model.MaxRequest,
+                    (int)RolesEnum.HR,
+                    null,
+                    this.CurrentUser.Id,
+                    string.Empty,
+                    null).ToList();
+                ViewBag.EntityList = entityList;
             }
 
             return View("RequestMonitoring", model);
+        }
+
+        /// <summary>
+        /// ActionResult HumanResourceRequestMonitoring.
+        /// </summary>
+        /// <param name="currentUserId">Current user id.</param>
+        /// <param name="fromDate">Query from date.</param>
+        /// <param name="toDate">Query to date.</param>
+        /// <param name="maxRequest">Max request.</param>
+        /// <param name="empId">Employee Id.</param>
+        /// <param name="group">Filter groups.</param>
+        /// <param name="isLocal">Expat or local.</param>
+        /// <param name="isExcel">Export to excel.</param>
+        /// <returns>Action Result.</returns>
+        [Authorize(Roles = "HR")]
+        public ActionResult HrRequestMonitoringDetails(
+            int currentUserId,
+            DateTime fromDate,
+            DateTime toDate,
+            int maxRequest,
+            int? empId,
+            string group,
+            byte? isLocal,
+            bool isExcel)
+        {
+            List<RequestsMonitoring> requests = _reportService.GetRequestMonitoring(
+                fromDate,
+                toDate,
+                maxRequest,
+                (int)RolesEnum.HR,
+                empId,
+                currentUserId,
+                group,
+                isLocal).ToList();
+            ViewBag.MaxRequest = maxRequest;
+            ViewBag.FromDate = fromDate;
+            ViewBag.ToDate = toDate;
+            ViewBag.isLeader = false;
+
+            if (isExcel)
+            {
+                string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+                var hssfworkbook = _exportExcelService.ExportHrRequestStatistic(requests, fromDate, toDate);
+                return ExcelFile(hssfworkbook, fileName);
+            }
+
+            return PartialView("RequestMonitoringDetails", requests);
         }
 
         /// <summary>
@@ -228,7 +268,15 @@ namespace Fanex.NexHR.Controllers
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
             ViewBag.EntityList = new List<RequestsMonitoring>();
-            ViewBag.EntityList = _reportService.GetRequestMonitoring(model.FromDate, model.ToDate, model.MaxRequest, currentUserrole, this.CurrentUser.Id);
+            ViewBag.EntityList = _reportService.GetRequestMonitoring(
+                model.FromDate,
+                model.ToDate,
+                model.MaxRequest,
+                currentUserrole,
+                null,
+                this.CurrentUser.Id,
+                string.Empty,
+                null);
 
             return View("RequestMonitoring", model);
         }

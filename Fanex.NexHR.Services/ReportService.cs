@@ -86,9 +86,12 @@ namespace Fanex.NexHR.Services
             DateTime toDate,
             int maxRequest,
             int role,
-            int employeeID)
+            int? employeeId,
+            int loginUserId,
+            string groupIds,
+            byte? isLocal = null)
         {
-            var requestMonitoring = _reportRepository.GetRequestMonitoring(fromDate, toDate, maxRequest, role, employeeID);
+            var requestMonitoring = _reportRepository.GetRequestMonitoring(fromDate, toDate, maxRequest, role, employeeId, loginUserId, groupIds, isLocal);
 
             return requestMonitoring;
         }

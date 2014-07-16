@@ -520,7 +520,9 @@
     <resourceSet name="requestmonitoringjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/libs/date.js" />
+			<resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/date.filter.js" />
+			<resource path="~/scripts/views/report.hrrequestmonitoring.js" />
     </resourceSet>
 
     <resourceSet name="jobtitlecss" type="css">

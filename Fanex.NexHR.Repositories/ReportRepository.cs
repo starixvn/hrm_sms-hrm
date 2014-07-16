@@ -94,21 +94,32 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method GetRequest Monitoring.
+        ///  Method Get Request Monitoring.
         /// </summary>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Get to date.</param>
-        /// <param name="maxRequest">Max Request.</param>
-        /// <param name="role">Role of employee.</param>
-        /// <param name="empId">Employee Id.</param>
-        /// <returns>List of RequestMonitoring.</returns>
-        public IList<RequestsMonitoring> GetRequestMonitoring(DateTime fromDate, DateTime toDate, int maxRequest, int role, int empId)
+        /// <param name="fromDate">Query from date.</param>
+        /// <param name="toDate">Query to date.</param>
+        /// <param name="maxRequest">Max request.</param>
+        /// <param name="role">Current user role.</param>
+        /// <param name="employeeId">Employee id.</param>
+        /// <param name="loginUserId">Current user id.</param>
+        /// <param name="groupIds">Filter groups.</param>
+        /// <param name="isLocal">Expat or local.</param>
+        /// <returns>List of Request Monitoring Entity.</returns>
+        public IList<RequestsMonitoring> GetRequestMonitoring(
+            DateTime fromDate,
+            DateTime toDate,
+            int maxRequest,
+            int role,
+            int? employeeId,
+            int loginUserId,
+            string groupIds,
+            byte? isLocal = null)
         {
             using (var db = new ObjectDb("RequestMonitoring"))
             {
                 var entityList = new List<RequestsMonitoring>();
 
-                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, maxRequest, role, empId }))
+                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, maxRequest, role, employeeId, loginUserId, groupIds, isLocal }))
                 {
                     if (reader != null)
                     {
@@ -124,9 +135,11 @@ namespace Fanex.NexHR.Repositories
                                     Id = reader.ToInt("EmpID")
                                 },
                                 TotalCheckInOut = reader.ToInt("TotalCheckInOutRequest"),
-                                TotalLateInEarlyOut = reader.ToInt("TotalLateInEarlyOutRequest"),
+                                TotalLateIn = reader.ToInt("TotalLateInRequest"),
+                                TotalEarlyOut = reader.ToInt("TotalEarlyOutRequest"),
                                 TotalChangeShift = reader.ToInt("TotalChangeShiftRequest"),
                                 TotalLeave = reader.ToInt("TotalLeaveRequest"),
+                                TotalUnpaidLeave = reader.ToInt("TotalUnpaidLeaveRequest"),
                                 TotalOvertime = reader.ToInt("TotalOvertimeRequest"),
                                 KeepInViewRequest = reader.ToInt("KeepInViewRequest")
                             };

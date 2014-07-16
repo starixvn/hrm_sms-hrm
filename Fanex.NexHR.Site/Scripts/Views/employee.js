@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
-
+	checkDisabledUser();
 	$("#group").multiselect();
-
 	var jobTitleId = $('#jobtitleid').val();
 
 	$('#title').val(jobTitleId);
@@ -25,6 +24,7 @@
 
 	$('#query').live("click", function (evt) {
 		evt.preventDefault();
+		
 		$("#userdata").dataTable().fnDestroy();
 		query(jobTitleId);
 	});
@@ -38,6 +38,15 @@
 	});
 
 });
+
+function checkDisabledUser() {
+	if ($("#enable").attr("checked")) {
+		$('#userdata .resignedDate').show();
+	}
+	else {
+		$('#userdata .resignedDate').hide();
+	}
+}
 
 function query(jobTitleId) {
 	if (jobTitleId == undefined || jobTitleId == '') {
@@ -92,6 +101,7 @@ function query(jobTitleId) {
 			rowIndex = 1;
 			$('#userdata tbody').children().remove();
 			$('#itemTemplate').tmpl(data).appendTo('#userdata');
+			checkDisabledUser();
 
 			$('.nick').tooltip({
 				track: true,
@@ -133,6 +143,7 @@ function query(jobTitleId) {
 				"bJQueryUI": true,
 				'bLengthChange': false
 			});
+			checkDisabledUser();
 		}
 		reloadButtonText('#query');
 	}).error(function () {

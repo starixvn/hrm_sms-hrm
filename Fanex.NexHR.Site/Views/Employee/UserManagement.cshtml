@@ -1,141 +1,144 @@
 ﻿@{
-    ViewBag.Title = Labels.EmployeeManagement;
+	ViewBag.Title = Labels.EmployeeManagement;
 }
 @section css{
-    @Url.CombresLink("employeecss")
+	@Url.CombresLink("employeecss")
 }
 @section js{
-    @Url.CombresLink("employeejs")
+	@Url.CombresLink("employeejs")
 }
 @section Breadcrumb {
-    <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
+	<a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
 }
 <script>
-    var enable = null;
+	var enable = null;
 </script>
 <h2>@ViewBag.Title</h2>
 <div class="container_24 bunhat">
-    <div class="grid_24">
-        <div class="grid_2 gridlabel">@Labels.Keyword</div>
-        <div class="grid_7">
-            <input id="keyword" type="text" placeholder="@Messages.SearchEmployeeWatermark" />
-        </div>
-        <div class="grid_1 gridlabel">@Labels.Team</div>
-        <div class="grid_6">
-            <select id="group" multiple="multiple" class="team-select">
-                @foreach (Team item in ViewBag.Groups)
-                { 
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </div>
-        <div class="grid_1 gridlabel">@Labels.Title</div>
-        <div class="grid_5">
-            @*  <select id="title" class="title-select">
+	<div class="grid_24">
+		<div class="grid_2 gridlabel">@Labels.Keyword</div>
+		<div class="grid_7">
+			<input id="keyword" type="text" placeholder="@Messages.SearchEmployeeWatermark" />
+		</div>
+		<div class="grid_1 gridlabel">@Labels.Team</div>
+		<div class="grid_6">
+			<select id="group" multiple="multiple" class="team-select">
+				@foreach (Team item in ViewBag.Groups)
+	{ 
+					<option value="@item.Id">@item.Name</option>
+	}
+			</select>
+		</div>
+		<div class="grid_1 gridlabel">@Labels.Title</div>
+		<div class="grid_5">
+			@*  <select id="title" class="title-select">
                 <option value="">@Labels.AllTitles</option>
                 @foreach (Fanex.NexHR.Models.LookupData item in ViewBag.JobTitles)
                 { 
                     <option value="@item.Id">@item.Name</option>
                 }
             </select>*@
-            @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, Labels.AllTitles, new { @class = "title-select" })
-        </div>
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="grid_24">
-        <div class="grid_2 gridlabel">
-            Category
-        </div>
-        <div class="grid_3">
-            @{
-                var category = new List<SelectListItem>
+			@Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, Labels.AllTitles, new { @class = "title-select" })
+		</div>
+	</div>
+	<div class="clear">
+	</div>
+	<div class="space">
+	</div>
+	<div class="clear">
+	</div>
+	<div class="space">
+	</div>
+	<div class="grid_24">
+		<div class="grid_2 gridlabel">
+			Category
+		</div>
+		<div class="grid_3">
+			@{
+				var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"}, 
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
-            }
-            @Html.DropDownList("category", category, new { @class = "category" })
-        </div>
-        <div class="grid_8 gridlabel usertype" id ="usertype">
-            <input name="name" type="radio" id="active" checked="checked" />
-            <label for="active">
-                Active Users</label>
-            <input name="name" type="radio" id="enable" />
-            <label for="enable">
-                Disabled Users</label>
-            <input name="name" type="radio" id="IsDeleted" />
-            <label for="IsDeleted">
-                Deleted Users</label>
-        </div>
-         <div class="grid_2 gridlabel">
-            <input id="query" type="button" value="@Labels.Submit" />
-        </div>
-        <div class="grid_3 gridlabel">
-            <input type="button" id="basicExcel" value="Excel - Basic Info" style="width: 115px;" /></div>
-        <div class="grid_1 gridlabel">
-            <input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px;" /></div>
-       
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
+			}
+			@Html.DropDownList("category", category, new { @class = "category" })
+		</div>
+		<div class="grid_8 gridlabel usertype" id="usertype">
+			<input name="name" type="radio" id="active" checked="checked" />
+			<label for="active">
+				Active Users</label>
+			<input name="name" type="radio" id="enable" />
+			<label for="enable">
+				Disabled Users</label>
+			<input name="name" type="radio" id="IsDeleted" />
+			<label for="IsDeleted">
+				Deleted Users</label>
+		</div>
+		<div class="grid_2 gridlabel">
+			<input id="query" type="button" value="@Labels.Submit" />
+		</div>
+		<div class="grid_3 gridlabel">
+			<input type="button" id="basicExcel" value="Excel - Basic Info" style="width: 115px;" /></div>
+		<div class="grid_1 gridlabel">
+			<input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px;" /></div>
+	</div>
+	<div class="clear">
+	</div>
+	<div class="space">
+	</div>
 </div>
 <div class="space">
 </div>
 <div class="clear">
 </div>
 <table id="userdata">
-    <thead>
-        <tr>
-            <th>
-                #
-            </th>
-            <th>
-                @Labels.Code
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th>
-                @Labels.Name
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>
-                @Labels.GroupDate
-            </th>
-            <th>
-                @Labels.JobTitle
-            </th>
-            <th>
-                Authority Level
-            </th>
-            <th>
-                @Labels.Edit
-            </th>
-            <th>
-                Schedule
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				#
+			</th>
+			<th>
+				@Labels.Code
+			</th>
+			<th>
+				@Labels.Nick
+			</th>
+			<th>
+				@Labels.Name
+			</th>
+			<th>
+				@Labels.Team
+			</th>
+			<th>
+				@Labels.GroupDate
+			</th>
+			<th>
+				@Labels.JobTitle
+			</th>
+			<th>
+				Authority Level
+			</th>
+			<th class="resignedDate">
+				Resigned Date
+			</th>
+			<th>
+				@Labels.Edit
+			</th>
+			<th>
+				Schedule
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
 </table>
 @*    <div id="blocker">
         <div>
             Loading ...</div>
     </div>*@
-<div style="clear:both"></div>
+<div style="clear: both">
+</div>
 <input type="hidden" id="jobtitleid" value="@ViewBag.JobTitleId" />
 <input type="hidden" id="groupid" value="@ViewBag.GroupId" />
 <script id="itemTemplate" type="text/x-jquery-tmpl">   
@@ -158,7 +161,11 @@
         </td>
         <td class="left">${JobTitle}</td>
         <td class="left">${MemberRoleAbbreviation}</td>
-              
+		<td class="left resignedDate">
+			{{if ResignedDate}}
+                ${jsonToShortDate(ResignedDate)}
+            {{/if}}
+		</td>
         <td style="width: 45px;">
             {{if !IsDeleted}}
                 <a href="/employee/edit/${Id}"><img src="/Styles/Images/edit-icon.png"></a>
@@ -172,7 +179,6 @@
             {{else}}
                 -
             {{/if}}
-            
         </td>
     </tr>
     

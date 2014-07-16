@@ -43,7 +43,10 @@ namespace Fanex.NexHR.Services.Interface
             DateTime toDate,
             int maxRequest,
             int role,
-            int employeeID);
+            int? employeeId,
+            int loginUserId,
+            string groupIds,
+            byte? isLocal = null);
 
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
             DateTime fromTime,
