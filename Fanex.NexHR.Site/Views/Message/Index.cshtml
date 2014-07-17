@@ -18,14 +18,32 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
-	if (Roles.IsUserInRole("HR"))
-			{
-		<div class="button-icon">
-			<span class="icon plus"></span>@Html.ActionLink("Create new Message", "Create")
+	<div class="container_24 bunhat" style="width: 878px;">
+		<div class="grid_2 formrow">
+			@Html.LabelFor(model => model.FromDate)
 		</div>
+		<div class="grid_4">
+		    @Html.DatePickerFor(model => model.FromDate)
+		</div>
+		<div class="grid_2 formrow">
+			@Html.LabelFor(model => model.ToDate)
+		</div>
+		<div class="grid_4">
+			@Html.DatePickerFor(model => model.ToDate)
+		</div>
+		<div class="grid_7">
+			<input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
+			@if (Roles.IsUserInRole("HR"))
+			{
+				<div class="button-icon">
+					<span class="icon plus"></span>@Html.ActionLink("Create Message", "Create")
+				</div>
 			}
-	
-	<table id="messageTable" class="data persist-area" style="width: 878px;">
+        </div>
+    </div>
+	<div class="clear">
+	</div>
+	<table id="messageTable" class="data persist-area" style="width: 900px;">
 		<thead>
 			<tr>
 				<th>#
@@ -34,7 +52,7 @@
 				</th>
 				<th>@Labels.Category
 				</th>
-				<th>@Labels.SendTo
+				<th style="width:200px;">@Labels.SendTo
 				</th>
 				<th>@Labels.CreatedDate
 				</th>
@@ -53,26 +71,26 @@
 				@{int index = 1;}
 				@foreach (MessageViewModel message in ViewBag.Messages)
 	{
-					<tr>
+					<tr id="row_@message.MessageId">
 						<td>@(index++)
 						</td>
 						<td>@message.Subject
 						</td>
 						<td>@message.Category
 						</td>
-						<td>@message.SendTo
+						<td style="width:200px;">@message.SendTo
 						</td>
 						<td>@message.CreatedDate.ToDateMonthYearFormatedDate()
 						</td>
 						@if (Roles.IsUserInRole("HR"))
 	  { 
 						<td class="cmd" title="Edit">
-							<a href="">
+							<a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">
 								<img src="~/Styles/Images/edit-icon.png" alt="Edit" />
 							</a>
 						</td>
 						<td class="cmd" title="Delete">
-							<a href="javascript:;" >
+							<a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
 								<img src="~/Styles/Images/delete-icon.png" alt="Delete" />
 							</a>
 						</td>

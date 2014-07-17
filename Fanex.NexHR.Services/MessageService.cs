@@ -13,30 +13,14 @@ namespace Fanex.NexHR.Services
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// The implement of Message service.
     /// </summary>
-    public class MessageService : IMessageService
+    public class MessageService : BaseService, IMessageService
     {
-        private readonly IMessageRepository _messageRepository;
-        private readonly IBaseRepository _baseRepository;
-
-        public MessageService()
-            : this(null, null)
-        {
-        }
-
-        public MessageService(IMessageRepository messageRepository, IBaseRepository baseRepository)
-        {
-            _messageRepository = messageRepository ?? new MessageRepository();
-            _baseRepository = baseRepository ?? new BaseRepository();
-        }
-
         /// <summary>
         /// Get message by creator.
         /// </summary>
@@ -49,7 +33,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                IEnumerable<Message> rawMessages = _messageRepository.GetMessageByCreator(criteria);
+                IEnumerable<Message> rawMessages = GetData<Message>(criteria);
 
                 foreach (Message rawMessageItem in rawMessages)
                 {
@@ -81,10 +65,82 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                _baseRepository.Insert(criteria);
+                _Repository.Insert(criteria);
             }
 
             return commandResult;
+        }
+
+        /// <summary>
+        /// Update Message.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult UpdateMessageByCreator(UpdateMessageByCreatorCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Update(criteria);
+            }
+
+            return commandResult;
+        }
+
+        /// <summary>
+        /// Get Message by Id.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Message model.</returns>
+        public Message GetMessageById(GetMessageByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var message = new Message();
+
+            if (criteria.IsValid())
+            {
+                message = GetDataEntity<Message>(criteria);
+            }
+
+            return message;
+        }
+
+        /// <summary>
+        /// Delete Message by creator.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult DeleteMessageByCreator(DeleteMessageByCreatorCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Delete(criteria);
+            }
+
+            return commandResult;
+        }
+
+        /// <summary>
+        /// Get Message by employee.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The enumerator Message.</returns>
+        public IEnumerable<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IEnumerable<Message> messages = null;
+
+            if (criteria.IsValid())
+            {
+                messages = GetData<Message>(criteria);
+            }
+
+            return messages;
         }
     }
 }

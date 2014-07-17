@@ -22,5 +22,13 @@ namespace Fanex.NexHR.Services.Interface
         IList<MessageViewModel> GetMessageByCreator(GetMessageByCreatorCriteria criteria);
 
         CommandResult InsertMessageByCreator(InsertMessageCriteria criteria);
+
+        CommandResult UpdateMessageByCreator(UpdateMessageByCreatorCriteria criteria);
+
+        Message GetMessageById(GetMessageByIdCriteria criteria);
+
+        CommandResult DeleteMessageByCreator(DeleteMessageByCreatorCriteria criteria);
+
+        IEnumerable<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria);
     }
 }

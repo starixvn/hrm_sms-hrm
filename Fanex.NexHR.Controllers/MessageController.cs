@@ -47,24 +47,32 @@ namespace Fanex.NexHR.Controllers
         {
             var criteria = new GetMessageByCreatorCriteria
             {
-                 CreatedBy = this.CurrentUser.Id
+                ToDate = DateTime.Now,
+                FromDate = DateTime.Now.AddMonths(-3)
             };
 
             return Index(criteria);
         }
 
         [HttpPost]
+        [Authorize(Roles = "HR")]
         public ActionResult Index(GetMessageByCreatorCriteria criteria)
         {
-            ////ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            if (criteria != null)
+            {
+                criteria.CreatedBy = this.CurrentUser.Id;
+                criteria.IsDisabled = false;
+            }
+
             ViewBag.Messages = _messageService.GetMessageByCreator(criteria);
-            return View();
+            return View(criteria);
         }
 
         /// <summary>
         /// Create Message.
         /// </summary>
         /// <returns>The Action Result.</returns>
+        [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
             ViewBag.Employees = _employeeService.GetEmployees(null, null, null, null, null, null);
@@ -74,6 +82,7 @@ namespace Fanex.NexHR.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [Authorize(Roles = "HR")]
         public JsonResult Create(InsertMessageCriteria model)
         {
             if (model != null)
@@ -84,6 +93,77 @@ namespace Fanex.NexHR.Controllers
 
             CommandResult commandResult = _messageService.InsertMessageByCreator(model);
             return Json(commandResult, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Edit Message.
+        /// </summary>
+        /// <param name="id">The Message Id.</param>
+        /// <returns>The Action Result.</returns>
+        [Authorize(Roles = "HR")]
+        public ActionResult Edit(int id)
+        {
+            var getMessageByIdCriteria = new GetMessageByIdCriteria
+            {
+                MessageId = id
+            };
+            ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
+            ViewBag.Employees = _employeeService.GetEmployees(null, null, null, null, null, null);
+            ViewBag.Groups = _teamService.GetAll();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [Authorize(Roles = "HR")]
+        public JsonResult Edit(UpdateMessageByCreatorCriteria model)
+        {
+            if (model != null)
+            {
+                model.ModifiedBy = this.CurrentUser.Id;
+                model.ModifiedDate = DateTime.Now;
+            }
+
+            CommandResult commandResult = _messageService.UpdateMessageByCreator(model);
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Delete Message.
+        /// </summary>
+        /// <param name="id">The Message Id.</param>
+        /// <returns>The Command Result.</returns>
+        [HttpPost]
+        [Authorize(Roles = "HR")]
+        public JsonResult Delete(int id)
+        {
+            var criteria = new DeleteMessageByCreatorCriteria
+            {
+                MessageId = id,
+                ModifiedBy = this.CurrentUser.Id,
+                ModifiedDate = DateTime.Now
+            };
+
+            CommandResult commandResult = _messageService.DeleteMessageByCreator(criteria);
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ViewMessageOfEmployee()
+        {
+            var criteria = new GetMessageByEmployeeCriteria
+            {
+                EmployeeId = this.CurrentUser.Id
+            };
+
+            return ViewMessageOfEmployee(criteria);
+        }
+
+        [HttpPost]
+        public ActionResult ViewMessageOfEmployee(GetMessageByEmployeeCriteria criteria)
+        {
+            ViewBag.Messages = _messageService.GetMessageByEmployee(criteria);
+            return View();
         }
     }
 }

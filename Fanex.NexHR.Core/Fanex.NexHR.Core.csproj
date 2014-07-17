@@ -55,9 +55,8 @@
     <Reference Include="Fanex.Caching">
       <HintPath>..\Dependencies\Fanex.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.Common, Version=1.0.404.97, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Fanex.Common.dll</HintPath>
+    <Reference Include="Fanex.Common">
+      <HintPath>..\packages\Fanex.Common.1.0.404.97\lib\net40\Fanex.Common.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.Data">
       <HintPath>..\Dependencies\Fanex.Data.dll</HintPath>
@@ -126,6 +125,7 @@
     <Compile Include="Enums\Commands.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
     <Compile Include="Enums\AttendanceFilterEnums.cs" />
+    <Compile Include="Enums\MessageCategory.cs" />
     <Compile Include="Enums\OvertimeTypes.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />

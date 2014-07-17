@@ -270,5 +270,9 @@
 	<Function Name="Message">
 		<Setting Key="Message_GetByCreator" SpName="Message_GetByCreator" DbName="nexhrx" Plain="0"></Setting>
 		<Setting Key="Message_Insert" SpName="Message_Insert" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Message_Update" SpName="Message_Update" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Message_GetById" SpName="Message_GetById" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Message_Delete" SpName="Message_Delete" DbName="nexhrx" Plain="0"></Setting>
+		<Setting Key="Message_GetByEmployee" SpName="Message_GetByEmployee" DbName="nexhrx" Plain="0"></Setting>
 	</Function>
 </Functions>

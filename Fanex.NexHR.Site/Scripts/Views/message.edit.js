@@ -1,10 +1,44 @@
 ﻿'use strict';
+/*global _global,initEditor,tinyMCE*/
+
+var bindingDataIfEditMode = function () {
+	var messageId = $('#messageId').val(),
+		messageSubject = $('#messageSubject').val(),
+		messageContents = $('#messageContents').val(),
+		messageFromDate = $('#messageFromDate').val(),
+		messageToDate = $('#messageToDate').val(),
+		messageEmployeeIds = $('#messageEmployeeIds').val(),
+		messageGroupIds = $('#messageGroupIds').val();
+
+	$('#Subject').val(messageSubject);
+	$('#Contents').val(messageContents);
+	$('#MessageId').val(messageId);
+
+	if (messageFromDate) {
+		var newFromDate = new Date(messageFromDate);
+		$('#FromDate').val($.datepicker.formatDate('d M, yy', newFromDate));
+	}
+	if (messageToDate) {
+		var newToDate = new Date(messageToDate);
+		$('#ToDate').val($.datepicker.formatDate('d M, yy', newToDate));
+	}
+	if (messageEmployeeIds) {
+		$('#employee').val(messageEmployeeIds.split(','));
+	}
+	if (messageGroupIds) {
+		$('#group').val(messageGroupIds.split(','));
+	}
+};
 
 var init = function () {
+	// initialize tiny MCE editor
 	initEditor('Contents', 'basic');
-	$("#group").multiselect();
+
+	bindingDataIfEditMode();
+
 	$('#employee').chosen();
 	$('#employee').trigger("chosen:updated");
+	$("#group").multiselect();
 };
 
 var validateForm = function () {
@@ -39,7 +73,7 @@ var createStringResult = function (items) {
 				result = items[i];
 			}
 			else {
-				result += ',' + result[i];
+				result += ',' + items[i];
 			}
 		}
 	}
@@ -52,7 +86,7 @@ $(document).ready(function () {
 
 	$("form").submit(function (event) {
 		var validate = validateForm();
-		debugger;
+
 		if (validate) {
 			$("#error").hide();
 			$("#error").html('');

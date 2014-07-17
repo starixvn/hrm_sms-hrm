@@ -754,6 +754,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Message.
+        /// </summary>
+        public static string EditMessage {
+            get {
+                return ResourceManager.GetString("EditMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit shift.
         /// </summary>
         public static string EditShift {

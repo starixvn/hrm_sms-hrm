@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseService.cs" />
     <Compile Include="ExcelExporting\ITotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="ExcelExporting\ReportExporting.cs" />
     <Compile Include="ExcelExporting\TotalWorkingHourMonthlyExporting.cs" />
@@ -162,7 +163,9 @@
     <Compile Include="Interface\IMemoService.cs" />
     <Compile Include="Interface\ITeamService.cs" />
     <Compile Include="MemoService.cs" />
-    <Compile Include="MessageService.cs" />
+    <Compile Include="MessageService.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="OvertimeRequestService.cs" />
     <Compile Include="ReportService.cs" />
     <Compile Include="SupportService.cs" />

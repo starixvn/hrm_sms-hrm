@@ -31,5 +31,9 @@ namespace Fanex.NexHR.Models
         public DateTime CreatedDate { get; set; }
 
         public string SendTo { get; set; }
+
+        public string EmployeeIds { get; set; }
+
+        public string GroupIds { get; set; }
     }
 }

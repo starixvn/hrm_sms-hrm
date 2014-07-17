@@ -996,4 +996,7 @@
   <data name="ToGroup" xml:space="preserve">
     <value>To Group</value>
   </data>
+  <data name="EditMessage" xml:space="preserve">
+    <value>Edit Message</value>
+  </data>
 </root>

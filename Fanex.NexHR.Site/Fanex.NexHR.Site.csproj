@@ -330,8 +330,8 @@
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
-    <Content Include="Scripts\Views\report.hrrequestmonitoring.js" />
     <Content Include="Scripts\Views\message.edit.js" />
+    <Content Include="Scripts\Views\report.hrrequestmonitoring.js" />
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\report.totalworkinghourweekly.js" />
     <Content Include="Scripts\Views\shift.js" />
@@ -1176,6 +1176,8 @@
     <Content Include="Views\Report\RequestMonitoringDetails.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\Create.cshtml" />
+    <Content Include="Views\Message\Edit.cshtml" />
+    <Content Include="Views\Message\ViewMessageOfEmployee.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
