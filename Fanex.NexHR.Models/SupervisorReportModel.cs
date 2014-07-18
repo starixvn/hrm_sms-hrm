@@ -39,13 +39,13 @@ namespace Fanex.NexHR.Models
                     switch (ActionType)
                     {
                         case 2:
-                            return "VERIFIED BY";
+                            return "Verified By";
                         case 3:
-                            return "APPROVED BY";
+                            return "Approved By";
                         case 4:
-                            return "SHIFT ARRANGEMENT";
+                            return "Shift Arrangement";
                         case 5:
-                            return "ON BEHALF REQUEST";
+                            return "On Behalf Request";
                     }
                 }
 

@@ -317,6 +317,15 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
+        public HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors)
+        {
+            HSSFWorkbook hssfworkbook;
+            ReportExporting exportExcel = new ReportExporting();
+            hssfworkbook = exportExcel.ExportEmployeeSupervisor(supervisors);
+
+            return hssfworkbook;
+        }
+
         /// <summary>
         /// Function to Export attendance report.
         /// </summary>

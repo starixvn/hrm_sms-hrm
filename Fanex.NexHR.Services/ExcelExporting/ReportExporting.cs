@@ -28,8 +28,10 @@ namespace Fanex.NexHR.Services.ExcelExporting
     {
         private const int _RowStartBodyHrRequestStatistic = 4;
         private const int _RowStartBodyWorkingCalendarSummary = 5;
+        private const int _RowStartBodyEmployeeSupervisor = 4;
         private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
+        private const string _EmployeeSupervisorFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeSupervisorTemplate.xls";
 
         /// <summary>
         /// Method Export HR Request Statistic.
@@ -211,6 +213,71 @@ namespace Fanex.NexHR.Services.ExcelExporting
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;
+        }
+
+        /// <summary>
+        /// Export Employee Supervisor.
+        /// </summary>
+        /// <param name="supervisors">SupervisorReportGroup Model.</param>
+        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
+        public HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors)
+        {
+            HSSFWorkbook hssfworkbook;
+
+            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeSupervisorFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "Employee Supervisor");
+
+            var rowIndex = _RowStartBodyEmployeeSupervisor;
+            var rowCopy = _RowStartBodyEmployeeSupervisor;
+            var height = sheet.GetRow(_RowStartBodyEmployeeSupervisor).Height;
+            var groupIndex = 1;
+
+            foreach (var item in supervisors)
+            {
+                rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
+                var row = sheet.GetRow(rowIndex);
+                foreach (var supervisor in item.SupervisorAction)
+                {
+                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                    row = sheet.GetRow(rowIndex);
+                    row.Height = height;
+                    row.GetCell(0).SetCellValue(groupIndex);
+                    row.GetCell(1).SetCellValue(supervisor.NickName);
+                    row.GetCell(2).SetCellValue(supervisor.FullName);
+                    row.GetCell(3).SetCellValue(supervisor.Code);
+                    row.GetCell(4).SetCellValue(supervisor.ActionName);
+                    row.GetCell(5).SetCellValue(supervisor.Supervisors);
+                    rowIndex++;
+                }
+
+                groupIndex++;
+
+                var firstRow = rowIndex - item.SupervisorAction.Count;
+                var lastRow = rowIndex - 1;
+                MergeCell(row, firstRow, lastRow);
+            }
+
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
+        private void MergeCell(NPOI.SS.UserModel.IRow row, int firstRow, int lastRow)
+        {
+            NPOI.SS.Util.CellRangeAddress cra1 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 0, 0);
+            NPOI.SS.Util.CellRangeAddress cra2 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 1, 1);
+            NPOI.SS.Util.CellRangeAddress cra3 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 2, 2);
+            NPOI.SS.Util.CellRangeAddress cra4 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 3, 3);
+            row.Sheet.AddMergedRegion(cra1);
+            row.Sheet.AddMergedRegion(cra2);
+            row.Sheet.AddMergedRegion(cra3);
+            row.Sheet.AddMergedRegion(cra4);
         }
     }
 }

@@ -745,9 +745,10 @@ namespace Fanex.NexHR.Controllers
         /// <param name="employeeId">Employee Id.</param>
         /// <param name="groups">Filter by group.</param>
         /// <param name="supervisorType">Supervisor type.</param>
+        /// <param name="isExcel">Export Excel Or query data.</param>
         /// <param name="isLocal">Expat or local.</param>
         /// <returns>Action Result.</returns>
-        public ActionResult EmployeeSupervisorDetails(int? employeeId, string groups, int? supervisorType, byte? isLocal = null)
+        public ActionResult EmployeeSupervisorDetails(int? employeeId, string groups, int? supervisorType, bool? isExcel, byte? isLocal = null)
         {
             var getSupervisorReportCriteria = new GetSupervisorReportCriteria()
             {
@@ -758,7 +759,17 @@ namespace Fanex.NexHR.Controllers
             };
             List<SupervisorReportGroupModel> supervisors = _reportService.GetSupervisorReport(getSupervisorReportCriteria);
 
-            return PartialView(supervisors);
+            if (isExcel.Value)
+            {
+                string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+                var hssfworkbook = _exportExcelService.ExportEmployeeSupervisor(supervisors);
+
+                return ExcelFile(hssfworkbook, fileName);
+            }
+            else
+            {
+                return PartialView(supervisors);
+            }
         }
 
         /// <summary>

@@ -5,7 +5,7 @@
 		selectedText: '# selected',
 		selectedList: 0
 	});
-	submitForm(false);
+	//submitForm(false);
 
 	$("#submit").click(function () {
 		submitForm(false);
@@ -34,8 +34,8 @@ function submitForm(isExcel) {
 		isLocal = 1;
 	}
 	if (isExcel) {
-		url = _global.root + "export/EmployeeSupervisor?employeeId=" + employeeId + "&groups=" + group + "&supervisorType=" + supervisorType
-		+ "&isLocal=" + isLocal;
+		url = _global.root + "report/EmployeeSupervisorDetails?employeeId=" + employeeId + "&groups=" + group + "&supervisorType=" + supervisorType
+		+ "&isExcel=" + isExcel + "&isLocal=" + isLocal;
 
 		location.href = url;
 	}
@@ -45,6 +45,7 @@ function submitForm(isExcel) {
 			employeeId: employeeId,
 			groups: group,
 			supervisorType: supervisorType,
+			isExcel: isExcel,
 			isLocal: isLocal
 		};
 
