@@ -84,6 +84,8 @@
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Request\CheckInOutRequestModel.cs" />
+    <Compile Include="SupervisorReportGroupModel.cs" />
+    <Compile Include="SupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
     <Compile Include="EmployeeAnnualBalance.cs" />

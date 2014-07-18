@@ -1,0 +1,39 @@
+﻿#Supervisor
+{
+	min-width: 100px;
+}
+
+#Employee
+{
+	width: 180px;
+}
+
+table.data td
+{
+	white-space: inherit !important;
+}
+
+table.data tr.oddRow
+{
+	background-color: #ececec;
+}
+
+table.data tr.evenRow
+{
+	background-color: #fff;
+}
+
+table.data tr.evenRow
+{
+	background-color: #fff;
+}
+
+table.data td.supervisorName
+{
+	text-align: left;
+}
+
+table.data th.actionName
+{
+	min-width: 150px;
+}

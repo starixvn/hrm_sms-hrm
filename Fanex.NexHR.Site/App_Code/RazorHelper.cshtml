@@ -344,13 +344,14 @@
     </select>
 }
 
-@helper SupervisorRolesDropDownList(short action = (short)RolesEnum.Verifier, string controlName = "", string classObject = "")
+@helper SupervisorRolesDropDownList(short action, string controlName = "", string classObject = "")
     {
     <select id="@controlName">
-        <option selected="@(action == (short)RolesEnum.Verifier)" value="@RolesEnum.Verifier">@Labels.Verifier</option>
-        <option selected="@(action == (short)RolesEnum.Approver)" value="@RolesEnum.Approver">@Labels.Approver</option>
-        <option selected="@(action == (short)RolesEnum.ShiftManager)" value="@RolesEnum.ShiftManager">@Labels.ShiftManager</option>
-        <option selected="@(action == (short)RolesEnum.ActingSupervisor)" value="@RolesEnum.ActingSupervisor">@Labels.ActingSupervisor</option>
+		<option selected="@(action == 0)" value="">@Labels.All</option>
+        <option selected="@(action == (short)RolesEnum.Verifier)" value="@((short)RolesEnum.Verifier)">@Labels.Verifier</option>
+        <option selected="@(action == (short)RolesEnum.Approver)" value="@((short)RolesEnum.Approver)">@Labels.Approver</option>
+        <option selected="@(action == (short)RolesEnum.ShiftManager)" value="@((short)RolesEnum.ShiftManager)">@Labels.ShiftManager</option>
+        <option selected="@(action == (short)RolesEnum.ActingSupervisor)" value="@((short)RolesEnum.ActingSupervisor)">@Labels.ActingSupervisor</option>
     </select>
         
 }

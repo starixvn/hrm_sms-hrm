@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Controllers
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -730,6 +731,34 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Year = year.Value;
 
             return View();
+        }
+
+        public ActionResult EmployeeSupervisor()
+        {
+            ViewBag.Groups = _teamService.GetAll();
+            return View();
+        }
+
+        /// <summary>
+        /// Employee Supervisor Details.
+        /// </summary>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="groups">Filter by group.</param>
+        /// <param name="supervisorType">Supervisor type.</param>
+        /// <param name="isLocal">Expat or local.</param>
+        /// <returns>Action Result.</returns>
+        public ActionResult EmployeeSupervisorDetails(int? employeeId, string groups, int? supervisorType, byte? isLocal = null)
+        {
+            var getSupervisorReportCriteria = new GetSupervisorReportCriteria()
+            {
+                EmployeeId = employeeId,
+                GroupIds = groups,
+                IsLocal = isLocal,
+                ActionType = supervisorType
+            };
+            List<SupervisorReportGroupModel> supervisors = _reportService.GetSupervisorReport(getSupervisorReportCriteria);
+
+            return PartialView(supervisors);
         }
 
         /// <summary>

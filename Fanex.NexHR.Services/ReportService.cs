@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -278,6 +279,17 @@ namespace Fanex.NexHR.Services
             }
 
             return calendars;
+        }
+
+        public List<SupervisorReportGroupModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
+        {
+            List<SupervisorReportGroupModel> groupingSupervisors = null;
+            if (criteria.IsValid())
+            {
+                groupingSupervisors = _reportRepository.GetSupervisorReport(criteria);
+            }
+
+            return groupingSupervisors;
         }
     }
 }

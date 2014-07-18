@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -86,5 +87,7 @@ namespace Fanex.NexHR.Services.Interface
         IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
 
         IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria);
+
+        List<SupervisorReportGroupModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
     }
 }

@@ -84,5 +84,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
 
         IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria);
+
+        List<SupervisorReportGroupModel> GetSupervisorReport(ICriteria criteria);
     }
 }

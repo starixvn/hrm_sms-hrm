@@ -418,6 +418,17 @@
       <resource path="~/scripts/views/report.totalworkinghours.js" />
     </resourceSet>
 
+
+		<resourceSet name="staffrepresentativecss" type="css">
+			<resource reference="sitecss"/>
+			<resource path="~/styles/report.staffrepresentative.css" />
+		</resourceSet>
+		<resourceSet name="staffrepresentativjs" type="js">
+			<resource reference="sitejs"/>
+			<resource path="~/scripts/views/employee.search.in.company.js" />
+			<resource path="~/scripts/views/report.staffrepresentative.js" />
+		</resourceSet>
+
     <resourceSet name="totalworkinghourmonthlycss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/report.totalworkinghourmonthly.css" />

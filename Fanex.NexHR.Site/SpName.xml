@@ -78,6 +78,8 @@
     <Setting Key="ExportExcel_OvertimeFiscal" SpName="ExportExcel_OvertimeFiscal" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExportExcel_OvertimeNormal" SpName="ExportExcel_OvertimeNormal" DbName="nexhrx" Plain="0"></Setting>
 
+		<Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="nexhrx" Plain="0"></Setting>
+
     <Setting Key="OverTime_ApproveMultiRequest" SpName="OverTime_ApproveMultiRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_RejectMultiRequest" SpName="OverTime_RejectMultiRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_ApproveSingleRequest" SpName="OverTime_ApproveSingleRequest" DbName="nexhrx" Plain="0"></Setting>

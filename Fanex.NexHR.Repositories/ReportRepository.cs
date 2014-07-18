@@ -615,5 +615,25 @@ namespace Fanex.NexHR.Repositories
 
             return calendars;
         }
+
+        /// <summary>
+        /// Method Get Supervisor Report.
+        /// </summary>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List of Supervisor Group Model.</returns>
+        public List<SupervisorReportGroupModel> GetSupervisorReport(ICriteria criteria)
+        {
+            List<SupervisorReportModel> supervisors = null;
+            List<SupervisorReportGroupModel> groupingSupervisor = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                supervisors = db.Query<SupervisorReportModel>(criteria.GetSpParams()).ToList();
+            }
+
+            groupingSupervisor = supervisors.GroupBy(x => x.EmpId)
+                .Select(x => new SupervisorReportGroupModel { EmployeeId = x.Key, SupervisorAction = x.ToList() }).ToList();
+
+            return groupingSupervisor;
+        }
     }
 }
