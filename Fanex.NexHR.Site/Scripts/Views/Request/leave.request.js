@@ -338,20 +338,48 @@
             }
         },
         fillTimeForHalfday: function () {
-            var arr = LeaveRequest.fromTime.val().split(':');
-            var x = parseInt(arr[0].trim(), 10);
-            var hour = "";
-            x = x + 4;
-            if (x >= 24) {
-                x = x - 24;
-            }
+            $.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
+                function (data) {
+                    if (data != null) {
+                        var arrTimeIn = data.BeginCheckInTime.split(":");
+                        var arrTimeOut = data.BeginCheckOutTime.split(":");
 
-            if (x < 10) {
-                hour = "0" + x;
-            }
-            else {
-                hour = x;
-            }
+                        var minuteFrom = parseInt(arrTimeIn[0]) * 60 + parseInt(arrTimeIn[1]);
+                        var minuteTo = parseInt(arrTimeOut[0]) * 60 + parseInt(arrTimeOut[1]);
+                        var isFromAfterday = data.IsInAfterDay;
+                        var isToAfterday = false;
+                        if (data.IsInAfterDay) {
+                            minuteFrom += 1440; //60*24
+                        }
+
+                        if (data.IsOutAfterDay) {
+                            minuteTo += 1440;
+                        }
+
+                        var averageTime = (minuteFrom + minuteTo) / 2;
+                        if (averageTime >= 1440) {
+                            averageTime = averageTime - 1440;
+                            isToAfterday = true;
+                        }
+
+                        var hour = Math.floor(averageTime / 60);
+                        var minute = Math.floor((averageTime % 60) / 30) * 30;
+                        minute = minute === 0 ? "00" : minute;
+                        if (hour < 10) {
+
+                            hour = "0" + hour;
+                        }
+
+                        var toTime = hour + ":" + minute;
+                        trObject.find(".ddlfromtime").val(data.BeginCheckInTime);
+                        trObject.find(".ddltotime").val(toTime);
+
+                        trObject.find(".chkIsFromAfterday").attr("checked", isFromAfterday);
+                        trObject.find(".chkIsToAfterday").attr("checked", isToAfterday);
+                        trObject.find(".ddltotime").attr("data-outtime", data.BeginCheckOutTime);
+                        trObject.find(".ddltotime").attr("data-isOutAfterday", data.IsOutAfterDay);
+                    }
+                });
 
             LeaveRequest.toTime.val(hour + ":" + arr[1]);
             LeaveRequest.totalDays.val(0.5);
