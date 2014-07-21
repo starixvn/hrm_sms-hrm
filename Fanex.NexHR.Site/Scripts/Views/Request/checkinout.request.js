@@ -19,19 +19,30 @@
 		var IsInAfterDay = $('#IsInAfterDay').val();
 		var IsOutAfterDay = $('#IsOutAfterDay').val();
 
-		if (IsOutAfterDay == "true" || IsInAfterDay == "true") {
+		if ($("#Type_1").attr("checked") == "checked") {
+			checkConstraintDate(e, IsInAfterDay, dayDiff);
+		}
+
+		if ($("#Type_2").attr("checked") == "checked") {
+			checkConstraintDate(e, IsOutAfterDay, dayDiff);
+		}
+
+	});
+
+	var checkConstraintDate = function (event, requesType, dayDiff) {
+		if (requesType == "true") {
 			if (dayDiff <= 0) {
-				e.preventDefault();
-				alert('Request date must be greater than Attendant date!');
+				event.preventDefault();
+				alert('Cross date shift. Request date must be greater than Attendant date!');
 			}
 		}
 		else {
 			if (dayDiff < 0) {
-				e.preventDefault();
+				event.preventDefault();
 				alert('Request date must be equal or greater than Attendant date!');
 			}
 		}
-	});
+	};
 
 	$("#Employee").blur(function () {
 		$.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
@@ -172,3 +183,5 @@ function checkInOrOutInNextDay(requestType) {
 		$("#ForDate").datepicker().val(attendantDate.format("dd mmm, yyyy"));
 	}
 }
+
+
