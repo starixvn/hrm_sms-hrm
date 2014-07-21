@@ -228,10 +228,10 @@
                 ${ShiftCode}
             </td>
         {{/if}}
-        <td>
+        <td class="tooltip" title="${jsonToFullDateTime(InFixed)}">
             {{if InFixed}}${jsonTojsDate(InFixed).format("HH:MM")}{{/if}}
         </td>
-        <td>
+        <td class="tooltip" title="${jsonToFullDateTime(OutFixed)}">
             {{if OutFixed}}${jsonTojsDate(OutFixed).format("HH:MM")}{{/if}}
         </td>
         <td>

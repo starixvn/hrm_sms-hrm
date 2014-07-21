@@ -274,8 +274,16 @@ function getEncodePlainText(text) {
 function jsonToDate(jsonDate) {
 	var date = Date.parse(jsonDate);
 	return date.format("mm/dd/yyyy HH:MM:ss");
-	//return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " "
-    //+ date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+}
+
+function jsonToFullDateTime(jsonDate) {
+	var date = Date.parse(jsonDate);
+	if(date != null) {
+		return date.format("ddd, dd mmm, yyyy HH:MM:ss");
+	}
+	else {
+		return "";
+	}
 }
 
 function jsonToShortDate(jsonDate) {
@@ -290,7 +298,6 @@ function jsonToDetailsDate(jsonDate) {
 
 function jsonTojsDate(jsonDate) {
 	return Date.parse(jsonDate);
-//	return new Date(parseInt(jsonDate.substr(6)));
 }
 
 function dateToString(date) {
