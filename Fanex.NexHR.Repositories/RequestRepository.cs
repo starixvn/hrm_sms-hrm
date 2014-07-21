@@ -244,7 +244,7 @@ namespace Fanex.NexHR.Repositories
                                     NickName = reader.To<string>("ApproverBy"),
                                     FullName = reader.To<string>("FullNameApproverBy"),
                                 },
-                                HrBy = new Employee
+                                ProcessedBy = new Employee
                                 {
                                     Id = reader.To<int>("HrId"),
                                     NickName = reader.To<string>("HrBy"),
@@ -257,14 +257,18 @@ namespace Fanex.NexHR.Repositories
                                 FromDate = reader.ToDateTime("FromDate"),
                                 ToDate = reader.ToDateTime("ToDate"),
                                 TotalDays = reader.ToDecimal("TotalDays"),
-                                LeaveType = reader.ToString("LeaveType"),
+                                LeaveType = new LeaveType
+                                {
+                                    Id = reader.ToInt("LeaveTypeId"),
+                                    Name = reader.ToString("LeaveType")
+                                },
                                 Remark = reader.ToString("Remark"),
                                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
                                 ApprovedStatus = reader.ToInt("ApprovedStatus"),
                                 ProcessedStatus = reader.ToInt("HRStatus"),
                                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
-                                HrDate = reader.ToDateTime("HrDate"),
+                                ProcessedDate = reader.ToDateTime("HrDate"),
                                 RefNO = reader.ToString("RefNo")
                             };
                             entityList.Add(entity);

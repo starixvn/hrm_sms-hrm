@@ -98,10 +98,18 @@
                         </span>
                     </td>
                     <td>
-                        @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToString("HH:mm")), new { @class = "ddlfromtime" })
+                        <div class="timehalfday">
+                            @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToString("HH:mm")), new { @class = "ddlfromtime" })
+                            @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
+                            *
+                        </div>
                     </td>
                     <td>
-                        @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToString("HH:mm")), new { @class = "ddltotime" })
+                        <div class="timehalfday">
+                            @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToString("HH:mm")), new { @class = "ddltotime" })
+                            @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
+                            *
+                        </div>
                     </td>
                     <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
                 }

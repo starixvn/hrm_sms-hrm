@@ -113,14 +113,14 @@ namespace Fanex.NexHR.Controllers.Request
                 By = this.CurrentUser.Id,
                 VerifierList = verifiers,
                 ApproverList = approverList,
-                Shift = request.Shift,
-                ShiftId = request.ShiftId,
+                Shift = request.Shift.Name,
+                ShiftId = request.Shift.Id,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
                 Remark = request.Remark,
                 CrossDay = request.CrossDay,
-                FromTime = request.FromTime,
-                ToTime = request.ToTime
+                FromTime = request.FromTime.ToString("HH:mm"),
+                ToTime = request.ToTime.ToString("HH:mm")
             };
 
             ViewBag.UnavailableDates = unavailableDates;

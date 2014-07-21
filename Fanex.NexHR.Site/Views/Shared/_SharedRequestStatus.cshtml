@@ -25,7 +25,7 @@ switch (request.Status.Id)
     case (byte)CurrentRequestStatus.Processed:
     case (byte)CurrentRequestStatus.Void:
         <td>
-            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip reedit" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
         </td> 
                                                                                                                                                                                    break;
     default:

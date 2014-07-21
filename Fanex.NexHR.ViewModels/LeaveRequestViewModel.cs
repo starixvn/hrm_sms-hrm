@@ -41,7 +41,11 @@ namespace Fanex.NexHR.ViewModels
 
         public string FromTime { get; set; }
 
+        public bool IsFromTimeAfterDay { get; set; }
+
         public string ToTime { get; set; }
+
+        public bool IsToTimeAfterDay { get; set; }
 
         public bool HalfDayOff { get; set; }
 

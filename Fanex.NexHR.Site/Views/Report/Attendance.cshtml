@@ -259,15 +259,12 @@
                             data-createddate="${CreatedDate}" 
                             data-fromshift="${FromShift}"
                             data-toshift="${ToShift}"
-                            data-leavetype="${LeaveType}"
+                            data-fromtime="${FromTime}"
+                            data-totime="${ToTime}"
                             data-totaldays="${TotalDays}"
                             data-totalmins="${TotalMins}"
                             data-remark='${Remark}'>
-                            {{if RequestType.Id == 6}}
-                                ${LeaveType}
-                            {{else}}
-                                ${RequestType.Name}
-                            {{/if}}
+                            ${RequestType.Name}
                         </a> 
                 {{/each}}
                

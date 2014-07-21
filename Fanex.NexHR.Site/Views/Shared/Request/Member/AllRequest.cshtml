@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+﻿@using Fanex.NexHR.Models.Request
+@model IList<RequestEntity>
 <table class="data persist-area">
     <thead>
         <tr class="persist-header">
@@ -33,7 +34,7 @@
             @{int index = 1;
               RequestViewModel options = (RequestViewModel)ViewBag.Options;
             }
-            @foreach (Fanex.NexHR.Models.Request.RequestEntity request in Model)
+            @foreach (RequestEntity request in Model)
             {
                 var requestModel = new RequestViewModel
                 {
@@ -61,7 +62,7 @@
                     <td class="highlight">
                         @if (request.Type.Id == (int)RequestTypes.Leave)
                         { 
-                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.LeaveType</a>
+                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.LeaveType.Name</a>
                         }
                         else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                         { 

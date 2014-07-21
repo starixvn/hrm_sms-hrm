@@ -1,5 +1,6 @@
 ﻿@using Fanex.NexHR.Services
-@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+@using Fanex.NexHR.Models.Request
+@model IList<RequestEntity>
 <table class="data persist-area">
     <thead>
         <tr class="persist-header">
@@ -34,7 +35,7 @@
             @{int index = 1;
               RequestViewModel options = (RequestViewModel)ViewBag.Options;
             }
-            @foreach (Fanex.NexHR.Models.Request.RequestEntity request in Model)
+            @foreach (RequestEntity request in Model)
             {
                 var requestModel = new RequestViewModel
                 {
@@ -64,7 +65,7 @@
                         {
                             if (request.Type.Id == (int)RequestTypes.Leave)
                             { 
-                                <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@request.LeaveType</a>
+                                <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
                             }
                             else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                             { 
@@ -81,7 +82,7 @@
                             {
                                 if (request.Type.Id == (int)RequestTypes.Leave)
                                 { 
-                                    <a href="@Url.Action("dailyviewdetail", "request", requestDetail)">@request.LeaveType</a>
+                                    <a href="@Url.Action("dailyviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
                                 }
                                 else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                                 { 
@@ -96,7 +97,7 @@
                             {
                                 if (request.Type.Id == (int)RequestTypes.Leave)
                                 { 
-                                    <a href="@Url.Action("employeeviewdetail", "request", requestDetail)">@request.LeaveType</a>
+                                    <a href="@Url.Action("employeeviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
                                 }
                                 else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                                 { 

@@ -35,9 +35,6 @@ var LeaveRequestDetail = function ($) {
                 var leaveTypeObject = trCopy.find(".ddlleavetype").first();
                 var workTypeObject = trCopy.find(".ddlWorkType").first();
 
-                trCopy.find(".chkhalfday").attr("checked", "checked").attr("disabled", "disabled");
-                trObject.find(".chkhalfday").attr("checked", "checked").attr("disabled", "disabled");
-
                 halfdayObject.click(function () {
                     var objectRemove = $(this).parent().parent().remove();
                     trObject.find(".addhalfday").first().html("+ Add a half");
@@ -56,6 +53,27 @@ var LeaveRequestDetail = function ($) {
                 trObject.after(trCopy);
                 trObject.find(".addhalfday").first().html("");
                 LeaveRequestDetail.getTotalLeave();
+
+                trObject.find(".chkhalfday").attr("checked", "checked").attr("disabled", "disabled");
+                trCopy.find(".chkhalfday").attr("checked", "checked").attr("disabled", "disabled");
+
+                // bind value for time and check box of copy row
+                trCopy.find(".ddlfromtime").val(trObject.find(".ddltotime").val());
+                trCopy.find(".ddltotime").val(trCopy.find(".ddltotime").attr("data-outtime"));
+                if (trObject.find(".chkIsToAfterday").attr("checked") === "checked") {
+                    trCopy.find(".chkIsFromAfterday").attr("checked", "checked");
+                }
+                else {
+                    trCopy.find(".chkIsFromAfterday").removeAttr("checked");
+                }
+
+                if (trCopy.find(".ddltotime").attr("data-isOutAfterday") === "true") {
+                    trCopy.find(".chkIsToAfterday").attr("checked", trCopy.find(".ddltotime").attr("data-isOutAfterday"));
+                }
+                else {
+                    trCopy.find(".chkIsToAfterday").removeAttr("checked");
+                }
+                // end
             });
 
             $(".ddlleavetype").change(function () {
@@ -72,50 +90,18 @@ var LeaveRequestDetail = function ($) {
                 var fromTimeObject = trObject.find(".ddlfromtime");
                 var toTimeObject = trObject.find(".ddltotime");
 
-                //if (trObject.find(".ddlWorkType").val() == LeaveRequestDetail.leaveWorkType) {
                 fromTimeObject.show();
                 toTimeObject.show();
-                //}
-
+                trObject.find(".timehalfday").show();
                 trObject.find(".tdnumberleaves").html("0.5");
-                var scheduleStatus = $.trim(trObject.find(".tdschedulestatus").html());
 
-                var arrTime = scheduleStatus.split("&gt;");
-                if (arrTime.length < 2 && arrTime.length > 0) {
-                    arrTime = arrTime[0].split(">");
-                }
-
-                if (arrTime.length > 1) {
-                    var fromTime = $.trim(arrTime[0]);
-                    var toTime = $.trim(arrTime[1]);
-                    if (fromTime.indexOf(":") == -1) {
-                        fromTime = fromTime + ":00";
-                    }
-
-                    if (toTime.indexOf(":") == -1) {
-                        toTime = toTime + ":00";
-                    }
-
-                    var arr = fromTime.split(":");
-                    var hour = parseInt(arr[0], 10);
-                    hour = hour + 4;
-                    if (hour >= 24)
-                        hour = hour - 24;
-
-                    if (hour < 10)
-                        toTime = "0" + hour;
-                    else
-                        time = hour;
-                    toTime = hour + ":" + arr[1]
-
-                    fromTimeObject.val(fromTime);
-                    toTimeObject.val(toTime);
-                }
+                LeaveRequestDetail.fillTimeForHalfday(trObject);
             }
             else {
                 trObject.find(".addhalfday").first().html("");
                 trObject.find(".ddlfromtime").hide();
                 trObject.find(".ddltotime").hide();
+                trObject.find(".timehalfday").hide();
                 trObject.find(".tdnumberleaves").html("1");
 
                 var isShow = false;
@@ -138,16 +124,62 @@ var LeaveRequestDetail = function ($) {
 
             LeaveRequestDetail.getTotalLeave();
         },
+        fillTimeForHalfday: function (trObject) {
+            $.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
+                function (data) {
+                    if (data != null) {
+                        var arrTimeIn = data.BeginCheckInTime.split(":");
+                        var arrTimeOut = data.BeginCheckOutTime.split(":");
+
+                        var minuteFrom = parseInt(arrTimeIn[0]) * 60 + parseInt(arrTimeIn[1]);
+                        var minuteTo = parseInt(arrTimeOut[0]) * 60 + parseInt(arrTimeOut[1]);
+                        var isFromAfterday = data.IsInAfterDay;
+                        var isToAfterday = false;
+                        if (data.IsInAfterDay) {
+                            minuteFrom += 1440; //60*24
+                        }
+
+                        if (data.IsOutAfterDay) {
+                            minuteTo += 1440;
+                        }
+
+                        var averageTime = (minuteFrom + minuteTo) / 2;
+                        if (averageTime >= 1440) {
+                            averageTime = averageTime - 1440;
+                            isToAfterday = true;
+                        }
+
+                        var hour = Math.floor(averageTime / 60);
+                        var minute = Math.floor((averageTime % 60) / 30) * 30;
+                        minute = minute === 0 ? "00" : minute;
+                        if (hour < 10) {
+
+                            hour = "0" + hour;
+                        }
+
+                        var toTime = hour + ":" + minute;
+                        trObject.find(".ddlfromtime").val(data.BeginCheckInTime);
+                        trObject.find(".ddltotime").val(toTime);
+
+                        trObject.find(".chkIsFromAfterday").attr("checked", isFromAfterday);
+                        trObject.find(".chkIsToAfterday").attr("checked", isToAfterday);
+                        trObject.find(".ddltotime").attr("data-outtime", data.BeginCheckOutTime);
+                        trObject.find(".ddltotime").attr("data-isOutAfterday", data.IsOutAfterDay);
+                    }
+                });
+        },
         workTypeChange: function (workTypeObject) {
             var workType = workTypeObject.val();
 
             if (workTypeObject.parent().parent().find(".chkhalfday").attr("checked") == "checked") {
                 workTypeObject.parent().parent().find(".ddlfromtime").show();
                 workTypeObject.parent().parent().find(".ddltotime").show();
+                workTypeObject.parent().parent().find(".timehalfday").show();
             }
             else {
                 workTypeObject.parent().parent().find(".ddlfromtime").hide();
                 workTypeObject.parent().parent().find(".ddltotime").hide();
+                workTypeObject.parent().parent().find(".timehalfday").hide();
             }
 
             if (workType == LeaveRequestDetail.leaveWorkType) {
@@ -161,6 +193,7 @@ var LeaveRequestDetail = function ($) {
                 workTypeObject.parent().parent().find(".tdnumberleaves").hide();
                 workTypeObject.parent().parent().find(".ddlfromtime").hide();
                 workTypeObject.parent().parent().find(".ddltotime").hide();
+                workTypeObject.parent().parent().find(".timehalfday").hide();
                 workTypeObject.parent().parent().find(".chkhalfday").removeAttr("checked").attr("disabled", "disabled");
                 workTypeObject.parent().parent().find(".addhalfday").hide();
                 workTypeObject.parent().parent().find(".tdnumberleaves").html("1");
@@ -183,11 +216,11 @@ var LeaveRequestDetail = function ($) {
                 var currentObject = objectTr[i];
                 if ($(currentObject).find(".ddlWorkType").first().val() == LeaveRequestDetail.leaveWorkType) {
                     var leaveType = $(currentObject).find(".ddlleavetype").first().val();
-                    if (leaveType == LeaveRequestDetail.annualLeaveType) { 
+                    if (leaveType == LeaveRequestDetail.annualLeaveType) {
                         totalAnnualLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
                     }
 
-                    if (leaveType == LeaveRequestDetail.unpaidLeaveType) { 
+                    if (leaveType == LeaveRequestDetail.unpaidLeaveType) {
                         totalUnpaidLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
                     }
                 }
@@ -230,10 +263,12 @@ var LeaveRequestDetail = function ($) {
                         isShow = true;
                         $(object).find(".ddlfromtime").show();
                         $(object).find(".ddltotime").show();
+                        $(object).find(".timehalfday").show();
                     }
                     else {
                         $(object).find(".ddlfromtime").hide();
                         $(object).find(".ddltotime").hide();
+                        $(object).find(".timehalfday").hide();
                     }
                 }
             }
@@ -245,6 +280,7 @@ var LeaveRequestDetail = function ($) {
                 $(".tdhalfday").hide();
                 $(".ddlfromtime").hide();
                 $(".ddltotime").hide();
+                $(".timehalfday").hide();
             }
         },
         disableControlForDetail: function () {

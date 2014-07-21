@@ -73,10 +73,16 @@ namespace Fanex.NexHR.Repositories
                                 RequestType = new RequestType { Id = Convert.ToInt16(t.RequestType) },
                                 FromDate = t.FromDate,
                                 ToDate = t.ToDate,
+                                FromTime = t.FromTime,
+                                ToTime = t.ToTime,
                                 CreatedDate = t.CreatedDate,
                                 Remark = t.Remark,
                                 TotalDays = Convert.ToDecimal(t.TotalDays),
-                                LeaveType = t.LeaveType,
+                                LeaveType = new LeaveType
+                                {
+                                    Id = t.LeaveTypeId,
+                                    Name = t.LeaveType
+                                },
                                 FromShift = t.FromShift,
                                 ToShift = t.ToShift,
                                 TotalMins = t.Time

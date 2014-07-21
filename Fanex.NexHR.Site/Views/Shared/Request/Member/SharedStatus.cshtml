@@ -73,7 +73,6 @@
             {
             <td>
                 <span>@request.Status.ToString()</span>
-                @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
             </td> 
             }
             break;
@@ -81,12 +80,10 @@
         case (byte)CurrentRequestStatus.Void:
         <td>
             <span>@request.Status.ToString()</span>
-            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
         </td> 
              break;
         default:
      <td>
-        @*<a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>*@
         <span>@request.Status.ToString()</span>
     </td>   
          break;

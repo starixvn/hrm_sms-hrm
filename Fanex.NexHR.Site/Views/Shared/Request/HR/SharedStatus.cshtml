@@ -12,7 +12,6 @@ if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
 else if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
 {
     <td>
-        @*<a class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
         <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
     </td>   
 }
@@ -27,7 +26,6 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Sta
     else
     {
         <td>
-            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
             <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
         </td>
     }
@@ -37,14 +35,13 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Processed || request.St
     if ((bool)ViewBag.IsAllowChangeStatus)
     {
         <td>
-            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions-reset tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions-reset tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
         </td>   
     }
     else
     {
         <td>
-            @*<a href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</a>*@
-            <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+            <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
         </td> 
     }
 }

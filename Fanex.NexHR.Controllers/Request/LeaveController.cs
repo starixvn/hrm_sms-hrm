@@ -31,11 +31,11 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Result.</returns>
         public ActionResult Create()
         {
-            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
-            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
-            var leaveTypes = _LeaveTypeService.GetAll();
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+            Employee employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
+            EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
+            IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll();
+            IList<SupervisorNameModel> verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            IList<SupervisorNameModel> approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
@@ -72,8 +72,8 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var errorCode = 0;
             var message = string.Empty;
-            var leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
-            var leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            LeaveRequestModel leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
+            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
             leaveRequest.RequestDetail = leaveRequestDetail;
             leaveRequest.CreatedBy = this.CurrentUser.Id;
 
@@ -89,37 +89,38 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View update.</returns>
         public ActionResult Update(long requestId)
         {
-            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
+            LeaveRequestViewModel leaveRequest = _LeaveRequestService.GetRequestById(requestId);
             if (leaveRequest == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, leaveRequest.EmployeeId))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, requestId, DateTime.Now.Date);
-            var listUnavailDates = leaveRequest.LeaveTypeId == Constants.GeneralLeave 
+            EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, requestId, DateTime.Now.Date);
+            IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll();
+            IList<SupervisorNameModel> verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            IList<SupervisorNameModel> approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
+            minDate = minDate > leaveRequest.FromDate ? leaveRequest.FromDate : minDate;
+            if (leaveRequest.LeaveTypeId == Constants.MaternityLeave)
+            {
+                //// rule: user can make leave request (maternity leave) for 6 months.
+                maxDate = maxDate.AddMonths(2);
+            }
+
+            IEnumerable<DateTime> listUnavailDates = leaveRequest.LeaveTypeId == Constants.GeneralLeave
                 ? null
-                : _EmployeeService.GetUnavailableDates(
-                    this.CurrentUser.Id,
-                    new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                    new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1));
-
-            var leaveTypes = _LeaveTypeService.GetAll();
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
-
-            var currentDate = DateTime.Now.Date;
-            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            decimal numberDays = _RequestService.GetNumberOfRequest((int)RequestFilter.Leave, this.CurrentUser.Id, fromDate, toDate);
+                : _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, minDate, maxDate);
 
             leaveRequest.UnavailDates = listUnavailDates;
             leaveRequest.LeaveTypeList = leaveTypes;
-            leaveRequest.TotalRequest = numberDays;
             leaveRequest.VerifierList = GetListItem(verifiers);
             leaveRequest.ApproverList = GetListItem(approvers);
             leaveRequest.EmployeeBalance = employeeBalance;
 
             ViewBag.IsView = false;
+            ViewBag.MinDate = minDate;
+            ViewBag.MaxDate = maxDate;
             return View(leaveRequest);
         }
 
@@ -135,8 +136,8 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var errorCode = 0;
             var message = string.Empty;
-            var leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
-            var leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            LeaveRequestModel leaveRequest = JsonConverter.JsonExtensionMethod.FromJson<LeaveRequestModel>(request);
+            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
             leaveRequest.RequestDetail = leaveRequestDetail;
             leaveRequest.ModifiedBy = this.CurrentUser.Id;
 
@@ -152,17 +153,12 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Detail.</returns>
         public ActionResult Detail(int requestId)
         {
-            var leaveTypes = _LeaveTypeService.GetAll();
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
-            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
-            var currentDate = DateTime.Now.Date;
-            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            decimal numberDays = _RequestService.GetNumberOfRequest((int)RequestFilter.Leave, this.CurrentUser.Id, fromDate, toDate);
+            IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll();
+            IList<SupervisorNameModel> verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
+            IList<SupervisorNameModel> approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
+            LeaveRequestViewModel leaveRequest = _LeaveRequestService.GetRequestById(requestId);
 
             leaveRequest.LeaveTypeList = leaveTypes;
-            leaveRequest.TotalRequest = numberDays;
             leaveRequest.VerifierList = GetListItem(verifiers);
             leaveRequest.ApproverList = GetListItem(approvers);
 
@@ -203,14 +199,14 @@ namespace Fanex.NexHR.Controllers.Request
 
         public ActionResult GetVerifiers(int employeeId, int requestType)
         {
-            var verifierList = _EmployeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Verifier, requestType);
+            IList<SupervisorNameModel> verifierList = _EmployeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Verifier, requestType);
 
             return Json(verifierList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetApprovers(int employeeId, int requestType)
         {
-            var approverList = _EmployeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Approver, requestType);
+            IList<SupervisorNameModel> approverList = _EmployeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Approver, requestType);
 
             return Json(approverList, JsonRequestBehavior.AllowGet);
         }
@@ -218,7 +214,7 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime? toDate)
         {
             var effectDate = toDate.HasValue ? toDate.Value : DateTime.Now.Date;
-            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, effectDate);
+            EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, effectDate);
 
             return Json(employeeBalance, JsonRequestBehavior.AllowGet);
         }
@@ -233,8 +229,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>Action Result.</returns>
         public ActionResult LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
         {
-            var leaveTypes = _LeaveTypeService.GetAll();
-            var workingCalendars = _WorkingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
+            IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll();
+            IList<WorkingCalendarModel> workingCalendars = _WorkingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
             IList<LeaveDetailModel> leaveRequestDetailList = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
@@ -344,11 +340,13 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
             {
-                foreach (var leaveDetail in tempLeaveDetailModels)
+                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
                     tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
                     leaveRequestDetailOutput.Add(tempLeaveDetailModel);
                 }
             }
@@ -383,10 +381,12 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
             {
-                foreach (var leaveDetail in tempLeaveDetailModels)
+                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
                     leaveRequestDetailOutput.Add(tempLeaveDetailModel);
                 }
             }
@@ -406,7 +406,11 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private IList<SelectListItem> GetListItem(IList<SupervisorNameModel> supervisors)
         {
-            var selectItems = supervisors.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem 
+            { 
+                Text = x.NickName + " (" + x.FullName + ")", 
+                Value = x.OwnerId.ToString() 
+            }).ToList();
 
             return selectItems;
         }

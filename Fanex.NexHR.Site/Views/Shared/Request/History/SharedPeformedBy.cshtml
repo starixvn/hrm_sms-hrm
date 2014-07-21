@@ -25,7 +25,7 @@ switch (request.Status.Id)
     case (byte)CurrentRequestStatus.Processed:
     case (byte)CurrentRequestStatus.Void:
         <td>
-            @request.HrBy.NickName (@request.HrDate.ToShortFormatedDate())
+            @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())
         </td> 
         break;
     default:

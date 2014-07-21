@@ -121,10 +121,11 @@ function view() {
                         object.attr('data-requesttype'),
                         object.attr('data-fromdate'),
                         object.attr('data-todate'),
+                        object.attr('data-fromtime'),
+                        object.attr('data-totime'),
                         object.attr('data-createddate'),
                         object.attr('data-fromshift'),
                         object.attr('data-toshift'),
-                        object.attr('data-leavetype'),
                         object.attr('data-totaldays'),
                         object.attr('data-totalmins'),
                         object.attr('data-ottype'),
@@ -172,15 +173,15 @@ function index() {
     return rowIndex++;
 }
 
-function getMessageDetail(requestType, fromDate, toDate, createdDate, fromShift, toShift, leaveType, totalDays, totalMins, overtimeType, isOvertimeHours) {
+function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours) {
     var result = '';
     dontBlock = true;
     $.ajax({
         url: _global.root + "ajax/GetMessageDetailRequest",
         async: false,
         type: 'post',
-        data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "createddate": createdDate, "fromshiftCode": fromShift,
-            "toshiftcode": toShift, "leavetype": leaveType, "totaldays": totalDays, "totalmins": totalMins,
+        data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "fromtime": fromTime, "totime": toTime, "createddate": createdDate, "fromshiftCode": fromShift,
+            "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
             "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours
         },
         success: function (data) {

@@ -110,7 +110,7 @@
 @*Normal Calendar*@
             @if (ViewBag.Calendar == 0)
             {
-                <tr>
+                <tr class="overtime-header">
                     <th>
                         <a href="@Url.Action("HRMonthlyReport", "Overtime", new { month = 1, year = ViewBag.Year, calendar = ViewBag.Calendar })">
                             @Labels.Jan
@@ -441,7 +441,7 @@
                         </td>
                         <td class="sumdec">
                             @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Dec != null)
+                            @if (request.Dec != 0)
                             {
                                 var currentMonth = DisplayDate((int)ViewBag.Year, 12);
                                 <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">

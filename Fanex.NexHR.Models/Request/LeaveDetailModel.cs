@@ -31,5 +31,9 @@ namespace Fanex.NexHR.Models
         public DateTime ToTime { get; set; }
 
         public bool IsOffOrHoliday { get; set; }
+
+        public bool IsFromAfterday { get; set; }
+
+        public bool IsToAfterday { get; set; }
     }
 }

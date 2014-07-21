@@ -178,6 +178,11 @@ input[type="password"].input-validation-error {
 	line-height:32px;
 }
 
+.formrow .input *
+{
+    vertical-align: middle;
+}
+
 .formlabel {
 	color: #999999;
 }
@@ -250,6 +255,7 @@ select
 	vertical-align: bottom;
 	margin-left:0px;
 	min-width:241px;
+	max-width:241px;
 }
 textarea 
 {
@@ -895,12 +901,18 @@ table.tabledata thead th
     font-weight: normal;
 }
 
+table.tabledata td *
+{
+    vertical-align:middle;
+    }
+
 table.tabledata td
 {
     border: 1px solid #d2d2d2;
     padding: 5px 10px 5px 10px;
     text-align: center;
     white-space: nowrap;
+    
 }
 
 table.tabledata td.left

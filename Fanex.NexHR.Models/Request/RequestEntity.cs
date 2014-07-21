@@ -35,7 +35,7 @@ namespace Fanex.NexHR.Models.Request
 
         public Employee ApprovedBy { get; set; }
 
-        public Employee HrBy { get; set; }
+        public Employee ProcessedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 
@@ -43,7 +43,7 @@ namespace Fanex.NexHR.Models.Request
 
         public DateTime? VerifiedDate { get; set; }
 
-        public DateTime? HrDate { get; set; }
+        public DateTime? ProcessedDate { get; set; }
 
         public bool IsPlanned { get; set; }
 
@@ -66,9 +66,7 @@ namespace Fanex.NexHR.Models.Request
 
         public decimal TotalDays { get; set; }
 
-        public int LeaveTypeId { get; set; }
-
-        public string LeaveType { get; set; }
+        public LeaveType LeaveType { get; set; }
 
         public int ReworkCount { get; set; }
 
@@ -85,8 +83,6 @@ namespace Fanex.NexHR.Models.Request
 
         public bool IsOvertimeHours { get; set; }
 
-        public int RequestType { get; set; }
-
         public decimal NormalHours { get; set; }
 
         public decimal OffHours { get; set; }
@@ -98,13 +94,11 @@ namespace Fanex.NexHR.Models.Request
         public bool IsShowWarning { get; set; }
 
         // Keep In View
-        public string FromTime { get; set; }
+        public DateTime FromTime { get; set; }
 
-        public string ToTime { get; set; }
+        public DateTime ToTime { get; set; }
 
-        public string Shift { get; set; }
-
-        public int ShiftId { get; set; }
+        public Shift Shift { get; set; }
 
         public bool IsHalfDay { get; set; }
 

@@ -83,6 +83,8 @@
             unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
             <span class="time hide">
                 @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
+                @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
+                @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
             </span>
         </div>
         <div class="clear">
@@ -96,6 +98,8 @@
             @Html.DatePickerFor(model => model.ToDate)
             <span class="time hide">
                 @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
+                @Html.LabelFor(model => model.IsToTimeAfterDay, "Is after day")
             </span>
         </div>
         <div class="clear">

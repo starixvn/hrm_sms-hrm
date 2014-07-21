@@ -69,10 +69,6 @@
                 LeaveRequest.saveLeaveRequest();
             });
 
-            LeaveRequest.fromTime.change(function () {
-                LeaveRequest.setValueforToTime();
-            });
-
             LeaveRequest.disableControlForDetail();
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
@@ -96,8 +92,8 @@
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
                     EmployeeName: LeaveRequest.employee.val(),
-                    FromDate: LeaveRequest.fromDate.val() + " " + LeaveRequest.fromTime.val(),
-                    ToDate: LeaveRequest.toDate.val() + " " + LeaveRequest.toTime.val(),
+                    FromDate: LeaveRequest.fromDate.val(),
+                    ToDate: LeaveRequest.toDate.val(),
                     LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(":selected").text(),
                     TotalDays: LeaveRequest.totalDays.val(),
@@ -109,19 +105,54 @@
                 var requestDetails = [];
                 var leaveDate = "";
                 var isHalfDay = false;
-                $(".tabledata tbody tr").each(function () {
-                    leaveDate = $.trim($("td.tdleavedate", this).first().attr("data-date"));
-                    isHalfDay = $("td input.chkhalfday", this).first().attr("checked") == "checked";
-                    requestDetails.push({
-                        LeaveDate: leaveDate,
-                        WorkType: $("td select.ddlWorkType", this).first().val(),
-                        LeaveTypeId: $("td select.ddlleavetype", this).first().val(),
-                        IsHalfDay: isHalfDay,
-                        FromTime: leaveDate + (isHalfDay ? (" " + $("td select.ddlfromtime", this).first().val()) : ""),
-                        ToTime: leaveDate + (isHalfDay ? (" " + $("td select.ddltotime", this).first().val()) : "")
-                    });
+                var fromTime = new Date();
+                var toTime = new Date();
+                if (LeaveRequest.leaveTypeId.val() == "0") {
+                    $(".tabledata tbody tr").each(function () {
+                        leaveDate = $.trim($("td.tdleavedate", this).first().attr("data-date"));
+                        isHalfDay = $("td input.chkhalfday", this).first().attr("checked") == "checked";
+                        fromTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddlfromtime", this).first().val()) : ""));
+                        toTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddltotime", this).first().val()) : ""));
 
-                });
+                        if ($("td input.chkIsFromAfterday", this).first().attr("checked") === "checked") {
+                            fromTime.setDate(fromTime.getDate() + 1);
+                        }
+
+                        if ($("td input.chkIsToAfterday", this).first().attr("checked") === "checked") {
+                            toTime.setDate(toTime.getDate() + 1);
+                        }
+
+                        requestDetails.push({
+                            LeaveDate: leaveDate,
+                            WorkType: $("td select.ddlWorkType", this).first().val(),
+                            LeaveTypeId: $("td select.ddlleavetype", this).first().val(),
+                            IsHalfDay: isHalfDay,
+                            FromTime: fromTime,
+                            ToTime: toTime
+                        });
+
+                    });
+                }
+                else if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
+                    fromTime = new Date(LeaveRequest.fromDate.val());
+                    toTime = new Date(LeaveRequest.fromDate.val());
+                    if ($("#IsFromTimeAfterDay").attr("checked") === "checked") {
+                        fromTime.setDate(fromTime.getDate() + 1);
+                    }
+
+                    if ($("#IsToTimeAfterDay").attr("checked") === "checked") {
+                        toTime.setDate(toTime.getDate() + 1);
+                    }
+
+                    requestDetails.push({
+                        LeaveDate: LeaveRequest.fromDate.val(),
+                        WorkType: 2,
+                        LeaveTypeId: LeaveRequest.leaveTypeId.val(),
+                        IsHalfDay: true,
+                        FromTime: fromTime.format("dd mmm, yyyy") + " " + LeaveRequest.fromTime.val(),
+                        ToTime: toTime.format("dd mmm, yyyy") + " " + LeaveRequest.toTime.val()
+                    });
+                }
 
                 if (LeaveRequest.requestId.val() == -1) {
                     LeaveRequest.insertLeaveRequest(leaveRequest, requestDetails);
@@ -230,13 +261,15 @@
             var maxDate = new Date(LeaveRequest.fromDate.attr("maxDate"));
             var newMaxDate = new Date(maxDate);
 
+            var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
+            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 5));
+
             if (leaveType == LeaveRequest.generalLeaveType) {
                 $("#grbHalfDay").hide();
                 $("#grbTotalDay").hide();
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 $('.time').hide();
                 LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
-
                 LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
                 LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
             }
@@ -248,13 +281,12 @@
                 leaveDetailContainer.empty();
 
                 if (leaveType == LeaveRequest.maternityLeaveType) {
-                    var tempDate = new Date(LeaveRequest.fromDate.attr("minDate"));
-                    tempDate = new Date(new Date(tempDate).setMonth(tempDate.getMonth() + 8));
-                    newMaxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
+                    tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
                     LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
                     LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
                 }
                 else {
+
                     $.getJSON(_global.root + 'api/employee/GetUnavailableDates',
                     {
                         employeeId: LeaveRequest.employeeId.val(),
@@ -272,7 +304,7 @@
                 LeaveRequest.dateChange(false);
             }
 
-
+            newMaxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
             LeaveRequest.fromDate.datepicker("option", "maxDate", newMaxDate);
             LeaveRequest.toDate.datepicker("option", "maxDate", newMaxDate);
         },
@@ -305,7 +337,7 @@
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
             }
         },
-        setValueforToTime: function () {
+        fillTimeForHalfday: function () {
             var arr = LeaveRequest.fromTime.val().split(':');
             var x = parseInt(arr[0].trim(), 10);
             var hour = "";

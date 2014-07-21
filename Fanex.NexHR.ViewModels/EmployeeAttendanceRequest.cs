@@ -34,7 +34,11 @@ namespace Fanex.NexHR.ViewModels
 
         public decimal? TotalDays { get; set; }
 
-        public string LeaveType { get; set; }
+        public LeaveType LeaveType { get; set; }
+
+        public DateTime? FromTime { get; set; }
+
+        public DateTime? ToTime { get; set; }
 
         // ChangeShift
         public string FromShift { get; set; }

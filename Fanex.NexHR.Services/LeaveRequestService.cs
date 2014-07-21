@@ -124,7 +124,7 @@ namespace Fanex.NexHR.Services
                         request = new LeaveRequestViewModel
                         {
                             RequestId = requestEntity.Id,
-                            LeaveTypeId = requestEntity.LeaveTypeId,
+                            LeaveTypeId = requestEntity.LeaveType.Id,
                             Employee = requestEntity.Requester.NickName + " (" + requestEntity.Requester.FullName + ")",
                             DisplayName = requestEntity.Requester.FullName,
                             EmployeeId = requestEntity.Requester.Id,
@@ -136,8 +136,10 @@ namespace Fanex.NexHR.Services
                             ApproverId = requestEntity.ApprovedBy.Id,
                             RefNo = requestEntity.RefNO,
                             Remark = requestEntity.Remark,
-                            FromTime = requestEntity.FromDate.ToString("HH:mm"),
-                            ToTime = requestEntity.ToDate.ToString("HH:mm"),
+                            FromTime = requestEntity.FromTime.ToString("HH:mm"),
+                            ToTime = requestEntity.ToTime.ToString("HH:mm"),
+                            IsFromTimeAfterDay = requestEntity.FromDate.Date != requestEntity.FromTime.Date,
+                            IsToTimeAfterDay = requestEntity.ToDate.Date != requestEntity.ToTime.Date,
                             FormattedStatus = requestEntity.Status.Name,
                             Status = requestEntity.Status.Id
                         };

@@ -531,15 +531,8 @@ namespace Fanex.NexHR.Services
             }
             else if ((request.TotalDays - (decimal)0.5) == 0)
             {
-                if (request.LeaveTypeId == Constants.GeneralLeave)
-                {
-                    messageDetail = string.Format(_MsgGeneralLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate));
-                }
-                else
-                {
-                    messageDetail = string.Format(
-                    _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), HourFormat(request.FromDate), HourFormat(request.ToDate));
-                }
+                messageDetail = string.Format(
+                _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), HourFormat(request.FromTime), HourFormat(request.ToTime));
             }
             else
             {

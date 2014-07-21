@@ -1,7 +1,8 @@
 ﻿@model Fanex.NexHR.ViewModels.LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.UpdateLeaveRequest;
-    var numberMonth = Constants.NumberMonthsInFutureCanLeaveRequest;
+    var minDate = ViewBag.MinDate != null ? (DateTime)ViewBag.MinDate : DateTime.Now;
+    var maxDate = ViewBag.MaxDate != null ? (DateTime)ViewBag.MaxDate : DateTime.Now;
 }
 @section css{
     @Url.CombresLink("leavecss")
@@ -78,17 +79,11 @@
             @Html.LabelFor(model => model.FromDate, Labels.FromDate)
         </div>
         <div class="input">
-        
-            @if (Model.LeaveTypeId == Constants.MaternityLeave)
-            { 
-                numberMonth = 7;
-            }
-            @Html.DatePickerFor(model => model.FromDate,
-            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                     new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(numberMonth).AddDays(-1),
-            unavailDates: Model.UnavailDates == null ? new List<DateTime> { DateTime.Now.AddYears(-3) } : Model.UnavailDates)
+            @Html.DatePickerFor(model => model.FromDate, minDate, maxDate, unavailDates: Model.UnavailDates == null ? new List<DateTime> { DateTime.Now.AddYears(-3) } : Model.UnavailDates)
             <span class="time hide">
                 @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
+                @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
+                @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
             </span>
         </div>
         <div class="clear">
@@ -102,6 +97,8 @@
             @Html.DatePickerFor(model => model.ToDate, unavailDates: Model.UnavailDates)
             <span class="time hide">
                 @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
+                @Html.LabelFor(model => model.IsToTimeAfterDay, "Is after day")
             </span>
         </div>
         <div class="clear">
