@@ -74,9 +74,10 @@
 					<tr id="row_@message.MessageId">
 						<td>@(index++)
 						</td>
-						<td>@message.Subject
+						<td>
+							<a href="/message/detail/@message.MessageId">@message.Subject</a>
 						</td>
-						<td>@message.Category
+						<td>@message.CategoryName
 						</td>
 						<td style="width:200px;">@message.SendTo
 						</td>

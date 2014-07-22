@@ -355,3 +355,13 @@
     </select>
         
 }
+
+@helper MessageCategoryDropDownList(short action = 0, string controlName = "", string classObject = "")
+    {
+    <select id="@controlName">
+        <option @(action == 0 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Notification)">@Labels.Notification</option>
+        <option @(action == 1 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Warning)">@Labels.Warning</option>
+        <option @(action == 2 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Violation)">@Labels.Violation</option>
+    </select>
+        
+}

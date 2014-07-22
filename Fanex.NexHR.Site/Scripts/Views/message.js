@@ -12,6 +12,7 @@ var deleteMessage = function (messageId) {
 };
 
 var init = function () {
+
 	var fromDateModel = $('#FromDate').val(),
 		toDateModel = $('#ToDate').val(),
 		toDate = new Date(),

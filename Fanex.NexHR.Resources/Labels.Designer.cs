@@ -1537,6 +1537,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My message.
+        /// </summary>
+        public static string MyMessage {
+            get {
+                return ResourceManager.GetString("MyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Overtime Request(s).
         /// </summary>
         public static string MyOvertimeRequest {
@@ -1717,6 +1726,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notification.
+        /// </summary>
+        public static string Notification {
+            get {
+                return ResourceManager.GetString("Notification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Verified.
         /// </summary>
         public static string NotVerified {
@@ -1839,6 +1857,15 @@ namespace Fanex.NexHR.Resources {
         public static string PerformedBy {
             get {
                 return ResourceManager.GetString("PerformedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal.
+        /// </summary>
+        public static string Personal {
+            get {
+                return ResourceManager.GetString("Personal", resourceCulture);
             }
         }
         
@@ -2635,11 +2662,29 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Violation.
+        /// </summary>
+        public static string Violation {
+            get {
+                return ResourceManager.GetString("Violation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Void.
         /// </summary>
         public static string Void {
             get {
                 return ResourceManager.GetString("Void", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
         

@@ -234,6 +234,9 @@
   <data name="MessageNumberRequestInMonth" xml:space="preserve">
     <value>You've already requested for Leave &lt;strong&gt;{0} day(s)&lt;/strong&gt; since {1}</value>
   </data>
+  <data name="MessageSubject" xml:space="preserve">
+    <value>Message Subject</value>
+  </data>
   <data name="NoDataIsAvailable" xml:space="preserve">
     <value>No data is available</value>
   </data>

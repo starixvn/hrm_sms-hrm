@@ -7,3 +7,21 @@
 {
 	line-height: 26px;
 }
+
+#Contents {
+	width: 580px;
+	height: 350px;
+}
+
+#Subject {
+	width: 580px !important;
+}
+
+#employee_chzn , .ui-multiselect {
+	width: 241px!important;
+}
+
+.chzn-choices {
+	border: 1px solid #cccccc !important;
+	border-radius: 4px !important;
+}

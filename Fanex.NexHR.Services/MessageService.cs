@@ -10,7 +10,10 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Web;
     using Fanex.Common.Helper;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interface;
@@ -21,6 +24,18 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class MessageService : BaseService, IMessageService
     {
+        private readonly IEmailService _emailService;
+
+        public MessageService()
+            : this(null)
+        {
+        }
+
+        public MessageService(IEmailService emailService)
+        {
+            _emailService = emailService ?? new EmailService();
+        }
+
         /// <summary>
         /// Get message by creator.
         /// </summary>
@@ -41,7 +56,7 @@ namespace Fanex.NexHR.Services
                     {
                         MessageId = rawMessageItem.MessageId,
                         Subject = rawMessageItem.Subject,
-                        Category = rawMessageItem.Category,
+                        CategoryName = GetCategoryName(rawMessageItem.Category),
                         CreatedDate  = rawMessageItem.CreatedDate,
                         SendTo = rawMessageItem.SendTo
                     };
@@ -65,7 +80,12 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                _Repository.Insert(criteria);
+                commandResult = _Repository.Insert(criteria);
+
+                if (commandResult != null && commandResult.Code == 0)
+                {
+                    SendEmail(criteria);
+                }
             }
 
             return commandResult;
@@ -102,6 +122,11 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 message = GetDataEntity<Message>(criteria);
+
+                if (message != null)
+                {
+                    message.CategoryName = GetCategoryName(message.Category);
+                }
             }
 
             return message;
@@ -138,9 +163,82 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 messages = GetData<Message>(criteria);
+
+                foreach (Message message in messages)
+                {
+                    message.CategoryName = GetCategoryName(message.Category);
+                }
             }
 
             return messages;
+        }
+
+        /// <summary>
+        /// Delete Message by employee.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult DeleteMessageByEmployee(DeleteMessageByEmployeeCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Delete(criteria);
+            }
+
+            return commandResult;
+        }
+
+        /// <summary>
+        /// Get message category name.
+        /// </summary>
+        /// <param name="categoryId">The category Id.</param>
+        /// <returns>The category name.</returns>
+        private string GetCategoryName(int categoryId)
+        {
+            string category = string.Empty;
+
+            switch (categoryId)
+            {
+                case (int)MessageCategory.Notification:
+                    category = MessageCategory.Notification.ToString();
+                    break;
+
+                case (int)MessageCategory.Warning:
+                    category = MessageCategory.Warning.ToString();
+                    break;
+
+                case (int)MessageCategory.Violation:
+                    category = MessageCategory.Violation.ToString();
+                    break;
+            }
+
+            return category;
+        }
+
+        /// <summary>
+        /// Send email.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        private void SendEmail(InsertMessageCriteria criteria)
+        {
+            var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath("~/app_data/emails/MessageNotification.cshtml"));
+
+            var content = new
+            {
+                Subject = criteria.Subject,
+                Content = criteria.Contents
+            };
+            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
+
+            _emailService.SendEmail(
+                string.Empty,
+                criteria.SendToEmail,
+                string.Empty,
+                Resources.Messages.MessageSubject + " " + criteria.Subject,
+                body);
         }
     }
 }

@@ -35,6 +35,9 @@ namespace Fanex.NexHR.Criteria.Message
 
         public DateTime CreatedDate { get; set; }
 
+        [SpParam(Ignored = true)]
+        public string SendToEmail { get; set; }
+
         public override string GetSettingKey()
         {
             return "Message_Insert";

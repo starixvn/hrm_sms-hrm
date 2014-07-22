@@ -107,6 +107,7 @@ namespace Fanex.NexHR.Controllers
             {
                 MessageId = id
             };
+
             ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
             ViewBag.Employees = _employeeService.GetEmployees(null, null, null, null, null, null);
             ViewBag.Groups = _teamService.GetAll();
@@ -153,7 +154,7 @@ namespace Fanex.NexHR.Controllers
         {
             var criteria = new GetMessageByEmployeeCriteria
             {
-                EmployeeId = this.CurrentUser.Id
+                EffectedDate = DateTime.Now
             };
 
             return ViewMessageOfEmployee(criteria);
@@ -162,8 +163,37 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public ActionResult ViewMessageOfEmployee(GetMessageByEmployeeCriteria criteria)
         {
+            if (criteria != null)
+            {
+                criteria.EmployeeId = this.CurrentUser.Id;
+            }
+
             ViewBag.Messages = _messageService.GetMessageByEmployee(criteria);
-            return View();
+            return View(criteria);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteMessageByEmployee(int id)
+        {
+            var criteria = new DeleteMessageByEmployeeCriteria
+            {
+                MessageId = id,
+                EmployeeId = this.CurrentUser.Id
+            };
+
+            CommandResult commandResult = _messageService.DeleteMessageByEmployee(criteria);
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Detail(int id)
+        {
+            var getMessageByIdCriteria = new GetMessageByIdCriteria
+            {
+                MessageId = id
+            };
+
+            Message message = _messageService.GetMessageById(getMessageByIdCriteria);
+            return View(message);
         }
     }
 }

@@ -17,7 +17,7 @@
       <siteMapNode title="Schedule Arrange" controller="Calendar" action="ArrangeSchedule" icon="calendar" roles="ShiftManager"/>
       <siteMapNode title="Shift Statistic" controller="Calendar" action="ShiftStatistic" icon="calendar" roles="ShiftManager, HR"/>
       <siteMapNode title="My profile" controller="account" action="index" icon="user" />
-	  <siteMapNode title="Member' messages" controller="message" action="viewMessageOfEmployee" icon="memo" />
+	  <siteMapNode title="My messages" controller="message" action="viewMessageOfEmployee" icon="memo" />
     </siteMapNode>
     <siteMapNode title="HR space" roles="HR" >
       <siteMapNode title="Employees' requests" controller="request" action="hrview" icon="user1" roles="HR" />

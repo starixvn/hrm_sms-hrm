@@ -999,4 +999,19 @@
   <data name="EditMessage" xml:space="preserve">
     <value>Edit Message</value>
   </data>
+  <data name="MyMessage" xml:space="preserve">
+    <value>My message</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Personal" xml:space="preserve">
+    <value>Personal</value>
+  </data>
+  <data name="Violation" xml:space="preserve">
+    <value>Violation</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
 </root>

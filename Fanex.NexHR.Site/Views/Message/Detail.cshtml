@@ -1,0 +1,79 @@
+﻿@model Fanex.NexHR.Models.Message
+@using Fanex.NexHR.Resources;
+
+@{
+	var messageSubject = Model != null ? Model.Subject : Labels.NoData;
+	ViewBag.Title = messageSubject + " - " + Labels.Memo;    
+}
+@section css{
+	@Url.CombresLink("messagecss")
+	@Url.CombresLink("memoedetailcss")
+}
+@section js{
+	@Url.CombresLink("messagejs")
+}
+@section Breadcrumb {
+	<a class="step">@Labels.HRSpace</a> 
+	<a class="step" href="@Url.Action("Index", "message")">@Labels.Message</a>
+	<a class="step">Message "@messageSubject" Details</a>
+}
+<h2>@Labels.Details</h2>
+
+@if (!ReferenceEquals(Model, null))
+{
+	<table class="data memo" style="width:50%;">
+		<thead>
+			<tr>
+				<th colspan="4">@Model.Subject
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="left">
+					<b>@Labels.SendTo</b>
+				</td>
+				<td class="left">
+					<b>@Model.SendTo</b>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>@Labels.Category</b>
+				</td>
+				<td>
+					<b>@Model.CategoryName</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="left" style="width:80px;">
+					<b>@Labels.FromDate</b>
+				</td>
+				<td class="left">
+					@Model.FromDate.ToDateMonthYearFormatedDate()
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>@Labels.ToDate</b>
+				</td>
+				<td>
+					@Model.ToDate.ToDateMonthYearFormatedDate()
+				</td>
+			</tr>
+			<tr>
+				<td class="left">
+					<b>@Labels.Content</b>
+				</td>
+				<td colspan="3">
+					<b>@Model.Contents</b>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+}
+else
+{
+    <h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
+}

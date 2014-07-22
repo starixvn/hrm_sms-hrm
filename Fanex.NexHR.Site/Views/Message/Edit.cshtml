@@ -36,9 +36,11 @@
 		@Html.Hidden("messageContents", message.Contents)
 		@Html.Hidden("messageEmployeeIds", message.EmployeeIds)
 		@Html.Hidden("messageGroupIds", message.GroupIds)
+		@Html.Hidden("messageCategory", message.Category)
 		@Html.HiddenFor(model => model.MessageId)
 		@Html.HiddenFor(model => model.EmployeeIds)
 		@Html.HiddenFor(model => model.GroupIds)
+		@Html.HiddenFor(model => model.Category)
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
@@ -47,6 +49,20 @@
 			</div>
 			<div class="grid_16">
 				@Html.EditorFor(model => model.Subject)
+			</div>
+		</div>
+		<div class="clear">
+		</div>
+		<div class="space">
+		</div>
+		<div class="grid_9 formrow">
+			<div class="grid_2">
+				<div class="label">
+					@Html.LabelFor(model => model.Category)
+				</div>
+			</div>
+			<div class="grid-6">
+				@RazorHelper.MessageCategoryDropDownList(controlName: "category")
 			</div>
 		</div>
 		<div class="clear">
@@ -124,7 +140,9 @@
 		<div id="contentEditor">
 			<div class="grid_20 formrow">
 				<div class="grid_2">
-					@Html.LabelFor(model => model.Contents)
+					<div class="label">
+						@Html.LabelFor(model => model.Contents)
+					</div>
 				</div>
 				<div class="grid_17">
 					@Html.TextAreaFor(model => model.Contents)

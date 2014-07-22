@@ -30,5 +30,7 @@ namespace Fanex.NexHR.Services.Interface
         CommandResult DeleteMessageByCreator(DeleteMessageByCreatorCriteria criteria);
 
         IEnumerable<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria);
+
+        CommandResult DeleteMessageByEmployee(DeleteMessageByEmployeeCriteria criteria);
     }
 }

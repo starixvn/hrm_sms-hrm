@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global,initEditor,tinyMCE*/
+/*global _global*/
 
 var bindingDataIfEditMode = function () {
 	var messageId = $('#messageId').val(),
@@ -8,11 +8,13 @@ var bindingDataIfEditMode = function () {
 		messageFromDate = $('#messageFromDate').val(),
 		messageToDate = $('#messageToDate').val(),
 		messageEmployeeIds = $('#messageEmployeeIds').val(),
-		messageGroupIds = $('#messageGroupIds').val();
+		messageGroupIds = $('#messageGroupIds').val(),
+		messageCategory = $('#messageCategory').val();
 
 	$('#Subject').val(messageSubject);
 	$('#Contents').val(messageContents);
 	$('#MessageId').val(messageId);
+	$('#category').val(messageCategory);
 
 	if (messageFromDate) {
 		var newFromDate = new Date(messageFromDate);
@@ -31,9 +33,6 @@ var bindingDataIfEditMode = function () {
 };
 
 var init = function () {
-	// initialize tiny MCE editor
-	initEditor('Contents', 'basic');
-
 	bindingDataIfEditMode();
 
 	$('#employee').chosen();
@@ -48,10 +47,13 @@ var validateForm = function () {
 	if (!$('#Subject').val()) {
 		errorString.push('The Subject field is required!');
 	}
+	if (!$('#category').val()) {
+		errorString.push('The Category field is required!');
+	}
 	if (!$('#employee').val() && !$('#group').val()) {
 		errorString.push('The Send To field is required!');
 	}
-	if (!tinyMCE.activeEditor.getContent()) {
+	if (!$('#Contents').val()) {
 		errorString.push('The Contents field is required!');
 	}
 
@@ -81,6 +83,27 @@ var createStringResult = function (items) {
 	return result;
 };
 
+var getEmail = function (result, items) {
+
+	if (items) {
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i],
+				email = $(item).attr('email');
+
+			if (email) {
+				if (!result) {
+					result = email;
+				}
+				else {
+					result += "," + email;
+				}
+			}
+		}
+	}
+
+	return result;
+};
+
 $(document).ready(function () {
 	init();
 
@@ -91,13 +114,19 @@ $(document).ready(function () {
 			$("#error").hide();
 			$("#error").html('');
 			event.preventDefault();
+
 			var form = $(this),
 				employees = createStringResult($('#employee').val()),
-				groups = createStringResult($('#group').val());
+				groups = createStringResult($('#group').val()),
+				sendToEmails = getEmail("", $('#employee option:selected'));
+
+			sendToEmails = sendToEmails != undefined ? getEmail(sendToEmails, $('#group option:selected'))
+													: getEmail("", $('#group option:selected'));
 
 			$('#EmployeeIds').val(employees);
 			$('#GroupIds').val(groups);
-			$("#Contents").val(tinyMCE.activeEditor.getContent());
+			$('#Category').val($('#category').val());
+			$('#SendToEmail').val(sendToEmails);
 
 			$.ajax({
 				url: form.action,

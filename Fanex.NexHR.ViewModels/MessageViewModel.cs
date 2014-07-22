@@ -20,7 +20,7 @@ namespace Fanex.NexHR.ViewModels
 
         public string Subject { get; set; }
 
-        public int Category { get; set; }
+        public string CategoryName { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

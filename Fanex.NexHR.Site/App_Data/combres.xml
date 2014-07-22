@@ -709,8 +709,12 @@
 	<resourceSet name="messageeditjs" type="js">
 		<resource reference="sitejs"/>
 		<resource path="~/scripts/views/message.edit.js" />
-		<resource path="~/scripts/Tiny_mce/tiny_mce_src.js" />
 		<resource path="~/scripts/chosen/chosen.jquery.js" />
+	</resourceSet>
+
+	<resourceSet name="employeemessagejs" type="js">
+		<resource reference="sitejs"/>
+		<resource path="~/scripts/views/employee.message.js" />
 	</resourceSet>
   </resourceSets>
 </combres>

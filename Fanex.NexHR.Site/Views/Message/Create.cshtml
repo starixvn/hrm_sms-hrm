@@ -22,12 +22,14 @@
 	<div class="container_24 bunhat">
 		<div class="validation-summary-errors" id="error" style="display:none;"></div>
 		@if (ViewBag.Updated == true)
-		{
+  {
 			<div class="success flash">
 				Created Successful!</div> 
-		}
+  }
 		@Html.HiddenFor(model => model.EmployeeIds)
 		@Html.HiddenFor(model => model.GroupIds)
+		@Html.HiddenFor(model => model.Category)
+		@Html.HiddenFor(model => model.SendToEmail)
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
@@ -36,6 +38,20 @@
 			</div>
 			<div class="grid_16">
 				@Html.EditorFor(model => model.Subject)
+			</div>
+		</div>
+		<div class="clear">
+		</div>
+		<div class="space">
+		</div>
+		<div class="grid_9 formrow">
+			<div class="grid_2">
+				<div class="label">
+					@Html.LabelFor(model => model.Category)
+				</div>
+			</div>
+			<div class="grid_6">
+				@RazorHelper.MessageCategoryDropDownList(controlName: "category")
 			</div>
 		</div>
 		<div class="clear">
@@ -52,7 +68,7 @@
 				<select id="employee" data-placeholder="Choose a employee..." multiple class="chosen-select">
 					@foreach (var employee in ViewBag.Employees)
 					{
-						<option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
+						<option value="@employee.Id" email="@employee.Email">@(employee.NickName + " (" + employee.FullName + ")")</option>
 					}
 				</select>
 				<label class="send-to-group" for="EmployeeIds">@Labels.ToEmployee</label>
@@ -72,7 +88,7 @@
 				<select id="group" multiple="multiple" class="team-select">
 					@foreach (var group in ViewBag.Groups)
 					{
-						<option value="@group.Id">@group.Name</option>
+						<option value="@group.Id" email="@group.MailGroup">@group.Name</option>
 					}
 				</select>
 				<label class="send-to-group" for="GroupIds">@Labels.ToGroup</label>
@@ -113,7 +129,9 @@
 		<div id="contentEditor">
 			<div class="grid_20 formrow">
 				<div class="grid_2">
-					@Html.LabelFor(model => model.Contents)
+					<div class="label">
+						@Html.LabelFor(model => model.Contents)
+					</div>
 				</div>
 				<div class="grid_17">
 					@Html.TextAreaFor(model => model.Contents)

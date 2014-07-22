@@ -24,6 +24,8 @@ namespace Fanex.NexHR.Models
 
         public int Category { get; set; }
 
+        public string CategoryName { get; set; }
+
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }

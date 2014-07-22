@@ -329,6 +329,7 @@
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
+    <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
     <Content Include="Scripts\Views\message.edit.js" />
     <Content Include="Scripts\Views\report.hrrequestmonitoring.js" />
@@ -1089,6 +1090,7 @@
     <Content Include="App_Data\Emails\LateInEarlyOutCancelation.cshtml" />
     <Content Include="App_Data\Emails\CheckInOutCancelation.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewCancelation.cshtml" />
+    <Content Include="App_Data\Emails\MessageNotification.cshtml" />
     <None Include="combres.readme" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
@@ -1178,6 +1180,7 @@
     <Content Include="Views\Message\Create.cshtml" />
     <Content Include="Views\Message\Edit.cshtml" />
     <Content Include="Views\Message\ViewMessageOfEmployee.cshtml" />
+    <Content Include="Views\Message\Detail.cshtml" />
     <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
     <Content Include="Views\Report\EmployeeSupervisorDetails.cshtml" />
     <None Include="ExcelTemplates\EmployeeSupervisorTemplate.xls" />
