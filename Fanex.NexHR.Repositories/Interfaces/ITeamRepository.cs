@@ -27,6 +27,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedBy, out int errorCode, out string message);
 
-        public IList<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
+        List<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
     }
 }

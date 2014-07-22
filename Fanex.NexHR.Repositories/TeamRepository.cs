@@ -153,12 +153,12 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<SupervisorNameModel> GetTeamSupervisor(ICriteria criteria)
+        public List<SupervisorModel> GetTeamSupervisor(ICriteria criteria)
         {
-            IList<SupervisorNameModel> supervisors = null;
+            List<SupervisorModel> supervisors = null;
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                supervisors = db.Query<SupervisorNameModel>(new { criteria }).ToList();
+                supervisors = db.Query<SupervisorModel>(new { criteria }).ToList();
             }
 
             return supervisors;

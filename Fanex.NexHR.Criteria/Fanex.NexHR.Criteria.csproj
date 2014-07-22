@@ -50,9 +50,13 @@
     <Compile Include="Report\Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
+    <Compile Include="Team\GetTeamSupervisorCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -63,9 +63,9 @@ namespace Fanex.NexHR.Services
             return this._teamRepository.DeleteTeam(id, modifiedDate, modifiedby, out errCode, out message);
         }
 
-        public IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+        public List<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
         {
-            IList<SupervisorModel> supervisors = null;
+            List<SupervisorModel> supervisors = null;
             if (criteria.IsValid())
             {
                 supervisors = _teamRepository.GetTeamSupervisor(criteria);
