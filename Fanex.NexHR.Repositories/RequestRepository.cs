@@ -259,6 +259,7 @@ namespace Fanex.NexHR.Repositories
                                 FromTime = reader.ToDateTime("FromTime"),
                                 ToTime = reader.ToDateTime("ToTime"),
                                 TotalDays = reader.ToDecimal("TotalDays"),
+                                IsHalfDay = reader.ToShort("RequestType") == 7 && reader.ToDouble("TotalDays") == 0.5,
                                 LeaveType = new LeaveType
                                 {
                                     Id = reader.ToInt("LeaveTypeId"),

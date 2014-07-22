@@ -13,56 +13,6 @@
 }
 <h2>@Labels.MySpace</h2>
 @Html.Hidden("ChangePassword", (bool)ViewBag.ResetPassword)
-<div class="grid_5">
-    @Labels.AnualLeaveBalance:<strong> @Model.AnnualLeaveBalance day(s)</strong>
-</div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<div class="grid_5">
-    Keep In View Balance:<strong> @Model.KeepInViewBalance day(s)</strong>
-</div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
-@*<div  class="grid_5">
-    @Labels.TotalWorkingDays @DateTime.Now.ToString("MMM yyyy"):<strong> @Model.TotalWorkDays days</strong>
-</div>
-<div class="clear"></div>
-<div class="space"></div>
-
-<div class="grid_5">
-    @Labels.TotalWorkingHours @DateTime.Now.ToString("MMM yyyy"): <strong>@Model.TotalWorkHours hours</strong>
-</div>
-<div class="clear"></div>
-<div class="space"></div>
-*@ @*<div class="grid_5">
-    @Labels.CountForgotCheckInOut : 
-    @if (Model.ForgotInOut > 0)
-    {
-        <a id="forgotInOut" href="javascript:void(0);"><strong>@(Model.ForgotInOut)</strong></a>
-    }
-    else
-    {
-        <strong>@(Model.ForgotInOut)</strong>
-    }
-</div>
-<div class="clear"></div>
-<div class="space"></div>
-
-<div class="grid_5">
-    @Labels.CountLateInEarlyOut : 
-    @if (Model.LateInEarlyOut > 0)
-    {
-        <a id="lateInEarlyOut" href="javascript:void(0);"><strong>@(Model.LateInEarlyOut)</strong></a>
-    }
-    else
-    {
-        <strong>@(Model.LateInEarlyOut)</strong>
-    }
-</div>*@
 <ul id="forgotCheckInOutMenu" class="hide">
     @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
     {
@@ -81,10 +31,6 @@
         }
     }
 </ul>
-<div class="clear">
-</div>
-<div class="space">
-</div>
 <table class="data" id="myspace">
     <thead>
         <tr>
@@ -246,5 +192,4 @@
         </label>
     </fieldset>
 </div>
-@*Management dashboard*@
 @Html.Action("ManagementDashboard")

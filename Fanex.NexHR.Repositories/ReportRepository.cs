@@ -80,7 +80,7 @@ namespace Fanex.NexHR.Repositories
                                 TotalDays = Convert.ToDecimal(t.TotalDays),
                                 LeaveType = new LeaveType
                                 {
-                                    Id = t.LeaveTypeId,
+                                    Id = t.LeaveTypeId == null ? 0 : t.LeaveTypeId,
                                     Name = t.LeaveType
                                 },
                                 FromShift = t.FromShift,

@@ -50,12 +50,12 @@
                 @foreach (RequestEntity request in Model)
                 {
                     var requestDate = request.IsHalfDay
-                        ? (request.RequestedDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime + " - " + request.ToTime + ")")
-                        : request.RequestedDate.ToDateMonthYearFormatedDate();
+                        ? (request.FromDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime.ToString("HH:mm") + " - " + request.ToTime.ToString("HH:mm") + ")")
+                        : request.FromDate.ToDateMonthYearFormatedDate();
                     <tr id="row@(request.Id)">
                         <td>@(index++)
                         </td>
-                        <td>@((request.Shift != null && string.IsNullOrWhiteSpace(request.Shift.Name)) ? Labels.NA : request.Shift.Name)
+                        <td>@((request.FromShift == null || string.IsNullOrWhiteSpace(request.FromShift.Name)) ? Labels.NA : request.FromShift.Name)
                         </td>
                          <td class="ddMMyyyyhhmm">@requestDate
                         </td>

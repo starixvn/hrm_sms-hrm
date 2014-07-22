@@ -11,9 +11,11 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -44,8 +46,8 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = DateTime.Now.Date,
                 By = this.CurrentUser.Id,
-                VerifierList = verifiers,
-                ApproverList = approvers,
+                VerifierList = GetListItem(verifiers),
+                ApproverList = GetListItem(approvers),
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ShiftId = (shift == null) ? 0 : shift.ShiftID
             };
@@ -70,8 +72,8 @@ namespace Fanex.NexHR.Controllers.Request
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
 
-            keepInViewRequestViewModel.VerifierList = verifiers;
-            keepInViewRequestViewModel.ApproverList = approvers;
+            keepInViewRequestViewModel.VerifierList = GetListItem(verifiers);
+            keepInViewRequestViewModel.ApproverList = GetListItem(approvers);
 
             ViewBag.Requested = _KeepInViewRequestService.Insert(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
@@ -111,8 +113,8 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = request.RequestedDate,
                 By = this.CurrentUser.Id,
-                VerifierList = verifiers,
-                ApproverList = approverList,
+                VerifierList = GetListItem(verifiers),
+                ApproverList = GetListItem(approverList),
                 Shift = request.Shift.Name,
                 ShiftId = request.Shift.Id,
                 ApproverId = request.ApprovedBy.Id,
@@ -143,8 +145,8 @@ namespace Fanex.NexHR.Controllers.Request
             var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
 
-            keepInViewRequestViewModel.VerifierList = verifiers;
-            keepInViewRequestViewModel.ApproverList = approvers;
+            keepInViewRequestViewModel.VerifierList = GetListItem(verifiers);
+            keepInViewRequestViewModel.ApproverList = GetListItem(approvers);
 
             ViewBag.Updated = _KeepInViewRequestService.Update(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
@@ -195,6 +197,18 @@ namespace Fanex.NexHR.Controllers.Request
         public bool Delete(long id)
         {
             return _RequestService.DeleteWorkingTimeRequest(id);
+        }
+
+        [NonAction]
+        private IList<SelectListItem> GetListItem(IList<SupervisorNameModel> supervisors)
+        {
+            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem
+            {
+                Text = x.NickName + " (" + x.FullName + ")",
+                Value = x.OwnerId.ToString()
+            }).ToList();
+
+            return selectItems;
         }
     }
 }

@@ -41,9 +41,8 @@ namespace Fanex.NexHR.Services
         private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
         private const string _MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2}";
         private const string _MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2}";
-        private const string _MsgOvertimeHours = "<span class='req overtime'>{0} ({1}-{2})</span> {3}' - {4}";
-        private const string _MsgOvertimeShift = "<span class='req overtime'>{0} ({1})</span> {2}";
         private const string _MsgKeepInView = "<span class='req keepinview'>{0}</span> {1}";
+        private const string _MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> {3}";
 
         private const string _MailContentLeave = "{0} to {1} ({2} days)";
         private const string _MailContentLeaveOneDay = "{0}";
@@ -55,7 +54,6 @@ namespace Fanex.NexHR.Services
         private const string _EmailTemplatePathForCheckInOut = "~/app_data/emails/CheckInOutApproval.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOut = "~/app_data/emails/LateInEarlyOutApproval.cshtml";
         private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
-        private const string _EmailTemplatePathForOvertime = "~/app_data/emails/OvertimeApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
         private const string _EmailTemplatePathForLeaveCancelation = "~/app_data/emails/LeaveCancelation.cshtml";
@@ -142,7 +140,20 @@ namespace Fanex.NexHR.Services
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
                 case (int)RequestTypes.KeepInView:
-                    msg.AppendFormat(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
+                    if ((double)request.TotalDays == 0.5)
+                    {
+                        msg.AppendFormat(
+                            _MsgKeepInViewHalfday, 
+                            request.FromDate.ToDateMonthYearFormatedDate(), 
+                            request.FromTime.ToString("HH:mm"), 
+                            request.ToTime.ToString("HH:mm"), 
+                            request.FromShift.Name);
+                    }
+                    else
+                    {
+                        msg.AppendFormat(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
+                    }
+                    
                     break;
                 default:
                     break;
@@ -1176,9 +1187,6 @@ namespace Fanex.NexHR.Services
                     break;
                 case (short)RequestTypes.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
-                    break;
-                case (short)RequestTypes.Overtime:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForOvertime);
                     break;
                 case (short)RequestTypes.KeepInView:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);

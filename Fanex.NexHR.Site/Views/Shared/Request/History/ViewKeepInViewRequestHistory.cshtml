@@ -30,7 +30,7 @@
             @foreach (var request in Model)
             {
                 var requestDate = request.IsHalfDay
-                        ? (request.RequestedDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime + " - " + request.ToTime + ")")
+                        ? (request.RequestedDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime.ToString("HH:mm") + " - " + request.ToTime.ToString("HH:mm") + ")")
                         : request.RequestedDate.ToDateMonthYearFormatedDate();
                 <tr id="row@(request.Id)">
                     <td>@(index++)
@@ -39,7 +39,7 @@
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName.ToString()
                     </td>
-                    <td>@request.Shift
+                    <td>@(request.Shift != null ? request.Shift.Name : string.Empty)
                     </td>
                     <td class="ddMMyyyyhhmm">@requestDate
                     </td>

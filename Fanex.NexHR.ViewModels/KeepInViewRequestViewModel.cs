@@ -12,8 +12,7 @@ namespace Fanex.NexHR.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
-    using Fanex.NexHR.Models;
+    using System.Web.Mvc;
 
     /// <summary>
     /// LeaveRequest ViewModel.
@@ -44,8 +43,8 @@ namespace Fanex.NexHR.ViewModels
 
         public int? ApproverId { get; set; }
 
-        public IList<SupervisorNameModel> VerifierList { get; set; }
+        public IList<SelectListItem> VerifierList { get; set; }
 
-        public IList<SupervisorNameModel> ApproverList { get; set; }
+        public IList<SelectListItem> ApproverList { get; set; }
     }
 }

@@ -460,7 +460,7 @@ namespace Fanex.NexHR.Repositories
                 { 
                     Id = reader.ToInt("ShiftId"), 
                     ShiftID = reader.ToInt("ShiftId"), 
-                    Name = reader.ToString("FromShift") 
+                    Name = reader.ToString("ShiftName") 
                 },
                 CreatedDate = reader.ToDateTime("CreatedDate"),
                 Status = new RequestStatus { Id = reader.ToByte("Status") },
