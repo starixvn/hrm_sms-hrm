@@ -127,6 +127,7 @@ $(document).ready(function () {
 			$('#GroupIds').val(groups);
 			$('#Category').val($('#category').val());
 			$('#SendToEmail').val(sendToEmails);
+			$('#HasSendEmail').val($('#sendEmail').is(':checked'));
 
 			$.ajax({
 				url: form.action,

@@ -48,7 +48,8 @@ namespace Fanex.NexHR.Controllers
             var criteria = new GetMessageByCreatorCriteria
             {
                 ToDate = DateTime.Now,
-                FromDate = DateTime.Now.AddMonths(-3)
+                FromDate = DateTime.Now.AddMonths(-3),
+                IsDisabled = 0
             };
 
             return Index(criteria);
@@ -61,7 +62,6 @@ namespace Fanex.NexHR.Controllers
             if (criteria != null)
             {
                 criteria.CreatedBy = this.CurrentUser.Id;
-                criteria.IsDisabled = false;
             }
 
             ViewBag.Messages = _messageService.GetMessageByCreator(criteria);
@@ -154,7 +154,8 @@ namespace Fanex.NexHR.Controllers
         {
             var criteria = new GetMessageByEmployeeCriteria
             {
-                EffectedDate = DateTime.Now
+                EffectedDate = DateTime.Today,
+                IsDisabled = 0
             };
 
             return ViewMessageOfEmployee(criteria);
@@ -185,6 +186,7 @@ namespace Fanex.NexHR.Controllers
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "HR")]
         public ActionResult Detail(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria

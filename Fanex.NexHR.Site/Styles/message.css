@@ -1,4 +1,25 @@
-﻿.employee 
+﻿.left 
+{
+	text-align: left;
+}
+
+.message-label 
+{
+	margin-top: 7px !important;
+}
+
+select#status 
+{
+	min-width: 90px;
+}
+
+.send-to 
+{
+	text-align: left !important;
+	width:200px;
+}
+
+.employee 
 {
 	width: 130px!important;
 }
@@ -10,14 +31,18 @@
 
 #Contents {
 	width: 580px;
-	height: 350px;
+	height: 200px;
 }
 
 #Subject {
 	width: 580px !important;
 }
 
-#employee_chzn , .ui-multiselect {
+#employee_chzn {
+	width: 590px !important;
+}
+
+.ui-multiselect {
 	width: 241px!important;
 }
 

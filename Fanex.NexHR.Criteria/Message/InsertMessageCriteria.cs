@@ -38,6 +38,9 @@ namespace Fanex.NexHR.Criteria.Message
         [SpParam(Ignored = true)]
         public string SendToEmail { get; set; }
 
+        [SpParam(Ignored = true)]
+        public bool HasSendEmail { get; set; }
+
         public override string GetSettingKey()
         {
             return "Message_Insert";

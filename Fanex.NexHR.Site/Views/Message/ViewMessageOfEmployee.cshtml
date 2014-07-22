@@ -19,11 +19,18 @@
 @using (Html.BeginForm())
 {
 	<div class="container_24 bunhat" style="width: 878px;">
-		<div class="grid_3 formrow">
+		@Html.HiddenFor(model => model.IsDisabled)
+		<div class="grid_3 formrow message-label">
 			@Html.LabelFor(model => model.EffectedDate)
 		</div>
 		<div class="grid_4">
 			@Html.DatePickerFor(model => model.EffectedDate)
+		</div>
+		<div class="grid_2 formrow message-label">
+			<label>@Labels.Status</label>
+		</div>
+		<div class="grid_3">
+			@RazorHelper.MessageStatusDropDownList(controlName: "status")
 		</div>
 		<div class="grid_7">
 			<input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
@@ -59,11 +66,11 @@
 					<tr id="row_@message.MessageId">
 						<td>@(index++)
 						</td>
-						<td>@message.Subject
+						<td class="left">@message.Subject
 						</td>
 						<td>@message.CategoryName
 						</td>
-						<td>@message.Contents
+						<td class="left">@message.Contents
 						</td>
 						<td>@message.FromDate.ToDateMonthYearFormatedDate()
 						</td>
@@ -80,7 +87,7 @@
 		}
 		else
 		{
-				@RazorHelper.DisplayNoInformation(6)
+				@RazorHelper.DisplayNoInformation(7)
 		}
 	</table>
 }

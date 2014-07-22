@@ -990,17 +990,17 @@
   <data name="Override" xml:space="preserve">
     <value>override</value>
   </data>
-  <data name="ToEmployee" xml:space="preserve">
+  <data name="SendToEmployee" xml:space="preserve">
     <value>To Employee</value>
   </data>
-  <data name="ToGroup" xml:space="preserve">
+  <data name="SendToGroup" xml:space="preserve">
     <value>To Group</value>
   </data>
   <data name="EditMessage" xml:space="preserve">
     <value>Edit Message</value>
   </data>
   <data name="MyMessage" xml:space="preserve">
-    <value>My message</value>
+    <value>My messages</value>
   </data>
   <data name="Notification" xml:space="preserve">
     <value>Notification</value>
@@ -1013,5 +1013,8 @@
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="SendEmail" xml:space="preserve">
+    <value>Send email</value>
   </data>
 </root>

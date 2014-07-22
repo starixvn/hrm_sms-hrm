@@ -3,11 +3,14 @@
 /*exported deleteMessage*/
 
 var init = function () {
-	var effectedDateModel = $('#EffectedDate').val();
+	var effectedDateModel = $('#EffectedDate').val(),
+		status = $('#IsDisabled').val();
 
 	if (!effectedDateModel) {
 		$('#EffectedDate').val($.datepicker.formatDate('d M, yy', new Date()));
 	}
+
+	$('#status').val(status);
 };
 
 var deleteMessage = function (messageId) {
@@ -22,9 +25,9 @@ var deleteMessage = function (messageId) {
 $(document).ready(function () {
 	init();
 
-	$("#submit").submit(function (event) {
+	$("#submit").click(function () {
 		var form = $(this);
-		event.preventDefault();
+		$('#IsDisabled').val($('#status').val());
 
 		$.ajax({
 			url: form.action,

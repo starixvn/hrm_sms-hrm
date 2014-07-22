@@ -3,7 +3,7 @@
 
 @{
 	var messageSubject = Model != null ? Model.Subject : Labels.NoData;
-	ViewBag.Title = messageSubject + " - " + Labels.Memo;    
+	ViewBag.Title = messageSubject + " - " + Labels.Memo;
 }
 @section css{
 	@Url.CombresLink("messagecss")
@@ -31,7 +31,7 @@
 		<tbody>
 			<tr>
 				<td class="left">
-					<b>@Labels.SendTo</b>
+					@Labels.SendTo
 				</td>
 				<td class="left">
 					<b>@Model.SendTo</b>
@@ -39,7 +39,7 @@
 			</tr>
 			<tr>
 				<td>
-					<b>@Labels.Category</b>
+					@Labels.Category
 				</td>
 				<td>
 					<b>@Model.CategoryName</b>
@@ -47,23 +47,23 @@
 			</tr>
 			<tr>
 				<td class="left" style="width:80px;">
-					<b>@Labels.FromDate</b>
+					@Labels.FromDate
 				</td>
 				<td class="left">
-					@Model.FromDate.ToDateMonthYearFormatedDate()
+					<b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<b>@Labels.ToDate</b>
+					@Labels.ToDate
 				</td>
 				<td>
-					@Model.ToDate.ToDateMonthYearFormatedDate()
+					<b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
 				</td>
 			</tr>
 			<tr>
 				<td class="left">
-					<b>@Labels.Content</b>
+					@Labels.Content
 				</td>
 				<td colspan="3">
 					<b>@Model.Contents</b>
@@ -75,5 +75,5 @@
 }
 else
 {
-    <h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
+	<h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
 }

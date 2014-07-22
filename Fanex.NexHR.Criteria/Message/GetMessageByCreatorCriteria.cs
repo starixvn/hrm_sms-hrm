@@ -23,7 +23,7 @@ namespace Fanex.NexHR.Criteria.Message
 
         public DateTime? ToDate { get; set; }
 
-        public bool? IsDisabled { get; set; }
+        public int? IsDisabled { get; set; }
 
         public override string GetSettingKey()
         {

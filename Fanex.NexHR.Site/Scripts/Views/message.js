@@ -12,9 +12,9 @@ var deleteMessage = function (messageId) {
 };
 
 var init = function () {
-
 	var fromDateModel = $('#FromDate').val(),
 		toDateModel = $('#ToDate').val(),
+		status = $('#IsDisabled').val(),
 		toDate = new Date(),
 		fromDate = new Date();
 	fromDate.setMonth(fromDate.getMonth() - 3);
@@ -25,14 +25,17 @@ var init = function () {
 	if (!toDateModel) {
 		$('#ToDate').val($.datepicker.formatDate('d M, yy', toDate));
 	}
+
+	$('#status').val(status);
 };
 
 $(document).ready(function () {
 	init();
 
-	$("from").submit(function (event) {
+	$("#submit").click(function () {
 		var form = $(this);
-		event.preventDefault();
+		$('#IsDisabled').val($('#status').val());
+
 		$.ajax({
 			url: form.action,
 			type: "Post",

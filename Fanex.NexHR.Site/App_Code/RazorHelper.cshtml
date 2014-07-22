@@ -365,3 +365,13 @@
     </select>
         
 }
+
+@helper MessageStatusDropDownList(short action = -1, string controlName = "", string classObject = "")
+    {
+    <select id="@controlName">
+		<option @(action == -1 ? "selected" : "") value="">-- All --</option>
+		<option @(action == 0 ? "selected" : "") value="0">Active</option>
+		<option @(action == 1 ? "selected" : "") value="1">Disabled</option>
+    </select>
+        
+}

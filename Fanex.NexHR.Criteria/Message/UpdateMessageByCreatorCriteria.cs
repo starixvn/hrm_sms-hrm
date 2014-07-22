@@ -33,12 +33,15 @@ namespace Fanex.NexHR.Criteria.Message
 
         public string GroupIds { get; set; }
 
-        [SpParam(Ignored = true)]
-        public string SendToEmail { get; set; }
-
         public int ModifiedBy { get; set; }
 
         public DateTime ModifiedDate { get; set; }
+
+        [SpParam(Ignored = true)]
+        public string SendToEmail { get; set; }
+
+        [SpParam(Ignored = true)]
+        public bool HasSendEmail { get; set; }
 
         public override string GetSettingKey()
         {

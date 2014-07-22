@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Threading.Tasks;
     using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
@@ -25,6 +26,8 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class MessageService : BaseService, IMessageService
     {
+        private readonly string _messageEmailTemplate = "~/app_data/emails/MessageNotification.cshtml";
+
         private readonly IEmailService _emailService;
 
         public MessageService()
@@ -83,9 +86,11 @@ namespace Fanex.NexHR.Services
             {
                 commandResult = _Repository.Insert(criteria);
 
-                if (commandResult != null && commandResult.Code == 0)
+                if (criteria.HasSendEmail && commandResult != null && commandResult.Code == 0)
                 {
-                    SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail);
+                    var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(_messageEmailTemplate));
+                    var taskSendMail = new Task(() => SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail, bodyTemplate));
+                    taskSendMail.Start();
                 }
             }
 
@@ -106,9 +111,11 @@ namespace Fanex.NexHR.Services
             {
                 commandResult = _Repository.Update(criteria);
 
-                if (commandResult != null && commandResult.Code == 0)
+                if (criteria.HasSendEmail && commandResult != null && commandResult.Code == 0)
                 {
-                    SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail);
+                    var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(_messageEmailTemplate));
+                    var taskSendMail = new Task(() => SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail, bodyTemplate));
+                    taskSendMail.Start();
                 }
             }
 
@@ -230,19 +237,19 @@ namespace Fanex.NexHR.Services
         /// <param name="subject">The Subject of message.</param>
         /// <param name="content">The Content of message.</param>
         /// <param name="sendToEmail">The send to email.</param>
+        /// <param name="emailTemplatePath">The email template.</param>
         private void SendEmail(
             string subject, 
             string content, 
-            string sendToEmail)
+            string sendToEmail,
+            string emailTemplatePath)
         {
-            var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath("~/app_data/emails/MessageNotification.cshtml"));
-
             var emailContent = new
             {
                 Subject = subject,
                 Content = content
             };
-            var body = RazorEngine.Razor.Parse(bodyTemplate, emailContent);
+            var body = RazorEngine.Razor.Parse(emailTemplatePath, emailContent);
 
             _emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],

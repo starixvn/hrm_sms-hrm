@@ -21,6 +21,8 @@ namespace Fanex.NexHR.Criteria.Message
 
         public DateTime EffectedDate { get; set; }
 
+        public int? IsDisabled { get; set; }
+
         public override string GetSettingKey()
         {
             return "Message_GetByEmployee";

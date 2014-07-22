@@ -1537,7 +1537,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My message.
+        ///   Looks up a localized string similar to My messages.
         /// </summary>
         public static string MyMessage {
             get {
@@ -2212,6 +2212,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send email.
+        /// </summary>
+        public static string SendEmail {
+            get {
+                return ResourceManager.GetString("SendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send To.
         /// </summary>
         public static string SendTo {
@@ -2226,6 +2235,24 @@ namespace Fanex.NexHR.Resources {
         public static string SendToAllEmployee {
             get {
                 return ResourceManager.GetString("SendToAllEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To Employee.
+        /// </summary>
+        public static string SendToEmployee {
+            get {
+                return ResourceManager.GetString("SendToEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To Group.
+        /// </summary>
+        public static string SendToGroup {
+            get {
+                return ResourceManager.GetString("SendToGroup", resourceCulture);
             }
         }
         
@@ -2442,24 +2469,6 @@ namespace Fanex.NexHR.Resources {
         public static string ToDay {
             get {
                 return ResourceManager.GetString("ToDay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To Employee.
-        /// </summary>
-        public static string ToEmployee {
-            get {
-                return ResourceManager.GetString("ToEmployee", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To Group.
-        /// </summary>
-        public static string ToGroup {
-            get {
-                return ResourceManager.GetString("ToGroup", resourceCulture);
             }
         }
         

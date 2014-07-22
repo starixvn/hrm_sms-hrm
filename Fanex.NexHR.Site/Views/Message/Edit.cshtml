@@ -42,6 +42,8 @@
 		@Html.HiddenFor(model => model.GroupIds)
 		@Html.HiddenFor(model => model.Category)
 		@Html.HiddenFor(model => model.SendToEmail)
+		@Html.HiddenFor(model => model.HasSendEmail)
+
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
@@ -73,7 +75,7 @@
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
-					@Html.Label(@Labels.SendTo)
+					@Html.Label(@Labels.SendToEmployee)
 				</div>
 			</div>
 			<div class="grid_16">
@@ -83,7 +85,6 @@
 						<option value="@employee.Id" email="@employee.Email">@(employee.NickName + " (" + employee.FullName + ")")</option>
 					}
 				</select>
-				<label class="send-to-group" for="EmployeeIds">@Labels.ToEmployee</label>
 			</div>
 		</div>
 		<div class="clear">
@@ -93,7 +94,7 @@
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
-					<label></label>
+					@Html.Label(@Labels.SendToGroup)
 				</div>
 			</div>
 			<div class="grid_16">
@@ -103,7 +104,23 @@
 						<option value="@group.Id" email="@group.MailGroup">@group.Name</option>
 					}
 				</select>
-				<label class="send-to-group" for="GroupIds">@Labels.ToGroup</label>
+			</div>
+		</div>
+		<div class="clear">
+		</div>
+		<div class="space">
+		</div>
+		<div id="contentEditor">
+			<div class="grid_20 formrow">
+				<div class="grid_2">
+					<div class="label">
+						<label></label>
+					</div>
+				</div>
+				<div class="grid_17">
+					<input id="sendEmail" type="checkbox" />
+					<span>@Labels.SendEmail</span>
+				</div>
 			</div>
 		</div>
 		<div class="clear">
