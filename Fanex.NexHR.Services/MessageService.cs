@@ -10,6 +10,7 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
@@ -84,7 +85,7 @@ namespace Fanex.NexHR.Services
 
                 if (commandResult != null && commandResult.Code == 0)
                 {
-                    SendEmail(criteria);
+                    SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail);
                 }
             }
 
@@ -104,6 +105,11 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 commandResult = _Repository.Update(criteria);
+
+                if (commandResult != null && commandResult.Code == 0)
+                {
+                    SendEmail(criteria.Subject, criteria.Contents, criteria.SendToEmail);
+                }
             }
 
             return commandResult;
@@ -221,23 +227,28 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Send email.
         /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        private void SendEmail(InsertMessageCriteria criteria)
+        /// <param name="subject">The Subject of message.</param>
+        /// <param name="content">The Content of message.</param>
+        /// <param name="sendToEmail">The send to email.</param>
+        private void SendEmail(
+            string subject, 
+            string content, 
+            string sendToEmail)
         {
             var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath("~/app_data/emails/MessageNotification.cshtml"));
 
-            var content = new
+            var emailContent = new
             {
-                Subject = criteria.Subject,
-                Content = criteria.Contents
+                Subject = subject,
+                Content = content
             };
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            var body = RazorEngine.Razor.Parse(bodyTemplate, emailContent);
 
             _emailService.SendEmail(
+                ConfigurationManager.AppSettings["Email"],
+                sendToEmail,
                 string.Empty,
-                criteria.SendToEmail,
-                string.Empty,
-                Resources.Messages.MessageSubject + " " + criteria.Subject,
+                Resources.Messages.MessageSubject + " " + subject,
                 body);
         }
     }

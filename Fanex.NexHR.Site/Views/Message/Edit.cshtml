@@ -41,6 +41,7 @@
 		@Html.HiddenFor(model => model.EmployeeIds)
 		@Html.HiddenFor(model => model.GroupIds)
 		@Html.HiddenFor(model => model.Category)
+		@Html.HiddenFor(model => model.SendToEmail)
 		<div class="grid_19 formrow">
 			<div class="grid_2">
 				<div class="label">
@@ -61,7 +62,7 @@
 					@Html.LabelFor(model => model.Category)
 				</div>
 			</div>
-			<div class="grid-6">
+			<div class="grid_6">
 				@RazorHelper.MessageCategoryDropDownList(controlName: "category")
 			</div>
 		</div>
@@ -79,7 +80,7 @@
 				<select id="employee" data-placeholder="Choose a employee..." multiple class="chosen-select">
 					@foreach (var employee in ViewBag.Employees)
 					{
-						<option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
+						<option value="@employee.Id" email="@employee.Email">@(employee.NickName + " (" + employee.FullName + ")")</option>
 					}
 				</select>
 				<label class="send-to-group" for="EmployeeIds">@Labels.ToEmployee</label>
@@ -99,7 +100,7 @@
 				<select id="group" multiple="multiple" class="team-select">
 					@foreach (var group in ViewBag.Groups)
 					{
-						<option value="@group.Id">@group.Name</option>
+						<option value="@group.Id" email="@group.MailGroup">@group.Name</option>
 					}
 				</select>
 				<label class="send-to-group" for="GroupIds">@Labels.ToGroup</label>
