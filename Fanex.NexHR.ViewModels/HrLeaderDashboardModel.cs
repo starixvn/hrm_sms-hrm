@@ -46,6 +46,8 @@ namespace Fanex.NexHR.ViewModels
 
         public int TotalRejecteKIVRequest { get; set; }
 
+        public int TotalPendingOvertime { get; set; }
+
         public int RoleId { get; set; }
     }
 }

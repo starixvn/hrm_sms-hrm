@@ -138,11 +138,32 @@
                 <td>@item.TotalRejecteKIVRequest
                 </td>
             </tr>
+
+			<tr>
+                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Overtime
+                </td>
+                <td>
+                    @if (item.TotalPendingOvertime > 0)
+                    {
+						 @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
+                        @*<a href="@Url.Action("memberovertime", "overtime")">@item.TotalPendingOvertime.ToString()</a>*@
+					}
+					else
+					{
+                        <span>0</span>
+					}
+                </td>
+                <td> -
+                </td>
+                <td> -
+                </td>
+            </tr>
+
         </tbody>
     </table>
-    }
-    if (item.RoleId == (int)RolesEnum.Approver)
-    { 
+	}
+	if (item.RoleId == (int)RolesEnum.Approver)
+	{ 
     <h4>
         Approval List</h4>
     <table class="data" id="myspace">
@@ -165,31 +186,31 @@
         </thead>
         <tbody>
             @{
-        var requestModel = new RequestViewModel
-        {
-            DateOption = 0,
-            ToDate = DateTime.Now,
-            FromDate = DateTime.Now.AddDays(-7),
-            StatusId = (byte)CurrentRequestStatus.Pending,
-            TeamIds = string.Empty,
-            IsDailyRequest = false
-        };
-        var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
+		var requestModel = new RequestViewModel
+		{
+			DateOption = 0,
+			ToDate = DateTime.Now,
+			FromDate = DateTime.Now.AddDays(-7),
+			StatusId = (byte)CurrentRequestStatus.Pending,
+			TeamIds = string.Empty,
+			IsDailyRequest = false
+		};
+		var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
             }
             <tr>
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.CheckInOut
                 </td>
                 <td>
                     @if (item.TotalPendingCheckInOutRequest > 0)
-                    {
-                        requestModel.RequestType = 1;
-                        requestModel.FromDate = minRequestDate;
+					{
+						requestModel.RequestType = 1;
+						requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
-                    }
-                    else
-                    {
+					}
+					else
+					{
                         <span>0</span>
-                    }
+					}
                 </td>
                 <td>@item.TotalApprovedCheckInOutRequest
                 </td>
@@ -201,15 +222,15 @@
                 </td>
                 <td>
                     @if (item.TotalPendingLateInEarlyOutRequest > 0)
-                    {
-                        requestModel.RequestType = 2;
-                        requestModel.FromDate = minRequestDate;
+					{
+						requestModel.RequestType = 2;
+						requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
-                    }
-                    else
-                    {
+					}
+					else
+					{
                         <span>0</span>
-                    }
+					}
                 </td>
                 <td>@item.TotalApprovedLateInEarlyOutRequest
                 </td>
@@ -221,15 +242,15 @@
                 </td>
                 <td>
                     @if (item.TotalPendingChangeShiftRequest > 0)
-                    {
-                        requestModel.RequestType = 3;
-                        requestModel.FromDate = minRequestDate;
+					{
+						requestModel.RequestType = 3;
+						requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
-                    }
-                    else
-                    {
+					}
+					else
+					{
                         <span>0</span>
-                    }
+					}
                 </td>
                 <td>@item.TotalApprovedChangeShiftRequest
                 </td>
@@ -241,15 +262,15 @@
                 </td>
                 <td>
                     @if (item.TotalPendingLeaveRequest > 0)
-                    {
-                        requestModel.RequestType = 4;
-                        requestModel.FromDate = minRequestDate;
+					{
+						requestModel.RequestType = 4;
+						requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
-                    }
-                    else
-                    {
+					}
+					else
+					{
                         <span>0</span>
-                    }
+					}
                 </td>
                 <td>@item.TotalApprovedLeaveRequest
                 </td>
@@ -261,21 +282,41 @@
                 </td>
                 <td>
                     @if (item.TotalPendingKIVRequest > 0)
-                    {
-                        requestModel.RequestType = 5;
-                        requestModel.FromDate = minRequestDate;
+					{
+						requestModel.RequestType = 5;
+						requestModel.FromDate = minRequestDate;
                         <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKIVRequest.ToString()</a>
-                    }
-                    else
-                    {
+					}
+					else
+					{
                         <span>0</span>
-                    }
+					}
                 </td>
                 <td>@item.TotalApprovedKIVRequest
                 </td>
                 <td>@item.TotalRejecteKIVRequest
                 </td>
             </tr>
+			<tr>
+                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Overtime
+                </td>
+                <td>
+                    @if (item.TotalPendingOvertime > 0)
+                    {
+						 @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
+                        @*<a href="@Url.Action("memberovertime", "overtime")">@item.TotalPendingOvertime.ToString()</a>*@
+					}
+					else
+					{
+                        <span>0</span>
+					}
+                </td>
+                <td> -
+                </td>
+                <td> -
+                </td>
+            </tr>
+
         </tbody>
     </table>
     }

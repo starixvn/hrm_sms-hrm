@@ -57,6 +57,8 @@ namespace Fanex.NexHR.ViewModels
 
         public decimal LateInEarlyOut { get; set; }
 
+        public decimal TotalPendingOverTimeRequest { get; set; }
+
         public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> DateOfEmployeeForgotAndLateEarlyIO { get; set; }
     }
 }

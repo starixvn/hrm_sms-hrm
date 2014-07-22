@@ -207,6 +207,29 @@
                 @Html.ActionLink(Labels.Request, "create", "KeepInView")
             </td>
         </tr>
+
+		<tr>
+            <td class="firstColumn">
+                @Labels.Overtime
+            </td>
+            <td>
+                -
+            </td>
+            <td>
+                @if (Model.TotalPendingOverTimeRequest > 0)
+                { 
+                    @Html.ActionLink(Model.TotalPendingOverTimeRequest.ToString(), "employeeView", "overtime")
+                }
+                else
+                { 
+                    <span>0</span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink(Labels.Request, "employeeView", "overtime")
+            </td>
+        </tr>
+
     </tbody>
 </table>
 <div class="space">
