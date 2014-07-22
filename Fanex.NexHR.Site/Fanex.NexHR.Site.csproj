@@ -1133,7 +1133,6 @@
     <Content Include="Views\Overtime\HRViewDetails.cshtml" />
     <Content Include="Views\Overtime\HRMonthlyReport.cshtml" />
     <Content Include="Views\Shared\Request\HR\HRViewChangeShiftDetail.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewLeaveDetail.cshtml" />
     <Content Include="Views\Request\HRViewDetail.cshtml" />
     <Content Include="Views\Shared\Request\HR\ChangeShiftDetails.cshtml" />
     <Content Include="Views\Overtime\MemberDailyOvertime.cshtml" />
@@ -1147,7 +1146,6 @@
     <Content Include="Views\Overtime\HRMonthlyReportDetails.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Shared\Request\Member\MemberChangeShiftDetail.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberLeaveDetail.cshtml" />
     <Content Include="Views\Shared\Request\Member\ChangeShiftDetails.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\OTExcelReportDetails.cshtml" />

@@ -65,7 +65,7 @@
                         {
                             if (request.Type.Id == (int)RequestTypes.Leave)
                             { 
-                                <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
+                                <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
                             }
                             else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                             { 
@@ -82,7 +82,7 @@
                             {
                                 if (request.Type.Id == (int)RequestTypes.Leave)
                                 { 
-                                    <a href="@Url.Action("dailyviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
+                                    <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
                                 }
                                 else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                                 { 
@@ -97,7 +97,7 @@
                             {
                                 if (request.Type.Id == (int)RequestTypes.Leave)
                                 { 
-                                    <a href="@Url.Action("employeeviewdetail", "request", requestDetail)">@request.LeaveType.Name</a>
+                                    <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
                                 }
                                 else if (request.Type.Id == (int)RequestTypes.ChangeShift)
                                 { 

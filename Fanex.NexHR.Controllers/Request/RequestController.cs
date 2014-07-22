@@ -194,15 +194,11 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.CurrentUserId = this.CurrentUser.Id;
 
-            if (type == (int)RequestFilter.Leave)
-            {
-                return MemberLeaveDetail(requestId, "member");
-            }
-            else if (type == (int)RequestFilter.ChangeShift)
+            if (type == (int)RequestFilter.ChangeShift)
             {
                 return MemberChangeShiftDetail(requestId, "member");
             }
-
+            
             return RedirectToAction("member");
         }
 
@@ -217,11 +213,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = true;
 
-            if (type == (int)RequestFilter.Leave)
-            {
-                return HRViewLeaveDetail(requestId, "hrview");
-            }
-            else if (type == (int)RequestFilter.ChangeShift)
+            if (type == (int)RequestFilter.ChangeShift)
             {
                 return HRViewChangeShiftDetail(requestId, "hrview");
             }
@@ -241,11 +233,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
 
-            if (type == (int)RequestFilter.Leave)
-            {
-                return HRViewLeaveDetail(requestId, "employeeview");
-            }
-            else if (type == (int)RequestFilter.ChangeShift)
+            if (type == (int)RequestFilter.ChangeShift)
             {
                 return HRViewChangeShiftDetail(requestId, "employeeview");
             }
@@ -265,11 +253,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.IsAllowChangeStatus = false;
 
-            if (type == (int)RequestFilter.Leave)
-            {
-                return HRViewLeaveDetail(requestId, "dailyview");
-            }
-            else if (type == (int)RequestFilter.ChangeShift)
+            if (type == (int)RequestFilter.ChangeShift)
             {
                 return HRViewChangeShiftDetail(requestId, "dailyview");
             }
@@ -309,22 +293,22 @@ namespace Fanex.NexHR.Controllers.Request
             request.TeamCollection = _TeamService.GetAll();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? loginId = null;
-
+            
             if (requestViewType != RequestViewType.HrSpace)
             {
                 loginId = this.CurrentUser.Id;
             }
 
             var requestList = _RequestService.GetRequests(
-                requestViewType, 
-                request.RequestType, 
-                request.FromDate, 
-                request.ToDate, 
-                request.TeamIds, 
-                request.StatusId, 
-                isDailyRequest, 
-                request.EmployeeId, 
-                loginId, 
+                requestViewType,
+                request.RequestType,
+                request.FromDate,
+                request.ToDate,
+                request.TeamIds,
+                request.StatusId,
+                isDailyRequest,
+                request.EmployeeId,
+                loginId,
                 request.IsLocal);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
@@ -412,70 +396,6 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.ViewName = viewName;
 
             return model;
-        }
-
-        /// <summary>
-        /// HRs the view leave detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <returns>
-        /// The view model of HRViewLeaveDetail.
-        /// </returns>
-        private ActionResult HRViewLeaveDetail(int requestId, string viewName)
-        {
-            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
-
-            if (leaveRequest == null)
-            {
-                return RedirectToAction(viewName);
-            }
-
-            ViewLeaveDetail(requestId, viewName, leaveRequest);
-            return View("HRViewDetail", leaveRequest);
-        }
-
-        /// <summary>
-        /// Members the leave detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <returns>
-        /// The view model of HRViewLeaveDetail.
-        /// </returns>
-        private ActionResult MemberLeaveDetail(int requestId, string viewName)
-        {
-            var leaveRequest = _LeaveRequestService.GetRequestById(requestId);
-
-            if (leaveRequest == null)
-            {
-                return RedirectToAction(viewName);
-            }
-
-            ViewLeaveDetail(requestId, viewName, leaveRequest);
-            return View("MemberDetail", leaveRequest);
-        }
-
-        /// <summary>
-        /// Views the leave detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <param name="leaveRequest">The leave request.</param>
-        private void ViewLeaveDetail(int requestId, string viewName, LeaveRequestViewModel leaveRequest)
-        {
-            var currentUserId = leaveRequest.EmployeeId;
-            var employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(currentUserId, requestId, DateTime.Now.Date);
-            var leaveTypes = _LeaveTypeService.GetAll();
-            var verifierList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Verifier, (int)RequestTypes.Leave);
-            var approverList = _EmployeeService.GetListSupervisorName(currentUserId, (int)RolesEnum.Approver, (int)RequestTypes.Leave);
-
-            leaveRequest.LeaveTypeList = leaveTypes;
-            leaveRequest.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            leaveRequest.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            leaveRequest.EmployeeBalance = employeeBalance;
-            leaveRequest.RequestId = requestId;
-            ViewBag.ViewName = viewName;
         }
 
         /// <summary>

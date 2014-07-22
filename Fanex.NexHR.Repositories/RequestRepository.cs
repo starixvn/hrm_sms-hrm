@@ -256,6 +256,8 @@ namespace Fanex.NexHR.Repositories
                                 TotalMins = reader.ToInt("Time"),
                                 FromDate = reader.ToDateTime("FromDate"),
                                 ToDate = reader.ToDateTime("ToDate"),
+                                FromTime = reader.ToDateTime("FromTime"),
+                                ToTime = reader.ToDateTime("ToTime"),
                                 TotalDays = reader.ToDecimal("TotalDays"),
                                 LeaveType = new LeaveType
                                 {

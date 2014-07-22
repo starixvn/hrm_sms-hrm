@@ -2,6 +2,9 @@
 @model IList<RequestEntity>
 @{
     ViewBag.Title = Labels.MyLeaveRequest;
+    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeAnnualBalance)ViewBag.EmployeeBalance;
+    decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
+    decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
 }
 @section css{
     @Url.CombresLink("myrequestcss")
@@ -16,6 +19,13 @@
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
+
+<div style="float:right">
+    @Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong>
+    <br />
+    Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong>
+</div>
+
 @using (Html.BeginForm())
 { 
     <input type="hidden" value="Leave" id="RequestType" />
@@ -24,7 +34,9 @@
     <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
     <div class="button-icon">
         <span class="icon plus"></span>@Html.ActionLink(Labels.LeaveRequest, "Create")</div>
-    <br />
+    
+}
+
     <table class="data" id="data">
         <thead>
             <tr>
@@ -58,7 +70,7 @@
                 var verifiedStatus = VerifiedStatus.Pending;
                 var approvedStatus = ApprovedStatus.Pending;
                 var processedStatus = HrStatus.Pending;
-                
+
                 foreach (RequestEntity request in Model)
                 {
                     verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
@@ -130,7 +142,7 @@
             }
         </tbody>
     </table>
-}
+
 <div id="dialog-reason" title="@Labels.ReasonReedit">
     <div>
         <span>@Messages.ReasonReedit</span>
