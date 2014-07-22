@@ -977,3 +977,13 @@ div.confirm div.inputRemark textarea
 {
 	color: #F7819F;
 }
+
+img.request-warning
+{
+	content: url(../Images/warning.png);
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	padding: 0;
+	float: right;
+}

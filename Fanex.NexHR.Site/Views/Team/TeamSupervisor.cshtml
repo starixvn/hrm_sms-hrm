@@ -1,0 +1,86 @@
+﻿@{
+	ViewBag.Title = "Team Supervisor";
+}
+@section css{
+	@Url.CombresLink("sitecss")
+}
+@section js{
+	@Url.CombresLink("teameditjs")
+}
+@section Breadcrumb {
+	<a class="step">HR Space</a>
+	<a href="~/team/index/" class="step">Team Management</a>
+	<a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+<table class="data" style="width: auto; min-width: 800px;">
+	<thead>
+		<tr>
+			<th>@Labels.Team
+			</th>
+			<th>
+				Action
+			</th>
+			<th>
+				Supervisor Name
+			</th>
+			<th>
+				Edit
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td rowspan="4">
+				Team Name
+			</td>
+			<td>
+				Verified By
+			</td>
+			<td>
+				abc, xyz
+			</td>
+			<td>
+				<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.Verifier })">
+					<img src="~/Styles/Images/edit-icon.png" /></a>
+			</td>
+			<tr>
+				<td>
+					Approved By
+				</td>
+				<td>
+					abc, xyz
+				</td>
+				<td>
+					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.Approver })">
+						<img src="~/Styles/Images/edit-icon.png" /></a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Shift Arrangement
+				</td>
+				<td>
+					abc, xyz
+				</td>
+				<td>
+					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.ShiftManager })">
+						<img src="~/Styles/Images/edit-icon.png" /></a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					On Behalf Request
+				</td>
+				<td>
+					abc, xyz
+				</td>
+				<td>
+					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.ActingSupervisor })">
+						<img src="~/Styles/Images/edit-icon.png" /></a>
+				</td>
+			</tr>
+		</tr>
+		@Html.Hidden("teamId", (int)ViewBag.TeamId)
+	</tbody>
+</table>

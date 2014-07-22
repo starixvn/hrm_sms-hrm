@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Controllers
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -146,6 +147,39 @@ namespace Fanex.NexHR.Controllers
             }
 
             return View(model);
+        }
+
+        [Authorize(Roles = "HR")]
+        public ActionResult TeamSupervisor(int id)
+        {
+            ViewBag.TeamId = id;
+            return View();
+        }
+
+        /// <summary>
+        /// Get Supervisors of Team.
+        /// </summary>
+        /// <param name="teamId">Id of team.</param>
+        /// <param name="supervisorRole">Supervisor Role.</param>
+        /// <returns>Action Result.</returns>
+        public ActionResult ManageSupervisor(int teamId, short supervisorRole)
+        {
+            var criteria = new GetTeamSupervisorCriteria()
+            {
+                TeamId = teamId,
+                SupervisorRole = supervisorRole
+            };
+
+            var supervisorModel = _teamService.GetTeamSupervisor(criteria);
+            var model = new SupervisorViewModel
+            {
+                SupervisorList = supervisorModel,
+                TeamId = teamId,
+                SupervisorRole = supervisorRole
+            };
+            ViewBag.Groups = _teamService.GetAll();
+
+            return View("~/Views/Employee/Supervisor.cshtml", model);
         }
     }
 }

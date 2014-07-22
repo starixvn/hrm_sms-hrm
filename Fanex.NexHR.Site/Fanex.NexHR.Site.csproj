@@ -1184,6 +1184,7 @@
     <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
     <Content Include="Views\Report\EmployeeSupervisorDetails.cshtml" />
     <None Include="ExcelTemplates\EmployeeSupervisorTemplate.xls" />
+    <Content Include="Views\Team\TeamSupervisor.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

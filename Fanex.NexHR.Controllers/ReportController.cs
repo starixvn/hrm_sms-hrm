@@ -268,6 +268,9 @@ namespace Fanex.NexHR.Controllers
             ViewBag.FromDate = model.FromDate;
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
+            ViewBag.CurrentUserId = this.CurrentUser.Id;
+            ViewBag.Groups = _teamService.GetAll();
+
             ViewBag.EntityList = new List<RequestsMonitoring>();
             ViewBag.EntityList = _reportService.GetRequestMonitoring(
                 model.FromDate,

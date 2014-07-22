@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
@@ -25,5 +26,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
         bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
 
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedBy, out int errorCode, out string message);
+
+        public IList<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
     }
 }

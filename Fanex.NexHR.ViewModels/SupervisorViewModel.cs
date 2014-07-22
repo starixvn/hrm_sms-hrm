@@ -20,6 +20,8 @@ namespace Fanex.NexHR.ViewModels
     {
         public int EmployeeId { get; set; }
 
+        public int TeamId { get; set; }
+
         public short SupervisorRole { get; set; }
 
         public IList<SupervisorModel> SupervisorList { get; set; }

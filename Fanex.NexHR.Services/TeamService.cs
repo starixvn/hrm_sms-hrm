@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -60,6 +61,17 @@ namespace Fanex.NexHR.Services
         public bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message)
         {
             return this._teamRepository.DeleteTeam(id, modifiedDate, modifiedby, out errCode, out message);
+        }
+
+        public IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+        {
+            IList<SupervisorModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = _teamRepository.GetTeamSupervisor(criteria);
+            }
+
+            return supervisors;
         }
     }
 }
