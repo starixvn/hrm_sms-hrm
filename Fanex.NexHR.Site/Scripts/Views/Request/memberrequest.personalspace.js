@@ -1,36 +1,45 @@
 ﻿$(document).ready(function () {
-    $("#confirmedDialog").hide();
-    
-    $("#TeamId").multiselect();
-    bindMenu('.verifier-actions', 'verifierMenu');
-    bindMenu('.approver-actions', 'approverMenu');
-    bindMenu('.verifier-actions-reset', 'resetMenu');
-    bindMenu('.approver-actions-reset', 'resetMenu');
+	$("#confirmedDialog").hide();
 
-    $(".viewhistory").click(function () {
-        var url = $(this).attr("id");
-        $.get(url, function (data) {
-            $('#dialoghistorycontent').html(data);
-            $("#dialoghistorycontent").dialog({
-                modal: true,
-                minHeight: 0,
-                width: 1100,
-                title: 'Request History'
-            });
-        });
-    });
+	$("#TeamId").multiselect();
+	bindMenu('.verifier-actions', 'verifierMenu');
+	bindMenu('.approver-actions', 'approverMenu');
+	bindMenu('.verifier-actions-reset', 'resetMenu');
+	bindMenu('.approver-actions-reset', 'resetMenu');
 
-    $("form").submit(function (e) {
-        e.preventDefault();
-        var action = $("#ActionRequest").val();
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var requestType = $("input[type='radio'][name='RequestType']:checked").val();
-        var employee = $("#Employee").val();
-        var employeeId = employee == "" ? "" : $("#EmployeeId").val();
-        var isLocal = $("#IsLocal").val();
-        var isDailyRequest = $("#IsDailyRequest").val();
+	$(".viewhistory").click(function () {
+		var url = $(this).attr("id");
+		$.get(url, function (data) {
+			$('#dialoghistorycontent').html(data);
+			$("#dialoghistorycontent").dialog({
+				modal: true,
+				minHeight: 0,
+				width: 1100,
+				title: 'Request History'
+			});
+		});
+	});
 
-        var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
+	$("form").submit(function (e) {
+		e.preventDefault();
+		var from = new Date($("#FromDate").val());
+		var to = new Date($("#ToDate").val());
+		if (from > to) {
+			alert("From Date must be less than To Date");
+			$("#submit").removeClass("disabled");
+			$("#submit").val("Submit");
+			e.preventDefault();
+		}
+		else {
+			var action = $("#ActionRequest").val();
+			var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+			var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+			var employee = $("#Employee").val();
+			var employeeId = employee == "" ? "" : $("#EmployeeId").val();
+			var isLocal = $("#IsLocal").val();
+			var isDailyRequest = $("#IsDailyRequest").val();
+
+			var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
                 + "&TeamIds=" + teams + "&Employee=" + employee
                 + "&EmployeeId=" + employeeId
                 + "&FromDate=" + $("#FromDate").val()
@@ -40,18 +49,19 @@
                 + "&IsLocal=" + isLocal
                 + "&IsDailyRequest=" + isDailyRequest;
 
-        location.href = url;
-    });
-    $("#btnExcel").click(function () {
-        var action = $("#ActionRequest").val() + "WorkingTimeRequest";
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var requestType = $("input[type='radio'][name='RequestType']:checked").val();
-        var employee = $("#Employee").val();
-        var employeeId = employee == "" ? "" : $("#EmployeeId").val();
-        var isLocal = $("#IsLocal").val();
-        var isDailyRequest = $("#IsDailyRequest").val();
+			location.href = url;
+		}		
+	});
+	$("#btnExcel").click(function () {
+		var action = $("#ActionRequest").val() + "WorkingTimeRequest";
+		var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+		var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+		var employee = $("#Employee").val();
+		var employeeId = employee == "" ? "" : $("#EmployeeId").val();
+		var isLocal = $("#IsLocal").val();
+		var isDailyRequest = $("#IsDailyRequest").val();
 
-        var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
+		var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
                 + "&TeamIds=" + teams + "&Employee=" + employee
                 + "&EmployeeId=" + employeeId
                 + "&FromDate=" + $("#FromDate").val()
@@ -60,8 +70,8 @@
                 + "&RequestType=" + requestType
                 + "&IsLocal=" + isLocal
                 + "&IsDailyRequest=" + isDailyRequest;
-        location.href = url;
-    });
+		location.href = url;
+	});
 });
 
 function processRequest(command, eventElement, remark) {
