@@ -86,5 +86,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria);
 
         List<SupervisorReportGroupModel> GetSupervisorReport(ICriteria criteria);
+
+        List<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria);
     }
 }

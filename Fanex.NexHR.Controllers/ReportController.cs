@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Services;
@@ -767,6 +768,32 @@ namespace Fanex.NexHR.Controllers
                 string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
                 var hssfworkbook = _exportExcelService.ExportEmployeeSupervisor(supervisors);
 
+                return ExcelFile(hssfworkbook, fileName);
+            }
+            else
+            {
+                return PartialView(supervisors);
+            }
+        }
+
+        public ActionResult TeamSupervisor()
+        {
+            ViewBag.Groups = _teamService.GetAll();
+            return View();
+        }
+
+        public ActionResult TeamSupervisorDetails(string groups, bool? isExcel)
+        {
+            var criteria = new GetAllTeamSupervisorCriteria()
+            {
+                GroupIds = groups,
+            };
+            List<TeamSupervisorReportModel> supervisors = _reportService.GetAllTeamSupervisor(criteria);
+
+            if (isExcel.Value)
+            {
+                string fileName = "TeamSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+                var hssfworkbook = _exportExcelService.ExportTeamSupervisor(supervisors);
                 return ExcelFile(hssfworkbook, fileName);
             }
             else

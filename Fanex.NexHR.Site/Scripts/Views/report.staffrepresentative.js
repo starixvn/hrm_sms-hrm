@@ -13,6 +13,13 @@
 	$("#excel").click(function () {
 		submitForm(true);
 	});
+
+	$("#submitTeam").click(function () {
+		submitFormTeam(false);
+	});
+	$("#excelTeam").click(function () {
+		submitFormTeam(true);
+	});
 });
 
 function submitForm(isExcel) {
@@ -51,6 +58,31 @@ function submitForm(isExcel) {
 
 		$.ajax({
 			url: _global.root + "report/EmployeeSupervisorDetails",
+			data: params,
+			async: false
+		}).done(function (response) {
+			template.empty();
+			template.html(response);
+		});
+	}
+}
+
+function submitFormTeam(isExcel) {
+	var group = $("#group").val() != null ? $("#group").val().join() : "";
+	if (isExcel) {
+		url = _global.root + "report/TeamSupervisorDetails?groups=" + group + "&isExcel=" + isExcel;
+
+		location.href = url;
+	}
+	else {
+		var template = $("#TeamSupervisorDetails");
+		var params = {
+			groups: group,
+			isExcel: isExcel,
+		};
+
+		$.ajax({
+			url: _global.root + "report/TeamSupervisorDetails",
 			data: params,
 			async: false
 		}).done(function (response) {

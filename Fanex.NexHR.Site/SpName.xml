@@ -182,6 +182,9 @@
 			</Setting>
 			<Setting Key="GroupSupervisor_Set" SpName="GroupSupervisor_Set" DbName="nexhrx" Plain="0"></Setting>
 			<Setting Key="GroupSupervisor_UpdateForShiftArrange" SpName="GroupSupervisor_UpdateForShiftArrange" DbName="nexhrx" Plain="0"></Setting>
+			<Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="nexhrx" Plain="0">
+				<Mapping DataField="GroupId" ObjectProperty="TeamId"/>
+			</Setting>
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="nexhrx" Plain="0"></Setting>

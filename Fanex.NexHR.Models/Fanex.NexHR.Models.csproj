@@ -87,6 +87,7 @@
     <Compile Include="SupervisorReportGroupModel.cs" />
     <Compile Include="SupervisorReportModel.cs" />
     <Compile Include="TeamSupervisorModel.cs" />
+    <Compile Include="TeamSupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
     <Compile Include="EmployeeAnnualBalance.cs" />

@@ -51,6 +51,7 @@
     <Compile Include="Report\Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
+    <Compile Include="Team\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Team\InsertOrUpdateTeamSupervisorCriteria.cs" />
     <Compile Include="Team\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Team\GetTeamSupervisorCriteria.cs" />

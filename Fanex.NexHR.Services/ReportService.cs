@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Team;
 
     /// <summary>
     /// Report Service.
@@ -290,6 +291,17 @@ namespace Fanex.NexHR.Services
             }
 
             return groupingSupervisors;
+        }
+
+        public List<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria)
+        {
+            List<TeamSupervisorReportModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = _reportRepository.GetAllTeamSupervisor(criteria);
+            }
+
+            return supervisors;
         }
     }
 }

@@ -641,5 +641,21 @@ namespace Fanex.NexHR.Repositories
 
             return groupingSupervisor;
         }
+
+        public List<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)
+        {
+            List<TeamSupervisorModel> entities = null;
+            List<TeamSupervisorReportModel> supervisors = null;
+
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                entities = db.Query<TeamSupervisorModel>(criteria.GetSpParams()).ToList();
+            }
+
+            supervisors = entities.GroupBy(x => x.TeamId)
+                .Select(x => new TeamSupervisorReportModel { GroupId = x.Key, SupervisorAction = x.ToList() }).ToList();
+
+            return supervisors;
+        }
     }
 }

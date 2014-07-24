@@ -47,5 +47,7 @@ namespace Fanex.NexHR.Services.Interface
         HSSFWorkbook ExportHrRequestStatistic(List<RequestsMonitoring> overtimes, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors);
+
+        HSSFWorkbook ExportTeamSupervisor(List<TeamSupervisorReportModel> supervisors);
     }
 }
