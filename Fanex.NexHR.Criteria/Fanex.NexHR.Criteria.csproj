@@ -37,6 +37,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Fanex.Data.0.5.404.63\lib\net40\Fanex.Data.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
@@ -50,7 +51,10 @@
     <Compile Include="Report\Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
+    <Compile Include="Team\InsertOrUpdateTeamSupervisorCriteria.cs" />
+    <Compile Include="Team\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Team\GetTeamSupervisorCriteria.cs" />
+    <Compile Include="Team\InsertTeamShiftManagerCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,11 +1,12 @@
-﻿@{
+﻿@model List<TeamSupervisorModel>
+@{
 	ViewBag.Title = "Team Supervisor";
 }
 @section css{
-	@Url.CombresLink("sitecss")
+	@Url.CombresLink("teamsupervisorcss")
 }
 @section js{
-	@Url.CombresLink("teameditjs")
+	@Url.CombresLink("teamsupervisorjs")
 }
 @section Breadcrumb {
 	<a class="step">HR Space</a>
@@ -16,7 +17,7 @@
 <table class="data" style="width: auto; min-width: 800px;">
 	<thead>
 		<tr>
-			<th>@Labels.Team
+			<th class="supervisor-team">@Labels.Team
 			</th>
 			<th>
 				Action
@@ -24,63 +25,55 @@
 			<th>
 				Supervisor Name
 			</th>
-			<th>
+			<th class="supervisor-action">
 				Edit
 			</th>
 		</tr>
 	</thead>
-	<tbody>
-		<tr>
-			<td rowspan="4">
-				Team Name
-			</td>
-			<td>
-				Verified By
-			</td>
-			<td>
-				abc, xyz
-			</td>
-			<td>
-				<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.Verifier })">
-					<img src="~/Styles/Images/edit-icon.png" /></a>
-			</td>
+	@if (Model != null)
+ {
+	 int rowCount = 0;
+		<tbody>
 			<tr>
-				<td>
-					Approved By
-				</td>
-				<td>
-					abc, xyz
-				</td>
-				<td>
-					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.Approver })">
-						<img src="~/Styles/Images/edit-icon.png" /></a>
-				</td>
-			</tr>
+				@foreach (TeamSupervisorModel item in Model)
+	{
+		
+		if (rowCount == 0)
+		{
+					<td rowspan="4">
+						@item.Code
+					</td>
+					<td>
+						@item.ActionName
+					</td>
+					<td class="supervisor-name">
+						@item.Supervisors
+					</td>
+					<td>
+						<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+							<img src="~/Styles/Images/edit-icon.png" /></a>
+					</td>
+			rowCount++;
+		}
+		else
+		{
 			<tr>
-				<td>
-					Shift Arrangement
-				</td>
-				<td>
-					abc, xyz
-				</td>
-				<td>
-					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.ShiftManager })">
-						<img src="~/Styles/Images/edit-icon.png" /></a>
-				</td>
+						<td>
+							@item.ActionName
+						</td>
+						<td class="supervisor-name">
+							@item.Supervisors
+						</td>
+						<td>
+							<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+								<img src="~/Styles/Images/edit-icon.png" /></a>
+						</td>
+					</tr>
+		}
+
+	}
 			</tr>
-			<tr>
-				<td>
-					On Behalf Request
-				</td>
-				<td>
-					abc, xyz
-				</td>
-				<td>
-					<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = (short)RolesEnum.ActingSupervisor })">
-						<img src="~/Styles/Images/edit-icon.png" /></a>
-				</td>
-			</tr>
-		</tr>
-		@Html.Hidden("teamId", (int)ViewBag.TeamId)
-	</tbody>
+			@Html.Hidden("TeamId", (int)ViewBag.TeamId)
+		</tbody>
+ }
 </table>

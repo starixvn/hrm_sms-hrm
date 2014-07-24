@@ -10,7 +10,8 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
     /// <summary>
@@ -37,5 +38,20 @@ namespace Fanex.NexHR.ViewModels
         public string RoleOvertimes { get; set; }
 
         public string RoleKeepInViews { get; set; }
+
+        public string ForView { get; set; }
+
+        public string DisplayTitle
+        {
+            get
+            {
+                if (SupervisorRole > 0)
+                {
+                    return Extensions.EnumToString((SupervisorActionType)SupervisorRole);
+                }
+
+                return string.Empty;
+            }
+        }
     }
 }

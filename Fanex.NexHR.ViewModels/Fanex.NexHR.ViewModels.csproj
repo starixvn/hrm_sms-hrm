@@ -63,6 +63,7 @@
     <Compile Include="ChangeShiftViewModel.cs" />
     <Compile Include="ChangeWorkingCalendarsViewModel.cs" />
     <Compile Include="MessageViewModel.cs" />
+    <Compile Include="TeamSupervisorViewModel.cs" />
     <Compile Include="TotalWorkingHourWeeklyViewModel.cs" />
     <Compile Include="OvertimeExcelReportViewModel.cs" />
     <Compile Include="ShiftByStatusViewModel.cs" />

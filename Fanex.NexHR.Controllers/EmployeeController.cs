@@ -511,7 +511,8 @@ namespace Fanex.NexHR.Controllers
             {
                 SupervisorList = supervisorModel,
                 EmployeeId = employeeId,
-                SupervisorRole = role
+                SupervisorRole = role,
+                ForView = "Employee"
             };
             ViewBag.Groups = _teamService.GetAll();
 
@@ -540,7 +541,8 @@ namespace Fanex.NexHR.Controllers
             {
                 ShiftManagerList = shiftManagerModel,
                 EmployeeId = employeeId,
-                SupervisorRole = role
+                SupervisorRole = role,
+                ForView = "Employee"
             };
 
             ViewBag.Groups = _teamService.GetAll();

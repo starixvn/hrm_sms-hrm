@@ -169,6 +169,19 @@
         <Mapping DataField="AssistantLeaderNickName" ObjectProperty="NickName"/>
         <Mapping DataField="AssistantLeaderFullName" ObjectProperty="FullName"/>
       </Setting>
+			<Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="nexhrx" Plain="0"></Setting>
+			<Setting Key="GroupSupervisor_GetByRole" SpName="GroupSupervisor_GetByRole" DbName="nexhrx" Plain="0">
+				<Mapping DataField="HasCheckInOut" ObjectProperty="CheckInOuts"/>
+				<Mapping DataField="HasLateInEarlyOut" ObjectProperty="LateInEarlyOuts"/>
+				<Mapping DataField="HasChangeShift" ObjectProperty="ChangeShifts"/>
+				<Mapping DataField="HasLeave" ObjectProperty="Leaves"/>
+				<Mapping DataField="HasKeepInView" ObjectProperty="KeepInViews"/>
+				<Mapping DataField="HasOvertime" ObjectProperty="Overtimes"/>
+				<Mapping DataField="Code" ObjectProperty="Team"/>
+				<Mapping DataField="EmpId" ObjectProperty="OwnerId"/>
+			</Setting>
+			<Setting Key="GroupSupervisor_Set" SpName="GroupSupervisor_Set" DbName="nexhrx" Plain="0"></Setting>
+			<Setting Key="GroupSupervisor_UpdateForShiftArrange" SpName="GroupSupervisor_UpdateForShiftArrange" DbName="nexhrx" Plain="0"></Setting>
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="nexhrx" Plain="0"></Setting>

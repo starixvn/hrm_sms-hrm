@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Controllers
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -152,8 +153,11 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult TeamSupervisor(int id)
         {
+            var criteria = new GetSupervisorByTeamIdCriteria() { GroupId = id };
+            var model = _teamService.GetSupervisorByTeamId(criteria);
             ViewBag.TeamId = id;
-            return View();
+
+            return View(model);
         }
 
         /// <summary>
@@ -164,22 +168,83 @@ namespace Fanex.NexHR.Controllers
         /// <returns>Action Result.</returns>
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
+            ViewBag.Groups = _teamService.GetAll();
             var criteria = new GetTeamSupervisorCriteria()
             {
-                TeamId = teamId,
-                SupervisorRole = supervisorRole
+                GroupId = teamId,
+                Role = supervisorRole
             };
-
             var supervisorModel = _teamService.GetTeamSupervisor(criteria);
-            var model = new SupervisorViewModel
-            {
-                SupervisorList = supervisorModel,
-                TeamId = teamId,
-                SupervisorRole = supervisorRole
-            };
-            ViewBag.Groups = _teamService.GetAll();
 
-            return View("~/Views/Employee/Supervisor.cshtml", model);
+            if (supervisorRole == (short)RolesEnum.ShiftManager)
+            {
+                var model = new ShiftManagerViewModel
+                {
+                    ShiftManagerList = supervisorModel,
+                    TeamId = teamId,
+                    SupervisorRole = supervisorRole,
+                    ForView = "Team"
+                };
+
+                return View("~/Views/Employee/ShiftManager.cshtml", model);
+            }
+            else
+            {
+                var model = new SupervisorViewModel
+                {
+                    SupervisorList = supervisorModel,
+                    TeamId = teamId,
+                    SupervisorRole = supervisorRole,
+                    ForView = "Team"
+                };
+                
+                return View("~/Views/Employee/Supervisor.cshtml", model);
+            }
+        }
+
+        /// <summary>
+        /// Method Insert Or Update Team Supervisor.
+        /// </summary>
+        /// <param name="model">Supervisor ViewModel.</param>
+        /// <returns>Action Result.</returns>
+        [HttpPost]
+        public ActionResult Supervisor(SupervisorViewModel model)
+        {
+            var criteria = new InsertOrUpdateTeamSupervisorCriteria
+            {
+                EmpIdChangeShifts = model.RoleChangeShifts,
+                EmpIdCheckInOuts = model.RoleCheckInOuts,
+                EmpIdKeepInViews = model.RoleKeepInViews,
+                EmpIdLateInEarlyOuts = model.RoleLateInEarlyOuts,
+                EmpIdLeaves = model.RoleLeaves,
+                EmpIdOvertimes = model.RoleOvertimes,
+                GroupId = model.TeamId,
+                ModifiedBy = this.CurrentUser.Id,
+                Role = model.SupervisorRole
+            };
+            var result = _teamService.UpdateSupervisor(criteria);
+
+            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Insert Or Update Shift Manger.
+        /// </summary>
+        /// <param name="model">Shift Manager ViewModel.</param>
+        /// <returns>Action Result.</returns>
+        [HttpPost]
+        public ActionResult ShiftManager(ShiftManagerViewModel model)
+        {
+            var criteria = new InsertTeamShiftManagerCriteria
+            {
+                GroupId = model.TeamId,
+                ShiftArrangers = model.RoleShiftArrange,
+                ModifiedBy = this.CurrentUser.Id
+            };
+
+            bool inserted = _teamService.InsertTeamShiftManager(criteria);
+
+            return Json(new { result = inserted }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Fanex.NexHR.Core
         /// </summary>
         /// <param name="value">Command ENUM.</param>
         /// <returns>Command string.</returns>
-        public static string EnumToString(this Commands value)
+        public static string EnumToString(this Enum value)
         {
             var type = value.GetType();
             var fieldInfo = type.GetField(value.ToString());

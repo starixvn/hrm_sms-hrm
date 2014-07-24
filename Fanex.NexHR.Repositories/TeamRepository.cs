@@ -158,10 +158,43 @@ namespace Fanex.NexHR.Repositories
             List<SupervisorModel> supervisors = null;
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                supervisors = db.Query<SupervisorModel>(new { criteria }).ToList();
+                supervisors = db.Query<SupervisorModel>(criteria.GetSpParams()).ToList();
             }
 
             return supervisors;
+        }
+
+        public List<TeamSupervisorModel> GetSupervisorByTeamId(ICriteria criteria)
+        {
+            List<TeamSupervisorModel> supervisor = null;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                supervisor = db.Query<TeamSupervisorModel>(criteria.GetSpParams()).ToList();
+            }
+
+            return supervisor;
+        }
+
+        public bool UpdateSupervisor(ICriteria criteria)
+        {
+            bool updated = false;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                updated = db.ExecuteNonQuery(criteria.GetSpParams()) != 0;
+            }
+
+            return updated;
+        }
+
+        public bool InsertTeamShiftManager(ICriteria criteria)
+        {
+            bool status = false;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                status = (int)db.ExecuteScalar(criteria.GetSpParams()) == 0;
+            }
+
+            return status;
         }
     }
 }

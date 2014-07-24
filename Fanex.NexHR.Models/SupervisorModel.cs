@@ -16,62 +16,6 @@ namespace Fanex.NexHR.Models
     {
         public Employee Supervisor { get; set; }
 
-        public bool HasLeaveRequest
-        {
-            get
-            {
-                return Leaves == 1 ? true : false;
-            }
-        }
-
-        public bool HasChangeShiftRequest
-        {
-            get
-            {
-                return ChangeShifts == 1 ? true : false;
-            }
-        }
-
-        public bool HasLateInEarlyOutRequest
-        {
-            get
-            {
-                return LateInEarlyOuts == 1 ? true : false;
-            }
-        }
-
-        public bool HasCheckInOutRequest
-        {
-            get
-            {
-                return CheckInOuts == 1 ? true : false;
-            }
-        }
-
-        public bool HasOvertimeRequest
-        {
-            get
-            {
-                return Overtimes == 1 ? true : false;
-            }
-        }
-
-        public bool HasKeepInViewRequest
-        {
-            get
-            {
-                return KeepInViews == 1 ? true : false;
-            }
-        }
-
-        public bool HasArrangeShiftRequest
-        {
-            get
-            {
-                return ArrangeShifts == 1 ? true : false;
-            }
-        }
-
         public int OwnerId { get; set; }
 
         public string NickName { get; set; }
@@ -82,19 +26,19 @@ namespace Fanex.NexHR.Models
 
         public byte ActionType { get; set; }
 
-        public int CheckInOuts { get; set; }
+        public bool CheckInOuts { get; set; }
 
-        public int LateInEarlyOuts { get; set; }
+        public bool LateInEarlyOuts { get; set; }
 
-        public int ChangeShifts { get; set; }
+        public bool ChangeShifts { get; set; }
 
-        public int Leaves { get; set; }
+        public bool Leaves { get; set; }
 
-        public int KeepInViews { get; set; }
+        public bool KeepInViews { get; set; }
 
-        public int Overtimes { get; set; }
+        public bool Overtimes { get; set; }
 
-        public int ArrangeShifts { get; set; }
+        public bool ArrangeShifts { get; set; }
 
         public string OrderCode { get; set; }
     }

@@ -16,18 +16,18 @@ namespace Fanex.NexHR.Criteria.Team
     /// </summary>
     public class GetTeamSupervisorCriteria : CriteriaBase
     {
-        public int TeamId { get; set; }
+        public int GroupId { get; set; }
 
-        public int SupervisorRole { get; set; }
+        public int Role { get; set; }
 
         public override bool IsValid()
         {
-            return TeamId > 0;
+            return GroupId > 0;
         }
 
         public override string GetSettingKey()
         {
-            return string.Empty;
+            return "GroupSupervisor_GetByRole";
         }
     }
 }

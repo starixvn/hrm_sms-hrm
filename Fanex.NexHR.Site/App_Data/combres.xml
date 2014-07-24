@@ -514,8 +514,15 @@
     <resourceSet name="teameditjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/team.edit.js" />
-      <!--<resource path="~/scripts/views/team.js" />-->
     </resourceSet>
+
+		<resourceSet name="teamsupervisorcss" type="css">
+			<resource reference="sitecss"/>
+			<resource path="~/styles/team.supervisor.css" />
+		</resourceSet>
+		<resourceSet name="teamsupervisorjs" type="js">
+			<resource reference="sitejs"/>
+		</resourceSet>
     
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs"/>

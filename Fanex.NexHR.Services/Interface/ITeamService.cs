@@ -28,5 +28,11 @@ namespace Fanex.NexHR.Services.Interface
         bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message);
 
         List<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
+
+        List<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria);
+
+        bool UpdateSupervisor(InsertOrUpdateTeamSupervisorCriteria criteria);
+
+        bool InsertTeamShiftManager(InsertTeamShiftManagerCriteria criteria);
     }
 }

@@ -1,94 +1,112 @@
 ﻿@model Fanex.NexHR.ViewModels.ShiftManagerViewModel
 @{
-    ViewBag.Title = "Update Shift Manager";
+	ViewBag.Title = "Update Shift Manager";
 }
 @section css{
-    @Url.CombresLink("employeeshiftmanagercss")
+	@Url.CombresLink("employeeshiftmanagercss")
 }
 @section js{
-    @Url.CombresLink("employeesshiftmanagerjs")
+	@Url.CombresLink("employeesshiftmanagerjs")
 }
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">HR</a> 
-    <span class="step"> <a href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a></span>
-    <span class="step"> <a href="/employee/edit/@Model.EmployeeId">Employee Personal Information</a> </span>
-    <span class="step">Shift Manager</span>
+	@if (Model.ForView == "Employee")
+ {
+		<a class="step" href="javascript:;">HR</a> 
+		<span class="step">
+			<a href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+		</span>
+		<span class="step">
+			<a href="/employee/edit/@Model.EmployeeId">Employee Personal Information</a>
+		</span>
+ }
+ else
+ {
+		<a class="step">HR Space</a>
+		<a href="~/team/index/" class="step">Team Management</a>
+		<a href="~/team/TeamSupervisor/@Model.TeamId" class="step">Team Supervisors</a>
+ }
+	<a class="step">@Model.DisplayTitle</a>
 }
-@*<div class="filter"> 
-    @Html.Label("Role Supervisor")
-    @RazorHelper.SupervisorRolesDropDownList()
-    <input type="button" value="Submit" />
-</div>
-
-<br />
-<br />*@
 <div class="addnew-supervisor">
-    <span class="title">@Html.Label("Employee")</span> <span class="control">
-        @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
-    </span>
-    @Html.Hidden("SupervisorId")
-    @Html.Hidden("SupervisorTeam")
-    @*@Html.DropDownList("SupervisorId", Model.SupervisorList, new { @multiple = "multiple", @class ="chosen-select", @style="width:400px;" })*@
-    <span class="add"><a id="lknAdd" href="javascript:;">+ Add to list</a></span>
+	<span class="title">@Html.Label("Employee")</span> <span class="control">
+		@Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
+	</span>
+	@Html.Hidden("SupervisorId")
+	@Html.Hidden("SupervisorTeam")
+	<span class="add">
+		<a id="lknAdd" href="javascript:;">+ Add to list</a></span>
 </div>
 <div class="addnew-supervisor">
-    <span class="title">@Labels.Team</span> <span class="control">
-        <select id="group" multiple="multiple" class="team-select">
-            @foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
-            { 
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>
-    </span><span class="add"><a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all
-        members to list</a> </span>
+	<span class="title">@Labels.Team</span> <span class="control">
+		<select id="group" multiple="multiple" class="team-select">
+			@foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+   { 
+				<option value="@item.Id">@item.Name</option>
+   }
+		</select>
+	</span><span class="add">
+		<a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
+	</span>
 </div>
 <div>
-    <table id="tblSupervisor" class="datasupervisor">
-        <thead>
-            <tr>
-                <th rowspan="2" class="supervisor">
-                    Priority
-                </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Employee")
-                </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Team")
-                </th>
-                <th rowspan="1">
-                    <a id="removeAll" href="javascript:;">Remove All</a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.ShiftManagerList != null)
-            {
-                foreach (var item in Model.ShiftManagerList)
-                {
-                <tr>
-                    <td>
-                        <a href="javascript:;" class="up">Up |</a> <a href="javascript:;" class="down">Down
-                            |</a> <a href="javascript:;" class="moveTop">Top</a>
-                    </td>
-                    <td class="left" data-id="@item.OwnerId">@item.NickName (@item.FullName)
-                    </td>
-                    <td class="left">@item.Team
-                    </td>
-                    <td>
-                        <a href="javascript:;" class="lnkremove">Remove</a>
-                    </td>
-                </tr>
-                }
-            }
-        </tbody>
-    </table>
+	<table id="tblSupervisor" class="datasupervisor">
+		<thead>
+			<tr>
+				<th rowspan="2" class="supervisor">
+					Priority
+				</th>
+				<th rowspan="1" class="supervisor">
+					@Html.Label("Employee")
+				</th>
+				<th rowspan="1" class="supervisor">
+					@Html.Label("Team")
+				</th>
+				<th rowspan="1">
+					<a id="removeAll" href="javascript:;">Remove All</a>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model != null && Model.ShiftManagerList != null)
+   {
+	   foreach (var item in Model.ShiftManagerList)
+	   {
+				<tr>
+					<td>
+						<a href="javascript:;" class="up">Up |</a>
+						<a href="javascript:;" class="down">Down |</a>
+						<a href="javascript:;" class="moveTop">Top</a>
+					</td>
+					<td class="left" data-id="@item.OwnerId">@item.NickName (@item.FullName)
+					</td>
+					<td class="left">@item.Team
+					</td>
+					<td>
+						<a href="javascript:;" class="lnkremove">Remove</a>
+					</td>
+				</tr>
+	   }
+   }
+		</tbody>
+	</table>
 </div>
 <div>
-    @Html.Hidden("EmployeeId", Model.EmployeeId)
-    @Html.Hidden("SupervisorRole", Model.SupervisorRole)
-    <input id="btnSave" type="button" value="Save" />
-    <a href="/employee/edit/@Model.EmployeeId">
-        <input type="button" value="Back" />
-    </a>
+	@Html.Hidden("EmployeeId", Model.EmployeeId)
+	@Html.Hidden("TeamId", Model.TeamId)
+	@Html.Hidden("SupervisorRole", Model.SupervisorRole)
+	@Html.Hidden("ForView", Model.ForView)
+	<input id="btnSave" type="button" value="Save" />
+	@if (Model.ForView == "Employee")
+ {
+		<a href="/employee/edit/@Model.EmployeeId">
+			<input type="button" value="Back" />
+		</a>
+ }
+ else
+ {
+		<a href="/team/TeamSupervisor/@Model.TeamId">
+			<input type="button" value="Back" />
+		</a>
+ }
 </div>

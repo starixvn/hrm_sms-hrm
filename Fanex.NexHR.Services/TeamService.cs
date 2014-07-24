@@ -73,5 +73,38 @@ namespace Fanex.NexHR.Services
 
             return supervisors;
         }
+
+        public List<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria)
+        {
+            List<TeamSupervisorModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = _teamRepository.GetSupervisorByTeamId(criteria);
+            }
+
+            return supervisors;
+        }
+
+        public bool UpdateSupervisor(InsertOrUpdateTeamSupervisorCriteria criteria)
+        {
+            bool updated = false;
+            if (criteria.IsValid())
+            {
+                updated = _teamRepository.UpdateSupervisor(criteria);
+            }
+
+            return updated;
+        }
+
+        public bool InsertTeamShiftManager(InsertTeamShiftManagerCriteria criteria)
+        {
+            bool inserted = false;
+            if (criteria.IsValid())
+            {
+                inserted = _teamRepository.InsertTeamShiftManager(criteria);
+            }
+
+            return inserted;
+        }
     }
 }

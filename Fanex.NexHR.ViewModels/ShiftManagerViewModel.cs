@@ -6,10 +6,9 @@
 
 namespace Fanex.NexHR.ViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
     /// <summary>
@@ -19,10 +18,27 @@ namespace Fanex.NexHR.ViewModels
     {
         public int EmployeeId { get; set; }
 
+        public int TeamId { get; set; }
+
         public int SupervisorRole { get; set; }
 
         public string RoleShiftArrange { get; set; }
 
+        public string ForView { get; set; }
+
         public IList<SupervisorModel> ShiftManagerList { get; set; }
+
+        public string DisplayTitle
+        {
+            get
+            {
+                if (SupervisorRole > 0)
+                {
+                    return Extensions.EnumToString((SupervisorActionType)SupervisorRole);
+                }
+
+                return string.Empty;
+            }
+        }
     }
 }
