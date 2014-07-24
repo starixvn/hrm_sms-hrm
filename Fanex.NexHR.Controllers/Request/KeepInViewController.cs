@@ -35,8 +35,6 @@ namespace Fanex.NexHR.Controllers.Request
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
             var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
 
             var model = new KeepInViewRequestViewModel
@@ -46,11 +44,11 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = DateTime.Now.Date,
                 By = this.CurrentUser.Id,
-                VerifierList = GetListItem(verifiers),
-                ApproverList = GetListItem(approvers),
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ShiftId = (shift == null) ? 0 : shift.ShiftID
             };
+
+            GetVerifierApproverList(this.CurrentUser.Id, model);
 
             ViewBag.UnavailableDates = unavailableDates;
             return View(model);
@@ -68,12 +66,9 @@ namespace Fanex.NexHR.Controllers.Request
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
 
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
 
-            keepInViewRequestViewModel.VerifierList = GetListItem(verifiers);
-            keepInViewRequestViewModel.ApproverList = GetListItem(approvers);
+            GetVerifierApproverList(this.CurrentUser.Id, keepInViewRequestViewModel);
 
             ViewBag.Requested = _KeepInViewRequestService.Insert(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
@@ -100,9 +95,6 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var employee = _EmployeeService.GetEmployeeById(request.EmpId);
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
-            var approverList = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
-
             var viewModel = new KeepInViewRequestViewModel()
             {
                 Id = request.Id,
@@ -113,8 +105,6 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = request.RequestedDate,
                 By = this.CurrentUser.Id,
-                VerifierList = GetListItem(verifiers),
-                ApproverList = GetListItem(approverList),
                 Shift = request.Shift.Name,
                 ShiftId = request.Shift.Id,
                 ApproverId = request.ApprovedBy.Id,
@@ -124,6 +114,8 @@ namespace Fanex.NexHR.Controllers.Request
                 FromTime = request.FromTime.ToString("HH:mm"),
                 ToTime = request.ToTime.ToString("HH:mm")
             };
+
+            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
 
             ViewBag.UnavailableDates = unavailableDates;
             return View(viewModel);
@@ -141,12 +133,8 @@ namespace Fanex.NexHR.Controllers.Request
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
 
-            var verifiers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Verifier, (int)RequestTypes.KeepInView);
-            var approvers = _EmployeeService.GetListSupervisorName(this.CurrentUser.Id, (int)RolesEnum.Approver, (int)RequestTypes.KeepInView);
+            GetVerifierApproverList(this.CurrentUser.Id, keepInViewRequestViewModel);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
-
-            keepInViewRequestViewModel.VerifierList = GetListItem(verifiers);
-            keepInViewRequestViewModel.ApproverList = GetListItem(approvers);
 
             ViewBag.Updated = _KeepInViewRequestService.Update(ModelState, keepInViewRequestViewModel, this.CurrentUser.IsTopManager);
             ViewBag.Year = keepInViewRequestViewModel.Date.Year;
@@ -197,6 +185,15 @@ namespace Fanex.NexHR.Controllers.Request
         public bool Delete(long id)
         {
             return _RequestService.DeleteWorkingTimeRequest(id);
+        }
+
+        [NonAction]
+        private void GetVerifierApproverList(int id, KeepInViewRequestViewModel viewModel)
+        {
+            var verifierList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Verifier, (byte)RequestTypes.KeepInView);
+            var approverList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Approver, (byte)RequestTypes.KeepInView);
+            viewModel.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            viewModel.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
 
         [NonAction]

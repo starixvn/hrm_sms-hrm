@@ -440,7 +440,7 @@
                         }
                     });
 
-            $.getJSON(_global.root + 'leave/GetVerifiers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+            $.getJSON(_global.root + 'Request/GetVerifiers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
                     function (response) {
                         if (response != null) {
                             var options = "";
@@ -453,7 +453,7 @@
                         }
                     });
 
-            $.getJSON(_global.root + 'leave/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+                $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
                     function (response) {
                         if (response != null) {
                             var options = "";

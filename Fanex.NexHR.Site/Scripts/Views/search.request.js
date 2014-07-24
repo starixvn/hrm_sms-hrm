@@ -40,7 +40,7 @@ $(document).ready(function () {
 });
 
 function eventAfterChangeEmployee() {
-    $.getJSON(_global.root + 'api/employee/GetVerifiers', { employeeId: $("#EmployeeId").val(), requestType: $("#RequestType").val() },
+    $.getJSON(_global.root + 'Request/GetVerifiers', { employeeId: $("#EmployeeId").val(), requestType: $("#RequestType").val() },
     function (response) {
         if (response != null) {
             var options = "";
@@ -53,7 +53,7 @@ function eventAfterChangeEmployee() {
         }
     });
 
-    $.getJSON(_global.root + 'api/employee/GetApprovers', { employeeId: $("#EmployeeId").val(), requestType: $("#RequestType").val() },
+    $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: $("#EmployeeId").val(), requestType: $("#RequestType").val() },
     function (response) {
         if (response != null) {
             var options = "";

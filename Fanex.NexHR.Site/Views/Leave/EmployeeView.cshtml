@@ -19,11 +19,18 @@
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-
-<div style="float:right">
-    @Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong>
+<div class="balance-area">
+    <table class="tblBalance">
+        <tr class="odd1">
+            <td>@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong></td>
+        </tr>
+        <tr class="event1">
+            <td>Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></td>
+        </tr>
+    </table>
+    @*@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong>
     <br />
-    Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong>
+    Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong>*@
 </div>
 
 @using (Html.BeginForm())

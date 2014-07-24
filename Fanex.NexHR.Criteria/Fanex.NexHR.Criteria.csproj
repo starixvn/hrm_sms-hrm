@@ -40,6 +40,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployeeSupervisor\GetSupervisorByRequestTypeCriteria.cs" />
     <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
     <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />

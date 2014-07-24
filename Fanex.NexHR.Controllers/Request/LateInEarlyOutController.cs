@@ -184,8 +184,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, LateInEarlyOutRequestViewModel viewModel)
         {
-            var verifierList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, (int)RequestTypes.LateIn);
-            var approverList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, (int)RequestTypes.LateIn);
+            var verifierList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Verifier, (byte)RequestTypes.LateIn);
+            var approverList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Approver, (byte)RequestTypes.LateIn);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }

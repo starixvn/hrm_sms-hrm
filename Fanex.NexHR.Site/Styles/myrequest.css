@@ -62,6 +62,25 @@ table.data tfoot tr.sum
     font-weight: bold;
 }
 
+.balance-area
+{
+    float:right;
+    text-align: right;
+    padding-right: 3px;
+    }
+    
+.tblBalance tr.odd1
+{
+    border-bottom: 1px solid #cccccc;
+    }
+.tblBalance tr.odd1 td
+{
+    padding-bottom: 4px;
+    }
+.tblBalance tr.event1 td
+{
+    padding-top: 3px;
+    }
 /*
 .errmsg
 {

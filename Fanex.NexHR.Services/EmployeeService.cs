@@ -11,11 +11,13 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
+    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -25,7 +27,7 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// Employee Service.
     /// </summary>
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService : BaseService, IEmployeeService
     {
         private const HashProvider _HashProvider = HashProvider.SHA1;
 
@@ -458,6 +460,18 @@ namespace Fanex.NexHR.Services
         public IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType)
         {
             return this._employeeRepository.GetListSupervisorName(empId, role, requestType);
+        }
+
+        public IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<SupervisorNameModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = GetData<SupervisorNameModel>(criteria).ToList();
+            }
+
+            return supervisors;
         }
 
         public int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy)

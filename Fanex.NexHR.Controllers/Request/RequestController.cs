@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -259,6 +260,33 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             return RedirectToAction("dailyview");
+        }
+
+        public ActionResult GetVerifiers(int employeeId, byte requestType)
+        {
+            IList<SupervisorNameModel> verifierList = this.GetSupervisorByRequestType(employeeId, (byte)RolesEnum.Verifier, requestType);
+
+            return Json(verifierList, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetApprovers(int employeeId, byte requestType)
+        {
+            IList<SupervisorNameModel> approverList = this.GetSupervisorByRequestType(employeeId, (byte)RolesEnum.Approver, requestType);
+
+            return Json(approverList, JsonRequestBehavior.AllowGet);
+        }
+
+        [NonAction]
+        public IList<SupervisorNameModel> GetSupervisorByRequestType(int employeeId, byte role, byte requestType)
+        {
+            var criteria = new GetSupervisorByRequestTypeCriteria
+            {
+                EmpId = this.CurrentUser.Id,
+                Role = role,
+                RequestType = requestType
+            };
+            IList<SupervisorNameModel> supervisors = _EmployeeService.GetSupervisorByRequestType(criteria);
+            return supervisors;
         }
 
         /// <summary>
