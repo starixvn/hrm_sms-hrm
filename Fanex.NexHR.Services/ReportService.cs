@@ -13,13 +13,13 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Criteria.Team;
 
     /// <summary>
     /// Report Service.

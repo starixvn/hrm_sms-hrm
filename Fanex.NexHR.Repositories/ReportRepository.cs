@@ -642,6 +642,11 @@ namespace Fanex.NexHR.Repositories
             return groupingSupervisor;
         }
 
+        /// <summary>
+        /// Method Get All Team Supervisors.
+        /// </summary>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Of Team Supervisor Report Model.</returns>
         public List<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)
         {
             List<TeamSupervisorModel> entities = null;

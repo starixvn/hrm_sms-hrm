@@ -782,6 +782,12 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Method Get Team Supervisors Details.
+        /// </summary>
+        /// <param name="groups">Query according to specific groups.</param>
+        /// <param name="isExcel">Is Export Excel.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult TeamSupervisorDetails(string groups, bool? isExcel)
         {
             var criteria = new GetAllTeamSupervisorCriteria()

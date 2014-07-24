@@ -270,6 +270,11 @@ namespace Fanex.NexHR.Services.ExcelExporting
             return hssfworkbook;
         }
 
+        /// <summary>
+        /// Export Excel Team Supervisors.
+        /// </summary>
+        /// <param name="supervisors">List Of Team Supervisor Report Model.</param>
+        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportTeamSupervisor(List<TeamSupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
@@ -336,6 +341,4 @@ namespace Fanex.NexHR.Services.ExcelExporting
             row.Sheet.AddMergedRegion(cra2);
         }
     }
-
-
 }
