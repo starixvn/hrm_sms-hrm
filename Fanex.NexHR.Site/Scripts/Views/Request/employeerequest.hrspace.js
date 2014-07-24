@@ -1,33 +1,42 @@
 ﻿$(document).ready(function () {
-    // menu
-    $("#TeamId").multiselect();
-    $("#confirmedDialog").hide();
+	// menu
+	$("#TeamId").multiselect();
+	$("#confirmedDialog").hide();
 
-    bindMenu('.hr-actions', 'hrMenu');
-    bindMenu('.hr-actions-reset', 'resetMenu');
+	bindMenu('.hr-actions', 'hrMenu');
+	bindMenu('.hr-actions-reset', 'resetMenu');
 
-    $(".viewhistory").click(function () {
-        var url = $(this).attr("id");
-        $.get(url, function (data) {
-            $('#dialoghistorycontent').html(data);
-            $("#dialoghistorycontent").dialog({
-                modal: true,
-                minHeight: 0,
-                width: 1100,
-                title: 'Request History'
-            });
-        });
-    });
+	$(".viewhistory").click(function () {
+		var url = $(this).attr("id");
+		$.get(url, function (data) {
+			$('#dialoghistorycontent').html(data);
+			$("#dialoghistorycontent").dialog({
+				modal: true,
+				minHeight: 0,
+				width: 1100,
+				title: 'Request History'
+			});
+		});
+	});
 
-    $("form").submit(function (e) {
-        e.preventDefault();
-        var action = $("#ActionRequest").val();
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var requestType = $("input[type='radio'][name='RequestType']:checked").val();
-        var isLocal = $("#IsLocal").val();
-        var isDailyRequest = $("#IsDailyRequest").val();
+	$("form").submit(function (e) {
+		e.preventDefault();
+		var from = new Date($("#FromDate").val());
+		var to = new Date($("#ToDate").val());
+		if (from > to) {
+			alert("From Date must be less than To Date");
+			$("#submit").removeClass("disabled");
+			$("#submit").val("Submit");
+			e.preventDefault();
+		}
+		else {
+			var action = $("#ActionRequest").val();
+			var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+			var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+			var isLocal = $("#IsLocal").val();
+			var isDailyRequest = $("#IsDailyRequest").val();
 
-        var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
+			var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val()
             + "&TeamIds=" + teams + "&Employee=" + $("#Employee").val()
             + "&EmployeeId=" + $("#EmployeeId").val()
             + "&FromDate=" + $("#FromDate").val()
@@ -37,17 +46,18 @@
             + "&IsLocal=" + isLocal
             + "&IsDailyRequest=" + isDailyRequest;
 
-        location.href = url;
-    });
+			location.href = url;
+		}
+	});
 
-    $("#btnExcel").click(function () {
-        var action = $("#ActionRequest").val() + "WorkingTimeRequest";
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var requestType = $("input[type='radio'][name='RequestType']:checked").val();
-        var isLocal = $("#IsLocal").val();
-        var isDailyRequest = $("#IsDailyRequest").val();
+	$("#btnExcel").click(function () {
+		var action = $("#ActionRequest").val() + "WorkingTimeRequest";
+		var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+		var requestType = $("input[type='radio'][name='RequestType']:checked").val();
+		var isLocal = $("#IsLocal").val();
+		var isDailyRequest = $("#IsDailyRequest").val();
 
-        var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
+		var url = _global.root + "export/" + action + "?DateOption=" + $("#Date").val()
             + "&TeamIds=" + teams + "&Employee=" + $("#Employee").val()
             + "&EmployeeId=" + $("#EmployeeId").val()
             + "&FromDate=" + $("#FromDate").val()
@@ -57,8 +67,8 @@
             + "&IsLocal=" + isLocal
             + "&IsDailyRequest=" + isDailyRequest;
 
-        location.href = url;
-    });
+		location.href = url;
+	});
 });
 
 function processRequest(command, eventElement, remark) {
