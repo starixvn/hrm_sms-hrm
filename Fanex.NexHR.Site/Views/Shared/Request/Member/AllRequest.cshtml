@@ -26,6 +26,7 @@
             </th>
             <th>@Labels.History
             </th>
+			<th></th>
         </tr>
     </thead>
     @if (ViewBag.EntityList.Count > 0)
@@ -96,6 +97,12 @@
                         <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
                             @Labels.View </a>
                     </td>
+					<td class="td-warning">
+						@if (request.IsWarning)
+	  {
+						 <span class="icon-warning tooltip" title="@Labels.RequestWarning"/>
+	  }
+					</td>
                 </tr>  
             }
         </tbody>

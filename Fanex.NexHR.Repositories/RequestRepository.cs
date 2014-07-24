@@ -215,6 +215,7 @@ namespace Fanex.NexHR.Repositories
                                 Type = new RequestType { Id = reader.ToShort("RequestType") },
                                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
                                 RequestedDate = reader.ToDateTime("RequestDate"),
+                                IsWarning = reader.ToBool("IsWarning"),
                                 Requester = new Employee
                                 {
                                     Id = reader.To<int>("RequesterID"),

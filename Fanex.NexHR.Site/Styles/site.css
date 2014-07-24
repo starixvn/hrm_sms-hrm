@@ -978,12 +978,23 @@ div.confirm div.inputRemark textarea
 	color: #F7819F;
 }
 
-img.request-warning
+.td-warning
 {
-	content: url(../Images/warning.png);
-	width: 15px;
-	height: 15px;
-	margin: 0;
-	padding: 0;
-	float: right;
+    width: 16px;
+}
+
+.icon-warning
+{
+    background:url(../Images/warning.png) center no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    float:left;
+}
+
+.request-area
+{
+	float: right !important;
 }

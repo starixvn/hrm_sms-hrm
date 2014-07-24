@@ -59,6 +59,8 @@ namespace Fanex.NexHR.Models.Request
 
         public int ProcessedStatus { get; set; }
 
+        public bool IsWarning { get; set; }
+
         // Leave
         public DateTime FromDate { get; set; }
 
