@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Controllers
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Security;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
@@ -102,25 +103,35 @@ namespace Fanex.NexHR.Controllers
         /// <summary>
         /// Action to get real time record.
         /// </summary>
+        /// <param name="fromDate">The From Date.</param>
+        /// <param name="toDate">The To Date.</param>
         /// <returns>Action Result.</returns>
-        [Authorize(Roles = "HR")]
-        public ActionResult TimeRecord()
+        public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
-            var currentDate = DateTime.Now;
+            if (!fromDate.HasValue || !toDate.HasValue)
+            {
+                fromDate = DateTime.Now.Date;
+                toDate = DateTime.Now.Date;
+            }
+
             var teams = _teamService.GetAll();
             var timeRecordViewModel = new TimeRecordViewModel
             {
-                FromDate = currentDate,
-                ToDate = currentDate,
+                FromDate = fromDate.Value,
+                ToDate = toDate.Value,
                 Teams = teams
             };
 
             return View(timeRecordViewModel);
         }
 
-        [Authorize(Roles = "HR")]
         public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
+            if (!Roles.IsUserInRole("HR"))
+            {
+                employeeId = this.CurrentUser.Id;
+            }
+
             IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(employeeId, groupIds, fromDate, toDate, isLocal);
 
             return View(timeRecords);

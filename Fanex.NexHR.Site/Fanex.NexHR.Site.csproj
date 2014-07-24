@@ -338,6 +338,7 @@
     <Content Include="Scripts\Views\report.totalworkinghourweekly.js" />
     <Content Include="Scripts\Views\shift.js" />
     <Content Include="Scripts\Views\reportovertimerequest.js" />
+    <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />

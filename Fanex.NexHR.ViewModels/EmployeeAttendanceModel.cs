@@ -75,6 +75,8 @@ namespace Fanex.NexHR.ViewModels
 
         public int IsOffDay { get; set; }
 
+        public bool IsWarning { get; set; }
+
         public bool IsOvertime { get; set; }
 
         public decimal? OvertimeHours { get; set; }

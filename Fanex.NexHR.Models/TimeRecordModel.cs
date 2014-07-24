@@ -17,6 +17,8 @@ namespace Fanex.NexHR.Models
     /// </summary>
     public class TimeRecordModel
     {
+        public int RecordTimeId { get; set; }
+
         public Employee Employee { get; set; }
 
         public DateTime RecordTime { get; set; }

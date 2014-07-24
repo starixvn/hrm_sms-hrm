@@ -180,7 +180,7 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
-            EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
+            EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, new DateTime(year, 1, 1));
 
             IList<RequestEntity> entityList = _RequestService.GetRequests(
                 RequestViewType.CompanySpace,

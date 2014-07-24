@@ -1,7 +1,6 @@
 ﻿
 $(document).ready(function () {
     var query = "";
-    $('#checkin').attr('checked', true);
 
     $("#EmployeeName").autocomplete({
         source: function (request, response) {

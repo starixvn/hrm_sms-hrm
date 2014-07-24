@@ -198,6 +198,7 @@
             <th>
                 @Labels.Note
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -277,6 +278,11 @@
         </td>
         <td class="left">
             ${Notes}
+        </td>
+        <td class="td-warning">
+            {{if IsWarning == true}}
+                <span class="icon-warning"/>
+            {{/if}}
         </td>
     </tr>
 </script>

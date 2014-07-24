@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Report.Supervisor;
+    using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -92,5 +93,7 @@ namespace Fanex.NexHR.Services.Interface
         List<SupervisorReportGroupModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
         List<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria);
+        
+        CommandResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria);
     }
 }

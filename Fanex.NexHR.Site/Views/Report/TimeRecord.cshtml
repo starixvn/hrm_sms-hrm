@@ -16,62 +16,85 @@
 </div>
 
 <div class="container_24 bunhat">
-    <div class="grid_2">
-        @Html.LabelFor(model => model.FromDate)
-    </div>
-    <div class="grid_6">
-        @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
-    </div>
-    <div class="grid_2">
-        @Html.LabelFor(model => model.ToDate)
-    </div>
-    <div class="grid_4">
-        @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="grid_2">
-        @Html.LabelFor(model => model.TeamIds, Labels.Team)
-    </div>
-    <div class="grid_6">
-        @Html.DropDownListFor(model => model.TeamIds, new SelectList(Model.Teams, "Id", "Code"), new { @multiple = "multiple" })
-    </div>
-    <div class="grid_2">
-        @Html.LabelFor(model => model.Employee)
-    </div>
-    <div class="grid_4">
-        @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-        @Html.HiddenFor(model => model.EmployeeId)
-    </div>
-
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="grid_2 gridlabel">
-            Category
+    @if (Roles.IsUserInRole("HR"))
+    {
+        <div class="grid_2">
+            @Html.LabelFor(model => model.FromDate)
         </div>
-        <div class="grid_3">
-            @{
-                var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-            }
-            @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
+        <div class="grid_6">
+            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
         </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.ToDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.TeamIds, Labels.Team)
+        </div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.TeamIds, new SelectList(Model.Teams, "Id", "Code"), new { @multiple = "multiple" })
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="grid_4">
+            @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+            @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+        
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+                @{
+        var category = new List<SelectListItem>
+                        {
+                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                            new SelectListItem() {Text = "Expat", Value = "0"}, 
+                            new SelectListItem() {Text = "Local", Value = "1"},
+                        };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
+            </div>
 
-    <div class="grid_12">
-        <input id="btnSubmit" type="button" value="@Labels.Submit"/>
-    </div>
+        <div class="grid_12">
+            <input id="btnSubmit" type="button" value="@Labels.Submit"/>
+        </div>
+    }
+    else
+    { 
+        <div class="grid_2">
+            @Html.LabelFor(model => model.FromDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.ToDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="grid_2">
+            <input id="btnSubmit" type="button" value="@Labels.Submit"/>
+        </div>
+    }
+
+    
 </div>
 <div class="clear">
 </div>
@@ -79,3 +102,11 @@
 </div>
 <div id="TimeRecordContent"></div>
 
+<ul id="outMenu" class="hide">
+    <li class="out"><a command="out" href="javascript:;">@Labels.Out</a>
+    </li>
+</ul>
+<ul id="inMenu" class="hide">
+    <li class="in"><a command="in" href="javascript:;">@Labels.In</a>
+    </li>
+</ul>

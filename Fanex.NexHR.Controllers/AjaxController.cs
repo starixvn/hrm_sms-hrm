@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -109,6 +110,20 @@ namespace Fanex.NexHR.Controllers
             string errorMessage;
             var result = _requestService.ProcessOvertime(command, requestIds, this.CurrentUser.Id, out errorMessage);
             return result ? Json(true) : Json(errorMessage);
+        }
+
+        [Authorize(Roles = "HR")]
+        [HttpPost]
+        public JsonResult ProcessInOut(TimeRecordUpdateTypeCriteria model)
+        {
+            if (model != null)
+            {
+                model.ModifiedBy = this.CurrentUser.Id;
+                model.ModifiedDate = DateTime.Now;
+            }
+
+            CommandResult commandResult = _reportService.ProcessInOut(model);
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize(Roles = "Verifier,Approver,HR")]

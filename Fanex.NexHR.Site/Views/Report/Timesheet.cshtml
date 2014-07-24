@@ -97,6 +97,7 @@
             <th>
                 @Labels.Note
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -107,9 +108,17 @@
         <td>${index()}</td>
 
 		{{if IsWeekend == true}}
-            <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
+            <td>
+                <a class="weekend" href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+                    ${jsonToDetailsDate(AttendanceDate)}
+                </a>
+            </td>
         {{else}}
-			<td>${jsonToDetailsDate(AttendanceDate)}</td>
+            <td>
+                <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+                    ${jsonToDetailsDate(AttendanceDate)}
+                </a>
+            </td>
         {{/if}}
 
         <td title="${FullName}" class="tooltip">
@@ -170,8 +179,13 @@
                 <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
             {{/if}}
         </td>
-        <td>
+        <td class="left">
             ${Notes}
+        </td>
+        <td class="td-warning">
+            {{if IsWarning == true}}
+                <span class="icon-warning"/>
+            {{/if}}
         </td>
     </tr>
 </script>

@@ -46,8 +46,29 @@
                     <td>
                         @item.RecordTime.ToDetailFormatedDate()
                     </td>
-                    <td>
+                    @*<td>
                         @item.GetInOutName()
+                    </td>*@
+                    <td>
+                        @if (Roles.IsUserInRole("HR"))
+                        {
+                            if (item.InOutType == 0)
+                            {
+                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
+                                @item.GetInOutName()
+                            </a>
+                            }
+                            else
+                            {
+                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
+                                @item.GetInOutName()
+                            </a>
+                            }
+                        }
+                        else
+                        {
+                            @item.GetInOutName()
+                        }
                     </td>
                 </tr>
                 
@@ -59,3 +80,5 @@
         }
     </tbody>
 </table>
+
+@Url.CombresLink("timerecorddetailjs")

@@ -11,7 +11,9 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Report.Supervisor;
+    using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -24,7 +26,7 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// Report Service.
     /// </summary>
-    public class ReportService : IReportService
+    public class ReportService : BaseService, IReportService
     {
         private readonly IReportRepository _reportRepository;
 
@@ -302,6 +304,18 @@ namespace Fanex.NexHR.Services
             }
 
             return supervisors;
+        }
+        
+        public CommandResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var commandResult = new CommandResult();
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Update(criteria);
+            }
+
+            return commandResult;
         }
     }
 }

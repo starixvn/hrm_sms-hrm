@@ -92,10 +92,8 @@
                             && request.TotalWorkHours >= request.WorkingHoursContract)))
                         {
                             var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.TotalWorkHours + " / " + request.TotalShiftHours;
-                            <td>
-                                <a class="warning-icon tooltip" href="javascript:;" title="@tooltip">
-                                    <img src="../../Images/warning.png" width="16px;" height="16px;"/>
-                                </a>
+                            <td class="td-warning tooltip" title="@tooltip">
+                                <span class="icon-warning"></span>
                             </td>
                         }
                         else

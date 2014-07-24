@@ -7,8 +7,8 @@
         employeeId: null,
         employee: null,
         btnSubmit: null,
-
         init: function () {
+            $('#checkin').attr('checked', true);
             TimeRecord.teamIds = $("#TeamIds");
             TimeRecord.timeRecordContent = $("#TimeRecordContent");
             TimeRecord.fromDate = $("#FromDate");
@@ -55,7 +55,7 @@
                         });
             }
         }
-    };
+    }
 } (jQuery);
 
 $(document).ready(function () {

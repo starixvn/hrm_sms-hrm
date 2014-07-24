@@ -16,7 +16,7 @@
 
 $.extend({
 	getOrCreateDialog: function(id) {
-		$box = $('#' + id);
+		var $box = $('#' + id);
 		if (!$box.length) {
 			$box = $('<div id="' + id + '"><p></p></div>').hide().appendTo('body');
 		}
@@ -294,6 +294,12 @@ function jsonToShortDate(jsonDate) {
 function jsonToDetailsDate(jsonDate) {
 	var date = Date.parse(jsonDate);
 	return date.format("ddd, dd mmm, yyyy");
+}
+
+function addDays(jsonDate, days) {
+	var date = Date.parse(jsonDate);
+    date.setDate(date.getDate() + days);
+	return date.format("dd mmm, yyyy");
 }
 
 function jsonTojsDate(jsonDate) {

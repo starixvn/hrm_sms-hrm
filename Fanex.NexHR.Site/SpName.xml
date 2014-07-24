@@ -38,11 +38,12 @@
     <Setting Key="WorkingTimeRequest_Insert_KeepInViewRequest" SpName="WorkingTimeRequest_Insert_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ResetRequest_byMember" SpName="WorkingTimeRequest_ResetRequest_byMember" DbName="nexhrx" Plain="0"></Setting>
-    
+
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id"/>
       <Mapping DataField="GroupCode" ObjectProperty="Code"/>
     </Setting>
+    <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeDashBoard" SpName="Report_EmployeeDashBoard" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_HRLeaderDashBoard" SpName="Report_HRLeaderDashBoard" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="nexhrx" Plain="0"></Setting>
