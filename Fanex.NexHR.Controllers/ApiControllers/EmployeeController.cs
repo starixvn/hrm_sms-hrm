@@ -118,24 +118,60 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
         public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)
         {
-            return _employeeService.GetEmployeeSupervisor(empId, role);
+            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            {
+                EmpId = empId,
+                Role = role
+            };
+            IList<SupervisorModel> supervisors = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
+
+            return supervisors;
         }
 
+        /// <summary>
+        /// Get Verifiers.
+        /// </summary>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="requestType">Request Type.</param>
+        /// <returns>List Supervisor Name Model.</returns>
         public IList<SupervisorNameModel> GetVerifiers(int employeeId, int requestType)
         {
-            var verifierList = _employeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Verifier, requestType);
+            var getListSupervisor = new GetListSupervisorNameCriteria()
+            {
+                EmpId = employeeId,
+                Role = (int)RolesEnum.Verifier,
+                RequestType = requestType,
+            };
+            IList<SupervisorNameModel> verifierList = _employeeService.GetListSupervisorName(getListSupervisor);
+
             return verifierList;
         }
 
+        /// <summary>
+        /// Method Get Approvers.
+        /// </summary>
+        /// <param name="employeeId">Employee id.</param>
+        /// <param name="requestType">Request Type.</param>
+        /// <returns>List of supervisor Name Model.</returns>
         public IList<SupervisorNameModel> GetApprovers(int employeeId, int requestType)
         {
-            var approverList = _employeeService.GetListSupervisorName(employeeId, (int)RolesEnum.Approver, requestType);
+            var getListSupervisor = new GetListSupervisorNameCriteria()
+            {
+                EmpId = employeeId,
+                Role = (int)RolesEnum.Approver,
+                RequestType = requestType,
+            };
+            IList<SupervisorNameModel> approverList = _employeeService.GetListSupervisorName(getListSupervisor);
+
             return approverList;
         }
 
         public Employee GetEmployee(int id)
         {
-            return _employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+
+            return employee;
         }
 
         public string GetNewEmployeeCode()

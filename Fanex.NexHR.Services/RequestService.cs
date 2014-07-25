@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Services
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -569,8 +570,10 @@ namespace Fanex.NexHR.Services
             string templateEmailPathForRequester,
             string templateEmailPathForRelated)
         {
-            var employee = this._employeeRepository.GetEmployeeById(request.RequesterId);
-            var processUser = this._employeeRepository.GetEmployeeById(processBy);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.RequesterId };
+            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { Empid = processBy };
+            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var processUser = this._employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 

@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
@@ -68,7 +69,8 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var id = this.CurrentUser.Id;
             var listUnavailDates = _EmployeeService.GetUnavailableDates(id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
-            var employee = _EmployeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = employee.NickName,
@@ -149,7 +151,8 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var type = short.Parse(request.Type.Id.ToString());
-            var employee = _EmployeeService.GetEmployeeById(request.EmpId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
 
             var viewModel = new CheckInOutRequestViewModel()
@@ -238,7 +241,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="model">CheckInOutRequest ViewModel.</param>
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
-            var employee = _EmployeeService.GetEmployeeById(model.EmployeeId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

@@ -9,13 +9,11 @@
 
 namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -54,7 +52,8 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Index()
         {
             var id = this.CurrentUser.Id;
-            var model = this._employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var model = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
             ViewBag.JobTitle = model.JobTitleId == null
             ? Resources.Labels.Unknown
@@ -89,7 +88,9 @@ namespace Fanex.NexHR.Controllers
             ViewBag.IsUpdated = _employeeService.UpdatePersonalInformation(ModelState, employeeModel, out errorCode, out message);
 
             var id = this.CurrentUser.Id;
-            var displayModel = this._employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var displayModel = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
             ViewBag.JobTitle = displayModel.JobTitleId == null
             ? Resources.Labels.Unknown

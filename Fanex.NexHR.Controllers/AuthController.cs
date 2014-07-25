@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
     using System.Web.Security;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -53,7 +54,8 @@ namespace Fanex.NexHR.Controllers
                 switch (retCode)
                 {
                     case 0: // OK
-                        UserLoginModel user = _employeeService.GetUserLoginByCode(model.UserName);
+                        var criteria = new GetUserLoginByCodeCriteria() { Code = model.UserName };
+                        UserLoginModel user = _employeeService.GetUserLoginByCode(criteria);
                         user.IsShowLeftNavigation = true;
                         HttpContext.Session["CurrentUser"] = user;
                         FormsAuthentication.SetAuthCookie(model.UserName, false);

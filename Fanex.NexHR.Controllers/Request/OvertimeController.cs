@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -38,11 +39,16 @@ namespace Fanex.NexHR.Controllers.Request
             _lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
+        /// <summary>
+        /// Employee Overtime.
+        /// </summary>
+        /// <returns>Action Result.</returns>
         [HttpGet]
         public ActionResult EmployeeView()
         {
             var id = this.CurrentUser.Id;
-            var employee = _EmployeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var overtimeReportViewModel = new OvertimeReportViewModel()
             {
                 Employee = employee.NickName,
@@ -77,7 +83,8 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult View(DateTime requestDate, int empId)
         {
             IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(empId, Convert.ToDateTime(requestDate).Date);
-            var employee = _EmployeeService.GetEmployeeById(empId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var entity = new OvertimeRequest();
             if (entityList != null)
             {
@@ -110,7 +117,8 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Update(DateTime requestDate, int empId)
         {
             IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(empId, Convert.ToDateTime(requestDate).Date);
-            var employeeInfo = _EmployeeService.GetEmployeeById(empId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
+            var employeeInfo = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var entity = new OvertimeRequest();
             if (entityList != null)
             {
@@ -233,7 +241,8 @@ namespace Fanex.NexHR.Controllers.Request
                 entityList = _OvertimeService.HRGetOvertimeRequest(id, empId, Convert.ToDateTime(requestDate).Date);
             }
 
-            var employee = _EmployeeService.GetEmployeeById(empId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var overtimeViewModel = new MyOverTimeViewModel()
             {
                 OvertimeRequest = entityList,

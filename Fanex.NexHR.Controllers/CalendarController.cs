@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -265,7 +266,13 @@ namespace Fanex.NexHR.Controllers
         /// <returns>Action Result.</returns>
         public ActionResult MemberScheduleInOrder()
         {
-            var shiftManagerModel = _employeeService.GetEmployeeSupervisor(this.CurrentUser.Id, (short)RolesEnum.ShiftManager);
+            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                Role = (int)RolesEnum.ShiftManager
+            };
+            IList<SupervisorModel> shiftManagerModel = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
+
             var model = new ShiftManagerViewModel
             {
                 ShiftManagerList = shiftManagerModel,

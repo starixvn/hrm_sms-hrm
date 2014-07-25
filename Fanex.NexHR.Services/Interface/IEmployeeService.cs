@@ -21,17 +21,17 @@ namespace Fanex.NexHR.Services.Interface
     {
         string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria);
 
-        IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType);
+        IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
-        IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role);
+        IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria);
 
-        UserLoginModel GetUserLoginByDomainUserName(string domainUsername = null);
+        UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria);
 
-        UserLoginModel GetUserLoginByCode(string code);
+        UserLoginModel GetUserLoginByCode(GetUserLoginByCodeCriteria criteria);
 
-        UserLoginModel GetUserLoginByEmployeeId(int employeeId);
+        UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria);
 
-        Employee GetEmployeeById(int? employeeId = null);
+        Employee GetEmployeeById(GetEmployeeByIdCriteria criteria);
 
         Employee GetEmployeeByCode(string code);
 

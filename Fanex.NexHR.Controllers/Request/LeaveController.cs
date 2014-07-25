@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -31,7 +32,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Result.</returns>
         public ActionResult Create()
         {
-            Employee employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
+            Employee employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             EmployeeAnnualBalance employeeBalance = _LeaveRequestService.GetAnnualLeaveAndKeepInViewBalance(this.CurrentUser.Id, null, DateTime.Now.Date);
             IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll();
             IList<SupervisorNameModel> verifiers = this.GetSupervisorByRequestType(this.CurrentUser.Id, (byte)RolesEnum.Verifier, (byte)RequestTypes.Leave);

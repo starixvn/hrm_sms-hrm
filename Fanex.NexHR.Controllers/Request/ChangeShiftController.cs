@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -66,7 +67,8 @@ namespace Fanex.NexHR.Controllers.Request
             var currentDate = DateTime.Now.Date;
             var id = this.CurrentUser.Id;
             var listUnavailDates = GetUnavailableDateList(id);
-            var employee = _EmployeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var shift = _ShiftService.GetByDate(employee.Id, currentDate);
             var model = new ChangeShiftViewModel
             {
@@ -139,26 +141,23 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(id);
-            var employee = _EmployeeService.GetEmployeeById(changeShift.Requester.Id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = changeShift.Requester.Id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
             if (changeShift != null && shiftDetails != null)
             {
                 var lstShiftDeatails = new List<ShiftDetailsViewModel>();
-                foreach (ShiftDetails item in shiftDetails)
+                shiftDetails.ForEach(x => lstShiftDeatails.Add(new ShiftDetailsViewModel
                 {
-                    var shiftDetail = new ShiftDetailsViewModel
-                    {
-                        Date = item.OnDate.ToString("MM/dd/yyyy"),
-                        FromShift = item.FromShiftID,
-                        ToShift = item.ToShiftID,
-                        ScheduleStatus = item.FromShiftID == -1 ? Labels.Off : item.FromShift,
-                        ChangeToShiftCode = item.ToShift,
-                        Remark = item.Remark,
-                        ShiftId = item.ToShiftID,
-                        HasData = true
-                    };
-                    lstShiftDeatails.Add(shiftDetail);
-                }
+                    Date = x.OnDate.ToString("MM/dd/yyyy"),
+                    FromShift = x.FromShiftID,
+                    ToShift = x.ToShiftID,
+                    ScheduleStatus = x.FromShiftID == -1 ? Labels.Off : x.FromShift,
+                    ChangeToShiftCode = x.ToShift,
+                    Remark = x.Remark,
+                    ShiftId = x.ToShiftID,
+                    HasData = true
+                }));
 
                 model = new ChangeShiftViewModel
                 {

@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -19,8 +18,8 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -92,7 +91,8 @@ namespace Fanex.NexHR.Controllers
         /// <returns>View Details.</returns>
         public ActionResult Detail(int id)
         {
-            var model = _employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.JobTitle = (model.JobTitleId == null)
             ? Resources.Labels.Unknown
             : _lookupDataService.Get(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
@@ -188,7 +188,8 @@ namespace Fanex.NexHR.Controllers
             string approver;
             string shiftManager;
             string actingSupervisor;
-            var model = _employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var countryList = _employeeService.GetAllCountry();
 
             model.ListCountryCode = new List<SelectListItem>();
@@ -241,7 +242,8 @@ namespace Fanex.NexHR.Controllers
 
                 if (result == 0 && this.CurrentUser.Id == model.Id)
                 {
-                    var currentUser = _employeeService.GetUserLoginByEmployeeId(model.Id);
+                    var criteria = new GetEmployeeByIdCriteria() { Empid = model.Id };
+                    var currentUser = _employeeService.GetUserLoginByEmployeeId(criteria);
                     HttpContext.Session["CurrentUser"] = currentUser;
                 }
             }
@@ -275,18 +277,19 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult DefaultSchedule(int id)
         {
-            var employee = _employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+
+            ViewBag.Employee = employee;
+            ViewBag.Shifts = _shiftService.GetSelectList();
             if (employee.IsDefaultSchedule == true)
             {
-                ViewBag.Employee = employee;
-                ViewBag.Shifts = _shiftService.GetSelectList();
-                return View(_employeeService.GetEmployeeShift(id));
+                var model = _employeeService.GetEmployeeShift(id);
+                return View(model);
             }
             else
             {
                 ViewBag.Id = id;
-                ViewBag.Employee = _employeeService.GetEmployeeById(id);
-                ViewBag.Shifts = _shiftService.GetSelectList();
                 return View("MonthSchedule");
             }
         }
@@ -309,7 +312,8 @@ namespace Fanex.NexHR.Controllers
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            ViewBag.Employee = _employeeService.GetEmployeeById(model.EmpID);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpID };
+            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             ViewBag.Shifts = _shiftService.GetSelectList();
 
@@ -320,7 +324,8 @@ namespace Fanex.NexHR.Controllers
         public ActionResult MonthSchedule(int id)
         {
             ViewBag.Id = id;
-            ViewBag.Employee = _employeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.Shifts = _shiftService.GetSelectList();
 
             return View();
@@ -380,13 +385,18 @@ namespace Fanex.NexHR.Controllers
             return Json(null);
         }
 
+        /// <summary>
+        /// Get My Space.
+        /// </summary>
+        /// <returns>Action Result.</returns>
         public ActionResult MySpace()
         {
             var employeeId = this.CurrentUser.Id;
             var model = _employeeService.GetMySpace(employeeId);
             var dateOfEmployeeForgotAndLateEarlyIO = _employeeService.GetDateOfEmployeeForgotAndLateEarlyIO(this.CurrentUser.Id);
             model.DateOfEmployeeForgotAndLateEarlyIO = dateOfEmployeeForgotAndLateEarlyIO;
-            var employee = this._employeeService.GetEmployeeById(employeeId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = employeeId };
+            var employee = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.ResetPassword = employee.PasswordReset;
 
             return View(model);
@@ -506,7 +516,12 @@ namespace Fanex.NexHR.Controllers
         [HttpGet]
         public ActionResult Supervisor(short role, int employeeId)
         {
-            var supervisorModel = _employeeService.GetEmployeeSupervisor(employeeId, Convert.ToInt32(role));
+            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            {
+                EmpId = employeeId,
+                Role = role
+            };
+            var supervisorModel = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
             var model = new SupervisorViewModel
             {
                 SupervisorList = supervisorModel,
@@ -536,7 +551,13 @@ namespace Fanex.NexHR.Controllers
         [HttpGet]
         public ActionResult ShiftManager(short role, int employeeId)
         {
-            var shiftManagerModel = _employeeService.GetEmployeeSupervisor(employeeId, Convert.ToInt32(role));
+            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            {
+                EmpId = employeeId,
+                Role = role
+            };
+            IList<SupervisorModel> shiftManagerModel = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
+
             var model = new ShiftManagerViewModel
             {
                 ShiftManagerList = shiftManagerModel,
@@ -614,15 +635,22 @@ namespace Fanex.NexHR.Controllers
         /// <param name="actingSupervisor">List nickname of Acting Supervisor.</param>
         private void GetListSupervisorName(int id, out string verifier, out string approver, out string shiftManager, out string actingSupervisor)
         {
-            List<string> listVerifierName = new List<string>();
-            List<string> listApproverName = new List<string>();
-            List<string> listShiftName = new List<string>();
-            List<string> listActingName = new List<string>();
-
-            var verifierList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, 5);
-            var approverList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, 5);
-            var shiftMonitorList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ShiftManager, 0);
-            var actingList = _employeeService.GetListSupervisorName(id, (int)RolesEnum.ActingSupervisor, 5);
+            List<string> listVerifierName = null, listApproverName = null, listShiftName = null, listActingName = null;
+            List<SupervisorNameModel> verifierList = null, approverList = null, shiftMonitorList = null, actingList = null;
+            var getListSupervisor = new GetListSupervisorNameCriteria()
+            {
+                EmpId = id,
+                Role = null,
+                RequestType = null,
+            };
+            IList<SupervisorNameModel> supervisors = _employeeService.GetListSupervisorName(getListSupervisor);
+            if (supervisors != null)
+            {
+                verifierList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Verifier).ToList();
+                approverList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Approver).ToList();
+                shiftMonitorList = supervisors.Where(x => x.ActionType == (int)RolesEnum.ShiftManager).ToList();
+                actingList = supervisors.Where(x => x.ActionType == (int)RolesEnum.ActingSupervisor).ToList();
+            }
 
             listVerifierName = verifierList.Count > 3 ? verifierList.Select(x => x.NickName).Take(3).ToList() : verifierList.Select(x => x.NickName).ToList();
             if (verifierList.Count > 3)

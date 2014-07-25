@@ -11,11 +11,11 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -37,7 +37,8 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var id = this.CurrentUser.Id;
             var listUnavailDates = _EmployeeService.GetUnavailableDates(id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
-            var employee = _EmployeeService.GetEmployeeById(id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             //// Count number of Late in/early out request in current month.
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
@@ -103,7 +104,8 @@ namespace Fanex.NexHR.Controllers.Request
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var employee = _EmployeeService.GetEmployeeById(request.EmpId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             int minute = request.TotalMins;
             var type = short.Parse(request.Type.Id.ToString());
 
@@ -196,7 +198,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
         private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)
         {
-            var employee = _EmployeeService.GetEmployeeById(model.EmployeeId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

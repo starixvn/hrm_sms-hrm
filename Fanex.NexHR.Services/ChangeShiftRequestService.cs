@@ -6,17 +6,14 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -152,7 +149,8 @@ namespace Fanex.NexHR.Services
             string mailCC,
             string sendToNickName)
         {
-            var employee = this._employeeRepository.GetEmployeeById(int.Parse(model.Employee));
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = int.Parse(model.Employee) };
+            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             var subject = (isUpdate ? Messages.UpdatedChangeShiftEmailSubject : Messages.ChangeShiftEmailSubject)
                 + " " + employee.DisplayName + " on " + model.FromDate.ToDateMonthYearFormatedDate();
 

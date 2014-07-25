@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
@@ -70,7 +71,8 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
         {
             ViewBag.Groups = _teamService.GetAll();
-            var employee = _employeeService.GetEmployeeById(this.CurrentUser.Id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
+            var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             if (model.FromDate == DateTime.MinValue)
             {

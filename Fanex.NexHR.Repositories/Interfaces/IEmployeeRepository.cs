@@ -18,19 +18,19 @@ namespace Fanex.NexHR.Repositories.Interfaces
     {
         string NewEmployeeCode(ICriteria criteria);
 
-        IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType);
+        IList<SupervisorNameModel> GetListSupervisorName(ICriteria criteria);
 
-        IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role);
+        IList<SupervisorModel> GetEmployeeSupervisor(ICriteria criteria);
 
-        Employee GetEmployeeById(int? employeeId = null);
+        Employee GetEmployeeById(ICriteria criteria);
 
         Employee GetEmployeeByCode(string code);
 
-        UserLoginModel GetUserLoginByDomainUserName(string domainUsername = null);
+        UserLoginModel GetUserLoginByDomainUserName(ICriteria criteria);
 
-        UserLoginModel GetUserLoginByCode(string code);
+        UserLoginModel GetUserLoginByCode(ICriteria criteria);
 
-        UserLoginModel GetUserLoginByEmployeeId(int employeeId);
+        UserLoginModel GetUserLoginByEmployeeId(ICriteria criteria);
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 

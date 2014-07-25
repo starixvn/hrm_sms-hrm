@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -49,7 +50,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         {
             if (model.CurrentUserId > 0)
             {
-                var employee = _employeeService.GetEmployeeById(model.CurrentUserId);
+                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
+                var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
                 if (employee.IsMember())
                 {
                     model.GroupIds = employee.Team.Id.ToString();

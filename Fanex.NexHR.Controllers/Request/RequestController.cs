@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -137,8 +138,9 @@ namespace Fanex.NexHR.Controllers.Request
                 request.IsDailyRequest = true;
                 request.FromDate = request.ToDate;
             }
-            
-            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             request.IsMember = employee.IsMember();
             if (request.IsMember)
             {
@@ -351,8 +353,16 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
         {
-            var verifierList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Verifier, (int)RequestTypes.ChangeShift);
-            var approverList = _EmployeeService.GetListSupervisorName(id, (int)RolesEnum.Approver, (int)RequestTypes.ChangeShift);
+            var getListSupervisor = new GetListSupervisorNameCriteria()
+            {
+                EmpId = id,
+                Role = null,
+                RequestType = (int)RequestTypes.ChangeShift,
+            };
+
+            IList<SupervisorNameModel> supervisors = _EmployeeService.GetListSupervisorName(getListSupervisor);
+            var verifierList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Verifier);
+            var approverList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Approver);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
@@ -412,7 +422,8 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.UnavailDates = listUnavailDates;
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(requestId);
             var shifts = _ShiftService.GetAll(isShowOff: true);
-            var employee = _EmployeeService.GetEmployeeById(shift.Requester.Id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = shift.Requester.Id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.Shift = shifts;
             var model = new ChangeShiftViewModel();
             if (shift != null && shiftDetails != null)

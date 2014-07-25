@@ -20,5 +20,7 @@ namespace Fanex.NexHR.Models
         public string Email { get; set; }
 
         public string MailGroup { get; set; }
+
+        public int ActionType { get; set; }
     }
 }

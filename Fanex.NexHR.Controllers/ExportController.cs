@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -101,7 +102,8 @@ namespace Fanex.NexHR.Controllers
 
             if (model.CurrentUserId > 0)
             {
-                var employee = _employeeService.GetEmployeeById(model.CurrentUserId);
+                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
+                var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
                 if (employee.IsMember())
                 {
                     model.GroupIds = employee.Team.Id.ToString();

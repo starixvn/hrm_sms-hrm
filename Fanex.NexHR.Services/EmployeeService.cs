@@ -63,24 +63,48 @@ namespace Fanex.NexHR.Services
             return this._shiftRepository.GetAll();
         }
 
-        public Employee GetEmployeeById(int? employeeId = null)
+        public Employee GetEmployeeById(GetEmployeeByIdCriteria criteria)
         {
-            return this._employeeRepository.GetEmployeeById(employeeId);
+            Employee employee = null;
+            if (criteria.IsValid())
+            {
+                employee = this._employeeRepository.GetEmployeeById(criteria);
+            }
+
+            return employee;
         }
 
-        public UserLoginModel GetUserLoginByDomainUserName(string domainUsername = null)
+        public UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria)
         {
-            return this._employeeRepository.GetUserLoginByDomainUserName(domainUsername);
+            UserLoginModel user = null;
+            if (criteria.IsValid())
+            {
+                user = this._employeeRepository.GetUserLoginByDomainUserName(criteria);
+            }
+
+            return user;
         }
 
-        public UserLoginModel GetUserLoginByCode(string code)
+        public UserLoginModel GetUserLoginByCode(GetUserLoginByCodeCriteria criteria)
         {
-            return this._employeeRepository.GetUserLoginByCode(code);
+            UserLoginModel userLogin = null;
+            if (criteria.IsValid())
+            {
+                userLogin = this._employeeRepository.GetUserLoginByCode(criteria);
+            }
+
+            return userLogin;
         }
 
-        public UserLoginModel GetUserLoginByEmployeeId(int employeeId)
+        public UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria)
         {
-            return this._employeeRepository.GetUserLoginByEmployeeId(employeeId);
+            UserLoginModel userLogin = null;
+            if (criteria.IsValid())
+            {
+                userLogin = this._employeeRepository.GetUserLoginByEmployeeId(criteria);
+            }
+
+            return userLogin;
         }
 
         public Employee GetEmployeeByCode(string code)
@@ -424,7 +448,8 @@ namespace Fanex.NexHR.Services
         /// <returns>Result of changed password.</returns>
         public int ChangePassword(int empId, string oldPassword, string password)
         {
-            Employee employee = this.GetEmployeeById(empId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
+            Employee employee = this.GetEmployeeById(getEmployeeByIdCriteria);
             int retCode = this.ValidateUser(employee, oldPassword);
             if (retCode == 0)
             {
@@ -456,14 +481,26 @@ namespace Fanex.NexHR.Services
             return this._employeeRepository.UpdateSupervisor(model, modifiedBy);
         }
 
-        public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)
+        public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
         {
-            return this._employeeRepository.GetEmployeeSupervisor(empId, role);
+            IList<SupervisorModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = _employeeRepository.GetEmployeeSupervisor(criteria);
+            }
+
+            return supervisors;
         }
 
-        public IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType)
+        public IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria)
         {
-            return this._employeeRepository.GetListSupervisorName(empId, role, requestType);
+            IList<SupervisorNameModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = this._employeeRepository.GetListSupervisorName(criteria);
+            }
+
+            return supervisors;
         }
 
         public IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria)

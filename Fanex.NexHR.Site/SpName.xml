@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions>
   <Function Name="Employee">
-    <Setting Key="GetEmployee" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">
+    <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id"/>
     </Setting>
     <Setting Key="GetEmployees" SpName="Employee_GetEmployees" DbName="nexhrx" Plain="0">

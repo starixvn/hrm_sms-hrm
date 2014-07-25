@@ -40,11 +40,11 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method get Employee.
         /// </summary>
-        /// <param name="employeeId">The id of an employee.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>Employee entity.</returns>
-        public Employee GetEmployeeById(int? employeeId)
+        public Employee GetEmployeeById(ICriteria criteria)
         {
-            using (var db = new ObjectDb("GetEmployee"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -53,7 +53,7 @@ namespace Fanex.NexHR.Repositories
                             return e;
                         },
                         splitOn: "TeamID",
-                        parameters: new { Empid = employeeId });
+                        parameters: criteria.GetSpParams());
 
                 return entity;
             }
@@ -82,48 +82,51 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Get User By Domain User Name.
+        /// Get User Login By Domain User Name.
         /// </summary>
-        /// <param name="domainUsername">Domain User Name.</param>
-        /// <returns>UserLoginModel Entity.</returns>
-        public UserLoginModel GetUserLoginByDomainUserName(string domainUsername = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>User Login Model.</returns>
+        public UserLoginModel GetUserLoginByDomainUserName(ICriteria criteria)
         {
-            using (var db = new ObjectDb("GetEmployeeByDomainUserName"))
+            UserLoginModel entity = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<UserLoginModel>(new { domainUsername = domainUsername });
-
-                return entity;
+                entity = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
             }
+
+            return entity;
         }
 
         /// <summary>
         /// Method get Employee by code.
         /// </summary>
-        /// <param name="code">Employee's code.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>Employee entity.</returns>
-        public UserLoginModel GetUserLoginByCode(string code)
+        public UserLoginModel GetUserLoginByCode(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Employee_GetEmployeeByCode"))
+            UserLoginModel userLogin = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<UserLoginModel>(new { code = code });
-
-                return entity;
+                userLogin = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
             }
+
+            return userLogin;
         }
 
         /// <summary>
         /// Method get Employee by id.
         /// </summary>
-        /// <param name="employeeId">Employee's id.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>Employee entity.</returns>
-        public UserLoginModel GetUserLoginByEmployeeId(int employeeId)
+        public UserLoginModel GetUserLoginByEmployeeId(ICriteria criteria)
         {
-            using (var db = new ObjectDb("GetEmployee"))
+            UserLoginModel userLogin = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<UserLoginModel>(new { Empid = employeeId });
-
-                return entity;
+                userLogin = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
             }
+
+            return userLogin;
         }
 
         /// <summary>
@@ -830,20 +833,26 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)
+        public IList<SupervisorModel> GetEmployeeSupervisor(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb("EmployeeSupervisor_GetRequestByEmpID"))
+            IList<SupervisorModel> supervisors = null;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<SupervisorModel>(new { EmpId = empId, Role = role }).ToList();
+                supervisors = db.Query<SupervisorModel>(criteria.GetSpParams()).ToList();
             }
+
+            return supervisors;
         }
 
-        public IList<SupervisorNameModel> GetListSupervisorName(int empId, int role, int? requestType)
+        public IList<SupervisorNameModel> GetListSupervisorName(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb("EmployeeSupervisor_GetListSupervisorByEmpID"))
+            IList<SupervisorNameModel> supervisors = null;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<SupervisorNameModel>(new { EmpId = empId, Role = role, RequestType = requestType }).ToList();
+                supervisors = db.Query<SupervisorNameModel>(criteria.GetSpParams()).ToList();
             }
+
+            return supervisors;
         }
 
         public IList<SupervisorNameModel> GetEmployeeCanClaimOvertime()

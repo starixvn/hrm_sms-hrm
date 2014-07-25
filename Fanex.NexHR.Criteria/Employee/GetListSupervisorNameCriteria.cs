@@ -18,9 +18,9 @@ namespace Fanex.NexHR.Criteria.Employee
     {
         public int EmpId { get; set; }
 
-        public byte Role { get; set; }
+        public int? Role { get; set; }
 
-        public byte RequestType { get; set; }
+        public int? RequestType { get; set; }
 
         public override string GetSettingKey()
         {

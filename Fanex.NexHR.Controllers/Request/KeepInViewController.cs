@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
@@ -34,7 +35,8 @@ namespace Fanex.NexHR.Controllers.Request
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
-            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
 
             var model = new KeepInViewRequestViewModel
@@ -94,7 +96,8 @@ namespace Fanex.NexHR.Controllers.Request
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var employee = _EmployeeService.GetEmployeeById(request.EmpId);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
+            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var viewModel = new KeepInViewRequestViewModel()
             {
                 Id = request.Id,
