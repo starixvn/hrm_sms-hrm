@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -46,12 +47,15 @@ namespace Fanex.NexHR.Services
             this._shiftRepository = shifRepository;
         }
 
-        public string NewEmployeeCode
+        public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
         {
-            get
+            string newCode = string.Empty;
+            if (criteria.IsValid())
             {
-                return _employeeRepository.NewEmployeeCode;
+                newCode = _employeeRepository.NewEmployeeCode(criteria);
             }
+
+            return newCode;
         }
 
         public IList<Shift> GetAllShifts()

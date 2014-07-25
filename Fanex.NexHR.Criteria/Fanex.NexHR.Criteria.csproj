@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmployeeSupervisor\GetSupervisorByRequestTypeCriteria.cs" />
+     <Compile Include="Employee\GetListSupervisorNameCriteria.cs" />
+    <Compile Include="Employee\GetNewEmployeeCodeCriteria.cs" />
     <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
     <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />
@@ -53,11 +55,11 @@
     <Compile Include="Report\TimeRecord\TimeRecordUpdateTypeCriteria.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
-    <Compile Include="Team\GetAllTeamSupervisorCriteria.cs" />
-    <Compile Include="Team\InsertOrUpdateTeamSupervisorCriteria.cs" />
-    <Compile Include="Team\GetSupervisorByTeamIdCriteria.cs" />
-    <Compile Include="Team\GetTeamSupervisorCriteria.cs" />
-    <Compile Include="Team\InsertTeamShiftManagerCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

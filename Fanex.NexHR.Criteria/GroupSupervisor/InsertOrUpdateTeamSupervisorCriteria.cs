@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2014.7.23">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Team
+namespace Fanex.NexHR.Criteria.GroupSupervisor
 {
     using Fanex.Data.Repository;
 

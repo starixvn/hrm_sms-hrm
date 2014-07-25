@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetAllTeamSupervisorCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetNewEmployeeCodeCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,17 +7,15 @@
 //   <change who="Bradley.Mac" date="2014.7.24">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Team
+namespace Fanex.NexHR.Criteria.Employee
 {
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get All Team Supervisor Criteria.
+    /// Get New Employee Code Criteria.
     /// </summary>
-    public class GetAllTeamSupervisorCriteria : CriteriaBase
+    public class GetNewEmployeeCodeCriteria : CriteriaBase
     {
-        public string GroupIds { get; set; }
-
         public override bool IsValid()
         {
             return true;
@@ -25,7 +23,7 @@ namespace Fanex.NexHR.Criteria.Team
 
         public override string GetSettingKey()
         {
-            return "GroupSupervisor_Get";
+            return "Employee_GetNewEmployeecode";
         }
     }
 }

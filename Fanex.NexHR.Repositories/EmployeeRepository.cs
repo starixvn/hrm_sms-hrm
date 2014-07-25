@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Dapper;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -25,18 +26,15 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
-        public string NewEmployeeCode 
+        public string NewEmployeeCode(ICriteria criteria)
         {
-            get 
+            var code = string.Empty;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var code = string.Empty;
-                using (ObjectDb db = new ObjectDb("Employee_GetNewEmployeecode"))
-                {
-                    code = db.QueryEntity<string>();
-                }
-
-                return code;
+                code = db.QueryEntity<string>(criteria.GetSpParams());
             }
+
+            return code;
         }
 
         /// <summary>

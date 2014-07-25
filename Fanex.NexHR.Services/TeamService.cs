@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;

@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Controllers
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;

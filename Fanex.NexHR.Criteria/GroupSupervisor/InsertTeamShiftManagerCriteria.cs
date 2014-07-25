@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetSupervisorByTeamIdCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="InsertTeamShiftManagerCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,16 +7,20 @@
 //   <change who="Bradley.Mac" date="2014.7.23">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Team
+namespace Fanex.NexHR.Criteria.GroupSupervisor
 {
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get Supervisor By Team Id.
+    /// Insert Team Shift Manager Criteria.
     /// </summary>
-    public class GetSupervisorByTeamIdCriteria : CriteriaBase
+    public class InsertTeamShiftManagerCriteria : CriteriaBase
     {
         public int GroupId { get; set; }
+
+        public string ShiftArrangers { get; set; }
+
+        public int ModifiedBy { get; set; }
 
         public override bool IsValid()
         {
@@ -25,7 +29,7 @@ namespace Fanex.NexHR.Criteria.Team
 
         public override string GetSettingKey()
         {
-            return "GroupSupervisor_GetById";
+            return "GroupSupervisor_UpdateForShiftArrange";
         }
     }
 }

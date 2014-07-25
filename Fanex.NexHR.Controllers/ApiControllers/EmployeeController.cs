@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Web.Http;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -139,7 +140,10 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
         public string GetNewEmployeeCode()
         {
-            return _employeeService.NewEmployeeCode;
+            var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();
+            string newCode = _employeeService.NewEmployeeCode(getNewEmployeeCodeCriteria);
+
+            return newCode;
         }
     }
 }
