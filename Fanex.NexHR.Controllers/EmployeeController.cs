@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;

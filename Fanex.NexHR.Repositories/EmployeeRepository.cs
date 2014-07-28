@@ -562,43 +562,17 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method adjust annual leave.
+        /// Adjust Annual Leaves.
         /// </summary>
-        /// <param name="empIds">Employees id.</param>
-        /// <param name="description">Reason to adjust.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="deductDays">Deduct days.</param>
-        /// <param name="creditDays">Credit days.</param>
-        /// <param name="createdDate">Created date.</param>
-        /// <param name="createdBy">Created by.</param>
-        /// <param name="errorCode">Error code returned.</param>
-        /// <param name="message">Error message.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <param name="message">Out error message.</param>
         /// <returns>Boolean to check.</returns>
-        public bool AdjustAnnualLeaves(
-            string empIds,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy,
-            out int errorCode,
-            out string message)
+        public bool AdjustAnnualLeaves(ICriteria criteria, out string message)
         {
-            var checkDescription = description != null ? description : string.Empty;
-            using (ObjectDb db = new ObjectDb("AnnualLeave_InsertMultipleTransactions"))
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                db.AddInParameter("@EmpIds", DbType.String, empIds);
-                db.AddInParameter("@Description", DbType.String, checkDescription);
-                db.AddInParameter("@FromDate", DbType.DateTime, fromDate);
-                db.AddInParameter("@DeductDays", DbType.Decimal, deductDays);
-                db.AddInParameter("@CreditDays", DbType.Decimal, creditDays);
-                db.AddInParameter("@CreatedDate", DbType.DateTime, createdDate);
-                db.AddInParameter("@CreatedBy", DbType.Int32, createdBy);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-                db.ExecuteScalar();
-                errorCode = (int)db.GetParameterValue("ErrCode");
+                db.ExecuteScalar(criteria.GetSpParams());
+                int errorCode = (int)db.GetParameterValue("ErrCode");
                 message = db.GetParameterValue("ErrMsg") as string;
 
                 if (errorCode == 0)

@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Models;
@@ -158,15 +159,17 @@ namespace Fanex.NexHR.Controllers
         public JsonResult AdjustAnnualLeaves(string annualLeaveJson)
         {
             var model = JsonConverter.JsonExtensionMethod.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
-            var result = _employeeService.AdjustAnnualLeaves(
-                ModelState,
-                model.EmpIds,
-                model.Description,
-                model.AffectedFrom,
-                model.DeductDays,
-                model.CreditDays,
-                DateTime.Now,
-                this.CurrentUser.Id);
+            var adjustAnnualLeaveCriteria = new AdjustEmployeeAnnualLeaveCriteria
+            {
+                EmpIds = model.EmpIds,
+                Description = model.Description,
+                CreatedBy = this.CurrentUser.Id,
+                CreatedDate = DateTime.Now,
+                CreditDays = model.CreditDays,
+                DeductDays = model.DeductDays,
+                FromDate = model.AffectedFrom
+            };
+            var result = _employeeService.AdjustAnnualLeaves(ModelState, adjustAnnualLeaveCriteria);
             if (!result)
             {
                 foreach (var item in ModelState.Values)

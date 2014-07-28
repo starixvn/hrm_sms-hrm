@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
@@ -148,39 +149,15 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Method adjust Annual leaves.
+        /// Adjust Annual Leave.
         /// </summary>
-        /// <param name="modelState">AnnualLeave Model State.</param>
-        /// <param name="empIds">Employees id.</param>
-        /// <param name="description">Reason to adjust.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="deductDays">Deduct days.</param>
-        /// <param name="creditDays">Credit days.</param>
-        /// <param name="createdDate">Created date.</param>
-        /// <param name="createdBy">Created by.</param>
+        /// <param name="modelState">Model State.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>Boolean to check.</returns>
-        public bool AdjustAnnualLeaves(
-            ModelStateDictionary modelState,
-            string empIds,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy)
+        public bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria)
         {
-            int errorCode;
             string message;
-            var result = this._employeeRepository.AdjustAnnualLeaves(
-                empIds,
-                description,
-                fromDate,
-                deductDays,
-                creditDays,
-                createdDate,
-                createdBy,
-                out errorCode,
-                out message);
+            var result = this._employeeRepository.AdjustAnnualLeaves(criteria, out message);
             if (!result)
             {
                 modelState.AddModelError(string.Empty, message);

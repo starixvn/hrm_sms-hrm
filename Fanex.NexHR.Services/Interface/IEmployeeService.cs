@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
@@ -46,15 +47,7 @@ namespace Fanex.NexHR.Services.Interface
 
         Country GetCountryByCode(GetCountryByCodeCriteria criteria);
 
-        bool AdjustAnnualLeaves(
-            ModelStateDictionary modelState,
-            string empIds,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy);
+        bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria);
 
         bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy);
 

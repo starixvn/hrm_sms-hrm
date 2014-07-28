@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2014.7.25">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Employee
+namespace Fanex.NexHR.Criteria.EmployeeSupervisor
 {
     using System;
     using Fanex.Data.Repository;

@@ -72,16 +72,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
 
-        bool AdjustAnnualLeaves(
-            string empIds,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy,
-            out int errorCode,
-            out string message);
+        bool AdjustAnnualLeaves(ICriteria criteria, out string message);
 
         IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
 
