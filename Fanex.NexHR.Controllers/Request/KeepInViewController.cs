@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
@@ -37,13 +38,18 @@ namespace Fanex.NexHR.Controllers.Request
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                Date = DateTime.Now
+            };
+            var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
 
             var model = new KeepInViewRequestViewModel
             {
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
+                Employee = this.CurrentUser.NickName,
+                DisplayName = this.CurrentUser.DisplayName,
+                EmployeeId = this.CurrentUser.Id,
                 Date = DateTime.Now.Date,
                 By = this.CurrentUser.Id,
                 Shift = (shift == null) ? string.Empty : shift.Name,

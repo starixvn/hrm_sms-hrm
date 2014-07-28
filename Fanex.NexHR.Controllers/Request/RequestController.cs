@@ -156,10 +156,10 @@ namespace Fanex.NexHR.Controllers.Request
         }
 
         /// <summary>
-        /// ActionResult HumanResourceViewHistory.
+        /// ActionResult View History.
         /// </summary>
-        /// <param name="id">CheckInOutRequestHistory id.</param>
-        /// <param name="type">CheckInOutRequestHistory type.</param>
+        /// <param name="id">RequestHistory id.</param>
+        /// <param name="type">Request type.</param>
         /// <returns>View HumanResourceViewHistory.</returns>
         public ActionResult HRViewHistory(long id, int type)
         {
@@ -283,7 +283,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var criteria = new GetSupervisorByRequestTypeCriteria
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = employeeId,
                 Role = role,
                 RequestType = requestType
             };

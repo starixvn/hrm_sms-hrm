@@ -8,11 +8,12 @@
 // </history>
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -21,20 +22,8 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// Shift Service.
     /// </summary>
-    public class ShiftService : IShiftService
+    public class ShiftService : BaseService, IShiftService
     {
-        private readonly IShiftRepository _shiftRepository;
-
-        public ShiftService(IShiftRepository shiftRepository = null)
-        {
-            this._shiftRepository = shiftRepository ?? new ShiftRepository();
-        }
-
-        public ShiftService()
-            : this(null)
-        { 
-        }
-
         /// <summary>
         /// Function to get all shift.
         /// </summary>
@@ -43,8 +32,7 @@ namespace Fanex.NexHR.Services
         /// <returns>Shift List.</returns>
         public IList<Shift> GetAll(int statusId = 1, bool isShowOff = false)
         {
-            var allShifts = this._shiftRepository.GetAll();
-
+            var allShifts = GetData<Shift>(new GetAllShiftCriteria()).ToList();
             if (statusId == (int)ShiftStatus.Active)
             {
                 allShifts = allShifts.Where(t => t.IsDisabled == false).ToList();
@@ -110,39 +98,62 @@ namespace Fanex.NexHR.Services
             return list;
         }
 
-        public Shift GetByDate(int employeeId, DateTime date)
+        public Shift GetByDate(GetEmployeeShiftByDateCriteria criteria)
         {
-            if (employeeId > 0)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
             {
-                return this._shiftRepository.GetByDate(employeeId, date);
+                return GetDataEntity<Shift>(criteria);
             }
 
             return null;
         }
 
-        public Shift GetById(int shiftId)
+        public Shift GetById(GetShiftByIdCriteria criteria)
         {
-            if (shiftId > 0)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
             {
-                return this._shiftRepository.GetById(shiftId);
+                return GetDataEntity<Shift>(criteria);
             }
 
             return null;
         }
 
-        public int Insert(Shift model, out int errorCode, out string message)
+        public CommandResult Insert(InsertShiftCriteria criteria)
         {
-            return this._shiftRepository.Insert(model, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Insert(criteria);
+            }
+
+            return commandResult;
         }
 
-        public bool Update(Shift model, out int errorCode, out string message)
+        public CommandResult Update(UpdateShiftCriteria criteria)
         {
-            return this._shiftRepository.Update(model, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Update(criteria);
+            }
+
+            return commandResult;
         }
 
-        public bool Delete(int shiftId, out int errorCode, out string message)
+        public CommandResult Delete(DeleteShiftCriteria criteria)
         {
-            return this._shiftRepository.Delete(shiftId, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Delete(criteria);
+            }
+
+            return commandResult;
         }
     }
 }

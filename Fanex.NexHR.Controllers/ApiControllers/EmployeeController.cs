@@ -14,7 +14,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Linq;
     using System.Web.Http;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
@@ -142,43 +141,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return supervisors;
         }
 
-        /// <summary>
-        /// Get Verifiers.
-        /// </summary>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="requestType">Request Type.</param>
-        /// <returns>List Supervisor Name Model.</returns>
-        public IList<SupervisorNameModel> GetVerifiers(int employeeId, int requestType)
-        {
-            var getListSupervisor = new GetListSupervisorNameCriteria()
-            {
-                EmpId = employeeId,
-                Role = (int)RolesEnum.Verifier,
-                RequestType = requestType,
-            };
-            IList<SupervisorNameModel> verifierList = _employeeService.GetListSupervisorName(getListSupervisor);
-
-            return verifierList;
-        }
-
-        /// <summary>
-        /// Method Get Approvers.
-        /// </summary>
-        /// <param name="employeeId">Employee id.</param>
-        /// <param name="requestType">Request Type.</param>
-        /// <returns>List of supervisor Name Model.</returns>
-        public IList<SupervisorNameModel> GetApprovers(int employeeId, int requestType)
-        {
-            var getListSupervisor = new GetListSupervisorNameCriteria()
-            {
-                EmpId = employeeId,
-                Role = (int)RolesEnum.Approver,
-                RequestType = requestType,
-            };
-            IList<SupervisorNameModel> approverList = _employeeService.GetListSupervisorName(getListSupervisor);
-
-            return approverList;
-        }
+    
 
         public Employee GetEmployee(int id)
         {

@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -30,7 +31,7 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// RequestService Class.
     /// </summary>
-    public class RequestService : IRequestService
+    public class RequestService : BaseService, IRequestService
     {
         #region constant
         private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
@@ -69,7 +70,6 @@ namespace Fanex.NexHR.Services
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly IShiftRepository _shiftRepository;
         private readonly IRequestRepository _requestRepository;
         private readonly BaseRequestRepository _baseRequestRepository;
         private string _baseUrl;
@@ -79,7 +79,6 @@ namespace Fanex.NexHR.Services
             this._employeeRepository = new EmployeeRepository();
             this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
-            this._shiftRepository = new ShiftRepository();
             this._baseRequestRepository = new BaseRequestRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
@@ -88,13 +87,11 @@ namespace Fanex.NexHR.Services
             IEmployeeRepository employeeRepository,
             IEmailService emailService,
             IRequestRepository requestRepository,
-            IShiftRepository shiftRepository,
             BaseRequestRepository baseRequestRepository)
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
             this._requestRepository = requestRepository;
-            this._shiftRepository = shiftRepository;
             this._baseRequestRepository = baseRequestRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
@@ -225,7 +222,6 @@ namespace Fanex.NexHR.Services
 
                 var sendMailTask = new Task(() => this.SendMailProcess(command, request, processBy, templateEmailPathForRequester, templateEmailPathForRelated));
                 sendMailTask.Start();
-                sendMailTask.LogExceptions();
             }
             else
             {
@@ -1276,7 +1272,12 @@ namespace Fanex.NexHR.Services
             string mailCc,
             string templateEmailPath)
         {
-            var shift = this._shiftRepository.GetByDate(employee.Id, request.FromDate);
+            var criteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = employee.Id,
+                Date = request.FromDate
+            };
+            var shift = this.GetDataEntity<Shift>(criteria);
             var body = Utilities.ReadTextFile(templateEmailPath);
             var bodyContent = new
             {
@@ -1446,7 +1447,6 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-
             var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
             var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
 
@@ -1503,7 +1503,12 @@ namespace Fanex.NexHR.Services
             string mailCc,
             string templateEmailPath)
         {
-            var shift = this._shiftRepository.GetByDate(employee.Id, request.OnDate);
+            var criteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = employee.Id,
+                Date = request.FromDate
+            };
+            var shift = this.GetDataEntity<Shift>(criteria);
             var body = Utilities.ReadTextFile(templateEmailPath);
             var bodyContent = new
             {

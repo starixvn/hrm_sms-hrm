@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// AnnualLeaveBalance Model.

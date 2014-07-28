@@ -36,6 +36,7 @@
     <table id="tblShift" class="data persist-area">
         <thead class ="persist-header">
             <tr>
+                <th>#</th>
                 <th class="left">
                     @Labels.Shift
                 </th>
@@ -54,9 +55,12 @@
         <tbody>
         @if (Model.Shifts != null && Model.Shifts.Any())
         {
+            var i = 0;
             foreach (Shift item in Model.Shifts)
             {
+                i++;
                 <tr>
+                    <td>@i</td>
                     <td class="left">@item.Name
                     </td>
                     <td>@item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)

@@ -115,22 +115,6 @@
                 @Html.ValidationMessageFor(model => model.ApproverId)
             </div>
         </div>
-        
-@*        <div class="formrow">
-            <div class="label">
-                @Fanex.NexHR.Resources.Labels.ChangeFromShift
-            </div>
-            <div class="input">
-                <span id="shiftOfDate">@Model.FromShiftName</span> <span class="to">@Fanex.NexHR.Resources.Labels.To.ToLower()</span>
-                @Html.DropDownListFor(model => model.ToShift, new SelectList(ViewBag.Shifts, "Id", "Name"))
-                <a id="shiftinfo" href="javascript:;" title="@Fanex.NexHR.Resources.Labels.ShiftInfo">
-                    <span class="icon shiftinfo"></span></a>
-                <div class="hide">
-                    @RazorHelper.ShiftInfoTable(ViewBag.Shifts)
-                </div>
-            </div>
-        </div>*@
-        
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Remark)
@@ -146,7 +130,6 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.HiddenFor(model => model.DisplayName)
                 @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.FromShift)

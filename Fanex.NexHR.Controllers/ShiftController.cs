@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -62,31 +63,25 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public ActionResult Create(ShiftViewModel model)
         {
-            var successed = false; 
+            var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                var errorCode = 0;
-                var message = string.Empty;
-                var shift = new Shift 
-                {
+                var criteria = new InsertShiftCriteria() 
+                { 
                     Name = model.Name,
-                    BeginCheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MuniteTimeIn.ToString().PadLeft(2, '0'),
-                    BeginCheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MuniteTimeOut.ToString().PadLeft(2, '0'),
+                    CheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeIn.ToString().PadLeft(2, '0'),
+                    CheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeOut.ToString().PadLeft(2, '0'),
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
                     CreatedBy = this.CurrentUser.Id,
                     CreatedDate = DateTime.Now
                 };
 
-                _shiftService.Insert(shift, out errorCode, out message);
+                result = _shiftService.Insert(criteria);
 
-                if (errorCode != 0)
+                if (result.Code != 0)
                 {
-                    ModelState.AddModelError(string.Empty, message);
-                }
-                else
-                {
-                    successed = true;
+                    ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
             else
@@ -94,7 +89,7 @@ namespace Fanex.NexHR.Controllers
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            ViewBag.Successed = successed;
+            ViewBag.Successed = result.Code == 0;
             return View(model);
         }
 
@@ -106,14 +101,18 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Edit(int shiftId)
         {
-            var shift = _shiftService.GetById(shiftId);
+            var criteria = new GetShiftByIdCriteria()
+            {
+                ShiftId = shiftId
+            };
+            var shift = _shiftService.GetById(criteria);
             var model = new ShiftViewModel 
             {
                 Name = shift.Name,
                 HourTimeIn = GetHour(shift.BeginCheckInTime),
-                MuniteTimeIn = GetMinute(shift.BeginCheckInTime),
+                MinuteTimeIn = GetMinute(shift.BeginCheckInTime),
                 HourTimeOut = GetHour(shift.BeginCheckOutTime),
-                MuniteTimeOut = GetMinute(shift.BeginCheckOutTime),
+                MinuteTimeOut = GetMinute(shift.BeginCheckOutTime),
                 IsDisabled = shift.IsDisabled,
                 ShiftId = shift.ShiftID,
                 IsInAfterDay = shift.IsInAfterDay,
@@ -134,17 +133,14 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Edit(ShiftViewModel model)
         {
-            var successed = false;
+            var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                var errorCode = 0;
-                var message = string.Empty;
-                var shift = new Shift
+                var criteria = new UpdateShiftCriteria()
                 {
-                    ShiftID = model.ShiftId,
                     Name = model.Name,
-                    BeginCheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MuniteTimeIn.ToString().PadLeft(2, '0'),
-                    BeginCheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MuniteTimeOut.ToString().PadLeft(2, '0'),
+                    CheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeIn.ToString().PadLeft(2, '0'),
+                    CheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeOut.ToString().PadLeft(2, '0'),
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
                     ModifiedBy = this.CurrentUser.Id,
@@ -152,15 +148,11 @@ namespace Fanex.NexHR.Controllers
                     IsDisabled = model.IsDisabled
                 };
 
-                var result = _shiftService.Update(shift, out errorCode, out message);
+                result = _shiftService.Update(criteria);
 
-                if (errorCode != 0)
+                if (result.Code != 0)
                 {
-                    ModelState.AddModelError(string.Empty, message);
-                }
-                else
-                {
-                    successed = true;
+                    ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
             else
@@ -168,7 +160,7 @@ namespace Fanex.NexHR.Controllers
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            ViewBag.Successed = successed;
+            ViewBag.Successed = result.Code == 0;
             return View(model);
         }
 
@@ -176,9 +168,12 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public bool Delete(int shiftId)
         {
-            var errorCode = 0;
-            var message = string.Empty;
-            return _shiftService.Delete(shiftId, out errorCode, out message);
+            var criteria = new DeleteShiftCriteria()
+            {
+                ShiftId = shiftId
+            };
+            CommandResult result = _shiftService.Delete(criteria);
+            return result.Code == 0;
         }
 
         /// <summary>

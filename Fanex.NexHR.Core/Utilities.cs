@@ -17,7 +17,6 @@ namespace Fanex.NexHR.Core
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using Fanex.Logging;
     using Fanex.NexHR.Core.Enums;
 
     /// <summary>
@@ -135,17 +134,9 @@ namespace Fanex.NexHR.Core
         /// <returns>Content of file.</returns>
         public static string ReadTextFile(string filePath)
         {
-            try
+            using (var sr = new StreamReader(filePath))
             {
-                using (var sr = new StreamReader(filePath))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error(ex.Message, ex);
-                return string.Empty;
+                return sr.ReadToEnd();
             }
         }
 
@@ -411,24 +402,6 @@ namespace Fanex.NexHR.Core
             }
 
             return input;
-        }
-
-        /// <summary>
-        /// Logs the exceptions.
-        /// </summary>
-        /// <param name="task">The task is processed.</param>
-        public static void LogExceptions(this Task task)
-        {
-            task.ContinueWith(
-                t =>
-                {
-                    var aggException = t.Exception.Flatten();
-                    foreach (var exception in aggException.InnerExceptions)
-                    {
-                        Fanex.Logging.LogService.Error(exception.Message, exception);
-                    }
-                },
-                TaskContinuationOptions.OnlyOnFaulted);
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 {
     using System;
     using System.Web.Http;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -33,7 +34,13 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
         public Shift GetShiftByDate(int employeeId, DateTime date)
         {
-            return _shiftService.GetByDate(employeeId, date);
+            var criteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = employeeId,
+                Date = date
+            };
+
+            return _shiftService.GetByDate(criteria);
         }
     }
 }

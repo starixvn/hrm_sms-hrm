@@ -71,13 +71,17 @@
     <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="GroupSupervisor\GetTeamSupervisorCriteria.cs" />
     <Compile Include="GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
+    <Compile Include="Shift\DeleteShiftCriteria.cs" />
+    <Compile Include="Shift\GetAllShiftCriteria.cs" />
+    <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
+    <Compile Include="Shift\GetShiftByIdCriteria.cs" />
+    <Compile Include="Shift\InsertShiftCriteria.cs" />
+    <Compile Include="Shift\UpdateShiftCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Service References\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -65,32 +65,23 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
-            var id = this.CurrentUser.Id;
-            var listUnavailDates = GetUnavailableDateList(id);
+            var listUnavailDates = GetUnavailableDateList(this.CurrentUser.Id);
+            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var shift = _ShiftService.GetByDate(employee.Id, currentDate);
             var model = new ChangeShiftViewModel
             {
-                Employee = employee.NickName,
+                Employee = this.CurrentUser.NickName,
                 EmployeeId = employee.Id,
                 FromDate = currentDate,
                 ToDate = currentDate,
-                DisplayName = employee.DisplayName,
                 By = this.CurrentUser.Id,
                 ShiftDetails = new List<ShiftDetailsViewModel>(),
             };
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
             var numberOfRequest = _RequestService.GetNumberOfRequest((int)RequestFilter.ChangeShift, this.CurrentUser.Id, fromDate, toDate);
-
-            GetVerifierApproverList(id, model);
-            if (shift != null)
-            {
-                model.FromShift = (int)shift.Id;
-                model.FromShiftName = shift.Name;
-            }
-
+            GetVerifierApproverList(this.CurrentUser.Id, model);
             ViewBag.TotalRequest = numberOfRequest;
             ViewBag.UnavailDates = listUnavailDates;
             

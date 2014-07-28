@@ -34,19 +34,16 @@ namespace Fanex.NexHR.Services
     {
         private const HashProvider _HashProvider = HashProvider.SHA1;
 
-        private readonly IShiftRepository _shiftRepository;
         private IEmployeeRepository _employeeRepository;
 
         public EmployeeService()
         {
             this._employeeRepository = new EmployeeRepository();
-            this._shiftRepository = new ShiftRepository();
         }
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IShiftRepository shifRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository)
         {
             this._employeeRepository = employeeRepository;
-            this._shiftRepository = shifRepository;
         }
 
         public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
@@ -58,11 +55,6 @@ namespace Fanex.NexHR.Services
             }
 
             return newCode;
-        }
-
-        public IList<Shift> GetAllShifts()
-        {
-            return this._shiftRepository.GetAll();
         }
 
         public Employee GetEmployeeById(GetEmployeeByIdCriteria criteria)

@@ -29,7 +29,7 @@ namespace Fanex.NexHR.ViewModels
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, 59, ErrorMessage = "Minutes is less than 59")]
         [Required]
-        public int MuniteTimeIn { get; set; }
+        public int MinuteTimeIn { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, 23, ErrorMessage = "Hour is less than 23")]
@@ -39,7 +39,7 @@ namespace Fanex.NexHR.ViewModels
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, 59, ErrorMessage = "Minutes is less than 59")]
         [Required]
-        public int MuniteTimeOut { get; set; }
+        public int MinuteTimeOut { get; set; }
 
         [Required]
         public bool IsInAfterDay { get; set; }

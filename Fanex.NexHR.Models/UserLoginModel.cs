@@ -11,11 +11,8 @@ namespace Fanex.NexHR.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
 
     /// <summary>
@@ -66,6 +63,16 @@ namespace Fanex.NexHR.Models
                 }
 
                 return result;
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FullName))
+                ? string.Empty
+                : NickName + " (" + FullName + ")";
             }
         }
 

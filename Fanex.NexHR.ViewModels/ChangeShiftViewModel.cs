@@ -18,7 +18,7 @@ namespace Fanex.NexHR.ViewModels
     /// <summary>
     /// ChangeShift ViewModel.
     /// </summary>
-    public class ChangeShiftViewModel : BaseRequestModel, IValidatableObject
+    public class ChangeShiftViewModel : BaseRequestModel
     {
         protected readonly string ShiftRequests = "<Request><OnDate>{0}</OnDate><FromShift>{1}</FromShift><ToShift>{2}</ToShift><Remark>{3}</Remark></Request>";
 
@@ -37,9 +37,9 @@ namespace Fanex.NexHR.ViewModels
         public DateTime ToDate { get; set; }
 
         [Required]
-        public int FromShift { get; set; }
+        public int FromShift1 { get; set; }
 
-        public string FromShiftName { get; set; }
+        public string FromShiftName1 { get; set; }
 
         [Required]
         public int ToShift { get; set; }
@@ -81,41 +81,5 @@ namespace Fanex.NexHR.ViewModels
         }
 
         public string FormattedStatus { get; set; }
-
-        /// <summary>
-        /// Method Validate.
-        /// </summary>
-        /// <param name="validationContext">Validation context.</param>
-        /// <returns>List Validation result.</returns>
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            IList<ValidationResult> result = new List<ValidationResult>();
-
-            if (FromShift == 0)
-            {
-                var validation = new ValidationResult(
-                    "Invalid FromShift value",
-                    new[] { "FromShift" });
-                result.Add(validation);
-            }
-
-            if (ToShift == 0)
-            {
-                var validation = new ValidationResult(
-                    "Invalid ToShift value",
-                    new[] { "ToShift" });
-                result.Add(validation);
-            }
-
-            if (ToShift == FromShift)
-            {
-                var validation = new ValidationResult(
-                    Resources.Messages.ToShiftMustDifferentFromFromShift,
-                    new[] { "ToShift" });
-                result.Add(validation);
-            }
-
-            return result;
-        }
     }
 }

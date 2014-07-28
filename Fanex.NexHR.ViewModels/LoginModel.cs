@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Login Model.

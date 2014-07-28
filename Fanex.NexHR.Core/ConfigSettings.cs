@@ -24,16 +24,10 @@ namespace Fanex.NexHR.Core
         
         static ConfigSettings()
         {
-            try
-            {
-                _emailSetting = ConfigurationManager.AppSettings["Email"].ToString();
-                _isShowCloseBalance = Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
-                _allowEditPersonalInformation = Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"].ToString());
-                _allowAdminLogin = Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"].ToString());
-            }
-            catch 
-            {
-            }
+            _emailSetting = ConfigurationManager.AppSettings["Email"].ToString();
+            _isShowCloseBalance = Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
+            _allowEditPersonalInformation = Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"].ToString());
+            _allowAdminLogin = Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"].ToString());
         }
 
         public static string EmailSetting

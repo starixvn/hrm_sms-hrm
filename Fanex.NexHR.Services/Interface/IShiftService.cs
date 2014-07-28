@@ -9,9 +9,9 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
 
     public interface IShiftService
@@ -22,14 +22,14 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<SelectListItem> GetSelectList();
 
-        Shift GetByDate(int employeeId, DateTime date);
+        Shift GetByDate(GetEmployeeShiftByDateCriteria criteria);
 
-        Shift GetById(int shiftId);
+        Shift GetById(GetShiftByIdCriteria criteria);
 
-        int Insert(Shift model, out int errorCode, out string message);
+        CommandResult Insert(InsertShiftCriteria criteria);
 
-        bool Update(Shift model, out int errorCode, out string message);
+        CommandResult Update(UpdateShiftCriteria criteria);
 
-        bool Delete(int shiftId, out int errorCode, out string message);
+        CommandResult Delete(DeleteShiftCriteria criteria);
     }
 }

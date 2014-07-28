@@ -1,6 +1,5 @@
 ﻿@using System.Web.Mvc.Html5
 @model ShiftViewModel
-
 @{
     ViewBag.Title = @Labels.Shift;
 }
@@ -16,9 +15,7 @@
     <a class="step" href="@Url.Action("index", "shift")">@Labels.ShiftManagement</a>
     <span class="step">@Labels.Create</span>
 }
-
 <h2>@Labels.Create</h2>
-
 @using (Html.BeginForm())
 {
 <div class="bunhat">

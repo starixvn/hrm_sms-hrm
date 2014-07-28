@@ -81,38 +81,41 @@ namespace Fanex.NexHR.Web.Providers
         /// <returns>Return array role.</returns>
         public override string[] GetRolesForUser(string username)
         {
-            var user = GetCurrentUser(username);
             var roles = new List<string>();
-            roles.Add(RolesEnum.Member.EnumToString());
-            if (user.RoleList != null)
+            UserLoginModel user = GetCurrentUser(username);
+            if (user != null)
             {
-                foreach (var item in user.RoleList)
+                roles.Add(RolesEnum.Member.EnumToString());
+                if (user.RoleList != null)
                 {
-                    switch (item)
+                    foreach (var item in user.RoleList)
                     {
-                        case (int)RolesEnum.Verifier:
-                            roles.Add(RolesEnum.Verifier.EnumToString());
-                            break;
-                        case (int)RolesEnum.Approver:
-                            roles.Add(RolesEnum.Approver.EnumToString());
-                            break;
-                        case (int)RolesEnum.ShiftManager:
-                            roles.Add(RolesEnum.ShiftManager.EnumToString());
-                            break;
-                        case (int)RolesEnum.ActingSupervisor:
-                            roles.Add(RolesEnum.ActingSupervisor.EnumToString());
-                            break;
-                        case (int)RolesEnum.HR:
-                            roles.Add(RolesEnum.HR.EnumToString());
-                            break;
-                        case (int)RolesEnum.SystemAdmin:
-                            roles.Add(RolesEnum.Verifier.EnumToString());
-                            roles.Add(RolesEnum.Approver.EnumToString());
-                            roles.Add(RolesEnum.ShiftManager.EnumToString());
-                            roles.Add(RolesEnum.ActingSupervisor.EnumToString());
-                            roles.Add(RolesEnum.HR.EnumToString());
-                            roles.Add(RolesEnum.SystemAdmin.EnumToString());
-                            break;
+                        switch (item)
+                        {
+                            case (int)RolesEnum.Verifier:
+                                roles.Add(RolesEnum.Verifier.EnumToString());
+                                break;
+                            case (int)RolesEnum.Approver:
+                                roles.Add(RolesEnum.Approver.EnumToString());
+                                break;
+                            case (int)RolesEnum.ShiftManager:
+                                roles.Add(RolesEnum.ShiftManager.EnumToString());
+                                break;
+                            case (int)RolesEnum.ActingSupervisor:
+                                roles.Add(RolesEnum.ActingSupervisor.EnumToString());
+                                break;
+                            case (int)RolesEnum.HR:
+                                roles.Add(RolesEnum.HR.EnumToString());
+                                break;
+                            case (int)RolesEnum.SystemAdmin:
+                                roles.Add(RolesEnum.Verifier.EnumToString());
+                                roles.Add(RolesEnum.Approver.EnumToString());
+                                roles.Add(RolesEnum.ShiftManager.EnumToString());
+                                roles.Add(RolesEnum.ActingSupervisor.EnumToString());
+                                roles.Add(RolesEnum.HR.EnumToString());
+                                roles.Add(RolesEnum.SystemAdmin.EnumToString());
+                                break;
+                        }
                     }
                 }
             }
@@ -144,10 +147,6 @@ namespace Fanex.NexHR.Web.Providers
         {
             var criteria = new GetUserLoginByDomainUserNameCriteria() { DomainUsername = username };
             var user = _employeeService.GetUserLoginByDomainUserName(criteria);
-            if (user == null)
-            {
-                throw new System.Exception(username + " not found!!!");
-            }
 
             return user;
         }

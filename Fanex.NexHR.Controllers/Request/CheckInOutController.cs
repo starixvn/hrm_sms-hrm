@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
@@ -84,7 +85,12 @@ namespace Fanex.NexHR.Controllers.Request
                 By = id
             };
             GetVerifierApproverList(id, viewModel);
-            var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                Date = DateTime.Now
+            };
+            var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
             if (shift != null)
             {
                 CheckShiftFromToFormat(viewModel, shift);
@@ -152,8 +158,12 @@ namespace Fanex.NexHR.Controllers.Request
 
             var type = short.Parse(request.Type.Id.ToString());
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var shift = _ShiftService.GetByDate(employee.Id, DateTime.Now);
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                Date = DateTime.Now
+            };
+            var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
 
             var viewModel = new CheckInOutRequestViewModel()
             {
