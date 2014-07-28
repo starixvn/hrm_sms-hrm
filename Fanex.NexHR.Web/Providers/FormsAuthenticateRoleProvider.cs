@@ -11,10 +11,10 @@ namespace Fanex.NexHR.Web.Providers
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Web.Security;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -142,7 +142,8 @@ namespace Fanex.NexHR.Web.Providers
 
         private Employee GetCurrentUser(string code)
         {
-            var user = _employeeService.GetEmployeeByCode(code);
+            var criteria = new GetEmployeeByCodeCriteria() { Code = code };
+            Employee user = _employeeService.GetEmployeeByCode(criteria);
             if (user == null)
             {
                 throw new Exception(code + " not found!!!");

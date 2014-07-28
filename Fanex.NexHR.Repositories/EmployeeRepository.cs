@@ -62,11 +62,11 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method get Employee by code.
         /// </summary>
-        /// <param name="code">Employee's code.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>Employee entity.</returns>
-        public Employee GetEmployeeByCode(string code)
+        public Employee GetEmployeeByCode(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Employee_GetEmployeeByCode"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 Employee entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -75,7 +75,7 @@ namespace Fanex.NexHR.Repositories
                             return e;
                         },
                         splitOn: "TeamID",
-                        parameters: new { code = code });
+                        parameters: criteria.GetSpParams());
 
                 return entity;
             }
@@ -238,16 +238,6 @@ namespace Fanex.NexHR.Repositories
                          @isLocal = localUser 
                      });
                 return entityList.ToList();
-            }
-        }
-
-        public IList<Employee> GetEmployeesForRelatedTeam(int employeeId)
-        {
-            using (var db = new ObjectDb("Employee_GetEmployeeForRelatedTeam"))
-            {
-                var entityList = db.Query<Employee>(new { empId = employeeId }).ToList();
-
-                return entityList;
             }
         }
 
@@ -538,26 +528,25 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId)
+        public IList<Employee> GetMembersByManager(ICriteria criteria)
         {
-            int excludedManager = 0;
-            using (ObjectDb db = new ObjectDb("Employee_GetMembesByManager"))
+            IList<Employee> employees = null;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<Employee>(new { managerId, role, excludedManager, groupId, keyword }).ToList();
-                return entity;
+                employees = db.Query<Employee>(criteria.GetSpParams()).ToList();
             }
+
+            return employees;
         }
 
         /// <summary>
-        /// Get Employee By Role.
+        /// Get Employees by role.
         /// </summary>
-        /// <param name="roleIds">Role identify.</param>
-        /// <param name="query">Query to database.</param>
-        /// <param name="excludeIds">Exclude ids.</param>
-        /// <returns>List Employee.</returns>
-        public IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List of employee.</returns>
+        public IList<Employee> GetEmployeesByRole(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Employee_GetByRole"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var entity = db.Query<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -566,7 +555,7 @@ namespace Fanex.NexHR.Repositories
                             return e;
                         },
                         splitOn: "TeamID",
-                        parameterValues: new { roleIds = roleIds, query = query, excludeIds = excludeIds }).ToList();
+                        parameterValues: criteria.GetSpParams()).ToList();
 
                 return entity;
             }
@@ -793,12 +782,15 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Country> GetAllCountry()
+        public IList<Country> GetAllCountry(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Country_GetAll"))
+            IList<Country> countries = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<Country>().ToList();
+                countries = db.Query<Country>().ToList();
             }
+
+            return countries;
         }
 
         public Country GetCountryByCode(string countryCode)

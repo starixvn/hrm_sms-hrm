@@ -24,7 +24,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         Employee GetEmployeeById(ICriteria criteria);
 
-        Employee GetEmployeeByCode(string code);
+        Employee GetEmployeeByCode(ICriteria criteria);
 
         UserLoginModel GetUserLoginByDomainUserName(ICriteria criteria);
 
@@ -34,11 +34,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        IList<Employee> GetEmployeesForRelatedTeam(int employeeId);
-
         IList<Employee> GetAll();
 
-        IList<Country> GetAllCountry();
+        IList<Country> GetAllCountry(ICriteria criteria);
 
         Country GetCountryByCode(string countryCode);
 
@@ -68,9 +66,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
 
-        IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId);
+        IList<Employee> GetMembersByManager(ICriteria criteria);
 
-        IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
+        IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
 

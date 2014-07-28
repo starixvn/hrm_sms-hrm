@@ -33,17 +33,15 @@ namespace Fanex.NexHR.Services.Interface
 
         Employee GetEmployeeById(GetEmployeeByIdCriteria criteria);
 
-        Employee GetEmployeeByCode(string code);
+        Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria);
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        IList<Employee> GetEmployeesForRelatedTeam(int employeeId);
+        IList<Employee> GetMembersByManager(GetEmployeeByManagerCriteria criteria);
 
-        IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId = null);
+        IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 
-        IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds);
-
-        IList<Country> GetAllCountry();
+        IList<Country> GetAllCountry(GetAllCountryCriteria criteria);
 
         Country GetCountryByCode(string countryCode);
 

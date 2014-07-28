@@ -107,9 +107,15 @@ namespace Fanex.NexHR.Services
             return userLogin;
         }
 
-        public Employee GetEmployeeByCode(string code)
+        public Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria)
         {
-            return this._employeeRepository.GetEmployeeByCode(code);
+            Employee employee = null;
+            if (criteria.IsValid())
+            {
+                employee = this._employeeRepository.GetEmployeeByCode(criteria);
+            }
+
+            return employee;
         }
 
         public IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null)
@@ -118,21 +124,24 @@ namespace Fanex.NexHR.Services
             return employees;
         }
 
-        public IList<Employee> GetEmployeesForRelatedTeam(int employeeId)
+        public IList<Employee> GetMembersByManager(GetEmployeeByManagerCriteria criteria)
         {
-            return this._employeeRepository.GetEmployeesForRelatedTeam(employeeId);
+            IList<Employee> employees = null;
+            if (criteria.IsValid())
+            {
+                employees = this._employeeRepository.GetMembersByManager(criteria);
+            }
+
+            return employees;
         }
 
-        public IList<Employee> GetMembersByManager(int managerId, short role, string keyword, int? groupId = null)
+        public IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria)
         {
-            var members = this._employeeRepository.GetMembersByManager(managerId, role, keyword, groupId);
-
-            return members;
-        }
-
-        public IList<Employee> GetEmployeesByRole(string roleIds, string query, string excludeIds)
-        {
-            var employees = this._employeeRepository.GetEmployeesByRole(roleIds, query, excludeIds);
+            IList<Employee> employees = null;
+            if (criteria.IsValid())
+            {
+                employees = this._employeeRepository.GetEmployeesByRole(criteria);
+            }
 
             return employees;
         }
@@ -433,10 +442,24 @@ namespace Fanex.NexHR.Services
             return this._employeeRepository.GetDisableRequestDate(employeeId, fromDate, toDate);
         }
 
+        /// <summary>
+        /// Method Validate User.
+        /// </summary>
+        /// <param name="code">User code.</param>
+        /// <param name="password">User Password.</param>
+        /// <returns>A code to check user valid.</returns>
         public int ValidateUser(string code, string password)
         {
-            Employee employee = this.GetEmployeeByCode(code);
-            return this.ValidateUser(employee, password);
+            Employee employee = null;
+            int retCode = -1;
+            var criteria = new GetEmployeeByCodeCriteria() { Code = code };
+            if (criteria.IsValid())
+            {
+                employee = this.GetEmployeeByCode(criteria);
+                retCode = this.ValidateUser(employee, password);
+            }
+
+            return retCode;
         }
 
         /// <summary>
@@ -466,9 +489,15 @@ namespace Fanex.NexHR.Services
             return this._employeeRepository.ChangePassword(empId, hashPassword, true);
         }
 
-        public IList<Country> GetAllCountry()
+        public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
         {
-            return _employeeRepository.GetAllCountry();
+            IList<Country> countries = null;
+            if (criteria.IsValid())
+            {
+                countries = _employeeRepository.GetAllCountry(criteria);
+            }
+
+            return countries;
         }
 
         public Country GetCountryByCode(string countryCode)

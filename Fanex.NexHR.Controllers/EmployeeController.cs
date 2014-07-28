@@ -169,7 +169,8 @@ namespace Fanex.NexHR.Controllers
             var create = _employeeService.Insert(ModelState, model);
             if (create)
             {
-                var employee = _employeeService.GetEmployeeByCode(model.Code);
+                var criteria = new GetEmployeeByCodeCriteria() { Code = model.Code };
+                Employee employee = _employeeService.GetEmployeeByCode(criteria);
                 return RedirectToAction("Edit", new { id = employee.Id });
             }
 
@@ -190,7 +191,8 @@ namespace Fanex.NexHR.Controllers
             string actingSupervisor;
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var countryList = _employeeService.GetAllCountry();
+            var getAllCountryCriteria = new GetAllCountryCriteria();
+            var countryList = _employeeService.GetAllCountry(getAllCountryCriteria);
 
             model.ListCountryCode = new List<SelectListItem>();
             foreach (var item in countryList)
@@ -219,11 +221,9 @@ namespace Fanex.NexHR.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Employee model)
         {
-            string verifier;
-            string approver;
-            string shiftManager;
-            string actingSupervisor;
-            var countryList = _employeeService.GetAllCountry();
+            string verifier, approver, shiftManager, actingSupervisor;
+            var getAllCountryCriteria = new GetAllCountryCriteria();
+            var countryList = _employeeService.GetAllCountry(getAllCountryCriteria);
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
             model.ListCountryCode = new List<SelectListItem>();
             CheckRoleUser(model);

@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -126,13 +127,26 @@ namespace Fanex.NexHR.Controllers
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Get Employees By Manager.
+        /// </summary>
+        /// <param name="keyword">Key words.</param>
+        /// <param name="groupId">Filter by groups.</param>
+        /// <returns>JSON Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         public JsonResult GetMembersByManager(string keyword, int? groupId = null)
         {
-            var role = RolesEnum.HR;
-            return Json(
-                _employeeService.GetMembersByManager(this.CurrentUser.Id, (short)role, keyword, groupId).Take(10),
-                JsonRequestBehavior.AllowGet);
+            var criteria = new GetEmployeeByManagerCriteria()
+            {
+                ManagerID = this.CurrentUser.Id,
+                Role = (int)RolesEnum.HR,
+                Keyword = keyword,
+                GroupID = groupId,
+                ExcludedManager = false
+            };
+            IList<Employee> employees = _employeeService.GetMembersByManager(criteria);
+
+            return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

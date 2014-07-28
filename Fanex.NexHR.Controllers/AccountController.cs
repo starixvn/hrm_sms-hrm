@@ -149,7 +149,8 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
-            var countries = _employeeService.GetAllCountry();
+            var getAllCountryCriteria = new GetAllCountryCriteria();
+            var countries = _employeeService.GetAllCountry(getAllCountryCriteria);
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
             ViewBag.Genders = new List<SelectListItem>()

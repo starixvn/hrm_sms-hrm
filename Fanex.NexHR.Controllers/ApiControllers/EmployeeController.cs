@@ -55,9 +55,22 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return entityList.AsQueryable();
         }
 
-        public IQueryable<Employee> GetSupervisors(string roleIds, string query, string excludeIds)
+        /// <summary>
+        /// Get Employee By Role.
+        /// </summary>
+        /// <param name="roleIds">Role of employee to get.</param>
+        /// <param name="query">A string to query data.</param>
+        /// <param name="excludeIds">A string of Excluded id.</param>
+        /// <returns>List of employees.</returns>
+        public IList<Employee> GetSupervisors(string roleIds, string query, string excludeIds)
         {
-            var employees = _employeeService.GetEmployeesByRole(roleIds, query.Trim(), excludeIds).AsQueryable();
+            var criteria = new GetEmployeeByRoleCriteria
+            {
+                ExcludeIds = excludeIds,
+                Query = query.Trim(),
+                RoleIds = roleIds
+            };
+            IList<Employee> employees = _employeeService.GetEmployeesByRole(criteria);
 
             return employees;
         }
