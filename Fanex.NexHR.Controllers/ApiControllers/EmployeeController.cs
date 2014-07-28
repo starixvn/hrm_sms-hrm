@@ -141,8 +141,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return supervisors;
         }
 
-    
-
         public Employee GetEmployee(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };

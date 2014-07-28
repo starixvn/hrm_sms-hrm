@@ -66,8 +66,10 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var currentDate = DateTime.Now.Date;
             var listUnavailDates = GetUnavailableDateList(this.CurrentUser.Id);
-            var employee = _EmployeeService.GetEmployeeById(this.CurrentUser.Id);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() 
+            { 
+                Empid = this.CurrentUser.Id 
+            };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel
             {

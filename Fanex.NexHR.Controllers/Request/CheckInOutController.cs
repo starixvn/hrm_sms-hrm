@@ -68,23 +68,20 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
         {
-            var id = this.CurrentUser.Id;
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
             var viewModel = new CheckInOutRequestViewModel
             {
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
+                Employee = this.CurrentUser.NickName,
+                DisplayName = this.CurrentUser.DisplayName,
+                EmployeeId = this.CurrentUser.Id,
                 ForDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 Type = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestTypes.CheckIn : (short)RequestTypes.CheckOut,
-                By = id
+                By = this.CurrentUser.Id
             };
-            GetVerifierApproverList(id, viewModel);
+            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
@@ -157,7 +154,6 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var type = short.Parse(request.Type.Id.ToString());
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
@@ -168,9 +164,9 @@ namespace Fanex.NexHR.Controllers.Request
             var viewModel = new CheckInOutRequestViewModel()
             {
                 Id = request.Id,
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
+                Employee = this.CurrentUser.NickName,
+                DisplayName = this.CurrentUser.DisplayName,
+                EmployeeId = this.CurrentUser.Id,
                 ForDate = request.RequestedDate.Date,
                 Hour = request.RequestedDate.Hour,
                 Minute = request.RequestedDate.Minute,
