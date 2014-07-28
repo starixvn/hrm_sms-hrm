@@ -1186,10 +1186,14 @@
     <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
     <Content Include="Views\Report\EmployeeSupervisorDetails.cshtml" />
     <None Include="ExcelTemplates\EmployeeSupervisorTemplate.xls" />
+<<<<<<< HEAD
     <Content Include="Views\Team\TeamSupervisor.cshtml" />
     <Content Include="Views\Report\TeamSupervisor.cshtml" />
     <Content Include="Views\Report\TeamSupervisorDetails.cshtml" />
     <None Include="ExcelTemplates\TeamSupervisorTemplate.xls" />
+=======
+    <Content Include="Views\Message\DetailByEmployee.cshtml" />
+>>>>>>> #18864 - Add Is Read property on Message, view detail Message of Employee, reminder unread Message
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -1020,4 +1020,7 @@
   <data name="SendEmail" xml:space="preserve">
     <value>Send email</value>
   </data>
+  <data name="IsRead" xml:space="preserve">
+    <value>Is Read</value>
+  </data>
 </root>

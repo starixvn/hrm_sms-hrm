@@ -60,6 +60,7 @@
     <Compile Include="Message\GetMessageByIdCriteria.cs" />
     <Compile Include="Message\InsertMessageCriteria.cs" />
     <Compile Include="Message\UpdateMessageByCreatorCriteria.cs" />
+    <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Report\TimeRecord\TimeRecordUpdateTypeCriteria.cs" />

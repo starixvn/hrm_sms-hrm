@@ -44,6 +44,7 @@
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
       <resource path="~/Scripts/views/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
+	  <resource path="~/scripts/views/home.js" />
     </resourceSet>
 
     <resourceSet name="homecss" type="css">

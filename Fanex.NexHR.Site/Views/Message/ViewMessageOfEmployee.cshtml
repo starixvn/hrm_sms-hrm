@@ -14,6 +14,9 @@
 	<a class="step">@Labels.Personal</a>
 	<a class="step">@ViewBag.Title</a>
 }
+@{
+	IList<Message> messages = ViewBag.Messages as IList<Message>;
+}
 
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
@@ -47,34 +50,41 @@
 				</th>
 				<th>@Labels.Category
 				</th>
-				<th>@Labels.Content
-				</th>
 				<th>@Labels.FromDate
 				</th>
 				<th>@Labels.ToDate
+				</th>
+				<th>@Labels.IsRead
 				</th>
 				<th>@Labels.Delete
 				</th>
 			</tr>
 		</thead>
-		@if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
+		@if (messages != null && messages.Count > 0)
 		{
 			<tbody>
 				@{int index = 1;}
-				@foreach (Message message in ViewBag.Messages)
+				@foreach (Message message in messages)
 				{
 					<tr id="row_@message.MessageId">
 						<td>@(index++)
 						</td>
-						<td class="left">@message.Subject
+						<td class="left">
+							<a href="" onclick="detailMessage(@message.MessageId, @message.IsRead)">@message.Subject</a>
 						</td>
 						<td>@message.CategoryName
-						</td>
-						<td class="left">@message.Contents
 						</td>
 						<td>@message.FromDate.ToDateMonthYearFormatedDate()
 						</td>
 						<td>@message.ToDate.ToDateMonthYearFormatedDate()
+						</td>
+						<td>
+						@{
+							if (message.IsRead == true)
+							{
+								<img src="~/Styles/Images/tick-icon.png"></img>
+							}
+						}
 						</td>
 						<td class="cmd" title="Delete">
 							<a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
@@ -87,7 +97,7 @@
 		}
 		else
 		{
-				@RazorHelper.DisplayNoInformation(7)
+					@RazorHelper.DisplayNoInformation(7)
 		}
 	</table>
 }

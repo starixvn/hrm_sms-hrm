@@ -205,6 +205,24 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
+        /// Update read status of message.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult UpdateReadStatusOfMessage(UpdateReadStatusMessageCriteria criteria) 
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = _Repository.Update(criteria);
+            }
+
+            return commandResult;
+        }
+
+        /// <summary>
         /// Get message category name.
         /// </summary>
         /// <param name="categoryId">The category Id.</param>

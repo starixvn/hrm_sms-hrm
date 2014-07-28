@@ -37,5 +37,7 @@ namespace Fanex.NexHR.Models
         public string EmployeeIds { get; set; }
 
         public string GroupIds { get; set; }
+
+        public bool IsRead { get; set; }
     }
 }

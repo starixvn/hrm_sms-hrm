@@ -75,7 +75,7 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
-            ViewBag.Employees = _employeeService.GetEmployees(null, null, null, null, null, null);
+            ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
             ViewBag.Groups = _teamService.GetAll();
             return View();
         }
@@ -109,7 +109,7 @@ namespace Fanex.NexHR.Controllers
             };
 
             ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
-            ViewBag.Employees = _employeeService.GetEmployees(null, null, null, null, null, null);
+            ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
             ViewBag.Groups = _teamService.GetAll();
 
             return View();
@@ -196,6 +196,29 @@ namespace Fanex.NexHR.Controllers
 
             Message message = _messageService.GetMessageById(getMessageByIdCriteria);
             return View(message);
+        }
+
+        public ActionResult DetailByEmployee(int id)
+        {
+            var getMessageByIdCriteria = new GetMessageByIdCriteria
+            {
+                MessageId = id
+            };
+
+            Message message = _messageService.GetMessageById(getMessageByIdCriteria);
+            return View(message);
+        }
+
+        public JsonResult UpdateReadStatusOfMessage(int id)
+        {
+            var criteria = new UpdateReadStatusMessageCriteria
+            {
+                MessageId = id,
+                EmployeeId = this.CurrentUser.Id
+            };
+
+            CommandResult commandResult = _messageService.UpdateReadStatusOfMessage(criteria);
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
     }
 }

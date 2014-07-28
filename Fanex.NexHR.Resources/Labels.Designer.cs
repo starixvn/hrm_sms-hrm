@@ -1105,6 +1105,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Read.
+        /// </summary>
+        public static string IsRead {
+            get {
+                return ResourceManager.GetString("IsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jan.
         /// </summary>
         public static string Jan {

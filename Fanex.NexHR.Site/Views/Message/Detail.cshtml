@@ -3,7 +3,7 @@
 
 @{
 	var messageSubject = Model != null ? Model.Subject : Labels.NoData;
-	ViewBag.Title = messageSubject + " - " + Labels.Memo;
+	ViewBag.Title = messageSubject + " - " + Labels.Message;
 }
 @section css{
 	@Url.CombresLink("messagecss")

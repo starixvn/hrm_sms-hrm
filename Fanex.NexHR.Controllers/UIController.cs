@@ -9,12 +9,16 @@
 
 namespace Fanex.NexHR.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
+    using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -23,13 +27,33 @@ namespace Fanex.NexHR.Controllers
     [Authorize]
     public class UIController : BaseController
     {
+        private readonly IMessageService _messageService;
+
         public UIController()
+            : this(null)
         {
         }
 
+        public UIController(IMessageService messageService)
+        {
+            _messageService = messageService ?? new MessageService();
+        }
+
+        /// <summary>
+        /// The Header.
+        /// </summary>
+        /// <returns>The partial view of current user.</returns>
         [ChildActionOnly]
         public ActionResult Header()
         {
+            var criteria = new GetMessageByEmployeeCriteria
+            {
+                EmployeeId = this.CurrentUser.Id,
+                EffectedDate = DateTime.Today,
+                IsDisabled = 0
+            };
+
+            ViewBag.Messages = _messageService.GetMessageByEmployee(criteria);
             return PartialView(this.CurrentUser);
         }
 
