@@ -38,7 +38,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Country> GetAllCountry(ICriteria criteria);
 
-        Country GetCountryByCode(string countryCode);
+        Country GetCountryByCode(ICriteria criteria);
 
         int Insert(CreateEmployeeViewModel model, out int errorCode, out string message);
 

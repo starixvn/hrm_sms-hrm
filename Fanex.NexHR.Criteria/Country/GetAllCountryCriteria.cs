@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2014.7.28">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Employee
+namespace Fanex.NexHR.Criteria.Country
 {
     using Fanex.Data.Repository;
 

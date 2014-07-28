@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
+    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Models;
@@ -500,9 +501,15 @@ namespace Fanex.NexHR.Services
             return countries;
         }
 
-        public Country GetCountryByCode(string countryCode)
+        public Country GetCountryByCode(GetCountryByCodeCriteria criteria)
         {
-            return _employeeRepository.GetCountryByCode(countryCode);
+            Country country = null;
+            if (criteria.IsValid())
+            {
+                country = _employeeRepository.GetCountryByCode(criteria);
+            }
+
+            return country;
         }
 
         public bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy)

@@ -793,12 +793,15 @@ namespace Fanex.NexHR.Repositories
             return countries;
         }
 
-        public Country GetCountryByCode(string countryCode)
+        public Country GetCountryByCode(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Country_GetByCode"))
+            Country country = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<Country>(new { CountryCode = countryCode });
+                country = db.QueryEntity<Country>(criteria.GetSpParams());
             }
+
+            return country;
         }
 
         /// <summary>

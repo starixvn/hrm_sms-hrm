@@ -40,8 +40,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Country\GetCountryByCodeCriteria.cs" />
     <Compile Include="EmployeeSupervisor\GetSupervisorByRequestTypeCriteria.cs" />
-    <Compile Include="Employee\GetAllCountryCriteria.cs" />
+    <Compile Include="Country\GetAllCountryCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByCodeCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByManagerCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByRoleCriteria.cs" />

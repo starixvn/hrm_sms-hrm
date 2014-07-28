@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Controllers
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
@@ -61,7 +62,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Working = _employeeService.GetMySpace(id);
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
             var workingCalendar = _employeeService.GetEmployeeShift(id);
-            var countryName = _employeeService.GetCountryByCode(model.CountryCode);
+            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
+            var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;
 
             this.DisplayDefaultValuesOfDropDownListsForPersonalInformation();
@@ -98,7 +100,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Working = _employeeService.GetMySpace(id);
             ViewBag.DefaultCalendar = displayModel.IsDefaultSchedule;
             var workingCalendar = _employeeService.GetEmployeeShift(id);
-            var countryName = _employeeService.GetCountryByCode(displayModel.CountryCode);
+            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = displayModel.CountryCode };
+            var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;
 
             this.DisplayDefaultValuesOfDropDownListsForPersonalInformation();

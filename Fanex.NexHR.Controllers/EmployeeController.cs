@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -101,7 +102,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Working = _employeeService.GetMySpace(id);
             var workingCalendar = _employeeService.GetEmployeeShift(id);
             var shifts = _shiftService.GetAll();
-            var countryName = _employeeService.GetCountryByCode(model.CountryCode);
+            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
+            var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             if (countryName != null)
             {
                 ViewBag.CountryName = countryName.CountryName;
