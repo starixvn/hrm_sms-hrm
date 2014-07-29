@@ -64,6 +64,7 @@
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="EmailSettingsModel.cs" />
+    <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />
     <Compile Include="Message.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="TeamSupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
-    <Compile Include="EmployeeAnnualBalance.cs" />
     <Compile Include="ExtensionNoModel.cs" />
     <Compile Include="Overtime\OvertimeRequest.cs" />
     <Compile Include="Country.cs" />

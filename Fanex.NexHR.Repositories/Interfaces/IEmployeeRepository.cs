@@ -22,10 +22,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        bool Delete(int id, DateTime resignedDate);
-
-        bool UpdatePersonalInformation(Employee model, out int errorCode, out string message);
-
         EmployeeShift GetEmployeeShift(int id);
 
         bool UpdateEmployeeShift(EmployeeShift model);

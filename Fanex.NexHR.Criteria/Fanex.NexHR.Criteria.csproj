@@ -82,6 +82,7 @@
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />
     <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
+    <Compile Include="Shift\GetEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />

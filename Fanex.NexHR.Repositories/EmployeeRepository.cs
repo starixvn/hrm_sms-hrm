@@ -155,64 +155,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public bool Delete(int id, DateTime resignedDate)
-        {
-            using (var db = new ObjectDb("Employee_Delete"))
-            {
-                db.AddInParameter("@Empid", DbType.Int32, id);
-                db.AddInParameter("@ResignedDate", DbType.DateTime, resignedDate);
-                return db.ExecuteNonQuery() != 0;
-            }
-        }
-
-        /// <summary>
-        /// Method update Employee.
-        /// </summary>
-        /// <param name="model">Employee model.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error Message.</param>
-        /// <returns>
-        /// Value of Error code.
-        /// </returns>
-        public bool UpdatePersonalInformation(Employee model, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("Employee_Information_UpdateByEmpId"))
-            {
-                db.AddInParameter("@EmpId", DbType.Int32, model.Id);
-                db.AddInParameter("@DOB", DbType.DateTime, model.DOB);
-                db.AddInParameter("@PlaceOfBirth", DbType.String, model.PlaceOfBirth);
-                db.AddInParameter("@Ethnic", DbType.String, model.Ethnic);
-                db.AddInParameter("@Native", DbType.String, model.Native);
-                db.AddInParameter("@Religion", DbType.String, model.Religion);
-                db.AddInParameter("@DateOfIdCard", DbType.DateTime, model.DateOfIdCard);
-                db.AddInParameter("@PlaceOfIdCard", DbType.String, model.PlaceOfIdCard);
-                db.AddInParameter("@HomePhone", DbType.String, model.HomePhone);
-                db.AddInParameter("@Qualification", DbType.String, model.Qualification);
-                db.AddInParameter("@Major", DbType.String, model.Major);
-                db.AddInParameter("@Phone", DbType.String, model.Phone);
-                db.AddInParameter("@Gender", DbType.Byte, model.Gender);
-                db.AddInParameter("@Skype", DbType.String, model.Skype);
-                db.AddInParameter("@Yahoo", DbType.String, model.Yahoo);
-                db.AddInParameter("@ChineseName", DbType.String, model.ChineseName);
-                db.AddInParameter("@Marriage", DbType.Byte, model.Marriage);
-                db.AddInParameter("@PermanentAddress", DbType.String, model.Address);
-                db.AddInParameter("@CurrentAddress", DbType.String, model.CurrentAddress);
-                db.AddInParameter("@IdCardNumber", DbType.String, model.CardNo);
-                db.AddInParameter("@PassportNo", DbType.String, model.PassportNo);
-                db.AddInParameter("@PassportExp", DbType.DateTime, model.PassportExp);
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, DateTime.Now);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, model.Modifier.Id);
-                db.AddInParameter("@CountryCode", DbType.String, model.CountryCode);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-                db.ExecuteScalar();
-                errorCode = (int)db.GetParameterValue("ErrCode");
-                message = db.GetParameterValue("ErrMsg") as string;
-
-                return errorCode == 0 ? true : false;
-            }
-        }
-
         public EmployeeShift GetEmployeeShift(int empID)
         {
             using (var db = new ObjectDb("EmployeeShift_Get"))
