@@ -20,7 +20,7 @@ namespace Fanex.NexHR.ViewModels
     /// </summary>
     public class ChangeShiftViewModel : BaseRequestModel
     {
-        protected readonly string ShiftRequests = "<Request><OnDate>{0}</OnDate><FromShift>{1}</FromShift><ToShift>{2}</ToShift><Remark>{3}</Remark></Request>";
+        private readonly string _shiftRequests = "<Request><OnDate>{0}</OnDate><FromShift>{1}</FromShift><ToShift>{2}</ToShift><Remark>{3}</Remark></Request>";
 
         public long RequestId { get; set; }
 
@@ -72,7 +72,7 @@ namespace Fanex.NexHR.ViewModels
                 {
                     foreach (var item in ShiftDetails)
                     {
-                        value.AppendFormat(ShiftRequests, Convert.ToDateTime(item.Date).ToString("MM/dd/yyyy"), item.FromShift, item.ToShift, item.Remark); // 1 -> read
+                        value.AppendFormat(_shiftRequests, Convert.ToDateTime(item.Date).ToString("MM/dd/yyyy"), item.FromShift, item.ToShift, item.Remark); // 1 -> read
                     }
                 }
 

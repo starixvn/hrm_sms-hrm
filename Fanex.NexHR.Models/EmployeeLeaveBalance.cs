@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeAnnualBalance.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="EmployeeLeaveBalance.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Models
     /// <summary>
     /// Employee Annual and Keep in view Balance.
     /// </summary>
-    public class EmployeeAnnualBalance
+    public class EmployeeLeaveBalance
     {
         public int EmployeeId { get; set; }
 

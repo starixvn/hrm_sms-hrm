@@ -14,13 +14,23 @@ namespace Fanex.NexHR.ViewModels
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     /// <summary>
     /// LeaveRequest ViewModel.
     /// </summary>
-    public class LeaveRequestViewModel : BaseRequestModel, IValidatableObject
+    public class LeaveRequestViewModel : IValidatableObject
     {
         public long RequestId { get; set; }
+
+        [Required]
+        public string Employee { get; set; }
+
+        [Required]
+        public int EmployeeId { get; set; }
+
+        [AllowHtml]
+        public string Remark { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -36,8 +46,6 @@ namespace Fanex.NexHR.ViewModels
         public decimal TotalDays { get; set; }
 
         public int LeaveTypeId { get; set; }
-
-        public bool IsPlanned { get; set; }
 
         public string FromTime { get; set; }
 
@@ -67,9 +75,9 @@ namespace Fanex.NexHR.ViewModels
 
         public IList<SelectListItem> ApproverList { get; set; }
 
-        public EmployeeAnnualBalance EmployeeBalance { get; set; }
+        public EmployeeLeaveBalance EmployeeLeaveBalance { get; set; }
 
-        public string FormattedStatus { get; set; }
+        public RequestStatus Status { get; set; }
 
         /// <summary>
         /// Method Validate.

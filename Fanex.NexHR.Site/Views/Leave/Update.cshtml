@@ -149,12 +149,12 @@
         </div>
         <div class="input">
             ※ <span class="infobalance">@Messages.AnnualBalance:</span>
-            <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeBalance.AnnualBalance.ToString("0.#")</span> &nbsp
+            <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeLeaveBalance.AnnualBalance.ToString("0.#")</span> &nbsp
             ※ <span class="infobalance">@Messages.KeepInViewBalance:</span>
-            <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeBalance.KeepInViewBalance.ToString("0.#")</span> &nbsp
+            <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeLeaveBalance.KeepInViewBalance.ToString("0.#")</span> &nbsp
             <br />
             ※ <span class="infobalance">@Messages.CurrentALCanBeUsed:</span>
-            <span class="numberbalance" id="lblCurrentLeaveBalance">@Model.EmployeeBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
+            <span class="numberbalance" id="lblCurrentLeaveBalance">@Model.EmployeeLeaveBalance.CurrentLeaveBalanceDay.ToString("0.#")</span>
         </div>
         <div class="clear">
         </div>
@@ -162,7 +162,6 @@
     <div class="formrow">
         <div id="tbldetail"></div>
     </div>
-    @Html.HiddenFor(model => model.DisplayName)
     @if (!(bool)ViewBag.IsView)
     { 
         <div class="formrow">

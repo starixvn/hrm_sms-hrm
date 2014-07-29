@@ -238,7 +238,7 @@
                     }
                 });
 
-                $.getJSON(_global.root + 'leave/GetAnnualLeaveAndKeepInViewBalance',
+                $.getJSON(_global.root + 'leave/GetLeaveBalance',
                 {
                     employeeId: LeaveRequest.employeeId.val(),
                     requestId: LeaveRequest.requestId.val(),
@@ -423,7 +423,7 @@
             });
         },
         eventAfterChangeEmployee: function () {
-            $.getJSON(_global.root + 'leave/GetAnnualLeaveAndKeepInViewBalance', { employeeId: LeaveRequest.employeeId.val(), requestId: LeaveRequest.requestId.val() },
+            $.getJSON(_global.root + 'leave/GetLeaveBalance', { employeeId: LeaveRequest.employeeId.val(), requestId: LeaveRequest.requestId.val() },
                     function (response) {
                         if (response != null) {
                             LeaveRequest.annualBalance.html(response.AnnualBalance);

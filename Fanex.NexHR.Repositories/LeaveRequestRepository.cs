@@ -113,16 +113,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay)
-        {
-            using (ObjectDb db = new ObjectDb("WorkingTimeRequest_AvaibleBalanceLeave"))
-            {
-                var employeeBalance = db.QueryEntity<EmployeeAnnualBalance>(new { empId = employeeId, requestId = requestId, EffectedDay = effectDay });
-
-                return employeeBalance;
-            }
-        }
-
         /// <summary>
         /// Function to reset request when user reedit a leave request.
         /// </summary>

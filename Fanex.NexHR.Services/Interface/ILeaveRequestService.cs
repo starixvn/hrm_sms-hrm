@@ -9,8 +9,8 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
@@ -28,6 +28,6 @@ namespace Fanex.NexHR.Services.Interface
 
         void SendReasonReeditToSupervisor(long requestId, int processBy, string reason, out int errorCode, out string errorMessage);
 
-        EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay);
+        EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
     }
 }

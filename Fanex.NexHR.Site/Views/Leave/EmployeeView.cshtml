@@ -2,7 +2,7 @@
 @model IList<RequestEntity>
 @{
     ViewBag.Title = Labels.MyLeaveRequest;
-    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeAnnualBalance)ViewBag.EmployeeBalance;
+    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
     decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
     decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
 }

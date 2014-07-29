@@ -66,6 +66,6 @@ namespace Fanex.NexHR.Models
 
         public bool IsChangeShift { get; set; }
 
-        public string TotalWorkHours_Time { get; set; }
+        public string TotalWorkHoursTime { get; set; }
     }
 }

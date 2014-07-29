@@ -13,8 +13,10 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using System.Web;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -125,8 +127,7 @@ namespace Fanex.NexHR.Services
                         {
                             RequestId = requestEntity.Id,
                             LeaveTypeId = requestEntity.LeaveType.Id,
-                            Employee = requestEntity.Requester.NickName + " (" + requestEntity.Requester.FullName + ")",
-                            DisplayName = requestEntity.Requester.FullName,
+                            Employee = requestEntity.Requester.DisplayName,
                             EmployeeId = requestEntity.Requester.Id,
                             FromDate = requestEntity.FromDate,
                             ToDate = requestEntity.ToDate,
@@ -140,8 +141,7 @@ namespace Fanex.NexHR.Services
                             ToTime = requestEntity.ToTime.ToString("HH:mm"),
                             IsFromTimeAfterDay = requestEntity.FromDate.Date != requestEntity.FromTime.Date,
                             IsToTimeAfterDay = requestEntity.ToDate.Date != requestEntity.ToTime.Date,
-                            FormattedStatus = requestEntity.Status.Name,
-                            Status = requestEntity.Status.Id
+                            Status = requestEntity.Status
                         };
                     }
                 }
@@ -173,27 +173,16 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to get annual leave and keep in view balance of user.
-        /// </summary>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="effectDay">Effect day.</param>
-        /// <returns>Employee Annual Balance.</returns>
-        public EmployeeAnnualBalance GetAnnualLeaveAndKeepInViewBalance(int employeeId, long? requestId, DateTime effectDay)
+        public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
-            var employeeBalance = new EmployeeAnnualBalance();
-            if (employeeId > 0)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var employeeLeaveBalance = new EmployeeLeaveBalance();
+            if (criteria.IsValid())
             {
-                if (requestId.HasValue && requestId.Value == -1)
-                {
-                    requestId = null;
-                }
-
-                employeeBalance = _leaveRequestRepository.GetAnnualLeaveAndKeepInViewBalance(employeeId, requestId, effectDay);
+                employeeLeaveBalance = GetDataEntity<EmployeeLeaveBalance>(criteria);
             }
 
-            return employeeBalance;
+            return employeeLeaveBalance;
         }
 
         /// <summary>
@@ -295,7 +284,7 @@ namespace Fanex.NexHR.Services
         {
             // send email(s)
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            string subject = Messages.ReeditSubject + " " + model.DisplayName;
+            string subject = Messages.ReeditSubject + " " + model.Employee;
 
             if (model.TotalDays > 1)
             {
@@ -310,7 +299,7 @@ namespace Fanex.NexHR.Services
             {
                 RefNo = model.RefNo,
                 Leader = sendToNickName,
-                Member = model.DisplayName,
+                Member = model.Employee,
                 Reason = reason,
                 Url = this.BaseUrl
             };
