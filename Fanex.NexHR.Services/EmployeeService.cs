@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -21,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -251,10 +251,16 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        public EmployeeShift GetEmployeeShift(int id)
+        public EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria)
         {
-            Check.Argument.IsNotNegativeOrZero(id, "id");
-            return this._employeeRepository.GetEmployeeShift(id);
+            EmployeeShift employeeShift = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                employeeShift = this.GetDataEntity<EmployeeShift>(criteria);
+            }
+
+            return employeeShift;
         }
 
         public bool UpdateEmployeeShift(EmployeeShift model)

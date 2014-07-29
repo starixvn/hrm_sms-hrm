@@ -25,7 +25,7 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public override bool IsValid()
         {
-            return Code != string.Empty;
+            return !string.IsNullOrEmpty(Code);
         }
     }
 }

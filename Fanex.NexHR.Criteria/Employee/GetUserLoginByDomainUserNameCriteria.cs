@@ -25,7 +25,7 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public override bool IsValid()
         {
-            return DomainUsername != string.Empty;
+            return !string.IsNullOrEmpty(DomainUsername);
         }
     }
 }

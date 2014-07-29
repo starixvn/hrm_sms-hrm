@@ -11,11 +11,11 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Services.Interface
 
         CommandResult UpdatePersonalInformation(UpdateEmployeePersonalInformationCriteria criteria);
 
-        EmployeeShift GetEmployeeShift(int id);
+        EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria);
 
         bool UpdateEmployeeShift(EmployeeShift model);
 

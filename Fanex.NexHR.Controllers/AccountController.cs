@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -62,7 +63,8 @@ namespace Fanex.NexHR.Controllers
             : _lookupDataService.Get(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
             ViewBag.Working = _employeeService.GetMySpace(id);
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
-            var workingCalendar = _employeeService.GetEmployeeShift(id);
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
+            var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
             var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
             var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;
@@ -109,7 +111,8 @@ namespace Fanex.NexHR.Controllers
             : _lookupDataService.Get(LookupCodeName.JobTitle, displayModel.JobTitleId.Value).Name;
             ViewBag.Working = _employeeService.GetMySpace(id);
             ViewBag.DefaultCalendar = displayModel.IsDefaultSchedule;
-            var workingCalendar = _employeeService.GetEmployeeShift(id);
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
+            var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
             var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = displayModel.CountryCode };
             var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;

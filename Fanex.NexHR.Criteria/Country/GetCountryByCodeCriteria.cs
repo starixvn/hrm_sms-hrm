@@ -26,7 +26,7 @@ namespace Fanex.NexHR.Criteria.Country
 
         public override bool IsValid()
         {
-            return CountryCode != string.Empty;
+            return !string.IsNullOrEmpty(CountryCode);
         }
     }
 }
