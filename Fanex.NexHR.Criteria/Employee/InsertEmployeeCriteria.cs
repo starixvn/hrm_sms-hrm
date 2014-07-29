@@ -49,10 +49,6 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public bool IsDefaultSchedule { get; set; }
 
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
-
         public override string GetSettingKey()
         {
             return "Employee_Information_Insert";

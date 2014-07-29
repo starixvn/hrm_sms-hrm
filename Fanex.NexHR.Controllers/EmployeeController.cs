@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -188,8 +189,8 @@ namespace Fanex.NexHR.Controllers
                 TueShift = model.TueShift,
                 WedShift = model.WedShift
             };
-            var create = _employeeService.Insert(ModelState, insertEmployeeCriteria);
-            if (create)
+            CommandResult result = _employeeService.Insert(insertEmployeeCriteria);
+            if (result.Code == 0)
             {
                 var criteria = new GetEmployeeByCodeCriteria() { Code = model.Code };
                 Employee employee = _employeeService.GetEmployeeByCode(criteria);
@@ -252,8 +253,9 @@ namespace Fanex.NexHR.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = _employeeService.Update(model, ModelState);
-                if (result != 0)
+                UpdateEmployeeCriteria updateEmployeeCriteria = SetUpdateEmployeeCriteria(model);
+                CommandResult result = _employeeService.Update(updateEmployeeCriteria);
+                if (result.Code != 0)
                 {
                     ViewBag.Updated = false;
                 }
@@ -262,10 +264,10 @@ namespace Fanex.NexHR.Controllers
                     ViewBag.Updated = true;
                 }
 
-                if (result == 0 && this.CurrentUser.Id == model.Id)
+                if (result.Code == 0 && this.CurrentUser.Id == model.Id)
                 {
-                    var criteria = new GetEmployeeByIdCriteria() { Empid = model.Id };
-                    var currentUser = _employeeService.GetUserLoginByEmployeeId(criteria);
+                    var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.Id };
+                    var currentUser = _employeeService.GetUserLoginByEmployeeId(getEmployeeByIdCriteria);
                     HttpContext.Session["CurrentUser"] = currentUser;
                 }
             }
@@ -769,6 +771,72 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;
+        }
+
+        /// <summary>
+        /// Set Data To UpdateEmployeeCriteria.
+        /// </summary>
+        /// <param name="model">Employee model.</param>
+        /// <returns>UpdateEmployee Criteria.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+        private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)
+        {
+            var criteria = new UpdateEmployeeCriteria
+            {
+                EmpId = model.Id,
+                Code = model.Code.Trim(),
+                DomainUsername = model.DomainUsername,
+                FullName = model.FullName,
+                NickName = model.NickName,
+                DOB = model.DOB,
+                Email = model.Email,
+                JobTitleId = model.JobTitleId,
+                Enabled = model.Enabled,
+                Phone = model.Phone,
+                Gender = model.Gender,
+                Roles = model.Roles,
+                JoinedDate = model.JoinedDate,
+                CompanyDate = model.CompanyDate,
+                ConfirmedDate = model.ConfirmedDate,
+                ResignedDate = model.ResignedDate,
+                Skype = model.Skype,
+                Yahoo = model.Yahoo,
+                Marriage = model.Marriage,
+                PermanentAddress = model.Address,
+                CurrentAddress = model.CurrentAddress,
+                IdCardNumber = model.CardNo,
+                PassportNo = model.PassportNo,
+                PassportExp = model.PassportExp,
+                ModifiedDate = DateTime.Now,
+                ModifiedBy = model.Modifier.Id,
+                Password = model.Password,
+                GroupId = model.Team.Id,
+                IsLocal = model.IsLocal,
+                CountryCode = model.CountryCode,
+                CanOT = model.CanOT,
+                IsDefaultSchedule = model.IsDefaultSchedule,
+                WorkingDays = model.WorkingDays,
+                WorkingHours = model.WorkingHours,
+                IsTopManager = model.IsTopManager,
+                OffDaysbyWeek = model.OffDaysbyWeek,
+                Unit = model.Unit,
+                PlaceOfbirth = model.PlaceOfBirth,
+                Ethnic = model.Ethnic,
+                Native = model.Native,
+                Religion = model.Religion,
+                DateOfIDCard = model.DateOfIdCard,
+                PlaceOfIDCard = model.PlaceOfIdCard,
+                HomePhone = model.HomePhone,
+                Qualification = model.Qualification,
+                Major = model.Major,
+                BankAccount = model.BankAccount,
+                TaxCode = model.TaxCode,
+                SocialInsuranceNo = model.SocialInsuranceNo,
+                RegisteredHospital = model.RegisteredHospital,
+                IsExpatUseHoliday = model.IsExpatUseHoliday
+            };
+
+            return criteria;
         }
     }
 }

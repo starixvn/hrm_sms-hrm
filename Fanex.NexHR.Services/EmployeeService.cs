@@ -52,7 +52,7 @@ namespace Fanex.NexHR.Services
             string newCode = string.Empty;
             if (criteria.IsValid())
             {
-                newCode = _employeeRepository.NewEmployeeCode(criteria);
+                newCode = this.GetDataEntity<string>(criteria);
             }
 
             return newCode;
@@ -76,7 +76,7 @@ namespace Fanex.NexHR.Services
             UserLoginModel user = null;
             if (criteria.IsValid())
             {
-                user = this._employeeRepository.GetUserLoginByDomainUserName(criteria);
+                user = this.GetDataEntity<UserLoginModel>(criteria);
             }
 
             return user;
@@ -88,7 +88,7 @@ namespace Fanex.NexHR.Services
             UserLoginModel userLogin = null;
             if (criteria.IsValid())
             {
-                userLogin = this._employeeRepository.GetUserLoginByCode(criteria);
+                userLogin = this.GetDataEntity<UserLoginModel>(criteria);
             }
 
             return userLogin;
@@ -100,7 +100,7 @@ namespace Fanex.NexHR.Services
             UserLoginModel userLogin = null;
             if (criteria.IsValid())
             {
-                userLogin = this._employeeRepository.GetUserLoginByEmployeeId(criteria);
+                userLogin = this.GetDataEntity<UserLoginModel>(criteria);
             }
 
             return userLogin;
@@ -130,7 +130,7 @@ namespace Fanex.NexHR.Services
             IList<Employee> employees = null;
             if (criteria.IsValid())
             {
-                employees = this._employeeRepository.GetMembersByManager(criteria);
+                employees = this.GetData<Employee>(criteria).ToList();
             }
 
             return employees;
@@ -151,130 +151,104 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Adjust Annual Leave.
         /// </summary>
-        /// <param name="modelState">Model State.</param>
         /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Boolean to check.</returns>
-        public bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria)
+        /// <returns>Command Result.</returns>
+        public CommandResult AdjustAnnualLeaves(AdjustEmployeeAnnualLeaveCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            string message;
-            bool result = false;
+            CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = this._employeeRepository.AdjustAnnualLeaves(criteria, out message);
-                if (!result)
-                {
-                    modelState.AddModelError(string.Empty, message);
-                    return result;
-                }
+                result = _Repository.Update(criteria);
             }
             
             return result;
         }
 
-        public bool ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria)
+        public CommandResult ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            bool result = false;
+            CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = this._employeeRepository.ResetAnnualLeaves(criteria);
+                result = _Repository.Update(criteria);
             }
 
             return result;
         }
 
         /// <summary>
-        /// Insert New Employee.
+        /// Insert Employee.
         /// </summary>
-        /// <param name="modelState">Model state.</param>
         /// <param name="criteria">Criteria to insert DB.</param>
-        /// <returns>Boolean to check.</returns>
-        public bool Insert(ModelStateDictionary modelState, InsertEmployeeCriteria criteria)
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertEmployeeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-
-            if (modelState.IsValid)
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                int errorCode;
-                string message;
-                //// hash pasword
                 criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
-                this._employeeRepository.Insert(criteria, out errorCode, out message);
-                if (errorCode == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    modelState.AddModelError(string.Empty, message);
-                    return false;
-                }
-            }
-            else
-            {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                result = this._Repository.Insert(criteria);
             }
 
-            return false;
+            return result;
         }
 
-        public bool Delete(int id, DateTime resignedDate)
+        public CommandResult Delete(DeleteEmployeeCriteria criteria)
         {
-            Check.Argument.IsNotNegativeOrZero(id, "id");
-            return this._employeeRepository.Delete(id, resignedDate);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = _Repository.Delete(criteria);
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Update Employee.
         /// </summary>
-        /// <param name="model">Employee Model.</param>
-        /// <param name="modelState">ModelState Dictionary.</param>
-        /// <returns>Error code.</returns>
-        public int Update(Employee model, ModelStateDictionary modelState)
+        /// <param name="criteria">Criteria to update DB.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Update(UpdateEmployeeCriteria criteria)
         {
-            int errorCode;
-            string message;
-            Check.Argument.IsNotNull(model, "model");
-
-            if (!string.IsNullOrWhiteSpace(model.Password))
+            CommandResult result = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
             {
-                model.Password = Encryptor.ComputeHash(_HashProvider, model.Password);
+                if (!string.IsNullOrWhiteSpace(criteria.Password))
+                {
+                    criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
+                }
+
+                if (criteria.IsLocal == true)
+                {
+                    criteria.IsExpatUseHoliday = false;
+                }
+
+                result = _Repository.Update(criteria);
             }
 
-            if (model.IsLocal == true)
-            {
-                model.IsExpatUseHoliday = false;
-            }
-
-            var updated = this._employeeRepository.Update(model, out errorCode, out message);
-            if (errorCode != 0)
-            {
-                modelState.AddModelError(string.Empty, message);
-            }
-
-            return updated;
+            return result;
         }
 
         /// <summary>
-        /// Update Employee.
+        /// Update Personal Information.
         /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="model">Employee Model.</param>
-        /// <param name="errorCode">The error code.</param>
-        /// <param name="message">The message.</param>
-        /// <returns>
-        /// Error code.
-        /// </returns>
-        public bool UpdatePersonalInformation(ModelStateDictionary modelState, Employee model, out int errorCode, out string message)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult UpdatePersonalInformation(UpdateEmployeePersonalInformationCriteria criteria)
         {
-            bool isSuccessful = this._employeeRepository.UpdatePersonalInformation(model, out errorCode, out message);
-            if (!isSuccessful)
+            CommandResult result = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
             {
-                modelState.AddModelError(errorCode.ToString(), message);
+                result = _Repository.Update(criteria);
             }
 
-            return isSuccessful;
+            return result;
         }
 
         public EmployeeShift GetEmployeeShift(int id)
@@ -473,7 +447,7 @@ namespace Fanex.NexHR.Services
             IList<Country> countries = null;
             if (criteria.IsValid())
             {
-                countries = _employeeRepository.GetAllCountry(criteria);
+                countries = this.GetData<Country>(criteria).ToList();
             }
 
             return countries;
@@ -484,7 +458,7 @@ namespace Fanex.NexHR.Services
             Country country = null;
             if (criteria.IsValid())
             {
-                country = _employeeRepository.GetCountryByCode(criteria);
+                country = this.GetDataEntity<Country>(criteria);
             }
 
             return country;
@@ -497,10 +471,11 @@ namespace Fanex.NexHR.Services
 
         public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             IList<SupervisorModel> supervisors = null;
             if (criteria.IsValid())
             {
-                supervisors = _employeeRepository.GetEmployeeSupervisor(criteria);
+                supervisors = this.GetData<SupervisorModel>(criteria).ToList();
             }
 
             return supervisors;
@@ -508,10 +483,11 @@ namespace Fanex.NexHR.Services
 
         public IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             IList<SupervisorNameModel> supervisors = null;
             if (criteria.IsValid())
             {
-                supervisors = this._employeeRepository.GetListSupervisorName(criteria);
+                supervisors = this.GetData<SupervisorNameModel>(criteria).ToList();
             }
 
             return supervisors;

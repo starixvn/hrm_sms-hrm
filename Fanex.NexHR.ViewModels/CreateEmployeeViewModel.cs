@@ -25,11 +25,8 @@ namespace Fanex.NexHR.ViewModels
         public string DomainUsername { get; set; }
         [Required]
         public string Code { get; set; }
-        ////[Required]
+
         public string Password { get; set; }
-        ////[Required]
-        ////[Compare("Password")]
-        ////public string ConfirmPassword { get; set; }
 
         public int? MonShift { get; set; }
 

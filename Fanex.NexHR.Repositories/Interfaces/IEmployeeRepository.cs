@@ -16,33 +16,13 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
     public interface IEmployeeRepository
     {
-        string NewEmployeeCode(ICriteria criteria);
-
-        IList<SupervisorNameModel> GetListSupervisorName(ICriteria criteria);
-
-        IList<SupervisorModel> GetEmployeeSupervisor(ICriteria criteria);
-
         Employee GetEmployeeById(ICriteria criteria);
 
         Employee GetEmployeeByCode(ICriteria criteria);
 
-        UserLoginModel GetUserLoginByDomainUserName(ICriteria criteria);
-
-        UserLoginModel GetUserLoginByCode(ICriteria criteria);
-
-        UserLoginModel GetUserLoginByEmployeeId(ICriteria criteria);
-
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        IList<Country> GetAllCountry(ICriteria criteria);
-
-        Country GetCountryByCode(ICriteria criteria);
-
-        int Insert(ICriteria criteria, out int errorCode, out string message);
-
         bool Delete(int id, DateTime resignedDate);
-
-        int Update(Employee model, out int errorCode, out string message);
 
         bool UpdatePersonalInformation(Employee model, out int errorCode, out string message);
 
@@ -64,15 +44,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
 
-        IList<Employee> GetMembersByManager(ICriteria criteria);
-
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
-
-        bool AdjustAnnualLeaves(ICriteria criteria, out string message);
-
-        bool ResetAnnualLeaves(ICriteria criteria);
 
         IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
 

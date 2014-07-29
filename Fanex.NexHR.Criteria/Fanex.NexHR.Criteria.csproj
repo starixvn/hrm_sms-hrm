@@ -46,6 +46,7 @@
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />
     <Compile Include="EmployeeSupervisor\GetSupervisorByRequestTypeCriteria.cs" />
     <Compile Include="Country\GetAllCountryCriteria.cs" />
+    <Compile Include="Employee\DeleteEmployeeCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByCodeCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByManagerCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByRoleCriteria.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="Employee\GetUserLoginByDomainUserNameCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByIdCriteria.cs" />
     <Compile Include="Employee\InsertEmployeeCriteria.cs" />
+    <Compile Include="Employee\UpdateEmployeeCriteria.cs" />
+    <Compile Include="Employee\UpdateEmployeePersonalInformationCriteria.cs" />
     <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
     <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />

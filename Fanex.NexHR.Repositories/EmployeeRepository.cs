@@ -26,17 +26,6 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
-        public string NewEmployeeCode(ICriteria criteria)
-        {
-            var code = string.Empty;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                code = db.QueryEntity<string>(criteria.GetSpParams());
-            }
-
-            return code;
-        }
-
         /// <summary>
         /// Method get Employee.
         /// </summary>
@@ -79,54 +68,6 @@ namespace Fanex.NexHR.Repositories
 
                 return entity;
             }
-        }
-
-        /// <summary>
-        /// Get User Login By Domain User Name.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>User Login Model.</returns>
-        public UserLoginModel GetUserLoginByDomainUserName(ICriteria criteria)
-        {
-            UserLoginModel entity = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                entity = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
-            }
-
-            return entity;
-        }
-
-        /// <summary>
-        /// Method get Employee by code.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Employee entity.</returns>
-        public UserLoginModel GetUserLoginByCode(ICriteria criteria)
-        {
-            UserLoginModel userLogin = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                userLogin = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
-            }
-
-            return userLogin;
-        }
-
-        /// <summary>
-        /// Method get Employee by id.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Employee entity.</returns>
-        public UserLoginModel GetUserLoginByEmployeeId(ICriteria criteria)
-        {
-            UserLoginModel userLogin = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                userLogin = db.QueryEntity<UserLoginModel>(criteria.GetSpParams());
-            }
-
-            return userLogin;
         }
 
         /// <summary>
@@ -214,24 +155,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Insert New Employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to insert DB.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error Message.</param>
-        /// <returns>Error code to handle.</returns>
-        public int Insert(ICriteria criteria, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                db.ExecuteScalar(criteria.GetSpParams());
-                errorCode = (int)db.GetParameterValue("ErrCode");
-                message = db.GetParameterValue("ErrMsg") as string;
-                return errorCode;
-            }
-        }
-
         public bool Delete(int id, DateTime resignedDate)
         {
             using (var db = new ObjectDb("Employee_Delete"))
@@ -239,80 +162,6 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@Empid", DbType.Int32, id);
                 db.AddInParameter("@ResignedDate", DbType.DateTime, resignedDate);
                 return db.ExecuteNonQuery() != 0;
-            }
-        }
-
-        /// <summary>
-        /// Method update Employee.
-        /// </summary>
-        /// <param name="model">Employee model.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error Message.</param>
-        /// <returns>Value of Error code.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public int Update(Employee model, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("Employee_UpdateEmployee"))
-            {
-                db.AddInParameter("@EmpId", DbType.Int32, model.Id);
-                db.AddInParameter("@Code", DbType.String, model.Code.Trim());
-                db.AddInParameter("@DomainUsername", DbType.String, model.DomainUsername);
-                db.AddInParameter("@FullName", DbType.String, model.FullName);
-                db.AddInParameter("@NickName", DbType.String, model.NickName);
-                db.AddInParameter("@DOB", DbType.DateTime, model.DOB);
-                db.AddInParameter("@Email", DbType.String, model.Email);
-                db.AddInParameter("@JobTitleId", DbType.Int32, model.JobTitleId);
-                db.AddInParameter("@Enabled", DbType.Boolean, model.Enabled);
-                db.AddInParameter("@Phone", DbType.String, model.Phone);
-                db.AddInParameter("@Gender", DbType.Int32, model.Gender);
-                db.AddInParameter("@Roles", DbType.String, model.Roles);
-                db.AddInParameter("@JoinedDate", DbType.DateTime, model.JoinedDate);
-                db.AddInParameter("@CompanyDate", DbType.DateTime, model.CompanyDate);
-                db.AddInParameter("@ConfirmedDate", DbType.DateTime, model.ConfirmedDate);
-                db.AddInParameter("@ResignedDate", DbType.DateTime, model.ResignedDate);
-                db.AddInParameter("@Skype", DbType.String, model.Skype);
-                db.AddInParameter("@Yahoo", DbType.String, model.Yahoo);
-                db.AddInParameter("@Marriage", DbType.Byte, model.Marriage);
-                db.AddInParameter("@PermanentAddress", DbType.String, model.Address);
-                db.AddInParameter("@CurrentAddress", DbType.String, model.CurrentAddress);
-                db.AddInParameter("@IdCardNumber", DbType.String, model.CardNo);
-                db.AddInParameter("@PassportNo", DbType.String, model.PassportNo);
-                db.AddInParameter("@PassportExp", DbType.DateTime, model.PassportExp);
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, DateTime.Now);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, model.Modifier.Id);
-                db.AddInParameter("@Password", DbType.String, model.Password);
-                db.AddInParameter("@GroupId", DbType.Int32, model.Team.Id);
-                db.AddInParameter("@IsLocal", DbType.Boolean, model.IsLocal);
-                db.AddInParameter("@CountryCode", DbType.String, model.CountryCode);
-                db.AddInParameter("@CanOT", DbType.Boolean, model.CanOT);
-                db.AddInParameter("@IsDefaultSchedule", DbType.Boolean, model.IsDefaultSchedule);
-                db.AddInParameter("@WorkingDays", DbType.Int32, model.WorkingDays);
-                db.AddInParameter("@WorkingHours", DbType.Int32, model.WorkingHours);
-                db.AddInParameter("@IsTopManager", DbType.Boolean, model.IsTopManager);
-                db.AddInParameter("@OffDaysbyWeek", DbType.Int32, model.OffDaysbyWeek);
-                db.AddInParameter("@Unit", DbType.String, model.Unit);
-                db.AddInParameter("@PlaceOfbirth", DbType.String, model.PlaceOfBirth);
-                db.AddInParameter("@Ethnic", DbType.String, model.Ethnic);
-                db.AddInParameter("@Native", DbType.String, model.Native);
-                db.AddInParameter("@Religion", DbType.String, model.Religion);
-                db.AddInParameter("@DateOfIDCard", DbType.DateTime, model.DateOfIdCard);
-                db.AddInParameter("@PlaceOfIDCard", DbType.String, model.PlaceOfIdCard);
-                db.AddInParameter("@HomePhone", DbType.String, model.HomePhone);
-                db.AddInParameter("@Qualification", DbType.String, model.Qualification);
-                db.AddInParameter("@Major", DbType.String, model.Major);
-                db.AddInParameter("@BankAccount", DbType.String, model.BankAccount);
-                db.AddInParameter("@TaxCode", DbType.String, model.TaxCode);
-                db.AddInParameter("@SocialInsuranceNo", DbType.String, model.SocialInsuranceNo);
-                db.AddInParameter("@RegisteredHospital", DbType.String, model.RegisteredHospital);
-                db.AddInParameter("@IsExpatUseHoliday", DbType.Boolean, model.IsExpatUseHoliday);
-
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-                db.ExecuteScalar();
-                errorCode = (int)db.GetParameterValue("ErrCode");
-                message = db.GetParameterValue("ErrMsg") as string;
-
-                return errorCode;
             }
         }
 
@@ -482,17 +331,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Employee> GetMembersByManager(ICriteria criteria)
-        {
-            IList<Employee> employees = null;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                employees = db.Query<Employee>(criteria.GetSpParams()).ToList();
-            }
-
-            return employees;
-        }
-
         /// <summary>
         /// Get Employees by role.
         /// </summary>
@@ -513,40 +351,6 @@ namespace Fanex.NexHR.Repositories
 
                 return entity;
             }
-        }
-
-        /// <summary>
-        /// Adjust Annual Leaves.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <param name="message">Out error message.</param>
-        /// <returns>Boolean to check.</returns>
-        public bool AdjustAnnualLeaves(ICriteria criteria, out string message)
-        {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                db.ExecuteScalar(criteria.GetSpParams());
-                int errorCode = (int)db.GetParameterValue("ErrCode");
-                message = db.GetParameterValue("ErrMsg") as string;
-
-                if (errorCode == 0)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-        }
-
-        public bool ResetAnnualLeaves(ICriteria criteria)
-        {
-            bool result = false;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                result = db.ExecuteNonQuery(criteria.GetSpParams()) != 0;
-            }
-
-            return result;
         }
 
         public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans)
@@ -713,28 +517,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<Country> GetAllCountry(ICriteria criteria)
-        {
-            IList<Country> countries = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                countries = db.Query<Country>().ToList();
-            }
-
-            return countries;
-        }
-
-        public Country GetCountryByCode(ICriteria criteria)
-        {
-            Country country = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                country = db.QueryEntity<Country>(criteria.GetSpParams());
-            }
-
-            return country;
-        }
-
         /// <summary>
         /// Insert info or update info to Employee Supervisor.
         /// </summary>
@@ -757,28 +539,6 @@ namespace Fanex.NexHR.Repositories
 
                 return db.ExecuteNonQuery() != 0;
             }
-        }
-
-        public IList<SupervisorModel> GetEmployeeSupervisor(ICriteria criteria)
-        {
-            IList<SupervisorModel> supervisors = null;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                supervisors = db.Query<SupervisorModel>(criteria.GetSpParams()).ToList();
-            }
-
-            return supervisors;
-        }
-
-        public IList<SupervisorNameModel> GetListSupervisorName(ICriteria criteria)
-        {
-            IList<SupervisorNameModel> supervisors = null;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                supervisors = db.Query<SupervisorNameModel>(criteria.GetSpParams()).ToList();
-            }
-
-            return supervisors;
         }
 
         public IList<SupervisorNameModel> GetEmployeeCanClaimOvertime()

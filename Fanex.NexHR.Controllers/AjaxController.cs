@@ -84,7 +84,14 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public bool DeleteEmployee(int id, DateTime resignedDate)
         {
-            return _employeeService.Delete(id, resignedDate);
+            var deleteEmployeeCriteria = new DeleteEmployeeCriteria
+            {
+                EmpId = id,
+                ResignedDate = resignedDate
+            };
+            CommandResult result = _employeeService.Delete(deleteEmployeeCriteria);
+
+            return result.Code == 0;
         }
 
         [Authorize(Roles = "Verifier,Approver,HR")]
@@ -169,19 +176,13 @@ namespace Fanex.NexHR.Controllers
                 DeductDays = model.DeductDays,
                 FromDate = model.AffectedFrom
             };
-            var result = _employeeService.AdjustAnnualLeaves(ModelState, adjustAnnualLeaveCriteria);
-            if (!result)
+            CommandResult result = _employeeService.AdjustAnnualLeaves(adjustAnnualLeaveCriteria);
+            if (result.Code != 0)
             {
-                foreach (var item in ModelState.Values)
-                {
-                    foreach (ModelError error in item.Errors)
-                    {
-                        return Json(new { success = false, errors = error.ErrorMessage });
-                    }
-                }
+                return Json(new { success = false, errors = result.Message });
             }
 
-            return Json(result);
+            return Json(true);
         }
 
         /// <summary>
@@ -225,9 +226,9 @@ namespace Fanex.NexHR.Controllers
                     FromDate = date,
                     ResetDays = minbalance
                 };
-                bool result = _employeeService.ResetAnnualLeaves(resetAnnualLeaveCriteria);
+                CommandResult result = _employeeService.ResetAnnualLeaves(resetAnnualLeaveCriteria);
 
-                return Json(result);
+                return Json(result.Code == 0);
             }
             else
             {

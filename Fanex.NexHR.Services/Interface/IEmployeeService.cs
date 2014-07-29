@@ -47,17 +47,17 @@ namespace Fanex.NexHR.Services.Interface
 
         Country GetCountryByCode(GetCountryByCodeCriteria criteria);
 
-        bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria);
+        CommandResult AdjustAnnualLeaves(AdjustEmployeeAnnualLeaveCriteria criteria);
 
-        bool ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria);
+        CommandResult ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria);
 
-        bool Insert(ModelStateDictionary modelState, InsertEmployeeCriteria criteria);
+        CommandResult Insert(InsertEmployeeCriteria criteria);
 
-        bool Delete(int id, DateTime resignedDate);
+        CommandResult Delete(DeleteEmployeeCriteria criteria);
 
-        int Update(Employee model, ModelStateDictionary modelState);
+        CommandResult Update(UpdateEmployeeCriteria criteria);
 
-        bool UpdatePersonalInformation(ModelStateDictionary modelState, Employee model, out int errorCode, out string message);
+        CommandResult UpdatePersonalInformation(UpdateEmployeePersonalInformationCriteria criteria);
 
         EmployeeShift GetEmployeeShift(int id);
 

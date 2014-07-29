@@ -9,6 +9,7 @@
 
 namespace Fanex.NexHR.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -82,12 +83,21 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public ActionResult Index(Employee employeeModel)
         {
-            int errorCode = 0;
             string message = string.Empty;
             employeeModel.Id = this.CurrentUser.Id;
             employeeModel.Modifier = new Employee { Id = this.CurrentUser.Id };
             ModelState.Clear();
-            ViewBag.IsUpdated = _employeeService.UpdatePersonalInformation(ModelState, employeeModel, out errorCode, out message);
+            UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
+            CommandResult result = _employeeService.UpdatePersonalInformation(criteria);
+            if (result.Code != 0)
+            {
+                ModelState.AddModelError(result.Code.ToString(), result.Message);
+                ViewBag.IsUpdated = false;
+            }
+            else
+            {
+                ViewBag.IsUpdated = true;
+            }
 
             var id = this.CurrentUser.Id;
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -171,6 +181,45 @@ namespace Fanex.NexHR.Controllers
             };
 
             ViewBag.Marriages = Utilities.Marriages;
+        }
+
+        /// <summary>
+        /// Set Update Personal Information Criteria.
+        /// </summary>
+        /// <param name="employeeModel">Employee Model.</param>
+        /// <returns>UpdateEmployeePersonalInformation Criteria.</returns>
+        private UpdateEmployeePersonalInformationCriteria SetUpdatePersonalInfoCriteria(Employee employeeModel)
+        {
+            var updatePersonalInformationCriteria = new UpdateEmployeePersonalInformationCriteria
+            {
+                EmpId = employeeModel.Id,
+                DOB = employeeModel.DOB,
+                PlaceOfbirth = employeeModel.PlaceOfBirth,
+                Ethnic = employeeModel.Ethnic,
+                Native = employeeModel.Native,
+                Religion = employeeModel.Religion,
+                DateOfIDCard = employeeModel.DateOfIdCard,
+                PlaceOfIDCard = employeeModel.PlaceOfIdCard,
+                HomePhone = employeeModel.HomePhone,
+                Qualification = employeeModel.Qualification,
+                Major = employeeModel.Major,
+                Phone = employeeModel.Phone,
+                Gender = employeeModel.Gender,
+                Skype = employeeModel.Skype,
+                Yahoo = employeeModel.Yahoo,
+                ChineseName = employeeModel.ChineseName,
+                Marriage = employeeModel.Marriage,
+                PermanentAddress = employeeModel.Address,
+                CurrentAddress = employeeModel.CurrentAddress,
+                IdCardNumber = employeeModel.CardNo,
+                PassportNo = employeeModel.PassportNo,
+                PassportExp = employeeModel.PassportExp,
+                ModifiedBy = employeeModel.Modifier.Id,
+                ModifiedDate = DateTime.Now,
+                CountryCode = employeeModel.CountryCode
+            };
+
+            return updatePersonalInformationCriteria;
         }
     }
 }

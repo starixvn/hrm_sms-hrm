@@ -31,10 +31,6 @@ namespace Fanex.NexHR.Criteria.AnnualLeave
 
         public int CreatedBy { get; set; }
 
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
-
         public override string GetSettingKey()
         {
             return "AnnualLeave_InsertMultipleTransactions";
