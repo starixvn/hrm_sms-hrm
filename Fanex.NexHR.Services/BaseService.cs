@@ -20,13 +20,26 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class BaseService
     {
-        protected readonly IBaseRepository _Repository;
+        private readonly IBaseRepository _Repository;
         private readonly IDynamicRepository _dynamicRepository;
 
-        public BaseService(IDynamicRepository dynamicRepository = null, IBaseRepository repository = null)
+        public BaseService()
+            : this(null, null)
+        {
+        }
+
+        public BaseService(IDynamicRepository dynamicRepository, IBaseRepository repository)
         {
             _dynamicRepository = dynamicRepository ?? new DynamicRepository();
             _Repository = repository ?? new BaseRepository();
+        }
+
+        public IBaseRepository Repository
+        {
+            get
+            {
+                return _Repository;
+            }
         }
 
         /// <summary>

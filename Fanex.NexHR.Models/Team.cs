@@ -16,6 +16,13 @@ namespace Fanex.NexHR.Models
     /// </summary>
     public class Team : EntityBase<int>
     {
+        public Team()
+        {
+            Department = new Department();
+            Leader = new Employee();
+            AssistantLeader = new Employee();
+        }
+
         public Department Department { get; set; }
 
         public Employee Leader { get; set; }
@@ -37,5 +44,9 @@ namespace Fanex.NexHR.Models
         public int TotalExpat { get; set; }
 
         public string MailGroup { get; set; }
+
+        public LeaderModel RawLeader { get; set; }
+
+        public AssistantLeaderModel RawAssistantLeader { get; set; }
     }
 }

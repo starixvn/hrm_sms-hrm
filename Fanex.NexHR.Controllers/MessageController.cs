@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Controllers
     using System;
     using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Message;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -76,7 +77,10 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create()
         {
             ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
-            ViewBag.Groups = _teamService.GetAll();
+
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+
             return View();
         }
 
@@ -110,7 +114,9 @@ namespace Fanex.NexHR.Controllers
 
             ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
             ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
-            ViewBag.Groups = _teamService.GetAll();
+
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
             return View();
         }

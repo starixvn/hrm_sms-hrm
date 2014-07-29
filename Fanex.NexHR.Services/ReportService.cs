@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories;
@@ -153,19 +154,7 @@ namespace Fanex.NexHR.Services
         /// <returns>List Annual Leave.</returns>        
         public IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
         {
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = new List<LeaveSummaryByTeam>();
-            if (teams.Count > 1 || (teams.Count == 1 && teams[0].Id == 11))
-            {
-                var teamService = new TeamService();
-                LeaveSummaryByTeam management = new LeaveSummaryByTeam
-                {
-                    Team = teamService.Get(11),
-                    LeaveSummaryInTeam = new List<LeaveSummary>()
-                };
-
-                // Add management team in 1st position
-                leaveSummaryByTeamList.Add(management);
-            }
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = AddManagementTeamFirstPosition(teams);
 
             foreach (Team team in teams)
             {
@@ -312,10 +301,40 @@ namespace Fanex.NexHR.Services
             var commandResult = new CommandResult();
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Update(criteria);
+                commandResult = Repository.Update(criteria);
             }
 
             return commandResult;
+        }
+
+        /// <summary>
+        /// Add management team in first position.
+        /// </summary>
+        /// <param name="teams">The list team.</param>
+        /// <returns>The list Leave Summary by Team.</returns>
+        private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(
+            IList<Team> teams)
+        {
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList  = new List<LeaveSummaryByTeam>();
+
+            if (teams.Count > 1 || (teams.Count == 1 && teams[0].Id == 11))
+            {
+                var teamService = new TeamService();
+                var getGroupByIdCriteria = new GetGroupByIdCriteria
+                {
+                    GroupId = 11
+                };
+                LeaveSummaryByTeam management = new LeaveSummaryByTeam
+                {
+                    Team = teamService.Get(getGroupByIdCriteria),
+                    LeaveSummaryInTeam = new List<LeaveSummary>()
+                };
+
+                // Add management team in 1st position
+                leaveSummaryByTeamList.Add(management);
+            }
+
+            return leaveSummaryByTeamList;
         }
     }
 }

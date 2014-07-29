@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Services;
@@ -70,7 +71,9 @@ namespace Fanex.NexHR.Controllers
         /// <returns>View EmployeeAttendance.</returns>
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
             var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
@@ -116,7 +119,9 @@ namespace Fanex.NexHR.Controllers
                 toDate = DateTime.Now.Date;
             }
 
-            var teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+
             var timeRecordViewModel = new TimeRecordViewModel
             {
                 FromDate = fromDate.Value,
@@ -159,7 +164,8 @@ namespace Fanex.NexHR.Controllers
                 DateOption = 0
             };
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
 
             var listRole = CurrentUser.RoleList;
@@ -283,7 +289,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
             ViewBag.CurrentUserId = this.CurrentUser.Id;
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
             ViewBag.EntityList = new List<RequestsMonitoring>();
             ViewBag.EntityList = _reportService.GetRequestMonitoring(
@@ -366,7 +373,8 @@ namespace Fanex.NexHR.Controllers
                 return export.TotalWorkingHours(model);
             }
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamIds = model.TeamIds;
             var totalWorkingHours = _reportService.GetWorkingHoursList(
                 model.FromDate,
@@ -436,7 +444,8 @@ namespace Fanex.NexHR.Controllers
 
             ViewBag.EntityList = totalWorkingHourMonthly;
             ViewBag.FirstRecord = firstRecord;
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamIds = model.TeamIds;
 
             return View(model);
@@ -471,7 +480,8 @@ namespace Fanex.NexHR.Controllers
                 endDate = startDate.Value.AddDays(6);
             }
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamIds = teamIds;
 
             var model = new TotalWorkingHourWeeklyViewModel
@@ -541,7 +551,8 @@ namespace Fanex.NexHR.Controllers
                 TeamIds = teamIds
             };
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.DefaultFromDate = model.FromDate;
             ViewBag.DefaultToDate = model.ToDate;
             var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
@@ -563,7 +574,6 @@ namespace Fanex.NexHR.Controllers
                     IsLocal = model.IsLocal,
                     JobTitleId = model.JobTitleId
                 };
-
                 List<WorkingCalendarSummary> calendars = _reportService.CalendarSummaryList(criteria).ToList();
 
                 string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -626,7 +636,8 @@ namespace Fanex.NexHR.Controllers
                 isLocal: null);
 
             IList<Team> teams = new List<Team>();
-            teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            teams = _teamService.GetAll(getAllGroupCriteria);
 
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;
@@ -752,7 +763,8 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult EmployeeSupervisor()
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             return View();
         }
 
@@ -791,7 +803,8 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult TeamSupervisor()
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             return View();
         }
 

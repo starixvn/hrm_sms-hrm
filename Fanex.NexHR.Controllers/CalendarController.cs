@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -65,7 +66,8 @@ namespace Fanex.NexHR.Controllers
             var currentDate = DateTime.Now;
             var fromDate = GetStartOfWeek(currentDate);
             var toDate = GetEndOfWeek(currentDate);
-            var teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
             var jobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
             var scheduleArrangeViewModel = new ScheduleArrangeFilterViewModel
             {
@@ -142,7 +144,8 @@ namespace Fanex.NexHR.Controllers
             var currentDate = DateTime.Now;
             var fromDate = GetStartOfWeek(currentDate);
             var toDate = GetEndOfWeek(currentDate);
-            var teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
 
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
@@ -216,7 +219,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.ToDate = toDate;
             ViewBag.JobTitleId = string.Empty;
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {

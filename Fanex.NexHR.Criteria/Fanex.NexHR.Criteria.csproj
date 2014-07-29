@@ -91,11 +91,18 @@
     <Compile Include="Shift\InsertShiftCriteria.cs" />
     <Compile Include="Shift\UpdateEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />
+    <Compile Include="Team\DeleteGroupCriteria.cs" />
+    <Compile Include="Team\GetAllGroupCriteria.cs" />
+    <Compile Include="Team\GetGroupByIdCriteria.cs" />
+    <Compile Include="Team\InsertNewGroupCriteria.cs" />
+    <Compile Include="Team\UpdateGroupCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="CodeAnalysis\CodeAnalysisConfiguration.xml" />
+  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

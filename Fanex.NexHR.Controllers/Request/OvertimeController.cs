@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -187,7 +188,8 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult YearlyReport()
         {
             ViewBag.Year = DateTime.Now.Year;
-            ViewBag.Groups = _TeamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _TeamService.GetAll(getAllGroupCriteria);
 
             return View();
         }
@@ -410,7 +412,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View OTExcelReport.</returns>
         public ActionResult OTExcelReport()
         {
-            ViewBag.Groups = _TeamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _TeamService.GetAll(getAllGroupCriteria);
             var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
@@ -466,7 +469,8 @@ namespace Fanex.NexHR.Controllers.Request
         private MemberOvertimeViewModel GetMemberOvertimeViewModel()
         {
             var month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            var teams = _TeamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _TeamService.GetAll(getAllGroupCriteria);
             var memberOvertimeViewModel = new MemberOvertimeViewModel
             {
                 Teams = teams,

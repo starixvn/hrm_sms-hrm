@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -102,7 +103,8 @@ namespace Fanex.NexHR.Controllers
                 isLocal: (byte?)model.Category);
 
             IList<Team> teams = new List<Team>();
-            teams = _teamService.GetAll();
+            var getAllTeamCriteria = new GetAllGroupCriteria();
+            teams = _teamService.GetAll(getAllTeamCriteria);
 
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;

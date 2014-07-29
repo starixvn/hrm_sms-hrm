@@ -25,6 +25,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -62,7 +63,8 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             return View();
         }
 
@@ -77,7 +79,8 @@ namespace Fanex.NexHR.Controllers
         {
             ViewBag.JobTitleId = jobTitleId;
             ViewBag.GroupId = groupIds;
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
             var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
@@ -155,7 +158,8 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create()
         {
             ViewBag.Shifts = _shiftService.GetSelectList();
-            var teamList = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teamList = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamList = teamList;
 
             return View(new CreateEmployeeViewModel());
@@ -171,7 +175,8 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create(CreateEmployeeViewModel model)
         {
             ViewBag.Shifts = _shiftService.GetSelectList();
-            var teamList = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teamList = _teamService.GetAll(getAllGroupCriteria);
             model.ProcessBy = this.CurrentUser.Id;
             model.Password = model.Code;
             ViewBag.TeamList = teamList;
@@ -479,7 +484,8 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult TeamManagement()
         {
-            IList<Team> teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
 
             return View(teams);
         }
@@ -505,7 +511,12 @@ namespace Fanex.NexHR.Controllers
             }
             else
             {
-                var team = _teamService.Get(teamId);
+                var criteria = new GetGroupByIdCriteria
+                {
+                    GroupId = teamId
+                };
+                Team team = _teamService.Get(criteria);
+
                 if (team != null)
                 {
                     model = new TeamViewModel
@@ -591,7 +602,9 @@ namespace Fanex.NexHR.Controllers
                 SupervisorRole = role,
                 ForView = "Employee"
             };
-            ViewBag.Groups = _teamService.GetAll();
+
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
             return View(model);
         }
@@ -628,7 +641,8 @@ namespace Fanex.NexHR.Controllers
                 ForView = "Employee"
             };
 
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
             return View(model);
         }
@@ -805,7 +819,8 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         private void ComposeViewBagsForEditEmployee()
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.JobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;

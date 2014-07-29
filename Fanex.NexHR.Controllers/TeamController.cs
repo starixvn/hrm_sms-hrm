@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -32,7 +33,7 @@ namespace Fanex.NexHR.Controllers
         {
         }
 
-        public TeamController(ITeamService teamService = null)
+        public TeamController(ITeamService teamService)
         {
             _teamService = teamService ?? new TeamService();
         }
@@ -40,7 +41,8 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Index()
         {
-            IList<Team> teams = _teamService.GetAll();
+            var criteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(criteria);
 
             return View(teams);
         }
@@ -67,18 +69,27 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var errorCode = 0;
-                var message = string.Empty;
-                _teamService.AddNewTeam(model, out errorCode, out message);
-                if (errorCode != 0) 
+                var criteria = new InsertNewGroupCriteria
                 {
-                    if (errorCode == 100)
+                    Code = model.TeamCode,
+                    Name = model.TeamName,
+                    MailGroup = model.MailGroup,
+                    LeaderId = model.LeaderId,
+                    AssistantLeaderId = model.AssistantLeaderId,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = this.CurrentUser.Id
+                };
+                CommandResult commandResult = _teamService.AddNewTeam(criteria);
+
+                if (commandResult.Code != 0)
+                {
+                    if (commandResult.Code == 100)
                     {
                         ModelState.AddModelError(string.Empty, Resources.Messages.DuplicateTeamCode);
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, message);
+                        ModelState.AddModelError(string.Empty, commandResult.Message);
                     }
                 }
                 else
@@ -102,7 +113,12 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
-            var team = _teamService.Get(id);
+            var criteria = new GetGroupByIdCriteria
+            {
+                GroupId = id
+            };
+
+            Team team = _teamService.Get(criteria);
 
             var model = new TeamViewModel
             {
@@ -110,9 +126,9 @@ namespace Fanex.NexHR.Controllers
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 Leader = team.Leader.DisplayName,
-                LeaderId = team.Leader.Id,
+                LeaderId = team.Leader.EmpId,
                 AssistantLeader = team.AssistantLeader.DisplayName,
-                AssistantLeaderId = team.AssistantLeader.Id,
+                AssistantLeaderId = team.AssistantLeader.EmpId,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = this.CurrentUser.Id
             };
@@ -130,17 +146,26 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
-                var errorCode = 0;
-                var message = string.Empty;
-
                 if (string.IsNullOrEmpty(model.AssistantLeader))
                 {
                     model.AssistantLeaderId = null;
                 }
 
-                var result = _teamService.UpdateTeam(model, out errorCode, out message);
+                var criteria = new UpdateGroupCriteria
+                {
+                    GroupId = model.Id,
+                    Code = model.TeamCode,
+                    Name = model.TeamName,
+                    MailGroup = model.MailGroup,
+                    LeaderId = model.LeaderId,
+                    AssistantLeaderId = model.AssistantLeaderId,
+                    ModifiedBy = this.CurrentUser.Id,
+                    ModifiedDate = DateTime.Now
+                };
 
-                ViewBag.Updated = result;
+                CommandResult result = _teamService.UpdateTeam(criteria);
+
+                ViewBag.Updated = result.Code == 0;
             }
             else
             {
@@ -168,7 +193,8 @@ namespace Fanex.NexHR.Controllers
         /// <returns>Action Result.</returns>
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
-            ViewBag.Groups = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             var criteria = new GetTeamSupervisorCriteria()
             {
                 GroupId = teamId,

@@ -11,8 +11,9 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -22,50 +23,138 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// Team Service.
     /// </summary>
-    public class TeamService : ITeamService
+    public class TeamService : BaseService, ITeamService
     {
         private readonly ITeamRepository _teamRepository;
 
-        public TeamService(ITeamRepository teamRespository = null)
+        public TeamService()
+            : this(null)
+        {
+        }
+
+        public TeamService(ITeamRepository teamRespository)
         {
             this._teamRepository = teamRespository ?? new TeamRepository();
         }
 
-        public Team Get(int teamId)
+        /// <summary>
+        /// Get group by group Id.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Group object.</returns>
+        public Team Get(GetGroupByIdCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             Team team = new Team();
-            if (teamId > 0)
+
+            if (criteria.IsValid())
             {
-                var allTeams = this.GetAll();
-                team = allTeams.Where(t => t.Id == teamId).SingleOrDefault();
+                team = _teamRepository.GetById(criteria);
+
+                if (team != null)
+                {
+                    if (team.RawLeader != null)
+                    {
+                        var leader = new Employee
+                        {
+                            EmpId = team.RawLeader.LeaderId,
+                            NickName = team.RawLeader.NickName,
+                            FullName = team.RawLeader.FullName
+                        };
+                        team.Leader = leader;
+                    }
+
+                    if (team.RawAssistantLeader != null)
+                    {
+                        var assistantLeader = new Employee
+                        {
+                            EmpId = team.RawAssistantLeader.AssistantLeaderId,
+                            NickName = team.RawAssistantLeader.NickName,
+                            FullName = team.RawAssistantLeader.FullName
+                        };
+                        team.AssistantLeader = assistantLeader;
+                    }
+                }
             }
 
             return team;
         }
 
-        public IList<Team> GetAll()
+        /// <summary>
+        /// Get all team.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The list Team.</returns>
+        public IList<Team> GetAll(GetAllGroupCriteria criteria)
         {
-            return this._teamRepository.GetAll();
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<Team> allTeam = null;
+
+            if (criteria.IsValid())
+            {
+                allTeam = _teamRepository.GetAll(criteria);
+            }
+
+            return allTeam;
         }
 
-        public int AddNewTeam(TeamViewModel model, out int errorCode, out string message)
+        /// <summary>
+        /// Add new Team.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult AddNewTeam(InsertNewGroupCriteria criteria)
         {
-            return this._teamRepository.AddNewTeam(model, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Insert(criteria);
+            }
+
+            return commandResult;
         }
 
-        public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
+        /// <summary>
+        /// Update Team.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult UpdateTeam(UpdateGroupCriteria criteria)
         {
-            return this._teamRepository.UpdateTeam(model, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Update(criteria);
+            }
+
+            return commandResult;
         }
 
-        public bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message)
+        /// <summary>
+        /// Delete Team.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult DeleteTeam(DeleteGroupCriteria criteria)
         {
-            return this._teamRepository.DeleteTeam(id, modifiedDate, modifiedby, out errCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Delete(criteria);
+            }
+
+            return commandResult;
         }
 
-        public List<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+        public IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
         {
-            List<SupervisorModel> supervisors = null;
+            IList<SupervisorModel> supervisors = null;
             if (criteria.IsValid())
             {
                 supervisors = _teamRepository.GetTeamSupervisor(criteria);
@@ -74,9 +163,9 @@ namespace Fanex.NexHR.Services
             return supervisors;
         }
 
-        public List<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria)
+        public IList<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria)
         {
-            List<TeamSupervisorModel> supervisors = null;
+            IList<TeamSupervisorModel> supervisors = null;
             if (criteria.IsValid())
             {
                 supervisors = _teamRepository.GetSupervisorByTeamId(criteria);

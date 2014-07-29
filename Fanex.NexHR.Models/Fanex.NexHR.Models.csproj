@@ -55,16 +55,19 @@
     <Reference Include="Fanex.Common, Version=1.0.404.97, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Common.1.0.404.97\lib\net40\Fanex.Common.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssistantLeaderModel.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
+    <Compile Include="LeaderModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />
     <Compile Include="Message.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="TeamSupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
+    <Compile Include="EmployeeAnnualBalance.cs" />
     <Compile Include="ExtensionNoModel.cs" />
     <Compile Include="Overtime\OvertimeRequest.cs" />
     <Compile Include="Country.cs" />

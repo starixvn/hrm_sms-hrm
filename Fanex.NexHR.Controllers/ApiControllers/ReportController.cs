@@ -14,6 +14,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Linq;
     using System.Web.Http;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -111,7 +113,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         {
             if (isInternal)
             {
-                var data = _teamService.GetAll();
+                var getAllGroupCriteria = new GetAllGroupCriteria();
+                IList<Team> data = _teamService.GetAll(getAllGroupCriteria);
                 var selectList = data.Select(x => new System.Web.Mvc.SelectListItem
                 {
                     Text = x.Name,

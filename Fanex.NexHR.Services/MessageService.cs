@@ -84,7 +84,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Insert(criteria);
+                commandResult = Repository.Insert(criteria);
 
                 if (criteria.HasSendEmail && commandResult != null && commandResult.Code == 0)
                 {
@@ -109,7 +109,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Update(criteria);
+                commandResult = Repository.Update(criteria);
 
                 if (criteria.HasSendEmail && commandResult != null && commandResult.Code == 0)
                 {
@@ -157,7 +157,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Delete(criteria);
+                commandResult = Repository.Delete(criteria);
             }
 
             return commandResult;
@@ -198,7 +198,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Delete(criteria);
+                commandResult = Repository.Delete(criteria);
             }
 
             return commandResult;
@@ -216,7 +216,7 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Update(criteria);
+                commandResult = Repository.Update(criteria);
             }
 
             return commandResult;
@@ -268,7 +268,7 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="categoryId">The category Id.</param>
         /// <returns>The category name.</returns>
-        private string GetCategoryName(int categoryId)
+        private static string GetCategoryName(int categoryId)
         {
             string category = string.Empty;
 

@@ -27,21 +27,21 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Get Team by id.
         /// </summary>
-        /// <param name="teamId">Team's id.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Team entity.</returns>
-        public Team GetById(int teamId)
+        public Team GetById(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Group_Select"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var team = db.QueryEntity<Team, Employee, Employee, Team>(
+                var team = db.QueryEntity<Team, LeaderModel, AssistantLeaderModel, Team>(
                         (t, ld, asld) =>
                         {
-                            t.Leader = ld;
-                            t.AssistantLeader = asld;
+                            t.RawLeader = ld;
+                            t.RawAssistantLeader = asld;
                             return t;
                         },
                         splitOn: "leaderID, AssistantLeaderId",
-                        parameters: new { groupId = teamId });
+                        parameters: criteria.GetSpParams());
 
                 return team;
             }
@@ -50,10 +50,11 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Get all Team.
         /// </summary>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>List of Team.</returns>
-        public IList<Team> GetAll()
+        public IList<Team> GetAll(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Group_Select"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var teams = db.Query<Team, Employee, Employee, Team>(
                         (t, ld, asld) =>
@@ -62,94 +63,10 @@ namespace Fanex.NexHR.Repositories
                             t.AssistantLeader = asld;
                             return t;
                         },
-                        splitOn: "leaderID, AssistantLeaderId").ToList();
+                        splitOn: "leaderID, AssistantLeaderId",
+                        parameterValues: criteria.GetSpParams()).ToList();
 
                 return teams;
-            }
-        }
-
-        /// <summary>
-        /// Method update Team.
-        /// </summary>
-        /// <param name="model">Team ViewModel.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error message.</param>
-        /// <returns>Boolean to check status.</returns>
-        public bool UpdateTeam(TeamViewModel model, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("EmployeeGroup_Update"))
-            {
-                db.AddInParameter("@GroupId", DbType.Int32, model.Id);
-                db.AddInParameter("@Code", DbType.String, model.TeamCode);
-                db.AddInParameter("@Name", DbType.String, model.TeamName);
-                db.AddInParameter("@MailGroup", DbType.String, model.MailGroup);
-                db.AddInParameter("@LeaderId", DbType.Int32, model.LeaderId);
-                db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, model.ModifiedDate);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, model.ModifiedBy);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                db.ExecuteNonQuery();
-                errorCode = (int)db.GetParameterValue("ErrCode");
-                message = db.GetParameterValue("ErrMsg") as string;
-
-                return errorCode == 0;
-            }
-        }
-
-        /// <summary>
-        /// Method Add new Team.
-        /// </summary>
-        /// <param name="model">Team ViewModel.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error Message.</param>
-        /// <returns>Value of error code.</returns>
-        public int AddNewTeam(TeamViewModel model, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("EmployeeGroup_Insert"))
-            {
-                db.AddInParameter("@Code", DbType.String, model.TeamCode);
-                db.AddInParameter("@Name", DbType.String, model.TeamName);
-                db.AddInParameter("@MailGroup", DbType.String, model.MailGroup);
-                db.AddInParameter("@LeaderId", DbType.Int32, model.LeaderId);
-                db.AddInParameter("@AssistantLeaderId", DbType.Int32, model.AssistantLeaderId);
-                db.AddInParameter("@CreatedDate", DbType.DateTime, model.CreatedDate);
-                db.AddInParameter("@CreatedBy", DbType.Int32, model.CreatedBy);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-                db.ExecuteScalar();
-                errorCode = (int)db.GetParameterValue("ErrCode"); 
-                message = db.GetParameterValue("ErrMsg") as string;
-                return errorCode;
-            }
-        }
-
-        /// <summary>
-        /// Method Delete Team.
-        /// </summary>
-        /// <param name="id">Id of Team.</param>
-        /// <param name="modifiedDate">Modified Date.</param>
-        /// <param name="modifiedBy">Modified By.</param>
-        /// <param name="errorCode">Error Code.</param>
-        /// <param name="message">Delete message.</param>
-        /// <returns>Boolean to check status.</returns>
-        public bool DeleteTeam(int id, DateTime modifiedDate, int modifiedBy, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("EmployeeGroup_Delete"))
-            {
-                db.AddInParameter("@GroupID", DbType.Int32, id);
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                var result = db.ExecuteScalar() == null ? false : true;
-
-                message = db.GetParameterValue("ErrMsg") as string;
-                errorCode = (int)db.GetParameterValue("ErrCode");
-
-                return result;
             }
         }
 

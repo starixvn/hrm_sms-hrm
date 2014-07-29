@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -320,7 +321,8 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
-            request.TeamCollection = _TeamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            request.TeamCollection = _TeamService.GetAll(getAllGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? loginId = null;
             

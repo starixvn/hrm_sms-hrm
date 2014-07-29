@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -250,14 +251,27 @@ namespace Fanex.NexHR.Controllers
             return _memoService.Delete(id);
         }
 
+        /// <summary>
+        /// Add new Team.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>The error code.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         public int AddNewTeam(TeamViewModel model)
         {
-            var errorCode = 0;
-            var message = string.Empty;
-
-            return _teamService.AddNewTeam(model, out errorCode, out message);
+            var criteria = new InsertNewGroupCriteria
+            {
+                Code = model.TeamCode,
+                Name = model.TeamName,
+                MailGroup = model.MailGroup,
+                LeaderId = model.LeaderId,
+                AssistantLeaderId = (int)model.AssistantLeaderId,
+                CreatedDate = DateTime.Now,
+                CreatedBy = this.CurrentUser.Id
+            };
+            CommandResult commandResult = _teamService.AddNewTeam(criteria);
+            return commandResult.Code;
         }
 
         /// <summary>
@@ -269,13 +283,17 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public string DeleteTeam(int id)
         {
-            int errCode;
-            string errMsg;
-            _teamService.DeleteTeam(id, DateTime.Now, this.CurrentUser.Id, out errCode, out errMsg);
-
-            if (errCode != 0)
+            var criteria = new DeleteGroupCriteria
             {
-                return errMsg;
+                GroupID = id,
+                ModifiedBy = this.CurrentUser.Id,
+                ModifiedDate = DateTime.Now
+            };
+            CommandResult commandResult = _teamService.DeleteTeam(criteria);
+
+            if (commandResult.Code != 0)
+            {
+                return commandResult.Message;
             }
 
             return string.Empty;

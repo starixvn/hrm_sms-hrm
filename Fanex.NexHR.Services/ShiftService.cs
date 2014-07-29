@@ -126,7 +126,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Insert(criteria);
+                commandResult = Repository.Insert(criteria);
             }
 
             return commandResult;
@@ -138,7 +138,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Update(criteria);
+                commandResult = Repository.Update(criteria);
             }
 
             return commandResult;
@@ -150,7 +150,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Delete(criteria);
+                commandResult = Repository.Delete(criteria);
             }
 
             return commandResult;

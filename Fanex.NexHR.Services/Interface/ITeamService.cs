@@ -12,24 +12,25 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     public interface ITeamService
     {
-        Team Get(int teamId);
+        Team Get(GetGroupByIdCriteria criteria);
 
-        IList<Team> GetAll();
+        IList<Team> GetAll(GetAllGroupCriteria criteria);
 
-        int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
+        CommandResult AddNewTeam(InsertNewGroupCriteria criteria);
 
-        bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
+        CommandResult UpdateTeam(UpdateGroupCriteria criteria);
 
-        bool DeleteTeam(int id, DateTime modifiedDate, int modifiedby, out int errCode, out string message);
+        CommandResult DeleteTeam(DeleteGroupCriteria criteria);
 
-        List<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
+        IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
 
-        List<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria);
+        IList<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria);
 
         bool UpdateSupervisor(InsertOrUpdateTeamSupervisorCriteria criteria);
 

@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -147,8 +148,8 @@ namespace Fanex.NexHR.Controllers
                 model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 model.TeamIds,
                 isLocal);
-
-            var teams = _teamService.GetAll();
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
             var leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(leaveSummary, teams);
 
             var hssfworkbook = _exportService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);

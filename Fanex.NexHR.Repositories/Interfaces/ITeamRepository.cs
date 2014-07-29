@@ -17,15 +17,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
     public interface ITeamRepository
     {
-        Team GetById(int teamId);
+        Team GetById(ICriteria criteria);
 
-        IList<Team> GetAll();
-
-        int AddNewTeam(TeamViewModel model, out int errorCode, out string message);
-
-        bool UpdateTeam(TeamViewModel model, out int errorCode, out string message);
-
-        bool DeleteTeam(int id, DateTime modifiedDate, int modifiedBy, out int errorCode, out string message);
+        IList<Team> GetAll(ICriteria criteria);
 
         List<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
 
