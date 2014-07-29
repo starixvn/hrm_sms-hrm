@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -93,7 +94,13 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                     break;
                 case Constants.UnpaidLeave:
                 case Constants.BusinessTrip:
-                    IEnumerable<DateTime> dates = _employeeService.GetOffAndHoliday(employeeId, fromDate, toDate);
+                    var criteria = new GetOffDateAndHolidayDateCriteria()
+                    {
+                        EmpId = employeeId,
+                        FromDate = fromDate,
+                        ToDate = toDate
+                    };
+                    IEnumerable<DateTime> dates = _employeeService.GetOffDateAndHolidayDate(criteria);
                     numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
                     break;
                 default:
@@ -119,7 +126,13 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
             if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave || leaveTypeId.Value == Constants.BusinessTrip))
             {
-                dates = _employeeService.GetOffAndHoliday(employeeId, fromDate, toDate);
+                var criteria = new GetOffDateAndHolidayDateCriteria()
+                {
+                    EmpId = employeeId,
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                dates = _employeeService.GetOffDateAndHolidayDate(criteria);
             }
             else
             {

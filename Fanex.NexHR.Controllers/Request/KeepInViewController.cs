@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -35,7 +36,14 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
+            var criteria = new GetOffDateAndHolidayDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(criteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
@@ -72,7 +80,14 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
+            var criteria = new GetOffDateAndHolidayDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(criteria);
 
             keepInViewRequestViewModel.By = this.CurrentUser.Id;
 
@@ -94,7 +109,14 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
+            var criteria = new GetOffDateAndHolidayDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(criteria);
 
             var request = _KeepInViewRequestService.GetRequestById(id);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
@@ -140,7 +162,14 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(this.CurrentUser.Id, fromDate, toDate);
+
+            var criteria = new GetOffDateAndHolidayDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(criteria);
 
             GetVerifierApproverList(this.CurrentUser.Id, keepInViewRequestViewModel);
             keepInViewRequestViewModel.By = this.CurrentUser.Id;

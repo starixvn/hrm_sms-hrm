@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Country;
+    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.MySpace;
@@ -301,49 +302,55 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Employees the calendar_ get off date_ holiday date.
+        /// Get Off Date And Holiday Date.
         /// </summary>
-        /// <param name="empId">The employee identifier.</param>
-        /// <param name="fromDate">Get unavailable date is greater than From date.</param>
-        /// <param name="toDate">Get unavailable date is less than To date.</param>
-        /// <returns>The list of unavailable dates for creating keep in view.</returns>
-        public IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List of Date Time.</returns>
+        public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
         {
-            IList<DateTime> availableDates = this._employeeRepository.GetOffDateAndHolidayDate(empId, fromDate, toDate);
+            IList<DateTime> availableDates = null;
             IList<DateTime> unavailableDates = new List<DateTime>();
-
-            for (var dateInRange = fromDate; dateInRange <= toDate; dateInRange = dateInRange.AddDays(1))
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
             {
-                bool isIncludedToUnvailableDates = true;
-
-                foreach (var availableDate in availableDates)
-                {
-                    if (dateInRange.IsSameDateWith(availableDate))
-                    {
-                        isIncludedToUnvailableDates = false;
-                        break;
-                    }
-                }
-
-                if (isIncludedToUnvailableDates)
-                {
-                    unavailableDates.Add(dateInRange);
-                }
+                availableDates = this.GetData<DateTime>(criteria).ToList();
             }
 
+            if (availableDates != null)
+            {
+                for (var dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
+                {
+                    bool isIncludedToUnvailableDates = true;
+
+                    foreach (var availableDate in availableDates)
+                    {
+                        if (dateInRange.IsSameDateWith(availableDate))
+                        {
+                            isIncludedToUnvailableDates = false;
+                            break;
+                        }
+                    }
+
+                    if (isIncludedToUnvailableDates)
+                    {
+                        unavailableDates.Add(dateInRange);
+                    }
+                }
+            }
+            
             return unavailableDates;
         }
 
-        public IList<DateTime> GetOffAndHoliday(int empId, DateTime fromDate, DateTime toDate)
+        public IList<HrLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
         {
-            IList<DateTime> dates = this._employeeRepository.GetOffDateAndHolidayDate(empId, fromDate, toDate);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<HrLeaderDashboardModel> dashboard = null;
+            if (criteria.IsValid())
+            {
+                dashboard = this.GetData<HrLeaderDashboardModel>(criteria).ToList();
+            }
 
-            return dates;
-        }
-
-        public IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null)
-        {
-            return this._employeeRepository.GetHrLeaderDashboard(date, employeeId);
+            return dashboard;
         }
 
         public bool UpdateShift(int id, System.DateTime date, int? shift, int modifiedBy, DateTime modifiedDate)

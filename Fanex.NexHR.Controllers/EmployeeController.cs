@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Country;
+    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.MySpace;
@@ -453,12 +454,22 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Management Dashboard.
+        /// </summary>
+        /// <returns>Action Result.</returns>
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
             if (this.CurrentUser.IsInRoles(RolesEnum.Verifier) || this.CurrentUser.IsInRoles(RolesEnum.Approver))
             {
-                var model = _employeeService.GetHrLeaderDashboard(DateTime.Today, this.CurrentUser.Id);
+                var getHRLeaderDashboardCriteria = new GetHRLeaderDashboardCriteria
+                {
+                    Empid = this.CurrentUser.Id,
+                    Date = DateTime.Now
+                };
+                IList<HrLeaderDashboardModel> model = _employeeService.GetHrLeaderDashboard(getHRLeaderDashboardCriteria);
+
                 return PartialView("MultiRoleManagementDashboard", model);
             }
 

@@ -172,14 +172,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate)
-        {
-            using (var db = new ObjectDb("EmployeeCalendar_GetOffDate_HolidayDate"))
-            {
-                return db.Query<DateTime>(new { empId, fromDate, toDate }).ToList();
-            }
-        }
-
         /// <summary>
         /// Method update shift.
         /// </summary>

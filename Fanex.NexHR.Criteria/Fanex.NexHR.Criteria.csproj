@@ -41,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="MySpace\GetEmployeeMissingRequestDateCriteria.cs" />
     <Compile Include="MySpace\GetMySpaceCriteria.cs" />
+    <Compile Include="MySpace\GetOffDateAndHolidayDateCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />

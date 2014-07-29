@@ -24,8 +24,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
 
-        IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);
-
         IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null);
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);

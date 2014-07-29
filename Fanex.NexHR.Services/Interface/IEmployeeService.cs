@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Services.Interface
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Country;
+    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.MySpace;
@@ -68,11 +69,9 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria);
 
-        IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);
+        IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 
-        IList<DateTime> GetOffAndHoliday(int empId, DateTime fromDate, DateTime toDate);
-
-        IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null);
+        IList<HrLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
 
         bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
 
