@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
+    <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionCriteria.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
@@ -82,6 +84,11 @@
     <Compile Include="Report\Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Report\TimeRecord\TimeRecordUpdateTypeCriteria.cs" />
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
+    <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
+    <Compile Include="Request\GetRequestByIdCriteria.cs" />
+    <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
+    <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
     <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
@@ -106,7 +113,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CodeAnalysis\CodeAnalysisConfiguration.xml" />
+    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
+      <Project>{5955CE2D-B3DC-48C2-B3B4-CCEE2DB5B35F}</Project>
+      <Name>Fanex.NexHR.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

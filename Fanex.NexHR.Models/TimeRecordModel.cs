@@ -25,22 +25,21 @@ namespace Fanex.NexHR.Models
 
         public short InOutType { get; set; }
 
-        /// <summary>
-        /// Method to get type of In or Out.
-        /// </summary>
-        /// <returns>In/out type.</returns>
-        public string GetInOutName()
-        {
-            if (InOutType == 0)
+        public string GetInOutName 
+        { 
+            get 
             {
-                return Labels.In;
-            }
-            else if (InOutType == 1)
-            {
-                return Labels.Out;
-            }
+                if (InOutType == 0)
+                {
+                    return Labels.In;
+                }
+                else if (InOutType == 1)
+                {
+                    return Labels.Out;
+                }
 
-            return string.Empty;
+                return string.Empty;
+            } 
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("RequestId"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
@@ -162,7 +162,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("RequestId"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
@@ -241,7 +241,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("Id"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 FromDate = reader.ToDateTime("FromDate"),
                                 ToDate = reader.ToDateTime("ToDate"),
                                 TotalDays = reader.ToDecimal("TotalDays"),
@@ -297,7 +297,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("Id"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 FromDate = reader.ToDateTime("FromDate"),
                                 ToDate = reader.ToDateTime("ToDate"),
                                 TotalDays = reader.ToDecimal("TotalDays"),
@@ -371,7 +371,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("RequestId"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
@@ -499,7 +499,7 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 Id = reader.ToInt("RequestId"),
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },

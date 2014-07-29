@@ -27,7 +27,7 @@
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.TotalPages)
         @Html.HiddenFor(model => model.AttachFile)
-        @Html.HiddenFor(model => model.Type)
+        @Html.HiddenFor(model => model.MemoType)
         <div class="grid_19 formrow">
             <div class="grid_2">
                 <div class="label">
@@ -137,7 +137,7 @@
                 new SelectListItem() {Text = "FCK Editor", Value = "0"},
             };    
                 }
-                @Html.RadioButtonList(model => model.Type, types)
+                @Html.RadioButtonList(model => model.MemoType, types)
             </div>
         </div>
         <div class="clear">

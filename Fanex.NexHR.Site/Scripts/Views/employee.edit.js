@@ -16,7 +16,7 @@
         futureDates: true,
         maxYear: new Date().getFullYear(),
         maxAge: 75,
-        defaultDate: $('#DOB').val()
+        defaultDate: $('#DateOfBirth').val()
     });
 
     $("#postform").click(function () {
@@ -64,7 +64,7 @@
         var day = $("#day").val();
         var date = new Date(year, month - 1, day);
 
-        $("#DOB").val(date.format("dd mmm yyyy"));
+        $("#DateOfBirth").val(date.format("dd mmm yyyy"));
     });
 
     $('#upload').click(function () {

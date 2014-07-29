@@ -38,6 +38,7 @@
     <Setting Key="WorkingTimeRequest_Insert_KeepInViewRequest" SpName="WorkingTimeRequest_Insert_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ResetRequest_byMember" SpName="WorkingTimeRequest_ResetRequest_byMember" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="WorkingTimeRequest_GetNumberRequestInMonth" SpName="WorkingTimeRequest_GetNumberRequestInMonth" DbName="nexhrx" Plain="0"></Setting>
 
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id"/>

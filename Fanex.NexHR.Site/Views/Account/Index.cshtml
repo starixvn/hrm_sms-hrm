@@ -81,11 +81,11 @@
                     <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
-                            @Html.DatePickerFor(model => model.DOB)
+                            @Html.DatePickerFor(model => model.DateOfBirth)
                         }
                         else
                         {
-                            @Model.DOB.ToString("dd MMM, yyyy")
+                            @Model.DateOfBirth.ToString("dd MMM, yyyy")
                         }
                     </div>
                     <div class="clear">

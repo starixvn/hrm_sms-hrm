@@ -63,7 +63,7 @@ namespace Fanex.NexHR.Repositories
             if (id > 0)
             {
                 memo = this._memoRepository.GetById(id);
-                if (memo != null && memo.Type == 1)
+                if (memo != null && memo.MemoType == 1)
                 {
                     memo.AttachFile = memo.Contents;
                }

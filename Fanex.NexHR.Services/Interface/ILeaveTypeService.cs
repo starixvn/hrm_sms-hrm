@@ -10,12 +10,13 @@
 namespace Fanex.NexHR.Services.Interface
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Models;
 
     public interface ILeaveTypeService
     {
-        IList<LeaveType> GetAll();
+        IList<LeaveType> GetAll(GetLeaveTypeCriteria criteria);
 
-        LeaveType GetLeaveType(int id);
+        LeaveType GetLeaveTypeById(GetLeaveTypeByIdCriteria criteria);
     }
 }

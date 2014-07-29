@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Services
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -132,16 +133,12 @@ namespace Fanex.NexHR.Services
         /// <param name="isUpdate">Is update or insert.</param>
         private void SendMailForLateInEarlyOutSuccessfully(LateInEarlyOutRequestViewModel model, long requestId, bool isUpdate)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
-                var taskSendMail = new Task(() => this.SendMailForLateInEarlyOutRequest(model, requestId, isUpdate, templateEmailPath, mailTo, mailCC, sendToNickName));
+                var taskSendMail = new Task(()
+                    => this.SendMailForLateInEarlyOutRequest(model, requestId, isUpdate, templateEmailPath, email.SendTo, email.SendCc, email.SendToNickName));
                 taskSendMail.Start();
             }
         }

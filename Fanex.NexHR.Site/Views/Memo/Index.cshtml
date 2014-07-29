@@ -99,7 +99,7 @@
                                     <img src="~/Styles/Images/edit-icon.png" alt="Edit" /></a>
                             </td>
                             <td class="cmd" title="Delete">
-                                <a href="javascript:;" onclick="deleteMemo(@item.Id, '@System.Web.HttpUtility.HtmlEncode(item.Contents)', @item.Type);">
+                                <a href="javascript:;" onclick="deleteMemo(@item.Id, '@System.Web.HttpUtility.HtmlEncode(item.Contents)', @item.MemoType);">
                                     <img src="~/Styles/Images/delete-icon.png" alt="Delete" /></a>
                             </td>
                         }

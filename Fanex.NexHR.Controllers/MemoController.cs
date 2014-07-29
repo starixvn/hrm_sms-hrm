@@ -93,12 +93,12 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Edit(Memo model)
         {
             ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
-            if (model.Type == 1 && string.IsNullOrEmpty(model.AttachFile))
+            if (model.MemoType == 1 && string.IsNullOrEmpty(model.AttachFile))
             {
                 return View(model);
             }
 
-            if (model.Type == 1)
+            if (model.MemoType == 1)
             {
                 model.Contents = model.AttachFile;
             }
@@ -130,7 +130,7 @@ namespace Fanex.NexHR.Controllers
                 TotalPages = 1,
                 SentDate = DateTime.Now,
                 Contents = "[Contents]",
-                Type = 1
+                MemoType = 1
             });
         }
 
@@ -145,7 +145,7 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create(Memo model)
         {
             ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
-            if (model.Type == 1)
+            if (model.MemoType == 1)
             {
                 model.Contents = model.AttachFile;
             }

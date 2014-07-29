@@ -26,7 +26,7 @@
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.TotalPages)
         @Html.HiddenFor(model => model.AttachFile)
-        @Html.HiddenFor(model => model.Type)
+        @Html.HiddenFor(model => model.MemoType)
         @Html.Hidden("pathName", Model.Contents)
         <!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
         <div class="grid_19 formrow">
@@ -139,7 +139,7 @@
                 new SelectListItem() {Text = "FCK Editor", Value = "0"},
             };    
                 }
-                @Html.RadioButtonList(model => model.Type, types)
+                @Html.RadioButtonList(model => model.MemoType, types)
             </div>
         </div>
         <div class="clear">

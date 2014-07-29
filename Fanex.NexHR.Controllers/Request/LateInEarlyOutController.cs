@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -43,7 +44,14 @@ namespace Fanex.NexHR.Controllers.Request
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var numberOfRequest = _RequestService.GetNumberOfRequest((int)RequestFilter.LateInEarlyOut, this.CurrentUser.Id, fromDate, toDate);
+            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                RequestType = (int)RequestFilter.LateInEarlyOut,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             var viewModel = new LateInEarlyOutRequestViewModel()
             {
                 Employee = employee.NickName,
@@ -58,7 +66,7 @@ namespace Fanex.NexHR.Controllers.Request
             GetVerifierApproverList(id, viewModel);
 
             ViewBag.UnavailDates = listUnavailDates;
-            ViewBag.TotalRequest = numberOfRequest;
+            ViewBag.TotalRequest = numberRequests;
             return View(viewModel);
         }
 
@@ -107,7 +115,7 @@ namespace Fanex.NexHR.Controllers.Request
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             int minute = request.TotalMins;
-            var type = short.Parse(request.Type.Id.ToString());
+            var type = short.Parse(request.RequestType.Id.ToString());
 
             var viewModel = new LateInEarlyOutRequestViewModel()
             {

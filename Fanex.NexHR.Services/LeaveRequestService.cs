@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -50,52 +51,47 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to insert leave request.
         /// </summary>
-        /// <param name="model">LeaveRequest Model.</param>
-        /// <param name="errorCode">Error Code.</param>
-        /// <param name="message">Error message.</param>
-        /// <returns>Result of insert.</returns>
-        public long Insert(LeaveRequestModel model, out int errorCode, out string message)
+        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertLeaveRequestCriteria criteria)
         {
-            if (model.FromDate <= model.ToDate)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
             {
-                var requestId = _leaveRequestRepository.Insert(model, out errorCode, out message);
-                model.RequestId = requestId;
-
-                if (errorCode == 0)
+                commandResult = _Repository.Insert(criteria, hasGetOutputParams: true);
+                if (commandResult.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForLeaveSuccessfully(model, templateEmailPath, isUpdate: false));
+                    var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
+            }
 
-                return requestId;
-            }
-            else
-            {
-                errorCode = 101;
-                message = Messages.WrongDateRange;
-                return -1;
-            }
+            return commandResult;
         }
 
         /// <summary>
         /// Function to update leave request.
         /// </summary>
-        /// <param name="model">LeaveRequest Model.</param>
-        /// <param name="errorCode">Error Code.</param>
-        /// <param name="message">Error message.</param>
+        /// <param name="criteria">UpdateLeaveRequest Criteria.</param>
         /// <returns>Result of update.</returns>
-        public bool Update(LeaveRequestModel model, out int errorCode, out string message)
+        public CommandResult Update(UpdateLeaveRequestCriteria criteria)
         {
-            var result = _leaveRequestRepository.Update(model, out errorCode, out message);
-            if (result)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                var taskSendMail = new Task(() => this.SendMailForLeaveSuccessfully(model, templateEmailPath, isUpdate: false));
-                taskSendMail.Start();
+                commandResult = _Repository.Update(criteria);
+                if (commandResult.Code == 0)
+                {
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForUpdateLeaveSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
+                }
             }
 
-            return result;
+            return commandResult;
         }
 
         public IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id)
@@ -188,20 +184,88 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to send mail for saved success for leave request.
         /// </summary>
-        /// <param name="model">LeaveRequest ViewModel.</param>
+        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
         /// <param name="templateEmailPath">Path of template email.</param>
-        /// <param name="isUpdate">Is update or insert.</param>
-        private void SendMailForLeaveSuccessfully(LeaveRequestModel model, string templateEmailPath, bool isUpdate)
+        private void SendMailForInsertLeaveSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            GetMailToAndMailCC(model.RequestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel emailModel = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                this.SendMailForLeaveRequest(model, sendToNickName, isUpdate, templateEmailPath, mailTo, mailCC);
+                string subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
+                if (criteria.TotalDays > 1)
+                {
+                    subject += " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate();
+                }
+                else
+                {
+                    subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
+                }
+
+                emailModel.Subject = subject;
+                string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                var content = new
+                {
+                    Leader = emailModel.SendToNickName,
+                    Member = criteria.EmployeeName,
+                    RequestId = criteria.RequestId,
+                    ForDate = forDate,
+                    Remark = criteria.Remark,
+                    LeaveType = criteria.LeaveTypeName,
+                    Url = this.BaseUrl
+                };
+                emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
+                emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
+
+                this._emailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                emailModel.SendTo,
+                emailModel.SendCc,
+                emailModel.Subject,
+                emailModel.Body);
+            }
+        }
+
+        /// <summary>
+        /// Function to send mail for saved success for leave request.
+        /// </summary>
+        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <param name="templateEmailPath">Path of template email.</param>
+        private void SendMailForUpdateLeaveSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
+        {
+            EmailModel emailModel = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
+            {
+                string subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+                if (criteria.TotalDays > 1)
+                {
+                    subject += " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate();
+                }
+                else
+                {
+                    subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
+                }
+
+                emailModel.Subject = subject;
+                string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                var content = new
+                {
+                    Leader = emailModel.SendToNickName,
+                    Member = criteria.EmployeeName,
+                    RequestId = criteria.RequestId,
+                    ForDate = forDate,
+                    Remark = criteria.Remark,
+                    LeaveType = criteria.LeaveTypeName,
+                    Url = this.BaseUrl
+                };
+                emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
+                emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
+
+                this._emailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                emailModel.SendTo,
+                emailModel.SendCc,
+                emailModel.Subject,
+                emailModel.Body);
             }
         }
 
@@ -213,62 +277,12 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPath">Path of template email.</param>
         private void SendMailForReSetSuccessfully(long requestId, string reason, string templateEmailPath)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit, ref mailTo, ref mailCC, ref sendToNickName);
-            
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel emailModel = GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit);
+            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
                 var leaveRequest = GetRequestById(requestId);
-                this.SendMailForReeditRequest(leaveRequest, reason, sendToNickName, templateEmailPath, mailTo, mailCC);
+                this.SendMailForReeditRequest(leaveRequest, reason, emailModel.SendToNickName, templateEmailPath, emailModel.SendTo, emailModel.SendCc);
             }
-        }
-
-        /// <summary>
-        /// Function to send mail for leave request.
-        /// </summary>
-        /// <param name="model">LeaveRequest ViewModel.</param>
-        /// <param name="sendToNickName">Nick name of person email send to.</param>
-        /// <param name="isUpdate">Is Update or insert.</param>
-        /// <param name="templateEmailPath">Path of email template.</param>
-        /// <param name="mailTo">MailTo List.</param>
-        /// <param name="mailCC">MailCC List.</param>
-        private void SendMailForLeaveRequest(LeaveRequestModel model, string sendToNickName, bool isUpdate, string templateEmailPath, string mailTo, string mailCC)
-        {
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-
-            string forDate = GetStringDateForLeaveRequest(model.FromDate, model.ToDate, model.TotalDays);
-            string subject = (isUpdate ? Messages.UpdatedLeaveEmailSubject : Messages.LeaveEmailSubject) + " " + model.EmployeeName;
-
-            if (model.TotalDays > 1)
-            {
-                subject += " from " + model.FromDate.ToDateMonthYearFormatedDate() + " to " + model.ToDate.ToDateMonthYearFormatedDate();
-            }
-            else
-            {
-                subject += " on " + model.FromDate.ToDateMonthYearFormatedDate();
-            }
-
-            var content = new
-            {
-                Leader = sendToNickName,
-                Member = model.EmployeeName,
-                RequestId = model.RequestId,
-                ForDate = forDate,
-                Remark = model.Remark,
-                LeaveType = model.LeaveTypeName,
-                Url = this.BaseUrl
-            };
-
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                mailTo,
-                mailCC,
-                subject,
-                body);
         }
 
         /// <summary>

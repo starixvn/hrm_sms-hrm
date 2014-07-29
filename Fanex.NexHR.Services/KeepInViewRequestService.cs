@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Services
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -185,16 +186,12 @@ namespace Fanex.NexHR.Services
         /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
         private void SendMailForSuccessfulKeepInViewRequest(KeepInViewRequestViewModel keepInViewRequestViewModel, long requestId, bool isUpdate)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-                var taskSendMail = new Task(() => this.ProcessSendMail(keepInViewRequestViewModel, sendToNickName, isUpdate, templateEmailPath, mailTo, mailCC));
+                var taskSendMail = new Task(() 
+                    => this.ProcessSendMail(keepInViewRequestViewModel, email.SendToNickName, isUpdate, templateEmailPath, email.SendTo, email.SendCc));
                 taskSendMail.Start();
             }
         }

@@ -73,7 +73,7 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public string GetMessageDetailRequest(RequestEntity request, short requestType, string fromShiftCode, string toShiftCode)
         {
-            request.Type = new RequestType { Id = requestType };
+            request.RequestType = new RequestType { Id = requestType };
             request.FromShift = new Shift { Name = fromShiftCode };
             request.ToShift = new Shift { Name = toShiftCode };
 

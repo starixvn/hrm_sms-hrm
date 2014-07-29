@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -99,11 +100,18 @@ namespace Fanex.NexHR.Controllers.Request
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var numberOfRequest = _RequestService.GetNumberOfRequest((int)RequestFilter.CheckInOut, this.CurrentUser.Id, fromDate, toDate);
+            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                RequestType = (int)RequestFilter.CheckInOut,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
 
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.UnavailDates = listUnavailDates;
-            ViewBag.TotalRequest = numberOfRequest;
+            ViewBag.TotalRequest = numberRequests;
 
             return View(viewModel);
         }
@@ -153,7 +161,7 @@ namespace Fanex.NexHR.Controllers.Request
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var type = short.Parse(request.Type.Id.ToString());
+            var type = short.Parse(request.RequestType.Id.ToString());
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,

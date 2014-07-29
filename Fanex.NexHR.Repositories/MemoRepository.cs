@@ -62,7 +62,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@TotalPages", DbType.Int32, model.TotalPages);
                 db.AddInParameter("@SentDate", DbType.DateTime, model.SentDate);
                 db.AddInParameter("@Category", DbType.Int32, model.Category);
-                db.AddInParameter("@Type", DbType.Int32, model.Type);
+                db.AddInParameter("@Type", DbType.Int32, model.MemoType);
 
                 return (int)db.ExecuteScalar();
             }
@@ -87,7 +87,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@TotalPages", DbType.Int32, model.TotalPages);
                 db.AddInParameter("@SentDate", DbType.DateTime, model.SentDate);
                 db.AddInParameter("@Category", DbType.Int32, model.Category);
-                db.AddInParameter("@Type", DbType.Int32, model.Type);
+                db.AddInParameter("@Type", DbType.Int32, model.MemoType);
 
                 return db.ExecuteNonQuery() != 0;
             }

@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Models.Request
 
         public DateTime RequestedDate { get; set; }
 
-        public RequestType Type { get; set; }
+        public RequestType RequestType { get; set; }
 
         public RequestStatus Status { get; set; }
 

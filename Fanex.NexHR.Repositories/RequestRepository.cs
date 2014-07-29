@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -212,7 +213,7 @@ namespace Fanex.NexHR.Repositories
                                 Id = reader.ToInt("RequestId"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                Type = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
                                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 IsWarning = reader.ToBool("IsWarning"),
@@ -295,35 +296,44 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Function to get list supervisor related with request.
+        /// Function to get related people of a request.
         /// </summary>
-        /// <param name="requestId">Request id.</param>
-        /// <param name="action">Action process request.</param>
-        /// <param name="employee">Output Employee.</param>
-        /// <param name="verifier">Output Verifier.</param>
-        /// <param name="approver">Output Approver.</param>
-        /// <param name="listHr">Output SupervisorNameModel list.</param>
-        /// <param name="emailSettings">Email settings.</param>
-        public void GetSupervisorAndHrByRequestId(
-            long requestId,
-            int action,
-            ref SupervisorNameModel employee,
-            ref SupervisorNameModel verifier,
-            ref SupervisorNameModel approver,
-            ref IList<SupervisorNameModel> listHr,
-            ref EmailSettingsModel emailSettings)
+        /// <param name="criteria">GetRequestRelatedPeople Criteria.</param>
+        /// <returns>RequestRelatedPeople Model.</returns>
+        public RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb("EmployeeSupervisor_GetListSupervisorRequestID"))
+            RequestRelatedPeopleModel relatedPeople = null;
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(new { requestId = requestId, action = action }))
+                using (var multi = db.QueryMultiple(criteria))
                 {
-                    employee = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    verifier = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    approver = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    listHr = multi.Read<SupervisorNameModel>().ToList();
-                    emailSettings = multi.Read<EmailSettingsModel>().FirstOrDefault();
+                    relatedPeople.Requester = multi.Read<SupervisorNameModel>().FirstOrDefault();
+                    relatedPeople.Verifier = multi.Read<SupervisorNameModel>().FirstOrDefault();
+                    relatedPeople.Approver = multi.Read<SupervisorNameModel>().FirstOrDefault();
+                    relatedPeople.ListHR = multi.Read<SupervisorNameModel>().ToList();
+                    relatedPeople.EmailSetting = multi.Read<EmailSettingsModel>().FirstOrDefault();
                 }
             }
+
+            return relatedPeople;
+        }
+
+        /// <summary>
+        /// Method get number request in month.
+        /// </summary>
+        /// <param name="employeeId">Employee's id.</param>
+        /// <param name="fromDate">Range from date.</param>
+        /// <param name="toDate">Range to date.</param>
+        /// <returns>Number days.</returns>
+        public int GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
+        {
+            var numberDay = 0;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                numberDay = (int)db.ExecuteScalar(criteria);
+            }
+
+            return numberDay;
         }
 
         /// <summary>

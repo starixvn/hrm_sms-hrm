@@ -1355,7 +1355,7 @@ namespace Fanex.NexHR.Services
             cellFullName.SetCellValue(item.FullName);
             cellNickName.SetCellValue(item.NickName);
             cellTeam.SetCellValue(item.Team.Name);
-            cellDOB.SetCellValue(item.DOB.ToString("dd MMM, yyyy"));
+            cellDOB.SetCellValue(item.DateOfBirth.ToString("dd MMM, yyyy"));
             cellPlaceOfBirth.SetCellValue(item.PlaceOfBirth);
             cellEthnic.SetCellValue(item.Ethnic);
             cellNative.SetCellValue(item.Native);
@@ -1486,7 +1486,7 @@ namespace Fanex.NexHR.Services
             cellCompanyDate.SetCellValue(item.CompanyDate != null ? item.CompanyDate.Value.ToString("dd MMM, yyyy") : string.Empty);
             cellConfirmedDate.SetCellValue(item.ConfirmedDate != null ? item.ConfirmedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
             cellResignedDate.SetCellValue(item.ResignedDate != null ? item.ResignedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellDOB.SetCellValue(item.DOB.ToString("dd MMM, yyyy"));
+            cellDOB.SetCellValue(item.DateOfBirth.ToString("dd MMM, yyyy"));
             cellGender.SetCellValue(gender);
             cellCellPhone.SetCellValue(item.Phone);
             cellEmail.SetCellValue(item.Email);
@@ -1606,13 +1606,13 @@ namespace Fanex.NexHR.Services
             cellTeam.SetCellValue(item.Requester.Team.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
-            if (item.Type.Id == (int)RequestTypes.Leave)
+            if (item.RequestType.Id == (int)RequestTypes.Leave)
             {
                 cellRequest.SetCellValue(item.LeaveType);
             }
             else
             {
-                cellRequest.SetCellValue(item.Type.Name);
+                cellRequest.SetCellValue(item.RequestType.Name);
             }
 
             cellDetails.SetCellValue(this.GetRequestDetail(item));
@@ -1789,7 +1789,7 @@ namespace Fanex.NexHR.Services
             var detail = string.Empty;
             var date = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
 
-            switch (request.Type.Id)
+            switch (request.RequestType.Id)
             {
                 case (int)RequestTypes.Leave:
                     if (request.TotalDays > 1)

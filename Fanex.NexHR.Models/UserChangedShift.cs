@@ -26,8 +26,8 @@ namespace Fanex.NexHR.Models
 
         public int ShiftId { get; set; }
 
-        public string Code_From { get; set; }
+        public string CodeFrom { get; set; }
 
-        public int ShiftId_From { get; set; }
+        public int ShiftIdFrom { get; set; }
     }
 }

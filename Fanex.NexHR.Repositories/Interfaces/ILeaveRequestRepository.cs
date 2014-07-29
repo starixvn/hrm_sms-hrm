@@ -16,10 +16,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
     public interface ILeaveRequestRepository
     {
-        long Insert(object model, out int errorCode, out string message);
-
-        bool Update(object model, out int errorCode, out string message);
-
         IList<RequestEntity> GetRequests(
             int requestType,
             string role,

@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -153,9 +154,7 @@ namespace Fanex.NexHR.Services
             var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             var subject = (isUpdate ? Messages.UpdatedChangeShiftEmailSubject : Messages.ChangeShiftEmailSubject)
                 + " " + employee.DisplayName + " on " + model.FromDate.ToDateMonthYearFormatedDate();
-
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-
             var content = new
             {
                 Leader = sendToNickName,
@@ -182,16 +181,12 @@ namespace Fanex.NexHR.Services
         /// <param name="isUpdate">Is update or insert.</param>
         private void SendMailForChangeShiftSuccessfully(ChangeShiftViewModel model, long requestId, bool isUpdate)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New, ref mailTo, ref mailCC, ref sendToNickName);
-
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
-                var taskSendMail = new Task(() => this.SendMailForChangeShiftRequest(model, requestId, isUpdate, templateEmailPath, mailTo, mailCC, sendToNickName));
+                var taskSendMail = new Task(()
+                    => this.SendMailForChangeShiftRequest(model, requestId, isUpdate, templateEmailPath, email.SendTo, email.SendCc, email.SendToNickName));
                 taskSendMail.Start();
             }
         }

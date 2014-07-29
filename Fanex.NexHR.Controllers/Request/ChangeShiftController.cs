@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Request;
 
     /// <summary>
     /// ChangeShift Controller.
@@ -82,9 +83,16 @@ namespace Fanex.NexHR.Controllers.Request
             };
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var numberOfRequest = _RequestService.GetNumberOfRequest((int)RequestFilter.ChangeShift, this.CurrentUser.Id, fromDate, toDate);
+            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            {
+                EmployeeId = this.CurrentUser.Id,
+                RequestType = (int)RequestFilter.LateInEarlyOut,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             GetVerifierApproverList(this.CurrentUser.Id, model);
-            ViewBag.TotalRequest = numberOfRequest;
+            ViewBag.TotalRequest = numberRequests;
             ViewBag.UnavailDates = listUnavailDates;
             
             return View(model);

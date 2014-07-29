@@ -98,7 +98,6 @@
     <Compile Include="Interfaces\IRequestRepository.cs" />
     <Compile Include="Interfaces\ITeamRepository.cs" />
     <Compile Include="Interfaces\IHolidayRepository.cs" />
-    <Compile Include="Interfaces\ILeaveTypeRepository.cs" />
     <Compile Include="Interfaces\ILookupDataRepository.cs" />
     <Compile Include="Interfaces\IMemoRepository.cs" />
     <Compile Include="Interfaces\IReportRepository.cs" />
@@ -106,7 +105,6 @@
     <Compile Include="Interfaces\ITimeRepository.cs" />
     <Compile Include="LateInEarlyOutRepository.cs" />
     <Compile Include="LeaveRequestRepository.cs" />
-    <Compile Include="LeaveTypeRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="MessageRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs" />

@@ -45,7 +45,7 @@ namespace Fanex.NexHR.Models
 
         public int Category { get; set; }
 
-        public int Type { get; set; }
+        public int MemoType { get; set; }
 
         public string AttachFile { get; set; }
 

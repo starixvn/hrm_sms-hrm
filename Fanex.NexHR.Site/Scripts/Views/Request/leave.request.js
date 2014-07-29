@@ -170,7 +170,7 @@
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
                     $('.validation-summary-valid').show();
-                    if (response.errorCode == 0) {
+                    if (response.Code == 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         LeaveRequest.showSuccessMsg(successMsg, "Leave/EmployeeView");
@@ -189,7 +189,7 @@
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
                     $('.validation-summary-valid').show();
-                    if (response.errorCode == 0) {
+                    if (response.Code == 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         LeaveRequest.showSuccessMsg(successMsg, "Leave/EmployeeView");

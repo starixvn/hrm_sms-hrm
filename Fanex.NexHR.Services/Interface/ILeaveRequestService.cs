@@ -11,14 +11,15 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     public interface ILeaveRequestService
     {
-        long Insert(LeaveRequestModel model, out int errorCode, out string message);
+        CommandResult Insert(InsertLeaveRequestCriteria criteria);
 
-        bool Update(LeaveRequestModel model, out int errorCode, out string message);
+        CommandResult Update(UpdateLeaveRequestCriteria criteria);
 
         bool DeleteWorkingTimeRequest(long id);
 

@@ -10,11 +10,10 @@
 namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
-    using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+using System.Collections.Generic;
+using Fanex.NexHR.Criteria.Request;
+using Fanex.NexHR.Models;
+using Fanex.NexHR.Models.Request;
 
     public interface IRequestRepository
     {
@@ -47,14 +46,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
 
-        void GetSupervisorAndHrByRequestId(
-            long requestId,
-            int action,
-            ref SupervisorNameModel employee,
-            ref SupervisorNameModel verifier, 
-            ref SupervisorNameModel approver, 
-            ref IList<SupervisorNameModel> listHr,
-            ref EmailSettingsModel emailSettings);
+        RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
         int ProcessOvertime(
             string command,
@@ -70,5 +62,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
             int processedBy,
             DateTime processedDate,
             out string message);
+
+        int GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
     }
 }

@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -114,7 +115,7 @@ namespace Fanex.NexHR.Services
             StringBuilder msg = new StringBuilder();
             var message = string.Empty;
 
-            switch (request.Type.Id)
+            switch (request.RequestType.Id)
             {
                 case (int)RequestTypes.Leave:
                     message = GetMessageForLeave(request);
@@ -385,6 +386,18 @@ namespace Fanex.NexHR.Services
             return numberDays;
         }
 
+        public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var number = 0;
+            if (criteria.IsValid())
+            {
+                number = _requestRepository.GetNumberRequestInMonth(criteria);
+            }
+
+            return number;
+        }
+
         /// <summary>
         /// Function to get Change shift request history.
         /// </summary>
@@ -418,66 +431,58 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="requestId">Request Id.</param>
         /// <param name="action">Action setting send mail.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="isSendForRequester">Send mail to requester or no.</param>
-        /// <returns>Setting allow send to requester or no.</returns>
-        public bool GetMailToAndMailCC(
+        /// <returns>Email Model.</returns>
+        public EmailModel GetMailToAndMailCC(
             long requestId, 
-            int action, 
-            ref string mailTo, 
-            ref string mailCC, 
-            ref string sendToNickName,
-            bool isSendForRequester = true)
+            int action)
         {
-            SupervisorNameModel verifier = null;
-            SupervisorNameModel approver = null;
-            SupervisorNameModel employee = null;
-            IList<SupervisorNameModel> listHr = null;
-            EmailSettingsModel emailSettings = null;
-
-            _requestRepository.GetSupervisorAndHrByRequestId(requestId, action, ref employee, ref verifier, ref approver, ref listHr, ref emailSettings);
-
-            if (emailSettings.AllowSendApprover)
+            var emailModel = new EmailModel();
+            var criteria = new GetRequestRelatedPeopleCriteria() 
             {
-                GetMailApprover(approver, ref mailTo, ref sendToNickName);
+                RequestId = requestId,
+                Action = action
+            };
+            RequestRelatedPeopleModel relatedPeople = _requestRepository.GetRequestRelatedPeople(criteria);
+            if (relatedPeople.EmailSetting.AllowSendApprover)
+            {
+                emailModel = GetMailApprover(relatedPeople);
+            }
+            
+            if (relatedPeople.EmailSetting.AllowSendVerifier
+                && !(relatedPeople.Approver != null && relatedPeople.Verifier != null
+                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email) && !string.IsNullOrWhiteSpace(relatedPeople.Approver.Email)
+                && relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                emailModel = GetMailVerifier(relatedPeople, emailModel);
             }
 
-            if (emailSettings.AllowSendVerifier 
-                && !(approver != null && verifier != null
-                && !string.IsNullOrWhiteSpace(verifier.Email) && !string.IsNullOrWhiteSpace(approver.Email)
-                && verifier.Email.Equals(approver.Email, StringComparison.OrdinalIgnoreCase)))
+            if (relatedPeople.EmailSetting.AllowSendHR)
             {
-                GetMailVerifier(verifier, ref mailTo, ref sendToNickName);
-            }
-
-            if (emailSettings.AllowSendHR)
-            {
-                if (verifier != null)
+                if (relatedPeople.Verifier != null)
                 {
-                    listHr = listHr.Where(t => t.Email != verifier.Email).ToList();
+                    relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Verifier.Email).ToList();
                 }
 
-                if (approver != null)
+                if (relatedPeople.Approver != null)
                 {
-                    listHr = listHr.Where(t => t.Email != approver.Email).ToList();
+                    relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Approver.Email).ToList();
                 }
-                
-                GetMailHR(listHr, ref mailTo, ref mailCC, ref sendToNickName);
+
+                emailModel = GetMailHR(relatedPeople, emailModel);
             }
 
-            if (isSendForRequester && emailSettings.AllowSendUser)
+            if (relatedPeople.EmailSetting.AllowSendUser)
             {
-                GetMailOwnerRequest(employee, ref mailTo, ref mailCC, ref sendToNickName);
+                emailModel = GetMailOwnerRequest(relatedPeople, emailModel);
             }
 
-            if (emailSettings.AllowSendMailGroup)
+            if (relatedPeople.EmailSetting.AllowSendMailGroup)
             {
-                GetMailGroup(employee, ref mailTo, ref mailCC, ref sendToNickName);
+                emailModel = GetMailGroup(relatedPeople, emailModel);
             }
 
-            return emailSettings.AllowSendUser;
+            emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
+            return emailModel;
         }
 
         /// <summary>
@@ -573,20 +578,15 @@ namespace Fanex.NexHR.Services
             var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
-
-            var allowSendRequester = GetMailToAndMailCC(request.RequestId, action, ref mailTo, ref mailCC, ref sendToNickName, isSendForRequester: false);
-
-            if (allowSendRequester)
+            EmailModel emailModel = GetMailToAndMailCC(request.RequestId, action);
+            if (emailModel.IsAllowSendRequester)
             {
                 this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
             }
 
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                this.SendToRelatedPeople(command, processUser, request, employee, sendToNickName, mailTo, mailCC, templateEmailPathForRelated);
+                this.SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCc, templateEmailPathForRelated);
             }
         }
 
@@ -751,34 +751,31 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPath">Path of email template.</param>
         private void SendMailForCancelRequest(WorkingTimeRequest request, string templateEmailPath)
         {
-            var mailTo = string.Empty;
-            var mailCC = string.Empty;
-            var sendToNickName = string.Empty;
             var actionSendMail = (request.RequestType == (short)RequestTypes.Leave && request.ReworkCount > 0)
                 ? (int)SettingsSendMail.Delete
                 : (int)SettingsSendMail.Cancel;
 
-            this.GetMailToAndMailCC(request.RequestId, actionSendMail, ref mailTo, ref mailCC, ref sendToNickName);
-            if (!string.IsNullOrWhiteSpace(mailTo))
+            EmailModel email = GetMailToAndMailCC(request.RequestId, actionSendMail);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 switch (request.RequestType)
                 {
                     case (short)RequestTypes.Leave:
-                        this.SendMailForCancelLeaveRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                     case (short)RequestTypes.ChangeShift:
-                        this.SendMailForCancelChangeShiftRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                     case (short)RequestTypes.LateIn:
                     case (short)RequestTypes.EarlyOut:
-                        this.SendMailForCancelLateInEarlyOutRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                     case (short)RequestTypes.CheckIn:
-                    case (short)RequestTypes.CheckOut: 
-                        this.SendMailForCancelCheckInOutRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                    case (short)RequestTypes.CheckOut:
+                        this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                     case (short)RequestTypes.KeepInView:
-                        this.SendMailForCancelKeepInViewRequest(request, mailTo, mailCC, sendToNickName, templateEmailPath);
+                        this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                 }
             }
@@ -1050,113 +1047,121 @@ namespace Fanex.NexHR.Services
             return string.Empty;
         }
 
-        private void GetMailApprover(SupervisorNameModel approver, ref string mailTo, ref string sendToNickName)
+        private EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
         {
-            if (approver != null)
+            var emailModel = new EmailModel();
+            if (relatedPeople.Approver != null)
             {
-                mailTo = approver.Email;
-                sendToNickName = approver.NickName;
+                emailModel.SendTo = relatedPeople.Approver.Email;
+                emailModel.SendToNickName = relatedPeople.Approver.NickName;
             }
+
+            return emailModel;
         }
 
         /// <summary>
-        /// Function to check verifier.
+        /// Function to get mail of verifier.
         /// </summary>
-        /// <param name="verifier">Verifier Object.</param>
-        /// <param name="mailTo">Email to output.</param>
-        /// <param name="sendToNickName">Nick name of person email send to.</param>
-        private void GetMailVerifier(SupervisorNameModel verifier, ref string mailTo, ref string sendToNickName)
+        /// <param name="relatedPeople">Request Related People Model.</param>
+        /// <param name="emailModel">In Email Model.</param>
+        /// <returns>Out Email Model.</returns>
+        private EmailModel GetMailVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (verifier != null)
+            if (relatedPeople.Verifier != null)
             {
-                if (string.IsNullOrWhiteSpace(mailTo))
+                if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
-                    mailTo = verifier.Email;
-                    sendToNickName = verifier.NickName;
+                    emailModel.SendTo = relatedPeople.Verifier.Email;
+                    emailModel.SendToNickName = relatedPeople.Verifier.NickName;
                 }
                 else
                 {
-                    mailTo += ";" + verifier.Email;
+                    emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
                 }
             }
+
+            return emailModel;
         }
 
         /// <summary>
         /// Function to get all emails of HR.
         /// </summary>
-        /// <param name="listHr">Emails of HR.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailHR(IList<SupervisorNameModel> listHr, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        /// <param name="relatedPeople">Request Related People Model.</param>
+        /// <param name="emailModel">In Email Model.</param>
+        /// <returns>Out Email Model.</returns>
+        private EmailModel GetMailHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (listHr != null && listHr.Any())
+            if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
             {
-                var mailHRs = string.Join(";", listHr.Select(x => x.Email != null ? x.Email : string.Empty));
-                if (string.IsNullOrWhiteSpace(mailTo))
+                var mailHRs = string.Join(";", relatedPeople.ListHR.Select(x => x.Email != null ? x.Email : string.Empty));
+                if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
-                    mailTo = mailHRs;
-                    sendToNickName = Labels.HR;
+                    emailModel.SendTo = mailHRs;
+                    emailModel.SendToNickName = Labels.HR;
                 }
                 else
                 {
-                    mailCC = mailHRs;
+                    emailModel.SendCc = mailHRs;
                 }
             }
+
+            return emailModel;
         }
 
         /// <summary>
         /// Function to get email of Owner request.
         /// </summary>
-        /// <param name="employee">Employee which create request.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailOwnerRequest(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        /// <param name="relatedPeople">Request Related People Model.</param>
+        /// <param name="emailModel">In Email Model.</param>
+        /// <returns>Email Model.</returns>
+        private EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (employee != null)
+            if (relatedPeople.Requester != null)
             {
-                if (string.IsNullOrWhiteSpace(mailTo))
+                if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
-                    mailTo = employee.Email;
-                    sendToNickName = employee.NickName;
+                    emailModel.SendTo = relatedPeople.Requester.Email;
+                    emailModel.SendToNickName = relatedPeople.Requester.NickName;
                 }
-                else if (string.IsNullOrWhiteSpace(mailCC))
+                else if (string.IsNullOrWhiteSpace(emailModel.SendCc))
                 {
-                    mailCC = employee.Email;
+                    emailModel.SendCc = relatedPeople.Requester.Email;
                 }
                 else
                 {
-                    mailCC += ";" + employee.Email;
+                    emailModel.SendCc += ";" + relatedPeople.Requester.Email;
                 }
             }
+
+            return emailModel;
         }
 
         /// <summary>
         /// Function to get email group.
         /// </summary>
-        /// <param name="employee">Employee which create request.</param>
-        /// <param name="mailTo">Output mail to.</param>
-        /// <param name="mailCC">Output mail cc.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        private void GetMailGroup(SupervisorNameModel employee, ref string mailTo, ref string mailCC, ref string sendToNickName)
+        /// <param name="relatedPeople">Request Related People Model.</param>
+        /// <param name="emailModel">In Email Model.</param>
+        /// <returns>Email Model.</returns>
+        private EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (employee != null)
+            if (relatedPeople.Requester != null)
             {
-                if (string.IsNullOrWhiteSpace(mailTo))
+                if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
-                    mailTo = employee.MailGroup;
-                    sendToNickName = Labels.All;
+                    emailModel.SendTo = relatedPeople.Requester.MailGroup;
+                    emailModel.SendToNickName = Labels.All;
                 }
-                else if (string.IsNullOrWhiteSpace(mailCC))
+                else if (string.IsNullOrWhiteSpace(emailModel.SendCc))
                 {
-                    mailCC = employee.MailGroup;
+                    emailModel.SendCc = relatedPeople.Requester.MailGroup;
                 }
                 else
                 {
-                    mailCC += ";" + employee.MailGroup;
+                    emailModel.SendCc += ";" + relatedPeople.Requester.MailGroup;
                 }
             }
+
+            return emailModel;
         }
 
         /// <summary>
