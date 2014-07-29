@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
@@ -61,15 +62,11 @@ namespace Fanex.NexHR.Services.Interface
 
         EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria);
 
-        bool UpdateEmployeeShift(EmployeeShift model);
+        CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria);
 
-        IList<WeekWorking> GetWeekWorking(int id, DateTime date);
+        MySpaceViewModel GetMySpace(GetMySpaceCriteria criteria);
 
-        bool UpdateWeekWorking(EmployeeShift model, DateTime date);
-
-        MySpaceViewModel GetMySpace(int id);
-
-        IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
+        IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria);
 
         IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);
 

@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
@@ -263,32 +264,40 @@ namespace Fanex.NexHR.Services
             return employeeShift;
         }
 
-        public bool UpdateEmployeeShift(EmployeeShift model)
+        public CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria)
         {
-            Check.Argument.IsNotNull(model, "modmodelel");
-            return this._employeeRepository.UpdateEmployeeShift(model);
+            CommandResult result = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                result = _Repository.Update(criteria);
+            }
+
+            return result;
         }
 
-        public IList<WeekWorking> GetWeekWorking(int id, System.DateTime date)
+        public MySpaceViewModel GetMySpace(GetMySpaceCriteria criteria)
         {
-            Check.Argument.IsNotNull(id, "id");
-            return this._employeeRepository.GetWeekWorking(id, date);
+            MySpaceViewModel space = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                space = this.GetDataEntity<MySpaceViewModel>(criteria);
+            }
+
+            return space;
         }
 
-        public bool UpdateWeekWorking(EmployeeShift model, System.DateTime date)
+        public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria)
         {
-            Check.Argument.IsNotNull(model, "model");
-            return this._employeeRepository.UpdateWeekWorking(model, date);
-        }
+            IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> dates = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                dates = this.GetData<DateOfEmployeeForgotAndLateEarlyIOViewModel>(criteria).ToList();
+            }
 
-        public ViewModels.MySpaceViewModel GetMySpace(int id)
-        {
-            return this._employeeRepository.GetMySpace(id);
-        }
-
-        public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id)
-        {
-            return this._employeeRepository.GetDateOfEmployeeForgotAndLateEarlyIO(id);
+            return dates;
         }
 
         /// <summary>

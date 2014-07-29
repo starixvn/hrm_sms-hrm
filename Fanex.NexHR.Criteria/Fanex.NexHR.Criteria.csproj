@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="MySpace\GetEmployeeMissingRequestDateCriteria.cs" />
+    <Compile Include="MySpace\GetMySpaceCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Shift\GetEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />
+    <Compile Include="Shift\UpdateEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />
   </ItemGroup>
   <ItemGroup>

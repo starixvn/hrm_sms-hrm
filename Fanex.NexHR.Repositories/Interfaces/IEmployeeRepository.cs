@@ -22,16 +22,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        EmployeeShift GetEmployeeShift(int id);
-
-        bool UpdateEmployeeShift(EmployeeShift model);
-
-        IList<WeekWorking> GetWeekWorking(int id, DateTime date);
-
-        bool UpdateWeekWorking(EmployeeShift model, DateTime date);
-
-        MySpaceViewModel GetMySpace(int id);
-
         IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
 
         IList<DateTime> GetOffDateAndHolidayDate(int empId, DateTime fromDate, DateTime toDate);

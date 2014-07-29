@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -102,7 +103,8 @@ namespace Fanex.NexHR.Controllers
             : _lookupDataService.Get(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
 
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
-            ViewBag.Working = _employeeService.GetMySpace(id);
+            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
+            ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
             var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
             var shifts = _shiftService.GetAll();
@@ -332,7 +334,19 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _employeeService.UpdateEmployeeShift(model);
+                var updateEmployeeShiftCriteria = new UpdateEmployeeShiftCriteria()
+                {
+                    EmpId = model.EmpID,
+                    FriShift = model.FriShift,
+                    MonShift = model.MonShift,
+                    SatShift = model.SatShift,
+                    SunShift = model.SunShift,
+                    ThuShift = model.ThuShift,
+                    TueShift = model.TueShift,
+                    WedShift = model.WedShift
+                };
+                CommandResult result = _employeeService.UpdateEmployeeShift(updateEmployeeShiftCriteria);
+                ViewBag.Updated = result.Code == 0;
             }
             else
             {
@@ -419,10 +433,20 @@ namespace Fanex.NexHR.Controllers
         public ActionResult MySpace()
         {
             var employeeId = this.CurrentUser.Id;
-            var model = _employeeService.GetMySpace(employeeId);
-            var dateOfEmployeeForgotAndLateEarlyIO = _employeeService.GetDateOfEmployeeForgotAndLateEarlyIO(this.CurrentUser.Id);
-            model.DateOfEmployeeForgotAndLateEarlyIO = dateOfEmployeeForgotAndLateEarlyIO;
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = employeeId };
+            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = employeeId, Date = DateTime.Now };
+            var getDatesMissingRequestCriteria = new GetEmployeeMissingRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                Date = DateTime.Now
+            };
+            MySpaceViewModel model = _employeeService.GetMySpace(getMySpaceCriteria);
+
+            if (model != null)
+            {
+                model.DateOfEmployeeForgotAndLateEarlyIO = _employeeService.GetDateOfEmployeeForgotAndLateEarlyIO(getDatesMissingRequestCriteria);
+            }
+
             var employee = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.ResetPassword = employee.PasswordReset;
 

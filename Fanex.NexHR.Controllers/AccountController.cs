@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
@@ -61,7 +62,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitle = model.JobTitleId == null
             ? Resources.Labels.Unknown
             : _lookupDataService.Get(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
-            ViewBag.Working = _employeeService.GetMySpace(id);
+            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
+            ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
             var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
@@ -109,7 +111,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitle = displayModel.JobTitleId == null
             ? Resources.Labels.Unknown
             : _lookupDataService.Get(LookupCodeName.JobTitle, displayModel.JobTitleId.Value).Name;
-            ViewBag.Working = _employeeService.GetMySpace(id);
+            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
+            ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             ViewBag.DefaultCalendar = displayModel.IsDefaultSchedule;
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
             var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
