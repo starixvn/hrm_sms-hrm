@@ -60,6 +60,8 @@
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />
     <Compile Include="Message\GetMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByIdCriteria.cs" />
+    <Compile Include="Message\GetMessageOfEmployeeByIdCriteria.cs" />
+    <Compile Include="Message\GetUnreadMessageOfEmployeeCriteria.cs" />
     <Compile Include="Message\InsertMessageCriteria.cs" />
     <Compile Include="Message\UpdateMessageByCreatorCriteria.cs" />
     <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />

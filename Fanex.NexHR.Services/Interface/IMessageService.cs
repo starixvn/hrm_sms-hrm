@@ -34,5 +34,9 @@ namespace Fanex.NexHR.Services.Interface
         CommandResult DeleteMessageByEmployee(DeleteMessageByEmployeeCriteria criteria);
 
         CommandResult UpdateReadStatusOfMessage(UpdateReadStatusMessageCriteria criteria);
+
+        Message GetDetailMessageByEmployee(GetMessageOfEmployeeByIdCriteria criteria);
+
+        IEnumerable<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria);
     }
 }

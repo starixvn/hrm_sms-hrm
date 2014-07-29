@@ -70,7 +70,14 @@
 						<td>@(index++)
 						</td>
 						<td class="left">
-							<a href="" onclick="detailMessage(@message.MessageId, @message.IsRead)">@message.Subject</a>
+							@if (message.IsRead)
+							{
+								<a href="/message/DetailByEmployee/@message.MessageId">@message.Subject</a>
+							}
+							else
+							{
+								<a href="javascript:;" onclick="detailMessage(@message.MessageId)">@message.Subject</a>
+							}
 						</td>
 						<td>@message.CategoryName
 						</td>
@@ -82,7 +89,7 @@
 						@{
 							if (message.IsRead == true)
 							{
-								<img src="~/Styles/Images/tick-icon.png"></img>
+								<img src="~/Styles/Images/tick-icon.png" title="Read"></img>
 							}
 						}
 						</td>
@@ -95,9 +102,9 @@
 				}
 			</tbody>
 		}
-		else
-		{
+  else
+  {
 					@RazorHelper.DisplayNoInformation(7)
-		}
+  }
 	</table>
 }

@@ -223,6 +223,47 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
+        /// Get detail message by employee.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The detail message.</returns>
+        public Message GetDetailMessageByEmployee(GetMessageOfEmployeeByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var message = new Message();
+
+            if (criteria.IsValid())
+            {
+                message = GetDataEntity<Message>(criteria);
+
+                if (message != null)
+                {
+                    message.CategoryName = GetCategoryName(message.Category);
+                }
+            }
+
+            return message;
+        }
+
+        /// <summary>
+        /// Get unread message of employee.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The enumerator Message.</returns>
+        public IEnumerable<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IEnumerable<Message> unreadMessages = null;
+
+            if (criteria.IsValid())
+            {
+                unreadMessages = GetData<Message>(criteria);
+            }
+
+            return unreadMessages;
+        }
+
+        /// <summary>
         /// Get message category name.
         /// </summary>
         /// <param name="categoryId">The category Id.</param>

@@ -1000,24 +1000,3 @@ div.confirm div.inputRemark textarea
 	float: right !important;
 }
 
-.marquee-message
-{
-	border: 1px solid #A0A0A0;
-	height: 26px;
-	left: 510px;
-	position: absolute;
-	right: 233px;
-	top: 9px;
-	vertical-align: 10px;
-	border-radius: 3px;
-}
-
-.marquee-number-message
-{
-	color: #CF27E1;
-}
-
-.message-text {
-	font-size: 13px;
-	line-height: 24px;
-}

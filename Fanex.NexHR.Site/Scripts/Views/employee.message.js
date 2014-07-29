@@ -22,17 +22,11 @@ var deleteMessage = function (messageId) {
 	});
 };
 
-var detailMessage = function (messageId, isRead) {
-	if (!isRead) {
-		var jqxhr = $.post(_global.root + 'Message/UpdateReadStatusOfMessage', { id: messageId }, function () {
-		}).always(function () {
-			window.location.href = '/message/detailByEmployee/' + messageId;
-		});
-	}
-	else {
-		window.location.href = '/message/DetailByEmployee/' + messageId;
-		return false;
-	}
+var detailMessage = function (messageId) {
+	var jqxhr = $.post(_global.root + 'Message/UpdateReadStatusOfMessage', { id: messageId }, function () {
+	}).always(function () {
+		window.location.href = '/message/detailByEmployee/' + messageId;
+	});
 };
 
 $(document).ready(function () {

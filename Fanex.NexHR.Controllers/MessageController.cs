@@ -200,12 +200,12 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult DetailByEmployee(int id)
         {
-            var getMessageByIdCriteria = new GetMessageByIdCriteria
+            var getMessageByIdCriteria = new GetMessageOfEmployeeByIdCriteria
             {
                 MessageId = id
             };
 
-            Message message = _messageService.GetMessageById(getMessageByIdCriteria);
+            Message message = _messageService.GetDetailMessageByEmployee(getMessageByIdCriteria);
             return View(message);
         }
 

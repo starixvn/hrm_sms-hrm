@@ -13,20 +13,6 @@
                 id="searchbox" class="placeholder" /><a id="searchIcon" class="search_btn button straight-left no_border just-icon"><span class="icon magnifier"></span></a></form>
         </div>
 
-		@if (messages != null && messages.Any())
-		{
-			var numberMessages = messages.Count();
-			var messageText = "You have <span class='marquee-number-message'>" + numberMessages;
-			messageText += numberMessages > 1 ? " unread</span> messages" : " unread</span> message";
-
-			<div class= "marquee-message">
-				<div id="marquee">
-				<a id="lnkmarquee" href="/message/ViewMessageOfEmployee" class="message-text">
-						@Html.Raw(messageText)
-					</a>
-				</div>
-			</div>
-		}
         <div id="user_utilities" class="dropdown_navigation"  style="z-index: 1000;">
             <h2>
                 @Model.FullName - <i>@Model.NickName</i>

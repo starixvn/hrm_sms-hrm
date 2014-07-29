@@ -83,9 +83,7 @@ namespace Fanex.NexHR.Controllers
         public IList<NavigationViewModel> GetNagivationData()
         {
             var navigationItemList = new List<NavigationViewModel>();
-
             var roles = Roles.GetRolesForUser();
-
             navigationItemList = new List<NavigationViewModel>();
 
             // populate sitemap data
@@ -96,8 +94,7 @@ namespace Fanex.NexHR.Controllers
                 var user = this.CurrentUser;
                 var userRole = user.RoleList;
                 //// section level
-                if (sectionNode.Roles.Count == 0
-                    || this.CurrentUser.IsInRoles(sectionNode.Roles.Cast<string>().ToList<string>()))
+                if (sectionNode.Roles.Count == 0 || this.CurrentUser.IsInRoles(sectionNode.Roles.Cast<string>().ToList<string>()))
                 {
                     var sectionItem = new NavigationViewModel(sectionNode);
                     navigationItemList.Add(sectionItem);
@@ -107,9 +104,22 @@ namespace Fanex.NexHR.Controllers
                     foreach (SiteMapNode navNode in sectionNode.ChildNodes)
                     {
                         var navItem = new NavigationViewModel(navNode);
-                        if (navNode.Roles == null || navNode.Roles.Count == 0 ||
-                            roles.Any(i => navNode.Roles.Contains(i)))
+                        if (navNode.Roles == null || navNode.Roles.Count == 0 || roles.Any(i => navNode.Roles.Contains(i)))
                         {
+                            if (navItem.Title.Equals("My messages"))
+                            {
+                                var criteria = new GetUnreadMessageOfEmployeeCriteria
+                                {
+                                    EmployeeId = this.CurrentUser.Id
+                                };
+                                IEnumerable<Message> unreadMessages = _messageService.GetUnreadMessageOfEmployee(criteria);
+
+                                if (unreadMessages != null && unreadMessages.Count() > 0)
+                                {
+                                    navItem.Title += "(" + unreadMessages.Count() + ")";
+                                }
+                            }
+
                             sectionItem.Childs.Add(navItem);
                         }
                     }
