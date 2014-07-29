@@ -30,7 +30,7 @@ var detailMessage = function (messageId, isRead) {
 		});
 	}
 	else {
-		window.location = '/message/DetailByEmployee/' + messageId;
+		window.location.href = '/message/DetailByEmployee/' + messageId;
 		return false;
 	}
 };

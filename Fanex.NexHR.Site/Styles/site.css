@@ -999,7 +999,7 @@ div.confirm div.inputRemark textarea
 {
 	float: right !important;
 }
-=======
+
 .marquee-message
 {
 	border: 1px solid #A0A0A0;
@@ -1021,4 +1021,3 @@ div.confirm div.inputRemark textarea
 	font-size: 13px;
 	line-height: 24px;
 }
->>>>>>> #18864 - Add Is Read property on Message, view detail Message of Employee, reminder unread Message
