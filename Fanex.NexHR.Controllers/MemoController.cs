@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services;
@@ -54,11 +55,22 @@ namespace Fanex.NexHR.Controllers
             return Index(model);
         }
 
+        /// <summary>
+        /// Get all memo.
+        /// </summary>
+        /// <param name="model">The Memo model.</param>
+        /// <returns>The view index.</returns>
         [HttpPost]
         public ActionResult Index(MemoViewModel model)
         {
             ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
-            ViewBag.EntityList = _memoService.GetAll(model);
+            var criteria = new GetAllMemoCriteria
+            {
+                Content = model.Content,
+                Year = model.Year,
+                Category = model.Category
+            };
+            ViewBag.EntityList = _memoService.GetAll(criteria);
             return View(model);
         }
 

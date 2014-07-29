@@ -9,13 +9,15 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using Fanex.NexHR.ViewModels;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Models;
 
     public interface IMemoService
     {
         bool Delete(int id);
 
-        System.Collections.Generic.IList<Fanex.NexHR.Models.Memo> GetAll(MemoViewModel model);
+        IEnumerable<Memo> GetAll(GetAllMemoCriteria criteria);
 
         Fanex.NexHR.Models.Memo GetById(int id);
 

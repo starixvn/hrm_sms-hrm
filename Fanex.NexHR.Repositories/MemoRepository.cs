@@ -11,9 +11,9 @@ namespace Fanex.NexHR.Repositories
 {
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
 
@@ -22,14 +22,6 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class MemoRepository : IMemoRepository
     {
-        public IList<Memo> GetAll(string content, int year, int category)
-        {
-            using (var db = new ObjectDb("Memo_GetAll"))
-            {
-                return db.Query<Memo>(new { content = content, year = year, category = category }).ToList();
-            }
-        }
-
         public Memo GetById(int id)
         {
             using (var db = new ObjectDb("Memo_GetById"))

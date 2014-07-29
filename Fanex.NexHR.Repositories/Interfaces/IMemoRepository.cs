@@ -10,12 +10,11 @@
 namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
 
     public interface IMemoRepository
     {
-        IList<Memo> GetAll(string content, int year, int category);
-
         Memo GetById(int id);
 
         int Insert(Memo model);
