@@ -11,9 +11,9 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Criteria.Request;
 
     public interface IRequestService
     {

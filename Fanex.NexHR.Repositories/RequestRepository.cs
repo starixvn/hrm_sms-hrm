@@ -321,9 +321,7 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method get number request in month.
         /// </summary>
-        /// <param name="employeeId">Employee's id.</param>
-        /// <param name="fromDate">Range from date.</param>
-        /// <param name="toDate">Range to date.</param>
+        /// <param name="criteria">GetNumberRequestInMonth Criteria.</param>
         /// <returns>Number days.</returns>
         public int GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
         {

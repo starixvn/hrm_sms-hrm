@@ -16,11 +16,11 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Criteria.Request;
 
     /// <summary>
     /// ChangeShift Controller.

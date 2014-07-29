@@ -199,7 +199,7 @@ namespace Fanex.NexHR.Controllers
             var updatePersonalInformationCriteria = new UpdateEmployeePersonalInformationCriteria
             {
                 EmpId = employeeModel.Id,
-                DOB = employeeModel.DOB,
+                DateOfBirth = employeeModel.DateOfBirth,
                 PlaceOfbirth = employeeModel.PlaceOfBirth,
                 Ethnic = employeeModel.Ethnic,
                 Native = employeeModel.Native,

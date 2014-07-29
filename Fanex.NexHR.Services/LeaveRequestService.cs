@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Insert(criteria, hasGetOutputParams: true);
+                commandResult = Repository.Insert(criteria, hasGetOutputParams: true);
                 if (commandResult.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
@@ -82,7 +82,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = _Repository.Update(criteria);
+                commandResult = Repository.Update(criteria);
                 if (commandResult.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);

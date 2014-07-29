@@ -19,7 +19,8 @@ namespace Fanex.NexHR.Criteria.Employee
     {
         public int EmpId { get; set; }
 
-        public DateTime DOB { get; set; }
+        [SpParam(SqlParamName = "DOB")]
+        public DateTime DateOfBirth { get; set; }
 
         public string Phone { get; set; }
 
