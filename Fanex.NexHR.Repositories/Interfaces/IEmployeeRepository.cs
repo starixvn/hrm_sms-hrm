@@ -24,15 +24,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
 
-        IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? employeeId = null);
-
-        bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
-
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
-
-        IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
 
         bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
 

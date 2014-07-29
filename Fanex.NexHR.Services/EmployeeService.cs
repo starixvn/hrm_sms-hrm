@@ -353,19 +353,28 @@ namespace Fanex.NexHR.Services
             return dashboard;
         }
 
-        public bool UpdateShift(int id, System.DateTime date, int? shift, int modifiedBy, DateTime modifiedDate)
+        public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
         {
-            return this._employeeRepository.UpdateShift(id, date, shift, modifiedBy, modifiedDate);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<AnnualLeaveBalanceModel> annualLeaves = null;
+            if (criteria.IsValid())
+            {
+                annualLeaves = this.GetData<AnnualLeaveBalanceModel>(criteria).ToList();
+            }
+
+            return annualLeaves;
         }
 
-        public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans)
+        public AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria)
         {
-            return this._employeeRepository.GetAnnualLeaveTransactions(id, year, excludedRequestTrans);
-        }
+            Check.Argument.IsNotNull(criteria, "criteria");
+            AnnualLeaveBalanceModel annualLeave = null;
+            if (criteria.IsValid())
+            {
+                annualLeave = this.GetDataEntity<AnnualLeaveBalanceModel>(criteria);
+            }
 
-        public AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int id)
-        {
-            return this._employeeRepository.GetAnnualLeaveTransaction(id);
+            return annualLeave;
         }
 
         public bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy)

@@ -299,11 +299,6 @@ namespace Fanex.NexHR.Controllers
             return string.Empty;
         }
 
-        public bool UpdateShift(int id, DateTime date, int? shift)
-        {
-            return _employeeService.UpdateShift(id, date, shift, this.CurrentUser.Id, DateTime.Now);
-        }
-
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool DeleteJobTitle(int id)

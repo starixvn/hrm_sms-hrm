@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Security;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -154,10 +155,14 @@ namespace Fanex.NexHR.Controllers
                    ExcludedRequestTrans = true
                };
 
-            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(
-                model.EmployeeId,
-                model.Year,
-                false);
+            var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
+            {
+                EmpID = model.EmployeeId,
+                ExcludedRequestTrans = false,
+                Year = model.Year
+            };
+
+            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
 
             return View(model);
         }
@@ -175,10 +180,13 @@ namespace Fanex.NexHR.Controllers
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(
-                model.EmployeeId,
-                model.Year,
-                model.ExcludedRequestTrans);
+            var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
+            {
+                EmpID = model.EmployeeId,
+                ExcludedRequestTrans = model.ExcludedRequestTrans,
+                Year = model.Year
+            };
+            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
 
             return View(model);
         }
@@ -186,9 +194,11 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
-            var model = _employeeService.GetAnnualLeaveTransaction(id);
+            var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
+            AnnualLeaveBalanceModel model = _employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+
             return View(model);
         }
 

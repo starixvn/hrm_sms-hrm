@@ -155,43 +155,12 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<HrLeaderDashboardModel> GetHrLeaderDashboard(DateTime date, int? empId = null)
-        {
-            using (var db = new ObjectDb("Report_HRLeaderDashBoard"))
-            {
-                return db.Query<HrLeaderDashboardModel>(new { empId, date }).ToList();
-            }
-        }
-
         public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int empId)
         {
             using (var db = new ObjectDb("Report_DateOfEmployeeForgotAndLateEarlyIO"))
             {
                 var date = DateTime.Now.ToShortDateString();
                 return db.Query<DateOfEmployeeForgotAndLateEarlyIOViewModel>(new { empId, date }).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Method update shift.
-        /// </summary>
-        /// <param name="id">Id of the Shift.</param>
-        /// <param name="date">Date time to update.</param>
-        /// <param name="shift">Shift number.</param>
-        /// <param name="modifiedBy">Modified by.</param>
-        /// <param name="modifiedDate">Modified date.</param>
-        /// <returns>Boolean to check status.</returns>
-        public bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate)
-        {
-            using (ObjectDb db = new ObjectDb("EmployeeCalendar_Update"))
-            {
-                db.AddInParameter("@EmpId", DbType.Int32, id);
-                db.AddInParameter("@date", DbType.DateTime, date);
-                db.AddInParameter("@ShiftID", DbType.Int32, shift);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, modifiedBy);
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, modifiedDate);
-
-                return db.ExecuteNonQuery() != 0;
             }
         }
 
@@ -214,14 +183,6 @@ namespace Fanex.NexHR.Repositories
                         parameterValues: criteria.GetSpParams()).ToList();
 
                 return entity;
-            }
-        }
-
-        public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans)
-        {
-            using (ObjectDb db = new ObjectDb("AnnualLeave_GetTransByEmp"))
-            {
-                return db.Query<AnnualLeaveBalanceModel>(new { empId = id, year, excludedRequestTrans }).ToList();
             }
         }
 

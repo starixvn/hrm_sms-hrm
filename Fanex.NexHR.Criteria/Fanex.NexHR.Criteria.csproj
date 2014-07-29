@@ -41,6 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="AnnualLeave\GetAnnualLeaveTransactionCriteria.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Memo\GetAllMemoCriteria.cs" />
     <Compile Include="MySpace\GetEmployeeMissingRequestDateCriteria.cs" />

@@ -73,11 +73,9 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<HrLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
 
-        bool UpdateShift(int id, DateTime date, int? shift, int modifiedBy, DateTime modifiedDate);
+        IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 
-        IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
-
-        AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int id);
+        AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria);
 
         bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
 
