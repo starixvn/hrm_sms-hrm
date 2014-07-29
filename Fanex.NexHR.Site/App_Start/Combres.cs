@@ -7,9 +7,9 @@
 //   <change who="Quinn.Vo" date="2013.1.16">Created</change>
 // </history>
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Fanex.NexHR.Site.App_Start.Combres), "PreStart")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(Fanex.NexHR.Site.AppStart.Combres), "PreStart")]
 
-namespace Fanex.NexHR.Site.App_Start
+namespace Fanex.NexHR.Site.AppStart
 {
     using System.Diagnostics.CodeAnalysis;
     using System.Web.Routing;

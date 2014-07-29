@@ -110,7 +110,7 @@ namespace Fanex.NexHR.Models
 
         public bool IsMember()
         {
-            return Roles == null || Roles == string.Empty || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member);
+            return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member);
         }
     }
 }

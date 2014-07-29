@@ -42,7 +42,7 @@ namespace Fanex.NexHR.Criteria.AnnualLeave
 
         public override bool IsValid()
         {
-            return EmpIds != string.Empty;
+            return !string.IsNullOrWhiteSpace(EmpIds);
         }
     }
 }
