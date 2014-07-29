@@ -80,7 +80,6 @@
     <Compile Include="TeamSupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
-    <Compile Include="EmployeeAnnualBalance.cs" />
     <Compile Include="ExtensionNoModel.cs" />
     <Compile Include="Overtime\OvertimeRequest.cs" />
     <Compile Include="Country.cs" />

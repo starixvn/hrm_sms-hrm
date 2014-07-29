@@ -161,7 +161,7 @@ namespace Fanex.NexHR.Services
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = _Repository.Update(criteria);
+                result = Repository.Update(criteria);
             }
             
             return result;
@@ -173,7 +173,7 @@ namespace Fanex.NexHR.Services
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = _Repository.Update(criteria);
+                result = Repository.Update(criteria);
             }
 
             return result;
@@ -191,7 +191,7 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
-                result = this._Repository.Insert(criteria);
+                result = Repository.Insert(criteria);
             }
 
             return result;
@@ -203,7 +203,7 @@ namespace Fanex.NexHR.Services
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = _Repository.Delete(criteria);
+                result = Repository.Delete(criteria);
             }
 
             return result;
@@ -230,7 +230,7 @@ namespace Fanex.NexHR.Services
                     criteria.IsExpatUseHoliday = false;
                 }
 
-                result = _Repository.Update(criteria);
+                result = Repository.Update(criteria);
             }
 
             return result;
@@ -247,7 +247,7 @@ namespace Fanex.NexHR.Services
             Check.Argument.IsNotNull(criteria, "criteria");
             if (criteria.IsValid())
             {
-                result = _Repository.Update(criteria);
+                result = Repository.Update(criteria);
             }
 
             return result;
@@ -271,7 +271,7 @@ namespace Fanex.NexHR.Services
             Check.Argument.IsNotNull(criteria, "criteria");
             if (criteria.IsValid())
             {
-                result = _Repository.Update(criteria);
+                result = Repository.Update(criteria);
             }
 
             return result;
