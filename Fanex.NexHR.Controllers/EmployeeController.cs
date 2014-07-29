@@ -169,7 +169,26 @@ namespace Fanex.NexHR.Controllers
             model.ProcessBy = this.CurrentUser.Id;
             model.Password = model.Code;
             ViewBag.TeamList = teamList;
-            var create = _employeeService.Insert(ModelState, model);
+            var insertEmployeeCriteria = new InsertEmployeeCriteria
+            {
+                Code = model.Code,
+                CreateBy = model.ProcessBy,
+                CreatedDate = DateTime.Now,
+                DomainUserName = model.DomainUsername,
+                FriShift = model.FriShift,
+                FullName = model.FullName,
+                IsDefaultSchedule = model.IsDefaultSchedule,
+                MainGroupID = model.TeamId,
+                MonShift = model.MonShift,
+                NickName = model.NickName,
+                Password = model.Password,
+                SatShift = model.SatShift,
+                SunShift = model.SunShift,
+                ThuShift = model.ThuShift,
+                TueShift = model.TueShift,
+                WedShift = model.WedShift
+            };
+            var create = _employeeService.Insert(ModelState, insertEmployeeCriteria);
             if (create)
             {
                 var criteria = new GetEmployeeByCodeCriteria() { Code = model.Code };

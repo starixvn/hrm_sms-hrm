@@ -130,33 +130,6 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method get all Employees.
-        /// </summary>
-        /// <returns>All employee.</returns>
-        public IList<Employee> GetAll()
-        {
-            using (var db = new ObjectDb("GetEmployees"))
-            {
-                var p = new DynamicParameters();
-                p.Add("@query", null);
-                p.Add("@pageNumber", 1);
-                p.Add("@pageSize", int.MaxValue);
-                p.Add("@totalRow", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                var entityList = db.Query<Employee, dynamic, Employee>(
-                       (e, t) =>
-                       {
-                           e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
-                           return e;
-                       },
-                       splitOn: "TeamID",
-                       parameterValues: p);
-
-                return entityList.ToList();
-            }
-        }
-
-        /// <summary>
         /// Query Employee.
         /// </summary>
         /// <param name="query">String query.</param>
@@ -242,36 +215,17 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method insert an Employee.
+        /// Insert New Employee.
         /// </summary>
-        /// <param name="model">Employee View Model.</param>
+        /// <param name="criteria">Criteria to insert DB.</param>
         /// <param name="errorCode">Error code.</param>
         /// <param name="message">Error Message.</param>
-        /// <returns>Error Code.</returns>
-        public int Insert(CreateEmployeeViewModel model, out int errorCode, out string message)
+        /// <returns>Error code to handle.</returns>
+        public int Insert(ICriteria criteria, out int errorCode, out string message)
         {
-            using (var db = new ObjectDb("Employee_Information_Insert"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                db.AddInParameter("@fullName", DbType.String, model.FullName);
-                db.AddInParameter("@nickName", DbType.String, model.NickName);
-                db.AddInParameter("@domainUsername", DbType.String, model.DomainUsername);
-                db.AddInParameter("@code", DbType.String, model.Code);
-                db.AddInParameter("@monShift", DbType.String, model.MonShift);
-                db.AddInParameter("@tueShift", DbType.String, model.TueShift);
-                db.AddInParameter("@wedShift", DbType.String, model.WedShift);
-                db.AddInParameter("@thuShift", DbType.String, model.ThuShift);
-                db.AddInParameter("@friShift", DbType.String, model.FriShift);
-                db.AddInParameter("@satShift", DbType.String, model.SatShift);
-                db.AddInParameter("@sunShift", DbType.String, model.SunShift);
-                db.AddInParameter("@mainGroupId", DbType.Int16, model.TeamId);
-                db.AddInParameter("@createdDate", DbType.DateTime, DateTime.Now);
-                db.AddInParameter("@createBy", DbType.Int16, model.ProcessBy);
-                db.AddInParameter("@password", DbType.String, model.Password);
-                db.AddInParameter("@IsDefaultSchedule", DbType.Boolean, model.IsDefaultSchedule);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                db.ExecuteScalar();
+                db.ExecuteScalar(criteria.GetSpParams());
                 errorCode = (int)db.GetParameterValue("ErrCode");
                 message = db.GetParameterValue("ErrMsg") as string;
                 return errorCode;
@@ -584,12 +538,15 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy)
+        public bool ResetAnnualLeaves(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb("AnnualLeave_ResetMultipleTransactions"))
+            bool result = false;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.ExecuteNonQuery(new { empValue, description, fromDate, resetDays, createdDate, createdBy }) != 0;
+                result = db.ExecuteNonQuery(criteria.GetSpParams()) != 0;
             }
+
+            return result;
         }
 
         public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans)

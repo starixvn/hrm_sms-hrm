@@ -48,6 +48,7 @@ namespace Fanex.NexHR.Services
 
         public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             string newCode = string.Empty;
             if (criteria.IsValid())
             {
@@ -59,6 +60,7 @@ namespace Fanex.NexHR.Services
 
         public Employee GetEmployeeById(GetEmployeeByIdCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             Employee employee = null;
             if (criteria.IsValid())
             {
@@ -70,6 +72,7 @@ namespace Fanex.NexHR.Services
 
         public UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             UserLoginModel user = null;
             if (criteria.IsValid())
             {
@@ -81,6 +84,7 @@ namespace Fanex.NexHR.Services
 
         public UserLoginModel GetUserLoginByCode(GetUserLoginByCodeCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             UserLoginModel userLogin = null;
             if (criteria.IsValid())
             {
@@ -92,6 +96,7 @@ namespace Fanex.NexHR.Services
 
         public UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             UserLoginModel userLogin = null;
             if (criteria.IsValid())
             {
@@ -103,6 +108,7 @@ namespace Fanex.NexHR.Services
 
         public Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             Employee employee = null;
             if (criteria.IsValid())
             {
@@ -120,6 +126,7 @@ namespace Fanex.NexHR.Services
 
         public IList<Employee> GetMembersByManager(GetEmployeeByManagerCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             IList<Employee> employees = null;
             if (criteria.IsValid())
             {
@@ -131,6 +138,7 @@ namespace Fanex.NexHR.Services
 
         public IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             IList<Employee> employees = null;
             if (criteria.IsValid())
             {
@@ -148,50 +156,51 @@ namespace Fanex.NexHR.Services
         /// <returns>Boolean to check.</returns>
         public bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             string message;
-            var result = this._employeeRepository.AdjustAnnualLeaves(criteria, out message);
-            if (!result)
+            bool result = false;
+            if (criteria.IsValid())
             {
-                modelState.AddModelError(string.Empty, message);
-                return false;
+                result = this._employeeRepository.AdjustAnnualLeaves(criteria, out message);
+                if (!result)
+                {
+                    modelState.AddModelError(string.Empty, message);
+                    return result;
+                }
+            }
+            
+            return result;
+        }
+
+        public bool ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            bool result = false;
+            if (criteria.IsValid())
+            {
+                result = this._employeeRepository.ResetAnnualLeaves(criteria);
             }
 
             return result;
         }
 
-        public bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy)
-        {
-            return this._employeeRepository.ResetAnnualLeaves(
-                empValue,
-                description,
-                fromDate,
-                resetDays,
-                createdDate,
-                createdBy);
-        }
-
-        public IList<Employee> GetAll()
-        {
-            return this._employeeRepository.GetAll();
-        }
-
         /// <summary>
-        /// Insert new account.
+        /// Insert New Employee.
         /// </summary>
         /// <param name="modelState">Model state.</param>
-        /// <param name="model">CreateEmployee ViewModel.</param>
-        /// <returns>Boolean result.</returns>
-        public bool Insert(ModelStateDictionary modelState, CreateEmployeeViewModel model)
+        /// <param name="criteria">Criteria to insert DB.</param>
+        /// <returns>Boolean to check.</returns>
+        public bool Insert(ModelStateDictionary modelState, InsertEmployeeCriteria criteria)
         {
-            Check.Argument.IsNotNull(model, "model");
+            Check.Argument.IsNotNull(criteria, "criteria");
 
             if (modelState.IsValid)
             {
                 int errorCode;
                 string message;
                 //// hash pasword
-                model.Password = Encryptor.ComputeHash(_HashProvider, model.Password);
-                this._employeeRepository.Insert(model, out errorCode, out message);
+                criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
+                this._employeeRepository.Insert(criteria, out errorCode, out message);
                 if (errorCode == 0)
                 {
                     return true;

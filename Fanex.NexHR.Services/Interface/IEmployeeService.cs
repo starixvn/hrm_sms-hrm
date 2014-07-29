@@ -49,11 +49,9 @@ namespace Fanex.NexHR.Services.Interface
 
         bool AdjustAnnualLeaves(ModelStateDictionary modelState, AdjustEmployeeAnnualLeaveCriteria criteria);
 
-        bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy);
+        bool ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria);
 
-        IList<Employee> GetAll();
-
-        bool Insert(ModelStateDictionary modelState, CreateEmployeeViewModel model);
+        bool Insert(ModelStateDictionary modelState, InsertEmployeeCriteria criteria);
 
         bool Delete(int id, DateTime resignedDate);
 

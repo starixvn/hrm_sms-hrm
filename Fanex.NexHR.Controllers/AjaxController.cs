@@ -215,13 +215,19 @@ namespace Fanex.NexHR.Controllers
                 }
 
                 strValue.Append("</ROOT>");
-                return Json(_employeeService.ResetAnnualLeaves(
-                    strValue.ToString(),
-                    descriptionReset,
-                    date,
-                    minbalance,
-                    DateTime.Now,
-                    this.CurrentUser.Id));
+
+                var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
+                {
+                    CreatedBy = this.CurrentUser.Id,
+                    CreatedDate = DateTime.Now,
+                    Description = descriptionReset,
+                    EmpValue = strValue.ToString(),
+                    FromDate = date,
+                    ResetDays = minbalance
+                };
+                bool result = _employeeService.ResetAnnualLeaves(resetAnnualLeaveCriteria);
+
+                return Json(result);
             }
             else
             {

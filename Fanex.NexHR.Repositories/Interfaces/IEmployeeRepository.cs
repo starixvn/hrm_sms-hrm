@@ -34,13 +34,11 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        IList<Employee> GetAll();
-
         IList<Country> GetAllCountry(ICriteria criteria);
 
         Country GetCountryByCode(ICriteria criteria);
 
-        int Insert(CreateEmployeeViewModel model, out int errorCode, out string message);
+        int Insert(ICriteria criteria, out int errorCode, out string message);
 
         bool Delete(int id, DateTime resignedDate);
 
@@ -73,6 +71,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
 
         bool AdjustAnnualLeaves(ICriteria criteria, out string message);
+
+        bool ResetAnnualLeaves(ICriteria criteria);
 
         IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(int id, int year, bool excludedRequestTrans);
 
@@ -107,8 +107,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
         int GetRangeDate(int employeeId, DateTime fromDate, DateTime toDate);
 
         IEnumerable<DateTime> GetDisableRequestDate(int employeeId, DateTime fromDate, DateTime toDate);
-
-        bool ResetAnnualLeaves(string empValue, string description, DateTime fromDate, int resetDays, DateTime createdDate, int createdBy);
 
         int ChangePassword(int empId, string password, bool? passwordReset);
 

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />
     <Compile Include="EmployeeSupervisor\GetSupervisorByRequestTypeCriteria.cs" />
     <Compile Include="Country\GetAllCountryCriteria.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Employee\GetUserLoginByCodeCriteria.cs" />
     <Compile Include="Employee\GetUserLoginByDomainUserNameCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByIdCriteria.cs" />
+    <Compile Include="Employee\InsertEmployeeCriteria.cs" />
     <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
     <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />
