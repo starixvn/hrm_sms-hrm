@@ -9,41 +9,33 @@
 
 namespace Fanex.NexHR.Core
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using System.Web.Script.Serialization;
 
     /// <summary>
     /// Convert from JSON format to Object and vice versa.
     /// </summary>
-    public class JsonConverter
+    public static class JsonConverter
     {
-        /// <summary>
-        /// JSON Method.
-        /// </summary>
-        public static class JsonExtensionMethod
+        public static string ToJson(object o)
         {
-            public static string ToJson(object o)
-            {
-                var jsonSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            var jsonSerializer = new JavaScriptSerializer();
 
-                return jsonSerializer.Serialize(o);
-            }
+            return jsonSerializer.Serialize(o);
+        }
 
-            public static T FromJson<T>(string s)
-            {
-                var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        public static T FromJson<T>(string s)
+        {
+            var serializer = new JavaScriptSerializer();
 
-                return serializer.Deserialize<T>(s);
-            }
+            return serializer.Deserialize<T>(s);
+        }
 
-            public static List<T> FromJsonArray<T>(string s)
-            {
-                var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        public static List<T> FromJsonArray<T>(string s)
+        {
+            var javaScriptSerializer = new JavaScriptSerializer();
 
-                return javaScriptSerializer.Deserialize<List<T>>(s);
-            }
+            return javaScriptSerializer.Deserialize<List<T>>(s);
         }
     }
 }

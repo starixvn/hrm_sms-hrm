@@ -167,7 +167,7 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public JsonResult AdjustAnnualLeaves(string annualLeaveJson)
         {
-            var model = JsonConverter.JsonExtensionMethod.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
+            var model = JsonConverter.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
             var adjustAnnualLeaveCriteria = new AdjustEmployeeAnnualLeaveCriteria
             {
                 EmpIds = model.EmpIds,

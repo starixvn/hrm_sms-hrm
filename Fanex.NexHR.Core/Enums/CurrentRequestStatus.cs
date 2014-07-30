@@ -9,7 +9,11 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum CurrentRequestStatus : byte
+    using System.Diagnostics.CodeAnalysis;
+    using Fanex.Common.Extensions;
+
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
+    public enum CurrentRequestStatus : int
     {
         /// <summary>
         /// Pending item.

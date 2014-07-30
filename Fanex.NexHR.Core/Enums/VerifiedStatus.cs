@@ -9,6 +9,10 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
+    using System.Diagnostics.CodeAnalysis;
+    using Fanex.Common.Extensions;
+
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum VerifiedStatus
     {
         /// <summary>

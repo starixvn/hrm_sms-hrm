@@ -9,6 +9,8 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
+    using Fanex.Common.Extensions;
+
     /// <summary>
     /// The category of message.
     /// </summary>

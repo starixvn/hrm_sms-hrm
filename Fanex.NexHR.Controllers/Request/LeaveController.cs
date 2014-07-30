@@ -83,8 +83,8 @@ namespace Fanex.NexHR.Controllers.Request
         [ValidateInput(false)] 
         public ActionResult Create(string request, string requestDetails)
         {
-            InsertLeaveRequestCriteria criteria = JsonConverter.JsonExtensionMethod.FromJson<InsertLeaveRequestCriteria>(request);
-            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
+            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = this.CurrentUser.Id;
 
@@ -154,8 +154,8 @@ namespace Fanex.NexHR.Controllers.Request
         [ValidateInput(false)]
         public ActionResult Update(string request, string requestDetails)
         {
-            UpdateLeaveRequestCriteria criteria = JsonConverter.JsonExtensionMethod.FromJson<UpdateLeaveRequestCriteria>(request);
-            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<LeaveDetailModel>(requestDetails);
+            UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
+            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = this.CurrentUser.Id;
 

@@ -10,9 +10,8 @@
 namespace Fanex.NexHR.Core
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Text;
@@ -21,8 +20,10 @@ namespace Fanex.NexHR.Core
     using System.Web.Mvc.Html;
     using System.Web.Routing;
     using System.Web.WebPages;
+    using Fanex.Common.Extensions;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
+
 
     /// <summary>
     /// Extensions Class.
@@ -72,6 +73,7 @@ namespace Fanex.NexHR.Core
         /// <param name="expression">Input Expression.</param>
         /// <param name="listOfValues">SelectListItem List.</param>
         /// <returns>MVCHtml String.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString RadioButtonList<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression,
@@ -127,11 +129,6 @@ namespace Fanex.NexHR.Core
             string formatDate = "dd MMM, yyyy",
             IEnumerable<DateTime> unavailDates = null)
         {
-            if (string.IsNullOrWhiteSpace(formatDate))
-            {
-                throw new ArgumentNullException("formatDate cannot be null");
-            }
-
             string disabledDate = (unavailDates != null && unavailDates.Count() > 0)
                 ? string.Join(",", unavailDates.Select(d => d.ToString("dd MMM yyyy")))
                 : string.Empty;
@@ -163,6 +160,7 @@ namespace Fanex.NexHR.Core
         /// <param name="formatDate">Format date.</param>
         /// <param name="unavailDates">Unavailable Dates.</param>
         /// <returns>MVCHtml String.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString DatePickerFor<TModel, TValue>(
             this HtmlHelper<TModel> html, 
             Expression<Func<TModel, TValue>> expression, 
@@ -223,6 +221,7 @@ namespace Fanex.NexHR.Core
             return MvcHtmlString.Create(dropDownList.ToString());
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString YearPickerFor<TModel, TValue>(
             this HtmlHelper<TModel> html,
             Expression<Func<TModel, TValue>> expression,
@@ -317,11 +316,13 @@ namespace Fanex.NexHR.Core
             return MvcHtmlString.Create(sb.ToString());
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             return CheckBoxListFor(htmlHelper, expression, null);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper, 
             Expression<Func<TModel, TProperty>> expression, 
@@ -330,6 +331,7 @@ namespace Fanex.NexHR.Core
             return CheckBoxListFor(htmlHelper, expression, selectList, (IDictionary<string, object>)null);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper, 
             Expression<Func<TModel, TProperty>> expression, 
@@ -339,17 +341,14 @@ namespace Fanex.NexHR.Core
             return CheckBoxListFor(htmlHelper, expression, selectList, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper, 
             Expression<Func<TModel, TProperty>> expression, 
             IEnumerable<SelectListItem> selectList, 
             IDictionary<string, object> htmlAttributes)
         {
-            if (expression == null)
-            {
-                throw new ArgumentNullException("expression");
-            }
-
             return CheckBoxList(htmlHelper, ExpressionHelper.GetExpressionText(expression), selectList, htmlAttributes);
         }
 
@@ -517,6 +516,7 @@ namespace Fanex.NexHR.Core
         /// <param name="firstItem">First Item.</param>
         /// <param name="htmlAttributes">Html Attributes.</param>
         /// <returns>MVCHtml String.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static MvcHtmlString DropDownListFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression,
@@ -547,12 +547,6 @@ namespace Fanex.NexHR.Core
         }
 
         #endregion
-        public static string CreatePageNode(string url, int pageNumber, bool isActive = false)
-        {
-            return isActive
-                ? "<li><a class='active' href='javascript:;'>" + pageNumber + "</a></li>"
-                : string.Format("<li><a rel='external' href='" + url + "'>{0}</a></li>", pageNumber);
-        }
 
         /// <summary>
         /// Render CheckBoxList.
@@ -572,7 +566,7 @@ namespace Fanex.NexHR.Core
         {
             if (values != null)
             {
-                var valueList = values is string[]
+                var valueList = values.GetType() == typeof(string[])
                 ? values as string[]
                 : values.ToString().Split(new[] { ',' });
 

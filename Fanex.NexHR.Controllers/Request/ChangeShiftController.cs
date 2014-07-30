@@ -109,8 +109,8 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public JsonResult Create(string shiftJson, string shiftDetailJson)
         {
-            var shift = JsonConverter.JsonExtensionMethod.FromJson<ChangeShiftViewModel>(shiftJson);
-            shift.ShiftDetails = JsonConverter.JsonExtensionMethod.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
+            var shift = JsonConverter.FromJson<ChangeShiftViewModel>(shiftJson);
+            shift.ShiftDetails = JsonConverter.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
             shift.By = this.CurrentUser.Id;
             var insert = _ChangeShiftRequestService.Insert(ModelState, shift);
 
@@ -191,8 +191,8 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public JsonResult Update(string shiftJson, string shiftDetailJson, int requestId)
         {
-            var changeShift = JsonConverter.JsonExtensionMethod.FromJson<ChangeShiftViewModel>(shiftJson);
-            changeShift.ShiftDetails = JsonConverter.JsonExtensionMethod.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
+            var changeShift = JsonConverter.FromJson<ChangeShiftViewModel>(shiftJson);
+            changeShift.ShiftDetails = JsonConverter.FromJsonArray<ShiftDetailsViewModel>(shiftDetailJson);
             changeShift.By = this.CurrentUser.Id;
             changeShift.Id = requestId;
 

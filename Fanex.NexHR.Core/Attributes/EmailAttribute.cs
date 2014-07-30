@@ -9,6 +9,7 @@
 
 namespace Fanex.NexHR.Core.Attributes
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
@@ -16,7 +17,8 @@ namespace Fanex.NexHR.Core.Attributes
     /// <summary>
     /// Email Attribute.
     /// </summary>
-    public class EmailAttribute : RegularExpressionAttribute, IClientValidatable
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class EmailAttribute : RegularExpressionAttribute, IClientValidatable
     {
         public EmailAttribute()
             : base(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
@@ -25,8 +27,6 @@ namespace Fanex.NexHR.Core.Attributes
         {
         }
 
-        #region IClientValidatable Members
-
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(
             ModelMetadata metadata, ControllerContext context)
         {
@@ -34,7 +34,5 @@ namespace Fanex.NexHR.Core.Attributes
 
             yield return new EmailValidationRule(errorMessage);
         }
-
-        #endregion
     }
 }

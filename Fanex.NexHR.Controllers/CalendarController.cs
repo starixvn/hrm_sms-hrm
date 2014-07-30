@@ -94,8 +94,8 @@ namespace Fanex.NexHR.Controllers
             var errorCode = 0;
             var message = string.Empty;
             
-            var scheduleArrangeDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<ScheduleModel>(scheduleArranges);
-            var shiftMultipleDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<ShiftMultipleModel>(shiftMultiples);
+            var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
+            var shiftMultipleDetail = JsonConverter.FromJsonArray<ShiftMultipleModel>(shiftMultiples);
             var scheduleArrangeModel = new ScheduleArrangeModel
             {
                 ScheduleModels = scheduleArrangeDetail,
@@ -307,7 +307,7 @@ namespace Fanex.NexHR.Controllers
         {
             var errorCode = 0;
             var message = string.Empty;
-            var employeeOrdersDetail = JsonConverter.JsonExtensionMethod.FromJsonArray<MemberOrderModel>(employeeOrders);
+            var employeeOrdersDetail = JsonConverter.FromJsonArray<MemberOrderModel>(employeeOrders);
             var memberOrders = new MemberScheduleOrderModel
             {
                 SupervisorId = this.CurrentUser.Id,

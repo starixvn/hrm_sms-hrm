@@ -9,9 +9,10 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    /// <summary>
-    /// Supervisor Action Type.
-    /// </summary>
+    using System.Diagnostics.CodeAnalysis;
+    using Fanex.Common.Extensions;
+
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum SupervisorActionType
     {
         /// <summary>

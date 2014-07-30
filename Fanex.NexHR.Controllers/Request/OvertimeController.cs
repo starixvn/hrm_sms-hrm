@@ -157,8 +157,8 @@ namespace Fanex.NexHR.Controllers.Request
         public JsonResult Update(string overtimeJson, string overtimeDetailsJson)
         {
             var id = this.CurrentUser.Id;
-            var model = JsonConverter.JsonExtensionMethod.FromJson<MyOverTimeViewModel>(overtimeJson);
-            var overtimeDetailModel = JsonConverter.JsonExtensionMethod.FromJsonArray<OvertimeRequest>(overtimeDetailsJson).ToList();
+            var model = JsonConverter.FromJson<MyOverTimeViewModel>(overtimeJson);
+            var overtimeDetailModel = JsonConverter.FromJsonArray<OvertimeRequest>(overtimeDetailsJson).ToList();
             model.ProcessedBy = id;
             model.ProcessedDate = DateTime.Now.Date;
             model.OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList();
