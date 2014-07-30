@@ -72,7 +72,7 @@ namespace Fanex.NexHR.ViewModels
         /// Method GetSelectListItemTeam.
         /// </summary>
         /// <returns>List SelectListItem.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
         public IList<SelectListItem> GetSelecListItemTeam()
         {
             IList<SelectListItem> selecListItemTeam = new List<SelectListItem>();
