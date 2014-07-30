@@ -55,29 +55,39 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Get memo by id.
         /// </summary>
-        /// <param name="id">The id of memo.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Memo object.</returns>
-        public Memo GetById(int id)
+        public Memo GetById(GetMemoByIdCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             Memo memo = new Memo();
-            if (id > 0)
+
+            if (criteria.IsValid())
             {
-                memo = this._memoRepository.GetById(id);
+                memo = GetDataEntity<Memo>(criteria);
+
                 if (memo != null && memo.MemoType == 1)
                 {
                     memo.AttachFile = memo.Contents;
-               }
+                }
             }
 
             return memo;
         }
 
-        public bool Delete(int id)
+        /// <summary>
+        /// Delete Memo.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The result.</returns>
+        public bool Delete(DeleteMemoCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             bool result = false;
-            if (id > 0)
+
+            if (criteria.IsValid())
             {
-                result = this._memoRepository.Delete(id);
+                result = _memoRepository.Delete(criteria);
             }
 
             return result;
@@ -86,17 +96,22 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Function to insert MEMO.
         /// </summary>
-        /// <param name="entity">MEMO Object.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Result of insert.</returns>
-        public int Insert(Memo entity)
+        public int Insert(InsertMemoCriteria criteria)
         {
-            int result = 1;
-            if (entity != null)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            int result = 0;
+
+            if (criteria.IsValid())
             {
-                result = this._memoRepository.Insert(entity);
-                var link = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
-                if (result != -1 && entity.SendMail)
+                result = this._memoRepository.Insert(criteria);
+
+                if (result != -1 && criteria.SendMail)
                 {
+                    var link = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority
+                            + HttpContext.Current.Request.ApplicationPath;
+
                     var groupSd = ConfigurationManager.AppSettings["EmailSD"].ToString();
                     var groupGo = ConfigurationManager.AppSettings["EmailGo"].ToString();
                     //// send email(s)
@@ -104,7 +119,7 @@ namespace Fanex.NexHR.Repositories
 
                     var content = new
                     {
-                        Subject = entity.Subject,
+                        Subject = criteria.Subject,
                         Link = link + "memo/detail/" + result.ToString()
                     };
                     var body = RazorEngine.Razor.Parse(bodyTemplate, content);
@@ -112,13 +127,13 @@ namespace Fanex.NexHR.Repositories
                         ConfigurationManager.AppSettings["Email"],
                         groupGo,
                         string.Empty,
-                        Resources.Messages.MemoSubject + " " + entity.Subject,
+                        Resources.Messages.MemoSubject + " " + criteria.Subject,
                         body);
                     this._emailService.SendEmail(
                        ConfigurationManager.AppSettings["Email"],
                        groupSd,
                        string.Empty,
-                       Resources.Messages.MemoSubject + " " + entity.Subject,
+                       Resources.Messages.MemoSubject + " " + criteria.Subject,
                        body);
                 }
             }
@@ -129,18 +144,22 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Function to update MEMO.
         /// </summary>
-        /// <param name="entity">MEMO Object.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Result of updated.</returns>
-        public bool Update(Memo entity)
+        public bool Update(UpdateMemoCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             bool result = false;
-            if (entity != null)
-            {
-                result = this._memoRepository.Update(entity);
-                var link = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath;
 
-                if (result && entity.SendMail)
+            if (criteria.IsValid())
+            {
+                result = this._memoRepository.Update(criteria);
+
+                if (result && criteria.SendMail)
                 {
+                    var link = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority 
+                                    + HttpContext.Current.Request.ApplicationPath;
+
                     var groupSd = ConfigurationManager.AppSettings["EmailSD"].ToString();
                     var groupGo = ConfigurationManager.AppSettings["EmailGo"].ToString();
                     //// send email(s)
@@ -148,21 +167,21 @@ namespace Fanex.NexHR.Repositories
 
                     var content = new
                     {
-                        Subject = entity.Subject,
-                        Link = link + "memo/detail/" + entity.Id.ToString()
+                        Subject = criteria.Subject,
+                        Link = link + "memo/detail/" + criteria.Id.ToString()
                     };
                     var body = RazorEngine.Razor.Parse(bodyTemplate, content);
                     this._emailService.SendEmail(
                         ConfigurationManager.AppSettings["Email"],
                         groupGo,
                         string.Empty,
-                        Resources.Messages.MemoSubject + " " + entity.Subject,
+                        Resources.Messages.MemoSubject + " " + criteria.Subject,
                         body);
                     this._emailService.SendEmail(
                        ConfigurationManager.AppSettings["Email"],
                        groupSd,
                        string.Empty,
-                       Resources.Messages.MemoSubject + " " + entity.Subject,
+                       Resources.Messages.MemoSubject + " " + criteria.Subject,
                        body);
                 }
             }

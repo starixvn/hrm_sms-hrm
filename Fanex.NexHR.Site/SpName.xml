@@ -245,9 +245,12 @@
     <Setting Key="Memo_Insert" SpName="Memo_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Memo_Update" SpName="Memo_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Memo_Delete" SpName="Memo_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Memo_GetAll" SpName="Memo_GetAll" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Memo_GetById" SpName="Memo_GetById" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Memo_GetById" SpName="Memo_GetById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Memo_GetAll" SpName="Memo_GetAll" DbName="nexhrx" Plain="0">
+		<Mapping DataField="Type" ObjectProperty="MemoType"/>
+	</Setting>
+    <Setting Key="Memo_GetById" SpName="Memo_GetById" DbName="nexhrx" Plain="0">
+		<Mapping DataField="Type" ObjectProperty="MemoType"/>
+	</Setting>
   </Function>
 
   <Function Name="LeaveType">

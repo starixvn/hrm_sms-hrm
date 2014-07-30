@@ -78,7 +78,11 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Edit(int id)
         {
             ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
-            var memo = _memoService.GetById(id);
+            var criteria = new GetMemoByIdCriteria
+            {
+                Id = id
+            };
+            var memo = _memoService.GetById(criteria);
             return View(memo);
         }
 
@@ -105,7 +109,21 @@ namespace Fanex.NexHR.Controllers
 
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _memoService.Update(model);
+                var criteria = new UpdateMemoCriteria
+                {
+                    Id = model.Id,
+                    RefNo = model.RefNo,
+                    Contents = model.Contents,
+                    Subject = model.Subject,
+                    SentTo = model.SentTo,
+                    SentFrom = model.SentFrom,
+                    ForInfo = model.ForInfo,
+                    TotalPages = model.TotalPages,
+                    SentDate = model.SentDate,
+                    Category = model.Category,
+                    Type = model.MemoType
+                };
+                ViewBag.Updated = _memoService.Update(criteria);
             }
             else
             {
@@ -152,10 +170,25 @@ namespace Fanex.NexHR.Controllers
 
             if (ModelState.IsValid)
             {
-                var id = _memoService.Insert(model);
+                var insertMemoCriteria = new InsertMemoCriteria
+                {
+                    RefNo = model.RefNo,
+                    Contents = model.Contents,
+                    Subject = model.Subject,
+                    SentTo = model.SentTo,
+                    SentFrom = model.SentFrom,
+                    SentDate = model.SentDate,
+                    ForInfo = model.ForInfo,
+                    TotalPages = model.TotalPages,
+                    Category = model.Category,
+                    Type = model.MemoType,
+                    SendMail = model.SendMail
+                };
+                int memoId = _memoService.Insert(insertMemoCriteria);
 
-                ViewBag.Updated = id != -1 ? true : false;
-                if (id == -1)
+                ViewBag.Updated = memoId != -1 ? true : false;
+
+                if (memoId == -1)
                 {
                     ModelState.AddModelError(string.Empty, "Duplicate memo");
                 }
@@ -170,7 +203,11 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult Detail(int id)
         {
-            return View(_memoService.GetById(id));
+            var criteria = new GetMemoByIdCriteria
+            {
+                Id = id
+            };
+            return View(_memoService.GetById(criteria));
         }
     }
 }

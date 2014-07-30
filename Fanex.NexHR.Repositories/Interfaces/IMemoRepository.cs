@@ -9,18 +9,14 @@
 
 namespace Fanex.NexHR.Repositories.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
 
     public interface IMemoRepository
     {
-        Memo GetById(int id);
+        int Insert(ICriteria criteria);
 
-        int Insert(Memo model);
+        bool Update(ICriteria criteria);
 
-        bool Delete(int id);
-
-        bool Update(Memo model);
+        bool Delete(ICriteria criteria);
     }
 }

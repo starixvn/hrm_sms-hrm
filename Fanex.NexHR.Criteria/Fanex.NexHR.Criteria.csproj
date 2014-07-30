@@ -53,7 +53,11 @@
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
+    <Compile Include="Memo\DeleteMemoCriteria.cs" />
     <Compile Include="Memo\GetAllMemoCriteria.cs" />
+    <Compile Include="Memo\GetMemoByIdCriteria.cs" />
+    <Compile Include="Memo\InsertMemoCriteria.cs" />
+    <Compile Include="Memo\UpdateMemoCriteria.cs" />
     <Compile Include="MySpace\GetEmployeeMissingRequestDateCriteria.cs" />
     <Compile Include="MySpace\GetMySpaceCriteria.cs" />
     <Compile Include="MySpace\GetOffDateAndHolidayDateCriteria.cs" />

@@ -15,14 +15,14 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IMemoService
     {
-        bool Delete(int id);
+        bool Delete(DeleteMemoCriteria criteria);
 
         IEnumerable<Memo> GetAll(GetAllMemoCriteria criteria);
 
-        Fanex.NexHR.Models.Memo GetById(int id);
+        Memo GetById(GetMemoByIdCriteria criteria);
 
-        int Insert(Fanex.NexHR.Models.Memo entity);
+        int Insert(InsertMemoCriteria criteria);
 
-        bool Update(Fanex.NexHR.Models.Memo entity);
+        bool Update(UpdateMemoCriteria criteria);
     }
 }

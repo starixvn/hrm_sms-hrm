@@ -52,15 +52,15 @@ function attachFile(attachPath) {
 var form;
 
 function changeType() {
-	if ($("#Type_1").attr("checked") === "checked") {
+	if ($("#MemoType_1").attr("checked") === "checked") {
 		$("#content").hide();
 		$("#upload").show();
-		$("#Type").val("1");
+		$("#MemoType").val("1");
 	}
 	else {
 		$("#content").show();
 		$("#upload").hide();
-		$("#Type").val("0");
+		$("#MemoType").val("0");
 		$("#Contents_tbl").css("width", "612");
 		$("#Contents_ifr").css("height", "335");
 
@@ -154,13 +154,13 @@ function validateForm() {
 		errorString.push("* The SentFrom field is required.");
 	}
 
-	if ($("#Type").val() === "1") {
+	if ($("#MemoType").val() === "1") {
 		if (attachFile === 0 && fileName === "") {
 			errorString.push("* The Attached file is required.");
 		}
 	}
 
-	if ($("#Type").val() === "0") {
+	if ($("#MemoType").val() === "0") {
 		if (editorText === null || editorText === "") {
 			errorString.push("* The Content field is required.");
 		}
@@ -201,13 +201,13 @@ $(document).ready(function () {
 		$("#Contents").val(contents);
 	});
 
-	$("#Type_0, #Type_1").change(function () {
+	$("#MemoType_0, #MemoType_1").change(function () {
 		changeType();
 		$("#error").hide();
 	});
 
-	if ($("#Type").val() === "1") {
-		$("#Type_1").attr("checked", "checked");
+	if ($("#MemoType").val() === "1") {
+		$("#MemoType_1").attr("checked", "checked");
 
 		if ($("#AttachFile").val().length > 0) {
 			$('#attach').show();
@@ -218,7 +218,7 @@ $(document).ready(function () {
 		}
 	}
 	else {
-		$("#Type_0").attr("checked", "checked");
+		$("#MemoType_0").attr("checked", "checked");
 	}
 
 	changeType();
@@ -227,7 +227,7 @@ $(document).ready(function () {
 		var validate = validateForm();
 		form = $(this);
 
-		if ($("#Type").val() === "1") {
+		if ($("#MemoType").val() === "1") {
 			var attachFile = $("#allAttachFile").children().length;
 			var fileName = $("#fileName").val();
 
