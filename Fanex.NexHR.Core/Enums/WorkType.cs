@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="WorkTypes.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="WorkType.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum WorkTypes : short
+    public enum WorkType : int
     {
         /// <summary>
         /// Off day item.
@@ -27,6 +27,6 @@ namespace Fanex.NexHR.Core.Enums
         /// Work item.
         /// </summary>
         [StringValue("Work")]
-        Work = 3,
+        Work = 3
     }
 }

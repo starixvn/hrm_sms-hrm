@@ -171,7 +171,7 @@ namespace Fanex.NexHR.Controllers
             var listRole = CurrentUser.RoleList;
             if (listRole != null)
             {
-                authorize = listRole.Any(x => x == (int)RolesEnum.HR);
+                authorize = listRole.Any(x => x == (int)RoleSystem.HR);
             }
 
             if (authorize)
@@ -180,7 +180,7 @@ namespace Fanex.NexHR.Controllers
                     model.FromDate,
                     model.ToDate,
                     model.MaxRequest,
-                    (int)RolesEnum.HR,
+                    (int)RoleSystem.HR,
                     null,
                     this.CurrentUser.Id,
                     string.Empty,
@@ -218,7 +218,7 @@ namespace Fanex.NexHR.Controllers
                 fromDate,
                 toDate,
                 maxRequest,
-                (int)RolesEnum.HR,
+                (int)RoleSystem.HR,
                 empId,
                 currentUserId,
                 group,
@@ -261,14 +261,14 @@ namespace Fanex.NexHR.Controllers
             var listRole = CurrentUser.RoleList;
             if (listRole != null)
             {
-                if (listRole.Any(x => x == (int)RolesEnum.Approver))
+                if (listRole.Any(x => x == (int)RoleSystem.Approver))
                 {
-                    currentUserrole = (int)RolesEnum.Approver;
+                    currentUserrole = (int)RoleSystem.Approver;
                 }
 
-                if (listRole.Any(x => x == (int)RolesEnum.Verifier))
+                if (listRole.Any(x => x == (int)RoleSystem.Verifier))
                 {
-                    currentUserrole = (int)RolesEnum.Verifier;
+                    currentUserrole = (int)RoleSystem.Verifier;
                 }
             }
 
@@ -660,7 +660,7 @@ namespace Fanex.NexHR.Controllers
             var listRole = this.CurrentUser.RoleList;
             if (listRole != null)
             {
-                authorize = listRole.Any(x => x == (int)RolesEnum.HR);
+                authorize = listRole.Any(x => x == (int)RoleSystem.HR);
             }
 
             ViewBag.Authorize = authorize;

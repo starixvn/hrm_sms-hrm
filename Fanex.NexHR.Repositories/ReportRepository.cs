@@ -70,7 +70,7 @@ namespace Fanex.NexHR.Repositories
                         {
                             request = new EmployeeAttendanceRequest
                             {
-                                RequestType = new RequestType { Id = Convert.ToInt16(t.RequestType) },
+                                RequestType = new RequestTypeModel { Id = Convert.ToInt16(t.RequestType) },
                                 FromDate = t.FromDate,
                                 ToDate = t.ToDate,
                                 FromTime = t.FromTime,

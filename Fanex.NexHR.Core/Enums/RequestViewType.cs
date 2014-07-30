@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum RequestViewType : byte
+    public enum RequestViewType : int
     {
         /// <summary>
         /// PersonalSpace item.
@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Core.Enums
         /// HRSpace item.
         /// </summary>
         [StringValue("HrSpace")]
-        HrSpace = 2,
+        HRSpace = 2,
 
         /// <summary>
         /// CompanySpace item.

@@ -202,7 +202,7 @@ namespace Fanex.NexHR.Controllers
             };
             var supervisorModel = _teamService.GetTeamSupervisor(criteria);
 
-            if (supervisorRole == (short)RolesEnum.ShiftManager)
+            if (supervisorRole == (short)RoleSystem.ShiftManager)
             {
                 var model = new ShiftManagerViewModel
                 {

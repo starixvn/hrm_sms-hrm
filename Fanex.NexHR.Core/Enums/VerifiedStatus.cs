@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum VerifiedStatus : byte
+    public enum VerifiedStatus
     {
         /// <summary>
         /// Pending item.

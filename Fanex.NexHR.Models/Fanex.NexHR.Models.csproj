@@ -94,10 +94,10 @@
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveSummaryByTeam.cs" />
     <Compile Include="RequestsMonitoring.cs" />
-    <Compile Include="Overtime\OvertimeType.cs" />
+    <Compile Include="Overtime\OvertimeTypeModel.cs" />
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
-    <Compile Include="Request\RequestType.cs" />
+    <Compile Include="Request\RequestTypeModel.cs" />
     <Compile Include="Request\ShiftDetails.cs" />
     <Compile Include="Calendar\ScheduleArrangeModel.cs" />
     <Compile Include="Calendar\ScheduleModel.cs" />

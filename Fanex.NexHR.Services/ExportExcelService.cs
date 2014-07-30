@@ -1606,7 +1606,7 @@ namespace Fanex.NexHR.Services
             cellTeam.SetCellValue(item.Requester.Team.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
-            if (item.RequestType.Id == (int)RequestTypes.Leave)
+            if (item.RequestType.Id == (int)RequestType.Leave)
             {
                 cellRequest.SetCellValue(item.LeaveType);
             }
@@ -1728,7 +1728,7 @@ namespace Fanex.NexHR.Services
 
             switch (request.RequestType.Id)
             {
-                case (int)RequestTypes.Leave:
+                case (int)RequestType.Leave:
                     if (request.TotalDays > 1)
                     {
                         detail = string.Format(_MsgLeave, Convert.ToInt32(request.TotalDays), date);
@@ -1754,22 +1754,22 @@ namespace Fanex.NexHR.Services
 
                     break;
 
-                case (int)RequestTypes.ChangeShift:
+                case (int)RequestType.ChangeShift:
                     detail = string.Format(_MsgChangeShift, request.FromShift, request.ToShift, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
-                case (int)RequestTypes.CheckIn:
-                case (int)RequestTypes.CheckOut:
+                case (int)RequestType.CheckIn:
+                case (int)RequestType.CheckOut:
                     detail = string.Format(_MsgCheckInOut, request.FromDate.Value.ToString("HH:mm"), request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
-                case (int)RequestTypes.LateIn:
+                case (int)RequestType.LateIn:
                     detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift, date);
                     break;
-                case (int)RequestTypes.EarlyOut:
+                case (int)RequestType.EarlyOut:
                     detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift, date);
                     break;
-                case (int)RequestTypes.KeepInView:
+                case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
                 default:
@@ -1791,7 +1791,7 @@ namespace Fanex.NexHR.Services
 
             switch (request.RequestType.Id)
             {
-                case (int)RequestTypes.Leave:
+                case (int)RequestType.Leave:
                     if (request.TotalDays > 1)
                     {
                         detail = string.Format(_MsgLeave, Convert.ToInt32(request.TotalDays), date);
@@ -1817,22 +1817,22 @@ namespace Fanex.NexHR.Services
 
                     break;
 
-                case (int)RequestTypes.ChangeShift:
+                case (int)RequestType.ChangeShift:
                     detail = string.Format(_MsgChangeShift, request.FromShift.Name, request.ToShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
-                case (int)RequestTypes.CheckIn:
-                case (int)RequestTypes.CheckOut:
+                case (int)RequestType.CheckIn:
+                case (int)RequestType.CheckOut:
                     detail = string.Format(_MsgCheckInOut, request.FromDate.ToString("HH:mm"), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
-                case (int)RequestTypes.LateIn:
+                case (int)RequestType.LateIn:
                     detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift.Name, date);
                     break;
-                case (int)RequestTypes.EarlyOut:
+                case (int)RequestType.EarlyOut:
                     detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, date);
                     break;
-                case (int)RequestTypes.Overtime:
+                case (int)RequestType.Overtime:
                     if (request.IsOvertimeHours)
                     {
                         detail = string.Format(
@@ -1841,7 +1841,7 @@ namespace Fanex.NexHR.Services
                             request.FromDate.ToString("HH:mm"),
                             request.ToDate.ToString("HH:mm"),
                             request.TotalDays.ToString("0.#"),
-                            new OvertimeType { Id = request.OvertimeType }.Name);
+                            new OvertimeTypeModel { Id = request.OvertimeType }.Name);
                     }
                     else
                     {
@@ -1849,11 +1849,11 @@ namespace Fanex.NexHR.Services
                             _MsgOvertimeShift,
                             request.FromDate.ToDateMonthYearFormatedDate(),
                             request.FromShift != null ? request.FromShift.Name : string.Empty,
-                            new OvertimeType { Id = request.OvertimeType }.Name);
+                            new OvertimeTypeModel { Id = request.OvertimeType }.Name);
                     }
 
                     break;
-                case (int)RequestTypes.KeepInView:
+                case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
                 default:

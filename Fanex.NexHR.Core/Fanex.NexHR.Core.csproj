@@ -50,6 +50,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Fanex.Common, Version=1.0.404.97, Culture=neutral, processorArchitecture=MSIL">
@@ -72,11 +74,11 @@
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
-    <Compile Include="Enums\Commands.cs" />
+    <Compile Include="Enums\Command.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
-    <Compile Include="Enums\AttendanceFilterEnums.cs" />
+    <Compile Include="Enums\AttendanceFilter.cs" />
     <Compile Include="Enums\MessageCategory.cs" />
-    <Compile Include="Enums\OvertimeTypes.cs" />
+    <Compile Include="Enums\OvertimeType.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
     <Compile Include="Enums\SettingsSendMail.cs" />
@@ -86,10 +88,10 @@
     <Compile Include="Enums\CurrentRequestStatus.cs" />
     <Compile Include="Enums\HashProvider.cs" />
     <Compile Include="Enums\RequestFilter.cs" />
-    <Compile Include="Enums\RequestTypes.cs" />
-    <Compile Include="Enums\RolesEnum.cs" />
+    <Compile Include="Enums\RequestType.cs" />
+    <Compile Include="Enums\RoleSystem.cs" />
     <Compile Include="Enums\StringValueAttribute.cs" />
-    <Compile Include="Enums\WorkTypes.cs" />
+    <Compile Include="Enums\WorkType.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HSSFSheetExtensions.cs" />
     <Compile Include="JsonConverter.cs" />

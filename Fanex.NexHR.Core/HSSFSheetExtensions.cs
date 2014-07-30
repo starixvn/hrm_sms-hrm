@@ -84,7 +84,7 @@ namespace Fanex.NexHR.Core
                 var oldCell = sourceRow.GetCell(i);
                 var newCell = newRow.CreateCell(i);
 
-                sheet.CopyCell(oldCell, newCell);
+                CopyCell(oldCell, newCell);
             }
 
             return newRow;
@@ -93,11 +93,10 @@ namespace Fanex.NexHR.Core
         /// <summary>
         /// Copy a cell to another cell.
         /// </summary>
-        /// <param name="sheet">Main sheet object.</param>
         /// <param name="sourceCell">Source cell.</param>
         /// <param name="destCell">Destination cell.</param>
         /// <returns>A copy cell.</returns>
-        public static ICell CopyCell(this ISheet sheet, ICell sourceCell, ICell destCell)
+        public static ICell CopyCell(ICell sourceCell, ICell destCell)
         {
             //// If the old cell is null jump to next cell
             if (sourceCell == null)

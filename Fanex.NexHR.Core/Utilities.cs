@@ -30,8 +30,8 @@ namespace Fanex.NexHR.Core
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckIn, Value = ((short)RequestTypes.CheckIn).ToString() },
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckOut, Value = ((short)RequestTypes.CheckOut).ToString() }
+                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
+                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
                     };
             }
         }
@@ -42,8 +42,8 @@ namespace Fanex.NexHR.Core
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.LateIn, Value = ((short)RequestTypes.LateIn).ToString() },
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.EarlyOut, Value = ((short)RequestTypes.EarlyOut).ToString() }
+                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
+                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
                     };
             }
         }

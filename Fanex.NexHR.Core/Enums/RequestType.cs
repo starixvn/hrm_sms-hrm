@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="RequestTypes.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="RequestType.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum RequestTypes : short
+    public enum RequestType : int
     {
         /// <summary>
         /// CheckIn item.

@@ -179,7 +179,7 @@ namespace Fanex.NexHR.Controllers.Request
 
         public ActionResult GetActingEmployees(string query)
         {
-            var employees = _RequestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RolesEnum.ActingSupervisor, null, query.Trim(), includeLoginUser: true);
+            var employees = _RequestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RoleSystem.ActingSupervisor, null, query.Trim(), includeLoginUser: true);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
@@ -455,8 +455,8 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetVerifierApproverList(int id, MyOverTimeViewModel viewModel)
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Verifier, (byte)RequestTypes.Overtime);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Approver, (byte)RequestTypes.Overtime);
+            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.Overtime);
+            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.Overtime);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }

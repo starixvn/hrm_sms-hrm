@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="RequestType.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="RequestTypeModel.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -11,12 +11,11 @@ namespace Fanex.NexHR.Models.Request
 {
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Resources;
-    
+
     /// <summary>
     /// Request Type.
     /// </summary>
-    public class RequestType : EntityBase<short>
+    public class RequestTypeModel : EntityBase<short>
     {
         public new string Name
         {
@@ -32,17 +31,17 @@ namespace Fanex.NexHR.Models.Request
             {
                 switch (Id)
                 {
-                    case (int)RequestTypes.CheckIn:
-                    case (int)RequestTypes.CheckOut:
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.CheckInOut;
-                    case (int)RequestTypes.LateIn:
-                    case (int)RequestTypes.EarlyOut:
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.LateInEarlyOut;
-                    case (int)RequestTypes.ChangeShift:
+                    case (int)RequestType.ChangeShift:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.ChangeShift;
-                    case (int)RequestTypes.Leave:
+                    case (int)RequestType.Leave:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
-                    case (int)RequestTypes.KeepInView:
+                    case (int)RequestType.KeepInView:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
                     default:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;
@@ -56,17 +55,17 @@ namespace Fanex.NexHR.Models.Request
             {
                 switch (Id)
                 {
-                    case (int)RequestTypes.CheckIn:
-                    case (int)RequestTypes.CheckOut:
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.CheckInOut;
-                    case (int)RequestTypes.LateIn:
-                    case (int)RequestTypes.EarlyOut:
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.LateInEarlyOut;
-                    case (int)RequestTypes.ChangeShift:
+                    case (int)RequestType.ChangeShift:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.ChangeShift;
-                    case (int)RequestTypes.Leave:
+                    case (int)RequestType.Leave:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
-                    case (int)RequestTypes.KeepInView:
+                    case (int)RequestType.KeepInView:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
                     default:
                         return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;

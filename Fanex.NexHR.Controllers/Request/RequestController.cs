@@ -121,7 +121,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             ViewBag.IsAllowChangeStatus = true;
             ViewBag.Action = "HRView";
-            this.GetRequests(request, RequestViewType.HrSpace, request.IsDailyRequest);
+            this.GetRequests(request, RequestViewType.HRSpace, request.IsDailyRequest);
 
             return View(request);
         }
@@ -267,14 +267,14 @@ namespace Fanex.NexHR.Controllers.Request
 
         public ActionResult GetVerifiers(int employeeId, byte requestType)
         {
-            IList<SupervisorNameModel> verifierList = this.GetSupervisorByRequestType(employeeId, (byte)RolesEnum.Verifier, requestType);
+            IList<SupervisorNameModel> verifierList = this.GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
 
             return Json(verifierList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetApprovers(int employeeId, byte requestType)
         {
-            IList<SupervisorNameModel> approverList = this.GetSupervisorByRequestType(employeeId, (byte)RolesEnum.Approver, requestType);
+            IList<SupervisorNameModel> approverList = this.GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Approver, requestType);
 
             return Json(approverList, JsonRequestBehavior.AllowGet);
         }
@@ -326,7 +326,7 @@ namespace Fanex.NexHR.Controllers.Request
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? loginId = null;
             
-            if (requestViewType != RequestViewType.HrSpace)
+            if (requestViewType != RequestViewType.HRSpace)
             {
                 loginId = this.CurrentUser.Id;
             }
@@ -359,12 +359,12 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 EmpId = id,
                 Role = null,
-                RequestType = (int)RequestTypes.ChangeShift,
+                RequestType = (int)RequestType.ChangeShift,
             };
 
             IList<SupervisorNameModel> supervisors = _EmployeeService.GetListSupervisorName(getListSupervisor);
-            var verifierList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Verifier);
-            var approverList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Approver);
+            var verifierList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Verifier);
+            var approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }

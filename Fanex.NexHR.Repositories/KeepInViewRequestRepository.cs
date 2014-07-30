@@ -38,7 +38,7 @@ namespace Fanex.NexHR.Repositories
             using (var db = new ObjectDb(Constants.WorkingTimeRequestInsertKeepInViewRequest))
             {
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, (int)RequestTypes.KeepInView);
+                db.AddInParameter("@RequestType", DbType.Int16, (int)RequestType.KeepInView);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.Date);
                 db.AddInParameter("@IsHalfDay", DbType.Boolean, request.HalfDay);
@@ -81,7 +81,7 @@ namespace Fanex.NexHR.Repositories
             {
                 db.AddInParameter("@RequestId", DbType.Int64, request.Id);
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, (int)RequestTypes.KeepInView);
+                db.AddInParameter("@RequestType", DbType.Int16, (int)RequestType.KeepInView);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.Date);
                 db.AddInParameter("@IsHalfDay", DbType.Boolean, request.HalfDay);

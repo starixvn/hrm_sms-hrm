@@ -117,28 +117,28 @@ namespace Fanex.NexHR.Services
 
             switch (request.RequestType.Id)
             {
-                case (int)RequestTypes.Leave:
+                case (int)RequestType.Leave:
                     message = GetMessageForLeave(request);
                     msg.Append(message);
                     break;
-                case (int)RequestTypes.ChangeShift:
+                case (int)RequestType.ChangeShift:
                     msg.AppendFormat(
                         _MsgChangeShift,
                         request.FromDate.ToDateMonthYearFormatedDate(),
                         request.ToDate.ToDateMonthYearFormatedDate(),
                         request.CreatedDate.ToDateMonthYearFormatedDate());
                     break;
-                case (int)RequestTypes.CheckIn:
-                case (int)RequestTypes.CheckOut:
+                case (int)RequestType.CheckIn:
+                case (int)RequestType.CheckOut:
                     msg.AppendFormat(_MsgCheckInOut, HourFormat(request.FromDate), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
-                case (int)RequestTypes.LateIn:
+                case (int)RequestType.LateIn:
                     msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
-                case (int)RequestTypes.EarlyOut:
+                case (int)RequestType.EarlyOut:
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
                     break;
-                case (int)RequestTypes.KeepInView:
+                case (int)RequestType.KeepInView:
                     if ((double)request.TotalDays == 0.5)
                     {
                         msg.AppendFormat(
@@ -360,7 +360,7 @@ namespace Fanex.NexHR.Services
         public decimal GetNumberOfRequest(int requestType, int employeeId, DateTime fromDate, DateTime toDate)
         {
             decimal numberDays = 0;
-            string role = ((int)RolesEnum.Member).ToString();
+            string role = ((int)RoleSystem.Member).ToString();
             var requests = _requestRepository.GetRequests(requestType, role, fromDate, toDate, string.Empty, string.Empty, true, employeeId, null, null);
 
             var requestsValid = requests.Where(
@@ -389,7 +389,7 @@ namespace Fanex.NexHR.Services
         public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            var number = 0;
+            decimal number = 0;
             if (criteria.IsValid())
             {
                 number = _requestRepository.GetNumberRequestInMonth(criteria);
@@ -599,37 +599,37 @@ namespace Fanex.NexHR.Services
         private int GetActionProcessRequest(WorkingTimeRequest request, string command)
         {
             var action = (int)SettingsSendMail.New;
-            if (command == Commands.Accept.ToString())
+            if (command == Command.Accept.ToString())
             {
                 action = (int)SettingsSendMail.Verify;
             }
 
-            if (command == Commands.NotAccept.ToString())
+            if (command == Command.NotAccept.ToString())
             {
                 action = (int)SettingsSendMail.NotVerify;
             }
 
-            if (command == Commands.Approve.ToString())
+            if (command == Command.Approve.ToString())
             {
                 action = (int)SettingsSendMail.Approve;
             }
 
-            if (command == Commands.Reject.ToString())
+            if (command == Command.Reject.ToString())
             {
                 action = (int)SettingsSendMail.Reject;
             }
 
-            if (command == Commands.Process.ToString())
+            if (command == Command.Process.ToString())
             {
                 action = (int)SettingsSendMail.Process;
             }
 
-            if (command == Commands.Void.ToString())
+            if (command == Command.Void.ToString())
             {
                 action = (int)SettingsSendMail.Void;
             }
 
-            if (command == Commands.Reset.ToString())
+            if (command == Command.Reset.ToString())
             {
                 if (request.Status == (byte)CurrentRequestStatus.Verified || request.Status == (byte)CurrentRequestStatus.NotVerified)
                 {
@@ -665,7 +665,7 @@ namespace Fanex.NexHR.Services
             }
             else
             {
-                forDate = " on " + (request.RequestType == (short)RequestTypes.KeepInView ? 
+                forDate = " on " + (request.RequestType == (short)RequestType.KeepInView ? 
                     request.OnDate.ToDateMonthYearFormatedDate() 
                     : request.FromDate.ToDateMonthYearFormatedDate());
             }
@@ -719,21 +719,21 @@ namespace Fanex.NexHR.Services
 
             switch (requestType)
             {
-                case (short)RequestTypes.Leave:
+                case (short)RequestType.Leave:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
                     break;
-                case (short)RequestTypes.ChangeShift:
+                case (short)RequestType.ChangeShift:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
                     break;
-                case (short)RequestTypes.LateIn:
-                case (short)RequestTypes.EarlyOut:
+                case (short)RequestType.LateIn:
+                case (short)RequestType.EarlyOut:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOutCancelation);
                     break;
-                case (short)RequestTypes.CheckIn:
-                case (short)RequestTypes.CheckOut:
+                case (short)RequestType.CheckIn:
+                case (short)RequestType.CheckOut:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOutCancelation);
                     break;
-                case (short)RequestTypes.KeepInView:
+                case (short)RequestType.KeepInView:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInViewCancelation);
                     break;
                 default:
@@ -751,7 +751,7 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPath">Path of email template.</param>
         private void SendMailForCancelRequest(WorkingTimeRequest request, string templateEmailPath)
         {
-            var actionSendMail = (request.RequestType == (short)RequestTypes.Leave && request.ReworkCount > 0)
+            var actionSendMail = (request.RequestType == (short)RequestType.Leave && request.ReworkCount > 0)
                 ? (int)SettingsSendMail.Delete
                 : (int)SettingsSendMail.Cancel;
 
@@ -760,21 +760,21 @@ namespace Fanex.NexHR.Services
             {
                 switch (request.RequestType)
                 {
-                    case (short)RequestTypes.Leave:
+                    case (short)RequestType.Leave:
                         this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
-                    case (short)RequestTypes.ChangeShift:
+                    case (short)RequestType.ChangeShift:
                         this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
-                    case (short)RequestTypes.LateIn:
-                    case (short)RequestTypes.EarlyOut:
+                    case (short)RequestType.LateIn:
+                    case (short)RequestType.EarlyOut:
                         this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
-                    case (short)RequestTypes.CheckIn:
-                    case (short)RequestTypes.CheckOut:
+                    case (short)RequestType.CheckIn:
+                    case (short)RequestType.CheckOut:
                         this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
-                    case (short)RequestTypes.KeepInView:
+                    case (short)RequestType.KeepInView:
                         this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
                 }
@@ -872,7 +872,7 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType == (short)RequestTypes.LateIn
+            var requestType = request.RequestType == (short)RequestType.LateIn
                 ? Resources.Labels.LateIn
                 : Resources.Labels.EarlyOut;
 
@@ -884,7 +884,7 @@ namespace Fanex.NexHR.Services
                 Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
                 ForDate = forDate,
                 RequestType = requestType,
-                Minute = request.RequestType == (short)RequestTypes.LateIn ? ("+" + request.Time) : ("-" + request.Time),
+                Minute = request.RequestType == (short)RequestType.LateIn ? ("+" + request.Time) : ("-" + request.Time),
                 Remark = request.Remark
             };
 
@@ -914,7 +914,7 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType == (short)RequestTypes.CheckIn
+            var requestType = request.RequestType == (short)RequestType.CheckIn
                 ? Resources.Labels.CheckIn
                 : Resources.Labels.CheckOut;
 
@@ -988,15 +988,15 @@ namespace Fanex.NexHR.Services
             var role = string.Empty;
             if (requestViewType == RequestViewType.PersonalSpace)
             {
-                role = ((int)RolesEnum.Verifier).ToString() + "," + ((int)RolesEnum.Approver).ToString();
+                role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
             }
-            else if (requestViewType == RequestViewType.HrSpace)
+            else if (requestViewType == RequestViewType.HRSpace)
             {
-                role = ((int)RolesEnum.HR).ToString();
+                role = ((int)RoleSystem.HR).ToString();
             }
             else
             {
-                role = ((int)RolesEnum.Member).ToString();
+                role = ((int)RoleSystem.Member).ToString();
             }
 
             return role;
@@ -1009,37 +1009,37 @@ namespace Fanex.NexHR.Services
         /// <returns>The string of the passive name.</returns>
         private string GetPassiveNameOfCommand(string command)
         {
-            if (command == Commands.Accept.ToString())
+            if (command == Command.Accept.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Accepted.ToLower());
             }
 
-            if (command == Commands.NotAccept.ToString())
+            if (command == Command.NotAccept.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Accepted.ToLower());
             }
 
-            if (command == Commands.Approve.ToString())
+            if (command == Command.Approve.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Approved.ToLower());
             }
 
-            if (command == Commands.Reject.ToString())
+            if (command == Command.Reject.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Rejected.ToLower());
             }
 
-            if (command == Commands.Process.ToString())
+            if (command == Command.Process.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Processed.ToLower());
             }
 
-            if (command == Commands.Void.ToString())
+            if (command == Command.Void.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Void.ToLower());
             }
 
-            if (command == Commands.Reset.ToString())
+            if (command == Command.Reset.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Reseted.ToLower());
             }
@@ -1174,25 +1174,25 @@ namespace Fanex.NexHR.Services
             var path = string.Empty;
             switch (requestType)
             {
-                case (short)RequestTypes.CheckIn:
+                case (short)RequestType.CheckIn:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
-                case (short)RequestTypes.CheckOut:
+                case (short)RequestType.CheckOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
-                case (short)RequestTypes.LateIn:
+                case (short)RequestType.LateIn:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;
-                case (short)RequestTypes.EarlyOut:
+                case (short)RequestType.EarlyOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;
-                case (short)RequestTypes.ChangeShift:
+                case (short)RequestType.ChangeShift:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShift);
                     break;
-                case (short)RequestTypes.Leave:
+                case (short)RequestType.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
                     break;
-                case (short)RequestTypes.KeepInView:
+                case (short)RequestType.KeepInView:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);
                     break;
             }
@@ -1223,31 +1223,31 @@ namespace Fanex.NexHR.Services
         {
             switch (request.RequestType)
             {
-                case (short)RequestTypes.CheckIn:
+                case (short)RequestType.CheckIn:
                     var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
                     CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
-                case (short)RequestTypes.CheckOut:
+                case (short)RequestType.CheckOut:
                     var subjectCheckOut = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
                     CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
-                case (short)RequestTypes.LateIn:
+                case (short)RequestType.LateIn:
                     var subjectLateIn = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
                     LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, sendToNickName, mailTo, mailCc, true, templateEmailPath);
                     break;
-                case (short)RequestTypes.EarlyOut:
+                case (short)RequestType.EarlyOut:
                     var subjectEarlyOut = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
                     LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, sendToNickName, mailTo, mailCc, false, templateEmailPath);
                     break;
-                case (short)RequestTypes.ChangeShift:
+                case (short)RequestType.ChangeShift:
                     var subjectChangeShift = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
                     ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
-                case (short)RequestTypes.Leave:
+                case (short)RequestType.Leave:
                     var subjectLeave = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
                     LeaveRelatedMail(command, employee, processUser, request, subjectLeave, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
-                case (short)RequestTypes.KeepInView:
+                case (short)RequestType.KeepInView:
                     var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
                     KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
@@ -1347,7 +1347,7 @@ namespace Fanex.NexHR.Services
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType == (short)RequestTypes.LateIn
+                RequestType = request.RequestType == (short)RequestType.LateIn
                                 ? "a " + Resources.Labels.LateIn.ToLower()
                                 : "an " + Resources.Labels.EarlyOut.ToLower(),
                 ForDate = forDate,

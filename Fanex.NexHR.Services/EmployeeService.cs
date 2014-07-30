@@ -35,7 +35,7 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class EmployeeService : BaseService, IEmployeeService
     {
-        private const HashProvider _HashProvider = HashProvider.SHA1;
+        private const HashProvider _HashProvider = HashProvider.Sha1;
 
         private IEmployeeRepository _employeeRepository;
 

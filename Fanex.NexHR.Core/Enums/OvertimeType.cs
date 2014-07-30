@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeTypes.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="OvertimeType.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -9,12 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    public enum OvertimeTypes : short
+    public enum OvertimeType : int
     {
         /// <summary>
         /// Normal item.

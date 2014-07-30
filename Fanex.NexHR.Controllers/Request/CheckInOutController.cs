@@ -79,7 +79,7 @@ namespace Fanex.NexHR.Controllers.Request
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
-                Type = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestTypes.CheckIn : (short)RequestTypes.CheckOut,
+                Type = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
                 By = this.CurrentUser.Id
             };
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
@@ -222,8 +222,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, CheckInOutRequestViewModel viewModel)
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Verifier, (byte)RequestTypes.CheckIn);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Approver, (byte)RequestTypes.CheckIn);
+            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.CheckIn);
+            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.CheckIn);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }

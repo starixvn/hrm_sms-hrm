@@ -277,7 +277,7 @@ namespace Fanex.NexHR.Controllers
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             var requestList = _requestService.GetRequests(
-                RequestViewType.HrSpace,
+                RequestViewType.HRSpace,
                 model.RequestType,
                 model.FromDate,
                 model.ToDate,
@@ -332,7 +332,7 @@ namespace Fanex.NexHR.Controllers
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
             var requestList = _requestService.GetRequests(
-                RequestViewType.HrSpace,
+                RequestViewType.HRSpace,
                 model.RequestType,
                 model.FromDate,
                 model.ToDate,

@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Minute = 60,
-                Type = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestTypes.LateIn : (short)RequestTypes.EarlyOut,
+                Type = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
                 By = id
             };
 
@@ -194,8 +194,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, LateInEarlyOutRequestViewModel viewModel)
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Verifier, (byte)RequestTypes.LateIn);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RolesEnum.Approver, (byte)RequestTypes.LateIn);
+            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.LateIn);
+            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.LateIn);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }

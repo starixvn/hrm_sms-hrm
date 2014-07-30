@@ -9,8 +9,6 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
     /// ENUM Hash Provider.
     /// </summary>
@@ -24,21 +22,21 @@ namespace Fanex.NexHR.Core.Enums
         /// <summary>
         /// SHA1 item.
         /// </summary>
-        SHA1,
+        Sha1,
 
         /// <summary>
         /// SHA256 item.
         /// </summary>
-        SHA256,
+        Sha256,
 
         /// <summary>
         /// SHA384 item.
         /// </summary>
-        SHA384,
+        Sha384,
 
         /// <summary>
         /// SHA512 item.
         /// </summary>
-        SHA512
+        Sha512
     }
 }

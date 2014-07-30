@@ -39,7 +39,7 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method process request.
         /// </summary>
-        /// <param name="command">Commands (approve, reject..).</param>
+        /// <param name="command">Command (approve, reject..).</param>
         /// <param name="requestId">Request id.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="processedBy">Processed by.</param>
@@ -61,7 +61,7 @@ namespace Fanex.NexHR.Repositories
             string key = this.GetSpKeyForProcessRequest(command);
             using (ObjectDb db = new ObjectDb(key))
             {
-                if (command != Commands.Reset.ToString())
+                if (command != Command.Reset.ToString())
                 {
                     db.AddInParameter("@Comment", DbType.String, remark);
                 }
@@ -83,7 +83,7 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method process overtime.
         /// </summary>
-        /// <param name="command">Commands (approve, reject..).</param>
+        /// <param name="command">Command (approve, reject..).</param>
         /// <param name="requestId">Request id.</param>
         /// <param name="roleId">The role identifier.</param>
         /// <param name="processedBy">Processed by.</param>
@@ -119,7 +119,7 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Method process overtime.
         /// </summary>
-        /// <param name="command">Commands (approve, reject..).</param>
+        /// <param name="command">Command (approve, reject..).</param>
         /// <param name="requestIds">Request ids.</param>
         /// <param name="processedBy">Processed by.</param>
         /// <param name="processedDate">Processed date.</param>
@@ -213,7 +213,7 @@ namespace Fanex.NexHR.Repositories
                                 Id = reader.ToInt("RequestId"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                                 TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 IsWarning = reader.ToBool("IsWarning"),
@@ -323,12 +323,12 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">GetNumberRequestInMonth Criteria.</param>
         /// <returns>Number days.</returns>
-        public int GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
+        public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
         {
-            var numberDay = 0;
+            decimal numberDay = 0;
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                numberDay = (int)db.ExecuteScalar(criteria);
+                numberDay = (decimal)db.ExecuteScalar(criteria.GetSpParams());
             }
 
             return numberDay;
@@ -343,20 +343,20 @@ namespace Fanex.NexHR.Repositories
         {
             int roleId = 0;
 
-            if (command == Commands.Accept.ToString()
-                || command == Commands.NotAccept.ToString())
+            if (command == Command.Accept.ToString()
+                || command == Command.NotAccept.ToString())
             {
-                roleId = (int)RolesEnum.Verifier;
+                roleId = (int)RoleSystem.Verifier;
             }
-            else if (command == Commands.Approve.ToString()
-                || command == Commands.Reject.ToString())
+            else if (command == Command.Approve.ToString()
+                || command == Command.Reject.ToString())
             {
-                roleId = (int)RolesEnum.Approver;
+                roleId = (int)RoleSystem.Approver;
             }
-            else if (command == Commands.Process.ToString()
-                || command == Commands.Void.ToString())
+            else if (command == Command.Process.ToString()
+                || command == Command.Void.ToString())
             {
-                roleId = (int)RolesEnum.HR;
+                roleId = (int)RoleSystem.HR;
             }
 
             return roleId;
@@ -371,19 +371,19 @@ namespace Fanex.NexHR.Repositories
         {
             string key = string.Empty;
 
-            if (command == Commands.Accept.ToString()
-                || command == Commands.Approve.ToString()
-                || command == Commands.Process.ToString())
+            if (command == Command.Accept.ToString()
+                || command == Command.Approve.ToString()
+                || command == Command.Process.ToString())
             {
                 key = "WorkingTimeRequest_ApproveRequest";
             }
-            else if (command == Commands.NotAccept.ToString()
-                || command == Commands.Reject.ToString()
-                || command == Commands.Void.ToString())
+            else if (command == Command.NotAccept.ToString()
+                || command == Command.Reject.ToString()
+                || command == Command.Void.ToString())
             {
                 key = "WorkingTimeRequest_RejectRequest";
             }
-            else if (command == Commands.Reset.ToString())
+            else if (command == Command.Reset.ToString())
             {
                 key = "WorkingTimeRequest_ResetRequest";
             }
@@ -400,15 +400,15 @@ namespace Fanex.NexHR.Repositories
         {
             string key = string.Empty;
 
-            if (command == Commands.Accept.ToString()
-                || command == Commands.Approve.ToString()
-                || command == Commands.Process.ToString())
+            if (command == Command.Accept.ToString()
+                || command == Command.Approve.ToString()
+                || command == Command.Process.ToString())
             {
                 key = "OverTime_ApproveSingleRequest";
             }
-            else if (command == Commands.NotAccept.ToString()
-                || command == Commands.Reject.ToString()
-                || command == Commands.Void.ToString())
+            else if (command == Command.NotAccept.ToString()
+                || command == Command.Reject.ToString()
+                || command == Command.Void.ToString())
             {
                 key = "OverTime_RejectSingleRequest";
             }
@@ -429,15 +429,15 @@ namespace Fanex.NexHR.Repositories
         {
             string key = string.Empty;
 
-            if (command == Commands.Accept.ToString()
-                || command == Commands.Approve.ToString()
-                || command == Commands.Process.ToString())
+            if (command == Command.Accept.ToString()
+                || command == Command.Approve.ToString()
+                || command == Command.Process.ToString())
             {
                 key = "OverTime_ApproveMultiRequest";
             }
-            else if (command == Commands.NotAccept.ToString()
-                || command == Commands.Reject.ToString()
-                || command == Commands.Void.ToString())
+            else if (command == Command.NotAccept.ToString()
+                || command == Command.Reject.ToString()
+                || command == Command.Void.ToString())
             {
                 key = "OverTime_RejectMultiRequest";
             }

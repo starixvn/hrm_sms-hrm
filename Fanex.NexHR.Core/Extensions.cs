@@ -45,7 +45,7 @@ namespace Fanex.NexHR.Core
             return attribs.Length > 0 ? attribs[0].ToString() : null;
         }
 
-        public static string EnumToString(this RolesEnum value)
+        public static string EnumToString(this RoleSystem value)
         {
             var type = value.GetType();
             var fieldInfo = type.GetField(value.ToString());
@@ -54,7 +54,7 @@ namespace Fanex.NexHR.Core
             return attribs.Length > 0 ? attribs[0].ToString() : null;
         }
 
-        public static string EnumToString(this RequestTypes value)
+        public static string EnumToString(this RequestType value)
         {
             var type = value.GetType();
             var fieldInfo = type.GetField(value.ToString());
@@ -383,21 +383,21 @@ namespace Fanex.NexHR.Core
         {
             switch (type)
             {
-                case (int)RequestTypes.CheckIn:
+                case (int)RequestType.CheckIn:
                     return Labels.CheckIn;
-                case (int)RequestTypes.CheckOut:
+                case (int)RequestType.CheckOut:
                     return Labels.CheckOut;
-                case (int)RequestTypes.LateIn:
+                case (int)RequestType.LateIn:
                     return Labels.LateIn;
-                case (int)RequestTypes.EarlyOut:
+                case (int)RequestType.EarlyOut:
                     return Labels.EarlyOut;
-                case (int)RequestTypes.ChangeShift:
+                case (int)RequestType.ChangeShift:
                     return Labels.ChangeShift;
-                case (int)RequestTypes.Leave:
+                case (int)RequestType.Leave:
                     return Labels.Leave;
-                case (int)RequestTypes.KeepInView:
+                case (int)RequestType.KeepInView:
                     return Labels.KeepInView;
-                case (int)RequestTypes.Overtime:
+                case (int)RequestType.Overtime:
                     return Labels.Overtime;
                 default:
                     return string.Empty;

@@ -170,9 +170,9 @@ namespace Fanex.NexHR.Services
             {
                 Leader = sendToNickName,
                 Member = model.DisplayName,
-                Type = model.Type == (short)RequestTypes.CheckIn
-                    ? RequestTypes.CheckIn.EnumToString().ToLower()
-                    : RequestTypes.CheckOut.EnumToString().ToLower(),
+                Type = model.Type == (short)RequestType.CheckIn
+                    ? RequestType.CheckIn.EnumToString().ToLower()
+                    : RequestType.CheckOut.EnumToString().ToLower(),
                 RequestId = requestId,
                 ForDate = model.ForDate.ToDateMonthYearFormatedDate(),
                 Time = model.Hour.ToString().PadLeft(2, '0') + ":" + model.Minute.ToString().PadLeft(2, '0'),

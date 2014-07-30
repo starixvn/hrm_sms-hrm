@@ -184,7 +184,7 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult GetEmployeesByShiftMonitor(string query)
         {
-            var employees = _requestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RolesEnum.ShiftManager, null, query.Trim(), includeLoginUser: false);
+            var employees = _requestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RoleSystem.ShiftManager, null, query.Trim(), includeLoginUser: false);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
@@ -279,7 +279,7 @@ namespace Fanex.NexHR.Controllers
             var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
             {
                 EmpId = this.CurrentUser.Id,
-                Role = (int)RolesEnum.ShiftManager
+                Role = (int)RoleSystem.ShiftManager
             };
             IList<SupervisorModel> shiftManagerModel = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
 
@@ -287,7 +287,7 @@ namespace Fanex.NexHR.Controllers
             {
                 ShiftManagerList = shiftManagerModel,
                 EmployeeId = this.CurrentUser.Id,
-                SupervisorRole = (short)RolesEnum.ShiftManager
+                SupervisorRole = (short)RoleSystem.ShiftManager
             };
 
             return View(model);

@@ -261,7 +261,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToInt("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 FromDate = reader.ToDateTime("FromDate"),
                 ToDate = reader.ToDateTime("ToDate"),
                 TotalDays = reader.ToDecimal("TotalDays"),
@@ -328,7 +328,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToInt("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 FromShift = new Shift { Name = reader.ToString("Shift") },
                 RequestedDate = reader.ToDateTime("FromDate"),
                 CreatedDate = reader.ToDateTime("CreatedDate"),
@@ -391,7 +391,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToInt("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 FromShift = new Shift { Name = reader.ToString("Shift") },
                 FromDate = reader.ToDateTime("FromDate"),
                 RequestedDate = reader.ToDateTime("RequestTime"),
@@ -453,7 +453,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToLong("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 RequestedDate = reader.ToDateTime("OnDate"),
                 Remark = reader.ToString("Remark"),
                 Shift = new Shift 
@@ -526,7 +526,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToInt("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 FromShift = new Shift { Name = reader.To<string>("FromShift") },
                 ToShift = new Shift { Name = reader.To<string>("ToShift") },
                 Remark = reader.ToString("Remark"),
@@ -584,7 +584,7 @@ namespace Fanex.NexHR.Repositories
             var entity = new RequestEntity
             {
                 Id = reader.ToInt("RequestId"),
-                RequestType = new RequestType { Id = reader.ToShort("RequestType") },
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
                 FromShift = new Shift { Name = reader.To<string>("FromShift") },
                 ToShift = new Shift { Name = reader.To<string>("ToShift") },
                 Remark = reader.ToString("Remark"),

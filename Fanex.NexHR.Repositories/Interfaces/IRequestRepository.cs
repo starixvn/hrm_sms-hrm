@@ -10,10 +10,10 @@
 namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
-using System.Collections.Generic;
-using Fanex.NexHR.Criteria.Request;
-using Fanex.NexHR.Models;
-using Fanex.NexHR.Models.Request;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     public interface IRequestRepository
     {
@@ -63,6 +63,6 @@ using Fanex.NexHR.Models.Request;
             DateTime processedDate,
             out string message);
 
-        int GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
+        decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
     }
 }

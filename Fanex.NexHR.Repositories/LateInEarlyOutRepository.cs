@@ -31,8 +31,8 @@ namespace Fanex.NexHR.Repositories
         public override long Insert(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
-            int? lateInMins = request.Type == (short)RequestTypes.LateIn ? (int?)request.Minute : null;
-            int? earlyOutMins = request.Type == (short)RequestTypes.EarlyOut ? (int?)request.Minute : null;
+            int? lateInMins = request.Type == (short)RequestType.LateIn ? (int?)request.Minute : null;
+            int? earlyOutMins = request.Type == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
             using (var db = new ObjectDb("WorkingTimeRequest_Insert_LateInEarlyOutRequest"))
             {
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
@@ -69,8 +69,8 @@ namespace Fanex.NexHR.Repositories
         public override bool Update(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
-            int? lateInMins = request.Type == (short)RequestTypes.LateIn ? (int?)request.Minute : null;
-            int? earlyOutMins = request.Type == (short)RequestTypes.EarlyOut ? (int?)request.Minute : null;
+            int? lateInMins = request.Type == (short)RequestType.LateIn ? (int?)request.Minute : null;
+            int? earlyOutMins = request.Type == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
 
             using (var db = new ObjectDb("WorkingTimeRequest_Update_LateInEarlyOutRequest"))
             {

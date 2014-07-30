@@ -268,7 +268,7 @@ namespace Fanex.NexHR.Models
             get
             {
                 string roles = string.Empty;
-                if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member))
+                if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member))
                 {
                     return roles = "Member";
                 }
@@ -311,7 +311,7 @@ namespace Fanex.NexHR.Models
         /// </summary>
         /// <param name="roles">Role of user.</param>
         /// <returns>Return Boolean.</returns>
-        public bool IsInRoles(params RolesEnum[] roles)
+        public bool IsInRoles(params RoleSystem[] roles)
         {
             if (RoleList == null)
             {
@@ -345,7 +345,7 @@ namespace Fanex.NexHR.Models
         public string MemberRole()
         {
             string roles = string.Empty;
-            if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member))
+            if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member))
             {
                 return roles = "Member";
             }
@@ -384,7 +384,7 @@ namespace Fanex.NexHR.Models
 
         public bool IsMember()
         {
-            return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RolesEnum.Member);
+            return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member);
         }
     }
 }

@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum ShiftStatus : byte
+    public enum ShiftStatus : int
     {
         /// <summary>
         /// The all item (active and disabled).

@@ -73,7 +73,7 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public string GetMessageDetailRequest(RequestEntity request, short requestType, string fromShiftCode, string toShiftCode)
         {
-            request.RequestType = new RequestType { Id = requestType };
+            request.RequestType = new RequestTypeModel { Id = requestType };
             request.FromShift = new Shift { Name = fromShiftCode };
             request.ToShift = new Shift { Name = toShiftCode };
 
@@ -148,7 +148,7 @@ namespace Fanex.NexHR.Controllers
             var criteria = new GetEmployeeByManagerCriteria()
             {
                 ManagerID = this.CurrentUser.Id,
-                Role = (int)RolesEnum.HR,
+                Role = (int)RoleSystem.HR,
                 Keyword = keyword,
                 GroupID = groupId,
                 ExcludedManager = false

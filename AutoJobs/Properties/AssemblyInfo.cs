@@ -7,13 +7,14 @@
 //   <change who="Quinn.Vo" date="2013.10.17">Created</change>
 // </history>
 
+using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+[assembly: CLSCompliant(false)]
 [assembly: AssemblyTitle("AutoJobs")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]

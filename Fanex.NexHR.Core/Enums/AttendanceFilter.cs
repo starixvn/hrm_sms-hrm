@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="AttendanceFilterEnums.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="AttendanceFilter.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum AttendanceFilterEnums : short
+    public enum AttendanceFilter : int
     {
         /// <summary>
         /// Display all item.

@@ -21,7 +21,7 @@ namespace Fanex.NexHR.ViewModels
     /// </summary>
     public class EmployeeAttendanceRequest
     {
-        public RequestType RequestType { get; set; }
+        public RequestTypeModel RequestType { get; set; }
 
         public string Remark { get; set; }
 

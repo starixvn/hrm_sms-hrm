@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeType.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="OvertimeTypeModel.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Models.Request
     /// <summary>
     /// Overtime Type.
     /// </summary>
-    public class OvertimeType
+    public class OvertimeTypeModel
     {
         public short Id { get; set; }
 
@@ -23,15 +23,15 @@ namespace Fanex.NexHR.Models.Request
         { 
             get 
             {
-                if (this.Id == (short)OvertimeTypes.Normal)
+                if (this.Id == (short)OvertimeType.Normal)
                 {
                     return Labels.NormalDay;
                 }
-                else if (this.Id == (short)OvertimeTypes.Off)
+                else if (this.Id == (short)OvertimeType.Off)
                 {
                     return Labels.OffDay;
                 }
-                else if (this.Id == (short)OvertimeTypes.Holiday)
+                else if (this.Id == (short)OvertimeType.Holiday)
                 {
                     return Labels.PublicHoliday;
                 }

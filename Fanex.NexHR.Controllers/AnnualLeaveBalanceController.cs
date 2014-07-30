@@ -67,9 +67,9 @@ namespace Fanex.NexHR.Controllers
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
 
             if (!employeeId.HasValue 
-                && !Roles.IsUserInRole(RolesEnum.HR.ToString())
-                && !Roles.IsUserInRole(RolesEnum.Verifier.ToString())
-                && !Roles.IsUserInRole(RolesEnum.Approver.ToString()))
+                && !Roles.IsUserInRole(RoleSystem.HR.ToString())
+                && !Roles.IsUserInRole(RoleSystem.Verifier.ToString())
+                && !Roles.IsUserInRole(RoleSystem.Approver.ToString()))
             {
                 employeeId = this.CurrentUser.Id;
             }

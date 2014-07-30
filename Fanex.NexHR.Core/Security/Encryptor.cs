@@ -58,19 +58,19 @@ namespace Fanex.NexHR.Core.Security
             HashAlgorithm hash;
             switch (hashAlgorithm)
             {
-                case HashProvider.SHA1:
+                case HashProvider.Sha1:
                     hash = new SHA1Managed();
                     break;
 
-                case HashProvider.SHA256:
+                case HashProvider.Sha256:
                     hash = new SHA256Managed();
                     break;
 
-                case HashProvider.SHA384:
+                case HashProvider.Sha384:
                     hash = new SHA384Managed();
                     break;
 
-                case HashProvider.SHA512:
+                case HashProvider.Sha512:
                     hash = new SHA512Managed();
                     break;
 

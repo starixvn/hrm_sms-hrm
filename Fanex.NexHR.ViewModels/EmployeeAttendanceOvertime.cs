@@ -19,7 +19,7 @@ namespace Fanex.NexHR.ViewModels
     {
         public string OvertimeName { get; set; }
 
-        public OvertimeType OvertimeType { get; set; }
+        public OvertimeTypeModel OvertimeType { get; set; }
 
         public DateTime? OvertimeFromTime { get; set; }
 

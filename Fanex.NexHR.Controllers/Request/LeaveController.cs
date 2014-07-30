@@ -419,8 +419,8 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetVerifierAndApprover(LeaveRequestViewModel model)
         {
-            IList<SupervisorNameModel> verifiers = this.GetSupervisorByRequestType(this.CurrentUser.Id, (byte)RolesEnum.Verifier, (byte)RequestTypes.Leave);
-            IList<SupervisorNameModel> approvers = this.GetSupervisorByRequestType(this.CurrentUser.Id, (byte)RolesEnum.Verifier, (byte)RequestTypes.Leave);
+            IList<SupervisorNameModel> verifiers = this.GetSupervisorByRequestType(this.CurrentUser.Id, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
+            IList<SupervisorNameModel> approvers = this.GetSupervisorByRequestType(this.CurrentUser.Id, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
             model.VerifierList = GetListItem(verifiers);
             model.ApproverList = GetListItem(approvers);
         }

@@ -466,7 +466,7 @@ namespace Fanex.NexHR.Controllers
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (this.CurrentUser.IsInRoles(RolesEnum.Verifier) || this.CurrentUser.IsInRoles(RolesEnum.Approver))
+            if (this.CurrentUser.IsInRoles(RoleSystem.Verifier) || this.CurrentUser.IsInRoles(RoleSystem.Approver))
             {
                 var getHRLeaderDashboardCriteria = new GetHRLeaderDashboardCriteria
                 {
@@ -686,9 +686,9 @@ namespace Fanex.NexHR.Controllers
         {
             if (model.RoleList != null && model.RoleList.Count == 1)
             {
-                if (int.Parse(model.Roles) == (int)RolesEnum.SystemAdmin)
+                if (int.Parse(model.Roles) == (int)RoleSystem.SystemAdmin)
                 {
-                    var roleList = Enum.GetValues(typeof(RolesEnum)).Cast<RolesEnum>().Select(x => (int)x).ToList();
+                    var roleList = Enum.GetValues(typeof(RoleSystem)).Cast<RoleSystem>().Select(x => (int)x).ToList();
                     roleList.RemoveAt(0);
                     model.Roles = string.Join(",", roleList);
                 }
@@ -696,7 +696,7 @@ namespace Fanex.NexHR.Controllers
 
             if (model.RoleList == null)
             {
-                var role = (int)RolesEnum.Member;
+                var role = (int)RoleSystem.Member;
                 model.Roles = role.ToString();
             }
         }
@@ -722,10 +722,10 @@ namespace Fanex.NexHR.Controllers
             IList<SupervisorNameModel> supervisors = _employeeService.GetListSupervisorName(getListSupervisor);
             if (supervisors != null)
             {
-                verifierList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Verifier).ToList();
-                approverList = supervisors.Where(x => x.ActionType == (int)RolesEnum.Approver).ToList();
-                shiftMonitorList = supervisors.Where(x => x.ActionType == (int)RolesEnum.ShiftManager).ToList();
-                actingList = supervisors.Where(x => x.ActionType == (int)RolesEnum.ActingSupervisor).ToList();
+                verifierList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Verifier).ToList();
+                approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver).ToList();
+                shiftMonitorList = supervisors.Where(x => x.ActionType == (int)RoleSystem.ShiftManager).ToList();
+                actingList = supervisors.Where(x => x.ActionType == (int)RoleSystem.ActingSupervisor).ToList();
             }
 
             listVerifierName = verifierList.Count > 3 ? verifierList.Select(x => x.NickName).Take(3).ToList() : verifierList.Select(x => x.NickName).ToList();
@@ -789,7 +789,7 @@ namespace Fanex.NexHR.Controllers
             var currentUserRole = this.CurrentUser.RoleList;
             if (currentUserRole != null)
             {
-                authorize = currentUserRole.Any(x => x == (int)RolesEnum.SystemAdmin);
+                authorize = currentUserRole.Any(x => x == (int)RoleSystem.SystemAdmin);
             }
 
             ViewBag.Authorize = authorize;

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="RolesEnum.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="RoleSystem.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.Core.Enums
 {
-    public enum RolesEnum : short
+    public enum RoleSystem : int
     {
         /// <summary>
         /// Member item.
