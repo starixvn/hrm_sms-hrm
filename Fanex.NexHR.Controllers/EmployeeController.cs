@@ -556,8 +556,14 @@ namespace Fanex.NexHR.Controllers
         {
             if (ModelState.IsValid)
             {
-                int errorCode = _employeeService.ChangePassword(this.CurrentUser.Id, model.Password, model.NewPassword);
-                switch (errorCode)
+                var changePasswordCriteria = new ChangePasswordCriteria()
+                {
+                    EmpId = this.CurrentUser.Id,
+                    Password = model.Password,
+                    NewPassword = model.NewPassword
+                };
+                CommandResult result = _employeeService.ChangePassword(changePasswordCriteria);
+                switch (result.Code)
                 {
                     case 0: // OK
                         ViewBag.ChangePwdOK = Resources.Messages.ChangePwdOK;
@@ -609,12 +615,30 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Action Result Supervisor.
+        /// </summary>
+        /// <param name="model">Supervisor View Model.</param>
+        /// <returns>Action Result.</returns>
         [HttpPost]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
-            var result = _employeeService.UpdateSupervisor(model, this.CurrentUser.Id);
+            var updateSupervisorCriteria = new UpdateSupervisorCriteria()
+            {
+                EmpId = model.EmployeeId,
+                Role = model.SupervisorRole,
+                EmpIdLeaves = model.RoleLeaves,
+                EmpIdChangeShifts = model.RoleChangeShifts,
+                EmpIdLateInEarlyOuts = model.RoleLateInEarlyOuts,
+                EmpIdCheckInOuts = model.RoleCheckInOuts,
+                EmpIdOvertimes = model.RoleOvertimes,
+                EmpIdKeepInViews = model.RoleKeepInViews,
+                ModifiedBy = this.CurrentUser.Id
+            };
+            CommandResult commandResult = _employeeService.UpdateSupervisor(updateSupervisorCriteria);
+            bool updated = commandResult.Code == 0;
 
-            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = updated }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -656,9 +680,15 @@ namespace Fanex.NexHR.Controllers
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
             bool success = true;
-            var result = _employeeService.InsertEmployeeShiftManager(model, this.CurrentUser.Id);
+            var insertShiftMangerCriteria = new InsertShiftManagerCriteria()
+            {
+                EmpId = model.EmployeeId,
+                EmpIdShift = model.RoleShiftArrange,
+                ModifiedBy = this.CurrentUser.Id
+            };
+            CommandResult result = _employeeService.InsertEmployeeShiftManager(insertShiftMangerCriteria);
 
-            if (result != 0)
+            if (result.Code != 0)
             {
                 success = false;
             }

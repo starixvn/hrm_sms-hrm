@@ -483,30 +483,53 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Function to change password of employee.
+        /// Change Password.
         /// </summary>
-        /// <param name="empId">Employee Id.</param>
-        /// <param name="oldPassword">Old password.</param>
-        /// <param name="password">New password.</param>
-        /// <returns>Result of changed password.</returns>
-        public int ChangePassword(int empId, string oldPassword, string password)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult ChangePassword(ChangePasswordCriteria criteria)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = criteria.EmpId };
             Employee employee = this.GetEmployeeById(getEmployeeByIdCriteria);
-            int retCode = this.ValidateUser(employee, oldPassword);
+            int retCode = this.ValidateUser(employee, criteria.Password);
             if (retCode == 0)
             {
-                string hashPassword = Encryptor.ComputeHash(_HashProvider, password);
-                retCode = this._employeeRepository.ChangePassword(empId, hashPassword, false);
+                string hashPassword = Encryptor.ComputeHash(_HashProvider, criteria.NewPassword);
+                if (criteria.IsValid())
+                {
+                    criteria.Password = hashPassword;
+                    result = Repository.Update(criteria);
+                }
             }
 
-            return retCode;
+            return result;
         }
 
-        public int ResetPassword(int empId, string originalPassword)
+        /// <summary>
+        /// Reset Password.
+        /// </summary>
+        /// <param name="empId">Employee id.</param>
+        /// <param name="originalPassword">Default Password.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult ResetPassword(int empId, string originalPassword)
         {
+            CommandResult result = null;
             string hashPassword = Encryptor.ComputeHash(_HashProvider, originalPassword);
-            return this._employeeRepository.ChangePassword(empId, hashPassword, true);
+            var criteria = new ChangePasswordCriteria()
+            {
+                EmpId = empId,
+                Password = hashPassword,
+                PasswordReset = true
+            };
+
+            if (criteria.IsValid())
+            {
+                result = Repository.Update(criteria);
+            }
+
+            return result;
         }
 
         public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
@@ -531,9 +554,16 @@ namespace Fanex.NexHR.Services
             return country;
         }
 
-        public bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy)
+        public CommandResult UpdateSupervisor(UpdateSupervisorCriteria criteria)
         {
-            return this._employeeRepository.UpdateSupervisor(model, modifiedBy);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Update(criteria);
+            }
+
+            return result;
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
@@ -572,23 +602,40 @@ namespace Fanex.NexHR.Services
             return supervisors;
         }
 
-        public int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy)
+        public CommandResult InsertEmployeeShiftManager(InsertShiftManagerCriteria criteria)
         {
-            int errorCode;
-            string message;
-            return this._employeeRepository.InsertEmployeeShiftManager(shiftManagerModel, modifiedBy, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = this.Repository.Insert(criteria);
+            }
+
+            return result;
         }
 
-        public int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message)
+        public CommandResult UpdateOrderShiftArrange(UpdateOrderShiftArrangeCriteria criteria)
         {
-            return this._employeeRepository.UpdateOrderShiftArrange(memberOrder, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = this.Repository.Update(criteria);
+            }
+
+            return result;
         }
 
-        public int UpdatePasswordResetStatus(int empId, bool passwordReset)
+        public CommandResult UpdatePasswordResetStatus(UpdatePasswordResetStatusCriteria criteria)
         {
-            int errorCode;
-            string message;
-            return _employeeRepository.UpdatePasswordResetStatus(empId, passwordReset, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = this.Repository.Update(criteria);
+            }
+
+            return result;
         }
 
         /// <summary>

@@ -329,7 +329,8 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public int ResetPassword(int id)
         {
-            return _employeeService.ResetPassword(id, "123456");
+            CommandResult result = _employeeService.ResetPassword(id, "123456");
+            return result.Code;
         }
 
         [Authorize(Roles = "HR")]
@@ -362,7 +363,14 @@ namespace Fanex.NexHR.Controllers
 
         public int UpdatePasswordResetStatus(bool status)
         {
-            return _employeeService.UpdatePasswordResetStatus(this.CurrentUser.Id, status);
+            var criteria = new UpdatePasswordResetStatusCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                PasswordReset = status
+            };
+            CommandResult result = _employeeService.UpdatePasswordResetStatus(criteria);
+
+            return result.Code;
         }
     }
 }

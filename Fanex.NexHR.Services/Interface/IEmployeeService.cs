@@ -94,17 +94,17 @@ namespace Fanex.NexHR.Services.Interface
 
         int ValidateUser(string code, string password);
 
-        int ChangePassword(int empId, string oldPassword, string password);
+        CommandResult ChangePassword(ChangePasswordCriteria criteria);
 
-        int ResetPassword(int empId, string originalPassword);
+        CommandResult ResetPassword(int empId, string originalPassword);
 
-        bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
+        CommandResult UpdateSupervisor(UpdateSupervisorCriteria criteria);
 
-        int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy);
+        CommandResult InsertEmployeeShiftManager(InsertShiftManagerCriteria criteria);
 
-        int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message);
+        CommandResult UpdateOrderShiftArrange(UpdateOrderShiftArrangeCriteria criteria);
 
-        int UpdatePasswordResetStatus(int empId, bool passwordReset);
+        CommandResult UpdatePasswordResetStatus(UpdatePasswordResetStatusCriteria criteria);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
     }

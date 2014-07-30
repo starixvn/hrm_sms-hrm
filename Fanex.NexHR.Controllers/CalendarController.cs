@@ -315,7 +315,13 @@ namespace Fanex.NexHR.Controllers
                 ModifiedBy = this.CurrentUser.Id
             };
 
-            _employeeService.UpdateOrderShiftArrange(memberOrders, out errorCode, out message);
+            var updateOrderShiftArrangeCriteria = new UpdateOrderShiftArrangeCriteria()
+            {
+                EmployeeOrders = memberOrders.MemberOrderXML,
+                ModifiedBy = memberOrders.ModifiedBy,
+                SupervisorId = memberOrders.SupervisorId
+            };
+            _employeeService.UpdateOrderShiftArrange(updateOrderShiftArrangeCriteria);
 
             return Json(new { errorCode, message }, JsonRequestBehavior.AllowGet);
         }

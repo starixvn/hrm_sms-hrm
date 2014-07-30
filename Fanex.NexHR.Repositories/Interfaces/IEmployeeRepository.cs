@@ -22,25 +22,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
 
-        IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(int id);
-
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
-        int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
-
-        AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int id);
-
         IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees();
-
-        IEnumerable<DateTime> GetDisableRequestDate(int employeeId, DateTime fromDate, DateTime toDate);
-
-        int ChangePassword(int empId, string password, bool? passwordReset);
-
-        bool UpdateSupervisor(SupervisorViewModel model, int modifiedBy);
-
-        int InsertEmployeeShiftManager(ShiftManagerViewModel shiftManagerModel, int modifiedBy, out int errorCode, out string message);
-
-        int UpdateOrderShiftArrange(MemberScheduleOrderModel memberOrder, out int errorCode, out string message);
 
         IList<SupervisorNameModel> GetEmployeeCanClaimOvertime();
     }
