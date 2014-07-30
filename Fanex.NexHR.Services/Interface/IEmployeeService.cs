@@ -86,11 +86,11 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria);
 
-        IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null);
+        IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria);
 
-        int GetDateRange(int employeeId, DateTime fromDate, DateTime toDate);
+        int GetDateRange(GetDateRangeCriteria criteria);
 
-        IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime fromDate, DateTime toDate);
+        IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria);
 
         int ValidateUser(string code, string password);
 

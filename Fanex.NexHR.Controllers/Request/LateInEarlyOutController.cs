@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
@@ -37,7 +38,13 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Create(DateTime? suggestedDate, bool? isLateIn)
         {
             var id = this.CurrentUser.Id;
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             //// Count number of Late in/early out request in current month.
@@ -103,7 +110,13 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Update.</returns>
         public ActionResult Update(int id)
         {
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
 
             var request = _LateInEarlyOutRequestService.GetRequestById(id);

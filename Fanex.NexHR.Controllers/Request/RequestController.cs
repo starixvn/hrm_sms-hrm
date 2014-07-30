@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Team;
@@ -420,7 +421,13 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>The model of ChangeShiftViewModel.</returns>
         private ChangeShiftViewModel ViewChangeShiftDetail(long requestId, string viewName, RequestEntity shift)
         {
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(requestId);
             var shifts = _ShiftService.GetAll(isShowOff: true);

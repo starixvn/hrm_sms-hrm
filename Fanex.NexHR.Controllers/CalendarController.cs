@@ -257,8 +257,12 @@ namespace Fanex.NexHR.Controllers
             {
                 ReportDate = new DateTime(ViewBag.Year, ViewBag.Month, 1)
             };
+            var getUserHalfDayOffsCriteria = new GetEmployeeHalfDayOffCriteria()
+            {
+                ReportDate = DateTime.Parse(firstDateInMonth.ToString())
+            };
             var userChangedShift = _employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
-            var userHalfDayOffs = _employeeService.GetHalfDayOffs(DateTime.Parse(firstDateInMonth.ToString())); 
+            var userHalfDayOffs = _employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria); 
            
             ViewBag.FromNewDate = fromDate;
             ViewBag.ToNewDate = toDate;

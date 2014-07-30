@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
@@ -69,7 +70,13 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
         {
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = this.CurrentUser.NickName,
@@ -95,8 +102,6 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             viewModel.Shift = (shift == null) ? string.Empty : shift.Name;
-            //// Count number of Check in/out request in current month.
-
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
@@ -108,7 +113,6 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = toDate
             };
             decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
-
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.UnavailDates = listUnavailDates;
             ViewBag.TotalRequest = numberRequests;
@@ -150,7 +154,13 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Update.</returns>
         public ActionResult Update(int id)
         {
-            var listUnavailableDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailableDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailableDates;
 
             ViewBag.Shifts = _ShiftService.GetAll();

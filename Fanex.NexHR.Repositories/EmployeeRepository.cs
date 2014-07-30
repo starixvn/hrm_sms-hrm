@@ -202,39 +202,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? empId = null, int? groupId = null)
-        {
-            using (var db = new ObjectDb("EmployeeCalendar_GetHalfDayOff"))
-            {
-                return db.Query<HalfDayOff>(new { reportDate, empId, groupId }).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Method get Range date.
-        /// </summary>
-        /// <param name="employeeId">Employee's id.</param>
-        /// <param name="fromDate">Range from date.</param>
-        /// <param name="toDate">Range to date.</param>
-        /// <returns>Number days.</returns>
-        public int GetRangeDate(int employeeId, DateTime fromDate, DateTime toDate)
-        {
-            int numberDay = 0;
-            if (toDate.Date >= fromDate.Date)
-            {
-                using (var db = new ObjectDb("EmployeeCalendar_GetRangeDate"))
-                {
-                    db.AddInParameter("@EmpId", DbType.Int32, employeeId);
-                    db.AddInParameter("@fromDate", DbType.DateTime, fromDate);
-                    db.AddInParameter("@toDate", DbType.DateTime, toDate);
-
-                    numberDay = (int)db.ExecuteScalar();
-                }
-            }
-
-            return numberDay;
-        }
-
         public IEnumerable<DateTime> GetDisableRequestDate(int empId, DateTime fromDate, DateTime toDate)
         {
             using (var db = new ObjectDb("EmployeeCalendar_GetUnavailRequestDate"))

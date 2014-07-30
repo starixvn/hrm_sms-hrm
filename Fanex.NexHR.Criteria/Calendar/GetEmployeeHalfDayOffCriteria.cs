@@ -19,9 +19,9 @@ namespace Fanex.NexHR.Criteria.Calendar
     {
         public DateTime ReportDate { get; set; }
 
-        public int EmpId { get; set; }
+        public int? EmpId { get; set; }
 
-        public int Groupid { get; set; }
+        public int? Groupid { get; set; }
 
         public override string GetSettingKey()
         {
@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Criteria.Calendar
 
         public override bool IsValid()
         {
-            return EmpId > 0;
+            return ReportDate != null;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
@@ -121,9 +122,16 @@ namespace Fanex.NexHR.Controllers.Request
                 maxDate = maxDate.AddMonths(2);
             }
 
-            IEnumerable<DateTime> listUnavailDates = leaveRequest.LeaveTypeId == Constants.GeneralLeave
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = minDate,
+                ToDate = maxDate
+            };
+
+            IList<DateTime> listUnavailDates = leaveRequest.LeaveTypeId == Constants.GeneralLeave
                 ? null
-                : _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, minDate, maxDate);
+                : _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
 
             leaveRequest.UnavailDates = listUnavailDates;
             leaveRequest.LeaveTypeList = GetAllLeaveType();

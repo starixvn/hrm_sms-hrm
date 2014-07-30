@@ -11,10 +11,12 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
@@ -131,9 +133,16 @@ namespace Fanex.NexHR.Controllers.Request
         /// </summary>
         /// <param name="id">Working time request's id.</param>
         /// <returns>View update.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public ActionResult Update(int id)
         {
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(this.CurrentUser.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
             var changeShift = _ChangeShiftRequestService.GetRequestById(id);
             if (changeShift == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, changeShift.Requester.Id))
@@ -159,7 +168,6 @@ namespace Fanex.NexHR.Controllers.Request
                     ShiftId = x.ToShiftID,
                     HasData = true
                 }));
-
                 model = new ChangeShiftViewModel
                 {
                     Employee = employee.NickName,
@@ -259,13 +267,24 @@ namespace Fanex.NexHR.Controllers.Request
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
 
+        /// <summary>
+        /// Get Unavailable dates.
+        /// </summary>
+        /// <param name="id">Employee Id.</param>
+        /// <returns>List of unavailable dates.</returns>
         private IEnumerable<DateTime> GetUnavailableDateList(int id)
         {
             var previousMonth = DateTime.Now.AddMonths(-1).Date;
             var nextMonth = DateTime.Now.AddMonths(1).Date;
             var unvailableFromDate = new DateTime(previousMonth.Year, previousMonth.Month, 1);
             var unavailableToDate = new DateTime(nextMonth.Year, nextMonth.Month, DateTime.DaysInMonth(nextMonth.Year, nextMonth.Month));
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(id, unvailableFromDate, unavailableToDate);
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = id,
+                FromDate = unvailableFromDate,
+                ToDate = unavailableToDate
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             return listUnavailDates;
         }
     }

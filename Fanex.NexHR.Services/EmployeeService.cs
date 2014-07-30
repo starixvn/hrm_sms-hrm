@@ -426,19 +426,40 @@ namespace Fanex.NexHR.Services
             return users;
         }
 
-        public IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null)
+        public IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria)
         {
-            return this._employeeRepository.GetHalfDayOffs(reportDate, employeeId, groupId);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<HalfDayOff> halfDayOffs = null;
+            if (criteria.IsValid())
+            {
+                halfDayOffs = this.GetData<HalfDayOff>(criteria).ToList();
+            }
+
+            return halfDayOffs;
         }
 
-        public int GetDateRange(int employeeId, DateTime fromDate, DateTime toDate)
+        public int GetDateRange(GetDateRangeCriteria criteria)
         {
-            return this._employeeRepository.GetRangeDate(employeeId, fromDate, toDate);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            int dateRange = 0;
+            if (criteria.IsValid())
+            {
+                dateRange = this.GetDataEntity<int>(criteria);
+            }
+
+            return dateRange;
         }
 
-        public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime fromDate, DateTime toDate)
+        public IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria)
         {
-            return this._employeeRepository.GetDisableRequestDate(employeeId, fromDate, toDate);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<DateTime> unavailableDates = null;
+            if (criteria.IsValid())
+            {
+                unavailableDates = this.GetData<DateTime>(criteria).ToList();
+            }
+
+            return unavailableDates;
         }
 
         /// <summary>

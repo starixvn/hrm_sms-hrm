@@ -32,10 +32,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees();
 
-        IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null);
-
-        int GetRangeDate(int employeeId, DateTime fromDate, DateTime toDate);
-
         IEnumerable<DateTime> GetDisableRequestDate(int employeeId, DateTime fromDate, DateTime toDate);
 
         int ChangePassword(int empId, string password, bool? passwordReset);

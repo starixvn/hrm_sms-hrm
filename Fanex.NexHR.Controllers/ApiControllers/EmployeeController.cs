@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Linq;
     using System.Web.Http;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.MySpace;
@@ -104,7 +105,13 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                     numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
                     break;
                 default:
-                    numberDays = _employeeService.GetDateRange(employeeId, fromDate, toDate);
+                    var getDateRangeCriteria = new GetDateRangeCriteria()
+                    {
+                        EmpId = employeeId,
+                        FromDate = fromDate,
+                        ToDate = toDate
+                    };
+                    numberDays = _employeeService.GetDateRange(getDateRangeCriteria);
                     break;
             }
 
@@ -136,7 +143,13 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             }
             else
             {
-                dates = _employeeService.GetUnavailableDates(employeeId, fromDate, toDate);
+                var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+                {
+                    EmpId = employeeId,
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                dates = _employeeService.GetUnavailableDates(getUnavailableDateCriteria);
             }
 
             return dates;
