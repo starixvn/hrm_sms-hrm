@@ -41,10 +41,10 @@
                 {
                     EmployeeId = request.Requester.Id,
                     Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
-                    RequestType = request.Type.RequestFilter
+                    RequestType = request.RequestType.RequestFilter
                 };
 
-                var requestDetail = new { requestid = @request.Id, type = @request.Type.RequestHistoryFilter };
+                var requestDetail = new { requestid = @request.Id, type = @request.RequestType.RequestHistoryFilter };
                 
                 <tr id="row@(request.Id)">
                     <td>@(index++)
@@ -88,7 +88,7 @@
                     }
                     @Html.Partial("Request/HR/SharedStatus", request)
                     <td>
-                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter">
                             @Labels.View </a>
                     </td>
                 </tr>  

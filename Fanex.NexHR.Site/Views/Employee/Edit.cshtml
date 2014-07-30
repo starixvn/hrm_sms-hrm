@@ -388,7 +388,7 @@
 					</div>
 					<div class="input">
 						<span id="lstVerifier">@Model.Verifier</span>
-						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.Verifier, employeeId = Model.Id }, new { @class = "linkUpdate" })
+						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.Verifier, employeeId = Model.Id }, new { @class = "linkUpdate" })
 					</div>
 					<div class="clear">
 					</div>
@@ -399,7 +399,7 @@
 					</div>
 					<div class="input">
 						<span id="lstApprover">@Model.Approver</span>
-						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.Approver, employeeId = Model.Id }, new { @class = "linkUpdate" })
+						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.Approver, employeeId = Model.Id }, new { @class = "linkUpdate" })
 					</div>
 					<div class="clear">
 					</div>
@@ -566,7 +566,7 @@
 					</div>
 					<div class="input">
 						@Model.EmpShiftList
-						@Html.ActionLink("Update", "ShiftManager", "Employee", new { role = (short)RolesEnum.ShiftManager, employeeId = Model.Id }, new { @class = "linkUpdate" })
+						@Html.ActionLink("Update", "ShiftManager", "Employee", new { role = (short)RoleSystem.ShiftManager, employeeId = Model.Id }, new { @class = "linkUpdate" })
 					</div>
 					<div class="clear">
 					</div>
@@ -577,7 +577,7 @@
 					</div>
 					<div class="input">
 						@Model.ActingEmpList
-						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RolesEnum.ActingSupervisor, employeeId = Model.Id }, new { @class = "linkUpdate" })
+						@Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.ActingSupervisor, employeeId = Model.Id }, new { @class = "linkUpdate" })
 					</div>
 					<div class="clear">
 					</div>

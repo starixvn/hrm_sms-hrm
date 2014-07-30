@@ -8,25 +8,25 @@
         {
             case (byte)CurrentRequestStatus.Verified:
                 <td>
-                    <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
                 </td>
                 break;
             case (byte)CurrentRequestStatus.Pending:
                 if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
                 {
                     <td>
-                        <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
+                        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
                     </td>
                 }
                 break;
             case (byte)CurrentRequestStatus.Approved:
                 <td>
-                    <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-approved menu">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-approved menu">@request.Status.ToString()</a>
                 </td>
                                                                                                                                                   break;
             case (byte)CurrentRequestStatus.Rejected:
                 <td>
-                    <a roleid="@Convert.ToInt32(RolesEnum.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-rejected menu">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-rejected menu">@request.Status.ToString()</a>
                 </td>
                                                                                                                                                   break;
             case (byte)CurrentRequestStatus.NotVerified:

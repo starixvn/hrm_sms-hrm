@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
     public interface ILeaveRequestService
@@ -26,6 +27,8 @@ namespace Fanex.NexHR.Services.Interface
         IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
 
         LeaveRequestViewModel GetRequestById(long id);
+
+        RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
 
         void SendReasonReeditToSupervisor(long requestId, int processBy, string reason, out int errorCode, out string errorMessage);
 

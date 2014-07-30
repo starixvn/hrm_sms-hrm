@@ -50,7 +50,7 @@
                         
                     <tr  @selectedClass id="row@(request.Id)">
                         <td>@(index++)</td>
-                        <td class="highlight">@request.Type.ToString()
+                        <td class="highlight">@request.RequestType.ToString()
                         </td>
                         <td class="highlight" >@request.FromShift.Name
                         </td>
@@ -73,7 +73,7 @@
                         @Html.Partial("_SharedRequestStatus", request)
 
                         <td>
-                            <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                            <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter">
                                 @Labels.View </a>
                         </td>
                     </tr>

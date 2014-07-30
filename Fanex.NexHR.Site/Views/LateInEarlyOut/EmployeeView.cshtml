@@ -57,9 +57,9 @@
                         <td>@(index++)
                         </td>
                         
-                        <td class="highlight">@request.Type.ToString()
+                        <td class="highlight">@request.RequestType.ToString()
                         </td>
-                        <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.Type.Id)
+                        <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.RequestType.Id)
                         </td>
                         
                         <td class="ddMMyyyyhhmm">@request.FromDate.ToDateMonthYearFormatedDate()
@@ -83,7 +83,7 @@
                         @Html.Partial("_SharedRequestStatus", request)
 
                         <td>
-                            <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                            <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter">
                                 @Labels.View </a>
                         </td>
                     </tr>

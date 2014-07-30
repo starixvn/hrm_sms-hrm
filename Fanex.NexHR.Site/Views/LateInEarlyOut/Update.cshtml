@@ -115,7 +115,7 @@
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.Id)
                 @Html.HiddenFor(model => model.Type)
-                @Html.Hidden("RequestType", (int)RequestTypes.LateIn)
+                @Html.Hidden("RequestType", (int)RequestType.LateIn)
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Update"/>

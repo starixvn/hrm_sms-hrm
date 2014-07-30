@@ -20,7 +20,7 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Sta
     if ((bool)ViewBag.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
     {
         <td>
-            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
         </td>
     }
     else
@@ -35,7 +35,7 @@ else if (request.Status.Id == (byte)CurrentRequestStatus.Processed || request.St
     if ((bool)ViewBag.IsAllowChangeStatus)
     {
         <td>
-            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions-reset tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions-reset tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
         </td>   
     }
     else

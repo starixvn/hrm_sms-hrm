@@ -42,7 +42,7 @@
 						@request.Requester.NickName.ToString()
 					</td>
 					<td class="highlight">
-						<span>@request.Type.ToString()</span>
+						<span>@request.RequestType.ToString()</span>
 					</td>
 					<td class="highlight">@request.FromShift.Name
 					</td>
@@ -64,7 +64,7 @@
 	 }
 					@Html.Partial("Request/HR/SharedStatus", request)
 					<td>
-						<a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+						<a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter">
 							@Labels.View </a>
 					</td>
 					<td class="td-warning">

@@ -86,12 +86,12 @@
                 {
                     if (Model.Status == (byte)CurrentRequestStatus.Approved || Model.Status == (byte)CurrentRequestStatus.Rejected)
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnProcess" type="button" value="@Labels.Process" class="button-primary submit" requestId="@Model.RequestId"/>
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnVoid" type="button" value="@Labels.Void" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" id="btnProcess" type="button" value="@Labels.Process" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" id="btnVoid" type="button" value="@Labels.Void" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                     if (Model.Status == (byte)CurrentRequestStatus.Processed || Model.Status == (byte)CurrentRequestStatus.Void)
                     {
-                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.HR)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                        <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 @*<a href="@Url.Action(ViewBag.ViewName, "request")" class="button">@Labels.Back</a>*@

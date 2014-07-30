@@ -46,10 +46,10 @@
                     Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
                     TeamIds = options.TeamIds == null ? string.Empty : options.TeamIds,
                     StatusId = options.StatusId,
-                    RequestType = request.Type.RequestFilter
+                    RequestType = request.RequestType.RequestFilter
                 };
 
-                var requestDetail = new { requestid = @request.Id, type = @request.Type.RequestHistoryFilter };
+                var requestDetail = new { requestid = @request.Id, type = @request.RequestType.RequestHistoryFilter };
                 
                 <tr id="row@(request.Id)">
                     <td>@(index++)
@@ -61,17 +61,17 @@
                         @request.Requester.NickName.ToString()
                     </td>
                     <td class="highlight">
-                        @if (request.Type.Id == (int)RequestTypes.Leave)
+                        @if (request.RequestType.Id == (int)RequestType.Leave)
                         { 
                             <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
                         }
-                        else if (request.Type.Id == (int)RequestTypes.ChangeShift)
+                        else if (request.RequestType.Id == (int)RequestType.ChangeShift)
                         { 
-                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.Type.Name</a>
+                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.RequestType.Name</a>
                         }
                         else
                         {
-                            <a href="@Url.Action("member", "request", requestModel)">@request.Type.Name</a>
+                            <a href="@Url.Action("member", "request", requestModel)">@request.RequestType.Name</a>
                         }
                     </td>
                     <td class="left">
@@ -94,7 +94,7 @@
                     </td>
                     @Html.Partial("Request/Member/SharedStatus", request)
                     <td>
-                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter">
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter">
                             @Labels.View </a>
                     </td>
 					<td class="td-warning">

@@ -7,17 +7,17 @@
     {
         case (byte)CurrentRequestStatus.Approved:
             <td>
-                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-pending menu">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-pending menu">@request.Status.ToString()</a>
             </td>
             break;
         case (byte)CurrentRequestStatus.Processed:
             <td>
-                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-processed menu">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-processed menu">@request.Status.ToString()</a>
             </td>
             break;
         case (byte)CurrentRequestStatus.Void:
             <td>
-                <a roleid="@Convert.ToInt32(RolesEnum.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-void menu">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-void menu">@request.Status.ToString()</a>
             </td>
             break;
                 

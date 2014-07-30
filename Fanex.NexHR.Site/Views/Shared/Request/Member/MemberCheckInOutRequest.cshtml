@@ -39,7 +39,7 @@
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName.ToString()
                     </td>
-                    <td class="highlight">@request.Type.ToString()
+                    <td class="highlight">@request.RequestType.ToString()
                     </td>
                     <td class="highlight">@request.FromShift.Name.ToString()
                     </td>
@@ -62,7 +62,7 @@
                     @Html.Partial("Request/Member/SharedStatus", request)
 
                     <td>
-                    <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter"> @Labels.View </a>
+                    <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter"> @Labels.View </a>
                     </td>
 					<td class="td-warning">
 						@if (request.IsWarning)

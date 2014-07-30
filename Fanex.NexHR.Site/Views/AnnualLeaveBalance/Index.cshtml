@@ -12,9 +12,9 @@
     <a class="step">HR</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@if (Roles.IsUserInRole(RolesEnum.HR.ToString())
-    || Roles.IsUserInRole(RolesEnum.Verifier.ToString())
-    || Roles.IsUserInRole(RolesEnum.Approver.ToString()))
+@if (Roles.IsUserInRole(RoleSystem.HR.ToString())
+    || Roles.IsUserInRole(RoleSystem.Verifier.ToString())
+    || Roles.IsUserInRole(RoleSystem.Approver.ToString()))
 { 
 <div class="container_24 bunhat">
     @using (Html.BeginForm())

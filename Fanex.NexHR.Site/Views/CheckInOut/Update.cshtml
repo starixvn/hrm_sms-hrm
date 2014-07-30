@@ -46,7 +46,7 @@
             </div>
             <div class="input">
                 @{
-        RequestTypes enumDisplayStatus = ((RequestTypes)@Model.Type);
+        RequestType enumDisplayStatus = ((RequestType)@Model.Type);
         string stringValue = enumDisplayStatus.ToString();
                 }
                 @stringValue
@@ -138,7 +138,7 @@
                 @Html.HiddenFor(model => model.Shift)
                 @Html.Hidden("InTime")
                 @Html.Hidden("OutTime")
-                @Html.Hidden("RequestType", (int)RequestTypes.CheckIn)
+                @Html.Hidden("RequestType", (int)RequestType.CheckIn)
                 <input type="submit" value="@Labels.Update"/>
                 @*<a href="@Url.Action("employeeview", "checkinout")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>

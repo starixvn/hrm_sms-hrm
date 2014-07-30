@@ -28,7 +28,7 @@
             @{int index = 1;}
             @foreach (var request in Model)
             {
-                var requestDetail = new { requestid = @request.Id, type = @request.Type.RequestHistoryFilter };
+                var requestDetail = new { requestid = @request.Id, type = @request.RequestType.RequestHistoryFilter };
                 
                 <tr id="row@(request.Id)">
                     <td>
@@ -56,7 +56,7 @@
                     }
                     @Html.Partial("Request/Member/SharedStatus", request)
                     <td>
-                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.Type.RequestHistoryFilter"> @Labels.View </a>
+                        <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter"> @Labels.View </a>
                      </td>
                 </tr>  
             }

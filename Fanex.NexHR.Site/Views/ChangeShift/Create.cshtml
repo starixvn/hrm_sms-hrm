@@ -135,7 +135,7 @@
                 @Html.HiddenFor(model => model.FromShift)
                 @Html.HiddenFor(model => model.FromShiftName)
                 @Html.HiddenFor(model => model.ToShiftName)
-                @Html.Hidden("RequestType", (int)RequestTypes.ChangeShift)
+                @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
             </div>
             <div class="input">
                 <input type="button" name="submit" value="@Fanex.NexHR.Resources.Labels.Request" class="button-primary button"/>

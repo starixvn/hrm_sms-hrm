@@ -86,32 +86,32 @@
                 {
                     if (Model.VerifierId.HasValue && Model.VerifierId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnAccept" type="button" value="@Labels.Accept" class="button-primary submit" requestId="@Model.RequestId"/>
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnNotAccept" type="button" value="@Labels.NotAccept" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" id="btnAccept" type="button" value="@Labels.Accept" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" id="btnNotAccept" type="button" value="@Labels.NotAccept" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                     else if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 else if (Model.Status == (byte)CurrentRequestStatus.Verified || (Model.Status == (byte)CurrentRequestStatus.NotVerified))
                 {
                     if (Model.VerifierId.HasValue && Model.VerifierId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Verifier)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                     else if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" id="btnApprove" type="button" value="@Labels.Approve" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" id="btnReject" type="button" value="@Labels.Reject" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 else if (Model.Status == (byte)CurrentRequestStatus.Approved || (Model.Status == (byte)CurrentRequestStatus.Rejected))
                 {
                     if (Model.ApproverId.HasValue && Model.ApproverId.Value == Convert.ToInt32(ViewBag.CurrentUserId))
                     {
-                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RolesEnum.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
+                    <input roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" id="btnReset" type="button" value="@Labels.Reset" class="button-primary submit" requestId="@Model.RequestId"/>
                     }
                 }
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>

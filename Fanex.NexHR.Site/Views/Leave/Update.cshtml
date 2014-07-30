@@ -19,7 +19,7 @@
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
     @Html.HiddenFor(model => model.EmployeeId)
-    @Html.Hidden("RequestType", (int)RequestTypes.Leave)
+    @Html.Hidden("RequestType", (int)RequestType.Leave)
     @Html.Hidden("RequestId", Model.RequestId)
     @Html.Hidden("IsView", (bool)ViewBag.IsView)
     @Html.ValidationSummary()

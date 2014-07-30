@@ -150,6 +150,18 @@ namespace Fanex.NexHR.Services
             return request;
         }
 
+        public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            RequestEntity request = null;
+            if (criteria.IsValid())
+            {
+                request = GetDataEntity<RequestEntity>(criteria);
+            }
+
+            return request;
+        }
+
         /// <summary>
         /// Function to reset request and send mail to supervisor in case reedit.
         /// </summary>

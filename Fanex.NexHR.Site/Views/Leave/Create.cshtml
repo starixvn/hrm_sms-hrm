@@ -16,7 +16,7 @@
 <h2>@Labels.Create</h2>
 <div class="bunhat">
     @Html.HiddenFor(model => model.EmployeeId)
-    @Html.Hidden("RequestType", (int)RequestTypes.Leave)
+    @Html.Hidden("RequestType", (int)RequestType.Leave)
     @Html.Hidden("RequestId", -1)
     @Html.ValidationSummary()
     <div class="validation-summary-errors" id="errors-model-state">

@@ -3,7 +3,7 @@
     My members' requests</h2>
 @foreach (var item in Model)
 {
-    if (item.RoleId == (int)RolesEnum.Verifier)
+    if (item.RoleId == (int)RoleSystem.Verifier)
     {
     <h4>
         Verification List</h4>
@@ -162,7 +162,7 @@
         </tbody>
     </table>
 	}
-	if (item.RoleId == (int)RolesEnum.Approver)
+	if (item.RoleId == (int)RoleSystem.Approver)
 	{ 
     <h4>
         Approval List</h4>

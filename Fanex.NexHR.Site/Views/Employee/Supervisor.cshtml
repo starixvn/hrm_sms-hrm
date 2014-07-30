@@ -30,19 +30,19 @@
 }
 <div class="addnew-supervisor">
 	@{
-		if (Model.SupervisorRole == (short)RolesEnum.Verifier)
+		if (Model.SupervisorRole == (short)RoleSystem.Verifier)
 		{
 		@Html.Label("Verifier")
 		}
-		if (Model.SupervisorRole == (short)RolesEnum.Approver)
+		if (Model.SupervisorRole == (short)RoleSystem.Approver)
 		{
 		@Html.Label("Approver")
 		}
-		if (Model.SupervisorRole == (short)RolesEnum.ShiftManager)
+		if (Model.SupervisorRole == (short)RoleSystem.ShiftManager)
 		{
 		@Html.Label("Employee")
 		}
-		if (Model.SupervisorRole == (short)RolesEnum.ActingSupervisor)
+		if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
 		{
 		@Html.Label("Employee")
 		@Html.Hidden("supervisorRole", true)
@@ -52,7 +52,7 @@
 	@Html.Hidden("SupervisorId")
 	@Html.Hidden("SupervisorTeam")
 	<a id="lknAdd" href="javascript:;">+ Add to list</a>
-	@if (Model.SupervisorRole == (short)RolesEnum.ActingSupervisor)
+	@if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
  {
 		<span class="title team">@Labels.Team</span> <span class="control">
 			<select id="group" multiple="multiple" class="team-select">
@@ -75,16 +75,16 @@
 				</th>
 				<th rowspan="2" class="supervisor">
 					@{
-						if (Model.SupervisorRole == (short)RolesEnum.Verifier)
+						if (Model.SupervisorRole == (short)RoleSystem.Verifier)
 						{
 						@Html.Label("Verifier")
-						} if (Model.SupervisorRole == (short)RolesEnum.Approver)
+						} if (Model.SupervisorRole == (short)RoleSystem.Approver)
 						{
 						@Html.Label("Approver")
-						} if (Model.SupervisorRole == (short)RolesEnum.ShiftManager)
+						} if (Model.SupervisorRole == (short)RoleSystem.ShiftManager)
 						{
 						@Html.Label("Employee")
-						} if (Model.SupervisorRole == (short)RolesEnum.ActingSupervisor)
+						} if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
 						{
 						@Html.Label("Employee")
 						}
