@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
 
@@ -26,14 +27,14 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Get All Memo.
         /// </summary>
-        /// <param name="lookupCode">Lookup code.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>List of LookupData Entity.</returns>
-        public IList<LookupData> GetAll(string lookupCode)
+        public IList<LookupData> GetAll(ICriteria criteria)
         {
             IList<LookupData> listEntity = new List<LookupData>();
-            using (var db = new ObjectDb("Lookup_GetLookupData"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(new { lookupCode }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {

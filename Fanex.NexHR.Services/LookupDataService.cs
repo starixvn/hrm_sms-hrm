@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Services.Interface
     using System.Linq;
     using Fanex.Caching;
     using Fanex.Common.Helper;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -34,9 +35,20 @@ namespace Fanex.NexHR.Services.Interface
             this._cacheManager = CacheService.CreateInstance();
         }
 
-        public IList<LookupData> GetAll(string lookupCode)
+        /// <summary>
+        /// Get all lookup data.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The list lookup data.</returns>
+        public IList<LookupData> GetAll(GetAllLookupDataCriteria criteria)
         {
-            var lookupDataList = this._lookupDataRepository.GetAll(lookupCode);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<LookupData> lookupDataList = null;
+
+            if (criteria.IsValid())
+            {
+                lookupDataList = this._lookupDataRepository.GetAll(criteria);
+            }
 
             return lookupDataList;
         }
@@ -112,7 +124,11 @@ namespace Fanex.NexHR.Services.Interface
                 hashTable = new Hashtable();
             }
 
-            var listJobTile = this.GetAll(LookupCodeName.JobTitle);
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.JobTitle
+            };
+            IList<LookupData> listJobTile = this.GetAll(getAllJobTitleCriteria);
             hashTable[lookUpCode] = listJobTile;
             this._cacheManager.Set<Hashtable>(_CacheKey_AllLookUpData, hashTable, TimeSpan.FromHours(1));
         }
@@ -135,7 +151,11 @@ namespace Fanex.NexHR.Services.Interface
 
             if (!hashTable.ContainsKey(lookUpCode))
             {
-                var lookUpDataList = this._lookupDataRepository.GetAll(lookUpCode);
+                var criteria = new GetAllLookupDataCriteria
+                {
+                    LookupCode = lookUpCode
+                };
+                IList<LookupData> lookUpDataList = this._lookupDataRepository.GetAll(criteria);
 
                 if (lookUpDataList != null && lookUpDataList.Count > 0)
                 {

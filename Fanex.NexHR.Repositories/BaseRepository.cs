@@ -22,40 +22,39 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class BaseRepository : IBaseRepository
     {
-        public CommandResult Insert(ICriteria criteria, bool hasGetOutputParams = false)
+        public CommandResult Insert(ICriteria criteria)
         {
-            return ExecuteNonQuery(criteria, hasGetOutputParams);
+            return ExecuteNonQuery(criteria);
         }
 
-        public CommandResult Update(ICriteria criteria, bool hasGetOutputParams = false)
+        public CommandResult Update(ICriteria criteria)
         {
-            return ExecuteNonQuery(criteria, hasGetOutputParams);
+            return ExecuteNonQuery(criteria);
         }
 
-        public CommandResult Delete(ICriteria criteria, bool hasGetOutputParams = false)
+        public CommandResult Delete(ICriteria criteria)
         {
-            return ExecuteNonQuery(criteria, hasGetOutputParams);
+            return ExecuteNonQuery(criteria);
         }
 
         /// <summary>
         /// Function to insert, update or delete.
         /// </summary>
         /// <param name="criteria">Criteria contains parameter throw stored procedure.</param>
-        /// <param name="hasGetOutputParams">Has get output parameters or no.</param>
         /// <returns>Command Result.</returns>
-        private CommandResult ExecuteNonQuery(ICriteria criteria, bool hasGetOutputParams = false)
+        private static CommandResult ExecuteNonQuery(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 Hashtable hash = criteria.GetSpParams();
                 hash = (new ResultCriteria()).AddSpParams(hash);
-                int result = db.ExecuteNonQuery(hash);
+                db.ExecuteNonQuery(hash);
 
                 return GetCommandResult(hash);
             }
         }
 
-        private CommandResult GetCommandResult(Hashtable hash)
+        private static CommandResult GetCommandResult(Hashtable hash)
         {
             var errCode = hash["errcode"];
             var errMsg = hash["errmsg"];

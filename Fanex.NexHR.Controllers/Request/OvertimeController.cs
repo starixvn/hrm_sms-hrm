@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -414,7 +415,11 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _TeamService.GetAll(getAllGroupCriteria);
-            var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.JobTitle
+            };
+            IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,

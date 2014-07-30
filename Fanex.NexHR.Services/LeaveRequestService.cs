@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = Repository.Insert(criteria, hasGetOutputParams: true);
+                commandResult = Repository.Insert(criteria);
                 if (commandResult.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);

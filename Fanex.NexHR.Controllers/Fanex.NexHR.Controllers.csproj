@@ -142,7 +142,9 @@
     <Compile Include="MemoController.cs" />
     <Compile Include="MessageController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportController.cs" />
+    <Compile Include="ReportController.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Request\ChangeShiftController.cs" />
     <Compile Include="Request\CheckInOutController.cs" />
     <Compile Include="Request\KeepInViewController.cs" />

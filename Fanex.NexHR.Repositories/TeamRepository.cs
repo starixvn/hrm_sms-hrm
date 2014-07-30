@@ -70,9 +70,9 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public List<SupervisorModel> GetTeamSupervisor(ICriteria criteria)
+        public IList<SupervisorModel> GetTeamSupervisor(ICriteria criteria)
         {
-            List<SupervisorModel> supervisors = null;
+            IList<SupervisorModel> supervisors = null;
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
                 supervisors = db.Query<SupervisorModel>(criteria.GetSpParams()).ToList();
@@ -81,9 +81,9 @@ namespace Fanex.NexHR.Repositories
             return supervisors;
         }
 
-        public List<TeamSupervisorModel> GetSupervisorByTeamId(ICriteria criteria)
+        public IList<TeamSupervisorModel> GetSupervisorByTeamId(ICriteria criteria)
         {
-            List<TeamSupervisorModel> supervisor = null;
+            IList<TeamSupervisorModel> supervisor = null;
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
                 supervisor = db.Query<TeamSupervisorModel>(criteria.GetSpParams()).ToList();

@@ -118,7 +118,7 @@ namespace Fanex.NexHR.Controllers
                 GroupId = id
             };
 
-            Team team = _teamService.Get(criteria);
+            Team team = _teamService.GetById(criteria);
 
             var model = new TeamViewModel
             {

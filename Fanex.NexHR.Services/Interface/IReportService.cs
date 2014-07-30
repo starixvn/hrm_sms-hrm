@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
@@ -68,23 +69,23 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
 
-        IList<ExtensionNoModel> GetAllExtensionNo();
+        IEnumerable<ExtensionNoModel> GetAllExtensionNo(GetAllExtensionNumberCriteria criteria);
 
-        IList<ExtensionNoModel> GetAllExtensionGroupInfo(bool isInternal, int? groupId);
+        IEnumerable<ExtensionNoModel> GetAllExtensionGroupInfo(GetExtensionNumberGroupInfoCriteria criteria);
 
-        bool AddNewExtensionNoMember(ExtensionNoModel model);
+        CommandResult AddNewExtensionNoMember(InsertExtensionNumberCriteria criteria);
 
-        ExtensionNoModel GetEmployeeExtensionNoById(bool isInternal, int empExtID);
+        ExtensionNoModel GetEmployeeExtensionNoById(GetExtensionNumberMemberByIdCriteria criteria);
 
-        bool UpdateExtensionNoMember(ExtensionNoModel model);
+        CommandResult UpdateExtensionNoMember(UpdateExtensionNumberMemberCriteria criteria);
 
-        bool DeleteExtensionNumber(int extId);
+        CommandResult DeleteExtensionNumber(DeleteExtensionNumberMemberCriteria criteria);
 
-        bool AddNewExternalGroup(string groupName);
+        CommandResult AddNewExternalGroup(InsertExternalGroupCriteria criteria);
 
-        bool EditExternalGroup(int groupId, string groupName);
+        CommandResult EditExternalGroup(UpdateExternalNumberCriteria criteria);
 
-        bool DeleteExternalGroup(int groupId);
+        CommandResult DeleteExternalGroup(DeleteExternalGroupCriteria criteria);
 
         IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
 

@@ -21,9 +21,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Team> GetAll(ICriteria criteria);
 
-        List<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
+        IList<SupervisorModel> GetTeamSupervisor(ICriteria criteria);
 
-        List<TeamSupervisorModel> GetSupervisorByTeamId(ICriteria criteria);
+        IList<TeamSupervisorModel> GetSupervisorByTeamId(ICriteria criteria);
 
         bool UpdateSupervisor(ICriteria criteria);
 

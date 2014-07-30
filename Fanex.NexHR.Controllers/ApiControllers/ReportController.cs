@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Linq;
     using System.Web.Http;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -124,7 +125,12 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             }
             else
             {
-                var data = _reportService.GetAllExtensionGroupInfo(isInternal, groupId);
+                var getGroupInfoCriteria = new GetExtensionNumberGroupInfoCriteria
+                {
+                    IsInternal = isInternal,
+                    GroupID = (int)groupId
+                };
+                IEnumerable<ExtensionNoModel> data = _reportService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
                 var selectList = data.Select(x => new System.Web.Mvc.SelectListItem
                 {
                     Text = x.TeamName,

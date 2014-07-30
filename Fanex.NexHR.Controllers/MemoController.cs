@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
@@ -30,7 +31,7 @@ namespace Fanex.NexHR.Controllers
         public MemoController(IMemoService memoService = null, ILookupDataService lookupDataService = null)
         {
             _memoService = memoService ?? new MemoService();
-            _lookupDataService = lookupDataService ?? new LookupDataService();            
+            _lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
         public MemoController()
@@ -44,7 +45,11 @@ namespace Fanex.NexHR.Controllers
         /// <returns>View Index.</returns>
         public ActionResult Index()
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             MemoViewModel model = new MemoViewModel
             {
                 Content = string.Empty,
@@ -63,7 +68,11 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public ActionResult Index(MemoViewModel model)
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetAllMemoCriteria
             {
                 Content = model.Content,
@@ -74,10 +83,19 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit memo.
+        /// </summary>
+        /// <param name="id">The memo Id.</param>
+        /// <returns>The Action Result.</returns>
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetMemoByIdCriteria
             {
                 Id = id
@@ -96,7 +114,11 @@ namespace Fanex.NexHR.Controllers
         [ValidateInput(false)]
         public ActionResult Edit(Memo model)
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1 && string.IsNullOrEmpty(model.AttachFile))
             {
                 return View(model);
@@ -140,7 +162,11 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             return View(new Memo
             {
                 SentTo = "All Staff",
@@ -162,7 +188,11 @@ namespace Fanex.NexHR.Controllers
         [ValidateInput(false)]
         public ActionResult Create(Memo model)
         {
-            ViewBag.MemoCategories = _lookupDataService.GetAll(LookupCodeName.MemoCategory);
+            var getAllMemoCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.MemoCategory
+            };
+            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1)
             {
                 model.Contents = model.AttachFile;

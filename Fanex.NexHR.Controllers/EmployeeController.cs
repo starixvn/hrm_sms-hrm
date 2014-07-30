@@ -23,6 +23,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Team;
@@ -82,7 +83,11 @@ namespace Fanex.NexHR.Controllers
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
 
-            var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.JobTitle
+            };
+            IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -515,7 +520,7 @@ namespace Fanex.NexHR.Controllers
                 {
                     GroupId = teamId
                 };
-                Team team = _teamService.Get(criteria);
+                Team team = _teamService.GetById(criteria);
 
                 if (team != null)
                 {
@@ -851,7 +856,11 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-            ViewBag.JobTitles = _lookupDataService.GetAll(LookupCodeName.JobTitle);
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.JobTitle
+            };
+            ViewBag.JobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
 
             ViewBag.Marriages = Utilities.Marriages;
         }

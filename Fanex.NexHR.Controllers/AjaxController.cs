@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -337,28 +338,49 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public bool DeleteExtensionNumber(int extId)
         {
-            return _reportService.DeleteExtensionNumber(extId);
+            var criteria = new DeleteExtensionNumberMemberCriteria
+            {
+                ExtensionNumberId = extId
+            };
+            CommandResult commandResult = _reportService.DeleteExtensionNumber(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool AddNewExternalGroup(string groupName)
         {
-            return _reportService.AddNewExternalGroup(groupName);
+            var criteria = new InsertExternalGroupCriteria
+            {
+                FullName = groupName
+            };
+            CommandResult commandResult = _reportService.AddNewExternalGroup(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool DeleteExternalGroup(int extId)
         {
-            return _reportService.DeleteExternalGroup(extId);
+            var criteria = new DeleteExternalGroupCriteria
+            {
+                ExternalId = extId
+            };
+            CommandResult commandResult = _reportService.DeleteExternalGroup(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool EditExternalGroup(int extId, string groupName)
         {
-            return _reportService.EditExternalGroup(extId, groupName);
+            var criteria = new UpdateExternalNumberCriteria
+            {
+                ExternalId = extId,
+                FullName = groupName
+            };
+            CommandResult commandResult = _reportService.EditExternalGroup(criteria);
+            return commandResult.Code == 0;
         }
 
         public int UpdatePasswordResetStatus(bool status)

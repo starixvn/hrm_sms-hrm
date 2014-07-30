@@ -42,7 +42,7 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The Group object.</returns>
-        public Team Get(GetGroupByIdCriteria criteria)
+        public Team GetById(GetGroupByIdCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             Team team = new Team();

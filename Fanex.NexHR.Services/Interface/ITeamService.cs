@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface ITeamService
     {
-        Team Get(GetGroupByIdCriteria criteria);
+        Team GetById(GetGroupByIdCriteria criteria);
 
         IList<Team> GetAll(GetAllGroupCriteria criteria);
 

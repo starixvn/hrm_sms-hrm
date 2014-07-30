@@ -10,13 +10,14 @@
 namespace Fanex.NexHR.Services.Interface
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
 
     public interface ILookupDataService
     {
         LookupData Get(string lookupCode, int lookupId);
 
-        IList<LookupData> GetAll(string lookupCode);
+        IList<LookupData> GetAll(GetAllLookupDataCriteria criteria);
 
         IList<LookupData> GetJobTitle(string jobTitle);
 

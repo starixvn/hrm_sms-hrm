@@ -10,6 +10,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
@@ -17,6 +18,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Lookup;
+    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Team;
@@ -524,6 +527,9 @@ namespace Fanex.NexHR.Controllers
         /// <param name="isLocal">Expat Or Local.</param>
         /// <param name="isExcel">View Only Or Export Excel.</param>
         /// <returns>Action Result.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules",
+            "SP2101:MethodMustNotContainMoreLinesThan",
+            Justification = "Reviewed. Suppression is OK here.")]
         public ActionResult WorkingCalendarSummary(
              int? employeeId,
              string employee,
@@ -550,19 +556,21 @@ namespace Fanex.NexHR.Controllers
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds
             };
-
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.DefaultFromDate = model.FromDate;
             ViewBag.DefaultToDate = model.ToDate;
-            var listJobTitle = _lookupDataService.GetAll(LookupCodeName.JobTitle);
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria 
+            { 
+                LookupCode = LookupCodeName.JobTitle
+            };
+            IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
                 Selected = j.Id.ToString() == string.Empty
             }).ToList();
-
             if (isExcel)
             {
                 var criteria = new GetEmployeeWorkingCalendarByDateCriteria()
@@ -575,7 +583,6 @@ namespace Fanex.NexHR.Controllers
                     JobTitleId = model.JobTitleId
                 };
                 List<WorkingCalendarSummary> calendars = _reportService.CalendarSummaryList(criteria).ToList();
-
                 string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
                 var hssfworkbook = _exportExcelService.ExportWorkingCalendarSummary(calendars, fromDate.Value, toDate.Value);
                 return ExcelFile(hssfworkbook, fileName);
@@ -664,7 +671,7 @@ namespace Fanex.NexHR.Controllers
             }
 
             ViewBag.Authorize = authorize;
-            var lstEntity = _reportService.GetAllExtensionNo();
+            IEnumerable<ExtensionNoModel> lstEntity = _reportService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
             var model = (from item in lstEntity
                          group item by item.TeamName into g
                          select new ExtensionNumberViewModel() { Name = g.Key, ListExt = g.ToList() }).ToList();
@@ -678,6 +685,11 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Add new extension member.
+        /// </summary>
+        /// <param name="model">The extension number model.</param>
+        /// <returns>The view after add new number.</returns>
         [HttpPost]
         [Authorize(Roles = "HR")]
         public ActionResult AddNewMember(ExtensionNoModel model)
@@ -685,22 +697,54 @@ namespace Fanex.NexHR.Controllers
             CheckExternalEmployee(model);
             if (ModelState.IsValid)
             {
-                ViewBag.Requested = _reportService.AddNewExtensionNoMember(model);
+                var criteria = new InsertExtensionNumberCriteria
+                {
+                    FullName = model.FullName,
+                    NickName = model.NickName,
+                    ExtensionNo = model.ExtensionNo,
+                    IsInternal = model.IsInternal,
+                    EmpID = model.EmpId,
+                    GroupID = model.TeamId,
+                };
+
+                CommandResult commandResult = _reportService.AddNewExtensionNoMember(criteria);
+                ViewBag.Requested = commandResult.Code == 0;
             }
 
             return View();
         }
 
+        /// <summary>
+        /// Edit extension number.
+        /// </summary>
+        /// <param name="isInternal">The boolean is internal or not.</param>
+        /// <param name="empExtID">The extension Id.</param>
+        /// <returns>THe Action Result.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult EditExtensionNumber(bool isInternal, int empExtID)
         {
-            var model = _reportService.GetEmployeeExtensionNoById(isInternal, empExtID);
-            var group = _reportService.GetAllExtensionGroupInfo(isInternal, null);
-            ViewBag.Group = group.Select(x => new SelectListItem
+            var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
             {
-                Text = x.TeamName,
-                Value = x.TeamId.ToString()
-            }).ToList();
+                IsInternal = isInternal,
+                EmployeeExtensionNoId = empExtID
+            };
+            ExtensionNoModel model = _reportService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
+            {
+                IsInternal = isInternal,
+                GroupID = null
+            };
+            IEnumerable<ExtensionNoModel> groups = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
+
+            if (groups != null)
+            {
+                ViewBag.Group = groups.Select(x => new SelectListItem
+                {
+                    Text = x.TeamName,
+                    Value = x.TeamId.ToString()
+                }).ToList();
+            }
+
             return View(model);
         }
 
@@ -714,7 +758,12 @@ namespace Fanex.NexHR.Controllers
         public ActionResult EditExtensionNumber(ExtensionNoModel model)
         {
             CheckExternalEmployee(model);
-            var group = _reportService.GetAllExtensionGroupInfo(model.IsInternal, null);
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
+            {
+                IsInternal = model.IsInternal,
+                GroupID = null
+            };
+            IEnumerable<ExtensionNoModel> group = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
             ViewBag.Group = group.Select(x => new SelectListItem
             {
                 Text = x.TeamName,
@@ -722,7 +771,18 @@ namespace Fanex.NexHR.Controllers
             }).ToList();
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _reportService.UpdateExtensionNoMember(model);
+                var updateExtensionNoCriteria = new UpdateExtensionNumberMemberCriteria
+                {
+                    FullName = model.FullName,
+                    NickName = model.NickName,
+                    ExtensionNo = model.ExtensionNo,
+                    IsInternal = model.IsInternal,
+                    ExtID = model.EmpExtID,
+                    EmpID = model.EmpId,
+                    GroupID = model.TeamId
+                };
+                CommandResult commandResult = _reportService.UpdateExtensionNoMember(updateExtensionNoCriteria);
+                ViewBag.Updated = commandResult.Code == 0;
                 return RedirectToAction("ExtensionNo");
             }
             else
@@ -733,7 +793,12 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult ManageExternalGroup()
         {
-            var group = _reportService.GetAllExtensionGroupInfo(false, null);
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
+            {
+                IsInternal = false,
+                GroupID = null
+            };
+            IEnumerable<ExtensionNoModel> group = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
             return View(group);
         }
 
