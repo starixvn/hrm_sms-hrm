@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.AnnualLeave;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
@@ -77,27 +78,13 @@ namespace Fanex.NexHR.Services.Interface
 
         AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria);
 
-        bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
+        CommandResult DeleteAnnualLeaveTransaction(DeleteAnnualLeaveTransactionCriteria criteria);
 
-        bool UpdateAnnualLeaveTransaction(
-            long id,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime modifiedDate,
-            int modifiedBy);
+        CommandResult UpdateAnnualLeaveTransaction(UpdateAnnualLeaveTransactionCriteria criteria);
 
-        bool InsertAnnualLeaveTransaction(
-            int empId,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy);
+        CommandResult InsertAnnualLeaveTransaction(InsertAnnualLeaveTransactionCriteria criteria);
 
-        IList<UserChangedShift> GetUserChangedShift(DateTime date);
+        IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria);
 
         IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null);
 

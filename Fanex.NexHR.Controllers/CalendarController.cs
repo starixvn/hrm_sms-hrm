@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -251,7 +252,12 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Year = year != 0 ? year : DateTime.Now.Year;
             ViewBag.Month = month != 0 ? month : DateTime.Now.Month;
             firstDateInMonth.AppendFormat("{0}/{1}/1", ViewBag.Year, ViewBag.Month);
-            var userChangedShift = _employeeService.GetUserChangedShift(new DateTime(ViewBag.Year, ViewBag.Month, 1));
+
+            var getUserChangeShiftCriteria = new GetUserChangedShiftCriteria()
+            {
+                ReportDate = new DateTime(ViewBag.Year, ViewBag.Month, 1)
+            };
+            var userChangedShift = _employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
             var userHalfDayOffs = _employeeService.GetHalfDayOffs(DateTime.Parse(firstDateInMonth.ToString())); 
            
             ViewBag.FromNewDate = fromDate;

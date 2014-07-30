@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.AnnualLeave;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
@@ -377,38 +378,52 @@ namespace Fanex.NexHR.Services
             return annualLeave;
         }
 
-        public bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy)
+        public CommandResult DeleteAnnualLeaveTransaction(DeleteAnnualLeaveTransactionCriteria criteria)
         {
-            return this._employeeRepository.DeleteAnnualLeaveTransaction(id, modifiedDate, modifiedBy);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = this.Repository.Delete(criteria);
+            }
+
+            return result;
         }
 
-        public bool UpdateAnnualLeaveTransaction(
-            long id,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime modifiedDate,
-            int modifiedBy)
+        public CommandResult UpdateAnnualLeaveTransaction(UpdateAnnualLeaveTransactionCriteria criteria)
         {
-            return this._employeeRepository.UpdateAnnualLeaveTransaction(id, description, fromDate, deductDays, creditDays, modifiedDate, modifiedBy);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Update(criteria);
+            }
+
+            return result;
         }
 
-        public bool InsertAnnualLeaveTransaction(
-            int empId,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy)
+        public CommandResult InsertAnnualLeaveTransaction(InsertAnnualLeaveTransactionCriteria criteria)
         {
-            return this._employeeRepository.InsertAnnualLeaveTransaction(empId, description, fromDate, deductDays, creditDays, createdDate, createdBy);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Insert(criteria);
+            }
+
+            return result;
         }
 
-        public IList<UserChangedShift> GetUserChangedShift(DateTime date)
+        public IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria)
         {
-            return this._employeeRepository.GetUserChangedShift(date);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<UserChangedShift> users = null;
+            if (criteria.IsValid())
+            {
+                users = this.GetData<UserChangedShift>(criteria).ToList();
+            }
+
+            return users;
         }
 
         public IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null)

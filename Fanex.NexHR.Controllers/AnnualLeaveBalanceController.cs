@@ -218,8 +218,14 @@ namespace Fanex.NexHR.Controllers
 
             if (command == Resources.Labels.Delete)
             {
-                var result = _employeeService.DeleteAnnualLeaveTransaction(model.LeaveTransId, DateTime.Now, this.CurrentUser.Id);
-                if (result)
+                var deleteAnnualLeaveTransactionCriteria = new DeleteAnnualLeaveTransactionCriteria()
+                {
+                    LeaveTransId = model.LeaveTransId,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = this.CurrentUser.Id
+                };
+                CommandResult result = _employeeService.DeleteAnnualLeaveTransaction(deleteAnnualLeaveTransactionCriteria);
+                if (result.Code == 0)
                 {
                     return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
                 }
@@ -233,14 +239,18 @@ namespace Fanex.NexHR.Controllers
             if (ModelState.IsValid)
             {
                 // update annual leave here
-                ViewBag.Updated = _employeeService.UpdateAnnualLeaveTransaction(
-                    model.LeaveTransId, 
-                    model.Description,
-                    model.AffectedFrom, 
-                    model.DeductDays, 
-                    model.CreditDays, 
-                    DateTime.Now, 
-                    this.CurrentUser.Id);
+                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria()
+                {
+                    LeaveTransId = model.LeaveTransId,
+                    Description = model.Description,
+                    FromDate = model.AffectedFrom,
+                    DeductDays = model.DeductDays,
+                    CreditDays = model.CreditDays,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = this.CurrentUser.Id
+                };
+                CommandResult result = _employeeService.UpdateAnnualLeaveTransaction(updateAnnualLeaveTransactionCriteria);
+                ViewBag.Updated = result.Code == 0;
             }
             else
             {
@@ -276,14 +286,18 @@ namespace Fanex.NexHR.Controllers
 
             if (ModelState.IsValid)
             {
-                ViewBag.Inserted = _employeeService.InsertAnnualLeaveTransaction(
-                    model.EmpId,
-                    model.Description, 
-                    model.AffectedFrom, 
-                    model.DeductDays, 
-                    model.CreditDays, 
-                    DateTime.Now, 
-                    this.CurrentUser.Id);
+                var criteria = new InsertAnnualLeaveTransactionCriteria()
+                {
+                    EmpId = model.EmpId,
+                    Description = model.Description,
+                    FromDate = model.AffectedFrom,
+                    DeductDays = model.DeductDays,
+                    CreditDays = model.CreditDays,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = this.CurrentUser.Id
+                };
+                CommandResult result = _employeeService.InsertAnnualLeaveTransaction(criteria);
+                ViewBag.Inserted = result.Code == 0;
             }
             else
             {

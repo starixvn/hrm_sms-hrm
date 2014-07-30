@@ -28,31 +28,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         int UpdatePasswordResetStatus(int empId, bool passwordReset, out int errorCode, out string message);
 
-        bool DeleteAnnualLeaveTransaction(long id, DateTime modifiedDate, int modifiedBy);
-
         AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int id);
 
-        bool UpdateAnnualLeaveTransaction(
-            long id,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime modifiedDate,
-            int modifiedBy);
-
-        bool InsertAnnualLeaveTransaction(
-            int empId,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy);
-
         IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees();
-
-        IList<UserChangedShift> GetUserChangedShift(DateTime date);
 
         IList<HalfDayOff> GetHalfDayOffs(DateTime reportDate, int? employeeId = null, int? groupId = null);
 

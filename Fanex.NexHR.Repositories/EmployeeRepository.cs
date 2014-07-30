@@ -186,14 +186,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public bool DeleteAnnualLeaveTransaction(long leaveTransId, DateTime modifiedDate, int modifiedBy)
-        {
-            using (ObjectDb db = new ObjectDb("AnnualLeave_DeleteTransaction"))
-            {
-                return db.ExecuteNonQuery(new { leaveTransId, modifiedDate, modifiedBy }) != 0;
-            }
-        }
-
         public AnnualLeaveBalanceModel GetAnnualLeaveTransaction(int leaveTransId)
         {
             using (ObjectDb db = new ObjectDb("AnnualLeave_GetByID"))
@@ -202,77 +194,11 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Method update Annual Leave.
-        /// </summary>
-        /// <param name="leaveTransId">Leave Transaction id.</param>
-        /// <param name="description">Leave's description.</param>
-        /// <param name="fromDate">Affect from date.</param>
-        /// <param name="deductDays">Deduct days.</param>
-        /// <param name="creditDays">Credit days.</param>
-        /// <param name="modifiedDate">Modified date.</param>
-        /// <param name="modifiedBy">Modified by.</param>
-        /// <returns>Boolean to check.</returns>
-        public bool UpdateAnnualLeaveTransaction(
-            long leaveTransId,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime modifiedDate,
-            int modifiedBy)
-        {
-            var checkDescription = string.Empty;
-            if (description == null)
-            {
-                description = checkDescription;
-            }
-
-            using (ObjectDb db = new ObjectDb("AnnualLeave_UpdateTransaction"))
-            {
-                return db.ExecuteNonQuery(new { leaveTransId, description, fromDate, deductDays, creditDays, modifiedDate, modifiedBy }) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Method insert annual leave.
-        /// </summary>
-        /// <param name="empId">Employee's id.</param>
-        /// <param name="description">Description to leave.</param>
-        /// <param name="fromDate">Leave from date.</param>
-        /// <param name="deductDays">Deduct days.</param>
-        /// <param name="creditDays">Credit days.</param>
-        /// <param name="createdDate">Created date.</param>
-        /// <param name="createdBy">Created by.</param>
-        /// <returns>Boolean to check status.</returns>
-        public bool InsertAnnualLeaveTransaction(
-            int empId,
-            string description,
-            DateTime fromDate,
-            decimal deductDays,
-            decimal creditDays,
-            DateTime createdDate,
-            int createdBy)
-        {
-            using (ObjectDb db = new ObjectDb("AnnualLeave_InsertTransaction"))
-            {
-                return db.ExecuteNonQuery(new { empId, description, fromDate, deductDays, creditDays, createdDate, createdBy }) != 0;
-            }
-        }
-
         public IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees()
         {
             using (ObjectDb db = new ObjectDb("GetMissingCheckInOutList"))
             {
                 return db.Query<MissingCheckInOutModel>().ToList();
-            }
-        }
-
-        public IList<UserChangedShift> GetUserChangedShift(DateTime reportDate)
-        {
-            using (var db = new ObjectDb("EmployeeCalendar_GetChangedShift"))
-            {
-                return db.Query<UserChangedShift>(new { reportDate }).ToList();
             }
         }
 

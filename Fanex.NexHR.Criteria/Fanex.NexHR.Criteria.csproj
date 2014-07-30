@@ -41,11 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="AnnualLeave\DeleteAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionCriteria.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
+    <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
+    <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
+    <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
     <Compile Include="Memo\GetAllMemoCriteria.cs" />
