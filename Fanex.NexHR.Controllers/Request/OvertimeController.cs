@@ -474,7 +474,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 var getOvertimeRequestCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
                 {
-                    EmployeeId = overtimeMonthlyRequest.EmpId,
+                    EmployeeId = overtimeMonthlyRequest.Requester.Id,
                     Month = overtimeMonthlyRequest.RequestedDate
                 };
                 overtimeDaily = _OvertimeService.GetOvertimeRequests(getOvertimeRequestCriteria);
