@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
@@ -22,37 +23,25 @@ namespace Fanex.NexHR.Services.Interface
     /// </summary>
     public interface IOvertimeRequestService
     {
-        IList<OvertimeRequest> GetOvertimeRequests(int empId, DateTime requestMonth);
+        IList<OvertimeRequest> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
 
-        bool UpdateOvertimeRequest(MyOverTimeViewModel model, ModelStateDictionary modelState);
+        CommandResult UpdateOvertimeRequest(UpdateOvertimeRequestCriteria criteria);
 
-        IList<RequestEntity> GetOvertimeReportInYear(int empId, int year);
+        IList<RequestEntity> GetOvertimeReportInYear(GetOvertimeReportInYearCriteria criteria);
 
-        IList<RequestEntity> GetOvertimeRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null);
+        IList<OvertimeAnnualReport> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
 
-        IList<RequestEntity> GetHistoricOvertimeRequests(long requestId, int requestTypeId);
+        IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
 
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReport(int year, string team, int? empId, int supervisorId, string status);
+        IList<RequestEntity> GetMonthlyOvertimeReport(GetMonthlyOvertimeReportCriteria criteria);
 
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(int year, string team, int? empId, int supervisorId, string status);
+        IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria);
 
-        IList<RequestEntity> GetMonthlyOvertimeReport(DateTime date, int? empId, string groupids, string status);
+        IList<OvertimeRequest> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria);
 
-        IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(DateTime fromDate, DateTime toDate, int? empId, string groupids, string status);
+        IList<OvertimeRequest> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
 
-        IList<OvertimeRequest> HRGetOvertimeRequest(int supervisorId, int empId, DateTime requestMonth);
-
-        IList<OvertimeRequest> HRGetNormalOvertimeRequest(int supervisorId, int empId, DateTime requestMonth);
-
-        RequestEntity GetOvertimeRequestById(int requestId);
+        RequestEntity GetOvertimeRequestById(GetOvertimeByRequestIdCriteria criteria);
 
         IList<OvertimeRequest> GetMemberOvertimeDaily(int supervisorId, string roles, int employeeId, DateTime month);
 

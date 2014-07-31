@@ -8,6 +8,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
@@ -18,42 +19,17 @@ namespace Fanex.NexHR.Repositories.Interfaces
     /// </summary>
     public interface IOvertimeRequestRepository
     {
-        IList<OvertimeRequest> GetOvertimeRequests(int empId, DateTime requestMonth);
+        IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria);
 
-        bool UpdateOvertimeRequest(MyOverTimeViewModel model, out int errorCode, out string message);
+        IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria);
 
-        IList<RequestEntity> GetOvertimeReportInYear(int empId, int year);
+        IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria);
 
-        IList<RequestEntity> GetOvertimeRequests(
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isDailyRequest,
-            int? employeeId = null,
-            byte? status = null,
-            int? logInId = null,
-            byte? isLocal = null);
-
-        IList<RequestEntity> GetOvertimeRequestHistory(long requestId, int requestTypeId);
-
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReport(int year, string team, int? empId, int supervisorId, string status);
-
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(int year, string team, int? empId, int supervisorId, string status);
-
-        IList<RequestEntity> GetMonthlyOvertimeReport(DateTime date, int? empId, string groupids, string status);
-
-        IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(DateTime fromDate, DateTime toDate, int? empId, string groupids, string status);
-
-        RequestEntity GetOvertimeRequestById(int requestId);
+        RequestEntity GetOvertimeRequestById(ICriteria criteria);
 
         IList<OvertimeRequest> GetMemberOvertimeDaily(int supervisorId, string roles, int employeeId, DateTime month);
 
         IList<RequestEntity> GetMemberOvertimeMonthly(int supervisorId, string roles, DateTime month, int? employeeId, string teamIds, string status);
-
-        IList<OvertimeRequest> HRGetOvertimeRequest(int supervisorId, int empId, DateTime requestMonth);
-
-        IList<OvertimeRequest> HRGetNormalOvertimeRequest(int supervisorId, int empId, DateTime requestMonth);
 
         IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null);
 

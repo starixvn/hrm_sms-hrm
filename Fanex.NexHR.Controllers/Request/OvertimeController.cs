@@ -18,8 +18,10 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Lookup;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
@@ -70,7 +72,12 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var currentYear = year != 0 ? year : DateTime.Now.Year;
             ViewBag.Year = currentYear;
-            var entityList = _OvertimeService.GetOvertimeReportInYear(model.EmpId, currentYear);
+            var getOvertimeReportInYearCriteria = new GetOvertimeReportInYearCriteria
+            {
+                EmployeeId = model.EmpId,
+                Year = currentYear
+            };
+            IList<RequestEntity> entityList = _OvertimeService.GetOvertimeReportInYear(getOvertimeReportInYearCriteria);
             model.TotalRequest = entityList;
 
             return View(model);
@@ -84,7 +91,12 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View details.</returns>
         public ActionResult View(DateTime requestDate, int empId)
         {
-            IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(empId, Convert.ToDateTime(requestDate).Date);
+            var getOvertimeMonthlyByEmployeeCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
+            { 
+                EmployeeId = empId,
+                Month = Convert.ToDateTime(requestDate).Date
+            };
+            IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(getOvertimeMonthlyByEmployeeCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var entity = new OvertimeRequest();
@@ -94,7 +106,11 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var requestId = entity != null ? entity.RequestId : 0;
-            var overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(requestId);
+            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
+            {
+                RequestID = requestId
+            };
+            RequestEntity overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
 
             var overtimeViewModel = new MyOverTimeViewModel()
             {
@@ -118,7 +134,12 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View update overtime.</returns>
         public ActionResult Update(DateTime requestDate, int empId)
         {
-            IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(empId, Convert.ToDateTime(requestDate).Date);
+            var getOvertimeRequestCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
+            {
+                EmployeeId = empId,
+                Month = Convert.ToDateTime(requestDate).Date
+            };
+            IList<OvertimeRequest> entityList = _OvertimeService.GetOvertimeRequests(getOvertimeRequestCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
             var employeeInfo = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var entity = new OvertimeRequest();
@@ -128,7 +149,11 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var requestId = entity != null ? entity.RequestId : 0;
-            var overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(requestId);
+            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
+            {
+                RequestID = requestId
+            };
+            RequestEntity overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
             var overtimeViewModel = new MyOverTimeViewModel()
             {
                 OvertimeRequest = entityList,
@@ -163,8 +188,17 @@ namespace Fanex.NexHR.Controllers.Request
             model.ProcessedBy = id;
             model.ProcessedDate = DateTime.Now.Date;
             model.OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList();
-            var updated = _OvertimeService.UpdateOvertimeRequest(model, ModelState);
-            if (!updated)
+            var updateOvertimeRequestCriteria = new UpdateOvertimeRequestCriteria
+            {
+                EmployeeId = model.EmpId,
+                ProcessedBy = model.ProcessedBy,
+                ProcessedDate = model.ProcessedDate,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                ListDetail = model.OvertimeRequestDetail
+            };
+            CommandResult commandResult = _OvertimeService.UpdateOvertimeRequest(updateOvertimeRequestCriteria);
+            if (commandResult.Code == 0)
             {
                 foreach (var item in ModelState.Values)
                 {
@@ -173,6 +207,10 @@ namespace Fanex.NexHR.Controllers.Request
                         return Json(new { success = false, errors = error.ErrorMessage });
                     }
                 }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
             }
 
             return Json(new { success = true });
@@ -213,11 +251,27 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (calendar == 1)
             {
-                listEntity = this._OvertimeService.GetYearlyOvertimeReport(year, team, empId, currentUserId, null);
+                var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
+                {
+                    SupervisorID = this.CurrentUser.Id,
+                    Year = year,
+                    GroupIds = team,
+                    EmployeeId = empId,
+                    Status = null
+                };
+                listEntity = this._OvertimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
             else
             {
-                listEntity = this._OvertimeService.GetYearlyOvertimeReportByNormalCalendar(year, team, empId, currentUserId, null);
+                var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
+                {
+                    SupervisorID = this.CurrentUser.Id,
+                    Year = year,
+                    GroupIds = team,
+                    EmployeeId = empId,
+                    Status = null
+                };
+                listEntity = this._OvertimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
             return PartialView("YearlyReportDetails", listEntity);
@@ -237,11 +291,23 @@ namespace Fanex.NexHR.Controllers.Request
             IList<OvertimeRequest> entityList = new List<OvertimeRequest>();
             if (calendar == 0)
             {
-                entityList = _OvertimeService.HRGetNormalOvertimeRequest(id, empId, Convert.ToDateTime(requestDate).Date);
+                var getOvertimeNormalDailyByHRCriteria = new GetOvertimeNormalDailyByHRCriteria
+                {
+                    SupervisorID = id,
+                    EmployeeId = empId,
+                    Month = Convert.ToDateTime(requestDate).Date
+                };
+                entityList = _OvertimeService.HRGetNormalOvertimeRequest(getOvertimeNormalDailyByHRCriteria);
             }
             else
             {
-                entityList = _OvertimeService.HRGetOvertimeRequest(id, empId, Convert.ToDateTime(requestDate).Date);
+                var getOvertimeByHRCriteria = new GetOvertimeMonthlyByHRCriteria
+                {
+                    SupervisorID = id,
+                    EmployeeId = empId,
+                    Month = Convert.ToDateTime(requestDate).Date
+                };
+                entityList = _OvertimeService.HRGetOvertimeRequest(getOvertimeByHRCriteria);
             }
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
@@ -304,13 +370,23 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.Calendar = calendar;
             if (calendar == 0)
             {
-                var entityList = _OvertimeService.GetMonthlyOvertimeReportByNormalCalendar(fromDate, toDate, null, string.Empty, null);
+                var criteria = new GetMonthlyOvertimeReportByNormalCalendarCriteria
+                {
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                var entityList = _OvertimeService.GetMonthlyOvertimeReportByNormalCalendar(criteria);
                 return PartialView(entityList);
             }
             else
             {
                 var date = new DateTime(toDate.Year, toDate.Month, 1);
-                var entityList = _OvertimeService.GetMonthlyOvertimeReport(date, null, string.Empty, null);
+                var criteria = new GetMonthlyOvertimeReportCriteria
+                {
+                    FromDate = date,
+                    ToDate = date
+                };
+                IList<RequestEntity> entityList = _OvertimeService.GetMonthlyOvertimeReport(criteria);
                 return PartialView(entityList);
             }
         }
@@ -389,10 +465,19 @@ namespace Fanex.NexHR.Controllers.Request
         {
             IList<OvertimeRequest> overtimeDaily = null;
 
-            var overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(requestId);
+            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
+            {
+                RequestID = requestId
+            };
+            RequestEntity overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
             if (overtimeMonthlyRequest != null)
             {
-                overtimeDaily = _OvertimeService.GetOvertimeRequests(overtimeMonthlyRequest.Requester.Id, overtimeMonthlyRequest.RequestedDate);
+                var getOvertimeRequestCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
+                {
+                    EmployeeId = overtimeMonthlyRequest.EmpId,
+                    Month = overtimeMonthlyRequest.RequestedDate
+                };
+                overtimeDaily = _OvertimeService.GetOvertimeRequests(getOvertimeRequestCriteria);
             }
 
             var overtimeDailyViewModel = new MemberOvertimeDailyViewModel

@@ -18,8 +18,9 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Report.WorkingHour;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -188,11 +189,27 @@ namespace Fanex.NexHR.Controllers
             IList<OvertimeAnnualReport> entity = null;
             if (calendar == 1)
             {
-                entity = this._overtimeService.GetYearlyOvertimeReport(year, team, empId, this.CurrentUser.Id, null);
+                var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
+                {
+                    SupervisorID = this.CurrentUser.Id,
+                    Year = year,
+                    GroupIds = team,
+                    EmployeeId = empId,
+                    Status = null
+                };
+                entity = this._overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
             else
             {
-                entity = this._overtimeService.GetYearlyOvertimeReportByNormalCalendar(year, team, empId, this.CurrentUser.Id, null);
+                var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
+                {
+                    SupervisorID = this.CurrentUser.Id,
+                    Year = year,
+                    GroupIds = team,
+                    EmployeeId = empId,
+                    Status = null
+                };
+                entity = this._overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
             var hssfworkbook = _exportService.ExportYearlyOvertimeReport(entity, year, calendar);

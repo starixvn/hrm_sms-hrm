@@ -73,7 +73,6 @@
     <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetOTMonthlyOfEmpByHR" SpName="Overtime_GetOTMonthlyOfEmpByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalDailyByHR" SpName="OverTime_GetNormalDailyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalMonthlyByHR" SpName="OverTime_GetNormalMonthlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_OvertimeDetail" SpName="Report_OvertimeDetail" DbName="nexhrx" Plain="0"></Setting>
