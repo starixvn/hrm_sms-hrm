@@ -35,7 +35,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Result.</returns>
         public ActionResult Create()
         {
-            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria() 
+            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
             {
                 EmpId = this.CurrentUser.Id,
                 RequestId = null,
@@ -46,7 +46,7 @@ namespace Fanex.NexHR.Controllers.Request
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria() 
+            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
                 RequestType = (int)RequestFilter.Leave,
@@ -80,7 +80,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="requestDetails">Format request detail string.</param>
         /// <returns>Action Result.</returns>
         [HttpPost]
-        [ValidateInput(false)] 
+        [ValidateInput(false)]
         public ActionResult Create(string request, string requestDetails)
         {
             InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
@@ -99,8 +99,14 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View update.</returns>
         public ActionResult Update(long requestId)
         {
-            LeaveRequestViewModel leaveRequest = _LeaveRequestService.GetRequestById(requestId);
-            if (leaveRequest == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, leaveRequest.EmployeeId))
+            var criteria = new GetRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            RequestEntity request = _LeaveRequestService.GetRequestById(criteria);
+            LeaveRequestViewModel model = ConvertRequestToModel(request);
+
+            if (model == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, model.EmployeeId))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
@@ -115,8 +121,8 @@ namespace Fanex.NexHR.Controllers.Request
 
             var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-            minDate = minDate > leaveRequest.FromDate ? leaveRequest.FromDate : minDate;
-            if (leaveRequest.LeaveTypeId == Constants.MaternityLeave)
+            minDate = minDate > model.FromDate ? model.FromDate : minDate;
+            if (model.LeaveTypeId == Constants.MaternityLeave)
             {
                 //// rule: user can make leave request (maternity leave) for 6 months.
                 maxDate = maxDate.AddMonths(2);
@@ -129,19 +135,19 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = maxDate
             };
 
-            IList<DateTime> listUnavailDates = leaveRequest.LeaveTypeId == Constants.GeneralLeave
+            IList<DateTime> listUnavailDates = model.LeaveTypeId == Constants.GeneralLeave
                 ? null
                 : _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
 
-            leaveRequest.UnavailDates = listUnavailDates;
-            leaveRequest.LeaveTypeList = GetAllLeaveType();
-            leaveRequest.EmployeeLeaveBalance = employeeLeaveBalance;
-            GetVerifierAndApprover(leaveRequest);
+            model.UnavailDates = listUnavailDates;
+            model.LeaveTypeList = GetAllLeaveType();
+            model.EmployeeLeaveBalance = employeeLeaveBalance;
+            GetVerifierAndApprover(model);
 
             ViewBag.IsView = false;
             ViewBag.MinDate = minDate;
             ViewBag.MaxDate = maxDate;
-            return View(leaveRequest);
+            return View(model);
         }
 
         /// <summary>
@@ -171,12 +177,17 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Detail.</returns>
         public ActionResult Detail(int requestId)
         {
-            LeaveRequestViewModel leaveRequest = _LeaveRequestService.GetRequestById(requestId);
-            leaveRequest.LeaveTypeList = GetAllLeaveType();
-            GetVerifierAndApprover(leaveRequest);
+            var criteria = new GetRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            RequestEntity request = _LeaveRequestService.GetRequestById(criteria);
+            LeaveRequestViewModel model = ConvertRequestToModel(request);
+            model.LeaveTypeList = GetAllLeaveType();
+            GetVerifierAndApprover(model);
 
             ViewBag.IsView = true;
-            return View(leaveRequest);
+            return View(model);
         }
 
         [HttpGet]
@@ -381,8 +392,8 @@ namespace Fanex.NexHR.Controllers.Request
         /// <param name="workDate">Input the work date.</param>
         [NonAction]
         private void AddLeaveRequestNotExistCalendar(
-            List<LeaveDetailModel> leaveRequestDetailOutput, 
-            IEnumerable<LeaveDetailModel> tempLeaveDetailModels, 
+            List<LeaveDetailModel> leaveRequestDetailOutput,
+            IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
             DateTime workDate)
         {
             string tempScheduleStatus = Labels.NA;
@@ -415,10 +426,10 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private IList<SelectListItem> GetListItem(IList<SupervisorNameModel> supervisors)
         {
-            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem 
-            { 
-                Text = x.NickName + " (" + x.FullName + ")", 
-                Value = x.OwnerId.ToString() 
+            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem
+            {
+                Text = x.NickName + " (" + x.FullName + ")",
+                Value = x.OwnerId.ToString()
             }).ToList();
 
             return selectItems;
@@ -436,12 +447,48 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private IList<LeaveType> GetAllLeaveType()
         {
-            var criteria = new GetLeaveTypeCriteria() 
+            var criteria = new GetLeaveTypeCriteria()
             {
                 ExcludeNotShown = true
             };
             IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll(criteria);
             return leaveTypes;
+        }
+
+        /// <summary>
+        /// Function to convert from request entity to leave request view model.
+        /// </summary>
+        /// <param name="request">Request Entity.</param>
+        /// <returns>LeaveRequest ViewModel.</returns>
+        [NonAction]
+        private LeaveRequestViewModel ConvertRequestToModel(RequestEntity request)
+        {
+            LeaveRequestViewModel model = null;
+            if (request != null)
+            {
+                model = new LeaveRequestViewModel
+                {
+                    RequestId = request.Id,
+                    LeaveTypeId = request.LeaveType.Id,
+                    Employee = request.Requester.DisplayName,
+                    EmployeeId = request.Requester.Id,
+                    FromDate = request.FromDate,
+                    ToDate = request.ToDate,
+                    TotalDays = request.TotalDays,
+                    HalfDayOff = request.IsHalfDay,
+                    VerifierId = request.VerifiedBy.Id,
+                    ApproverId = request.ApprovedBy.Id,
+                    RefNo = request.RefNO,
+                    Remark = request.Remark,
+                    FromTime = request.FromTime.ToString("HH:mm"),
+                    ToTime = request.ToTime.ToString("HH:mm"),
+                    IsFromTimeAfterDay = request.FromDate.Date != request.FromTime.Date,
+                    IsToTimeAfterDay = request.ToDate.Date != request.ToTime.Date,
+                    Status = request.Status
+                };
+            }
+
+            return model;
         }
     }
 }
