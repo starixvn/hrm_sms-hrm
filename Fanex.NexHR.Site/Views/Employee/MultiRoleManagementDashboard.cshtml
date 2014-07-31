@@ -122,20 +122,20 @@
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
                 </td>
                 <td>
-                    @if (item.TotalPendingKIVRequest > 0)
+                    @if (item.TotalPendingKivRequest > 0)
                     {
                         requestModel.RequestType = 5;
                         requestModel.FromDate = minRequestDate;
-                        <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKIVRequest.ToString()</a>
+                        <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
                     }
                     else
                     {
                         <span>0</span>
                     }
                 </td>
-                <td>@item.TotalApprovedKIVRequest
+                <td>@item.TotalApprovedKivRequest
                 </td>
-                <td>@item.TotalRejecteKIVRequest
+                <td>@item.TotalRejecteKivRequest
                 </td>
             </tr>
 
@@ -281,20 +281,20 @@
                 <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
                 </td>
                 <td>
-                    @if (item.TotalPendingKIVRequest > 0)
+                    @if (item.TotalPendingKivRequest > 0)
 					{
 						requestModel.RequestType = 5;
 						requestModel.FromDate = minRequestDate;
-                        <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKIVRequest.ToString()</a>
+                        <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
 					}
 					else
 					{
                         <span>0</span>
 					}
                 </td>
-                <td>@item.TotalApprovedKIVRequest
+                <td>@item.TotalApprovedKivRequest
                 </td>
-                <td>@item.TotalRejecteKIVRequest
+                <td>@item.TotalRejecteKivRequest
                 </td>
             </tr>
 			<tr>

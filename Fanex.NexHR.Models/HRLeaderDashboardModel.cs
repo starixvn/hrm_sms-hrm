@@ -40,11 +40,11 @@ namespace Fanex.NexHR.Models
 
         public int TotalRejectLeaveRequest { get; set; }
 
-        public int TotalPendingKIVRequest { get; set; }
+        public int TotalPendingKivRequest { get; set; }
 
-        public int TotalApprovedKIVRequest { get; set; }
+        public int TotalApprovedKivRequest { get; set; }
 
-        public int TotalRejecteKIVRequest { get; set; }
+        public int TotalRejecteKivRequest { get; set; }
 
         public int TotalPendingOvertime { get; set; }
 
