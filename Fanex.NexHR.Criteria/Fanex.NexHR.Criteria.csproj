@@ -57,6 +57,7 @@
     <Compile Include="EmployeeSupervisor\UpdateOrderShiftArrangeCriteria.cs" />
     <Compile Include="EmployeeSupervisor\UpdateSupervisorCriteria.cs" />
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
+    <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />

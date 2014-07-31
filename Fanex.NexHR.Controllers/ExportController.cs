@@ -192,19 +192,58 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        /// <summary>
+        /// Export Excel Employee Basic Info.
+        /// </summary>
+        /// <param name="query">Query to DB.</param>
+        /// <param name="groupIds">Query group Id.</param>
+        /// <param name="enable">User enable or not.</param>
+        /// <param name="isDelete">User is deleted.</param>
+        /// <param name="titleId">Job title.</param>
+        /// <param name="isLocal">Expat or Local.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = query,
+                GroupIds = groupIds,
+                EnableUser = enable,
+                IsDeleteUser = isDelete,
+                TitleId = titleId,
+                IsLocalUser = isLocal
+            };
+
+            var entity = _employeeService.GetEmployees(getEmployeeCriteria);
             var hssfworkbook = _exportService.ExportEmployeeBasicInfo(entity);
 
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        /// <summary>
+        /// Export Excel Employee Detailed Info.
+        /// </summary>
+        /// <param name="query">Query to DB.</param>
+        /// <param name="groupIds">Query group Id.</param>
+        /// <param name="enable">User enable or not.</param>
+        /// <param name="isDelete">User is deleted.</param>
+        /// <param name="titleId">Job title.</param>
+        /// <param name="isLocal">Expat or Local.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult EmployeeDetailsInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeDetailsInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = query,
+                GroupIds = groupIds,
+                EnableUser = enable,
+                IsDeleteUser = isDelete,
+                TitleId = titleId,
+                IsLocalUser = isLocal
+            };
+            var entity = _employeeService.GetEmployees(getEmployeeCriteria);
             var hssfworkbook = _exportService.ExportEmployeeDetailsInfo(entity);
 
             return ExcelFile(hssfworkbook, fileName);

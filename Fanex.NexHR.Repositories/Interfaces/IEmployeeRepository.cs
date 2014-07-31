@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         Employee GetEmployeeByCode(ICriteria criteria);
 
-        IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null);
+        IList<Employee> GetEmployees(ICriteria criteria);
 
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 

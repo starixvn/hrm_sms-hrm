@@ -121,9 +121,15 @@ namespace Fanex.NexHR.Services
             return employee;
         }
 
-        public IList<Employee> GetEmployees(string query, string groupIds, bool? enable = null, bool? isDelete = null, int? titleId = null, bool? isLocal = null)
+        public IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria)
         {
-            IList<Employee> employees = this._employeeRepository.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<Employee> employees = null;
+            if (criteria.IsValid())
+            {
+                employees = this._employeeRepository.GetEmployees(criteria);
+            }
+
             return employees;
         }
 

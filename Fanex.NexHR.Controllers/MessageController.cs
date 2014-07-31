@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -76,7 +77,16 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
-            ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = null,
+                GroupIds = null,
+                EnableUser = false,
+                IsDeleteUser = false,
+                TitleId = null,
+                IsLocalUser = null
+            };
+            ViewBag.Employees = _employeeService.GetEmployees(getEmployeeCriteria);
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
@@ -113,7 +123,17 @@ namespace Fanex.NexHR.Controllers
             };
 
             ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
-            ViewBag.Employees = _employeeService.GetEmployees(null, null, false, false, null, null);
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = null,
+                GroupIds = null,
+                EnableUser = false,
+                IsDeleteUser = false,
+                TitleId = null,
+                IsLocalUser = null
+            };
+
+            ViewBag.Employees = _employeeService.GetEmployees(getEmployeeCriteria);
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);

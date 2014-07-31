@@ -39,6 +39,16 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             _employeeService = employeeService ?? new EmployeeService();
         }
 
+        /// <summary>
+        /// Query All Employees.
+        /// </summary>
+        /// <param name="query">Query to DB.</param>
+        /// <param name="groupIds">Employee Group Id.</param>
+        /// <param name="enable">Is Enabled.</param>
+        /// <param name="isDelete">Id Deleted.</param>
+        /// <param name="titleId">Employee Job Title.</param>
+        /// <param name="isLocal">Expat Or Local.</param>
+        /// <returns>List Of Employee.</returns>
         public IQueryable<Employee> GetEmployees(
             string query,
             string groupIds = "", 
@@ -52,7 +62,16 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 groupIds = string.Empty;
             }
 
-            var entityList = _employeeService.GetEmployees(query, groupIds, enable, isDelete, titleId, isLocal);
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = query,
+                GroupIds = groupIds,
+                EnableUser = enable,
+                IsDeleteUser = isDelete,
+                TitleId = titleId,
+                IsLocalUser = isLocal
+            };
+            var entityList = _employeeService.GetEmployees(getEmployeeCriteria);
 
             return entityList.AsQueryable();
         }
