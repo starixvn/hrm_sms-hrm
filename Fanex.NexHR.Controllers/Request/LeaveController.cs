@@ -105,7 +105,6 @@ namespace Fanex.NexHR.Controllers.Request
             };
             RequestEntity request = _LeaveRequestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-
             if (model == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, model.EmployeeId))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -118,7 +117,6 @@ namespace Fanex.NexHR.Controllers.Request
                 EffectedDay = DateTime.Now.Date
             };
             EmployeeLeaveBalance employeeLeaveBalance = _LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
-
             var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
             minDate = minDate > model.FromDate ? model.FromDate : minDate;
@@ -138,7 +136,6 @@ namespace Fanex.NexHR.Controllers.Request
             IList<DateTime> listUnavailDates = model.LeaveTypeId == Constants.GeneralLeave
                 ? null
                 : _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-
             model.UnavailDates = listUnavailDates;
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = employeeLeaveBalance;
