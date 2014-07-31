@@ -1,4 +1,4 @@
-﻿@model MySpaceViewModel
+﻿@model MySpaceModel
 @section css{
     @Url.CombresLink("myspacecss")
 }
@@ -137,12 +137,12 @@
                 @Labels.KeepInView
             </td>
             <td>
-                @Model.TotalKIVRequest
+                @Model.TotalKivRequest
             </td>
             <td>
-                @if (Model.TotalPendingKIVRequest > 0)
+                @if (Model.TotalPendingKivRequest > 0)
                 { 
-                    @Html.ActionLink(Model.TotalPendingKIVRequest.ToString(), "employeeView", "KeepInView")
+                    @Html.ActionLink(Model.TotalPendingKivRequest.ToString(), "employeeView", "KeepInView")
                 }
                 else
                 { 

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="DateOfEmployeeForgotAndLateEarlyIOViewModel.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="DateOfEmployeeForgotAndLateEarlyIOModel.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,15 +7,15 @@
 //   <change who="Paul.Nguyen" date="2013.12.19">Created.</change>
 // </history>
 
-namespace Fanex.NexHR.ViewModels
+namespace Fanex.NexHR.Models
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    /// DateOfEmployeeForgotAndLateEarlyIOViewModel Model.
+    /// DateOfEmployeeForgotAndLateEarlyIO Model.
     /// </summary>
-    public class DateOfEmployeeForgotAndLateEarlyIOViewModel
+    public class DateOfEmployeeForgotAndLateEarlyIOModel
     {
         public DateTime AttendanceDate { get; set; }
 

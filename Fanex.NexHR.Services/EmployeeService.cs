@@ -284,25 +284,25 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        public MySpaceViewModel GetMySpace(GetMySpaceCriteria criteria)
+        public MySpaceModel GetMySpace(GetMySpaceCriteria criteria)
         {
-            MySpaceViewModel space = null;
+            MySpaceModel space = null;
             Check.Argument.IsNotNull(criteria, "criteria");
             if (criteria.IsValid())
             {
-                space = this.GetDataEntity<MySpaceViewModel>(criteria);
+                space = this.GetDataEntity<MySpaceModel>(criteria);
             }
 
             return space;
         }
 
-        public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria)
+        public IList<DateOfEmployeeForgotAndLateEarlyIOModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria)
         {
-            IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> dates = null;
+            IList<DateOfEmployeeForgotAndLateEarlyIOModel> dates = null;
             Check.Argument.IsNotNull(criteria, "criteria");
             if (criteria.IsValid())
             {
-                dates = this.GetData<DateOfEmployeeForgotAndLateEarlyIOViewModel>(criteria).ToList();
+                dates = this.GetData<DateOfEmployeeForgotAndLateEarlyIOModel>(criteria).ToList();
             }
 
             return dates;
@@ -348,13 +348,13 @@ namespace Fanex.NexHR.Services
             return unavailableDates;
         }
 
-        public IList<HrLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
+        public IList<HRLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<HrLeaderDashboardModel> dashboard = null;
+            IList<HRLeaderDashboardModel> dashboard = null;
             if (criteria.IsValid())
             {
-                dashboard = this.GetData<HrLeaderDashboardModel>(criteria).ToList();
+                dashboard = this.GetData<HRLeaderDashboardModel>(criteria).ToList();
             }
 
             return dashboard;

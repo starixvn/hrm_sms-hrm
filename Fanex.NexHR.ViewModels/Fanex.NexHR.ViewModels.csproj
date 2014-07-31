@@ -69,13 +69,11 @@
     <Compile Include="ShiftViewModel.cs" />
     <Compile Include="TimeRecordViewModel.cs" />
     <Compile Include="TotalWorkingHourMonthlyViewModel.cs" />
-    <Compile Include="DateOfEmployeeForgotAndLateEarlyIOViewModel.cs" />
     <Compile Include="ExtensionNumberViewModel.cs" />
     <Compile Include="KeepInViewRequestViewModel.cs" />
     <Compile Include="EmployeeAttendanceOvertime.cs" />
     <Compile Include="EmployeeAttendanceRequest.cs" />
     <Compile Include="HalfDayOff.cs" />
-    <Compile Include="HrLeaderDashboardModel.cs" />
     <Compile Include="LeaveDetailViewModel.cs" />
     <Compile Include="LeaveSummaryViewModel.cs" />
     <Compile Include="LoginModel.cs" />
@@ -109,7 +107,6 @@
     <Compile Include="CreateEmployeeViewModel.cs" />
     <Compile Include="EmployeeAttendanceModel.cs" />
     <Compile Include="EmployeeAttendanceViewModel.cs" />
-    <Compile Include="MySpaceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TotalWorkingHoursViewModel.cs" />
     <Compile Include="WorkingCalendarSummaryViewModel.cs" />

@@ -66,13 +66,13 @@ namespace Fanex.NexHR.Services.Interface
 
         CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria);
 
-        MySpaceViewModel GetMySpace(GetMySpaceCriteria criteria);
+        MySpaceModel GetMySpace(GetMySpaceCriteria criteria);
 
-        IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria);
+        IList<DateOfEmployeeForgotAndLateEarlyIOModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria);
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 
-        IList<HrLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
+        IList<HRLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
 
         IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 

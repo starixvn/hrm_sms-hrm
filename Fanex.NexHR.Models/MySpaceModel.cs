@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="MySpaceViewModel.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="MySpaceModel.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
 // </history>
 
-namespace Fanex.NexHR.ViewModels
+namespace Fanex.NexHR.Models
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -15,7 +15,7 @@ namespace Fanex.NexHR.ViewModels
     /// <summary>
     /// MySpace ViewModel.
     /// </summary>
-    public class MySpaceViewModel
+    public class MySpaceModel
     {
         public decimal AnnualLeaveBalance { get; set; }
 
@@ -43,15 +43,15 @@ namespace Fanex.NexHR.ViewModels
 
         public decimal TotalPendingLeaveRequest { get; set; }
 
-        public decimal TotalKIVRequest { get; set; }
+        public decimal TotalKivRequest { get; set; }
 
-        public decimal TotalPendingKIVRequest { get; set; }
+        public decimal TotalPendingKivRequest { get; set; }
 
         public decimal KeepInViewBalance { get; set; }
 
         public decimal OutStandingLeaveBalance { get; set; }
 
-        public decimal OutStandingKIVLeaveBalance { get; set; }
+        public decimal OutStandingKivLeaveBalance { get; set; }
 
         public decimal ForgotInOut { get; set; }
 
@@ -59,6 +59,6 @@ namespace Fanex.NexHR.ViewModels
 
         public decimal TotalPendingOverTimeRequest { get; set; }
 
-        public IList<DateOfEmployeeForgotAndLateEarlyIOViewModel> DateOfEmployeeForgotAndLateEarlyIO { get; set; }
+        public IList<DateOfEmployeeForgotAndLateEarlyIOModel> DateOfEmployeeForgotAndLateEarlyIO { get; set; }
     }
 }

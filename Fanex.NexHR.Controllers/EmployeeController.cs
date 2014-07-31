@@ -451,7 +451,7 @@ namespace Fanex.NexHR.Controllers
                 EmpId = this.CurrentUser.Id,
                 Date = DateTime.Now
             };
-            MySpaceViewModel model = _employeeService.GetMySpace(getMySpaceCriteria);
+            MySpaceModel model = _employeeService.GetMySpace(getMySpaceCriteria);
 
             if (model != null)
             {
@@ -478,7 +478,7 @@ namespace Fanex.NexHR.Controllers
                     Empid = this.CurrentUser.Id,
                     Date = DateTime.Now
                 };
-                IList<HrLeaderDashboardModel> model = _employeeService.GetHrLeaderDashboard(getHRLeaderDashboardCriteria);
+                IList<HRLeaderDashboardModel> model = _employeeService.GetHrLeaderDashboard(getHRLeaderDashboardCriteria);
 
                 return PartialView("MultiRoleManagementDashboard", model);
             }

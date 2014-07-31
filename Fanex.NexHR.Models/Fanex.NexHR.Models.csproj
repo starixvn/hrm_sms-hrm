@@ -65,13 +65,16 @@
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
+    <Compile Include="DateOfEmployeeForgotAndLateEarlyIOModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
+    <Compile Include="HRLeaderDashboardModel.cs" />
     <Compile Include="LeaderModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="MySpaceModel.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Request\CheckInOutRequestModel.cs" />

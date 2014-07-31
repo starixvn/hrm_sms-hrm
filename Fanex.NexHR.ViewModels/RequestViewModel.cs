@@ -68,46 +68,44 @@ namespace Fanex.NexHR.ViewModels
 
         public bool IsMember { get; set; }
 
-        /// <summary>
-        /// Method GetSelectListItemTeam.
-        /// </summary>
-        /// <returns>List SelectListItem.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<SelectListItem> GetSelecListItemTeam()
+        public IList<SelectListItem> GetSelecListItemTeam
         {
-            IList<SelectListItem> selecListItemTeam = new List<SelectListItem>();
-
-            if (this.TeamCollection == null)
+            get
             {
-                this.TeamCollection = new List<Team>();
-            }
+                IList<SelectListItem> selecListItemTeam = new List<SelectListItem>();
 
-            var teamIds = this.TeamIds != null ? this.TeamIds.Split(',') : null;
-            var isSelected = false;
-
-            foreach (Team team in this.TeamCollection)
-            {
-                isSelected = false;
-                if (teamIds != null)
+                if (this.TeamCollection == null)
                 {
-                    int pos = Array.IndexOf(teamIds, team.Id.ToString());
-                    if (pos > -1)
-                    {
-                        isSelected = true;
-                    }
+                    this.TeamCollection = new List<Team>();
                 }
 
-                var item = new SelectListItem
+                var teamIds = this.TeamIds != null ? this.TeamIds.Split(',') : null;
+                var isSelected = false;
+
+                foreach (Team team in this.TeamCollection)
                 {
-                    Value = team.Id.ToString(),
-                    Text = team.Name,
-                    Selected = isSelected
-                };
+                    isSelected = false;
+                    if (teamIds != null)
+                    {
+                        int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                        if (pos > -1)
+                        {
+                            isSelected = true;
+                        }
+                    }
 
-                selecListItemTeam.Add(item);
+                    var item = new SelectListItem
+                    {
+                        Value = team.Id.ToString(),
+                        Text = team.Name,
+                        Selected = isSelected
+                    };
+
+                    selecListItemTeam.Add(item);
+                }
+
+                return selecListItemTeam;
             }
-
-            return selecListItemTeam;
         }
     }
 }
