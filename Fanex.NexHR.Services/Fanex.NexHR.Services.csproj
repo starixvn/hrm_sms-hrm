@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -154,7 +154,7 @@
     <Compile Include="Interface\IReportService.cs" />
     <Compile Include="LateInEarlyOutRequestService.cs" />
     <Compile Include="LeaveRequestService.cs" />
-    <Compile Include="LookupCodeName.cs" />
+    <Compile Include="LookupCodename.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmployeeService.cs" />
     <Compile Include="Interface\IEmailService.cs" />

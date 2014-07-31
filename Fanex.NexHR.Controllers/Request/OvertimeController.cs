@@ -417,7 +417,7 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.Groups = _TeamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.JobTitle
+                LookupCode = LookupCodename.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem

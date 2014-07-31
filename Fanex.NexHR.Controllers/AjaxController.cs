@@ -324,7 +324,7 @@ namespace Fanex.NexHR.Controllers
         {
             var criteria = new InsertLookupDataCriteria
             {
-                LookupCode = LookupCodeName.JobTitle,
+                LookupCode = LookupCodename.JobTitle,
                 Name = name
             };
             CommandResult commandResult = _lookupDataService.Insert(criteria);

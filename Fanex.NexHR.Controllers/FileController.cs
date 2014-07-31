@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Controllers
 
                     pathAttach = pathAttach.Substring(2);
 
-                    if (pathAttachFiles.Equals(string.Empty))
+                    if (string.IsNullOrEmpty(pathAttachFiles))
                     {
                         pathAttachFiles = pathAttach;
                     }

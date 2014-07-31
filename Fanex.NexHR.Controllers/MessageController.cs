@@ -24,23 +24,20 @@ namespace Fanex.NexHR.Controllers
     public class MessageController : BaseController
     {
         private readonly IMessageService _messageService;
-        private readonly ILookupDataService _lookupDataService;
         private readonly ITeamService _teamService;
         private readonly IEmployeeService _employeeService;
 
         public MessageController()
-            : this(null, null, null, null)
+            : this(null, null, null)
         {
         }
 
         public MessageController(
             IMessageService messageService,
-            ILookupDataService lookupDataService,
             ITeamService teamService,
             IEmployeeService employeeService)
         {
             _messageService = messageService ?? new MessageService();
-            _lookupDataService = lookupDataService ?? new LookupDataService();
             _teamService = teamService ?? new TeamService();
             _employeeService = employeeService ?? new EmployeeService();
         }

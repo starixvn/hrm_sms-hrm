@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="LookupCodeName.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="LookupCodename.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -14,8 +14,10 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// LookupCodeName Struct.
     /// </summary>
-    [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Reviewed. Suppression is OK here.")]
-    public struct LookupCodeName
+    [SuppressMessage("Microsoft.Performance",
+        "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes",
+        Justification = "Reviewed. Suppression is OK here.")]
+    public struct LookupCodename
     {
         public const string JobTitle = "JT";
         public const string MemoCategory = "MC";

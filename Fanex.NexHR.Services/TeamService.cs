@@ -32,9 +32,9 @@ namespace Fanex.NexHR.Services
         {
         }
 
-        public TeamService(ITeamRepository teamRespository)
+        public TeamService(ITeamRepository teamRepository)
         {
-            this._teamRepository = teamRespository ?? new TeamRepository();
+            this._teamRepository = teamRepository ?? new TeamRepository();
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             MemoViewModel model = new MemoViewModel
@@ -70,7 +70,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetAllMemoCriteria
@@ -93,7 +93,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetMemoByIdCriteria
@@ -116,7 +116,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1 && string.IsNullOrEmpty(model.AttachFile))
@@ -164,7 +164,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             return View(new Memo
@@ -190,7 +190,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.MemoCategory
+                LookupCode = LookupCodename.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1)

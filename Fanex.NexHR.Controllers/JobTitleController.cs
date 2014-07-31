@@ -37,7 +37,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodeName.JobTitle
+                LookupCode = LookupCodename.JobTitle
             };
             ViewBag.JobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
             return View();

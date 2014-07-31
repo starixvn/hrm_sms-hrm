@@ -562,7 +562,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.DefaultToDate = model.ToDate;
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria 
             { 
-                LookupCode = LookupCodeName.JobTitle
+                LookupCode = LookupCodename.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem

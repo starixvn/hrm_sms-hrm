@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Models
 
         public string Name { get; set; }
 
-        public int Value { get; set; }
+        public string Value { get; set; }
 
         public int TotalLocal { get; set; }
 
