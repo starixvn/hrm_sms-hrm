@@ -42,10 +42,10 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Type)
+                @Html.LabelFor(model => model.RequestType)
             </div>
             <div class="input">
-                @(Model.Type == 3 ? "Late in" : "Early out")
+                @(Model.RequestType == 3 ? "Late in" : "Early out")
             </div>
         </div>
         

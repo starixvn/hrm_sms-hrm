@@ -49,16 +49,6 @@ namespace Fanex.NexHR.Controllers.Support
         [HttpPost]
         public ActionResult Index(TimeSheetRecordViewModel model)
         {
-            if (model.Type == 1)
-            {
-                model.InOutType = false;
-            }
-
-            if (model.Type == 2)
-            {
-                model.InOutType = true;
-            }
-
             model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
 
             model.RecordTime = model.ForDate;

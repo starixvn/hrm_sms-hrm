@@ -31,7 +31,7 @@ namespace Fanex.NexHR.ViewModels
 
         public string GroupIds { get; set; }
 
-        public short Type { get; set; }
+        public short AttendanceType { get; set; }
 
         public int DateOption { get; set; }
 

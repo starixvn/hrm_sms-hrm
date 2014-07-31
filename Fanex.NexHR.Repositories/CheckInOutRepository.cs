@@ -33,7 +33,7 @@ namespace Fanex.NexHR.Repositories
             using (var db = new ObjectDb("WorkingTimeRequest_Insert_CheckInOutRequest"))
             {
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, request.Type);
+                db.AddInParameter("@RequestType", DbType.Int16, request.RequestType);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.AttendantDate);
                 db.AddInParameter("@CheckTime", DbType.DateTime, request.ForDate);
@@ -69,7 +69,7 @@ namespace Fanex.NexHR.Repositories
             {
                 db.AddInParameter("@RequestId", DbType.Int32, request.Id);
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, request.Type);
+                db.AddInParameter("@RequestType", DbType.Int16, request.RequestType);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.AttendantDate);
                 db.AddInParameter("@CheckTime", DbType.DateTime, request.ForDate);

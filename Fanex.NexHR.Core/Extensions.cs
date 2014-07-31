@@ -32,38 +32,6 @@ namespace Fanex.NexHR.Core
         private static readonly object _O = new object();
 
         /// <summary>
-        /// Convert Command enumerable to string.
-        /// </summary>
-        /// <param name="value">Command ENUM.</param>
-        /// <returns>Command string.</returns>
-        public static string EnumToString(this Enum value)
-        {
-            var type = value.GetType();
-            var fieldInfo = type.GetField(value.ToString());
-            var attribs = fieldInfo.GetCustomAttributes(
-                typeof(StringValueAttribute), false) as StringValueAttribute[];
-            return attribs.Length > 0 ? attribs[0].ToString() : null;
-        }
-
-        public static string EnumToString(this RoleSystem value)
-        {
-            var type = value.GetType();
-            var fieldInfo = type.GetField(value.ToString());
-            var attribs = fieldInfo.GetCustomAttributes(
-                typeof(StringValueAttribute), false) as StringValueAttribute[];
-            return attribs.Length > 0 ? attribs[0].ToString() : null;
-        }
-
-        public static string EnumToString(this RequestType value)
-        {
-            var type = value.GetType();
-            var fieldInfo = type.GetField(value.ToString());
-            var attribs = fieldInfo.GetCustomAttributes(
-                typeof(StringValueAttribute), false) as StringValueAttribute[];
-            return attribs.Length > 0 ? attribs[0].ToString() : null;
-        }
-
-        /// <summary>
         /// Radio button list.
         /// </summary>
         /// <typeparam name="TModel">Input TModel.</typeparam>

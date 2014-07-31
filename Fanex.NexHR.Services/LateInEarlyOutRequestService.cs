@@ -170,7 +170,7 @@ namespace Fanex.NexHR.Services
             {
                 Leader = sendToNickName,
                 Member = model.DisplayName,
-                Type = model.Type == (short)RequestType.LateIn
+                Type = model.RequestType == (short)RequestType.LateIn
                     ? "a " + Resources.Labels.LateIn.ToLower()
                     : "an " + Resources.Labels.EarlyOut.ToLower(),
                 RequestId = requestId,

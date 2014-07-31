@@ -19,11 +19,11 @@
 		var IsInAfterDay = $('#IsInAfterDay').val();
 		var IsOutAfterDay = $('#IsOutAfterDay').val();
 
-		if ($("#Type_1").attr("checked") == "checked") {
+		if ($("#RequestType_1").attr("checked") == "checked") {
 			checkConstraintDate(e, IsInAfterDay, dayDiff);
 		}
 
-		if ($("#Type_2").attr("checked") == "checked") {
+        if ($("#RequestType_2").attr("checked") == "checked") {
 			checkConstraintDate(e, IsOutAfterDay, dayDiff);
 		}
 
@@ -81,11 +81,11 @@
 		});
 	});
 
-	$('#Type_1, #Type_2').change(function () {
+$('#RequestType_1, #RequestType_2').change(function () {
 		bindingHourAndMinute();
 	});
 
-	if ($('#Type_1').val() != undefined) {
+if ($('#RequestType_1').val() != undefined) {
 		$("#Employee").blur();
 	}
 	else {
@@ -116,7 +116,7 @@ function updateZeroPrefix() {
 }
 
 function bindingHourAndMinute() {
-    if (($('#Type').val() == "1") || ($('#Type_1').attr("checked") == "checked")) {
+    if (($('#RequestType').val() == "1") || ($('#RequestType_1').attr("checked") == "checked")) {
         $('#Hour').val($('#InTime').val().substring(0, 2));
         $('#Minute').val($('#InTime').val().trim().substring(3, 5));
     }
@@ -154,19 +154,19 @@ function checkCrossDay() {
 	var IsInAfterDay = $('#IsInAfterDay').val();
 	var IsOutAfterDay = $('#IsOutAfterDay').val();
 
-	if ($("#Type_1").attr("checked") == "checked") {
+	if ($("#RequestType_1").attr("checked") == "checked") {
 		checkInOrOutInNextDay(IsInAfterDay);
 	}
 
-	if ($("#Type_2").attr("checked") == "checked") {
+if ($("#RequestType_2").attr("checked") == "checked") {
 		checkInOrOutInNextDay(IsOutAfterDay);
 	}
 
-	$("#Type_1").change(function () {
+$("#RequestType_1").change(function () {
 		checkInOrOutInNextDay(IsInAfterDay);
 	});
 
-	$("#Type_2").change(function () {
+$("#RequestType_2").change(function () {
 		checkInOrOutInNextDay(IsOutAfterDay);
 	});
 }

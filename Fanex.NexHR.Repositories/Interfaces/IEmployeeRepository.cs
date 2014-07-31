@@ -24,8 +24,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
-        IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees();
-
         IList<SupervisorNameModel> GetEmployeeCanClaimOvertime();
     }
 }

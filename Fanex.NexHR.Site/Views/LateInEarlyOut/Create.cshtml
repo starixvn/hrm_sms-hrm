@@ -43,10 +43,10 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Type)
+                @Html.LabelFor(model => model.RequestType)
             </div>
             <div class="input">
-                @Html.RadioButtonList(model => model.Type, Utilities.LateInEarlyOutTypes)
+                @Html.RadioButtonList(model => model.RequestType, Utilities.LateInEarlyOutTypes)
                 <div class="clear">
                 </div>
             </div>

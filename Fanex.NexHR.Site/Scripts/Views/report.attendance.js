@@ -66,7 +66,7 @@ $(document).ready(function () {
             + "&EmpId=" + $("#EmpId").val()
             + "&Employee=" + $("#Employee").val()
             + "&GroupIds=" + groups
-            + "&Type=" + $("#Type").val()
+            + "&AttendanceType=" + $("#AttendanceType").val()
             + "&DateOption=" + $("#Date").val()
             + "&ExcludeDeletedUsers=" + $("#ExcludeUserDelete").val()
             + "&CurrentUserId=" + currentUserId
@@ -97,7 +97,7 @@ function view() {
         "EmpId": $("#EmpId").val(),
         "Employee": $("#Employee").val(),
         "GroupIds": groups,
-        "Type": $("#Type").val(),
+        "AttendanceType": $("#AttendanceType").val(),
         "DateOption": $("#Date").val(),
         "ExcludeDeletedUsers": $("#ExcludeUserDelete").val(),
         "CurrentUserId": currentUserId,

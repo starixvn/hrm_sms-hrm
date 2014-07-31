@@ -57,7 +57,6 @@
     <Compile Include="AnnualLeaveBalanceMultiViewModel.cs" />
     <Compile Include="AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="BaseAnnualLeaveBalanceViewModel.cs" />
-    <Compile Include="BaseProcessModel.cs" />
     <Compile Include="BaseRequestModel.cs" />
     <Compile Include="ChangePasswordViewModel.cs" />
     <Compile Include="ChangeShiftViewModel.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="LeaveSummaryViewModel.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="MemoViewModel.cs" />
-    <Compile Include="MissingCheckInOutModel.cs" />
     <Compile Include="ModelBinder\CustomModelBinder.cs" />
     <Compile Include="ModelBinder\ReflectionModelBinder.cs" />
     <Compile Include="MyOverTimeViewModel.cs" />
@@ -105,11 +103,7 @@
     <Compile Include="TeamViewModel.cs" />
     <Compile Include="TimesheetRecord\TimeSheetRecordViewModel.cs" />
     <Compile Include="TimesheetViewModel.cs" />
-    <Compile Include="ProcessChangeShiftViewModel.cs" />
-    <Compile Include="ProcessLeaveViewModel.cs" />
     <Compile Include="LeaveRequestViewModel.cs" />
-    <Compile Include="ProcessLateInEarlyOutViewModel.cs" />
-    <Compile Include="ProcessCheckInOutViewModel.cs" />
     <Compile Include="CheckInOutRequestViewModel.cs" />
     <Compile Include="LateInEarlyOutRequestViewModel.cs" />
     <Compile Include="CreateEmployeeViewModel.cs" />

@@ -85,7 +85,7 @@ namespace Fanex.NexHR.Web.Providers
             UserLoginModel user = GetCurrentUser(username);
             if (user != null)
             {
-                roles.Add(RoleSystem.Member.EnumToString());
+                roles.Add(RoleSystem.Member.ToString());
                 if (user.RoleList != null)
                 {
                     foreach (var item in user.RoleList)
@@ -93,27 +93,27 @@ namespace Fanex.NexHR.Web.Providers
                         switch (item)
                         {
                             case (int)RoleSystem.Verifier:
-                                roles.Add(RoleSystem.Verifier.EnumToString());
+                                roles.Add(RoleSystem.Verifier.ToString());
                                 break;
                             case (int)RoleSystem.Approver:
-                                roles.Add(RoleSystem.Approver.EnumToString());
+                                roles.Add(RoleSystem.Approver.ToString());
                                 break;
                             case (int)RoleSystem.ShiftManager:
-                                roles.Add(RoleSystem.ShiftManager.EnumToString());
+                                roles.Add(RoleSystem.ShiftManager.ToString());
                                 break;
                             case (int)RoleSystem.ActingSupervisor:
-                                roles.Add(RoleSystem.ActingSupervisor.EnumToString());
+                                roles.Add(RoleSystem.ActingSupervisor.ToString());
                                 break;
                             case (int)RoleSystem.HR:
-                                roles.Add(RoleSystem.HR.EnumToString());
+                                roles.Add(RoleSystem.HR.ToString());
                                 break;
                             case (int)RoleSystem.SystemAdmin:
-                                roles.Add(RoleSystem.Verifier.EnumToString());
-                                roles.Add(RoleSystem.Approver.EnumToString());
-                                roles.Add(RoleSystem.ShiftManager.EnumToString());
-                                roles.Add(RoleSystem.ActingSupervisor.EnumToString());
-                                roles.Add(RoleSystem.HR.EnumToString());
-                                roles.Add(RoleSystem.SystemAdmin.EnumToString());
+                                roles.Add(RoleSystem.Verifier.ToString());
+                                roles.Add(RoleSystem.Approver.ToString());
+                                roles.Add(RoleSystem.ShiftManager.ToString());
+                                roles.Add(RoleSystem.ActingSupervisor.ToString());
+                                roles.Add(RoleSystem.HR.ToString());
+                                roles.Add(RoleSystem.SystemAdmin.ToString());
                                 break;
                         }
                     }

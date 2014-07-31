@@ -42,11 +42,11 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Type)
+                @Html.LabelFor(model => model.RequestType)
             </div>
             <div class="input">
                 @{
-        RequestType enumDisplayStatus = ((RequestType)@Model.Type);
+        RequestType enumDisplayStatus = ((RequestType)@Model.RequestType);
         string stringValue = enumDisplayStatus.ToString();
                 }
                 @stringValue

@@ -22,12 +22,10 @@ namespace Fanex.NexHR.ViewModels.TimesheetRecord
 
         public DateTime RecordTime { get; set; }
 
-        public bool InOutType { get; set; }
-
         public DateTime InsertDate { get; set; }
 
         [Required]
-        public short Type { get; set; }
+        public short InOutType { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

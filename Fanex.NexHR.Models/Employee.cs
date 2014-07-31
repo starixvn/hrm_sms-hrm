@@ -319,7 +319,7 @@ namespace Fanex.NexHR.Models
             }
 
             var userRoles = System.Web.Security.Roles.GetRolesForUser();
-            return roles.Any(role => userRoles.Contains(role.EnumToString()));
+            return roles.Any(role => userRoles.Contains(role.ToString()));
         }
 
         /// <summary>

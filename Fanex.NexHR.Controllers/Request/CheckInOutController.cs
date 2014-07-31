@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Controllers.Request
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
-                Type = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
+                RequestType = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
                 By = this.CurrentUser.Id
             };
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
@@ -188,7 +188,7 @@ namespace Fanex.NexHR.Controllers.Request
                 ForDate = request.RequestedDate.Date,
                 Hour = request.RequestedDate.Hour,
                 Minute = request.RequestedDate.Minute,
-                Type = type,
+                RequestType = type,
                 By = this.CurrentUser.Id,
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ApproverId = request.ApprovedBy.Id,

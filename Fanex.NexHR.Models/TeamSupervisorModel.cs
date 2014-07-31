@@ -33,7 +33,7 @@ namespace Fanex.NexHR.Models
             {
                 if (ActionType > 0)
                 {
-                    return Extensions.EnumToString((SupervisorActionType)ActionType);
+                    return ((SupervisorActionType)ActionType).ToString();
                 }
 
                 return string.Empty;

@@ -113,14 +113,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<MissingCheckInOutModel> GetMissingCheckInOutEmployees()
-        {
-            using (ObjectDb db = new ObjectDb("GetMissingCheckInOutList"))
-            {
-                return db.Query<MissingCheckInOutModel>().ToList();
-            }
-        }
-
         public IList<SupervisorNameModel> GetEmployeeCanClaimOvertime()
         {
             using (ObjectDb db = new ObjectDb("OverTime_GetListEmpClaimOT"))

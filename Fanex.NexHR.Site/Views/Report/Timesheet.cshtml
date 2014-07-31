@@ -29,7 +29,7 @@
             @Html.HiddenFor(model => model.EmpId)
         </div>
         <div class="grid_3 gridlabel">
-            @Html.LabelFor(model => model.Type)
+            @Html.LabelFor(model => model.TimeSheetType)
         </div>
         <div class="grid_4 pull_1">
             @{
@@ -43,8 +43,8 @@
                     new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
                 };
             }
-            @Html.DropDownListFor(model => model.Type, types)
-            @Html.ValidationMessageFor(model => model.Type)
+            @Html.DropDownListFor(model => model.TimeSheetType, types)
+            @Html.ValidationMessageFor(model => model.TimeSheetType)
         </div>
         <div class="grid_3 pull_1">
             <input type="submit" id="view" value="Submit" name="@Labels.View"/>

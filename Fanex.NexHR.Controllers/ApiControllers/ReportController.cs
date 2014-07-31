@@ -68,7 +68,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             var employeeAttendance = _reportService.GetEmployeeAttendanceReport(
                 model.FromDate, 
                 model.ToDate, 
-                model.Type, 
+                model.AttendanceType, 
                 model.EmpId, 
                 model.GroupIds, 
                 model.ExcludeDeletedUsers ? 1 : 0,
@@ -98,7 +98,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
             }
 
-            var timesheets = _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.Type, model.EmpId);
+            var timesheets = _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.TimeSheetType, model.EmpId);
             return timesheets;
         }
 

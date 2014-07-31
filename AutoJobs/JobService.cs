@@ -218,9 +218,9 @@ namespace AutoJobs
             {
                 Employee = item.NickName,
                 Date = item.AttendanceDate.ToShortDateString(),
-                Type = item.Type == 1 ? "Check In" : "Check Out",
+                Type = item.InOutType == 1 ? "Check In" : "Check Out",
                 Shift = item.ShiftCode,
-                Remark = item.Type == 1 ? "Forgot Check In" : "Forgot Check Out"
+                Remark = item.InOutType == 1 ? "Forgot Check In" : "Forgot Check Out"
             };
 
             emailContent = Razor.Parse(bodyTemplate, data);

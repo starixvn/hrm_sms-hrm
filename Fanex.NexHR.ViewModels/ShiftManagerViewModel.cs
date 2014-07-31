@@ -34,7 +34,7 @@ namespace Fanex.NexHR.ViewModels
             {
                 if (SupervisorRole > 0)
                 {
-                    return Extensions.EnumToString((SupervisorActionType)SupervisorRole);
+                    return ((SupervisorActionType)SupervisorRole).ToString();
                 }
 
                 return string.Empty;

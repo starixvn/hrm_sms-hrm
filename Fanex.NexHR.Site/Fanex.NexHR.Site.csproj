@@ -985,16 +985,13 @@
     <Content Include="Views\Home\AccessDenied.cshtml" />
     <Content Include="Views\CheckInOut\Create.cshtml" />
     <Content Include="Views\Holiday\Create.cshtml" />
-    <Content Include="Views\Process\CheckInOut.cshtml" />
     <Content Include="Views\Request\Index.cshtml" />
     <Content Include="Views\Memo\Index.cshtml" />
     <Content Include="Views\Memo\Edit.cshtml" />
     <Content Include="Views\Memo\Create.cshtml" />
     <Content Include="Views\Memo\Detail.cshtml" />
     <Content Include="Views\LateInEarlyOut\Create.cshtml" />
-    <Content Include="Views\Process\LateInEarlyOut.cshtml" />
     <Content Include="Views\Leave\Create.cshtml" />
-    <Content Include="Views\Process\Leave.cshtml" />
     <Content Include="Views\Employee\Detail.cshtml" />
     <Content Include="Views\CheckInOut\Update.cshtml" />
     <Content Include="Views\LateInEarlyOut\Update.cshtml" />
@@ -1003,7 +1000,6 @@
     <Content Include="Views\ChangeShift\Create.cshtml" />
     <Content Include="Views\Team\Shift\Index.cshtml" />
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
-    <Content Include="Views\Process\ChangeShift.cshtml" />
     <Content Include="Views\ChangeShift\Update.cshtml" />
     <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
     <Content Include="Views\Employee\MonthSchedule.cshtml" />

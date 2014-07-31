@@ -66,7 +66,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Minute = 60,
-                Type = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
+                RequestType = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
                 By = id
             };
 
@@ -138,7 +138,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = request.RequestedDate,
                 Minute = minute,
-                Type = type,
+                RequestType = type,
                 By = this.CurrentUser.Id,
                 Remark = request.Remark,
                 ApproverId = request.ApprovedBy.Id,

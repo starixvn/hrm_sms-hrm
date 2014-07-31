@@ -31,12 +31,12 @@ namespace Fanex.NexHR.Repositories
         public override long Insert(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
-            int? lateInMins = request.Type == (short)RequestType.LateIn ? (int?)request.Minute : null;
-            int? earlyOutMins = request.Type == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
+            int? lateInMins = request.RequestType == (short)RequestType.LateIn ? (int?)request.Minute : null;
+            int? earlyOutMins = request.RequestType == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
             using (var db = new ObjectDb("WorkingTimeRequest_Insert_LateInEarlyOutRequest"))
             {
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, request.Type);
+                db.AddInParameter("@RequestType", DbType.Int16, request.RequestType);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.Date);
                 db.AddInParameter("@LateInMins", DbType.Int32, lateInMins);
@@ -69,14 +69,14 @@ namespace Fanex.NexHR.Repositories
         public override bool Update(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
-            int? lateInMins = request.Type == (short)RequestType.LateIn ? (int?)request.Minute : null;
-            int? earlyOutMins = request.Type == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
+            int? lateInMins = request.RequestType == (short)RequestType.LateIn ? (int?)request.Minute : null;
+            int? earlyOutMins = request.RequestType == (short)RequestType.EarlyOut ? (int?)request.Minute : null;
 
             using (var db = new ObjectDb("WorkingTimeRequest_Update_LateInEarlyOutRequest"))
             {
                 db.AddInParameter("@RequestId", DbType.Int32, request.Id);
                 db.AddInParameter("@EmpId", DbType.Int32, request.EmployeeId);
-                db.AddInParameter("@RequestType", DbType.Int16, request.Type);
+                db.AddInParameter("@RequestType", DbType.Int16, request.RequestType);
                 db.AddInParameter("@Remark", DbType.String, request.Remark);
                 db.AddInParameter("@OnDate", DbType.DateTime, request.Date);
                 db.AddInParameter("@LateinMins", DbType.Int32, lateInMins);

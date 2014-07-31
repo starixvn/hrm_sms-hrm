@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Timesheet ViewModel.
@@ -24,6 +23,6 @@ namespace Fanex.NexHR.ViewModels
         public int? EmpId { get; set; }
 
         [Display(Name = "Request type")]
-        public short Type { get; set; }
+        public short TimeSheetType { get; set; }
     }
 }

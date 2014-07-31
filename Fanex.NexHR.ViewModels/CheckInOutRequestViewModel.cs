@@ -35,7 +35,7 @@ namespace Fanex.NexHR.ViewModels
         public int Minute { get; set; }
 
         [Required]
-        public short Type { get; set; }
+        public short RequestType { get; set; }
 
         public string Shift { get; set; }
 

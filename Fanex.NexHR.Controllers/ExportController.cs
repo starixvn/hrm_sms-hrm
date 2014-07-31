@@ -118,7 +118,7 @@ namespace Fanex.NexHR.Controllers
             var employeeAttendance = _reportService.GetEmployeeAttendanceReport(
                     model.FromDate,
                     model.ToDate,
-                    model.Type,
+                    model.AttendanceType,
                     model.EmpId,
                     model.GroupIds,
                     model.ExcludeDeletedUsers ? 1 : 0,
