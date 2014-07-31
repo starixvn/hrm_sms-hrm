@@ -21,54 +21,7 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public string GroupIds { get; set; }
 
-        public int? Enable { get; set; }
-
-        public int? IsDelete { get; set; }
-
-        public int? IsLocal { get; set; }
-
-        public int? PageNumber { get; set; }
-
-        public int? PageSize { get; set; }
-
-        public int? TotalRow { get; set; }
-
-        public int? TitleId { get; set; }
-
-        public bool? EnableUser { get; set; }
-
-        public bool? IsDeleteUser { get; set; }
-
-        public bool? IsLocalUser { get; set; }
-
-        public int? CheckDeletedCondition
-        {
-            get
-            {
-                int? deleteUsers;
-                if (IsDeleteUser == true)
-                {
-                    deleteUsers = 1;
-                }
-                else if (IsDeleteUser == false)
-                {
-                    deleteUsers = 0;
-                }
-                else
-                {
-                    deleteUsers = null;
-                }
-
-                return deleteUsers;
-            }
-
-            set
-            {
-                IsDelete = value;
-            }
-        }
-
-        public int? CheckEnabledCondition
+        public int? Enable 
         {
             get
             {
@@ -88,14 +41,31 @@ namespace Fanex.NexHR.Criteria.Employee
 
                 return disableUsers;
             }
+        }
 
-            set
+        public int? IsDelete 
+        {
+            get
             {
-                Enable = value;
+                int? deleteUsers;
+                if (IsDeleteUser == true)
+                {
+                    deleteUsers = 1;
+                }
+                else if (IsDeleteUser == false)
+                {
+                    deleteUsers = 0;
+                }
+                else
+                {
+                    deleteUsers = null;
+                }
+
+                return deleteUsers;
             }
         }
 
-        public int? CheckIsLocalCondition
+        public int? IsLocal 
         {
             get
             {
@@ -115,12 +85,24 @@ namespace Fanex.NexHR.Criteria.Employee
 
                 return localUser;
             }
-
-            set
-            {
-                IsLocal = value;
-            }
         }
+
+        public int? PageNumber { get; set; }
+
+        public int? PageSize { get; set; }
+
+        public int? TotalRow { get; set; }
+
+        public int? TitleId { get; set; }
+
+        [SpParam(Ignored = true)]
+        public bool? EnableUser { get; set; }
+
+        [SpParam(Ignored = true)]
+        public bool? IsDeleteUser { get; set; }
+
+        [SpParam(Ignored = true)]
+        public bool? IsLocalUser { get; set; }
 
         public override string GetSettingKey()
         {
