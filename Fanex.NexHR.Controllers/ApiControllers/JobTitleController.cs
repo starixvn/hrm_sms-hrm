@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 {
     using System.Linq;
     using System.Web.Http;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interface;
 
@@ -33,7 +34,12 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
         public IQueryable<LookupData> GetJobTitle(string query = "")
         {
-            return _lookupDataService.GetJobTitle(query).AsQueryable();
+            var criteria = new GetJobTitleCriteria
+            {
+                JobTitle = query
+            };
+
+            return _lookupDataService.GetJobTitle(criteria).AsQueryable();
         }
     }
 }

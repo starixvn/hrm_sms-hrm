@@ -15,16 +15,16 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface ILookupDataService
     {
-        LookupData Get(string lookupCode, int lookupId);
+        LookupData GetLookupByCodeAndId(string lookupCode, int lookupId);
 
         IList<LookupData> GetAll(GetAllLookupDataCriteria criteria);
 
-        IList<LookupData> GetJobTitle(string jobTitle);
+        IEnumerable<LookupData> GetJobTitle(GetJobTitleCriteria criteria);
 
-        bool Delete(int id);
+        CommandResult Delete(DeleteLookupDataCriteria criteria);
 
-        bool Insert(string name, string lookupCode);
+        CommandResult Insert(InsertLookupDataCriteria criteria);
 
-        bool Update(int id, string name);
+        CommandResult Update(UpdateLookupDataCriteria criteria);
     }
 }

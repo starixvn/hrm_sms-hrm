@@ -59,9 +59,13 @@
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
+    <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
+    <Compile Include="Lookup\GetJobTitleCriteria.cs" />
+    <Compile Include="Lookup\InsertLookupDataCriteria.cs" />
+    <Compile Include="Lookup\UpdateLookupDataCriteria.cs" />
     <Compile Include="Memo\DeleteMemoCriteria.cs" />
     <Compile Include="Memo\GetAllMemoCriteria.cs" />
     <Compile Include="Memo\GetMemoByIdCriteria.cs" />

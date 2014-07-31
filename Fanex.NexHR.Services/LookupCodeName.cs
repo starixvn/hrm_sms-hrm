@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// LookupCodeName Struct.
     /// </summary>
+    [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Reviewed. Suppression is OK here.")]
     public struct LookupCodeName
     {
         public const string JobTitle = "JT";

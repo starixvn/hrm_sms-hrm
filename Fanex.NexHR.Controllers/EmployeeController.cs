@@ -109,7 +109,7 @@ namespace Fanex.NexHR.Controllers
             var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.JobTitle = (model.JobTitleId == null)
             ? Resources.Labels.Unknown
-            : _lookupDataService.Get(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
+            : _lookupDataService.GetLookupByCodeAndId(LookupCodeName.JobTitle, model.JobTitleId.Value).Name;
 
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };

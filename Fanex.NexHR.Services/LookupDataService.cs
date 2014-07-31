@@ -23,7 +23,7 @@ namespace Fanex.NexHR.Services.Interface
     /// <summary>
     /// LookupData Service.
     /// </summary>
-    public class LookupDataService : ILookupDataService
+    public class LookupDataService : BaseService, ILookupDataService
     {
         private const string _CacheKey_AllLookUpData = "CacheKey_AllLookUpData";
         private readonly ILookupDataRepository _lookupDataRepository;
@@ -59,7 +59,7 @@ namespace Fanex.NexHR.Services.Interface
         /// <param name="lookupCode">Lookup code.</param>
         /// <param name="lookupId">Lookup id.</param>
         /// <returns>Lookup data.</returns>
-        public LookupData Get(string lookupCode, int lookupId)
+        public LookupData GetLookupByCodeAndId(string lookupCode, int lookupId)
         {
             Check.Argument.IsNotNegativeOrZero(lookupId, "lookupId");
             LookupData lookupData = new LookupData();
@@ -72,44 +72,91 @@ namespace Fanex.NexHR.Services.Interface
             return lookupData;
         }
 
-        public IList<LookupData> GetJobTitle(string jobTitle)
+        /// <summary>
+        /// Get Job Title.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The enumerator Job Title.</returns>
+        public IEnumerable<LookupData> GetJobTitle(GetJobTitleCriteria criteria)
         {
-            var lookUpDataList = this._lookupDataRepository.GetJobTitle(jobTitle);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IEnumerable<LookupData> jobTitles = null;
 
-            return lookUpDataList;
-        }
-
-        public bool Delete(int id)
-        {
-            bool check = this._lookupDataRepository.Delete(id);
-            if (check)
+            if (criteria.IsValid())
             {
-                this.ResetJobTitleCache();
+                jobTitles = GetData<LookupData>(criteria);
             }
 
-            return check;
+            return jobTitles;
         }
 
-        public bool Insert(string name, string lookupCode)
+        /// <summary>
+        /// Delete lookup data.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult Delete(DeleteLookupDataCriteria criteria)
         {
-            var check = this._lookupDataRepository.Insert(name, lookupCode);
-            if (check)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
             {
-                this.ResetJobTitleCache();
+                commandResult = Repository.Delete(criteria);
+
+                if (commandResult.Code == 0)
+                {
+                    ResetJobTitleCache();
+                }
             }
 
-            return check;
+            return commandResult;
         }
 
-        public bool Update(int id, string name)
+        /// <summary>
+        /// Insert lookup data.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult Insert(InsertLookupDataCriteria criteria)
         {
-            var check = this._lookupDataRepository.Update(id, name);
-            if (check)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
             {
-                this.ResetJobTitleCache();
+                commandResult = Repository.Insert(criteria);
+
+                if (commandResult.Code == 0)
+                {
+                    ResetJobTitleCache();
+                }
             }
 
-            return check;
+            return commandResult;
+        }
+
+        /// <summary>
+        /// Update lookup data.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>The Command Result.</returns>
+        public CommandResult Update(UpdateLookupDataCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Update(criteria);
+
+                if (commandResult.Code == 0)
+                {
+                    ResetJobTitleCache();
+                }
+            }
+
+            return commandResult;
         }
 
         /// <summary>

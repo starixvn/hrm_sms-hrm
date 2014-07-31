@@ -143,7 +143,7 @@ namespace Fanex.NexHR.Controllers
                     TotalPages = model.TotalPages,
                     SentDate = model.SentDate,
                     Category = model.Category,
-                    Type = model.MemoType
+                    MemoType = model.MemoType
                 };
                 ViewBag.Updated = _memoService.Update(criteria);
             }
@@ -211,7 +211,7 @@ namespace Fanex.NexHR.Controllers
                     ForInfo = model.ForInfo,
                     TotalPages = model.TotalPages,
                     Category = model.Category,
-                    Type = model.MemoType,
+                    MemoType = model.MemoType,
                     SendMail = model.SendMail
                 };
                 int memoId = _memoService.Insert(insertMemoCriteria);

@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
@@ -309,21 +310,38 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public bool DeleteJobTitle(int id)
         {
-            return _lookupDataService.Delete(id);
+            var criteria = new DeleteLookupDataCriteria
+            {
+                Id = id
+            };
+            CommandResult commandResult = _lookupDataService.Delete(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool InsertJobTitle(string name)
         {
-            return _lookupDataService.Insert(name, LookupCodeName.JobTitle);
+            var criteria = new InsertLookupDataCriteria
+            {
+                LookupCode = LookupCodeName.JobTitle,
+                Name = name
+            };
+            CommandResult commandResult = _lookupDataService.Insert(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public bool UpdatetJobTitle(int id, string name)
         {
-            return _lookupDataService.Update(id, name);
+            var criteria = new UpdateLookupDataCriteria
+            {
+                Id = id,
+                Name = name
+            };
+            CommandResult commandResult = _lookupDataService.Update(criteria);
+            return commandResult.Code == 0;
         }
 
         [Authorize(Roles = "HR")]
