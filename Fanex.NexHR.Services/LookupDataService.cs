@@ -17,8 +17,6 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>
     /// LookupData Service.
@@ -26,12 +24,10 @@ namespace Fanex.NexHR.Services.Interface
     public class LookupDataService : BaseService, ILookupDataService
     {
         private const string _CacheKey_AllLookUpData = "CacheKey_AllLookUpData";
-        private readonly ILookupDataRepository _lookupDataRepository;
         private ICache _cacheManager;
 
-        public LookupDataService(ILookupDataRepository lookupDataRepository = null)
+        public LookupDataService()
         {
-            this._lookupDataRepository = lookupDataRepository ?? new LookupDataRepository();
             this._cacheManager = CacheService.CreateInstance();
         }
 
@@ -47,7 +43,7 @@ namespace Fanex.NexHR.Services.Interface
 
             if (criteria.IsValid())
             {
-                lookupDataList = this._lookupDataRepository.GetAll(criteria);
+                lookupDataList = GetData<LookupData>(criteria).ToList();
             }
 
             return lookupDataList;
@@ -202,7 +198,7 @@ namespace Fanex.NexHR.Services.Interface
                 {
                     LookupCode = lookUpCode
                 };
-                IList<LookupData> lookUpDataList = this._lookupDataRepository.GetAll(criteria);
+                IList<LookupData> lookUpDataList = GetAll(criteria);
 
                 if (lookUpDataList != null && lookUpDataList.Count > 0)
                 {

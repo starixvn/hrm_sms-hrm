@@ -125,7 +125,7 @@ namespace Fanex.NexHR.Repositories
                     var content = new
                     {
                         Subject = criteria.Subject,
-                        Link = link + "memo/detail/" + result.ToString()
+                        Link = link + "memo/detail/" + result
                     };
                     var body = RazorEngine.Razor.Parse(bodyTemplate, content);
                     this._emailService.SendEmail(
@@ -173,7 +173,7 @@ namespace Fanex.NexHR.Repositories
                     var content = new
                     {
                         Subject = criteria.Subject,
-                        Link = link + "memo/detail/" + criteria.Id.ToString()
+                        Link = link + "memo/detail/" + criteria.Id
                     };
                     var body = RazorEngine.Razor.Parse(bodyTemplate, content);
                     this._emailService.SendEmail(
