@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.MySpace;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -117,14 +118,17 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = toDate
             };
             var unavailableDates = _EmployeeService.GetOffDateAndHolidayDate(criteria);
-
-            var request = _KeepInViewRequestService.GetRequestById(id);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
+            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = id
+            };
+            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var viewModel = new KeepInViewRequestViewModel()
             {
@@ -136,8 +140,8 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = employee.Id,
                 Date = request.RequestedDate,
                 By = this.CurrentUser.Id,
-                Shift = request.Shift.Name,
-                ShiftId = request.Shift.Id,
+                Shift = request.FromShift.Name,
+                ShiftId = request.FromShift.Id,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
                 Remark = request.Remark,
@@ -196,20 +200,20 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-            var fromDate = new DateTime(year, 1, 1);
-            var toDate = new DateTime(year, 12, 31);
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(
-                RequestViewType.CompanySpace,
-                (int)RequestFilter.KeepInView,
-                new DateTime(year, 1, 1),
-                new DateTime(year, 12, 31),
-                string.Empty,
-                0,
-                true,
-                this.CurrentUser.Id,
-                null,
-                null);
+            var criteria = new GetRequestCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = new DateTime(year, 1, 1),
+                ToDate = new DateTime(year, 12, 31),
+                RequestType = (int)RequestFilter.KeepInView,
+                IsQueryByCreatedDate = false,
+                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                SupervisorId = null,
+                IsLocal = null
+            };
+
+            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
 
             return View(entityList);
         }

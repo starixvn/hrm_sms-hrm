@@ -15,8 +15,6 @@ namespace Fanex.NexHR.Models.Request
     /// </summary>
     public class RequestEntity : EntityBase<long>
     {
-        public int EmpId { get; set; }
-
         public Employee Requester { get; set; }
 
         public DateTime RequestedDate { get; set; }
@@ -99,8 +97,6 @@ namespace Fanex.NexHR.Models.Request
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
-
-        public Shift Shift { get; set; }
 
         public bool IsHalfDay { get; set; }
 

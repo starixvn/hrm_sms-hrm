@@ -48,9 +48,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\packages\EnterpriseLibrary.Data.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -80,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
-    <Compile Include="BaseRequestRepository.cs" />
     <Compile Include="Interfaces\IBaseRepository.cs" />
     <Compile Include="Interfaces\IKeepInViewRequestRepository.cs" />
     <Compile Include="Interfaces\IMessageRepository.cs" />
@@ -94,7 +92,6 @@
     <Compile Include="Interfaces\ICheckInOutRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\ILateInEarlyOutRepository.cs" />
-    <Compile Include="Interfaces\ILeaveRequestRepository.cs" />
     <Compile Include="Interfaces\IRequestRepository.cs" />
     <Compile Include="Interfaces\ITeamRepository.cs" />
     <Compile Include="Interfaces\IHolidayRepository.cs" />
@@ -103,7 +100,6 @@
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ITimeRepository.cs" />
     <Compile Include="LateInEarlyOutRepository.cs" />
-    <Compile Include="LeaveRequestRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="MessageRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs" />

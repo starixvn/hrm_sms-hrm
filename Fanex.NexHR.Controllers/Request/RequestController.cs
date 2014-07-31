@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -314,6 +315,55 @@ namespace Fanex.NexHR.Controllers.Request
         }
 
         /// <summary>
+        /// Method check Role.
+        /// </summary>
+        /// <param name="requestViewType">RequestViewType model.</param>
+        /// <returns>Role after check.</returns>
+        protected string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
+        {
+            var role = string.Empty;
+            if (requestViewType == RequestViewType.PersonalSpace)
+            {
+                role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
+            }
+            else if (requestViewType == RequestViewType.HRSpace)
+            {
+                role = ((int)RoleSystem.HR).ToString();
+            }
+            else
+            {
+                role = ((int)RoleSystem.Member).ToString();
+            }
+
+            return role;
+        }
+
+        /// <summary>
+        /// Function to get statusIds.
+        /// </summary>
+        /// <param name="statusId">Status Id from UI.</param>
+        /// <returns>Status Ids.</returns>
+        protected string GetStatus(int statusId)
+        {
+            string statusIds;
+            if (statusId == -1)
+            {
+                // status = -1 --> pending and verified (1,2)
+                statusIds = "1,2";
+            }
+            else if (statusId == 0)
+            {
+                statusIds = string.Empty;
+            }
+            else
+            {
+                statusIds = statusId.ToString();
+            }
+
+            return statusIds;
+        }
+
+        /// <summary>
         /// Function GetRequests.
         /// </summary>
         /// <param name="request">Request ViewModel.</param>
@@ -332,17 +382,22 @@ namespace Fanex.NexHR.Controllers.Request
                 loginId = this.CurrentUser.Id;
             }
 
-            var requestList = _RequestService.GetRequests(
-                requestViewType,
-                request.RequestType,
-                request.FromDate,
-                request.ToDate,
-                request.TeamIds,
-                request.StatusId,
-                isDailyRequest,
-                request.EmployeeId,
-                loginId,
-                request.IsLocal);
+            bool? isLocal = null;
+            var criteria = new GetRequestCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                GroupIds = request.TeamIds,
+                Status = GetStatus(request.StatusId),
+                RequestType = request.RequestType,
+                IsQueryByCreatedDate = !isDailyRequest,
+                Role = CheckRoleAccordingToRequestType(requestViewType),
+                SupervisorId = null,
+                IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
+            };
+
+            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
             ViewBag.IsDailyRequest = isDailyRequest;
@@ -380,14 +435,18 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         private ActionResult HRViewChangeShiftDetail(long requestId, string viewName)
         {
-            var changeShift = _ChangeShiftRequestService.GetRequestById(requestId);
+            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
 
-            if (changeShift == null)
+            if (request == null)
             {
                 return RedirectToAction(viewName);
             }
 
-            var model = ViewChangeShiftDetail(requestId, viewName, changeShift);
+            var model = ViewChangeShiftDetail(requestId, viewName, request);
             return View("HRViewDetail", model);
         }
 
@@ -401,14 +460,18 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         private ActionResult MemberChangeShiftDetail(int requestId, string viewName)
         {
-            var shift = _ChangeShiftRequestService.GetRequestById(requestId);
+            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
 
-            if (shift == null)
+            if (request == null)
             {
                 return RedirectToAction(viewName);
             }
 
-            var model = ViewChangeShiftDetail(requestId, viewName, shift);
+            var model = ViewChangeShiftDetail(requestId, viewName, request);
             return View("MemberDetail", model);
         }
 

@@ -24,13 +24,9 @@ namespace Fanex.NexHR.Services.Interface
 
         bool DeleteWorkingTimeRequest(long id);
 
-        IList<LeaveDetailModel> GetLeaveRequestDetailsById(long id);
+        IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria);
 
-        LeaveRequestViewModel GetRequestById(long id);
-
-        RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
-
-        void SendReasonReeditToSupervisor(long requestId, int processBy, string reason, out int errorCode, out string errorMessage);
+        CommandResult SendReasonReeditToSupervisor(ResetLeaveRequestCriteria criteria);
 
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
     }

@@ -45,17 +45,19 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.Year = year;
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(
-                RequestViewType.CompanySpace,
-                (int)RequestFilter.CheckInOut,
-                new DateTime(year, 1, 1),
-                new DateTime(year, 12, 31),
-                string.Empty,
-                0,
-                true,
-                this.CurrentUser.Id,
-                null,
-                null);
+            var criteria = new GetRequestCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = new DateTime(year, 1, 1),
+                ToDate = new DateTime(year, 12, 31),
+                RequestType = (int)RequestFilter.CheckInOut,
+                IsQueryByCreatedDate = false,
+                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                SupervisorId = null,
+                IsLocal = null
+            };
+
+            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
 
             return View(entityList);
         }
@@ -162,11 +164,13 @@ namespace Fanex.NexHR.Controllers.Request
             };
             var listUnavailableDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailableDates;
-
             ViewBag.Shifts = _ShiftService.GetAll();
-
-            var request = _CheckInOutRequestService.GetRequestById(id);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
+            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = id
+            };
+            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
@@ -178,7 +182,6 @@ namespace Fanex.NexHR.Controllers.Request
                 Date = DateTime.Now
             };
             var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
-
             var viewModel = new CheckInOutRequestViewModel()
             {
                 Id = request.Id,
@@ -197,9 +200,7 @@ namespace Fanex.NexHR.Controllers.Request
                 AttendantDate = request.FromDate,
                 Remark = request.Remark
             };
-
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
-
             return View(viewModel);
         }
 

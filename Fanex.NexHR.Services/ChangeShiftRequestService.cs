@@ -111,16 +111,6 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        public RequestEntity GetRequestById(long id)
-        {
-            if (id > 0)
-            {
-                return this._changeShiftRepository.GetRequestById(id, (int)RequestFilter.ChangeShift);
-            }
-
-            return null;
-        }
-
         public List<ShiftDetails> GetChangeShiftDetailsById(long id)
         {
             if (id > 0)

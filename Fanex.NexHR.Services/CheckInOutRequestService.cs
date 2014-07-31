@@ -115,16 +115,6 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        public RequestEntity GetRequestById(long id)
-        {
-            if (id > 0)
-            {
-                return this._checkInOutRepository.GetRequestById(id, (int)RequestFilter.CheckInOut);
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Sends the email for check in out success.
         /// </summary>

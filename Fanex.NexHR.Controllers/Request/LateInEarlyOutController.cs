@@ -118,14 +118,17 @@ namespace Fanex.NexHR.Controllers.Request
             };
             var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
-
-            var request = _LateInEarlyOutRequestService.GetRequestById(id);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.EmpId))
+            var criteria = new GetRequestByIdCriteria()
+            {
+                RequestId = id
+            };
+            var request = _RequestService.GetRequestById(criteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.EmpId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             int minute = request.TotalMins;
             var type = short.Parse(request.RequestType.Id.ToString());
@@ -185,17 +188,19 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.Year = year;
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(
-                RequestViewType.CompanySpace,
-                (int)RequestFilter.LateInEarlyOut,
-                new DateTime(year, 1, 1),
-                new DateTime(year, 12, 31),
-                string.Empty,
-                0,
-                true,
-                this.CurrentUser.Id,
-                null,
-                null);
+            var criteria = new GetRequestCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = new DateTime(year, 1, 1),
+                ToDate = new DateTime(year, 12, 31),
+                RequestType = (int)RequestFilter.LateInEarlyOut,
+                IsQueryByCreatedDate = false,
+                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                SupervisorId = null,
+                IsLocal = null
+            };
+
+            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
 
             return View(entityList);
         }

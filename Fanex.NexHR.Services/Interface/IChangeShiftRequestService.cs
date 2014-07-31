@@ -23,8 +23,6 @@ namespace Fanex.NexHR.Services.Interface
 
         bool Update(ModelStateDictionary modelState, ChangeShiftViewModel model);
 
-        RequestEntity GetRequestById(long id);
-
         List<ShiftDetails> GetChangeShiftDetailsById(long id);
     }
 }

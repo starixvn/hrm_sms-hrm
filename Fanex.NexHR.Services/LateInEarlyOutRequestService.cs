@@ -115,16 +115,6 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        public RequestEntity GetRequestById(long id)
-        {
-            if (id > 0)
-            {
-                return this._lateInEarlyOutRepository.GetRequestById(id, (int)RequestFilter.LateInEarlyOut);
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Function to send mail for saved success for late in, early out request.
         /// </summary>

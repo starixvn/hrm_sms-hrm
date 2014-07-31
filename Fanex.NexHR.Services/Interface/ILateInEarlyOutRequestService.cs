@@ -21,7 +21,5 @@ namespace Fanex.NexHR.Services.Interface
         bool Insert(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model);
 
         bool Update(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model);
-
-        RequestEntity GetRequestById(long id);
     }
 }

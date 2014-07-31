@@ -18,7 +18,5 @@ namespace Fanex.NexHR.Services.Interface
         bool Insert(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
 
         bool Update(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
-        
-        RequestEntity GetRequestById(long id);
     }
 }

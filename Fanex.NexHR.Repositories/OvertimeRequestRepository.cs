@@ -72,7 +72,6 @@ namespace Fanex.NexHR.Repositories
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                EmpId = reader.ToInt("RequesterID"),
                                 NormalHours = reader.ToDecimal("NormalHours"),
                                 OffHours = reader.ToDecimal("OffHours"),
                                 PublicHours = reader.ToDecimal("PublicHours"),
@@ -81,6 +80,7 @@ namespace Fanex.NexHR.Repositories
                                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
                                 Requester = new Employee
                                 {
+                                    Id = reader.ToInt("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
@@ -166,7 +166,6 @@ namespace Fanex.NexHR.Repositories
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                EmpId = reader.ToInt("RequesterID"),
                                 NormalHours = reader.ToDecimal("NormalHours"),
                                 OffHours = reader.ToDecimal("OffHours"),
                                 PublicHours = reader.ToDecimal("PublicHours"),
@@ -175,6 +174,7 @@ namespace Fanex.NexHR.Repositories
                                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
                                 Requester = new Employee
                                 {
+                                    Id = reader.ToInt("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
@@ -375,7 +375,6 @@ namespace Fanex.NexHR.Repositories
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                EmpId = reader.ToInt("RequesterID"),
                                 NormalHours = reader.ToDecimal("NormalHours"),
                                 OffHours = reader.ToDecimal("OffHours"),
                                 PublicHours = reader.ToDecimal("PublicHours"),
@@ -384,6 +383,7 @@ namespace Fanex.NexHR.Repositories
                                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
                                 Requester = new Employee
                                 {
+                                    Id = reader.ToInt("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
@@ -435,13 +435,13 @@ namespace Fanex.NexHR.Repositories
                             var entity = new RequestEntity
                             {
                                 RequestedDate = reader.ToDateTime("RequestDate"),
-                                EmpId = reader.ToInt("RequesterID"),
                                 NormalHours = reader.ToDecimal("NormalHours"),
                                 OffHours = reader.ToDecimal("OffHours"),
                                 PublicHours = reader.ToDecimal("PublicHours"),
                                 ToTalHours = reader.ToDecimal("ToTalHours"),
                                 Requester = new Employee
                                 {
+                                    Id = reader.ToInt("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
@@ -503,7 +503,6 @@ namespace Fanex.NexHR.Repositories
                                 RequestedDate = reader.ToDateTime("RequestDate"),
                                 CreatedDate = reader.ToDateTime("CreatedDate"),
                                 Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                EmpId = reader.ToInt("RequesterID"),
                                 NormalHours = reader.ToDecimal("NormalHours"),
                                 OffHours = reader.ToDecimal("OffHours"),
                                 PublicHours = reader.ToDecimal("PublicHours"),
@@ -513,6 +512,7 @@ namespace Fanex.NexHR.Repositories
                                 IsShowWarning = reader.ToBool("IsShowWarning"),
                                 Requester = new Employee
                                 {
+                                    Id = reader.ToInt("RequesterID"),
                                     NickName = reader.To<string>("Requester"),
                                     FullName = reader.To<string>("FullNameRequester"),
                                     Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }

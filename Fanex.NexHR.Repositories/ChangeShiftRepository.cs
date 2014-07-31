@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Repositories
     /// <summary>
     /// Change shift Repository.
     /// </summary>
-    public class ChangeShiftRepository : BaseRequestRepository, IChangeShiftRepository
+    public class ChangeShiftRepository : IChangeShiftRepository
     {
         /// <summary>
         /// Inserts the change shift request.
@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Request's id.</returns>
-        public override long Insert(object model, out int errorCode, out string message)
+        public long Insert(object model, out int errorCode, out string message)
         {
             var request = (ChangeShiftViewModel)model;
             var fromDate = Convert.ToDateTime(request.FromDate);
@@ -68,7 +68,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Result update.</returns>
-        public override bool Update(object model, out int errorCode, out string message)
+        public bool Update(object model, out int errorCode, out string message)
         {
             var request = (ChangeShiftViewModel)model;
             var fromDate = Convert.ToDateTime(request.FromDate);

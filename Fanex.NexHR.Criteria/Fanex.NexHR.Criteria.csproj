@@ -50,6 +50,7 @@
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
+    <Compile Include="Calendar\GetWorkingCalendarByDateRangeCriteria.cs" />
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
@@ -120,8 +121,11 @@
     <Compile Include="Report\WorkingCalendar\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
     <Compile Include="Request\GetRequestByIdCriteria.cs" />
+    <Compile Include="Request\GetRequestCriteria.cs" />
     <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\ResetLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
     <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />

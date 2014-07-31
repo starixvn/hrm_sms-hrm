@@ -121,11 +121,11 @@
                 url: '/Leave/SendReasonReeditToSuperVisor',
                 data: { requestId: LeaveRequestView.requestId, reason: reason },
                 success: function (response) {
-                    if (response.errorCode === 0) {
+                    if (response.Code === 0) {
                         location.href = _global.root + requestType + "/Update?requestId=" + LeaveRequestView.requestId;
                     }
                     else {
-                        alert(response.errorMessage);
+                        alert(response.Message);
                     }
                 }
             });

@@ -46,17 +46,19 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.Year = year;
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(
-                RequestViewType.CompanySpace,
-                (int)RequestFilter.ChangeShift,
-                new DateTime(year, 1, 1),
-                new DateTime(year, 12, 31),
-                string.Empty,
-                0,
-                true,
-                this.CurrentUser.Id,
-                null,
-                null);
+            var criteria = new GetRequestCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = new DateTime(year, 1, 1),
+                ToDate = new DateTime(year, 12, 31),
+                RequestType = (int)RequestFilter.ChangeShift,
+                IsQueryByCreatedDate = false,
+                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                SupervisorId = null,
+                IsLocal = null
+            };
+
+            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
 
             return View(entityList);
         }
@@ -144,17 +146,21 @@ namespace Fanex.NexHR.Controllers.Request
             };
             var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
-            var changeShift = _ChangeShiftRequestService.GetRequestById(id);
-            if (changeShift == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, changeShift.Requester.Id))
+            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = id
+            };
+            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
             var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(id);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = changeShift.Requester.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
-            if (changeShift != null && shiftDetails != null)
+            if (request != null && shiftDetails != null)
             {
                 var lstShiftDeatails = new List<ShiftDetailsViewModel>();
                 shiftDetails.ForEach(x => lstShiftDeatails.Add(new ShiftDetailsViewModel
@@ -173,11 +179,11 @@ namespace Fanex.NexHR.Controllers.Request
                     Employee = employee.NickName,
                     DisplayName = employee.DisplayName,
                     EmployeeId = employee.Id,
-                    FromDate = changeShift.FromDate.Date,
-                    ToDate = changeShift.ToDate.Date,
-                    VerifierId = changeShift.VerifiedBy.Id,
-                    ApproverId = changeShift.ApprovedBy.Id,
-                    Remark = changeShift.Remark,
+                    FromDate = request.FromDate.Date,
+                    ToDate = request.ToDate.Date,
+                    VerifierId = request.VerifiedBy.Id,
+                    ApproverId = request.ApprovedBy.Id,
+                    Remark = request.Remark,
                     ShiftDetails = lstShiftDeatails
                 };
             }
@@ -210,11 +216,19 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult ChangeShiftDetails(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var model = new List<ShiftDetailsViewModel>();
-            var workingCalendars = _WorkingCalendarService.GetWorkingCalendarsByDateRange(fromDate, toDate, string.Empty, employeeId);
+            var criteria = new GetWorkingCalendarByDateRangeCriteria()
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                GroupIds = string.Empty,
+                EmpId = employeeId
+            };
+            IList<WorkingCalendarModel> calendars = _WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
+
             var shifts = _ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
 
-            foreach (WorkingCalendarModel item in workingCalendars)
+            foreach (WorkingCalendarModel item in calendars)
             {
                 var shiftDetail = new ShiftDetailsViewModel
                 {

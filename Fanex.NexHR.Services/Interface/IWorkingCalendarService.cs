@@ -11,14 +11,13 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
     public interface IWorkingCalendarService
     {
-        IList<WorkingCalendarModel> GetWorkingCalendarsByDateRange(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null);
+        IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria);
 
         IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(
             int supervisorId, 

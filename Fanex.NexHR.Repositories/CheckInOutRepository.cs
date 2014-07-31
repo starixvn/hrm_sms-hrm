@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Repositories
     /// <summary>
     /// Check in out repository.
     /// </summary>
-    public class CheckInOutRepository : BaseRequestRepository, ICheckInOutRepository
+    public class CheckInOutRepository : ICheckInOutRepository
     {
         /// <summary>
         /// Inserts the check in/out request.
@@ -27,7 +27,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Request's id.</returns>
-        public override long Insert(object model, out int errorCode, out string message)
+        public long Insert(object model, out int errorCode, out string message)
         {
             var request = (CheckInOutRequestViewModel)model;
             using (var db = new ObjectDb("WorkingTimeRequest_Insert_CheckInOutRequest"))
@@ -62,7 +62,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Result update.</returns>
-        public override bool Update(object model, out int errorCode, out string message)
+        public bool Update(object model, out int errorCode, out string message)
         {
             var request = (CheckInOutRequestViewModel)model;
             using (var db = new ObjectDb("WorkingTimeRequest_Update_CheckInOutRequest"))

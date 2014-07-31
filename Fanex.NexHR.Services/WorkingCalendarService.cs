@@ -11,7 +11,9 @@ namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Common.Helper;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -21,7 +23,7 @@ namespace Fanex.NexHR.Services
     /// <summary>
     /// WorkingCalendar Service.
     /// </summary>
-    public class WorkingCalendarService : IWorkingCalendarService
+    public class WorkingCalendarService : BaseService, IWorkingCalendarService
     {
         private readonly IWorkingCalendarRepository _workingCalendarRepository;
 
@@ -38,16 +40,18 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get WorkingCalendars By Date Range, groups and employee.
         /// </summary>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Groups Id.</param>
-        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="criteria">GetWorkingCalendarByDateRange Criteria.</param>
         /// <returns>List WorkingCalendarModel.</returns>
-        public IList<WorkingCalendarModel> GetWorkingCalendarsByDateRange(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null)
+        public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria)
         {
-            var workingCalendarModels = _workingCalendarRepository.GetWorkingCalendarsByDateRange(fromDate, toDate, groupIds, employeeId);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<WorkingCalendarModel> calendars = null;
+            if (criteria.IsValid())
+            {
+                calendars = GetData<WorkingCalendarModel>(criteria).ToList();
+            }
 
-            return workingCalendarModels;
+            return calendars;
         }
 
         /// <summary>

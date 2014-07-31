@@ -392,7 +392,7 @@ namespace Fanex.NexHR.Controllers.Request
             var overtimeMonthlyRequest = _OvertimeService.GetOvertimeRequestById(requestId);
             if (overtimeMonthlyRequest != null)
             {
-                overtimeDaily = _OvertimeService.GetOvertimeRequests(overtimeMonthlyRequest.EmpId, overtimeMonthlyRequest.RequestedDate);
+                overtimeDaily = _OvertimeService.GetOvertimeRequests(overtimeMonthlyRequest.Requester.Id, overtimeMonthlyRequest.RequestedDate);
             }
 
             var overtimeDailyViewModel = new MemberOvertimeDailyViewModel

@@ -72,7 +72,6 @@ namespace Fanex.NexHR.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
         private readonly IRequestRepository _requestRepository;
-        private readonly BaseRequestRepository _baseRequestRepository;
         private string _baseUrl;
 
         public RequestService()
@@ -80,20 +79,17 @@ namespace Fanex.NexHR.Services
             this._employeeRepository = new EmployeeRepository();
             this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
-            this._baseRequestRepository = new BaseRequestRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public RequestService(
             IEmployeeRepository employeeRepository,
             IEmailService emailService,
-            IRequestRepository requestRepository,
-            BaseRequestRepository baseRequestRepository)
+            IRequestRepository requestRepository)
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
             this._requestRepository = requestRepository;
-            this._baseRequestRepository = baseRequestRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -291,99 +287,28 @@ namespace Fanex.NexHR.Services
             return false;
         }
 
-        /// <summary>
-        /// Gets the working time requests.
-        /// </summary>
-        /// <param name="requestViewType">Type of the request view.</param>
-        /// <param name="requestType">Request Type.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Group Ids.</param>
-        /// <param name="statusId">Status Id.</param>
-        /// <param name="isDailyRequest">If set to <c>true</c> [is daily request].</param>
-        /// <param name="employeeId">The employee is searched.</param>
-        /// <param name="loginId">The login identifier.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>List of request.</returns>
-        public IList<RequestEntity> GetRequests(
-            RequestViewType requestViewType,
-            int requestType,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            int statusId,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            int? loginId = null,
-            byte? isLocal = null)
+        public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
         {
-            if (fromDate > toDate)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            RequestEntity request = null;
+            if (criteria.IsValid())
             {
-                return null;
+                request = GetDataEntity<RequestEntity>(criteria);
             }
 
-            IList<RequestEntity> entityList;
-            string statusIds;
-            if (statusId == -1)
-            {
-                // status = -1 --> pending and verified (1,2)
-                statusIds = "1,2"; 
-            }
-            else if (statusId == 0)
-            {
-                statusIds = string.Empty;
-            }
-            else
-            {
-                statusIds = statusId.ToString();
-            }
-
-            if (employeeId.HasValue && employeeId.Value == -1)
-            {
-                employeeId = null;
-            }
-
-            string role = CheckRoleAccordingToRequestType(requestViewType);
-            entityList = _requestRepository.GetRequests(requestType, role, fromDate, toDate, groupIds, statusIds, isDailyRequest, employeeId, loginId, isLocal);
-
-            return entityList;
+            return request;
         }
 
-        /// <summary>
-        /// Function to get number of request in date range.
-        /// </summary>
-        /// <param name="requestType">Request Type.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <returns>Numbers of request.</returns>
-        public decimal GetNumberOfRequest(int requestType, int employeeId, DateTime fromDate, DateTime toDate)
+        public IList<RequestEntity> GetRequests(GetRequestCriteria criteria)
         {
-            decimal numberDays = 0;
-            string role = ((int)RoleSystem.Member).ToString();
-            var requests = _requestRepository.GetRequests(requestType, role, fromDate, toDate, string.Empty, string.Empty, true, employeeId, null, null);
-
-            var requestsValid = requests.Where(
-                t => (t.Status.Id != (byte)CurrentRequestStatus.NotVerified 
-                    && t.Status.Id != (byte)CurrentRequestStatus.Rejected
-                    && t.Status.Id != (byte)CurrentRequestStatus.Void));
-
-            if (requestsValid != null && requestsValid.Any())
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<RequestEntity> entityList = null;
+            if (criteria.IsValid())
             {
-                if (requestType == (int)RequestFilter.Leave)
-                {
-                    foreach (RequestEntity request in requestsValid)
-                    {
-                        numberDays += request.TotalDays;
-                    }
-                }
-                else
-                {
-                    numberDays = requestsValid.Count();
-                }
+                entityList = _requestRepository.GetRequests(criteria);
             }
-            
-            return numberDays;
+
+            return entityList;
         }
 
         public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
@@ -409,7 +334,7 @@ namespace Fanex.NexHR.Services
             IList<RequestEntity> entityList = null;
             try
             {
-                entityList = this._baseRequestRepository.GetHistoryRequest(requestId, requestTypeId);
+                entityList = this._requestRepository.GetHistoryRequest(requestId, requestTypeId);
             }
             catch (Exception ex)
             {

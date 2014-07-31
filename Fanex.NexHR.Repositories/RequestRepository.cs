@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Repositories
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
@@ -141,7 +142,7 @@ namespace Fanex.NexHR.Repositories
                 db.AddInParameter("@ProcessedBy", DbType.Int32, processedBy);
                 db.AddInParameter("@ProcessedDate", DbType.DateTime, processedDate);
                 db.AddInParameter("@RoleID", DbType.Int32, roleId);
-                db.AddInParameter("@bOnbehalf", DbType.Boolean, false);
+                db.AddInParameter("@Onbehalf", DbType.Boolean, false);
                 db.AddOutParameter("@ErrCode", DbType.Int32, 8);
                 db.AddOutParameter("@ErrMsg", DbType.String, 200);
 
@@ -151,58 +152,71 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        public IList<WorkingTimeRequest> GetWorkingTimeRequests(int employeeId, int? requestType = null, byte? status = null)
-        {
-            using (var db = new ObjectDb("WorkingTimeRequest_GetByEmployee"))
-            {
-                return db.Query<WorkingTimeRequest>(new { id = employeeId, requestType, status }).ToList();
-            }
-        }
-
-        public WorkingTimeRequest GetWorkingTimeRequest(long id)
+        public WorkingTimeRequest GetWorkingTimeRequest(long requestId)
         {
             using (ObjectDb db = new ObjectDb("WorkingTimeRequest_GetAllByRequestID"))
             {
-                return db.Query<WorkingTimeRequest>(new { RequestID = id }).FirstOrDefault();
+                return db.Query<WorkingTimeRequest>(new { RequestID = requestId }).FirstOrDefault();
             }
+        }
+
+        /// <summary>
+        /// Function to get request by requestId.
+        /// </summary>
+        /// <param name="criteria">The Criteria.</param>
+        /// <returns>Request Entity.</returns>
+        public RequestEntity GetRequestById(ICriteria criteria)
+        {
+            IList<RequestEntity> entityList = null;
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
+                {
+                    if (reader != null)
+                    {
+                        entityList = FillData(reader);
+                    }
+                }
+            }
+
+            return entityList.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Function to get History request.
+        /// </summary>
+        /// <param name="requestId">Request Id.</param>
+        /// <param name="requestTypeId">Request Type Id.</param>
+        /// <returns>List Request Entity.</returns>
+        public IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId)
+        {
+            IList<RequestEntity> entityList = null;
+            using (var db = new ObjectDb("WorkingTimeRequest_GetRequestHistory"))
+            {
+                using (IDataReader reader = db.ExecuteReader(new { requestid = requestId, type = requestTypeId }))
+                {
+                    if (reader != null)
+                    {
+                        entityList = FillData(reader);
+                    }
+                }
+            }
+
+            return entityList;
         }
 
         /// <summary>
         /// Method Get all request.
         /// </summary>
-        /// <param name="requestType">Request Type.</param>
-        /// <param name="role">Employee's role id.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">The to date.</param>
-        /// <param name="groupIds">Group's id.</param>
-        /// <param name="status">Request status.</param>
-        /// <param name="isDailyRequest">Is Daily request.</param>
-        /// <param name="employeeId">Employee id.</param>
-        /// <param name="logInId">Log in id.</param>
-        /// <param name="isLocal">Expat or Local.</param>
+        /// <param name="criteria">GetRequest Criteria.</param>
         /// <returns>List of RequestEntity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<RequestEntity> GetRequests(
-            int requestType,
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            string status,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            int? logInId = null,
-            byte? isLocal = null)
+        public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
-            var keyName = isDailyRequest
-                        ? "WorkingTimeRequest_GetRequestByRequestDate_AllType"
-                        : "WorkingTimeRequest_GetRequestByCreateDate_AllType";
-
-            using (var db = new ObjectDb(keyName))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(
-                    new { requestType, empid = employeeId, groupIds, fromDate, toDate, status, excludedEmpID = logInId, role = role, supervisorID = logInId, isLocal }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {
@@ -447,6 +461,104 @@ namespace Fanex.NexHR.Repositories
             }
 
             return key;
+        }
+
+        private IList<RequestEntity> FillData(IDataReader reader)
+        {
+            IList<RequestEntity> entityList = new List<RequestEntity>();
+            while (reader.Read())
+            {
+                var entity = FillDataEntity(reader);
+                entityList.Add(entity);
+            }
+
+            return entityList;
+        }
+
+        /// <summary>
+        /// Function to fill data for a request.
+        /// </summary>
+        /// <param name="reader">IData Reader.</param>
+        /// <returns>Request Entity.</returns>
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+        private RequestEntity FillDataEntity(IDataReader reader)
+        {
+            var entity = new RequestEntity
+            {
+                Id = reader.ToInt("RequestId"),
+                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
+                FromDate = reader.ToDateTime("FromDate"),
+                ToDate = reader.ToDateTime("ToDate"),
+                TotalDays = reader.ToDecimal("TotalDays"),
+                IsHalfDay = reader.ToDouble("TotalDays") == 0.5 && reader.ToInt("LeaveType") != 0,
+                ////keep in view reader.ToBool("IsHalfDay")
+                FromTime = reader.ToDateTime("FromTime"),
+                ToTime = reader.ToDateTime("ToTime"),
+                LeaveType = new LeaveType
+                {
+                    Id = reader.ToInt("LeaveType"),
+                    Name = reader.ToString("LeaveTypeName")
+                },
+                Remark = reader.ToString("Remark"),
+                TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
+                CreatedDate = reader.ToDateTime("CreatedDate"),
+                Status = new RequestStatus { Id = reader.ToByte("Status") },
+                RefNO = reader.ToString("RefNo"),
+                ApprovedDate = reader.ToDateTime("ApprovedDate"),
+                VerifiedDate = reader.ToDateTime("VerifiedDate"),
+                ProcessedDate = reader.ToDateTime("HrDate"),
+                Requester = new Employee
+                {
+                    Id = reader.ToInt("RequesterId"),
+                    NickName = reader.ToString("Requester"),
+                    FullName = reader.ToString("FullNameRequester"),
+                    Team = new Team { Name = reader.ToString("Team"), Code = reader.ToString("TeamCode") }
+                },
+                ModifiedBy = new Employee
+                {
+                    Id = reader.ToInt("ModifiedByID"),
+                    NickName = reader.ToString("ModifiedBy"),
+                    FullName = reader.ToString("FullNameModified")
+                },
+                VerifiedBy = new Employee
+                {
+                    Id = reader.ToInt("VerifierID"),
+                    NickName = reader.ToString("VerifierBy"),
+                    FullName = reader.ToString("FullNameVerifierBy"),
+                },
+                ApprovedBy = new Employee
+                {
+                    Id = reader.ToInt("ApproverID"),
+                    NickName = reader.ToString("ApproverBy"),
+                    FullName = reader.ToString("FullNameApproverBy"),
+                },
+                ProcessedBy = new Employee
+                {
+                    Id = reader.ToInt("HrId"),
+                    NickName = reader.ToString("HrBy"),
+                    FullName = reader.ToString("FullNameHrBy"),
+                },
+                //// Late In, Early Out
+                FromShift = new Shift
+                {
+                    Id = reader.ToInt("ShiftId"),
+                    ShiftID = reader.ToInt("ShiftId"),
+                    Name = reader.ToString("ShiftName")
+                },
+                RequestedDate = reader.ToDateTime("RequestedDate"),
+                TotalMins = reader.ToInt("Time"),
+                //// Keep in view
+                CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
+                //// Change shift
+                ToShift = new Shift
+                {
+                    Id = reader.ToInt("ToShiftId"),
+                    ShiftID = reader.ToInt("ToShiftId"),
+                    Name = reader.ToString("ToShiftName")
+                },
+            };
+
+            return entity;
         }
     }
 }

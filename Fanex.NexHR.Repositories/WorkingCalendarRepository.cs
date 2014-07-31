@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Repositories
     using System.Data;
     using System.Linq;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -24,16 +25,13 @@ namespace Fanex.NexHR.Repositories
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
         /// <summary>
-        /// Function to get WorkingCalendars By Date Range, groups and employee.
+        /// Function to get working calendars by date range.
         /// </summary>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Groups Id.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <returns>List WorkingCalendarModel.</returns>
-        public IList<WorkingCalendarModel> GetWorkingCalendarsByDateRange(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null)
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>List working calendars.</returns>
+        public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria)
         {
-            using (var db = new ObjectDb("EmployeeCalendar_GetByDateRange"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var workingCalendarList = db.Query<WorkingCalendarModel, Employee, Shift, LeaveType, WorkingCalendarModel>(
                     (w, e, s, lv) =>
@@ -43,8 +41,8 @@ namespace Fanex.NexHR.Repositories
                         w.LeaveType = lv;
                         return w;
                     },
-                        splitOn: "EmpId, ShiftId, LeaveTypeId",
-                        parameterValues: new { fromDate = fromDate, toDate = toDate, groupIds = groupIds, empId = employeeId });
+                    splitOn: "EmpId, ShiftId, LeaveTypeId",
+                    parameterValues: criteria.GetSpParams());
 
                 return workingCalendarList.ToList();
             }

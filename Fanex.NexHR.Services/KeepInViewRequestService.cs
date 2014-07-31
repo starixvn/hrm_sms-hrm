@@ -117,23 +117,6 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Gets the keep in view by identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>
-        /// The RequestEntity entity.
-        /// </returns>
-        public RequestEntity GetRequestById(long id)
-        {
-            if (id > 0)
-            {
-                return this._keepInViewRequestRepository.GetRequestById(id, (int)RequestFilter.KeepInView);
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Checks the is valid keep in time request.
         /// </summary>
         /// <param name="modelState">State of the model.</param>

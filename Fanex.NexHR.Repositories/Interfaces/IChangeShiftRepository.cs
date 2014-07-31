@@ -22,20 +22,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         bool Update(object model, out int errorCode, out string message);
 
-        IList<RequestEntity> GetRequests(
-            int requestType,
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            string status,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            int? logInId = null,
-            byte? isLocal = null);
-
-        RequestEntity GetRequestById(long id, int requestTypeId);
-
         List<ShiftDetails> GetChangeShiftDetailsById(long id);
     }
 }

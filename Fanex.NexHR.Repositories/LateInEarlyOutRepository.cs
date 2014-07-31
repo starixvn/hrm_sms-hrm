@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Repositories
     /// <summary>
     /// Late In Early Out Repository.
     /// </summary>
-    public class LateInEarlyOutRepository : BaseRequestRepository, ILateInEarlyOutRepository
+    public class LateInEarlyOutRepository : ILateInEarlyOutRepository
     {
         /// <summary>
         /// Inserts the late in early out request.
@@ -28,7 +28,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Request's id.</returns>
-        public override long Insert(object model, out int errorCode, out string message)
+        public long Insert(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
             int? lateInMins = request.RequestType == (short)RequestType.LateIn ? (int?)request.Minute : null;
@@ -66,7 +66,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="errorCode">The error code.</param>
         /// <param name="message">The message.</param>
         /// <returns>Result update.</returns>
-        public override bool Update(object model, out int errorCode, out string message)
+        public bool Update(object model, out int errorCode, out string message)
         {
             var request = (LateInEarlyOutRequestViewModel)model;
             int? lateInMins = request.RequestType == (short)RequestType.LateIn ? (int?)request.Minute : null;

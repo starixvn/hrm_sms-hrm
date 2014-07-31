@@ -21,17 +21,9 @@ namespace Fanex.NexHR.Services.Interface
 
         bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage);
 
-        IList<RequestEntity> GetRequests(
-            RequestViewType requestViewType,
-            int requestType,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            int statusId,
-            bool isDailyRequest = false,
-            int? employeeId = null,
-            int? loginId = null,
-            byte? isLocal = null);
+        RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
+
+        IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
 
         IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId);
 

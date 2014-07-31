@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -28,21 +29,11 @@ namespace Fanex.NexHR.Repositories.Interfaces
             DateTime processedDate,
             out string message);
 
-        IList<WorkingTimeRequest> GetWorkingTimeRequests(int id, int? requestType = null, byte? status = null);
+        WorkingTimeRequest GetWorkingTimeRequest(long requestId);
 
-        WorkingTimeRequest GetWorkingTimeRequest(long workingTimeId);
+        IList<RequestEntity> GetRequests(ICriteria criteria);
 
-        IList<RequestEntity> GetRequests(
-            int requestType,
-            string role,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            string status,
-            bool isDailyRequest,
-            int? employeeId = null,
-            int? logInId = null, 
-            byte? isLocal = null);
+        IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId);
 
         IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
 
