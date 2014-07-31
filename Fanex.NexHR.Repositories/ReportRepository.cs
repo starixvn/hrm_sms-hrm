@@ -160,74 +160,41 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method get working hours.
+        /// Get Total Working Hours.
         /// </summary>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Get to date.</param>
-        /// <param name="empId">Employee's id.</param>
-        /// <param name="groupIds">Group's id.</param>
-        /// <param name="isLocal">Is expat or local.</param>
-        /// <returns>List of TotalWorkingHours.</returns>
-        public IList<TotalWorkingHours> GetWorkingHoursList(DateTime fromDate, DateTime toDate, int? empId, string groupIds, byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Total Working Hours.</returns>
+        public IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Report_WorkingHoursSummary"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entityList = new List<TotalWorkingHours>();
-
-                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, empId, groupIds, isLocal }))
-                {
-                    if (reader != null)
-                    {
-                        while (reader.Read())
+                var entity = db.Query<TotalWorkingHours, Employee, Team, TotalWorkingHours>(
+                        (w, e, t) =>
                         {
-                            var entity = new TotalWorkingHours
-                            {
-                                Employee = new Employee
-                                {
-                                    Code = reader.ToString("Code"),
-                                    FullName = reader.ToString("FullName"),
-                                    NickName = reader.ToString("NickName"),
-                                    Team = new Team { Name = reader.To<string>("Team") },
-                                    Id = reader.ToInt("empid")
-                                },
-                                WorkingDay = reader.ToInt("WorkingDays"),
-                                ActualWorkingDay = reader.ToFloat("ActualWorkingDays"),
-                                LeaveTaken = reader.ToFloat("LeaveTaken"),
-                                UnpaidLeave = reader.ToFloat("UnpaidLeave"),
-                                LateInMins = reader.ToInt("LateIn"),
-                                EarlyOutMins = reader.ToInt("EarlyOut"),
-                                TotalHours = reader.ToFloat("TotalWorkHours"),
-                                AverageHours = reader.ToFloat("AverageHours")
-                            };
+                            e.Team = t;
+                            w.Employee = e;
+                            
+                            return w;
+                        },
+                        splitOn: "EmpId,GroupId",
+                        parameterValues: criteria.GetSpParams());
 
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-
-                return entityList;
+                return entity.ToList();
             }
         }
 
         /// <summary>
-        /// Gets the total working hour monthly.
+        /// Get Total Working Hours Monthly.
         /// </summary>
-        /// <param name="month">The month.</param>
-        /// <param name="empId">The employee identifier.</param>
-        /// <param name="groupIds">The group ids.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>The list of TotalWorkingHourMonthly.</returns>
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
-           DateTime month,
-           int? empId,
-           string groupIds,
-           byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Total Working Hours.</returns>
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Report_EmployeeTotalWorkingHourByMonth"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var entityList = new List<TotalWorkingHourMonthly>();
 
-                using (IDataReader reader = db.ExecuteReader(new { reportMonth = month, empId, groupIds, isLocal }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {
@@ -259,26 +226,17 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Get Total Working Hour Weekly.
+        /// Get Total Working Hours Weekly.
         /// </summary>
-        /// <param name="empId">Employee Id.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">Query to date.</param>
-        /// <param name="groupIds">Group Ids.</param>
-        /// <param name="isLocal">Local or expat.</param>
-        /// <returns>TotalWorkingHourMonthly Model.</returns>
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
-            int? empId,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Of Total Working Hour Monthly.</returns>
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Report_EmployeeTotalWorkingHourByWeek"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var entityList = new List<TotalWorkingHourMonthly>();
 
-                using (IDataReader reader = db.ExecuteReader(new { empId, fromDate, toDate, groupIds, isLocal }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {

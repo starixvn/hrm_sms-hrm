@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -81,11 +82,15 @@ namespace Fanex.NexHR.Controllers
 
             string fileName = "TotalWorkingHours_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            IList<TotalWorkingHours> listTotalWorkingHours = _reportService.GetWorkingHoursList(
-                model.FromDate,
-                model.ToDate,
-                empId: (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds);
+            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria()
+            {
+                Fromdate = model.FromDate,
+                Todate = model.ToDate,
+                EmpId = (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = model.IsLocal
+            };
+            IList<TotalWorkingHours> listTotalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             var hssfworkbook = _exportService.ExportTotalWorkingHours(listTotalWorkingHours, model.FromDate, model.ToDate);
 

@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -37,54 +38,45 @@ namespace Fanex.NexHR.Services
             this._reportRepository = new ReportRepository();
         }
 
-        public IList<TotalWorkingHours> GetWorkingHoursList(
-            DateTime fromDate,
-            DateTime toDate,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null) 
+        public IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria) 
         {
-            var totalWorkingHours = _reportRepository.GetWorkingHoursList(fromDate, toDate, empId, groupIds, isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<TotalWorkingHours> totalWorkingHours = null;
+            if (criteria.IsValid())
+            {
+                totalWorkingHours = _reportRepository.GetWorkingHoursList(criteria);
+            }
 
             return totalWorkingHours;
         }
 
         /// <summary>
-        /// Gets the total working hour monthly.
+        /// Get Total Working Hour Monthly.
         /// </summary>
-        /// <param name="month">The month will be filtered.</param>
-        /// <param name="empId">The employee identifier.</param>
-        /// <param name="groupIds">The group ids.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>The list of TotalWorkingHourMonthly.</returns>
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
-            DateTime month,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Of TotalWorkingHourMonthly.</returns>
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria)
         {
-            try
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<TotalWorkingHourMonthly> totalWorkingHours = null;
+            if (criteria.IsValid())
             {
-                var totalWorkingHourMonthly = _reportRepository.GetTotalWorkingHourMonthly(month, empId, groupIds, isLocal);
-                return totalWorkingHourMonthly;
+                totalWorkingHours = _reportRepository.GetTotalWorkingHourMonthly(criteria);
             }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-                return null;
-            }
+
+            return totalWorkingHours;
         }
 
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
-            int? empId,
-            DateTime fromTime,
-            DateTime toTime,
-            string groupIds,
-            byte? isLocal = null)
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria)
         {
-            IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = null;
-            totalWorkingHourWeekly = _reportRepository.GetTotalWorkingHourWeekly(empId, fromTime, toTime, groupIds, isLocal);
-            return totalWorkingHourWeekly;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<TotalWorkingHourMonthly> totalWorkingHours = null;
+            if (criteria.IsValid())
+            {
+                totalWorkingHours = _reportRepository.GetTotalWorkingHourWeekly(criteria);
+            }
+
+            return totalWorkingHours;
         }
 
         public IList<RequestsMonitoring> GetRequestMonitoring(

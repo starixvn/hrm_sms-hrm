@@ -37,25 +37,11 @@ namespace Fanex.NexHR.Repositories.Interfaces
             string groupIds,
             byte? isLocal = null);
 
-        IList<TotalWorkingHours> GetWorkingHoursList(
-            DateTime fromDate,
-            DateTime toDate,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria);
 
-        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
-            DateTime month,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(ICriteria criteria);
 
-        IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
-            int? empId,
-            DateTime fromTime,
-            DateTime toTime,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(ICriteria criteria);
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(
             int year,

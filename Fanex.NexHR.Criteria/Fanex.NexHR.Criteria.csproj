@@ -83,6 +83,9 @@
     <Compile Include="Report\ExtensionNumber\InsertExternalGroupCriteria.cs" />
     <Compile Include="Report\ExtensionNumber\UpdateExtensionNumberMemberCriteria.cs" />
     <Compile Include="Report\ExtensionNumber\UpdateExternalNumberCriteria.cs" />
+    <Compile Include="Report\WorkingHour\GetReportWorkingHourSummaryCriteria.cs" />
+    <Compile Include="Report\WorkingHour\GetTotalWorkingHourMonthlyCriteria.cs" />
+    <Compile Include="Report\WorkingHour\GetTotalWorkingHourWeeklyCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />
@@ -149,6 +152,7 @@
       <Name>Fanex.NexHR.Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

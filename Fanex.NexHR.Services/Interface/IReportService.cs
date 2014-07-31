@@ -16,31 +16,18 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.ViewModels;
 
     public interface IReportService
     {
-        IList<TotalWorkingHours> GetWorkingHoursList(
-            DateTime fromDate,
-            DateTime toDate,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria);
 
-        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(
-            DateTime month,
-            int? empId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria);
 
-        IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(
-            int? empId,
-            DateTime fromTime,
-            DateTime toTime,
-            string groupIds,
-            byte? isLocal = null);
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria);
         
         IList<RequestsMonitoring> GetRequestMonitoring(
             DateTime fromDate,

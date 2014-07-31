@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
+    using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -379,12 +380,16 @@ namespace Fanex.NexHR.Controllers
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamIds = model.TeamIds;
-            var totalWorkingHours = _reportService.GetWorkingHoursList(
-                model.FromDate,
-                model.ToDate,
-                empId: (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds,
-                isLocal: model.IsLocal);
+
+            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria()
+            {
+                Fromdate = model.FromDate,
+                Todate = model.ToDate,
+                EmpId = (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = model.IsLocal
+            };
+            var totalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
 
@@ -431,11 +436,14 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = isLocal
             };
 
-            var totalWorkingHourMonthly = _reportService.GetTotalWorkingHourMonthly(
-                model.Month,
-                empId: string.IsNullOrEmpty(employee) ? null : employeeId,
-                groupIds: model.TeamIds,
-                isLocal: isLocal);
+            var getWorkingHourMonthlyCriteria = new GetTotalWorkingHourMonthlyCriteria()
+            {
+                EmpId = string.IsNullOrEmpty(employee) ? null : employeeId,
+                GroupIds = model.TeamIds,
+                IsLocal = isLocal,
+                ReportMonth = model.Month
+            };
+            var totalWorkingHourMonthly = _reportService.GetTotalWorkingHourMonthly(getWorkingHourMonthlyCriteria);
             var firstRecord = totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any() ? totalWorkingHourMonthly[0] : null;
 
             if (model.IsExportExcel)
@@ -499,7 +507,15 @@ namespace Fanex.NexHR.Controllers
 
             if (requestData)
             {
-                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = _reportService.GetTotalWorkingHourWeekly(employeeId, startDate.Value, endDate.Value, teamIds, isLocal);
+                var getTotalWorkingHourWeeklyCriteria = new GetTotalWorkingHourWeeklyCriteria()
+                {
+                    EmpId = employeeId,
+                    Fromdate = startDate.Value,
+                    Todate = endDate.Value,
+                    GroupIds = teamIds,
+                    IsLocal = isLocal
+                };
+                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = _reportService.GetTotalWorkingHourWeekly(getTotalWorkingHourWeeklyCriteria);
                 TotalWorkingHourMonthly firstRecord = totalWorkingHourWeekly != null && totalWorkingHourWeekly.Any() ? totalWorkingHourWeekly[0] : null;
                 ViewBag.EntityList = totalWorkingHourWeekly;
                 ViewBag.FirstRecord = firstRecord;
