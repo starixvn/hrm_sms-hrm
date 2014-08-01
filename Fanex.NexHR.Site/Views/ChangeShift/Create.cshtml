@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.ViewModels.ChangeShiftViewModel
+﻿@model Fanex.NexHR.ViewModels.Request.ChangeShiftViewModel
 @{
     ViewBag.Title = Labels.NewChangeShiftRequest;
 }
@@ -110,8 +110,6 @@
                 {
                     @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
                 }
-
-                
                 @Html.ValidationMessageFor(model => model.ApproverId)
             </div>
         </div>
@@ -125,16 +123,12 @@
         </div>
         
         <div class="formrow" id="shiftDetailSchedule">
-            @Html.Partial("ChangeShiftDetails", Model.ShiftDetails)
+            @Html.Partial("ChangeShiftDetail", Model.ShiftDetails)
         </div>
         
         <div class="formrow">
             <div class="label">
-                @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.FromShift)
-                @Html.HiddenFor(model => model.FromShiftName)
-                @Html.HiddenFor(model => model.ToShiftName)
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
             </div>
             <div class="input">

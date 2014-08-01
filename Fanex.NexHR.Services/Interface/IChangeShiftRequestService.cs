@@ -11,18 +11,20 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// Interface Change Shift Request Service.
     /// </summary>
     public interface IChangeShiftRequestService
     {
-        bool Insert(ModelStateDictionary modelState, ChangeShiftViewModel model);
+        CommandResult Insert(InsertChangeShiftRequestCriteria criteria);
 
-        bool Update(ModelStateDictionary modelState, ChangeShiftViewModel model);
+        CommandResult Update(UpdateChangeShiftRequestCriteria criteria);
 
-        List<ShiftDetails> GetChangeShiftDetailsById(long id);
+        IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
     }
 }

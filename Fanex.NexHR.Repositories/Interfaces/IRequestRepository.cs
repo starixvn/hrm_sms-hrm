@@ -31,6 +31,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         WorkingTimeRequest GetWorkingTimeRequest(long requestId);
 
+        RequestEntity GetRequestById(ICriteria criteria);
+
         IList<RequestEntity> GetRequests(ICriteria criteria);
 
         IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId);

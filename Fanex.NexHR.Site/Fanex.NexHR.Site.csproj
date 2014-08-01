@@ -34,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -1108,7 +1108,7 @@
     <Content Include="Views\Employee\Supervisor.cshtml" />
     <Content Include="Views\Employee\MultiRoleManagementDashboard.cshtml" />
     <Content Include="Views\Employee\ShiftManager.cshtml" />
-    <Content Include="Views\ChangeShift\ChangeShiftDetails.cshtml" />
+    <Content Include="Views\ChangeShift\ChangeShiftDetail.cshtml" />
     <Content Include="Views\Leave\LeaveRequestDetail.cshtml" />
     <Content Include="Views\KeepInView\Create.cshtml" />
     <Content Include="Views\KeepInView\Update.cshtml" />
@@ -1135,9 +1135,6 @@
     <Content Include="Views\Overtime\YearlyReportDetails.cshtml" />
     <Content Include="Views\Overtime\HRViewDetails.cshtml" />
     <Content Include="Views\Overtime\HRMonthlyReport.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewChangeShiftDetail.cshtml" />
-    <Content Include="Views\Request\HRViewDetail.cshtml" />
-    <Content Include="Views\Shared\Request\HR\ChangeShiftDetails.cshtml" />
     <Content Include="Views\Overtime\MemberDailyOvertime.cshtml" />
     <Content Include="Views\Overtime\MemberDailyOvertimeDetail.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
@@ -1148,15 +1145,12 @@
     <Content Include="Views\Overtime\MemberOvertimeViewByLeader.cshtml" />
     <Content Include="Views\Overtime\HRMonthlyReportDetails.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberChangeShiftDetail.cshtml" />
-    <Content Include="Views\Shared\Request\Member\ChangeShiftDetails.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\OTExcelReportDetails.cshtml" />
     <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
     <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
     <Content Include="ExcelTemplates\OvertimeReportTemplate.xls" />
     <Content Include="ExcelTemplates\EmployeeOvertimeRecordTemplate.xls" />
-    <Content Include="Views\Request\MemberDetail.cshtml" />
     <Content Include="Views\Report\AddNewMember.cshtml" />
     <Content Include="Views\Report\EditExtensionNumber.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourMonthly.cshtml" />
@@ -1190,6 +1184,7 @@
     <Content Include="Views\Report\TeamSupervisorDetails.cshtml" />
     <None Include="ExcelTemplates\TeamSupervisorTemplate.xls" />
     <Content Include="Views\Message\DetailByEmployee.cshtml" />
+    <Content Include="Views\ChangeShift\Detail.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

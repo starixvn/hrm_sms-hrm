@@ -1,4 +1,5 @@
-﻿@model List<ShiftDetailsViewModel>
+﻿@using Fanex.NexHR.ViewModels.Request
+@model List<ChangeShiftDetailViewModel>
 
 @section css{
     @Url.CombresLink("changeshiftcss")
@@ -8,24 +9,24 @@
     <thead>
         <tr>
             <th rowspan="1">
-                Date
+                @Labels.Date
             </th>
             <th rowspan="1">
-                Schedule status
+                @Labels.ScheduleStatus
             </th>
             <th rowspan="1">
                 Change to
             </th>
             <th rowspan="1">
-                Remark
+                @Labels.Remark
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (ShiftDetailsViewModel item in Model)
+        @foreach (ChangeShiftDetailViewModel item in Model)
         {
             <tr class='left'>
-                <td>@item.Date</td>
+                <td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
                 <td>@item.ScheduleStatus</td>
                 @if (item.ScheduleStatus == null || item.ScheduleStatus.Equals(Labels.NA))
                 { 
@@ -35,14 +36,13 @@
                 else
                 { 
                     <td>
-                        @Html.DropDownListFor(model => item.ToShift, new SelectList(ViewBag.Shift, "Id", "Code"), new { @class = "item_ToShift" })
+                        @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shift, "Id", "Code", item.ToShiftId), new { @class = "item_ToShift" })
+                        @*@Html.DropDownListFor(model => item.ToShift, new SelectList(ViewBag.Shift, "Id", "Code"), new { @class = "item_ToShift" })*@
                     </td>
                     <td>@Html.TextBoxFor(model => item.Remark) </td>
                 }
 
-                @Html.HiddenFor(model => item.FromShift)
-                @Html.HiddenFor(model => item.ShiftId)
-                @Html.HiddenFor(model => item.HasData)
+                @Html.HiddenFor(model => item.FromShiftId)
             </tr>
         }
     </tbody>

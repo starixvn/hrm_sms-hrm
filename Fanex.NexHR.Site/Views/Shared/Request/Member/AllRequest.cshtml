@@ -67,7 +67,7 @@
                         }
                         else if (request.RequestType.Id == (int)RequestType.ChangeShift)
                         { 
-                            <a href="@Url.Action("memberdetail", "request", requestDetail)">@request.RequestType.Name</a>
+                            <a href="~/ChangeShift/Detail?id=@request.Id">@request.RequestType.Name</a>
                         }
                         else
                         {
@@ -99,9 +99,9 @@
                     </td>
 					<td class="td-warning">
 						@if (request.IsWarning)
-	  {
+      {
 						 <span class="icon-warning tooltip" title="@Labels.RequestWarning"/>
-	  }
+      }
 					</td>
                 </tr>  
             }

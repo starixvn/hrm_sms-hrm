@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -93,6 +93,9 @@
     <Compile Include="Report\WorkingHour\GetReportWorkingHourSummaryCriteria.cs" />
     <Compile Include="Report\WorkingHour\GetTotalWorkingHourMonthlyCriteria.cs" />
     <Compile Include="Report\WorkingHour\GetTotalWorkingHourWeeklyCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestDetailByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\InsertChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\UpdateChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />

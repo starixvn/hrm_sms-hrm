@@ -1,6 +1,6 @@
-﻿@model Fanex.NexHR.ViewModels.ChangeShiftViewModel
+﻿@model Fanex.NexHR.ViewModels.Request.ChangeShiftViewModel
 @{
-    ViewBag.Title = "Update My Change Shift Request";
+    ViewBag.Title = "Update Change Shift Request";
 }
 @section css{
     @Url.CombresLink("changeshiftcss")
@@ -20,14 +20,10 @@
 <div class="bunhat">
 
 <div class="model-state" id="errors-model-state">
-            
 </div>
-
     @using (Html.BeginForm())
     {
-    
         @Html.ValidationSummary(true)
-
         if (ViewBag.Updated == true)
         {
         <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
@@ -37,7 +33,6 @@
          <div id="shift-unavailable" class="ui-state-error ui-corner-all">
             @Labels.CannotCreateRequest
         </div>
-          
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)
@@ -58,7 +53,6 @@
              unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
             </div>
         </div>
-        
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.ToDate)
@@ -70,7 +64,6 @@
              unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
             </div>
         </div>
-        
          <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Verifier)
@@ -99,23 +92,18 @@
         </div>
         
          <div class="formrow" id="shiftDetailSchedule">
-            @Html.Partial("ChangeShiftDetails", Model.ShiftDetails)
+            @Html.Partial("ChangeShiftDetail", Model.ShiftDetails)
         </div>
         
         <div class="formrow">
             <div class="label">
-                @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.DisplayName)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.FromShift)
-                @Html.HiddenFor(model => model.FromShiftName)
-                @Html.HiddenFor(model => model.ToShiftName)
+                @Html.HiddenFor(model => model.RequestId)
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
+                @Html.Hidden("IsView", (bool)ViewBag.IsView)
             </div>
             <div class="input">
                 <input type="button" name="submitEdit" value="@Fanex.NexHR.Resources.Labels.Update" class="button-primary submit"/>
-                @*<a href="@Url.Action("employeeview", "changeshift")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

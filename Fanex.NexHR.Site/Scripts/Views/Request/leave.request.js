@@ -516,6 +516,7 @@
                 $("input").attr("disabled", "disabled");
                 $("select").attr("disabled", "disabled");
                 $("textarea").attr("disabled", "disabled");
+                $("#searchbox").removeAttr("disabled");
             }
         },
         validateForm: function () {

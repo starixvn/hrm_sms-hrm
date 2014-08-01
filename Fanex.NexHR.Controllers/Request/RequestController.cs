@@ -9,23 +9,21 @@
 
 namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// Request Controller.
@@ -187,86 +185,6 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(supervisors, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// ActionResult Member.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="type">The request type.</param>
-        /// <returns>
-        /// View Member.
-        /// </returns>
-        [Authorize(Roles = "Verifier, Approver")]
-        public ActionResult MemberDetail(int requestId, int type)
-        {
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
-
-            if (type == (int)RequestFilter.ChangeShift)
-            {
-                return MemberChangeShiftDetail(requestId, "member");
-            }
-            
-            return RedirectToAction("member");
-        }
-
-        /// <summary>
-        /// HRs the view detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="type">The request type.</param>
-        /// <returns>View of HRViewDetail.</returns>
-        [Authorize(Roles = "HR")]
-        public ActionResult HRViewDetail(int requestId, int type)
-        {
-            ViewBag.IsAllowChangeStatus = true;
-
-            if (type == (int)RequestFilter.ChangeShift)
-            {
-                return HRViewChangeShiftDetail(requestId, "hrview");
-            }
-
-            return RedirectToAction("hrview");
-        }
-
-        /// <summary>
-        /// Employees view detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="type">The request type.</param>
-        /// <returns>
-        /// View of EmployeeViewDetail.
-        /// </returns>
-        public ActionResult EmployeeViewDetail(int requestId, int type)
-        {
-            ViewBag.IsAllowChangeStatus = false;
-
-            if (type == (int)RequestFilter.ChangeShift)
-            {
-                return HRViewChangeShiftDetail(requestId, "employeeview");
-            }
-
-            return RedirectToAction("employeeview");
-        }
-
-        /// <summary>
-        /// Employees view daily detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="type">The request type.</param>
-        /// <returns>
-        /// View of DailyViewDetail.
-        /// </returns>
-        public ActionResult DailyViewDetail(int requestId, int type)
-        {
-            ViewBag.IsAllowChangeStatus = false;
-
-            if (type == (int)RequestFilter.ChangeShift)
-            {
-                return HRViewChangeShiftDetail(requestId, "dailyview");
-            }
-
-            return RedirectToAction("dailyview");
-        }
-
         public ActionResult GetVerifiers(int employeeId, byte requestType)
         {
             IList<SupervisorNameModel> verifierList = this.GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
@@ -423,139 +341,6 @@ namespace Fanex.NexHR.Controllers.Request
             var approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-        }
-
-        /// <summary>
-        /// HRs the view change shift detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <returns>
-        /// The view model of HRViewChangeShiftDetail.
-        /// </returns>
-        private ActionResult HRViewChangeShiftDetail(long requestId, string viewName)
-        {
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
-            {
-                RequestId = requestId
-            };
-            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
-
-            if (request == null)
-            {
-                return RedirectToAction(viewName);
-            }
-
-            var model = ViewChangeShiftDetail(requestId, viewName, request);
-            return View("HRViewDetail", model);
-        }
-
-        /// <summary>
-        /// Members the change shift detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <returns>
-        /// The view model of HRViewChangeShiftDetail.
-        /// </returns>
-        private ActionResult MemberChangeShiftDetail(int requestId, string viewName)
-        {
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
-            {
-                RequestId = requestId
-            };
-            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
-
-            if (request == null)
-            {
-                return RedirectToAction(viewName);
-            }
-
-            var model = ViewChangeShiftDetail(requestId, viewName, request);
-            return View("MemberDetail", model);
-        }
-
-        /// <summary>
-        /// Views the change shift detail.
-        /// </summary>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="viewName">Name of the view.</param>
-        /// <param name="shift">The shift.</param>
-        /// <returns>The model of ChangeShiftViewModel.</returns>
-        private ChangeShiftViewModel ViewChangeShiftDetail(long requestId, string viewName, RequestEntity shift)
-        {
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            ViewBag.UnavailDates = listUnavailDates;
-            var shiftDetails = _ChangeShiftRequestService.GetChangeShiftDetailsById(requestId);
-            var shifts = _ShiftService.GetAll(isShowOff: true);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = shift.Requester.Id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            ViewBag.Shift = shifts;
-            var model = new ChangeShiftViewModel();
-            if (shift != null && shiftDetails != null)
-            {
-                model = this.ComposeHRViewChangeShiftDetailViewModel(shift, shiftDetails, employee, model);
-            }
-
-            GetVerifierApproverList(employee.Id, model);
-            ViewBag.ViewName = viewName;
-
-            return model;
-        }
-
-        /// <summary>
-        /// Composes the HR view change shift detail view model.
-        /// </summary>
-        /// <param name="shift">The shift.</param>
-        /// <param name="shiftDetails">The shift details.</param>
-        /// <param name="employee">The employee.</param>
-        /// <param name="model">The model.</param>
-        /// <returns>The object of ChangeShiftViewModel.</returns>
-        private ChangeShiftViewModel ComposeHRViewChangeShiftDetailViewModel(
-            RequestEntity shift,
-            List<ShiftDetails> shiftDetails,
-            Employee employee,
-            ChangeShiftViewModel model)
-        {
-            List<ShiftDetailsViewModel> lstShiftDeatails = new List<ShiftDetailsViewModel>();
-            foreach (var item in shiftDetails)
-            {
-                ShiftDetailsViewModel shiftDetail = new ShiftDetailsViewModel
-                {
-                    Date = item.OnDate.ToString("MM/dd/yyyy"),
-                    FromShift = item.FromShiftID,
-                    ToShift = item.ToShiftID,
-                    ScheduleStatus = item.FromShiftID == -1 ? Labels.Off : item.FromShift,
-                    ChangeToShiftCode = item.ToShift,
-                    Remark = item.Remark,
-                    ShiftId = item.ToShiftID,
-                    HasData = true
-                };
-                lstShiftDeatails.Add(shiftDetail);
-            }
-
-            model = new ChangeShiftViewModel
-            {
-                RequestId = shift.Id,
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
-                FromDate = shift.FromDate.Date,
-                ToDate = shift.ToDate.Date,
-                VerifierId = shift.VerifiedBy.Id,
-                ApproverId = shift.ApprovedBy.Id,
-                Remark = shift.Remark,
-                ShiftDetails = lstShiftDeatails,
-                Status = shift.Status.Id,
-                FormattedStatus = shift.Status.Name
-            };
-            return model;
         }
     }
 }

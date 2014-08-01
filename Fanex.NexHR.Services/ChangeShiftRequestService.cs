@@ -8,19 +8,21 @@ namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
-    using System.Web.Mvc;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// Change Shift Request Service.
@@ -30,95 +32,98 @@ namespace Fanex.NexHR.Services
         private const string _ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
-        private readonly IChangeShiftRepository _changeShiftRepository;
         private string _baseUrl;
 
         public ChangeShiftRequestService()
         {
             this._employeeRepository = new EmployeeRepository();
             this._emailService = new EmailService();
-            this._changeShiftRepository = new ChangeShiftRepository();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public ChangeShiftRequestService(
             IEmployeeRepository employeeRepository,
-            IEmailService emailService,
-            IChangeShiftRepository changeShiftRepository)
+            IEmailService emailService)
         {
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
-            this._changeShiftRepository = changeShiftRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         /// <summary>
-        /// Insert Change Shift request.
+        /// Function to insert change shift request.
         /// </summary>
-        /// <param name="modelState">ModelState Dictionary.</param>
-        /// <param name="model">ChangeShift ViewModel.</param>
-        /// <returns>Result of insert.</returns>
-        public bool Insert(ModelStateDictionary modelState, ChangeShiftViewModel model)
+        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertChangeShiftRequestCriteria criteria)
         {
-            if (modelState.IsValid)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
             {
-                int errorCode;
-                string message;
-                var requestId = this._changeShiftRepository.Insert(model, out errorCode, out message);
-                if (errorCode == 0)
+                commandResult = Repository.Insert(criteria);
+                if (commandResult.Code == 0)
                 {
-                    SendMailForChangeShiftSuccessfully(model, requestId, false);
-                    return true;
-                }
-                else
-                {
-                    modelState.AddModelError(string.Empty, message);
+                    //SendMailForChangeShiftSuccessfully(model, requestId, false);
+                    //var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    //var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
+                    //taskSendMail.Start();
                 }
             }
             else
             {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                commandResult = new CommandResult() 
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return commandResult;
         }
 
         /// <summary>
-        /// Update Change Shift request.
+        /// Function to update change shift request.
         /// </summary>
-        /// <param name="modelState">ModelState Dictionary.</param>
-        /// <param name="model">ChangeShift ViewModel.</param>
-        /// <returns>Result of update.</returns>
-        public bool Update(ModelStateDictionary modelState, ChangeShiftViewModel model)
+        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Update(UpdateChangeShiftRequestCriteria criteria)
         {
-            if (modelState.IsValid)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = null;
+            if (criteria.IsValid())
             {
-                int errorCode;
-                string message;
-                var result = this._changeShiftRepository.Update(model, out errorCode, out message);
-                if (result)
+                commandResult = Repository.Update(criteria);
+                if (commandResult.Code == 0)
                 {
-                    SendMailForChangeShiftSuccessfully(model, model.Id, true);
+                    //SendMailForChangeShiftSuccessfully(model, requestId, false);
+                    //var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    //var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
+                    //taskSendMail.Start();
                 }
-
-                return true;
             }
             else
             {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                commandResult = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return commandResult;
         }
 
-        public List<ShiftDetails> GetChangeShiftDetailsById(long id)
+        public IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria)
         {
-            if (id > 0)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            var detail = new List<ChangeShiftDetailModel>();
+            if (criteria.IsValid())
             {
-                return this._changeShiftRepository.GetChangeShiftDetailsById(id);
+                detail = GetData<ChangeShiftDetailModel>(criteria).ToList();
             }
 
-            return null;
+            return detail;
         }
 
         /// <summary>
@@ -148,7 +153,7 @@ namespace Fanex.NexHR.Services
             var content = new
             {
                 Leader = sendToNickName,
-                Member = model.DisplayName,
+                Member = model.Employee,
                 RequestId = requestId,
                 ForDate = GetMessageDateString(model.FromDate, model.ToDate),
                 Remark = model.Remark,

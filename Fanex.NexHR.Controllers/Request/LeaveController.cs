@@ -87,6 +87,7 @@ namespace Fanex.NexHR.Controllers.Request
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = this.CurrentUser.Id;
+            criteria.CreatedDate = DateTime.Now;
 
             CommandResult result = _LeaveRequestService.Insert(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);

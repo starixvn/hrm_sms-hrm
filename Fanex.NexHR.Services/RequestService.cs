@@ -293,7 +293,7 @@ namespace Fanex.NexHR.Services
             RequestEntity request = null;
             if (criteria.IsValid())
             {
-                request = GetDataEntity<RequestEntity>(criteria);
+                request = _requestRepository.GetRequestById(criteria);
             }
 
             return request;

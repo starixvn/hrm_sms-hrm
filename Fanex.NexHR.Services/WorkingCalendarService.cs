@@ -48,7 +48,7 @@ namespace Fanex.NexHR.Services
             IList<WorkingCalendarModel> calendars = null;
             if (criteria.IsValid())
             {
-                calendars = GetData<WorkingCalendarModel>(criteria).ToList();
+                calendars = this._workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
             }
 
             return calendars;

@@ -8,13 +8,6 @@
 
     $("#shift-unavailable").hide();
 
-    $("#tblchangeshift tbody tr").each(function () {
-        var selected = $(this).find("input[name='item.ShiftId']").val();
-        $('td select', this).val(selected);
-    });
-
-    checkHasData();
-
     function checkHasData() {
         var hasData = $("#item_HasData").val();
         if (hasData == "True") {
@@ -56,7 +49,7 @@
         };
 
         $.ajax({
-            url: _global.root + "changeshift/ChangeShiftDetails",
+            url: _global.root + "changeshift/ChangeShiftDetail",
             data: params,
             async: false
         }).done(function (response) {
@@ -82,7 +75,7 @@
     $("input[name='submit']").click(function () {
         checkIsTopManager();
         var shift = {
-            EmployeeId: $("#EmployeeId").val(),
+            EmpId: $("#EmployeeId").val(),
             FromDate: $("#FromDate").val(),
             ToDate: $("#ToDate").val(),
             Remark: $("#Remark").val(),
@@ -94,17 +87,14 @@
         var shiftDetails = [];
         $("#tblchangeshift tbody tr").each(function () {
             shiftDetails.push({
-                Date: $('td:first-child', this).html(),
-                FromShift: $('#item_FromShift', this).val(),
-                ToShift: $('td select', this).val(),
+                OnDate: $('td:first-child', this).html(),
+                FromShiftId: $('#item_FromShiftId', this).val(),
+                ToShiftId: $('td select', this).val(),
                 Remark: $('td #item_Remark', this).val()
             });
         });
-
-
         var shiftJson = JSON.stringify(shift);
         var shiftDetailsJson = JSON.stringify(shiftDetails);
-
         var successed = $("#successed").val();
         var year = $("#year").val();
         var validate = ValidateForm();
@@ -116,13 +106,13 @@
                 data: { shiftJson: shiftJson, shiftDetailJson: shiftDetailsJson },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.success) {
+                    if (response.Code === 0) {
                         $('form').removeClass("dirty");
                         confirm('Successfull!\nPress OK to continue', function () {
                             document.location = _global.root + "ChangeShift/EmployeeView/" + year;
                         });
                     } else {
-                        $("#errors-model-state").html("* " + response.errors);
+                        $("#errors-model-state").html("* " + response.Message);
                         $("#errors-model-state").show();
                     }
                 }
@@ -131,12 +121,11 @@
         return false;
     });
 
-
-
     //Submit Edit
-
     $("input[name='submitEdit']").click(function () {
+        var requestId = $("#requestId").val();
         var shift = {
+            RequestId: requestId,
             Employee: $("#EmployeeId").val(),
             FromDate: $("#FromDate").val(),
             ToDate: $("#ToDate").val(),
@@ -150,8 +139,8 @@
         $("#tblchangeshift tbody tr").each(function () {
             shiftDetails.push({
                 Date: $('td:first-child', this).html(),
-                FromShift: $('#item_FromShift', this).val(),
-                ToShift: $('td select', this).val(),
+                FromShiftId: $('#item_FromShiftId', this).val(),
+                ToShiftId: $('td select', this).val(),
                 Remark: $('td #item_Remark', this).val()
             });
         });
@@ -159,8 +148,6 @@
         var successed = $("#successed").val();
         var year = $("#year").val();
         var validate = ValidateForm();
-        var requestId = $("#Id").val();
-
         var shiftJson = JSON.stringify(shift);
         var shiftDetailsJson = JSON.stringify(shiftDetails);
 
@@ -183,6 +170,15 @@
         return false;
 
     });
+
+    function disableControlForDetail() {
+        if ($("#IsView").val() == "True") {
+            $("input").attr("disabled", "disabled");
+            $("select").attr("disabled", "disabled");
+            $("textarea").attr("disabled", "disabled");
+            $("#searchbox").removeAttr("disabled");
+        }
+    }
 
     function ValidateForm() {
 
@@ -247,7 +243,7 @@
     }
 
     $('form').areYouSure();
-    
+    disableControlForDetail();
 });
 
 

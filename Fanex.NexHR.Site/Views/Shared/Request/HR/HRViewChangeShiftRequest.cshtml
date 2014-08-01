@@ -40,21 +40,7 @@
                 
                 <tr id="row@(request.Id)">
                     <td>
-                     @if ((bool)ViewBag.IsAllowChangeStatus)
-                     {
-                        <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@(index++)</a>
-                     }
-                     else
-                     {
-                         if ((bool)ViewBag.IsDailyRequest)
-                         {
-                             <a href="@Url.Action("dailyviewdetail", "request", requestDetail)">@(index++)</a>
-                         }
-                         else
-                         {
-                             <a href="@Url.Action("employeeviewdetail", "request", requestDetail)">@(index++)</a>
-                         }
-                     }
+                        <a href="~/ChangeShift/Detail?id=@request.Id">@(index++)</a>
                     </td>
                     <td class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code
                     </td>

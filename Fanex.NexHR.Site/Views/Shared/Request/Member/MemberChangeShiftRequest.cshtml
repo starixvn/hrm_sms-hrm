@@ -32,7 +32,7 @@
                 
                 <tr id="row@(request.Id)">
                     <td>
-                        <a href="@Url.Action("memberdetail", "request", requestDetail)">@(index++)</a>
+                        <a href="~/ChangeShift/Detail?id=@request.Id">@(index++)</a>
                     </td>
                     <td  class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code</td>
                     <td class="tooltip" title="@request.Requester.FullName">

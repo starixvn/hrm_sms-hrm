@@ -437,6 +437,11 @@ namespace Fanex.NexHR.Core
             return date.ToString("MMM-yyyy");
         }
 
+        public static string ToDayOfWeekFormatedDate(this DateTime date)
+        {
+            return date.ToString("ddd, dd MMM, yyyy");
+        }
+
         public static string ToDateMonthYearFormatedDate(this DateTime date)
         {
             return date.ToString("dd MMM, yyyy");
