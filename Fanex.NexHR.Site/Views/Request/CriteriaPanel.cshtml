@@ -69,7 +69,7 @@
             @Html.LabelFor(model => model.TeamCollection)
         </div>
         <div class="grid_6">
-            @Html.DropDownList("TeamId", Model.GetSelecListItemTeam(), new { @multiple = "multiple" })
+            @Html.DropDownList("TeamId", Model.GetSelecListItemTeam, new { @multiple = "multiple" })
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.Employee)

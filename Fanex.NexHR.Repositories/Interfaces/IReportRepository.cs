@@ -18,24 +18,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
     public interface IReportRepository
     {
-        IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
-            DateTime fromTime,
-            DateTime toTime,
-            short type,
-            int? empId = null,
-            string groupIds = null,
-            int? excludeDeletedUsers = 1,
-            byte? isLocal = null);
+        IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria);
 
-        IList<RequestsMonitoring> GetRequestMonitoring(
-            DateTime fromDate,
-            DateTime toDate,
-            int maxRequest,
-            int role,
-            int? employeeId,
-            int loginUserId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<RequestsMonitoring> GetRequestMonitoring(ICriteria criteria);
 
         IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria);
 

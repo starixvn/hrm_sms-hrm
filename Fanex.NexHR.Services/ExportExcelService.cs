@@ -345,7 +345,6 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportAttendance(IList<EmployeeAttendanceModel> attendanceList, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
-
             var templatePath = HttpContext.Current.Server.MapPath(_AttendanceFilePathExcelTemplate);
             using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
             {
@@ -355,22 +354,77 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "AttendanceReport");
 
-            var cellTemplate = sheet.GetRow(1).GetCell(1);
-
             //// render body
             var rowIndex = _RowStartBodyAttendance;
-            var index = 1;
             var rowCopy = _RowStartBodyAttendance;
+            var index = 1;
             var height = sheet.GetRow(_RowStartBodyAttendance).Height;
 
             foreach (var item in attendanceList)
             {
-                rowCopy = RenderBodyAttendance(templateSheet, sheet, rowIndex, rowCopy, height, item, index);
+                var requests = string.Empty;
+                rowCopy = _RowStartBodyAttendance + (index % 2);
+                if (item.LateIn > 30 || item.EarlyOut > 30)
+                {
+                    rowCopy = _RowStartBodyAttendance + 2;
+                }
+                else
+                {
+                    if (item.IsWeekend)
+                    {
+                        rowCopy = 6 + (index % 2);
+                    }
+                    else
+                    {
+                        rowCopy = _RowStartBodyAttendance + (index % 2);
+                    }
+                }
+                
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
+
+                row.GetCell(0).SetCellValue(index);
+                row.GetCell(1).SetCellValue(item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy"));
+                row.GetCell(2).SetCellValue(item.Code);
+                row.GetCell(3).SetCellValue(item.NickName);
+                row.GetCell(4).SetCellValue(item.FullName);
+                row.GetCell(5).SetCellValue(item.TeamCode);
+                row.GetCell(6).SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ?
+                    string.Empty : (item.ShiftCode + " (" + item.ExpectedInTime + "-" + item.ExpectedOutTime + ")"));
+                row.GetCell(7).SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToString("HH:mm") : string.Empty);
+                row.GetCell(8).SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToString("HH:mm") : string.Empty);
+                row.GetCell(9).SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
+                row.GetCell(10).SetCellValue(Utilities.MinuteToTime(item.LateIn));
+                row.GetCell(11).SetCellValue(Utilities.MinuteToTime(item.EarlyOut));
+                row.GetCell(14).SetCellValue(item.Notes);
+
+                if (item.RequestList.Count > 0)
+                {
+                    row.Height = (short)(height * item.RequestList.Count);
+
+                    foreach (var request in item.RequestList)
+                    {
+                        requests += "- " + request.RequestType.Name + ": " + this.GetRequestDetail(request)
+                            + (string.IsNullOrEmpty(request.Remark) ? string.Empty : " --> " + request.Remark) + "\r\n";
+                    }
+
+                    requests = requests.Substring(0, requests.Length - 2);
+                    row.GetCell(12).SetCellValue(requests);
+                }
+                else
+                {
+                    row.Height = height;
+                }
+
+                if (item.IsOvertime)
+                {
+                    row.GetCell(13).SetCellValue(item.FormattedOvertimeStatus + " (" + item.OvertimeHours.ToString() + ")");
+                }
 
                 rowIndex++;
                 index++;
             }
-            //// end render body
 
             //// remove sheet & row template
             hssfworkbook.RemoveSheetAt(0);
@@ -1619,96 +1673,6 @@ namespace Fanex.NexHR.Services
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
             cellStatus.SetCellValue(item.Status.Name);
-        }
-
-        /// <summary>
-        /// Render Body Attendance.
-        /// </summary>
-        /// <param name="templateSheet">Template Sheet.</param>
-        /// <param name="sheet">Destination sheet.</param>
-        /// <param name="rowIndex">Row Index to render data.</param>
-        /// <param name="rowCopy">Row Index to copy.</param>
-        /// <param name="height">Height of row.</param>
-        /// <param name="item">Employee Attendance Model.</param>
-        /// <param name="index">No of row.</param>
-        /// <returns>Index of Row Copy.</returns>
-        private int RenderBodyAttendance(ISheet templateSheet, ISheet sheet, int rowIndex, int rowCopy, short height, EmployeeAttendanceModel item, int index)
-        {
-            var requests = string.Empty;
-
-            if (item.LateIn > 30 || item.EarlyOut > 30)
-            {
-                rowCopy = _RowStartBodyAttendance + 2;
-            }
-            else
-            {
-                if (item.IsWeekend)
-                {
-                    rowCopy = 6 + (index % 2);
-                }
-                else
-                {
-                    rowCopy = _RowStartBodyAttendance + (index % 2);
-                }
-            }
-
-            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-            var row = sheet.GetRow(rowIndex);
-
-            var cellNo = row.GetCell(0);
-            var cellDate = row.GetCell(1);
-            var cellCode = row.GetCell(2);
-            var cellNick = row.GetCell(3);
-            var cellName = row.GetCell(4);
-            var cellTeam = row.GetCell(5);
-            var cellShift = row.GetCell(6);
-            var cellCheckIn = row.GetCell(7);
-            var cellCheckOut = row.GetCell(8);
-            var cellTotalHours = row.GetCell(9);
-            var cellLateIn = row.GetCell(10);
-            var cellEarlyOut = row.GetCell(11);
-            var cellRequest = row.GetCell(12);
-            var cellOvertime = row.GetCell(13);
-            var cellNotes = row.GetCell(14);
-
-            cellNo.SetCellValue(index);
-            cellDate.SetCellValue(item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy"));
-            cellCode.SetCellValue(item.Code);
-            cellNick.SetCellValue(item.NickName);
-            cellName.SetCellValue(item.FullName);
-            cellTeam.SetCellValue(item.TeamCode);
-            cellShift.SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ? string.Empty : (item.ShiftCode + " (" + item.ExpectedInTime + "-" + item.ExpectedOutTime + ")"));
-            cellCheckIn.SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToString("HH:mm") : string.Empty);
-            cellCheckOut.SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToString("HH:mm") : string.Empty);
-            cellTotalHours.SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
-            cellLateIn.SetCellValue(Utilities.MinuteToTime(item.LateIn));
-            cellEarlyOut.SetCellValue(Utilities.MinuteToTime(item.EarlyOut));
-            cellNotes.SetCellValue(item.Notes);
-
-            if (item.RequestList.Count > 0)
-            {
-                row.Height = (short)(height * item.RequestList.Count);
-
-                foreach (var request in item.RequestList)
-                {
-                    requests += "- " + request.RequestType.Name + ": " + this.GetRequestDetail(request)
-                        + (string.IsNullOrEmpty(request.Remark) ? string.Empty : " --> " + request.Remark) + "\r\n";
-                }
-
-                requests = requests.Substring(0, requests.Length - 2);
-                cellRequest.SetCellValue(requests);
-            }
-            else
-            {
-                row.Height = height;
-            }
-
-            if (item.IsOvertime)
-            {
-                cellOvertime.SetCellValue(item.FormattedOvertimeStatus + " (" + item.OvertimeHours.ToString() + ")");
-            }
-
-            return rowCopy;
         }
 
         /// <summary>

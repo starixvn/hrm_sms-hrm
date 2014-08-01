@@ -89,17 +89,17 @@
             @if (Model.IsMember)
             {
                 <span class="isMember">@Model.TeamName</span>
-                @Html.HiddenFor(model => model.CurrentUserId)
-            }
-            else
-            {
+				@Html.Hidden("EmployeeGroupId", Model.GroupIds)
+			}
+			else
+			{
                 <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
                     @foreach (Team item in ViewBag.Groups)
-                    { 
+					{ 
                         <option value="@item.Id">@item.Name</option>
-                    }
+					}
                 </select>
-            }
+			}
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.EmpId)
@@ -109,6 +109,7 @@
             @Html.HiddenFor(model => model.EmpId)
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
+		 @Html.HiddenFor(model => model.IsMember)
         
         <div class="clear">
         </div>
@@ -124,7 +125,7 @@
         </div>
         <div class="grid_4">
             @{
-            var category = new List<SelectListItem>
+			var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"}, 
@@ -150,7 +151,7 @@
         </div>
         <div class="clear">
         </div>
-    }
+	}
 </div>
 <div class="clear">
 </div>

@@ -12,11 +12,13 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.ViewModels;
@@ -29,24 +31,9 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria);
         
-        IList<RequestsMonitoring> GetRequestMonitoring(
-            DateTime fromDate,
-            DateTime toDate,
-            int maxRequest,
-            int role,
-            int? employeeId,
-            int loginUserId,
-            string groupIds,
-            byte? isLocal = null);
+        IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria);
 
-        IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
-            DateTime fromTime,
-            DateTime toTime,
-            short type,
-            int? empId = null,
-            string groupIds = null,
-            int? excludeDeletedUsers = 1,
-            byte? isLocal = null);
+        IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria);
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(
             int year,

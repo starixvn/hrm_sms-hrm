@@ -75,6 +75,7 @@
     <Compile Include="MySpace\GetEmployeeMissingRequestDateCriteria.cs" />
     <Compile Include="MySpace\GetMySpaceCriteria.cs" />
     <Compile Include="MySpace\GetOffDateAndHolidayDateCriteria.cs" />
+    <Compile Include="Report\Attendance\GetEmployeeAttendanceCriteria.cs" />
     <Compile Include="Report\ExtensionNumber\DeleteExtensionNumberMemberCriteria.cs" />
     <Compile Include="Report\ExtensionNumber\DeleteExternalGroupCriteria.cs" />
     <Compile Include="Report\ExtensionNumber\GetAllExtensionNumberCriteria.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
     <Compile Include="Request\GetRequestByIdCriteria.cs" />
     <Compile Include="Request\GetRequestCriteria.cs" />
+    <Compile Include="Request\GetRequestMonitoringCriteria.cs" />
     <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
@@ -138,6 +140,12 @@
     <Compile Include="Request\Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Request\Overtime\UpdateOvertimeRequestCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
+
     <Compile Include="LeaveType\GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="LeaveType\GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
     <Compile Include="LeaveType\GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />

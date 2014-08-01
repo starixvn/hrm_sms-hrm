@@ -29,31 +29,18 @@ namespace Fanex.NexHR.Repositories
     public class ReportRepository : IReportRepository
     {
         /// <summary>
-        /// Method get Employee Attendance report.
+        /// Get Employee Attendance Report.
         /// </summary>
-        /// <param name="fromTime">Get from time.</param>
-        /// <param name="toTime">Get to time.</param>
-        /// <param name="type">Type to get.</param>
-        /// <param name="empId">Employee's id.</param>
-        /// <param name="groupIds">Group's id.</param>
-        /// <param name="excludeDeletedUsers">Exclude deleted users.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>List of EmployeeAttendanceModel.</returns>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Of EmployeeAttendanceModel.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
-            DateTime fromTime,
-            DateTime toTime,
-            short type,
-            int? empId = null,
-            string groupIds = null,
-            int? excludeDeletedUsers = 1,
-            byte? isLocal = null)
+        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
         {
             var listAttendance = new List<EmployeeAttendanceModel>();
             EmployeeAttendanceModel currentAttendance = new EmployeeAttendanceModel();
             EmployeeAttendanceRequest request = new EmployeeAttendanceRequest();
 
-            using (ObjectDb objectDb = new ObjectDb("EmployeeAttendance_GetByType"))
+            using (ObjectDb objectDb = new ObjectDb(criteria.GetSettingKey()))
             {
                 objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
                     (attendance, t) =>
@@ -93,69 +80,32 @@ namespace Fanex.NexHR.Repositories
                         return currentAttendance;
                     },
                     "RequestType",
-                    new { fromTime, toTime, type, empId, groupIds, excludeUserDelete = excludeDeletedUsers, isLocal });
+                    criteria.GetSpParams());
             }
 
             return listAttendance;
         }
 
         /// <summary>
-        ///  Method Get Request Monitoring.
+        /// Get Request Monitoring.
         /// </summary>
-        /// <param name="fromDate">Query from date.</param>
-        /// <param name="toDate">Query to date.</param>
-        /// <param name="maxRequest">Max request.</param>
-        /// <param name="role">Current user role.</param>
-        /// <param name="employeeId">Employee id.</param>
-        /// <param name="loginUserId">Current user id.</param>
-        /// <param name="groupIds">Filter groups.</param>
-        /// <param name="isLocal">Expat or local.</param>
-        /// <returns>List of Request Monitoring Entity.</returns>
-        public IList<RequestsMonitoring> GetRequestMonitoring(
-            DateTime fromDate,
-            DateTime toDate,
-            int maxRequest,
-            int role,
-            int? employeeId,
-            int loginUserId,
-            string groupIds,
-            byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Request Monitoring.</returns>
+        public IList<RequestsMonitoring> GetRequestMonitoring(ICriteria criteria)
         {
-            using (var db = new ObjectDb("RequestMonitoring"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entityList = new List<RequestsMonitoring>();
-
-                using (IDataReader reader = db.ExecuteReader(new { fromDate, toDate, maxRequest, role, employeeId, loginUserId, groupIds, isLocal }))
-                {
-                    if (reader != null)
-                    {
-                        while (reader.Read())
+                var entity = db.Query<RequestsMonitoring, Employee, Team, RequestsMonitoring>(
+                        (r, e, t) =>
                         {
-                            var entity = new RequestsMonitoring
-                            {
-                                Requester = new Employee
-                                {
-                                    FullName = reader.ToString("FullName"),
-                                    NickName = reader.ToString("NickName"),
-                                    Team = new Team { Name = reader.ToString("Team"), Id = reader.ToInt("TeamId") },
-                                    Id = reader.ToInt("EmpID")
-                                },
-                                TotalCheckInOut = reader.ToInt("TotalCheckInOutRequest"),
-                                TotalLateIn = reader.ToInt("TotalLateInRequest"),
-                                TotalEarlyOut = reader.ToInt("TotalEarlyOutRequest"),
-                                TotalChangeShift = reader.ToInt("TotalChangeShiftRequest"),
-                                TotalLeave = reader.ToInt("TotalLeaveRequest"),
-                                TotalUnpaidLeave = reader.ToInt("TotalUnpaidLeaveRequest"),
-                                TotalOvertime = reader.ToInt("TotalOvertimeRequest"),
-                                KeepInViewRequest = reader.ToInt("KeepInViewRequest")
-                            };
+                            e.Team = t;
+                            r.Requester = e;
+                            return r;
+                        },
+                        splitOn: "Id,GroupId",
+                        parameterValues: criteria.GetSpParams());
 
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-
-                return entityList;
+                return entity.ToList();
             }
         }
 

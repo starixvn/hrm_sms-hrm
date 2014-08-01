@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
-    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -51,28 +51,17 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         /// <returns>EmployeeAttendanceModel List.</returns>
         public IList<EmployeeAttendanceModel> GetEmployeeAttendances([FromUri]EmployeeAttendanceViewModel model)
         {
-            if (model.CurrentUserId > 0)
+            var criteria = new GetEmployeeAttendanceCriteria()
             {
-                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
-                var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-                if (employee.IsMember())
-                {
-                    model.GroupIds = employee.Team.Id.ToString();
-                }
-            }
-            else if (model.GroupIds == null)
-            {
-                model.GroupIds = string.Empty;
-            }
-
-            var employeeAttendance = _reportService.GetEmployeeAttendanceReport(
-                model.FromDate, 
-                model.ToDate, 
-                model.AttendanceType, 
-                model.EmpId, 
-                model.GroupIds, 
-                model.ExcludeDeletedUsers ? 1 : 0,
-                model.IsLocal);
+                Fromtime = model.FromDate,
+                Totime = model.ToDate,
+                Type = model.AttendanceType,
+                EmpId = model.EmpId,
+                Groupids = model.GroupIds,
+                ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
+                IsLocal = model.IsLocal
+            };
+            var employeeAttendance = _reportService.GetEmployeeAttendanceReport(criteria);
 
             return employeeAttendance;
         }
@@ -98,7 +87,17 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
             }
 
-            var timesheets = _reportService.GetEmployeeAttendanceReport(fromDate, toDate, model.TimeSheetType, model.EmpId);
+            var criteria = new GetEmployeeAttendanceCriteria()
+            {
+                Fromtime = fromDate,
+                Totime = toDate,
+                Type = model.TimeSheetType,
+                EmpId = model.EmpId,
+                Groupids = string.Empty,
+                ExcludeUserDelete = 1,
+                IsLocal = null
+            };
+            var timesheets = _reportService.GetEmployeeAttendanceReport(criteria);
             return timesheets;
         }
 

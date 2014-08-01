@@ -13,11 +13,13 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -79,49 +81,31 @@ namespace Fanex.NexHR.Services
             return totalWorkingHours;
         }
 
-        public IList<RequestsMonitoring> GetRequestMonitoring(
-            DateTime fromDate,
-            DateTime toDate,
-            int maxRequest,
-            int role,
-            int? employeeId,
-            int loginUserId,
-            string groupIds,
-            byte? isLocal = null)
+        public IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria)
         {
-            var requestMonitoring = _reportRepository.GetRequestMonitoring(fromDate, toDate, maxRequest, role, employeeId, loginUserId, groupIds, isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<RequestsMonitoring> requestMonitoring = null;
+            if (criteria.IsValid())
+            {
+                requestMonitoring = _reportRepository.GetRequestMonitoring(criteria);
+            }
 
             return requestMonitoring;
         }
 
         /// <summary>
-        /// Function to get employeeAttendance Report.
+        /// Get Employee Attendance Report.
         /// </summary>
-        /// <param name="fromTime">From time to query DB.</param>
-        /// <param name="toTime">To time to query DB..</param>
-        /// <param name="type">Type of request.</param>
-        /// <param name="empId">Employee Id.</param>
-        /// <param name="groupIds">Group list.</param>
-        /// <param name="excludeDeletedUsers">Is exclude user deleted.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>EmployeeAttendanceModel List object.</returns>
-        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(
-            DateTime fromTime,
-            DateTime toTime,
-            short type,
-            int? empId = null,
-            string groupIds = null,
-            int? excludeDeletedUsers = 1,
-            byte? isLocal = null)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List of EmployeeAttendanceModel.</returns>
+        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
-            var employeeAttendance = _reportRepository.GetEmployeeAttendanceReport(
-                fromTime, 
-                toTime,
-                type,
-                empId,
-                groupIds,
-                excludeDeletedUsers,
-                isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<EmployeeAttendanceModel> employeeAttendance = null;
+            if (criteria.IsValid())
+            {
+                employeeAttendance = _reportRepository.GetEmployeeAttendanceReport(criteria);
+            }
 
             return employeeAttendance;
         }

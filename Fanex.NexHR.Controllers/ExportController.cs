@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Overtime;
@@ -110,28 +111,17 @@ namespace Fanex.NexHR.Controllers
         {
             string fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            if (model.CurrentUserId > 0)
+            var criteria = new GetEmployeeAttendanceCriteria()
             {
-                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
-                var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-                if (employee.IsMember())
-                {
-                    model.GroupIds = employee.Team.Id.ToString();
-                }
-            }
-            else if (model.GroupIds == null)
-            {
-                model.GroupIds = string.Empty;
-            }
-
-            var employeeAttendance = _reportService.GetEmployeeAttendanceReport(
-                    model.FromDate,
-                    model.ToDate,
-                    model.AttendanceType,
-                    model.EmpId,
-                    model.GroupIds,
-                    model.ExcludeDeletedUsers ? 1 : 0,
-                    model.IsLocal);
+                Fromtime = model.FromDate,
+                Totime = model.ToDate,
+                Type = model.AttendanceType,
+                EmpId = model.EmpId,
+                Groupids = model.GroupIds,
+                ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
+                IsLocal = model.IsLocal
+            };
+            var employeeAttendance = _reportService.GetEmployeeAttendanceReport(criteria);
 
             var hssfworkbook = _exportService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
 

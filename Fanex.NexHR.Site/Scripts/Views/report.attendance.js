@@ -57,8 +57,18 @@ $(document).ready(function () {
         view();
     });
     $("#btnExcel").click(function () {
-        var groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
-        var currentUserId = $("#CurrentUserId").val();
+		var groups;
+		var isMember = $("#IsMember").val();
+		if ($('#Employee').val() == ''){
+			$('#EmpId').val('');
+		}
+		if (isMember == "True") {
+    		groups = $("#EmployeeGroupId").val()
+		}
+		else {
+    		groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
+		}
+		var excludeUser = $('#ExcludeDeletedUsers').attr('checked') ? true : false;
         var isLocal = $("#category").val();
         var url = _global.root + "export/Attendance?"
             + "FromDate=" + $("#FromDate").val()
@@ -68,9 +78,9 @@ $(document).ready(function () {
             + "&GroupIds=" + groups
             + "&AttendanceType=" + $("#AttendanceType").val()
             + "&DateOption=" + $("#Date").val()
-            + "&ExcludeDeletedUsers=" + $("#ExcludeUserDelete").val()
-            + "&CurrentUserId=" + currentUserId
-            + "&IsLocal=" + isLocal;
+            + "&ExcludeDeletedUsers=" + excludeUser
+            + "&IsLocal=" + isLocal
+			+ "&IsMember="+ isMember;
         location.href = url;
     });
     view();
@@ -79,15 +89,24 @@ $(document).ready(function () {
 function view() {
     var $form = $('form');
     if (!$form.valid()) return;
-
     actingButton('#view', true);
 
     //if no user is selected, clear the empId also
-    if ($('#Employee').val() == '') $('#EmpId').val('');
+    if ($('#Employee').val() == ''){
+		 $('#EmpId').val('');
+	}
+
     $('#nodata').remove();
 
-    var groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
-    var currentUserId = $("#CurrentUserId").val();
+    var groups;
+    var isMember = $("#IsMember").val();
+
+    if (isMember == "True") {
+    	groups = $("#EmployeeGroupId").val()
+    }
+    else {
+    	groups = $("#GroupId").val() != null ? $("#GroupId").val().join() : "";
+	}
     var isLocal = $("#category").val();
 
     $.getJSON("/api/report/getemployeeattendances",
@@ -99,13 +118,9 @@ function view() {
         "GroupIds": groups,
         "AttendanceType": $("#AttendanceType").val(),
         "DateOption": $("#Date").val(),
-        "ExcludeDeletedUsers": $("#ExcludeUserDelete").val(),
-        "CurrentUserId": currentUserId,
-        "IsLocal": isLocal
-    },
-
-    //$('form').serialize(), 
-    function (response) {
+        "ExcludeDeletedUsers": $('#ExcludeDeletedUsers').attr('checked') ? true : false,
+        "IsLocal": isLocal,
+    },function (response) {
         if (response.length > 0) {
             rowIndex = 1;
             $('#data tbody').children().remove();

@@ -23,6 +23,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Report.Supervisor;
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -69,31 +70,31 @@ namespace Fanex.NexHR.Controllers
         }
 
         /// <summary>
-        /// ActionResult Attendance.
+        /// Action Result Attendance.
         /// </summary>
-        /// <param name="model">EmployeeAttendance ViewModel.</param>
-        /// <returns>View EmployeeAttendance.</returns>
-        public ActionResult Attendance(EmployeeAttendanceViewModel model)
+        /// <returns>Render view Attendance.</returns>
+        public ActionResult Attendance()
         {
+            var currentUserId = this.CurrentUser.Id;
             var getAllGroupCriteria = new GetAllGroupCriteria();
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = currentUserId };
+
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.CurrentUserId };
-            var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-
-            if (model.FromDate == DateTime.MinValue)
+            var model = new EmployeeAttendanceViewModel
             {
-                model = new EmployeeAttendanceViewModel
-                {
-                    FromDate = DateTime.Now,
-                    ToDate = DateTime.Now,
-                    GroupIds = string.Empty,
-                    DateOption = 0,
-                    ExcludeDeletedUsers = true,
-                    IsMember = employee.IsMember(),
-                    TeamName = employee.Team.Name,
-                    CurrentUserId = this.CurrentUser.Id
-                };
+                FromDate = DateTime.Now,
+                ToDate = DateTime.Now,
+                GroupIds = string.Empty,
+                DateOption = 0,
+                ExcludeDeletedUsers = true,
+            };
+
+            Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            if (employee != null)
+            {
+                model.TeamName = employee.Team.Name;
+                model.GroupIds = employee.Team.Id.ToString();
+                model.IsMember = employee.IsMember();
             }
 
             return View(model);
@@ -180,15 +181,18 @@ namespace Fanex.NexHR.Controllers
 
             if (authorize)
             {
-                entityList = _reportService.GetRequestMonitoring(
-                    model.FromDate,
-                    model.ToDate,
-                    model.MaxRequest,
-                    (int)RoleSystem.HR,
-                    null,
-                    this.CurrentUser.Id,
-                    string.Empty,
-                    null).ToList();
+                var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
+                {
+                    FromDate = model.FromDate,
+                    ToDate = model.ToDate,
+                    MaxRequest = model.MaxRequest,
+                    Role = ((int)RoleSystem.HR).ToString(),
+                    EmployeeId = null,
+                    LoginUserId = this.CurrentUser.Id,
+                    GroupIds = string.Empty,
+                    IsLocal = null
+                };
+                entityList = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
                 ViewBag.EntityList = entityList;
             }
 
@@ -218,15 +222,18 @@ namespace Fanex.NexHR.Controllers
             byte? isLocal,
             bool isExcel)
         {
-            List<RequestsMonitoring> requests = _reportService.GetRequestMonitoring(
-                fromDate,
-                toDate,
-                maxRequest,
-                (int)RoleSystem.HR,
-                empId,
-                currentUserId,
-                group,
-                isLocal).ToList();
+            var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                MaxRequest = maxRequest,
+                Role = ((int)RoleSystem.HR).ToString(),
+                EmployeeId = empId,
+                LoginUserId = currentUserId,
+                GroupIds = group,
+                IsLocal = isLocal
+            };
+            List<RequestsMonitoring> requests = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
             ViewBag.MaxRequest = maxRequest;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
@@ -261,21 +268,6 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "Verifier,Approver")]
         public ActionResult LeaderRequestMonitoring(RequestsMonitoringViewModel model)
         {
-            int currentUserrole = 0;
-            var listRole = CurrentUser.RoleList;
-            if (listRole != null)
-            {
-                if (listRole.Any(x => x == (int)RoleSystem.Approver))
-                {
-                    currentUserrole = (int)RoleSystem.Approver;
-                }
-
-                if (listRole.Any(x => x == (int)RoleSystem.Verifier))
-                {
-                    currentUserrole = (int)RoleSystem.Verifier;
-                }
-            }
-
             if (model == null)
             {
                 var year = DateTime.Now.Year;
@@ -295,17 +287,20 @@ namespace Fanex.NexHR.Controllers
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-
             ViewBag.EntityList = new List<RequestsMonitoring>();
-            ViewBag.EntityList = _reportService.GetRequestMonitoring(
-                model.FromDate,
-                model.ToDate,
-                model.MaxRequest,
-                currentUserrole,
-                null,
-                this.CurrentUser.Id,
-                string.Empty,
-                null);
+
+            var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                MaxRequest = model.MaxRequest,
+                Role = GetUserRoles(),
+                EmployeeId = null,
+                LoginUserId = this.CurrentUser.Id,
+                GroupIds = string.Empty,
+                IsLocal = null
+            };
+            ViewBag.EntityList = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria);
 
             return View("RequestMonitoring", model);
         }
@@ -940,6 +935,38 @@ namespace Fanex.NexHR.Controllers
             MemoryStream output = new MemoryStream();
             hssfworkbook.Write(output);
             return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+        }
+
+        /// <summary>
+        /// Check Current User's roles.
+        /// </summary>
+        /// <returns>Roles in String format.</returns>
+        private string GetUserRoles()
+        {
+            string currentUserrole = string.Empty;
+            var listRole = CurrentUser.RoleList;
+            if (listRole != null)
+            {
+                if (listRole.Any(x => x == (int)RoleSystem.Approver))
+                {
+                    currentUserrole = ((int)RoleSystem.Approver).ToString();
+                }
+
+                if (listRole.Any(x => x == (int)RoleSystem.Verifier))
+                {
+                    int roleId = (int)RoleSystem.Verifier;
+                    if (currentUserrole == string.Empty)
+                    {
+                        currentUserrole = roleId.ToString();
+                    }
+                    else
+                    {
+                        currentUserrole += string.Concat(',', (int)RoleSystem.Verifier);
+                    }
+                }
+            }
+
+            return currentUserrole;
         }
     }
 }
