@@ -41,21 +41,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
-        int ProcessOvertime(
-            string command,
-            long requestId,
-            int roleId,
-            int processedBy,
-            DateTime processedDate,
-            out string message);
-
-        int ProcessOvertime(
-            string command,
-            string requestIds,
-            int processedBy,
-            DateTime processedDate,
-            out string message);
-
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
     }
 }

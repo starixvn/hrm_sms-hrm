@@ -21,6 +21,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -234,35 +235,38 @@ namespace Fanex.NexHR.Services
         /// Approve, disapprove or reject a request,
         /// notification email will be sent also.
         /// </summary>
-        /// <param name="command">Action on this request.</param>
-        /// <param name="requestId">Request id.</param>
-        /// <param name="roleId">The role identifier.</param>
-        /// <param name="processBy">Process By.</param>
-        /// <param name="errorMessage">Error message.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Return boolean.</returns>
-        public bool ProcessOvertime(string command, long requestId, int roleId, int processBy, out string errorMessage)
+        public CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria)
         {
-            string message;
-            errorMessage = string.Empty;
-            this._requestRepository.ProcessOvertime(command, requestId, roleId, processBy, DateTime.Now, out message);
-            return true;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Update(criteria);
+            }
+
+            return commandResult;
         }
 
         /// <summary>
         /// Approve, disapprove or reject a request,
         /// notification email will be sent also.
         /// </summary>
-        /// <param name="command">Action on this request.</param>
-        /// <param name="requestIds">Request ids.</param>
-        /// <param name="processBy">Process By.</param>
-        /// <param name="errorMessage">Error message.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>Return boolean.</returns>
-        public bool ProcessOvertime(string command, string requestIds, int processBy, out string errorMessage)
+        public CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria)
         {
-            string message;
-            errorMessage = string.Empty;
-            this._requestRepository.ProcessOvertime(command, requestIds, processBy, DateTime.Now, out message);
-            return true;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria.IsValid())
+            {
+                commandResult = Repository.Update(criteria);
+            }
+
+            return commandResult;
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -107,22 +108,49 @@ namespace Fanex.NexHR.Controllers
             return result ? Json(true) : Json(errorMessage);
         }
 
+        /// <summary>
+        /// Process single overtime request.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="requestId">The request Id.</param>
+        /// <param name="roleId">The role Id.</param>
+        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         public JsonResult ProcessSingleOvertime(string command, long requestId, int roleId)
         {
-            string errorMessage;
-            var result = _requestService.ProcessOvertime(command, requestId, roleId, this.CurrentUser.Id, out errorMessage);
-            return result ? Json(true) : Json(errorMessage);
+            var processOvertimeCriteria = new ProcessSingleOvertimeCriteria
+            {
+                CommandProcess = command,
+                RequestID = requestId,
+                RoleID = roleId,
+                ProcessedBy = this.CurrentUser.Id,
+                ProcessedDate = DateTime.Now
+            };
+            CommandResult commandResult = _requestService.ProcessOvertime(processOvertimeCriteria);
+            return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
+        /// <summary>
+        /// Process multiple overtime request.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="requestIds">The list request Id.</param>
+        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         public JsonResult ProcessMultipleOvertime(string command, string requestIds)
         {
-            string errorMessage;
-            var result = _requestService.ProcessOvertime(command, requestIds, this.CurrentUser.Id, out errorMessage);
-            return result ? Json(true) : Json(errorMessage);
+            var criteria = new ProcessMultipleOvertimeCriteria
+            {
+                CommandProcess = command,
+                ListRequestID = requestIds,
+                ProcessedBy = this.CurrentUser.Id,
+                ProcessedDate = DateTime.Now
+            };
+            criteria.RoleID = criteria.GetRoleIdForProcessOvertime(command);
+            CommandResult commandResult = _requestService.ProcessOvertime(criteria);
+            return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
         [Authorize(Roles = "HR")]

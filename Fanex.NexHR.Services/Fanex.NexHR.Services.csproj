@@ -173,7 +173,9 @@
     <Compile Include="HolidayService.cs" />
     <Compile Include="Interface\IHolidayService.cs" />
     <Compile Include="Interface\IEmployeeService.cs" />
-    <Compile Include="Interface\IRequestService.cs" />
+    <Compile Include="Interface\IRequestService.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Interface\IShiftService.cs" />
     <Compile Include="Interface\ILeaveTypeService.cs" />
     <Compile Include="LeaveTypeService.cs" />

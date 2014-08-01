@@ -8,10 +8,9 @@
 // </history>
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
@@ -29,9 +28,9 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
 
-        bool ProcessOvertime(string command, long requestId, int roleId, int processBy, out string errorMessage);
+        CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria);
 
-        bool ProcessOvertime(string command, string requestIds, int processBy, out string errorMessage);
+        CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria);
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
     }
