@@ -64,10 +64,10 @@ namespace Fanex.NexHR.Services
                 commandResult = Repository.Insert(criteria);
                 if (commandResult.Code == 0)
                 {
-                    //SendMailForChangeShiftSuccessfully(model, requestId, false);
-                    //var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    //var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
-                    //taskSendMail.Start();
+                    ////SendMailForChangeShiftSuccessfully(model, requestId, false);
+                    ////var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    ////var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
+                    ////taskSendMail.Start();
                 }
             }
             else
@@ -96,10 +96,10 @@ namespace Fanex.NexHR.Services
                 commandResult = Repository.Update(criteria);
                 if (commandResult.Code == 0)
                 {
-                    //SendMailForChangeShiftSuccessfully(model, requestId, false);
-                    //var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    //var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
-                    //taskSendMail.Start();
+                    ////SendMailForChangeShiftSuccessfully(model, requestId, false);
+                    ////var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+                    ////var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
+                    ////taskSendMail.Start();
                 }
             }
             else

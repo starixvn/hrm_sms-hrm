@@ -185,16 +185,21 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Detail(int Id)
+        /// <summary>
+        /// Action to view detail change shift request.
+        /// </summary>
+        /// <param name="id">Request Id.</param>
+        /// <returns>Action Result.</returns>
+        public ActionResult Detail(int id)
         {
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
-                RequestId = Id
+                RequestId = id
             };
             var request = _RequestService.GetRequestById(getRequestByIdcriteria);
             var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
             {
-                RequestId = Id
+                RequestId = id
             };
             var changeShiftDetail = _ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };

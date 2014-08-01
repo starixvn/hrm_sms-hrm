@@ -15,6 +15,9 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Request;
 
+    /// <summary>
+    /// InsertChangeShiftRequest Criteria.
+    /// </summary>
     public class InsertChangeShiftRequestCriteria : CriteriaBase
     {
         private readonly string _changeShiftDetailTpl = "<Request OnDate='{0}' FromShift='{1}' ToShift='{2}' Remark='{3}'></Request>";
