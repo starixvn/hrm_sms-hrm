@@ -567,135 +567,138 @@ namespace Fanex.NexHR.Services
                 }
             }
 
-            //// render Overtime type Header.
-            var rowHeaderOvertimeType = sheet.GetRow(2);
-            var headerRowEntity = overtimes.FirstOrDefault();
-            var overtimeTypeIndex = 0;
-            for (int i = 1; i <= totalHeaderDateCell; i++)
+            if (overtimes != null && overtimes.Count() > 0)
             {
-                var data = headerRowEntity.OvertimeDailyReport[overtimeTypeIndex];
-                if (i % 2 == 0)
+                //// render Overtime type Header.
+                var rowHeaderOvertimeType = sheet.GetRow(2);
+                var headerRowEntity = overtimes.FirstOrDefault();
+                var overtimeTypeIndex = 0;
+                for (int i = 1; i <= totalHeaderDateCell; i++)
                 {
-                    rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType2);
-                    overtimeTypeIndex++;
-                }
-
-                if (i % 2 == 1)
-                {
-                    rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType1);
-                }
-            }
-
-            //// render Body.
-            overtimes.RemoveAll(i => i == headerRowEntity);
-            var model = (from item in overtimes
-                         group item by item.Team into g
-                         select new OvertimeExcelReportViewModel() { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
-
-            var index = 1;
-            var rowIndex = _RowStartBodyOvertimeRecord;
-            var rowCopy = _RowStartBodyOvertimeRecord;
-            var rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
-            var rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
-            var rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
-            var numberCount = 1;
-            var numberStart = 0;
-            foreach (var overtime in model)
-            {
-                if (overtime.Name != null && overtime.ListOvertimeEntity.Count > 0)
-                {
-                    if (rowIndex <= _RowStartBodyOvertimeRecord)
+                    var data = headerRowEntity.OvertimeDailyReport[overtimeTypeIndex];
+                    if (i % 2 == 0)
                     {
-                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
+                        rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType2);
+                        overtimeTypeIndex++;
                     }
 
-                    var rowTeam = sheet.GetRow(rowIndex);
-                    rowTeam.Height = rowTeamHeight;
-                    var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(overtime.Name.ToUpper());
-                    sheet.MergeCells(rowIndex, 0, rowIndex, 2);
-                    rowIndex++;
-                    numberStart = rowIndex + 1;
-                    foreach (var item in overtime.ListOvertimeEntity)
+                    if (i % 2 == 1)
                     {
-                        rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
-                        sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                        var row = sheet.GetRow(rowIndex);
-                        row.Height = rowHeight;
-                        row.GetCell(0).SetCellValue(numberCount);
-                        row.GetCell(1).SetCellValue(item.EmpCode);
-                        row.GetCell(2).SetCellValue(item.Fullname);
-                        row.GetCell(3).SetCellValue(item.Nickname);
-                        row.GetCell(4).SetCellValue(item.Team);
-                        row.GetCell(5).SetCellValue(item.TotalWorkDays);
-                        row.GetCell(6).SetCellValue(item.UnpaidLeave);
+                        rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType1);
+                    }
+                }
 
-                        row.GetCell(7).SetCellValue(item.Normal);
-                        row.GetCell(8).SetCellValue(item.Offday);
-                        row.GetCell(9).SetCellValue(item.Holiday);
-                        row.GetCell(10).SetCellValue(item.Tax);
+                //// render Body.
+                overtimes.RemoveAll(i => i == headerRowEntity);
+                var model = (from item in overtimes
+                             group item by item.Team into g
+                             select new OvertimeExcelReportViewModel() { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
 
-                        var indexCount = 0;
-                        double defaultCellValue = 0.0;
-                        for (int i = 1; i <= totalHeaderDateCell; i++)
+                var index = 1;
+                var rowIndex = _RowStartBodyOvertimeRecord;
+                var rowCopy = _RowStartBodyOvertimeRecord;
+                var rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
+                var rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
+                var rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
+                var numberCount = 1;
+                var numberStart = 0;
+                foreach (var overtime in model)
+                {
+                    if (overtime.Name != null && overtime.ListOvertimeEntity.Count > 0)
+                    {
+                        if (rowIndex <= _RowStartBodyOvertimeRecord)
                         {
-                            var data = item.OvertimeDailyReport[indexCount];
-                            if (i % 2 == 0)
-                            {
-                                var cellValue = data.TotalOvertimeType2;
-                                if (string.IsNullOrEmpty(cellValue))
-                                {
-                                    row.GetCell(i + 10).SetCellValue(defaultCellValue);
-                                }
-                                else
-                                {
-                                    row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
-                                }
-
-                                indexCount++;
-                            }
-
-                            if (i % 2 == 1)
-                            {
-                                var cellValue = data.TotalOvertimeType1;
-                                if (string.IsNullOrEmpty(cellValue))
-                                {
-                                    row.GetCell(i + 10).SetCellValue(defaultCellValue);
-                                }
-                                else
-                                {
-                                    row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
-                                }
-                            }
+                            sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
                         }
 
+                        var rowTeam = sheet.GetRow(rowIndex);
+                        rowTeam.Height = rowTeamHeight;
+                        var cellTeam = rowTeam.GetCell(0);
+                        cellTeam.SetCellValue(overtime.Name.ToUpper());
+                        sheet.MergeCells(rowIndex, 0, rowIndex, 2);
                         rowIndex++;
-                        index++;
-                        numberCount++;
+                        numberStart = rowIndex + 1;
+                        foreach (var item in overtime.ListOvertimeEntity)
+                        {
+                            rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
+                            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                            var row = sheet.GetRow(rowIndex);
+                            row.Height = rowHeight;
+                            row.GetCell(0).SetCellValue(numberCount);
+                            row.GetCell(1).SetCellValue(item.EmpCode);
+                            row.GetCell(2).SetCellValue(item.Fullname);
+                            row.GetCell(3).SetCellValue(item.Nickname);
+                            row.GetCell(4).SetCellValue(item.Team);
+                            row.GetCell(5).SetCellValue(item.TotalWorkDays);
+                            row.GetCell(6).SetCellValue(item.UnpaidLeave);
+
+                            row.GetCell(7).SetCellValue(item.Normal);
+                            row.GetCell(8).SetCellValue(item.Offday);
+                            row.GetCell(9).SetCellValue(item.Holiday);
+                            row.GetCell(10).SetCellValue(item.Tax);
+
+                            var indexCount = 0;
+                            double defaultCellValue = 0.0;
+                            for (int i = 1; i <= totalHeaderDateCell; i++)
+                            {
+                                var data = item.OvertimeDailyReport[indexCount];
+                                if (i % 2 == 0)
+                                {
+                                    var cellValue = data.TotalOvertimeType2;
+                                    if (string.IsNullOrEmpty(cellValue))
+                                    {
+                                        row.GetCell(i + 10).SetCellValue(defaultCellValue);
+                                    }
+                                    else
+                                    {
+                                        row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
+                                    }
+
+                                    indexCount++;
+                                }
+
+                                if (i % 2 == 1)
+                                {
+                                    var cellValue = data.TotalOvertimeType1;
+                                    if (string.IsNullOrEmpty(cellValue))
+                                    {
+                                        row.GetCell(i + 10).SetCellValue(defaultCellValue);
+                                    }
+                                    else
+                                    {
+                                        row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
+                                    }
+                                }
+                            }
+
+                            rowIndex++;
+                            index++;
+                            numberCount++;
+                        }
+
+                        var cellCountMemberInTeam = rowTeam.GetCell(3);
+                        cellCountMemberInTeam.SetCellValue(numberCount - 1);
+
+                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
+                        var rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
+
+                        var cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
+                        var cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
+                        var cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
+                        var cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
+                        string formulaNormal = "SUM(H{0}:H{1})";
+                        string formulaOff = "SUM(I{0}:I{1})";
+                        string formulaPH = "SUM(J{0}:J{1})";
+                        string formulaTax = "SUM(K{0}:K{1})";
+
+                        string data1 = Convert.ToString(numberStart);
+                        string data2 = Convert.ToString(rowIndex);
+                        cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
+                        cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
+                        cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
+                        cellSumTax.CellFormula = string.Format(formulaTax, data1, data2);
+                        numberCount = 1;
                     }
-
-                    var cellCountMemberInTeam = rowTeam.GetCell(3);
-                    cellCountMemberInTeam.SetCellValue(numberCount - 1);
-
-                    sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
-                    var rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
-
-                    var cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
-                    var cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
-                    var cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
-                    var cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
-                    string formulaNormal = "SUM(H{0}:H{1})";
-                    string formulaOff = "SUM(I{0}:I{1})";
-                    string formulaPH = "SUM(J{0}:J{1})";
-                    string formulaTax = "SUM(K{0}:K{1})";
-
-                    string data1 = Convert.ToString(numberStart);
-                    string data2 = Convert.ToString(rowIndex);
-                    cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
-                    cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
-                    cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
-                    cellSumTax.CellFormula = string.Format(formulaTax, data1, data2);
-                    numberCount = 1;
                 }
             }
 

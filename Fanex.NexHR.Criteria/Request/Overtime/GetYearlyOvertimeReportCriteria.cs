@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Criteria.Request.Overtime
     {
         public int SupervisorID { get; set; }
 
-        [SpParam(SqlParamName = "Empid")]
+        [SpParam(SqlParamName = "empid")]
         public int? EmployeeId { get; set; }
 
         public string GroupIds { get; set; }
@@ -28,7 +28,7 @@ namespace Fanex.NexHR.Criteria.Request.Overtime
 
         public string Status { get; set; }
 
-        public int ExcludedEmpID { get; set; }
+        public int? ExcludedEmpID { get; set; }
 
         public string Role { get; set; }
 

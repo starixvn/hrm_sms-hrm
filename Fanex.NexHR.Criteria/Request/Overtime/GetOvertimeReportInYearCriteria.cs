@@ -16,7 +16,7 @@ namespace Fanex.NexHR.Criteria.Request.Overtime
     /// </summary>
     public class GetOvertimeReportInYearCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "Empid")]
+        [SpParam(SqlParamName = "EmpId")]
         public int EmployeeId { get; set; }
 
         public int Year { get; set; }

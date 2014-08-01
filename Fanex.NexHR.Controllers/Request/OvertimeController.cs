@@ -426,7 +426,17 @@ namespace Fanex.NexHR.Controllers.Request
                 month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             }
 
-            var monthlyOvertimes = _OvertimeService.GetMemberOvertimeMonthly(this.CurrentUser.Id, "2,3", month.Value, employeeId, teamIds, statusId);
+            var criteria = new GetMemberOvertimeMonthlyCriteria
+            {
+                SupervisorID = this.CurrentUser.Id,
+                Role = "2,3",
+                FromDate = month.Value,
+                ToDate = month.Value,
+                EmployeeId = employeeId,
+                GroupIds = teamIds,
+                Status = statusId
+            };
+            var monthlyOvertimes = _OvertimeService.GetMemberOvertimeMonthly(criteria);
 
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             return View(monthlyOvertimes);
@@ -449,7 +459,17 @@ namespace Fanex.NexHR.Controllers.Request
                 month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             }
 
-            var monthlyOvertimes = _OvertimeService.GetMemberOvertimeMonthly(this.CurrentUser.Id, "6", month.Value, employeeId, teamIds, statusId);
+            var criteria = new GetMemberOvertimeMonthlyCriteria
+            {
+                SupervisorID = this.CurrentUser.Id,
+                Role = "6",
+                FromDate = month.Value,
+                ToDate = month.Value,
+                EmployeeId = employeeId,
+                GroupIds = teamIds,
+                Status = statusId
+            };
+            var monthlyOvertimes = _OvertimeService.GetMemberOvertimeMonthly(criteria);
 
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             return View(monthlyOvertimes);
@@ -514,9 +534,28 @@ namespace Fanex.NexHR.Controllers.Request
             return View();
         }
 
+        /// <summary>
+        /// Get overtime excel report details.
+        /// </summary>
+        /// <param name="fromDate">The from date.</param>
+        /// <param name="toDate">The to date.</param>
+        /// <param name="empId">The employee Id.</param>
+        /// <param name="jobTitle">The job title.</param>
+        /// <param name="groups">The groups.</param>
+        /// <param name="isLocal">The is local.</param>
+        /// <returns>The Action Result.</returns>
         public ActionResult OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal)
         {
-            var entity = _OvertimeService.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups, isLocal);
+            var criteria = new GetOvertimeExcelReportDetailCriteria
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                EmployeeID = empId,
+                JobTitleId = jobTitle,
+                GroupIds = groups,
+                IsLocal = isLocal
+            };
+            var entity = _OvertimeService.OTExcelReportDetails(criteria);
             return PartialView(entity);
         }
 
@@ -524,7 +563,11 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "HR")]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
-            var isInvalid = _OvertimeService.CheckInvalidOvertimes(requestIds);
+            var criteria = new GetDetailOvertimeByRequestIdsCriteria
+            {
+                ListRequestID = requestIds
+            };
+            bool isInvalid = _OvertimeService.CheckInvalidOvertimes(criteria);
 
             return Json(isInvalid, JsonRequestBehavior.AllowGet);
         }

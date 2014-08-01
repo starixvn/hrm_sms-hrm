@@ -18,7 +18,6 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Overtime Request Repository.
@@ -247,40 +246,18 @@ namespace Fanex.NexHR.Repositories
             return entityList.ToList();
         }
 
-        public IList<OvertimeRequest> GetMemberOvertimeDaily(int supervisorId, string roles, int employeeId, DateTime month)
-        {
-            using (ObjectDb db = new ObjectDb("Overtime_GetOTMonthlyOfEmpByHR"))
-            {
-                return db.Query<OvertimeRequest>(new { SupervisorID = supervisorId, role = roles, EmpId = employeeId, Month = month }).ToList();
-            }
-        }
-
         /// <summary>
         /// Function to get member request of login user.
         /// </summary>
-        /// <param name="supervisorId">Login user id.</param>
-        /// <param name="roles">Role of user login.</param>
-        /// <param name="month">Month need query.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="teamIds">Input Team Ids.</param>
-        /// <param name="status">Status of request.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>List of Overtime request.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<RequestEntity> GetMemberOvertimeMonthly(int supervisorId, string roles, DateTime month, int? employeeId, string teamIds, string status)
+        public IList<RequestEntity> GetMemberOvertimeMonthly(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
-            using (ObjectDb db = new ObjectDb("OverTime_GetRequestMonthlyByHR"))
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(new
-                {
-                    SupervisorID = supervisorId,
-                    role = roles,
-                    EmpId = employeeId,
-                    fromdate = month,
-                    todate = month,
-                    groupIds = string.IsNullOrWhiteSpace(teamIds) ? null : teamIds,
-                    status = string.IsNullOrWhiteSpace(status) ? null : status
-                }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {
@@ -330,55 +307,29 @@ namespace Fanex.NexHR.Repositories
             return entityList.ToList();
         }
 
-        public IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null)
-        {
-            using (ObjectDb db = new ObjectDb("Report_OvertimeDetail"))
-            {
-                var entity = db.Query<OvertimeRequest>(new { fromDate, toDate, empId, JobTitleId = jobTitle, groupIds = groups, isLocal }).ToList();
-                return entity;
-            }
-        }
-
-        public IList<OvertimeRequest> GetOvertimeByRequestIds(string requestIds)
-        {
-            using (ObjectDb db = new ObjectDb("OverTime_GetDetailByListRequestID"))
-            {
-                return db.Query<OvertimeRequest>(new { ListRequestID = requestIds }).ToList();
-            }
-        }
-
         /// <summary>
         /// Query Overtime Record.
         /// </summary>
-        /// <param name="requestDate">Requested date.</param>
-        /// <param name="calendar">Normal or fiscal calendar.</param>
-        /// <param name="empId">Employee's id.</param>
-        /// <param name="errorCode">Error code.</param>
-        /// <param name="message">Error message.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>List OvertimeExcelReport entity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<OvertimeExcelReport> OvertimeRecord(DateTime requestDate, int calendar, int? empId, out int errorCode, out string message)
+        public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
         {
-            var keyName = calendar == 1 ? "ExportExcel_OvertimeFiscal" : "ExportExcel_OvertimeNormal";
-            using (var db = new ObjectDb(keyName))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 IList<OvertimeExcelReport> entityList = new List<OvertimeExcelReport>();
                 var ds = new DataSet();
-                db.AddInParameter("@Month", DbType.DateTime, requestDate);
-                db.AddInParameter("@EmpID", DbType.Int32, empId);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
+                ds = db.ExecuteDataSet(criteria.GetSpParams());
 
-                ds = db.ExecuteDataSet();
-                message = db.GetParameterValue("ErrMsg") as string;
-                errorCode = (int)db.GetParameterValue("ErrCode");
+                var dataTableOvertimeExcelReport = ds != null && ds.Tables != null && ds.Tables.Count > 0 
+                                                            ? ds.Tables[0] : null;
 
-                var dataTableOvertimeExcelReport = ds != null ? ds.Tables[0] : null;
-                var columnCount = (dataTableOvertimeExcelReport.Columns.Count - 12) / 2;
-                int rowIndex = 0;
-
-                if (dataTableOvertimeExcelReport.Rows.Count != 0)
+                if (dataTableOvertimeExcelReport != null && dataTableOvertimeExcelReport.Rows != null && 
+                                dataTableOvertimeExcelReport.Rows.Count != 0)
                 {
+                    var columnCount = (dataTableOvertimeExcelReport.Columns.Count - 12) / 2;
+                    int rowIndex = 0;
+
                     foreach (System.Data.DataRow row in dataTableOvertimeExcelReport.Rows)
                     {
                         var overtimeExcelReport = new OvertimeExcelReport();

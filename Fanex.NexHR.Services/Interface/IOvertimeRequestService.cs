@@ -9,9 +9,7 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
@@ -43,16 +41,14 @@ namespace Fanex.NexHR.Services.Interface
 
         RequestEntity GetOvertimeRequestById(GetOvertimeByRequestIdCriteria criteria);
 
-        IList<OvertimeRequest> GetMemberOvertimeDaily(int supervisorId, string roles, int employeeId, DateTime month);
-
-        IList<RequestEntity> GetMemberOvertimeMonthly(int supervisorId, string roles, DateTime month, int? employeeId, string teamIds, string status);
+        IList<RequestEntity> GetMemberOvertimeMonthly(GetMemberOvertimeMonthlyCriteria criteria);
 
         void SendMailToReminderClaimOvertime(string subject, string content);
 
-        bool CheckInvalidOvertimes(string requestIds);
+        bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria);
 
-        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null);
+        IList<OvertimeRequest> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 
-        IList<OvertimeExcelReport> OvertimeRecord(DateTime requestDate, int calendar, int? empId); 
+        IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria); 
     }
 }

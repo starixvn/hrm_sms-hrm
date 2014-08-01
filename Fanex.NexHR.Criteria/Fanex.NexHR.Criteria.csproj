@@ -137,12 +137,18 @@
     <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\ResetLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Overtime\GetDetailOvertimeByRequestIdsCriteria.cs" />
+    <Compile Include="Request\Overtime\GetMemberOvertimeMonthlyCriteria.cs" />
     <Compile Include="Request\Overtime\GetMonthlyOvertimeReportByNormalCalendarCriteria.cs" />
     <Compile Include="Request\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
     <Compile Include="Request\Overtime\GetOvertimeByRequestIdCriteria.cs" />
+    <Compile Include="Request\Overtime\GetOvertimeExcelReportDetailCriteria.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Request\Overtime\GetOvertimeMonthlyByEmployeeIdCriteria.cs" />
     <Compile Include="Request\Overtime\GetOvertimeMonthlyByHRCriteria.cs" />
     <Compile Include="Request\Overtime\GetOvertimeNormalDailyByHRCriteria.cs" />
+    <Compile Include="Request\Overtime\GetOvertimeRecordCriteria.cs" />
     <Compile Include="Request\Overtime\GetOvertimeReportInYearCriteria.cs" />
     <Compile Include="Request\Overtime\GetYearlyOvertimeReportByNormalCalendarCriteria.cs" />
     <Compile Include="Request\Overtime\GetYearlyOvertimeReportCriteria.cs" />

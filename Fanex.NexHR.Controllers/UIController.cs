@@ -116,7 +116,7 @@ namespace Fanex.NexHR.Controllers
 
                                 if (unreadMessages != null && unreadMessages.Count() > 0)
                                 {
-                                    navItem.Title += "(" + unreadMessages.Count() + ")";
+                                    navItem.Title += " (" + unreadMessages.Count() + ")";
                                 }
                             }
 

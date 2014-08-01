@@ -6,13 +6,10 @@
 
 namespace Fanex.NexHR.Repositories.Interfaces
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Interface Overtime Request Repository.
@@ -27,14 +24,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         RequestEntity GetOvertimeRequestById(ICriteria criteria);
 
-        IList<OvertimeRequest> GetMemberOvertimeDaily(int supervisorId, string roles, int employeeId, DateTime month);
+        IList<RequestEntity> GetMemberOvertimeMonthly(ICriteria criteria);
 
-        IList<RequestEntity> GetMemberOvertimeMonthly(int supervisorId, string roles, DateTime month, int? employeeId, string teamIds, string status);
-
-        IList<OvertimeRequest> OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal = null);
-
-        IList<OvertimeRequest> GetOvertimeByRequestIds(string requestIds);
-
-        IList<OvertimeExcelReport> OvertimeRecord(DateTime requestDate, int calendar, int? empId, out int errorCode, out string message); 
+        IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria);
     }
 }

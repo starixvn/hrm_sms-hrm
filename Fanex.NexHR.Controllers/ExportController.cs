@@ -24,6 +24,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interface;
@@ -156,10 +157,27 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        /// <summary>
+        /// Get overtime report.
+        /// </summary>
+        /// <param name="fromDate">The from date.</param>
+        /// <param name="toDate">The to date.</param>
+        /// <param name="empId">The employee Id.</param>
+        /// <param name="jobTitle">The job title.</param>
+        /// <param name="groups">The groups.</param>
+        /// <returns>The file excel.</returns>
         public ActionResult OvertimeReport(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
         {
             string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _overtimeService.OTExcelReportDetails(fromDate, toDate, empId, jobTitle, groups).OrderBy(x => x.OvertimeDate).ToList();
+            var criteria = new GetOvertimeExcelReportDetailCriteria
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                EmployeeID = empId,
+                JobTitleId = jobTitle,
+                GroupIds  = groups
+            };
+            IList<OvertimeRequest> entity = _overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
             var hssfworkbook = _exportService.ExportOvertimeReport(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
@@ -315,7 +333,13 @@ namespace Fanex.NexHR.Controllers
             }
 
             string fileName = "EmployeeOvertimeRecord_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _overtimeService.OvertimeRecord(requestDate, calendar.Value, empId).ToList();
+            var getOvertimeRecordCriteria = new GetOvertimeRecordCriteria
+            {
+                Month = requestDate,
+                EmployeeID = empId,
+                Calendar = calendar.Value
+            };
+            List<OvertimeExcelReport> entity = _overtimeService.OvertimeRecord(getOvertimeRecordCriteria).ToList();
             var hssfworkbook = _exportService.ExportEmployeeOvertimeRecord(entity, calendar, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);

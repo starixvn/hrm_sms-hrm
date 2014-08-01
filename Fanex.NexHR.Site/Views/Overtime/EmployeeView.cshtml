@@ -111,7 +111,7 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("View", "Overtime", new { requestDate = request.RequestedDate, empId = request.EmpId })">
+                        <a href="@Url.Action("View", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
                             View </a>
                     </td>
                     <td>
@@ -133,7 +133,7 @@
 
                     if (currentDate >= canEditFrom && currentDate <= canEditTo)
                     {
-                            <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.EmpId })">
+                            <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
                                 <img src="/Styles/Images/edit-icon.png"></a>
                     }
                     else
