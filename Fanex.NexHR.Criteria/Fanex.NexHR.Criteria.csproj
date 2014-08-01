@@ -60,6 +60,11 @@
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
+    <Compile Include="GroupSupervisor\GetTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
+    <Compile Include="GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
@@ -140,17 +145,6 @@
     <Compile Include="Request\Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Request\Overtime\UpdateOvertimeRequestCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
-    <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
-    <Compile Include="GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
-    <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
-    <Compile Include="GroupSupervisor\GetTeamSupervisorCriteria.cs" />
-    <Compile Include="GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
-
-    <Compile Include="LeaveType\GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
-    <Compile Include="LeaveType\GroupSupervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
-    <Compile Include="LeaveType\GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
-    <Compile Include="LeaveType\GroupSupervisor\GetTeamSupervisorCriteria.cs" />
-    <Compile Include="LeaveType\GroupSupervisor\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />
     <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
