@@ -12,29 +12,29 @@ namespace Fanex.NexHR.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
 
     /// <summary>
     /// LateInEarlyOutRequest ViewModel.
     /// </summary>
-    public class LateInEarlyOutRequestViewModel : BaseRequestModel
+    public class LateInEarlyOutRequestViewModel
     {
         [Required]
         [DataType(DataType.Date)]
-        public DateTime FromDate { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime ToDate { get; set; }
+        public DateTime Date { get; set; }
 
         public string FromTime { get; set; }
 
         public string ToTime { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public string Employee { get; set; }
+
+        [Required]
+        public int EmployeeId { get; set; }
+
+        [AllowHtml]
+        public string Remark { get; set; }
 
         [Required]
         [Range(1, 150, ErrorMessage = "The Minute field must be between 1 and 150")]

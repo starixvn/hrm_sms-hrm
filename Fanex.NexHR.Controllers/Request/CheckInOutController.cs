@@ -126,7 +126,7 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Create(CheckInOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            GetVerifierApproverList(this.CurrentUser.Id, model);
+            GetVerifierApproverList(model.EmployeeId, model);
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
 
@@ -224,7 +224,7 @@ namespace Fanex.NexHR.Controllers.Request
             CheckIsTopManager(model);
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
-            GetVerifierApproverList(this.CurrentUser.Id, model);
+            GetVerifierApproverList(model.EmployeeId, model);
             var criteria = new UpdateCheckInOutRequestCriteria()
             {
                 EmpId = model.EmployeeId,

@@ -111,9 +111,7 @@
         <div class="formrow">
             <div class="label">
                 @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.DisplayName)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.Id)
                 @Html.HiddenFor(model => model.Type)
                 @Html.Hidden("RequestType", (int)RequestType.LateIn)
             </div>

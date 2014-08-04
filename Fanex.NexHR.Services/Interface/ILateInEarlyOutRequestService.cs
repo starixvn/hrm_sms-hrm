@@ -9,17 +9,16 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System.Web.Mvc;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Models;
 
     /// <summary>
     /// Interface Late In Early Out Request Service.
     /// </summary>
     public interface ILateInEarlyOutRequestService
     {
-        bool Insert(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model);
+        CommandResult Insert(InsertLateInEarlyOutRequestCriteria criteria);
 
-        bool Update(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model);
+        CommandResult Update(UpdateLateInEarlyOutRequestCriteria criteria);
     }
 }

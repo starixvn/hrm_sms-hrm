@@ -1,25 +1,24 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // <copyright file="LateInEarlyOutRequestService.cs" company="Nexcel Solutions Vietnam">
-// TODO: Update copyright text.
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
+// </history>
 
 namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Configuration;
     using System.Threading.Tasks;
     using System.Web;
-    using System.Web.Mvc;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// LateInEarlyOutRequest Service.
@@ -27,177 +26,145 @@ namespace Fanex.NexHR.Services
     public class LateInEarlyOutRequestService : RequestService, ILateInEarlyOutRequestService
     {
         private const string _LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
-        private readonly IEmailService _emailService;
-        private readonly ILateInEarlyOutRepository _lateInEarlyOutRepository;
-        private string _baseUrl;
-
-        public LateInEarlyOutRequestService()
-        {
-            this._emailService = new EmailService();
-            this._lateInEarlyOutRepository = new LateInEarlyOutRepository();
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
-
-        public LateInEarlyOutRequestService(
-            IEmailService emailService,
-            ILateInEarlyOutRepository lateInEarlyOutRepository)
-        {
-            this._emailService = emailService;
-            this._lateInEarlyOutRepository = lateInEarlyOutRepository;
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
 
         /// <summary>
-        /// Insert Late In, Early Out request.
+        /// Function to insert late in, early out request.
         /// </summary>
-        /// <param name="modelState">ModelState Dictionary.</param>
-        /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
-        /// <returns>Result of insert.</returns>
-        public bool Insert(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
+        /// <param name="criteria">InsertLateInEarlyOutRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertLateInEarlyOutRequestCriteria criteria)
         {
-            int errorCode;
-            string message;
-            if (!string.IsNullOrEmpty(model.FromTime) && !string.IsNullOrEmpty(model.ToTime))
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                model.FromDate = Utilities.AddTimeToDate(model.FromDate, model.FromTime);
-                model.ToDate = Utilities.AddTimeToDate(model.ToDate, model.ToTime);
-            }
-
-            var requestId = this._lateInEarlyOutRepository.Insert(model, out errorCode, out message);
-            if (errorCode == 0)
-            {
-                SendMailForLateInEarlyOutSuccessfully(model, requestId, isUpdate: false);
-                return true;
-            }
-            else
-            {
-                modelState.AddModelError(string.Empty, message);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Update Late In, Early Out request.
-        /// </summary>
-        /// <param name="modelState">ModelState Dictionary.</param>
-        /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
-        /// <returns>Result of update.</returns>
-        public bool Update(ModelStateDictionary modelState, LateInEarlyOutRequestViewModel model)
-        {
-            if (modelState.IsValid)
-            {
-                if (!string.IsNullOrEmpty(model.FromTime) && !string.IsNullOrEmpty(model.ToTime))
+                result = Repository.Insert(criteria);
+                if (result != null && result.Code == 0)
                 {
-                    model.FromDate = Utilities.AddTimeToDate(model.FromDate, model.FromTime);
-                    model.ToDate = Utilities.AddTimeToDate(model.ToDate, model.ToTime);
-                }
-
-                int errorCode;
-                string message;
-                var updated = this._lateInEarlyOutRepository.Update(model, out errorCode, out message);
-
-                if (updated)
-                {
-                    SendMailForLateInEarlyOutSuccessfully(model, model.Id, isUpdate: true);
-                    return updated;
-                }
-                else
-                {
-                    modelState.AddModelError(string.Empty, message);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForInsertLateInEarlyOutSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
             }
             else
             {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return result;
         }
 
         /// <summary>
-        /// Function to send mail for saved success for late in, early out request.
+        /// Function to update check in/out request.
         /// </summary>
-        /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="isUpdate">Is update or insert.</param>
-        private void SendMailForLateInEarlyOutSuccessfully(LateInEarlyOutRequestViewModel model, long requestId, bool isUpdate)
+        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Update(UpdateLateInEarlyOutRequestCriteria criteria)
         {
-            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
-                var taskSendMail = new Task(()
-                    => this.SendMailForLateInEarlyOutRequest(model, requestId, isUpdate, templateEmailPath, email.SendTo, email.SendCc, email.SendToNickName));
-                taskSendMail.Start();
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
+                {
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForUpdateLateInEarlyOutSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
+                }
             }
+            else
+            {
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
+            }
+
+            return result;
         }
 
         /// <summary>
-        /// Sends the mail for late in early out request.
+        /// Function to send mail for inserted success for check in out request.
         /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
-        /// <param name="templateEmailPath">The template email path.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCC">The mail cc.</param>
-        /// <param name="sendToNickName">Name of the send to nick.</param>
-        private void SendMailForLateInEarlyOutRequest(
-            LateInEarlyOutRequestViewModel model,
-            long requestId,
-            bool isUpdate,
-            string templateEmailPath,
-            string mailTo,
-            string mailCC,
-            string sendToNickName)
+        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForInsertLateInEarlyOutSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
-            var subject = (isUpdate ? Messages.UpdatedLateInEarlyOutEmailSubject : Messages.LateInEarlyOutEmailSubject) + " " + model.Employee
-                + " on " + model.Date.ToDateMonthYearFormatedDate();
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            {
+                Empid = criteria.EmpId
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
+                + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-
             var content = new
             {
-                Leader = sendToNickName,
-                Member = model.DisplayName,
-                Type = model.RequestType == (short)RequestType.LateIn
+                Leader = email.SendToNickName,
+                Member = employee.DisplayName,
+                Type = criteria.RequestType == (short)RequestType.LateIn
                     ? "a " + Resources.Labels.LateIn.ToLower()
                     : "an " + Resources.Labels.EarlyOut.ToLower(),
-                RequestId = requestId,
-                ForDate = model.Date.ToDateMonthYearFormatedDate(),
-                Minute = model.Minute,
-                Remark = model.Remark,
-                Url = this._baseUrl
+                RequestId = criteria.RequestId,
+                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Minute = criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
+                Remark = criteria.Remark,
+                Url = this.BaseUrl
             };
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(
-                ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCC,
-                subject,
-                body);
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
 
         /// <summary>
-        /// Function to get string date for late in, early out request.
+        /// Function to send mail for updated success for check in out request.
         /// </summary>
-        /// <param name="fromDate">The From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <returns>String detail date.</returns>
-        private string GetStringDateForLateInEarlyOutRequest(DateTime fromDate, DateTime toDate)
+        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForUpdateLateInEarlyOutSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
-            var date = string.Empty;
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
-            if (toDate == null || (toDate - fromDate).Days == 0)
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                date = fromDate.ToDateMonthYearFormatedDate();
-            }
-            else
+                Empid = criteria.EmpId
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.UpdatedLateInEarlyOutEmailSubject + " " + employee.NickName
+                + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
+            var content = new
             {
-                date = "from " + fromDate.ToDateMonthYearFormatedDate() + " to " + toDate.ToDateMonthYearFormatedDate();
-            }
-
-            return date;
+                Leader = email.SendToNickName,
+                Member = employee.DisplayName,
+                Type = criteria.RequestType == (short)RequestType.LateIn
+                    ? "a " + Resources.Labels.LateIn.ToLower()
+                    : "an " + Resources.Labels.EarlyOut.ToLower(),
+                RequestId = criteria.RequestId,
+                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Minute = criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
+                Remark = criteria.Remark,
+                Url = this.BaseUrl
+            };
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
     }
 }

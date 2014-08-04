@@ -18,6 +18,8 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels;
 
@@ -37,18 +39,15 @@ namespace Fanex.NexHR.Controllers.Request
         /// </returns>
         public ActionResult Create(DateTime? suggestedDate, bool? isLateIn)
         {
-            var id = this.CurrentUser.Id;
+            var currentDate = DateTime.Now.Date;
             var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
             {
-                EmpId = id,
+                EmpId = this.CurrentUser.Id,
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
             var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             //// Count number of Late in/early out request in current month.
-            var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
@@ -61,17 +60,14 @@ namespace Fanex.NexHR.Controllers.Request
             decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             var viewModel = new LateInEarlyOutRequestViewModel()
             {
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
+                Employee = this.CurrentUser.NickName,
+                EmployeeId = this.CurrentUser.Id,
                 Date = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Minute = 60,
                 RequestType = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
-                By = id
             };
 
-            GetVerifierApproverList(id, viewModel);
-
+            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             ViewBag.UnavailDates = listUnavailDates;
             ViewBag.TotalRequest = numberRequests;
             return View(viewModel);
@@ -86,19 +82,33 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Create(LateInEarlyOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            var id = this.CurrentUser.Id;
-            model.By = id;
-            if (string.Compare(model.Employee, model.DisplayName, true) != 0)
+            var criteria = new InsertLateInEarlyOutRequestCriteria()
             {
-                model.DisplayName = model.Employee;
-            }
-
-            ViewBag.Year = model.FromDate.Year;
-            GetVerifierApproverList(id, model);
+                EmpId = model.EmployeeId,
+                OnDate = model.Date,
+                RequestType = model.RequestType,
+                Remark = model.Remark,
+                LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
+                EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                CreatedBy = this.CurrentUser.Id,
+                CreatedDate = DateTime.Now
+            };
+            var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                ViewBag.Requested = _LateInEarlyOutRequestService.Insert(ModelState, model);
+                result = _LateInEarlyOutRequestService.Insert(criteria);
+                ViewBag.Requested = result.Code == 0;
+
+                if (result.Code != 0)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
+
+            ViewBag.Year = model.Date.Year;
+            GetVerifierApproverList(model.EmployeeId, model);
 
             return View(model);
         }
@@ -110,14 +120,6 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View Update.</returns>
         public ActionResult Update(int id)
         {
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            ViewBag.UnavailDates = listUnavailDates;
             var criteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
@@ -128,25 +130,28 @@ namespace Fanex.NexHR.Controllers.Request
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             int minute = request.TotalMins;
             var type = short.Parse(request.RequestType.Id.ToString());
 
             var viewModel = new LateInEarlyOutRequestViewModel()
             {
-                Id = request.Id,
-                Employee = employee.NickName,
-                DisplayName = employee.DisplayName,
-                EmployeeId = employee.Id,
+                Employee = this.CurrentUser.NickName,
+                EmployeeId = this.CurrentUser.Id,
                 Date = request.RequestedDate,
                 Minute = minute,
                 RequestType = type,
-                By = this.CurrentUser.Id,
                 Remark = request.Remark,
                 ApproverId = request.ApprovedBy.Id,
-                VerifierId = request.VerifiedBy.Id,
+                VerifierId = request.VerifiedBy.Id
             };
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now.AddMonths(1)
+            };
+            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            ViewBag.UnavailDates = listUnavailDates;
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             return View(viewModel);
         }
@@ -160,14 +165,33 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Update(LateInEarlyOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            var id = this.CurrentUser.Id;
-            model.By = id;
-            GetVerifierApproverList(id, model);
-            ViewBag.Year = model.FromDate.Year;
+            var criteria = new UpdateLateInEarlyOutRequestCriteria()
+            {
+                EmpId = model.EmployeeId,
+                OnDate = model.Date,
+                RequestType = model.RequestType,
+                Remark = model.Remark,
+                LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
+                EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                ModifiedBy = this.CurrentUser.Id,
+                ModifiedDate = DateTime.Now
+            };
+
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _LateInEarlyOutRequestService.Update(ModelState, model);
+                CommandResult result = _LateInEarlyOutRequestService.Update(criteria);
+                ViewBag.Updated = result.Code == 0;
+
+                if (result.Code != 0)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
+
+            GetVerifierApproverList(model.EmployeeId, model);
+            ViewBag.Year = model.Date.Year;
 
             return View(model);
         }

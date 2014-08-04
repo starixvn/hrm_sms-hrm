@@ -28,7 +28,7 @@ namespace Fanex.NexHR.Services
         private const string _CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
 
         /// <summary>
-        /// Function to insert change shift request.
+        /// Function to insert check in/out request.
         /// </summary>
         /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
         /// <returns>Command Result.</returns>

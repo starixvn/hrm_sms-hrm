@@ -84,7 +84,6 @@
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />
     <Compile Include="KeepInViewRequestRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
-    <Compile Include="Interfaces\ILateInEarlyOutRepository.cs" />
     <Compile Include="Interfaces\IRequestRepository.cs" />
     <Compile Include="Interfaces\ITeamRepository.cs" />
     <Compile Include="Interfaces\IHolidayRepository.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Interfaces\IReportRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ITimeRepository.cs" />
-    <Compile Include="LateInEarlyOutRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="MessageRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">
