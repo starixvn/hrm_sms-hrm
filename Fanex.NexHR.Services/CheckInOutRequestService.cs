@@ -9,20 +9,16 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Configuration;
     using System.Threading.Tasks;
     using System.Web;
-    using System.Web.Mvc;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Check In Out Request Service.
@@ -30,147 +26,143 @@ namespace Fanex.NexHR.Services
     public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
     {
         private const string _CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
-        private readonly IEmailService _emailService;
-        private readonly ICheckInOutRepository _checkInOutRepository;
-        private string _baseUrl;
-
-        public CheckInOutRequestService()
-        {
-            this._emailService = new EmailService();
-            this._checkInOutRepository = new CheckInOutRepository();
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
-
-        public CheckInOutRequestService(
-            IEmailService emailService,
-            ICheckInOutRepository checkInOutRepository)
-        {
-            this._emailService = emailService;
-            this._checkInOutRepository = checkInOutRepository;
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
 
         /// <summary>
-        /// Checks the in out.
+        /// Function to insert change shift request.
         /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="model">The CheckInOutRequestViewModel.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Insert(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
+        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertCheckInOutRequestCriteria criteria)
         {
-            if (modelState.IsValid)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
-                model.AttendantDate = model.AttendantDate + new TimeSpan(model.Hour, model.Minute, 0);
-                int errorCode;
-                string message;
-                var requestId = this._checkInOutRepository.Insert(model, out errorCode, out message);
-
-                if (errorCode != 0)
+                result = Repository.Insert(criteria);
+                if (result != null && result.Code == 0)
                 {
-                    modelState.AddModelError(string.Empty, message);
-                }
-                else
-                {
-                    SendEmailForCheckInOutSuccessfully(model, requestId, isUpdate: false);
-                    return true;
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
+                    var taskSendMail = new Task(() => this.SendMailForInsertCheckInOutSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
             }
             else
             {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return result;
         }
 
         /// <summary>
-        /// Updates the check in out.
+        /// Function to update check in/out request.
         /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="model">The CheckInOutRequestViewModel.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Update(ModelStateDictionary modelState, CheckInOutRequestViewModel model)
+        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Update(UpdateCheckInOutRequestCriteria criteria)
         {
-            if (modelState.IsValid)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
-                model.AttendantDate = model.AttendantDate + new TimeSpan(model.Hour, model.Minute, 0);
-                int errorCode;
-                string message;
-                var updated = this._checkInOutRepository.Update(model, out errorCode, out message);
-
-                if (updated)
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
                 {
-                    SendEmailForCheckInOutSuccessfully(model, model.Id, isUpdate: true);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
+                    var taskSendMail = new Task(() => this.SendMailForUpdateCheckInOutSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
-
-                return updated;
             }
             else
             {
-                modelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return result;
         }
 
         /// <summary>
-        /// Sends the email for check in out success.
+        /// Function to send mail for inserted success for check in out request.
         /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="isUpdate">If set to <c>true</c> [is updated].</param>
-        private void SendEmailForCheckInOutSuccessfully(CheckInOutRequestViewModel model, long requestId, bool isUpdate)
+        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForInsertCheckInOutSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
-                var taskSendMail = new Task(() 
-                    => this.SendMailForCheckInOutRequest(model, requestId, isUpdate, templateEmailPath, email.SendTo, email.SendCc, email.SendToNickName));
-                taskSendMail.Start();
-            }
-        }
-
-        /// <summary>
-        /// Sends the mail for check in out request.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
-        /// <param name="templateEmailPath">The template email path.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCC">The mail cc.</param>
-        /// <param name="sendToNickName">Name of the send to nick.</param>
-        private void SendMailForCheckInOutRequest(
-            CheckInOutRequestViewModel model,
-            long requestId,
-            bool isUpdate,
-            string templateEmailPath,
-            string mailTo,
-            string mailCC,
-            string sendToNickName)
-        {
-            var subject = (isUpdate ? Messages.UpdatedCheckInOutEmailSubject : Messages.CheckInOutEmailSubject)
-                + " " + model.Employee + " on " + model.ForDate.ToDateMonthYearFormatedDate();
-
+                Empid = criteria.EmpId
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
-                Leader = sendToNickName,
-                Member = model.DisplayName,
-                Type = model.RequestType == (short)RequestType.CheckIn
+                Leader = email.SendToNickName,
+                Member = employee.NickName,
+                Type = criteria.RequestType == (short)RequestType.CheckIn
                     ? RequestType.CheckIn.ToString().ToLower()
                     : RequestType.CheckOut.ToString().ToLower(),
-                RequestId = requestId,
-                ForDate = model.ForDate.ToDateMonthYearFormatedDate(),
-                Time = model.Hour.ToString().PadLeft(2, '0') + ":" + model.Minute.ToString().PadLeft(2, '0'),
-                Shift = model.Shift,
-                Url = this._baseUrl
+                RequestId = criteria.RequestId,
+                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Time = criteria.CheckTime.ToShortFormatedDate(),
+                Shift = criteria.Shift,
+                Url = this.BaseUrl
             };
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, mailCC, subject, body);
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
+        }
+
+        /// <summary>
+        /// Function to send mail for updated success for check in out request.
+        /// </summary>
+        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForUpdateCheckInOutSuccessfully(UpdateCheckInOutRequestCriteria criteria, string templateEmailPath)
+        {
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            {
+                Empid = criteria.EmpId
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.UpdatedCheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
+            var content = new
+            {
+                Leader = email.SendToNickName,
+                Member = employee.NickName,
+                Type = criteria.RequestType == (short)RequestType.CheckIn
+                    ? RequestType.CheckIn.ToString().ToLower()
+                    : RequestType.CheckOut.ToString().ToLower(),
+                RequestId = criteria.RequestId,
+                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Time = criteria.CheckTime.ToShortFormatedDate(),
+                Shift = criteria.Shift,
+                Url = this.BaseUrl
+            };
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
     }
 }

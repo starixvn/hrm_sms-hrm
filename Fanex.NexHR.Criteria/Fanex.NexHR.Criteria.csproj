@@ -97,6 +97,8 @@
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\InsertChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\UpdateChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\InsertCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\UpdateCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />

@@ -35,6 +35,10 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class RequestService : BaseService, IRequestService
     {
+        protected readonly IEmployeeRepository _EmployeeRepository;
+        protected readonly IEmailService _EmailService;
+        protected readonly IRequestRepository _RequestRepository;
+
         #region constant
         private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
         private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
@@ -69,17 +73,13 @@ namespace Fanex.NexHR.Services
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
 
         #endregion
-
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IEmailService _emailService;
-        private readonly IRequestRepository _requestRepository;
         private string _baseUrl;
 
         public RequestService()
         {
-            this._employeeRepository = new EmployeeRepository();
-            this._requestRepository = new RequestRepository();
-            this._emailService = new EmailService();
+            this._EmployeeRepository = new EmployeeRepository();
+            this._RequestRepository = new RequestRepository();
+            this._EmailService = new EmailService();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -88,9 +88,9 @@ namespace Fanex.NexHR.Services
             IEmailService emailService,
             IRequestRepository requestRepository)
         {
-            this._employeeRepository = employeeRepository;
-            this._emailService = emailService;
-            this._requestRepository = requestRepository;
+            this._EmployeeRepository = employeeRepository;
+            this._EmailService = emailService;
+            this._RequestRepository = requestRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -208,9 +208,9 @@ namespace Fanex.NexHR.Services
         /// </returns>
         public bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage)
         {
-            var request = this._requestRepository.GetWorkingTimeRequest(requestId);
+            var request = this._RequestRepository.GetWorkingTimeRequest(requestId);
             string message;
-            int code = this._requestRepository.ProcessRequest(
+            int code = this._RequestRepository.ProcessRequest(
                 command, requestId, roleId, processBy, remark, DateTime.Now, out message);
 
             if (code == 0)
@@ -277,7 +277,7 @@ namespace Fanex.NexHR.Services
         public bool DeleteWorkingTimeRequest(long id)
         {
             Check.Argument.IsNotNegativeOrZero(id, "id");
-            var request = this._requestRepository.GetWorkingTimeRequest(id);
+            var request = this._RequestRepository.GetWorkingTimeRequest(id);
 
             if (request != null)
             {
@@ -285,7 +285,7 @@ namespace Fanex.NexHR.Services
                 var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
                 taskSendMail.Start();
 
-                return this._requestRepository.DeleteWorkingTimeRequest(id);
+                return this._RequestRepository.DeleteWorkingTimeRequest(id);
             }
 
             return false;
@@ -297,7 +297,7 @@ namespace Fanex.NexHR.Services
             RequestEntity request = null;
             if (criteria.IsValid())
             {
-                request = _requestRepository.GetRequestById(criteria);
+                request = _RequestRepository.GetRequestById(criteria);
             }
 
             return request;
@@ -309,7 +309,7 @@ namespace Fanex.NexHR.Services
             IList<RequestEntity> entityList = null;
             if (criteria.IsValid())
             {
-                entityList = _requestRepository.GetRequests(criteria);
+                entityList = _RequestRepository.GetRequests(criteria);
             }
 
             return entityList;
@@ -321,7 +321,7 @@ namespace Fanex.NexHR.Services
             decimal number = 0;
             if (criteria.IsValid())
             {
-                number = _requestRepository.GetNumberRequestInMonth(criteria);
+                number = _RequestRepository.GetNumberRequestInMonth(criteria);
             }
 
             return number;
@@ -338,7 +338,7 @@ namespace Fanex.NexHR.Services
             IList<RequestEntity> entityList = null;
             try
             {
-                entityList = this._requestRepository.GetHistoryRequest(requestId, requestTypeId);
+                entityList = this._RequestRepository.GetHistoryRequest(requestId, requestTypeId);
             }
             catch (Exception ex)
             {
@@ -350,7 +350,7 @@ namespace Fanex.NexHR.Services
 
         public IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser)
         {
-            var supervisors = this._requestRepository.GetSupervisorByQuery(empId, role, requestType, query, includeLoginUser);
+            var supervisors = this._RequestRepository.GetSupervisorByQuery(empId, role, requestType, query, includeLoginUser);
 
             return supervisors;
         }
@@ -371,7 +371,7 @@ namespace Fanex.NexHR.Services
                 RequestId = requestId,
                 Action = action
             };
-            RequestRelatedPeopleModel relatedPeople = _requestRepository.GetRequestRelatedPeople(criteria);
+            RequestRelatedPeopleModel relatedPeople = _RequestRepository.GetRequestRelatedPeople(criteria);
             if (relatedPeople.EmailSetting.AllowSendApprover)
             {
                 emailModel = GetMailApprover(relatedPeople);
@@ -502,8 +502,8 @@ namespace Fanex.NexHR.Services
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.RequesterId };
             var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { Empid = processBy };
-            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var processUser = this._employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var processUser = this._EmployeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 
@@ -629,7 +629,7 @@ namespace Fanex.NexHR.Services
                 bodyContent.Action,
                 processUser.NickName);
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 employee.Email,
                 string.Empty,
@@ -741,7 +741,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
             
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -778,7 +778,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -820,7 +820,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -863,7 +863,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -899,7 +899,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -1235,7 +1235,7 @@ namespace Fanex.NexHR.Services
                 Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1295,7 +1295,7 @@ namespace Fanex.NexHR.Services
                 Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1349,7 +1349,7 @@ namespace Fanex.NexHR.Services
                 Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1406,7 +1406,7 @@ namespace Fanex.NexHR.Services
                 Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -1466,7 +1466,7 @@ namespace Fanex.NexHR.Services
                 Fanex.Logging.LogService.Error(ex.Message, ex);
             }
 
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,

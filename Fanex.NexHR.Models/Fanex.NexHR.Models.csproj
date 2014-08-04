@@ -102,7 +102,6 @@
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
     <Compile Include="Request\RequestTypeModel.cs" />
-    <Compile Include="Request\ShiftDetails.cs" />
     <Compile Include="Calendar\ScheduleArrangeModel.cs" />
     <Compile Include="Calendar\ScheduleModel.cs" />
     <Compile Include="Calendar\ShiftMultipleModel.cs" />

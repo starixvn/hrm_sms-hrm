@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -44,7 +45,6 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-
             var criteria = new GetRequestCriteria()
             {
                 EmpId = this.CurrentUser.Id,
@@ -58,7 +58,6 @@ namespace Fanex.NexHR.Controllers.Request
             };
 
             IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
-
             return View(entityList);
         }
 
@@ -82,16 +81,13 @@ namespace Fanex.NexHR.Controllers.Request
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = this.CurrentUser.NickName,
-                DisplayName = this.CurrentUser.DisplayName,
                 EmployeeId = this.CurrentUser.Id,
                 ForDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 RequestType = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
-                By = this.CurrentUser.Id
             };
-            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
@@ -105,20 +101,19 @@ namespace Fanex.NexHR.Controllers.Request
 
             viewModel.Shift = (shift == null) ? string.Empty : shift.Name;
             var currentDate = DateTime.Now.Date;
-            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
                 RequestType = (int)RequestFilter.CheckInOut,
-                FromDate = fromDate,
-                ToDate = toDate
+                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
+                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
             };
             decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.UnavailDates = listUnavailDates;
             ViewBag.TotalRequest = numberRequests;
 
+            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             return View(viewModel);
         }
 
@@ -131,19 +126,35 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Create(CheckInOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            var id = this.CurrentUser.Id;
-            GetVerifierApproverList(id, model);
-            model.By = id;
+            GetVerifierApproverList(this.CurrentUser.Id, model);
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
-            if (string.Compare(model.Employee, model.DisplayName, true) != 0)
-            {
-                model.DisplayName = model.Employee;
-            }
 
+            var criteria = new InsertCheckInOutRequestCriteria()
+            {
+                EmpId = model.EmployeeId,
+                OnDate = model.AttendantDate,
+                CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                RequestType = model.RequestType,
+                RefNo = model.RefNO,
+                Remark = model.Remark,
+                CreatedBy = this.CurrentUser.Id,
+                CreatedDate = DateTime.Now,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                Shift = model.Shift
+            };
+
+            var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                ViewBag.Requested = _CheckInOutRequestService.Insert(ModelState, model);
+                result = _CheckInOutRequestService.Insert(criteria);
+                ViewBag.Requested = result.Code == 0;
+
+                if (result.Code != 0)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
 
             return View(model);
@@ -163,8 +174,7 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = DateTime.Now.AddMonths(1)
             };
             var listUnavailableDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            ViewBag.UnavailDates = listUnavailableDates;
-            ViewBag.Shifts = _ShiftService.GetAll();
+            
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
@@ -184,15 +194,12 @@ namespace Fanex.NexHR.Controllers.Request
             var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
             var viewModel = new CheckInOutRequestViewModel()
             {
-                Id = request.Id,
+                RequestId = request.Id,
                 Employee = this.CurrentUser.NickName,
-                DisplayName = this.CurrentUser.DisplayName,
                 EmployeeId = this.CurrentUser.Id,
                 ForDate = request.RequestedDate.Date,
                 Hour = request.RequestedDate.Hour,
                 Minute = request.RequestedDate.Minute,
-                RequestType = type,
-                By = this.CurrentUser.Id,
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
@@ -201,6 +208,8 @@ namespace Fanex.NexHR.Controllers.Request
                 Remark = request.Remark
             };
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
+            ViewBag.UnavailDates = listUnavailableDates;
+            ViewBag.Shifts = _ShiftService.GetAll();
             return View(viewModel);
         }
 
@@ -213,14 +222,33 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Update(CheckInOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            var id = this.CurrentUser.Id;
-            model.By = id;
             ViewBag.Shifts = _ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
-            GetVerifierApproverList(id, model);
+            GetVerifierApproverList(this.CurrentUser.Id, model);
+            var criteria = new UpdateCheckInOutRequestCriteria()
+            {
+                EmpId = model.EmployeeId,
+                OnDate = model.AttendantDate,
+                CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                RequestType = model.RequestType,
+                RefNo = model.RefNO,
+                Remark = model.Remark,
+                ModifiedBy = this.CurrentUser.Id,
+                ModifiedDate = DateTime.Now,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                Shift = model.Shift
+            };
+
             if (ModelState.IsValid)
             {
-                ViewBag.Updated = _CheckInOutRequestService.Update(ModelState, model);
+                CommandResult result = _CheckInOutRequestService.Update(criteria);
+                ViewBag.Updated = result.Code == 0;
+
+                if (result.Code != 0)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
 
             return View(model);

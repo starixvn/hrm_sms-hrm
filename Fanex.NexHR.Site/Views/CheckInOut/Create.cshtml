@@ -80,8 +80,6 @@
                 @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
             </div>
         </div>
-        
-                   
         <div class="clear">
         </div>
         <div class="space">
@@ -104,7 +102,7 @@
         
         <div class="formrow">
             <div class="label">
-                Shift
+                @Labels.Shift
             </div>
             <div class="input">
                 <span id="shiftname">@Model.Shift</span> @*<a id="shiftinfo" href="javascript:;" title="@Fanex.NexHR.Resources.Labels.ShiftInfo">
@@ -163,7 +161,6 @@
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.DisplayName)
                 @Html.HiddenFor(model => model.Shift)
                 @Html.Hidden("InTime")
                 @Html.Hidden("OutTime")

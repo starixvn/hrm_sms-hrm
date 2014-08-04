@@ -7,7 +7,6 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
@@ -22,7 +21,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// Change Shift Request Service.
@@ -30,88 +28,67 @@ namespace Fanex.NexHR.Services
     public class ChangeShiftRequestService : RequestService, IChangeShiftRequestService
     {
         private const string _ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IEmailService _emailService;
-        private string _baseUrl;
-
-        public ChangeShiftRequestService()
-        {
-            this._employeeRepository = new EmployeeRepository();
-            this._emailService = new EmailService();
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
-
-        public ChangeShiftRequestService(
-            IEmployeeRepository employeeRepository,
-            IEmailService emailService)
-        {
-            this._employeeRepository = employeeRepository;
-            this._emailService = emailService;
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
-        }
 
         /// <summary>
         /// Function to insert change shift request.
         /// </summary>
-        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <param name="criteria">InsertChangeShiftRequest Criteria.</param>
         /// <returns>Command Result.</returns>
         public CommandResult Insert(InsertChangeShiftRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = null;
+            CommandResult result = null;
             if (criteria.IsValid())
             {
-                commandResult = Repository.Insert(criteria);
-                if (commandResult.Code == 0)
+                result = Repository.Insert(criteria, hasGetOutputParams: true);
+                if (result != null && result.Code == 0)
                 {
-                    ////SendMailForChangeShiftSuccessfully(model, requestId, false);
-                    ////var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    ////var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
-                    ////taskSendMail.Start();
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
+                    var taskSendMail = new Task(() => this.SendMailForInsertChangeShiftSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
             }
             else
             {
-                commandResult = new CommandResult() 
+                result = new CommandResult() 
                 {
                     Code = 1,
                     Message = Resources.Messages.InvalidInputData
                 };
             }
 
-            return commandResult;
+            return result;
         }
 
         /// <summary>
         /// Function to update change shift request.
         /// </summary>
-        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
+        /// <param name="criteria">UpdateChangeShiftRequest Criteria.</param>
         /// <returns>Command Result.</returns>
         public CommandResult Update(UpdateChangeShiftRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = null;
+            CommandResult result = null;
             if (criteria.IsValid())
             {
-                commandResult = Repository.Update(criteria);
-                if (commandResult.Code == 0)
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
                 {
-                    ////SendMailForChangeShiftSuccessfully(model, requestId, false);
-                    ////var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    ////var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
-                    ////taskSendMail.Start();
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
+                    var taskSendMail = new Task(() => this.SendMailForUpdateChangeShiftSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
             }
             else
             {
-                commandResult = new CommandResult()
+                result = new CommandResult()
                 {
                     Code = 1,
                     Message = Resources.Messages.InvalidInputData
                 };
             }
 
-            return commandResult;
+            return result;
         }
 
         public IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria)
@@ -127,63 +104,71 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Sends the mail for change shift request.
+        /// Function to send mail for inserted success for change shift request.
         /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
-        /// <param name="templateEmailPath">The template email path.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCC">The mail cc.</param>
-        /// <param name="sendToNickName">Name of the send to nick.</param>
-        private void SendMailForChangeShiftRequest(
-            ChangeShiftViewModel model,
-            long requestId,
-            bool isUpdate,
-            string templateEmailPath,
-            string mailTo,
-            string mailCC,
-            string sendToNickName)
+        /// <param name="criteria">InsertChangeShiftRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForInsertChangeShiftSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = int.Parse(model.Employee) };
-            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var subject = (isUpdate ? Messages.UpdatedChangeShiftEmailSubject : Messages.ChangeShiftEmailSubject)
-                + " " + employee.DisplayName + " on " + model.FromDate.ToDateMonthYearFormatedDate();
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() 
+            { 
+                Empid = criteria.EmpId 
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
-                Leader = sendToNickName,
-                Member = model.Employee,
-                RequestId = requestId,
-                ForDate = GetMessageDateString(model.FromDate, model.ToDate),
-                Remark = model.Remark,
-                Url = this._baseUrl
+                Leader = email.SendToNickName,
+                Member = employee.NickName,
+                RequestId = criteria.RequestId,
+                ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
+                Remark = criteria.Remark,
+                Url = this.BaseUrl
             };
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(
-                ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCC,
-                subject,
-                body);
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
 
         /// <summary>
-        /// Function to send mail for saved success for late in, early out request.
+        /// Function to send mail for updated success for change shift request.
         /// </summary>
-        /// <param name="model">LateInEarlyOutRequest ViewModel.</param>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="isUpdate">Is update or insert.</param>
-        private void SendMailForChangeShiftSuccessfully(ChangeShiftViewModel model, long requestId, bool isUpdate)
+        /// <param name="criteria">UpdateChangeShiftRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForUpdateChangeShiftSuccessfully(UpdateChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
-                var taskSendMail = new Task(()
-                    => this.SendMailForChangeShiftRequest(model, requestId, isUpdate, templateEmailPath, email.SendTo, email.SendCc, email.SendToNickName));
-                taskSendMail.Start();
-            }
+                Empid = criteria.EmpId
+            };
+            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var subject = Messages.UpdatedChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
+            var content = new
+            {
+                Leader = email.SendToNickName,
+                Member = employee.NickName,
+                RequestId = criteria.RequestId,
+                ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
+                Remark = criteria.Remark,
+                Url = this.BaseUrl
+            };
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this._EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
     }
 }

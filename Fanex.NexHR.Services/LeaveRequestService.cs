@@ -34,17 +34,6 @@ namespace Fanex.NexHR.Services
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
         private const string _ReeditReasonEmailTpl = "~/app_data/emails/ReeditRequest.cshtml";
-        private readonly IEmailService _emailService;
-
-        public LeaveRequestService()
-        {
-            this._emailService = new EmailService();
-        }
-
-        public LeaveRequestService(IEmailService emailService)
-        {
-            this._emailService = emailService;
-        }
 
         /// <summary>
         /// Function to insert leave request.
@@ -175,7 +164,7 @@ namespace Fanex.NexHR.Services
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
 
-                this._emailService.SendEmail(
+                this._EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 emailModel.SendTo,
                 emailModel.SendCc,
@@ -219,7 +208,7 @@ namespace Fanex.NexHR.Services
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
 
-                this._emailService.SendEmail(
+                this._EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 emailModel.SendTo,
                 emailModel.SendCc,
@@ -282,7 +271,7 @@ namespace Fanex.NexHR.Services
             };
 
             var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(
+            this._EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 mailTo,
                 mailCC,

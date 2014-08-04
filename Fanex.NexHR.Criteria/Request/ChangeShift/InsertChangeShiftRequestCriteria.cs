@@ -22,6 +22,8 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
     {
         private readonly string _changeShiftDetailTpl = "<Request OnDate='{0}' FromShift='{1}' ToShift='{2}' Remark='{3}'></Request>";
 
+        public long RequestId { get; set; }
+        
         public int EmpId { get; set; }
 
         public short RequestType { get; set; }

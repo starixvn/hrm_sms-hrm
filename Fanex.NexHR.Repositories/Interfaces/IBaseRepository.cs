@@ -17,10 +17,10 @@ namespace Fanex.NexHR.Repositories.Interfaces
     /// </summary>
     public interface IBaseRepository
     {
-        CommandResult Insert(ICriteria criteria);
+        CommandResult Insert(ICriteria criteria, bool hasGetOutputParams = false);
 
-        CommandResult Update(ICriteria criteria);
+        CommandResult Update(ICriteria criteria, bool hasGetOutputParams = false);
 
-        CommandResult Delete(ICriteria criteria);
+        CommandResult Delete(ICriteria criteria, bool hasGetOutputParams = false);
     }
 }

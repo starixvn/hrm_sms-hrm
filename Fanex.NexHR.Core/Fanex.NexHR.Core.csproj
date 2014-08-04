@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Attributes\EmailAttribute.cs" />
     <Compile Include="Attributes\EmailValidationRule.cs" />
+    <Compile Include="Attributes\OutputAttribute.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />

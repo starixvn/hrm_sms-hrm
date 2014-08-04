@@ -17,8 +17,20 @@ namespace Fanex.NexHR.ViewModels
     /// <summary>
     /// CheckInOutRequest ViewModel.
     /// </summary>
-    public class CheckInOutRequestViewModel : BaseRequestModel, IValidatableObject
+    public class CheckInOutRequestViewModel : IValidatableObject
     {
+        public long RequestId { get; set; }
+
+        [Required]
+        public string Employee { get; set; }
+
+        [Required]
+        public int EmployeeId { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime AttendantDate { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
@@ -41,6 +53,9 @@ namespace Fanex.NexHR.ViewModels
 
         public string RefNO { get; set; }
 
+        [AllowHtml]
+        public string Remark { get; set; }
+
         [Display(Name = "Verified by")]
         public List<SelectListItem> Verifier { get; set; }
 
@@ -52,8 +67,6 @@ namespace Fanex.NexHR.ViewModels
 
         [Required(ErrorMessage = "The Approver field is required.")]
         public int? ApproverId { get; set; }
-
-        public DateTime AttendantDate { get; set; }
 
         /// <summary>
         /// Method Validate.

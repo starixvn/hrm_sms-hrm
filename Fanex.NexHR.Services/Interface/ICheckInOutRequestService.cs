@@ -9,17 +9,16 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System.Web.Mvc;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Request.CheckInOut;
+    using Fanex.NexHR.Models;
 
     /// <summary>
     /// Interface Check In Out Request Service.
     /// </summary>
     public interface ICheckInOutRequestService
     {
-        bool Insert(ModelStateDictionary modelState, CheckInOutRequestViewModel model);
+        CommandResult Insert(InsertCheckInOutRequestCriteria criteria);
 
-        bool Update(ModelStateDictionary modelState, CheckInOutRequestViewModel model);
+        CommandResult Update(UpdateCheckInOutRequestCriteria criteria);
     }
 }

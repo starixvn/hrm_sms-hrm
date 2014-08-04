@@ -83,8 +83,6 @@
     <Compile Include="Interfaces\ISupportRepository.cs" />
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />
     <Compile Include="KeepInViewRequestRepository.cs" />
-    <Compile Include="CheckInOutRepository.cs" />
-    <Compile Include="Interfaces\ICheckInOutRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\ILateInEarlyOutRepository.cs" />
     <Compile Include="Interfaces\IRequestRepository.cs" />
