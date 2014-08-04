@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Repositories
     using System.Data;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
@@ -29,59 +28,27 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>RequestEntity model.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public RequestEntity GetOvertimeRequestById(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
+            RequestEntity entityList = new RequestEntity();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
+                entityList = db.QueryEntity<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                    (re, reter, gr, ve, appr, rety, stt) =>
                     {
-                        while (reader.Read())
-                        {
-                            var entity = new RequestEntity
-                            {
-                                Id = reader.ToInt("RequestId"),
-                                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                                RequestedDate = reader.ToDateTime("RequestDate"),
-                                CreatedDate = reader.ToDateTime("CreatedDate"),
-                                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                NormalHours = reader.ToDecimal("NormalHours"),
-                                OffHours = reader.ToDecimal("OffHours"),
-                                PublicHours = reader.ToDecimal("PublicHours"),
-                                ToTalHours = reader.ToDecimal("ToTalHours"),
-                                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                                Requester = new Employee
-                                {
-                                    Id = reader.ToInt("RequesterID"),
-                                    NickName = reader.To<string>("Requester"),
-                                    FullName = reader.To<string>("FullNameRequester"),
-                                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                                },
-                                VerifiedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("VerifierBy"),
-                                    FullName = reader.To<string>("FullNameVerifierBy"),
-                                    Id = reader.To<int>("VerifierID")
-                                },
-                                ApprovedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("ApproverBy"),
-                                    FullName = reader.To<string>("FullNameApproverBy"),
-                                    Id = reader.To<int>("ApproverID")
-                                }
-                            };
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
+                        reter.Team = gr;
+                        re.Requester = reter;
+                        re.VerifiedBy = ve;
+                        re.ApprovedBy = appr;
+                        re.RequestType = rety;
+                        re.Status = stt;
+                        return re;
+                    },
+                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    criteria.GetSpParams());
             }
 
-            return entityList.SingleOrDefault();
+            return entityList;
         }
 
         /// <summary>
@@ -89,59 +56,27 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>RequestEntity List.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
+                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                    (re, reter, gr, ver, appr, rety, stt) =>
                     {
-                        while (reader.Read())
-                        {
-                            var entity = new RequestEntity
-                            {
-                                Id = reader.ToInt("RequestId"),
-                                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                                RequestedDate = reader.ToDateTime("RequestDate"),
-                                CreatedDate = reader.ToDateTime("CreatedDate"),
-                                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                NormalHours = reader.ToDecimal("NormalHours"),
-                                OffHours = reader.ToDecimal("OffHours"),
-                                PublicHours = reader.ToDecimal("PublicHours"),
-                                ToTalHours = reader.ToDecimal("ToTalHours"),
-                                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                                Requester = new Employee
-                                {
-                                    Id = reader.ToInt("RequesterID"),
-                                    NickName = reader.To<string>("Requester"),
-                                    FullName = reader.To<string>("FullNameRequester"),
-                                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                                },
-                                VerifiedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("VerifierBy"),
-                                    FullName = reader.To<string>("FullNameVerifierBy"),
-                                    Id = reader.To<int>("VerifierID")
-                                },
-                                ApprovedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("ApproverBy"),
-                                    FullName = reader.To<string>("FullNameApproverBy"),
-                                    Id = reader.To<int>("ApproverID")
-                                }
-                            };
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
+                        reter.Team = gr;
+                        re.Requester = reter;
+                        re.VerifiedBy = ver;
+                        re.ApprovedBy = appr;
+                        re.RequestType = rety;
+                        re.Status = stt;
+                        return re;
+                    },
+                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    criteria.GetSpParams()).ToList();
             }
 
-            return entityList.ToList();
+            return entityList;
         }
 
         /// <summary>
@@ -149,56 +84,24 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>List of Request Entity.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
+                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                    (re, reter, gr, ver, appr, rety, stt) =>
                     {
-                        while (reader.Read())
-                        {
-                            var entity = new RequestEntity
-                            {
-                                Id = reader.ToInt("RequestId"),
-                                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                                RequestedDate = reader.ToDateTime("RequestDate"),
-                                CreatedDate = reader.ToDateTime("CreatedDate"),
-                                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                NormalHours = reader.ToDecimal("NormalHours"),
-                                OffHours = reader.ToDecimal("OffHours"),
-                                PublicHours = reader.ToDecimal("PublicHours"),
-                                ToTalHours = reader.ToDecimal("ToTalHours"),
-                                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                                Requester = new Employee
-                                {
-                                    Id = reader.ToInt("RequesterID"),
-                                    NickName = reader.To<string>("Requester"),
-                                    FullName = reader.To<string>("FullNameRequester"),
-                                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                                },
-                                VerifiedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("VerifierBy"),
-                                    FullName = reader.To<string>("FullNameVerifierBy"),
-                                    Id = reader.To<int>("VerifierID")
-                                },
-                                ApprovedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("ApproverBy"),
-                                    FullName = reader.To<string>("FullNameApproverBy"),
-                                    Id = reader.To<int>("ApproverID")
-                                }
-                            };
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
+                        reter.Team = gr;
+                        re.Requester = reter;
+                        re.VerifiedBy = ver;
+                        re.ApprovedBy = appr;
+                        re.RequestType = rety;
+                        re.Status = stt;
+                        return re;
+                    },
+                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    criteria.GetSpParams()).ToList();
             }
 
             return entityList.ToList();
@@ -209,41 +112,23 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>List of RequestEntity.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
+                entityList = db.Query<RequestEntity, Employee, Team, RequestEntity>(
+                    (re, reter, te) =>
                     {
-                        while (reader.Read())
-                        {
-                            var entity = new RequestEntity
-                            {
-                                RequestedDate = reader.ToDateTime("RequestDate"),
-                                NormalHours = reader.ToDecimal("NormalHours"),
-                                OffHours = reader.ToDecimal("OffHours"),
-                                PublicHours = reader.ToDecimal("PublicHours"),
-                                ToTalHours = reader.ToDecimal("ToTalHours"),
-                                Requester = new Employee
-                                {
-                                    Id = reader.ToInt("RequesterID"),
-                                    NickName = reader.To<string>("Requester"),
-                                    FullName = reader.To<string>("FullNameRequester"),
-                                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                                }
-                            };
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
+                        reter.Team = te;
+                        re.Requester = reter;
+                        return re;
+                    },
+                    "RequesterID,GroupId",
+                    criteria.GetSpParams()).ToList();
             }
 
-            return entityList.ToList();
+            return entityList;
         }
 
         /// <summary>
@@ -251,57 +136,24 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>List of Overtime request.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetMemberOvertimeMonthly(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
+                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                    (re, reter, gr, ver, appr, rety, stt) =>
                     {
-                        while (reader.Read())
-                        {
-                            var entity = new RequestEntity
-                            {
-                                Id = reader.ToInt("RequestId"),
-                                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                                RequestedDate = reader.ToDateTime("RequestDate"),
-                                CreatedDate = reader.ToDateTime("CreatedDate"),
-                                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                                NormalHours = reader.ToDecimal("NormalHours"),
-                                OffHours = reader.ToDecimal("OffHours"),
-                                PublicHours = reader.ToDecimal("PublicHours"),
-                                ToTalHours = reader.ToDecimal("ToTalHours"),
-                                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                                IsShowWarning = reader.ToBool("IsShowWarning"),
-                                Requester = new Employee
-                                {
-                                    Id = reader.ToInt("RequesterID"),
-                                    NickName = reader.To<string>("Requester"),
-                                    FullName = reader.To<string>("FullNameRequester"),
-                                    Team = new Team { Name = reader.To<string>("Team"), Code = reader.To<string>("TeamCode") }
-                                },
-                                VerifiedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("VerifierBy"),
-                                    FullName = reader.To<string>("FullNameVerifierBy"),
-                                    Id = reader.To<int>("VerifierID")
-                                },
-                                ApprovedBy = new Employee
-                                {
-                                    NickName = reader.To<string>("ApproverBy"),
-                                    FullName = reader.To<string>("FullNameApproverBy"),
-                                    Id = reader.To<int>("ApproverID")
-                                }
-                            };
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
+                        reter.Team = gr;
+                        re.Requester = reter;
+                        re.VerifiedBy = ver;
+                        re.ApprovedBy = appr;
+                        re.RequestType = rety;
+                        re.Status = stt;
+                        return re;
+                    },
+                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    criteria.GetSpParams()).ToList();
             }
 
             return entityList.ToList();

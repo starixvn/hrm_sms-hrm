@@ -244,7 +244,6 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "HR")]
         public ActionResult GetYearlyOvertimeReport(int year, string team, int? empId, int? calendar)
         {
-            var currentUserId = this.CurrentUser.Id;
             ViewBag.Year = year;
             ViewBag.Calendar = calendar;
             IList<OvertimeAnnualReport> listEntity = null;
