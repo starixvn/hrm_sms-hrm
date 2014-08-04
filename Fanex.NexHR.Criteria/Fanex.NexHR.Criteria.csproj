@@ -170,6 +170,7 @@
     <Compile Include="Team\GetGroupByIdCriteria.cs" />
     <Compile Include="Team\InsertNewGroupCriteria.cs" />
     <Compile Include="Team\UpdateGroupCriteria.cs" />
+    <Compile Include="TimeRecord\GetTimeRecordCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

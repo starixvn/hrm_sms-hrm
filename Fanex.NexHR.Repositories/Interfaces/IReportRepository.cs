@@ -30,7 +30,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria);
 
-        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
+        IList<TimeRecordModel> GetTimeRecords(ICriteria criteria);
 
         IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria);
 

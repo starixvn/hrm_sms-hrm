@@ -26,6 +26,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Services;
@@ -138,6 +139,15 @@ namespace Fanex.NexHR.Controllers
             return View(timeRecordViewModel);
         }
 
+        /// <summary>
+        /// Get Time Record Details.
+        /// </summary>
+        /// <param name="fromDate">Get From Date.</param>
+        /// <param name="toDate">Get To Date.</param>
+        /// <param name="groupIds">Group Ids.</param>
+        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="isLocal">Expat Or Local.</param>
+        /// <returns>Time Record Details.</returns>
         public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
             if (!Roles.IsUserInRole("HR"))
@@ -145,7 +155,15 @@ namespace Fanex.NexHR.Controllers
                 employeeId = this.CurrentUser.Id;
             }
 
-            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(employeeId, groupIds, fromDate, toDate, isLocal);
+            var criteria = new GetTimeRecordCriteria()
+            {
+                EmpID = employeeId,
+                GroupIds = groupIds,
+                FromDate = fromDate,
+                ToDate = toDate,
+                IsLocal = isLocal
+            };
+            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(criteria);
 
             return View(timeRecords);
         }

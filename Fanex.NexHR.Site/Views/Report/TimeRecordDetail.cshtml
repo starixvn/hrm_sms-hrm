@@ -47,7 +47,7 @@
                         @item.RecordTime.ToDetailFormatedDate()
                     </td>
                     @*<td>
-                        @item.GetInOutName()
+                        @item.GetInOutName
                     </td>*@
                     <td>
                         @if (Roles.IsUserInRole("HR"))
@@ -55,19 +55,19 @@
                             if (item.InOutType == 0)
                             {
                             <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
-                                @item.GetInOutName()
+                                @item.GetInOutName
                             </a>
                             }
                             else
                             {
                             <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
-                                @item.GetInOutName()
+                                @item.GetInOutName
                             </a>
                             }
                         }
                         else
                         {
-                            @item.GetInOutName()
+                            @item.GetInOutName
                         }
                     </td>
                 </tr>

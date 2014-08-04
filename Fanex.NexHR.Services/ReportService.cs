@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.AnnualLeave;
@@ -22,6 +21,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories;
@@ -334,13 +334,13 @@ namespace Fanex.NexHR.Services
             return commandResult;
         }
 
-        public IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal)
+        public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
         {
+            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TimeRecordModel> timeRecords = null;
-
-            if (fromDate <= toDate)
+            if (criteria.IsValid())
             {
-                timeRecords = _reportRepository.GetTimeRecords(employeeId, groupIds, fromDate, toDate, isLocal);
+                timeRecords = _reportRepository.GetTimeRecords(criteria);
             }
 
             return timeRecords;

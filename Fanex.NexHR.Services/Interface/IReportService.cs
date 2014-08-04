@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Services.Interface
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.GroupSupervisor;
@@ -20,6 +19,7 @@ namespace Fanex.NexHR.Services.Interface
     using Fanex.NexHR.Criteria.Report.WorkingCalendar;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.ViewModels;
@@ -58,7 +58,7 @@ namespace Fanex.NexHR.Services.Interface
 
         CommandResult DeleteExternalGroup(DeleteExternalGroupCriteria criteria);
 
-        IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
+        IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
 
         IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria);
 
