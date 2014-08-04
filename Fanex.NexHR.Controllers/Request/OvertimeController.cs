@@ -294,7 +294,8 @@ namespace Fanex.NexHR.Controllers.Request
                 {
                     SupervisorID = id,
                     EmployeeId = empId,
-                    Month = Convert.ToDateTime(requestDate).Date
+                    Month = Convert.ToDateTime(requestDate).Date,
+                    Role = "6"
                 };
                 entityList = _OvertimeService.HRGetNormalOvertimeRequest(getOvertimeNormalDailyByHRCriteria);
             }
@@ -304,7 +305,8 @@ namespace Fanex.NexHR.Controllers.Request
                 {
                     SupervisorID = id,
                     EmployeeId = empId,
-                    Month = Convert.ToDateTime(requestDate).Date
+                    Month = Convert.ToDateTime(requestDate).Date,
+                    Role = "6"
                 };
                 entityList = _OvertimeService.HRGetOvertimeRequest(getOvertimeByHRCriteria);
             }
@@ -380,7 +382,7 @@ namespace Fanex.NexHR.Controllers.Request
             else
             {
                 var date = new DateTime(toDate.Year, toDate.Month, 1);
-                var criteria = new GetMonthlyOvertimeReportCriteria
+                var criteria = new GetMemberOvertimeMonthlyCriteria
                 {
                     FromDate = date,
                     ToDate = date

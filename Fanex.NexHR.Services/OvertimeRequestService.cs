@@ -166,7 +166,7 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The list Request Entity.</returns>
-        public IList<RequestEntity> GetMonthlyOvertimeReport(GetMonthlyOvertimeReportCriteria criteria)
+        public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeMonthlyCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> overtimeReports = new List<RequestEntity>();

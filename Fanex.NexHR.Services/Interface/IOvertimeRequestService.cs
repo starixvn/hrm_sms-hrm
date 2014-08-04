@@ -31,7 +31,7 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
 
-        IList<RequestEntity> GetMonthlyOvertimeReport(GetMonthlyOvertimeReportCriteria criteria);
+        IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeMonthlyCriteria criteria);
 
         IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria);
 
