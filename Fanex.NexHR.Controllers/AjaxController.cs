@@ -231,11 +231,16 @@ namespace Fanex.NexHR.Controllers
                 int lastYear = DateTime.Now.AddYears(-1).Year;
                 DateTime date = new DateTime(lastYear, 12, 31);
 
-                IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(
-                    lastYear,
-                    empId: null,
-                    groupIds: null,
-                    isLocal: null);
+                var criteria = new GetAnnualLeaveBalanceCriteria()
+                {
+                    Year = lastYear,
+                    EmpId = null,
+                    GroupIds = null,
+                    IsLocal = null,
+                    Role = string.Empty,
+                    SupervisorID = null
+                };
+                IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
 
                 entityList = entityList.Where(m => m.LeaveBalance > minbalance).ToList();
 

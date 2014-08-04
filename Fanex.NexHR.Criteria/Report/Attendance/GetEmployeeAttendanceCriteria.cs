@@ -29,7 +29,8 @@ namespace Fanex.NexHR.Criteria.Report.Attendance
 
         public byte? IsLocal { get; set; }
 
-        public short Type { get; set; }
+        [SpParam(SqlParamName = "Type")]
+        public short AttendanceType { get; set; }
 
         public override string GetSettingKey()
         {

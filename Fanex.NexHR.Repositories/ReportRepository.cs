@@ -218,20 +218,17 @@ namespace Fanex.NexHR.Repositories
         }
 
         /// <summary>
-        /// Method get annual leave balance.
+        /// Get Annual Leave Balance Report.
         /// </summary>
-        /// <param name="year">Year to get.</param>
-        /// <param name="empId">Employee's id.</param>
-        /// <param name="groupIds">Group's id.</param>
-        /// <param name="isLocal">Employee Local or Expat.</param>
-        /// <returns>List of LeaveSummary.</returns>
-        public IList<LeaveSummary> GetAnnualLeaveBalanceReport(int year, int? empId, string groupIds, byte? isLocal)
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>List Leave Summary.</returns>
+        public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Report_LeaveSummary"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var entityList = new List<LeaveSummary>();
 
-                using (IDataReader reader = db.ExecuteReader(new { empId, groupIds, year, isLocal }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {

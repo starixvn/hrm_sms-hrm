@@ -96,12 +96,17 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-           
-            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(
-                model.Year,
-                empId: model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds,
-                isLocal: (byte?)model.Category);
+
+            var criteria = new GetAnnualLeaveBalanceCriteria()
+            {
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = (byte?)model.Category,
+                Role = string.Empty,
+                SupervisorID = null
+            };
+            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
 
             IList<Team> teams = new List<Team>();
             var getAllTeamCriteria = new GetAllGroupCriteria();

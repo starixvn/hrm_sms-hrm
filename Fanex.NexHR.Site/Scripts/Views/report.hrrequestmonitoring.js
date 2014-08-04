@@ -30,6 +30,7 @@ function queryDataHrRequestMonitoring(isExcel) {
 	var group = $("#group").val() != null ? $("#group").val().join() : "";
 	var maxRequest = $("#MaxRequest").val();
 	var currentUserId = $("#CurrentUserId").val();
+	var viewRole = $("#ViewRole").val();
 
 	var from = new Date($("#FromDate").val());
 	var to = new Date($("#ToDate").val());
@@ -44,7 +45,7 @@ function queryDataHrRequestMonitoring(isExcel) {
 
 		if (isExcel) {
 			var url = _global.root + "report/HrRequestMonitoringDetails?currentUserId=" + currentUserId + "&fromDate=" + fromDate + "&toDate=" + toDate
-		+ "&maxRequest=" + maxRequest + "&empId=" + employeeId + "&group=" + group + "&isLocal=" + isLocal + "&isExcel=" + isExcel;
+		+ "&maxRequest=" + maxRequest + "&empId=" + employeeId + "&group=" + group + "&isLocal=" + isLocal + "&isExcel=" + isExcel + "&viewRole=" + viewRole;
 			location.href = url;
 		}
 		else {
@@ -57,7 +58,8 @@ function queryDataHrRequestMonitoring(isExcel) {
 				empId: employeeId,
 				group: group,
 				isLocal: isLocal,
-				isExcel: isExcel
+				isExcel: isExcel,
+				viewRole: viewRole
 			};
 
 			$.ajax({

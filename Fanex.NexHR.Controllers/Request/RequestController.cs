@@ -293,17 +293,11 @@ namespace Fanex.NexHR.Controllers.Request
             var getAllGroupCriteria = new GetAllGroupCriteria();
             request.TeamCollection = _TeamService.GetAll(getAllGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
-            int? loginId = null;
-            
-            if (requestViewType != RequestViewType.HRSpace)
-            {
-                loginId = this.CurrentUser.Id;
-            }
 
             bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = request.EmployeeId,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
                 GroupIds = request.TeamIds,

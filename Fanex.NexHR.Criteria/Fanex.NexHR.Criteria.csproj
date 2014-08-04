@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
     <Compile Include="AnnualLeave\DeleteAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="AnnualLeave\GetAnnualLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionCriteria.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>

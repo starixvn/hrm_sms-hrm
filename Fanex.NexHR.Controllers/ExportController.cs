@@ -17,6 +17,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
@@ -116,7 +117,7 @@ namespace Fanex.NexHR.Controllers
             {
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
-                Type = model.AttendanceType,
+                AttendanceType = model.AttendanceType,
                 EmpId = model.EmpId,
                 Groupids = model.GroupIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
@@ -143,11 +144,16 @@ namespace Fanex.NexHR.Controllers
                 isLocal = (byte)model.Category;
             }
 
-            IList<LeaveSummary> leaveSummary = _reportService.GetAnnualLeaveBalanceReport(
-                model.Year,
-                model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                model.TeamIds,
-                isLocal);
+            var criteria = new GetAnnualLeaveBalanceCriteria()
+            {
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = isLocal,
+                Role = string.Empty,
+                SupervisorID = null
+            };
+            IList<LeaveSummary> leaveSummary = _reportService.GetAnnualLeaveBalanceReport(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
             var leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(leaveSummary, teams);

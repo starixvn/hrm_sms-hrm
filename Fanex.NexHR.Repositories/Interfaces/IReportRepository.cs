@@ -28,11 +28,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(ICriteria criteria);
 
-        IList<LeaveSummary> GetAnnualLeaveBalanceReport(
-            int year,
-            int? empId,
-            string groupIds,
-            byte? isLocal);
+        IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria);
 
         IList<TimeRecordModel> GetTimeRecords(int? employeeId, string groupIds, DateTime fromDate, DateTime toDate, byte? isLocal);
 

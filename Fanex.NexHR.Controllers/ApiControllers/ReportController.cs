@@ -55,7 +55,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             {
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
-                Type = model.AttendanceType,
+                AttendanceType = model.AttendanceType,
                 EmpId = model.EmpId,
                 Groupids = model.GroupIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
@@ -91,7 +91,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             {
                 Fromtime = fromDate,
                 Totime = toDate,
-                Type = model.TimeSheetType,
+                AttendanceType = model.TimeSheetType,
                 EmpId = model.EmpId,
                 Groupids = string.Empty,
                 ExcludeUserDelete = 1,

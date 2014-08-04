@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Controllers
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
@@ -159,21 +160,10 @@ namespace Fanex.NexHR.Controllers
             var authorize = false;
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
-            var entityList = new List<RequestsMonitoring>();
-
-            var model = new RequestsMonitoringViewModel
-            {
-                FromDate = new DateTime(year, month, 1),
-                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                MaxRequest = 2,
-                DateOption = 0
-            };
-
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
-
+            string viewRole = ((int)RoleSystem.HR).ToString();
+            var model = new RequestsMonitoringViewModel();
             var listRole = CurrentUser.RoleList;
+
             if (listRole != null)
             {
                 authorize = listRole.Any(x => x == (int)RoleSystem.HR);
@@ -181,19 +171,18 @@ namespace Fanex.NexHR.Controllers
 
             if (authorize)
             {
-                var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
+                model = new RequestsMonitoringViewModel
                 {
-                    FromDate = model.FromDate,
-                    ToDate = model.ToDate,
-                    MaxRequest = model.MaxRequest,
-                    Role = ((int)RoleSystem.HR).ToString(),
-                    EmployeeId = null,
-                    LoginUserId = this.CurrentUser.Id,
-                    GroupIds = string.Empty,
-                    IsLocal = null
+                    FromDate = new DateTime(year, month, 1),
+                    ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                    MaxRequest = 2,
+                    DateOption = 0
                 };
-                entityList = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
-                ViewBag.EntityList = entityList;
+
+                var getAllGroupCriteria = new GetAllGroupCriteria();
+                ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+                ViewBag.CurrentUserId = this.CurrentUser.Id;
+                ViewBag.ViewRole = viewRole;
             }
 
             return View("RequestMonitoring", model);
@@ -210,8 +199,9 @@ namespace Fanex.NexHR.Controllers
         /// <param name="group">Filter groups.</param>
         /// <param name="isLocal">Expat or local.</param>
         /// <param name="isExcel">Export to excel.</param>
+        /// <param name="viewRole">HR View or Leader View.</param>
         /// <returns>Action Result.</returns>
-        [Authorize(Roles = "HR")]
+        [Authorize(Roles = "HR,Verifier,Approver")]
         public ActionResult HrRequestMonitoringDetails(
             int currentUserId,
             DateTime fromDate,
@@ -220,14 +210,15 @@ namespace Fanex.NexHR.Controllers
             int? empId,
             string group,
             byte? isLocal,
-            bool isExcel)
+            bool isExcel,
+            string viewRole)
         {
             var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
             {
                 FromDate = fromDate,
                 ToDate = toDate,
                 MaxRequest = maxRequest,
-                Role = ((int)RoleSystem.HR).ToString(),
+                Role = viewRole,
                 EmployeeId = empId,
                 LoginUserId = currentUserId,
                 GroupIds = group,
@@ -237,8 +228,15 @@ namespace Fanex.NexHR.Controllers
             ViewBag.MaxRequest = maxRequest;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
-            ViewBag.isLeader = false;
-
+            if (viewRole == ((int)RoleSystem.HR).ToString())
+            {
+                ViewBag.isLeader = false;
+            }
+            else
+            {
+                ViewBag.isLeader = true;
+            }
+            
             if (isExcel)
             {
                 string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -250,57 +248,31 @@ namespace Fanex.NexHR.Controllers
         }
 
         /// <summary>
-        /// ActionResult Verifier or Approver View Request Monitoring.
+        /// ActionResult LeaderRequestMonitoring.
         /// </summary>
-        /// <returns>Action with Role to check.</returns>
+        /// <returns>RequestMonitoring View.</returns>
         [Authorize(Roles = "Verifier,Approver")]
         public ActionResult LeaderRequestMonitoring()
         {
-            return LeaderRequestMonitoring(null);
-        }
-
-        /// <summary>
-        /// ActionResult LeaderRequestMonitoring.
-        /// </summary>
-        /// <param name="model">RequestsMonitoring ViewModel.</param>
-        /// <returns>View LeaderRequestMonitoring.</returns>
-        [HttpPost]
-        [Authorize(Roles = "Verifier,Approver")]
-        public ActionResult LeaderRequestMonitoring(RequestsMonitoringViewModel model)
-        {
-            if (model == null)
+            string viewRole = GetUserRoles();
+            var year = DateTime.Now.Year;
+            var month = DateTime.Now.Month;
+            var model = new RequestsMonitoringViewModel
             {
-                var year = DateTime.Now.Year;
-                var month = DateTime.Now.Month;
-                model = new RequestsMonitoringViewModel
-                {
-                    FromDate = new DateTime(year, month, 1),
-                    ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    MaxRequest = 1,
-                    DateOption = 0
-                };
-            }
+                FromDate = new DateTime(year, month, 1),
+                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                MaxRequest = 1,
+                DateOption = 0
+            };
 
             ViewBag.FromDate = model.FromDate;
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
             ViewBag.CurrentUserId = this.CurrentUser.Id;
+            ViewBag.ViewRole = viewRole;
+
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-            ViewBag.EntityList = new List<RequestsMonitoring>();
-
-            var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                MaxRequest = model.MaxRequest,
-                Role = GetUserRoles(),
-                EmployeeId = null,
-                LoginUserId = this.CurrentUser.Id,
-                GroupIds = string.Empty,
-                IsLocal = null
-            };
-            ViewBag.EntityList = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria);
 
             return View("RequestMonitoring", model);
         }
@@ -647,11 +619,16 @@ namespace Fanex.NexHR.Controllers
                 };
             }
 
-            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(
-                model.Year,
-                empId: model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                groupIds: model.TeamIds,
-                isLocal: null);
+            var criteria = new GetAnnualLeaveBalanceCriteria()
+            {
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = null,
+                Role = string.Empty,
+                SupervisorID = null
+            };
+            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
 
             IList<Team> teams = new List<Team>();
             var getAllGroupCriteria = new GetAllGroupCriteria();

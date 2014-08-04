@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services.Interface
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
@@ -35,11 +36,7 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria);
 
-        IList<LeaveSummary> GetAnnualLeaveBalanceReport(
-            int year,
-            int? empId,
-            string groupIds,
-            byte? isLocal);
+        IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria);
 
         IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
 
