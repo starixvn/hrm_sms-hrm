@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Criteria.Report.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report.TimeRecord;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -99,13 +100,30 @@ namespace Fanex.NexHR.Controllers
             return result.Code == 0;
         }
 
+        /// <summary>
+        /// Function to process a request.
+        /// </summary>
+        /// <param name="command">Action process request.</param>
+        /// <param name="requestId">Request Id.</param>
+        /// <param name="roleId">The Role Id.</param>
+        /// <param name="remark">The remark.</param>
+        /// <returns>Command Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
-            string errorMessage;
-            var result = _requestService.Process(command, requestId, roleId, this.CurrentUser.Id, remark, out errorMessage);
-            return result ? Json(true) : Json(errorMessage);
+            var criteria = new ProcessRequestCriteria()
+            {
+                Action = command,
+                RequestId = requestId,
+                RoleID = roleId,
+                Comment = remark,
+                ProcessedBy = this.CurrentUser.Id,
+                ProcessedDate = DateTime.Now
+            };
+            CommandResult result = _requestService.Process(criteria);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

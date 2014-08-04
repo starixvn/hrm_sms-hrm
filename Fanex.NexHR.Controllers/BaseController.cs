@@ -87,7 +87,7 @@ namespace Fanex.NexHR.Controllers
             {
                 foreach (AuthorizeAttribute item in attributes)
                 {
-                    if (item.Roles != string.Empty && !currentUser.IsInRoles(item.Roles.Split(new[] { ',' }).ToList()))
+                    if (!string.IsNullOrWhiteSpace(item.Roles) && !currentUser.IsInRoles(item.Roles.Split(new[] { ',' }).ToList()))
                     {
                         filterContext.Result = new RedirectResult("~/home/accessdenied?url=" + Request.Url.AbsoluteUri);
                     }

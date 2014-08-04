@@ -41,7 +41,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestId = null,
                 EffectedDay = DateTime.Now.Date
             };
-            EmployeeLeaveBalance employeeLeaveBalance = _LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
 
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
@@ -53,7 +53,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
 
             var model = new LeaveRequestViewModel
             {
@@ -89,7 +89,7 @@ namespace Fanex.NexHR.Controllers.Request
             criteria.CreatedBy = this.CurrentUser.Id;
             criteria.CreatedDate = DateTime.Now;
 
-            CommandResult result = _LeaveRequestService.Insert(criteria);
+            CommandResult result = LeaveRequestService.Insert(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -104,7 +104,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = requestId
             };
-            RequestEntity request = _RequestService.GetRequestById(criteria);
+            RequestEntity request = RequestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, model.EmployeeId))
             {
@@ -117,7 +117,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestId = requestId,
                 EffectedDay = DateTime.Now.Date
             };
-            EmployeeLeaveBalance employeeLeaveBalance = _LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
             minDate = minDate > model.FromDate ? model.FromDate : minDate;
@@ -136,7 +136,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             IList<DateTime> listUnavailDates = model.LeaveTypeId == Constants.GeneralLeave
                 ? null
-                : _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+                : EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             model.UnavailDates = listUnavailDates;
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = employeeLeaveBalance;
@@ -163,7 +163,7 @@ namespace Fanex.NexHR.Controllers.Request
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = this.CurrentUser.Id;
 
-            CommandResult result = _LeaveRequestService.Update(criteria);
+            CommandResult result = LeaveRequestService.Update(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -179,7 +179,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = requestId
             };
-            RequestEntity request = _RequestService.GetRequestById(criteria);
+            RequestEntity request = RequestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = GetAllLeaveType();
             GetVerifierAndApprover(model);
@@ -208,7 +208,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestId = null,
                 EffectedDay = new DateTime(year, 1, 1)
             };
-            EmployeeLeaveBalance employeeLeaveBalance = _LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             var criteria = new GetRequestCriteria()
             {
                 EmpId = this.CurrentUser.Id,
@@ -221,7 +221,7 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
 
             ViewBag.Year = year;
             ViewBag.EmployeeBalance = employeeLeaveBalance;
@@ -236,7 +236,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestId = requestId,
                 EffectedDay = toDate.HasValue ? toDate.Value : DateTime.Now.Date
             };
-            EmployeeLeaveBalance employeeLeaveBalance = _LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             return Json(employeeLeaveBalance, JsonRequestBehavior.AllowGet);
         }
 
@@ -257,7 +257,7 @@ namespace Fanex.NexHR.Controllers.Request
                 GroupIds = string.Empty,
                 EmpId = employeeId
             };
-            IList<WorkingCalendarModel> calendars = _WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
+            IList<WorkingCalendarModel> calendars = WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
             IList<LeaveDetailModel> leaveRequestDetail = null;
             if (requestId != -1)
             {
@@ -266,7 +266,7 @@ namespace Fanex.NexHR.Controllers.Request
                     RequestId = requestId
                 };
 
-                leaveRequestDetail = _LeaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
+                leaveRequestDetail = LeaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
             }
 
             leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
@@ -288,7 +288,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmpId = this.CurrentUser.Id,
                 Reason = reason
             };
-            CommandResult result = _LeaveRequestService.SendReasonReeditToSupervisor(criteria);
+            CommandResult result = LeaveRequestService.SendReasonReeditToSupervisor(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -464,7 +464,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 ExcludeNotShown = true
             };
-            IList<LeaveType> leaveTypes = _LeaveTypeService.GetAll(criteria);
+            IList<LeaveType> leaveTypes = LeaveTypeService.GetAll(criteria);
             return leaveTypes;
         }
 

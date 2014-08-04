@@ -22,6 +22,9 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Request.KeepInView;
+    using Fanex.Common.Helper;
+    using Fanex.NexHR.Criteria.Employee;
 
     /// <summary>
     /// RequestService Class.
@@ -29,195 +32,138 @@ namespace Fanex.NexHR.Services
     public class KeepInViewRequestService : RequestService, IKeepInViewRequestService
     {
         private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
-        private readonly IEmailService _emailService;
-        private readonly IKeepInViewRequestRepository _keepInViewRequestRepository;
-
-        public KeepInViewRequestService()
-        {
-            this._keepInViewRequestRepository = new KeepInViewRequestRepository();
-            this._emailService = new EmailService();
-        }
-
-        public KeepInViewRequestService(
-            IEmailService emailService,
-            IKeepInViewRequestRepository keepInViewRequestRepository)
-        {
-            this._emailService = emailService;
-            this._keepInViewRequestRepository = keepInViewRequestRepository;
-        }
 
         /// <summary>
-        /// Inserts the keep in view request.
+        /// Function to insert keep in view request.
         /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="model">The keep in view request view model.</param>
-        /// <param name="isTopManager">If set to <c>true</c> [is top manager].</param>
-        /// <returns>
-        /// Indicate the insert action is successful or not.
-        /// </returns>
-        public bool Insert(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager)
+        /// <param name="criteria">InsertKeepInViewRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Insert(InsertKeepInViewRequestCriteria criteria)
         {
-            if (!modelState.IsValid)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                return false;
-            }
-
-            if (!this.CheckIsValidKeepInTimeRequest(modelState, model, isTopManager))
-            {
-                return false;
-            }
-
-            int errorCode;
-            string message;
-            var requestId = this._keepInViewRequestRepository.Insert(model, out errorCode, out message);
-
-            if (errorCode == 0)
-            {
-                SendMailForSuccessfulKeepInViewRequest(model, requestId, isUpdate: false);
-                return true;
-            }
-
-            modelState.AddModelError(string.Empty, message);
-            return false;
-        }
-
-        /// <summary>
-        /// Updates the keep in view request.
-        /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="model">The keep in view request view model.</param>
-        /// <param name="isTopManager">If set to <c>true</c> [is top manager].</param>
-        /// <returns>
-        /// Indicate the update action is successful or not.
-        /// </returns>
-        public bool Update(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager)
-        {
-            if (!modelState.IsValid)
-            {
-                return false;
-            }
-
-            if (!this.CheckIsValidKeepInTimeRequest(modelState, model, isTopManager))
-            {
-                return false;
-            }
-
-            int errorCode;
-            string message;
-            var updated = this._keepInViewRequestRepository.Update(model, out errorCode, out message);
-
-            if (updated)
-            {
-                this.SendMailForSuccessfulKeepInViewRequest(model, model.Id, isUpdate: true);
-                return true;
-            }
-
-            modelState.AddModelError(string.Empty, message);
-            return false;
-        }
-
-        /// <summary>
-        /// Checks the is valid keep in time request.
-        /// </summary>
-        /// <param name="modelState">State of the model.</param>
-        /// <param name="keepInViewRequestViewModel">The keep in view request view model.</param>
-        /// <param name="isTopManager">If set to <c>true</c> [is top manager].</param>
-        /// <returns>
-        /// Indicate the keep in view request is valid or not.
-        /// </returns>
-        private bool CheckIsValidKeepInTimeRequest(ModelStateDictionary modelState, KeepInViewRequestViewModel keepInViewRequestViewModel, bool isTopManager)
-        {
-            ////if (keepInViewRequestViewModel.ShiftId <= 0)
-            ////{
-            ////    modelState.AddModelError("NoShiftArrangedForThisDate", Messages.NoShiftArrangedForThisDate);
-            ////    return false;
-            ////}
-
-            if (!isTopManager && (keepInViewRequestViewModel.ApproverId == null || keepInViewRequestViewModel.VerifierId == null))
-            {
-                modelState.AddModelError("VerifierOrApproverIsRequired", Messages.VerifierOrApproverIsRequired);
-                return false;
-            }
-
-            if (keepInViewRequestViewModel.HalfDay && !keepInViewRequestViewModel.CrossDay)
-            {
-                string[] fromTimeArray = keepInViewRequestViewModel.FromTime.Split(':');
-                string[] toTimeArray = keepInViewRequestViewModel.ToTime.Split(':');
-
-                if (_keepInViewRequestRepository.ConvertHourFromStringToDouble(fromTimeArray[0]) > _keepInViewRequestRepository.ConvertHourFromStringToDouble(toTimeArray[0]))
+                result = Repository.Insert(criteria, hasGetOutputParams: true);
+                if (result != null && result.Code == 0)
                 {
-                    modelState.AddModelError("FromTimeShouldBeLessThanToTime", Messages.FromTimeShouldBeLessThanToTime);
-                    return false;
-                }
-                else if (_keepInViewRequestRepository.ConvertHourFromStringToDouble(fromTimeArray[0]) 
-                    == _keepInViewRequestRepository.ConvertHourFromStringToDouble(toTimeArray[0])
-                    && Convert.ToInt32(fromTimeArray[1]) > Convert.ToInt32(toTimeArray[1]))
-                {
-                    modelState.AddModelError("FromTimeShouldBeLessThanToTime", Messages.FromTimeShouldBeLessThanToTime);
-                    return false;
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForInsertKeepInViewSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
                 }
             }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Sends the mail for successful keep in view request.
-        /// </summary>
-        /// <param name="keepInViewRequestViewModel">The keep in view request view model.</param>
-        /// <param name="requestId">The request identifier.</param>
-        /// <param name="isUpdate">If set to <c>true</c> [is update].</param>
-        private void SendMailForSuccessfulKeepInViewRequest(KeepInViewRequestViewModel keepInViewRequestViewModel, long requestId, bool isUpdate)
-        {
-            EmailModel email = GetMailToAndMailCC(requestId, isUpdate ? (int)SettingsSendMail.Edit : (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            else
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-                var taskSendMail = new Task(() 
-                    => this.ProcessSendMail(keepInViewRequestViewModel, email.SendToNickName, isUpdate, templateEmailPath, email.SendTo, email.SendCc));
-                taskSendMail.Start();
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
+
+            return result;
         }
 
         /// <summary>
-        /// Function to send mail for leave request.
+        /// Function to update keep in view request.
         /// </summary>
-        /// <param name="keepInViewRequestViewModel">LeaveRequest ViewModel.</param>
-        /// <param name="receiverNickName">Nick name of person email send to.</param>
-        /// <param name="isUpdate">Is Update or insert.</param>
-        /// <param name="emailTemplatePath">Path of email template.</param>
-        /// <param name="mailTo">MailTo List.</param>
-        /// <param name="mailCc">MailCC List.</param>
-        private void ProcessSendMail(
-            KeepInViewRequestViewModel keepInViewRequestViewModel,
-            string receiverNickName,
-            bool isUpdate,
-            string emailTemplatePath,
-            string mailTo,
-            string mailCc)
+        /// <param name="criteria">UpdateKeepInViewRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Update(UpdateKeepInViewRequestCriteria criteria)
         {
-            var bodyTemplate = Utilities.ReadTextFile(emailTemplatePath);
-            string subject = (isUpdate ? Messages.UpdatedKeepInViewEmailSubject : Messages.InsertedKeepInViewEmailSubject) + " " + keepInViewRequestViewModel.Employee;
-            subject += " on " + keepInViewRequestViewModel.Date.ToDateMonthYearFormatedDate();
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
+                {
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
+                    var taskSendMail = new Task(() => this.SendMailForUpdateKeepInViewSuccessfully(criteria, templateEmailPath));
+                    taskSendMail.Start();
+                }
+            }
+            else
+            {
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
+            }
 
+            return result;
+        }
+
+        /// <summary>
+        /// Function to send mail for inserted success for check in out request.
+        /// </summary>
+        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForInsertKeepInViewSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
+        {
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            {
+                Empid = criteria.EmpId
+            };
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.InsertedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+
+            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
-                LeaderName = receiverNickName,
-                MemberName = keepInViewRequestViewModel.DisplayName,
-                RequestId = keepInViewRequestViewModel.Id,
-                Date = keepInViewRequestViewModel.Date.ToDateMonthYearFormatedDate(),
-                Shift = keepInViewRequestViewModel.Shift,
-                Remark = keepInViewRequestViewModel.Remark,
-                Url = this.BaseUrl
+                LeaderName = email.SendToNickName,
+                MemberName = employee.NickName,
+                RequestId = criteria.RequestId,
+                Date = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Shift = criteria.ShiftName,
+                Remark = criteria.Remark,
+                Url = this.BaseLink
             };
-
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._emailService.SendEmail(
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
-                mailTo,
-                mailCc,
-                subject,
-                body);
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
+        }
+
+        /// <summary>
+        /// Function to send mail for updated success for check in out request.
+        /// </summary>
+        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
+        /// <param name="templateEmailPath">Template Email Path.</param>
+        private void SendMailForUpdateKeepInViewSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
+        {
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            {
+                Empid = criteria.EmpId
+            };
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.UpdatedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
+            var content = new
+            {
+                LeaderName = email.SendToNickName,
+                MemberName = employee.NickName,
+                RequestId = criteria.RequestId,
+                Date = criteria.OnDate.ToDateMonthYearFormatedDate(),
+                Shift = criteria.ShiftName,
+                Remark = criteria.Remark,
+                Url = this.BaseLink
+            };
+            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            this.EmailService.SendEmail(
+                ConfigSettings.EmailSetting,
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
         }
     }
 }

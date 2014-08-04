@@ -46,7 +46,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             //// Count number of Late in/early out request in current month.
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
@@ -57,7 +57,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             var viewModel = new LateInEarlyOutRequestViewModel()
             {
                 Employee = this.CurrentUser.NickName,
@@ -98,7 +98,7 @@ namespace Fanex.NexHR.Controllers.Request
             var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                result = _LateInEarlyOutRequestService.Insert(criteria);
+                result = LateInEarlyOutRequestService.Insert(criteria);
                 ViewBag.Requested = result.Code == 0;
 
                 if (result.Code != 0)
@@ -124,7 +124,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = id
             };
-            var request = _RequestService.GetRequestById(criteria);
+            var request = RequestService.GetRequestById(criteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -150,7 +150,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             return View(viewModel);
@@ -181,7 +181,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (ModelState.IsValid)
             {
-                CommandResult result = _LateInEarlyOutRequestService.Update(criteria);
+                CommandResult result = LateInEarlyOutRequestService.Update(criteria);
                 ViewBag.Updated = result.Code == 0;
 
                 if (result.Code != 0)
@@ -224,7 +224,7 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
 
             return View(entityList);
         }
@@ -249,7 +249,7 @@ namespace Fanex.NexHR.Controllers.Request
         private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

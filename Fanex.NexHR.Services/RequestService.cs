@@ -35,10 +35,6 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class RequestService : BaseService, IRequestService
     {
-        protected readonly IEmployeeRepository _EmployeeRepository;
-        protected readonly IEmailService _EmailService;
-        protected readonly IRequestRepository _RequestRepository;
-
         #region constant
         private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
         private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
@@ -74,12 +70,15 @@ namespace Fanex.NexHR.Services
 
         #endregion
         private string _baseUrl;
+        private IEmployeeRepository _employeeRepository;
+        private IEmailService _emailService;
+        private IRequestRepository _requestRepository;
 
         public RequestService()
         {
-            this._EmployeeRepository = new EmployeeRepository();
-            this._RequestRepository = new RequestRepository();
-            this._EmailService = new EmailService();
+            this._employeeRepository = new EmployeeRepository();
+            this._requestRepository = new RequestRepository();
+            this._emailService = new EmailService();
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
@@ -88,13 +87,37 @@ namespace Fanex.NexHR.Services
             IEmailService emailService,
             IRequestRepository requestRepository)
         {
-            this._EmployeeRepository = employeeRepository;
-            this._EmailService = emailService;
-            this._RequestRepository = requestRepository;
+            this._employeeRepository = employeeRepository;
+            this._emailService = emailService;
+            this._requestRepository = requestRepository;
             this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
-        public string BaseUrl
+        public IEmployeeRepository EmployeeRepository
+        {
+            get
+            {
+                return this._employeeRepository;
+            }
+        }
+
+        public IEmailService EmailService
+        {
+            get
+            {
+                return this._emailService;
+            }
+        }
+
+        public IRequestRepository RequestRepository
+        {
+            get
+            {
+                return this._requestRepository;
+            }
+        }
+
+        public string BaseLink
         {
             get
             {
@@ -194,41 +217,42 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Approve, disapprove or reject a request,
-        /// notification email will be sent also.
+        /// Function to process a request.
         /// </summary>
-        /// <param name="command">Action on this request.</param>
-        /// <param name="requestId">Request id.</param>
-        /// <param name="roleId">The role identifier.</param>
-        /// <param name="processBy">Process By.</param>
-        /// <param name="remark">Reason to proceed.</param>
-        /// <param name="errorMessage">Error message.</param>
-        /// <returns>
-        /// Return boolean.
-        /// </returns>
-        public bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage)
+        /// <param name="criteria">ProcessRequest Criteria.</param>
+        /// <returns>Command Result.</returns>
+        public CommandResult Process(ProcessRequestCriteria criteria)
         {
-            var request = this._RequestRepository.GetWorkingTimeRequest(requestId);
-            string message;
-            int code = this._RequestRepository.ProcessRequest(
-                command, requestId, roleId, processBy, remark, DateTime.Now, out message);
-
-            if (code == 0)
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
             {
-                var templateEmailPathForRequester = HttpContext.Current.Server.MapPath(_EmailTemplatePathForRequester);
-                var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType);
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
+                {
+                    var getRequestByIdCriteria = new GetRequestByIdCriteria()
+                    {
+                        RequestId = criteria.RequestId
+                    };
+                    RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
+                    var templateEmailPathForRequester = HttpContext.Current.Server.MapPath(_EmailTemplatePathForRequester);
+                    var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
 
-                var sendMailTask = new Task(() => this.SendMailProcess(command, request, processBy, templateEmailPathForRequester, templateEmailPathForRelated));
-                sendMailTask.Start();
+                    var sendMailTask = new Task(() 
+                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRequester, templateEmailPathForRelated));
+                    sendMailTask.Start();
+                }
             }
             else
             {
-                errorMessage = message;
-                return false;
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            errorMessage = string.Empty;
-            return true;
+            return result;
         }
 
         /// <summary>
@@ -277,15 +301,19 @@ namespace Fanex.NexHR.Services
         public bool DeleteWorkingTimeRequest(long id)
         {
             Check.Argument.IsNotNegativeOrZero(id, "id");
-            var request = this._RequestRepository.GetWorkingTimeRequest(id);
+            var getRequestByIdCriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = id
+            };
+            RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
 
             if (request != null)
             {
-                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType);
+                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
                 var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
                 taskSendMail.Start();
 
-                return this._RequestRepository.DeleteWorkingTimeRequest(id);
+                return this.RequestRepository.DeleteWorkingTimeRequest(id);
             }
 
             return false;
@@ -297,7 +325,7 @@ namespace Fanex.NexHR.Services
             RequestEntity request = null;
             if (criteria.IsValid())
             {
-                request = _RequestRepository.GetRequestById(criteria);
+                request = RequestRepository.GetRequestById(criteria);
             }
 
             return request;
@@ -309,7 +337,7 @@ namespace Fanex.NexHR.Services
             IList<RequestEntity> entityList = null;
             if (criteria.IsValid())
             {
-                entityList = _RequestRepository.GetRequests(criteria);
+                entityList = RequestRepository.GetRequests(criteria);
             }
 
             return entityList;
@@ -321,7 +349,7 @@ namespace Fanex.NexHR.Services
             decimal number = 0;
             if (criteria.IsValid())
             {
-                number = _RequestRepository.GetNumberRequestInMonth(criteria);
+                number = RequestRepository.GetNumberRequestInMonth(criteria);
             }
 
             return number;
@@ -336,21 +364,13 @@ namespace Fanex.NexHR.Services
         public IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId)
         {
             IList<RequestEntity> entityList = null;
-            try
-            {
-                entityList = this._RequestRepository.GetHistoryRequest(requestId, requestTypeId);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
-
+            entityList = this.RequestRepository.GetHistoryRequest(requestId, requestTypeId);
             return entityList;
         }
 
         public IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser)
         {
-            var supervisors = this._RequestRepository.GetSupervisorByQuery(empId, role, requestType, query, includeLoginUser);
+            var supervisors = this.RequestRepository.GetSupervisorByQuery(empId, role, requestType, query, includeLoginUser);
 
             return supervisors;
         }
@@ -371,7 +391,7 @@ namespace Fanex.NexHR.Services
                 RequestId = requestId,
                 Action = action
             };
-            RequestRelatedPeopleModel relatedPeople = _RequestRepository.GetRequestRelatedPeople(criteria);
+            RequestRelatedPeopleModel relatedPeople = RequestRepository.GetRequestRelatedPeople(criteria);
             if (relatedPeople.EmailSetting.AllowSendApprover)
             {
                 emailModel = GetMailApprover(relatedPeople);
@@ -495,19 +515,19 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPathForRelated">The template email path for send to related people.</param>
         private void SendMailProcess(
             string command,
-            WorkingTimeRequest request,
+            RequestEntity request,
             int processBy,
             string templateEmailPathForRequester,
             string templateEmailPathForRelated)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.RequesterId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { Empid = processBy };
-            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var processUser = this._EmployeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
+            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var processUser = this._employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 
-            EmailModel emailModel = GetMailToAndMailCC(request.RequestId, action);
+            EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
             if (emailModel.IsAllowSendRequester)
             {
                 this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
@@ -525,7 +545,7 @@ namespace Fanex.NexHR.Services
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="command">Process of request.</param>
         /// <returns>Action setting send mail.</returns>
-        private int GetActionProcessRequest(WorkingTimeRequest request, string command)
+        private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;
             if (command == Command.Accept.ToString())
@@ -560,11 +580,11 @@ namespace Fanex.NexHR.Services
 
             if (command == Command.Reset.ToString())
             {
-                if (request.Status == (byte)CurrentRequestStatus.Verified || request.Status == (byte)CurrentRequestStatus.NotVerified)
+                if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
                 {
                     action = (int)SettingsSendMail.Reset1;
                 }
-                else if (request.Status == (byte)CurrentRequestStatus.Approved || request.Status == (byte)CurrentRequestStatus.Rejected)
+                else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Status.Id == (byte)CurrentRequestStatus.Rejected)
                 {
                     action = (int)SettingsSendMail.Reset2;
                 }
@@ -585,7 +605,7 @@ namespace Fanex.NexHR.Services
         /// <param name="employee">Employee which made request.</param>
         /// <param name="processUser">Employee which change status request.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
-        private void SendToRequester(string command, WorkingTimeRequest request, Employee employee, Employee processUser, string templateEmailPath)
+        private void SendToRequester(string command, RequestEntity request, Employee employee, Employee processUser, string templateEmailPath)
         {
             string forDate = string.Empty;
             if (request.TotalDays > 1)
@@ -594,42 +614,32 @@ namespace Fanex.NexHR.Services
             }
             else
             {
-                forDate = " on " + (request.RequestType == (short)RequestType.KeepInView ? 
-                    request.OnDate.ToDateMonthYearFormatedDate() 
-                    : request.FromDate.ToDateMonthYearFormatedDate());
+                forDate = " on " + request.FromDate.ToDateMonthYearFormatedDate();
             }
 
             var bodyContent = new
             {
                 Employee = employee.NickName,
-                RequestId = request.RequestId,
+                RequestId = request.Id,
                 Action = command,
                 ForDate = forDate,
-                RequestType = request.RequestType.RequestTypeToText(),
+                RequestType = request.RequestType.Name,
                 ProcessUser = processUser.NickName,
                 DisplayNameOfProcessUser = processUser.FullName,
                 Url = this._baseUrl
             };
 
             var body = Utilities.ReadTextFile(templateEmailPath);
-
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
             var subject = string.Format(
                 Resources.Messages.ProcessSubject,
-                request.RequestType.RequestTypeToText(),
+                request.RequestType.Name,
                 forDate,
                 bodyContent.Action,
                 processUser.NickName);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 employee.Email,
                 string.Empty,
@@ -678,16 +688,16 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="request">WorkingTime Request.</param>
         /// <param name="templateEmailPath">Path of email template.</param>
-        private void SendMailForCancelRequest(WorkingTimeRequest request, string templateEmailPath)
+        private void SendMailForCancelRequest(RequestEntity request, string templateEmailPath)
         {
-            var actionSendMail = (request.RequestType == (short)RequestType.Leave && request.ReworkCount > 0)
+            var actionSendMail = (request.RequestType.Id == (short)RequestType.Leave && request.ReworkCount > 0)
                 ? (int)SettingsSendMail.Delete
                 : (int)SettingsSendMail.Cancel;
 
-            EmailModel email = GetMailToAndMailCC(request.RequestId, actionSendMail);
+            EmailModel email = GetMailToAndMailCC(request.Id, actionSendMail);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
-                switch (request.RequestType)
+                switch (request.RequestType.Id)
                 {
                     case (short)RequestType.Leave:
                         this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
@@ -719,29 +729,29 @@ namespace Fanex.NexHR.Services
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelLeaveRequest(
-            WorkingTimeRequest request,
+            RequestEntity request,
             string mailTo,
             string sendCc,
             string sendToNickName,
             string templateEmailPath)
         {
             var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester);
-            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
-            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
+            var toDate = request.ToDate;
+            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays);
 
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
                 ForDate = forDate,
                 Remark = request.Remark,
-                LeaveName = request.LeaveName,
+                LeaveName = request.LeaveType.Name,
             };
 
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
             
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -758,19 +768,19 @@ namespace Fanex.NexHR.Services
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelChangeShiftRequest(
-            WorkingTimeRequest request,
+            RequestEntity request,
             string mailTo,
             string sendCc,
             string sendToNickName,
             string templateEmailPath)
         {
             var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester);
-            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
+            var toDate = request.ToDate;
             var forDate = GetMessageDateString(request.FromDate, toDate);
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
                 ForDate = forDate,
                 Remark = request.Remark
             };
@@ -778,7 +788,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -795,32 +805,32 @@ namespace Fanex.NexHR.Services
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelLateInEarlyOutRequest(
-            WorkingTimeRequest request,
+            RequestEntity request,
             string mailTo,
             string sendCc,
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType == (short)RequestType.LateIn
+            var requestType = request.RequestType.Id == (short)RequestType.LateIn
                 ? Resources.Labels.LateIn
                 : Resources.Labels.EarlyOut;
 
-            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, requestType, request.Requester);
-            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate.Value);
+            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, requestType, request.Requester.NickName);
+            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate);
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
+                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
                 ForDate = forDate,
                 RequestType = requestType,
-                Minute = request.RequestType == (short)RequestType.LateIn ? ("+" + request.Time) : ("-" + request.Time),
+                Minute = request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 Remark = request.Remark
             };
 
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -837,13 +847,13 @@ namespace Fanex.NexHR.Services
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelCheckInOutRequest(
-            WorkingTimeRequest request,
+            RequestEntity request,
             string mailTo,
             string sendCc,
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType == (short)RequestType.CheckIn
+            var requestType = request.RequestType.Id == (short)RequestType.CheckIn
                 ? Resources.Labels.CheckIn
                 : Resources.Labels.CheckOut;
 
@@ -852,18 +862,18 @@ namespace Fanex.NexHR.Services
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
-                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
+                RequestType = request.RequestType.Name.ToLower(),
                 ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
-                Time = HourFormat(request.RequestTime),
-                Shift = request.ShiftName,
+                Time = HourFormat(request.RequestedDate),
+                Shift = request.FromShift.Name,
                 Remark = request.Remark
             };
 
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -880,7 +890,7 @@ namespace Fanex.NexHR.Services
         /// <param name="sendToNickName">Nick name which this request will be sent.</param>
         /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelKeepInViewRequest(
-            WorkingTimeRequest request,
+            RequestEntity request,
             string mailTo,
             string sendCc,
             string sendToNickName,
@@ -890,45 +900,21 @@ namespace Fanex.NexHR.Services
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester, request.FullNameRequester),
-                Date = request.OnDate.ToDateMonthYearFormatedDate(),
-                Shift = request.ShiftName,
+                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
+                Date = request.FromDate.ToDateMonthYearFormatedDate(),
+                Shift = request.FromShift.Name,
                 Remark = request.Remark
             };
 
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
                 subject,
                 body);
-        }
-
-        /// <summary>
-        /// Method check Role.
-        /// </summary>
-        /// <param name="requestViewType">RequestViewType model.</param>
-        /// <returns>Role after check.</returns>
-        private string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
-        {
-            var role = string.Empty;
-            if (requestViewType == RequestViewType.PersonalSpace)
-            {
-                role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
-            }
-            else if (requestViewType == RequestViewType.HRSpace)
-            {
-                role = ((int)RoleSystem.HR).ToString();
-            }
-            else
-            {
-                role = ((int)RoleSystem.Member).ToString();
-            }
-
-            return role;
         }
 
         /// <summary>
@@ -1143,14 +1129,14 @@ namespace Fanex.NexHR.Services
         private void SendToRelatedPeople(
             string command,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             Employee employee,
             string sendToNickName,
             string mailTo,
             string mailCc,
             string templateEmailPath)
         {
-            switch (request.RequestType)
+            switch (request.RequestType.Id)
             {
                 case (short)RequestType.CheckIn:
                     var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
@@ -1199,7 +1185,7 @@ namespace Fanex.NexHR.Services
             string command,
             Employee employee,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             string subject,
             string sendToNickName,
             string mailTo,
@@ -1218,7 +1204,7 @@ namespace Fanex.NexHR.Services
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                RequestType = request.RequestType.Name.ToLower(),
                 ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
                 Time = HourFormat(request.FromDate),
                 Shift = shift != null ? shift.Name : string.Empty,
@@ -1226,16 +1212,9 @@ namespace Fanex.NexHR.Services
                 Action = command
             };
 
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1260,7 +1239,7 @@ namespace Fanex.NexHR.Services
             string command,
             Employee employee,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             string subject,
             string sendToNickName,
             string mailTo,
@@ -1269,33 +1248,26 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate.Value);
+            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate);
 
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType == (short)RequestType.LateIn
+                RequestType = request.RequestType.Id == (short)RequestType.LateIn
                                 ? "a " + Resources.Labels.LateIn.ToLower()
                                 : "an " + Resources.Labels.EarlyOut.ToLower(),
                 ForDate = forDate,
-                Minute = isLateIn ? ("+" + request.Time) : ("-" + request.Time),
+                Minute = isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 Remark = request.Remark,
                 Url = this._baseUrl,
                 Action = command
             };
 
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1319,7 +1291,7 @@ namespace Fanex.NexHR.Services
             string command,
             Employee employee,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             string subject,
             string sendToNickName,
             string mailTo,
@@ -1327,29 +1299,21 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
-            var forDate = GetMessageDateString(request.FromDate, toDate);
+            var forDate = GetMessageDateString(request.FromDate, request.ToDate);
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                RequestType = request.RequestType.Name.ToLower(),
                 ForDate = forDate,
                 Remark = request.Remark,
                 Action = command
             };
 
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1373,7 +1337,7 @@ namespace Fanex.NexHR.Services
             string command,
             Employee employee,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             string subject,
             string sendToNickName,
             string mailTo,
@@ -1381,32 +1345,24 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var toDate = request.ToDate.HasValue ? request.ToDate.Value : request.FromDate;
-            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays.HasValue ? request.TotalDays.Value : 0);
+            var forDate = GetStringDateForLeaveRequest(request.FromDate, request.ToDate, request.TotalDays);
 
             var bodyContent = new
             {
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.RequestTypeToText().ToLower(),
+                RequestType = request.RequestType.Name.ToLower(),
                 ForDate = forDate,
                 Remark = request.Remark,
-                LeaveName = request.LeaveName,
+                LeaveName = request.LeaveType.Name,
                 Url = this._baseUrl,
                 Action = command
             };
 
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -1430,7 +1386,7 @@ namespace Fanex.NexHR.Services
             string command,
             Employee employee,
             Employee processUser,
-            WorkingTimeRequest request,
+            RequestEntity request,
             string subject,
             string sendToNickName,
             string mailTo,
@@ -1449,24 +1405,17 @@ namespace Fanex.NexHR.Services
                 SendToNickName = sendToNickName,
                 ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
                 Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.RequestTypeToText().ToLower(),
-                Date = request.OnDate.ToDateMonthYearFormatedDate(),
+                RequestType = request.RequestType.Name.ToLower(),
+                Date = request.FromDate.ToDateMonthYearFormatedDate(),
                 Shift = shift != null ? shift.Name : string.Empty,
                 Remark = request.Remark,
                 Url = this._baseUrl,
                 Action = command
             };
 
-            try
-            {
-                body = RazorEngine.Razor.Parse(body, bodyContent);
-            }
-            catch (Exception ex)
-            {
-                Fanex.Logging.LogService.Error(ex.Message, ex);
-            }
+            body = RazorEngine.Razor.Parse(body, bodyContent);
 
-            this._EmailService.SendEmail(
+            this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,

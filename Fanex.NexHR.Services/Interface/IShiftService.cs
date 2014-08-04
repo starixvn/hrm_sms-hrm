@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<Shift> GetByQuery(string query, bool isShowOff);
 
-        IList<SelectListItem> GetSelectList();
+        IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false);
 
         Shift GetByDate(GetEmployeeShiftByDateCriteria criteria);
 

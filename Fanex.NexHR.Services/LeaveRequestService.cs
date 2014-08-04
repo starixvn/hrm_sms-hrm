@@ -159,12 +159,12 @@ namespace Fanex.NexHR.Services
                     ForDate = forDate,
                     Remark = criteria.Remark,
                     LeaveType = criteria.LeaveTypeName,
-                    Url = this.BaseUrl
+                    Url = this.BaseLink
                 };
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
 
-                this._EmailService.SendEmail(
+                this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 emailModel.SendTo,
                 emailModel.SendCc,
@@ -203,12 +203,12 @@ namespace Fanex.NexHR.Services
                     ForDate = forDate,
                     Remark = criteria.Remark,
                     LeaveType = criteria.LeaveTypeName,
-                    Url = this.BaseUrl
+                    Url = this.BaseLink
                 };
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
 
-                this._EmailService.SendEmail(
+                this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 emailModel.SendTo,
                 emailModel.SendCc,
@@ -267,11 +267,11 @@ namespace Fanex.NexHR.Services
                 Leader = sendToNickName,
                 Member = model.Requester.NickName,
                 Reason = reason,
-                Url = this.BaseUrl
+                Url = this.BaseLink
             };
 
             var body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._EmailService.SendEmail(
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 mailTo,
                 mailCC,

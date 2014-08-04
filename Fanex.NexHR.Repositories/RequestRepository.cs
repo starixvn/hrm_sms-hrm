@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics.CodeAnalysis;
@@ -34,50 +33,6 @@ namespace Fanex.NexHR.Repositories
             {
                 db.AddInParameter("@RequestId", DbType.Int64, id);
                 return db.ExecuteNonQuery() != 0;
-            }
-        }
-
-        /// <summary>
-        /// Method process request.
-        /// </summary>
-        /// <param name="command">Command (approve, reject..).</param>
-        /// <param name="requestId">Request id.</param>
-        /// <param name="roleId">The role identifier.</param>
-        /// <param name="processedBy">Processed by.</param>
-        /// <param name="remark">Reason to proceed.</param>
-        /// <param name="processedDate">Processed date.</param>
-        /// <param name="message">Message comment.</param>
-        /// <returns>
-        /// Number to check status.
-        /// </returns>
-        public int ProcessRequest(
-            string command,
-            long requestId,
-            int roleId,
-            int processedBy,
-            string remark,
-            DateTime processedDate,
-            out string message)
-        {
-            string key = this.GetSpKeyForProcessRequest(command);
-            using (ObjectDb db = new ObjectDb(key))
-            {
-                if (command != Command.Reset.ToString())
-                {
-                    db.AddInParameter("@Comment", DbType.String, remark);
-                }
-
-                db.AddInParameter("@RequestID", DbType.Int64, requestId);
-                db.AddInParameter("@ProcessedBy", DbType.Int32, processedBy);
-                db.AddInParameter("@ProcessedDate", DbType.DateTime, processedDate);
-                db.AddInParameter("@RoleID", DbType.Int32, roleId);
-                db.AddInParameter("@bOnbehalf", DbType.Boolean, false);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                db.ExecuteNonQuery();
-                message = db.GetParameterValue("ErrMsg") as string;
-                return (int)db.GetParameterValue("ErrCode");
             }
         }
 
@@ -277,127 +232,12 @@ namespace Fanex.NexHR.Repositories
             return numberDay;
         }
 
-        /// <summary>
-        /// Gets the role identifier for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The role id of processor.</returns>
-        private int GetRoleIdForProcessOvertime(string command)
-        {
-            int roleId = 0;
-
-            if (command == Command.Accept.ToString()
-                || command == Command.NotAccept.ToString())
-            {
-                roleId = (int)RoleSystem.Verifier;
-            }
-            else if (command == Command.Approve.ToString()
-                || command == Command.Reject.ToString())
-            {
-                roleId = (int)RoleSystem.Approver;
-            }
-            else if (command == Command.Process.ToString()
-                || command == Command.Void.ToString())
-            {
-                roleId = (int)RoleSystem.HR;
-            }
-
-            return roleId;
-        }
-
-        /// <summary>
-        /// Gets the key for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The key name for processing request.</returns>
-        private string GetSpKeyForProcessRequest(string command)
-        {
-            string key = string.Empty;
-
-            if (command == Command.Accept.ToString()
-                || command == Command.Approve.ToString()
-                || command == Command.Process.ToString())
-            {
-                key = "WorkingTimeRequest_ApproveRequest";
-            }
-            else if (command == Command.NotAccept.ToString()
-                || command == Command.Reject.ToString()
-                || command == Command.Void.ToString())
-            {
-                key = "WorkingTimeRequest_RejectRequest";
-            }
-            else if (command == Command.Reset.ToString())
-            {
-                key = "WorkingTimeRequest_ResetRequest";
-            }
-
-            return key;
-        }
-
-        /// <summary>
-        /// Gets the key for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The key name for processing request.</returns>
-        private string GetSpKeyForProcessSingleOvertime(string command)
-        {
-            string key = string.Empty;
-
-            if (command == Command.Accept.ToString()
-                || command == Command.Approve.ToString()
-                || command == Command.Process.ToString())
-            {
-                key = "OverTime_ApproveSingleRequest";
-            }
-            else if (command == Command.NotAccept.ToString()
-                || command == Command.Reject.ToString()
-                || command == Command.Void.ToString())
-            {
-                key = "OverTime_RejectSingleRequest";
-            }
-            else
-            {
-                key = "Overtime_ResetSingleRequest";
-            }
-
-            return key;
-        }
-
-        /// <summary>
-        /// Gets the key for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The key name for processing request.</returns>
-        private string GetSpKeyForProcessMultipleOvertime(string command)
-        {
-            string key = string.Empty;
-
-            if (command == Command.Accept.ToString()
-                || command == Command.Approve.ToString()
-                || command == Command.Process.ToString())
-            {
-                key = "OverTime_ApproveMultiRequest";
-            }
-            else if (command == Command.NotAccept.ToString()
-                || command == Command.Reject.ToString()
-                || command == Command.Void.ToString())
-            {
-                key = "OverTime_RejectMultiRequest";
-            }
-            else
-            {
-                key = "Overtime_ResetMultiRequest";
-            }
-
-            return key;
-        }
-
         private IList<RequestEntity> FillData(IDataReader reader)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
             while (reader.Read())
             {
-                var entity = FillDataEntity(reader);
+                RequestEntity entity = FillDataEntity(reader);
                 entityList.Add(entity);
             }
 

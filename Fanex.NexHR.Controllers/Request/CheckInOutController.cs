@@ -57,7 +57,7 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
             return View(entityList);
         }
 
@@ -77,7 +77,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = this.CurrentUser.NickName,
@@ -93,7 +93,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = this.CurrentUser.Id,
                 Date = DateTime.Now
             };
-            var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
+            var shift = ShiftService.GetByDate(getShiftByDateCriteria);
             if (shift != null)
             {
                 CheckShiftFromToFormat(viewModel, shift);
@@ -108,8 +108,8 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
                 ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
             };
-            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
-            ViewBag.Shifts = _ShiftService.GetAll();
+            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            ViewBag.Shifts = ShiftService.GetAll();
             ViewBag.UnavailDates = listUnavailDates;
             ViewBag.TotalRequest = numberRequests;
 
@@ -127,7 +127,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             CheckIsTopManager(model);
             GetVerifierApproverList(model.EmployeeId, model);
-            ViewBag.Shifts = _ShiftService.GetAll();
+            ViewBag.Shifts = ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
 
             var criteria = new InsertCheckInOutRequestCriteria()
@@ -148,7 +148,7 @@ namespace Fanex.NexHR.Controllers.Request
             var result = new CommandResult();
             if (ModelState.IsValid)
             {
-                result = _CheckInOutRequestService.Insert(criteria);
+                result = CheckInOutRequestService.Insert(criteria);
                 ViewBag.Requested = result.Code == 0;
 
                 if (result.Code != 0)
@@ -173,25 +173,24 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var listUnavailableDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailableDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            var request = RequestService.GetRequestById(getRequestByIdcriteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var type = short.Parse(request.RequestType.Id.ToString());
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
                 Date = DateTime.Now
             };
-            var shift = _ShiftService.GetByDate(getShiftByDateCriteria);
+            var shift = ShiftService.GetByDate(getShiftByDateCriteria);
             var viewModel = new CheckInOutRequestViewModel()
             {
                 RequestId = request.Id,
@@ -209,7 +208,7 @@ namespace Fanex.NexHR.Controllers.Request
             };
             GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             ViewBag.UnavailDates = listUnavailableDates;
-            ViewBag.Shifts = _ShiftService.GetAll();
+            ViewBag.Shifts = ShiftService.GetAll();
             return View(viewModel);
         }
 
@@ -222,7 +221,7 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult Update(CheckInOutRequestViewModel model)
         {
             CheckIsTopManager(model);
-            ViewBag.Shifts = _ShiftService.GetAll();
+            ViewBag.Shifts = ShiftService.GetAll();
             ViewBag.Year = model.ForDate.Year;
             GetVerifierApproverList(model.EmployeeId, model);
             var criteria = new UpdateCheckInOutRequestCriteria()
@@ -242,7 +241,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             if (ModelState.IsValid)
             {
-                CommandResult result = _CheckInOutRequestService.Update(criteria);
+                CommandResult result = CheckInOutRequestService.Update(criteria);
                 ViewBag.Updated = result.Code == 0;
 
                 if (result.Code != 0)
@@ -295,7 +294,7 @@ namespace Fanex.NexHR.Controllers.Request
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

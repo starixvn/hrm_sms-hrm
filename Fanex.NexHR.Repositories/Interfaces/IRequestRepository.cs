@@ -20,15 +20,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
     {
         bool DeleteWorkingTimeRequest(long id);
 
-        int ProcessRequest(
-            string command,
-            long requestId,
-            int roleId,
-            int processedBy,
-            string remark,
-            DateTime processedDate,
-            out string message);
-
         WorkingTimeRequest GetWorkingTimeRequest(long requestId);
 
         RequestEntity GetRequestById(ICriteria criteria);

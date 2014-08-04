@@ -8,15 +8,13 @@
 // </history>
 namespace Fanex.NexHR.Services.Interface
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Criteria.Request.KeepInView;
+    using Fanex.NexHR.Models;
 
     public interface IKeepInViewRequestService
     {
-        bool Insert(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
+        CommandResult Insert(InsertKeepInViewRequestCriteria criteria);
 
-        bool Update(ModelStateDictionary modelState, KeepInViewRequestViewModel model, bool isTopManager);
+        CommandResult Update(UpdateKeepInViewRequestCriteria criteria);
     }
 }

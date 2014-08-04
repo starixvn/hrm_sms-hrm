@@ -69,7 +69,7 @@ namespace Fanex.NexHR.Services
 
             if (shifts != null && shifts.Any())
             {
-                shifts = shifts.Where(t => t.Code.ToUpper().StartsWith(query.ToUpper())).ToList();
+                shifts = shifts.Where(t => t.Code.ToUpper().StartsWith(query.ToUpper(), System.StringComparison.CurrentCulture)).ToList();
             }
 
             return shifts;
@@ -79,10 +79,10 @@ namespace Fanex.NexHR.Services
         /// Function to get select list shift items.
         /// </summary>
         /// <returns>SelectListItem List.</returns>
-        public IList<SelectListItem> GetSelectList()
+        public IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false)
         {
             IList<SelectListItem> list = new List<SelectListItem>();
-            var shifts = this.GetAll();
+            var shifts = this.GetAll(statusId, isShowOff);
 
             foreach (Shift item in shifts)
             {

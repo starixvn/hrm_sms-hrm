@@ -375,7 +375,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
 
             return ExcelFile(hssfworkbook, fileName);
@@ -407,7 +407,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
 
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
@@ -439,7 +439,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -469,7 +469,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -499,7 +499,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
             return ExcelFile(hssfworkbook, fileName);
         }

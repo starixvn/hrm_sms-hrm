@@ -116,8 +116,8 @@ namespace Fanex.NexHR.Services
             { 
                 Empid = criteria.EmpId 
             };
-            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
@@ -126,10 +126,10 @@ namespace Fanex.NexHR.Services
                 RequestId = criteria.RequestId,
                 ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
                 Remark = criteria.Remark,
-                Url = this.BaseUrl
+                Url = this.BaseLink
             };
             email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._EmailService.SendEmail(
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -150,8 +150,8 @@ namespace Fanex.NexHR.Services
             {
                 Empid = criteria.EmpId
             };
-            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var subject = Messages.UpdatedChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.UpdatedChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
@@ -160,10 +160,10 @@ namespace Fanex.NexHR.Services
                 RequestId = criteria.RequestId,
                 ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
                 Remark = criteria.Remark,
-                Url = this.BaseUrl
+                Url = this.BaseLink
             };
             email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._EmailService.SendEmail(
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,

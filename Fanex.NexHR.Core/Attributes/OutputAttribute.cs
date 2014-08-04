@@ -14,7 +14,8 @@ namespace Fanex.NexHR.Core.Attributes
     /// <summary>
     /// Output Attribute.
     /// </summary>
-    public class OutputAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class OutputAttribute : Attribute
     {
         public OutputAttribute()
         {

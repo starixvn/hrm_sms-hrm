@@ -38,7 +38,7 @@ namespace Fanex.NexHR.Services
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = Repository.Insert(criteria);
+                result = Repository.Insert(criteria, hasGetOutputParams: true);
                 if (result != null && result.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
@@ -102,8 +102,8 @@ namespace Fanex.NexHR.Services
             {
                 Empid = criteria.EmpId
             };
-            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
@@ -116,10 +116,10 @@ namespace Fanex.NexHR.Services
                 ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
                 Time = criteria.CheckTime.ToShortFormatedDate(),
                 Shift = criteria.Shift,
-                Url = this.BaseUrl
+                Url = this.BaseLink
             };
             email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._EmailService.SendEmail(
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -140,8 +140,8 @@ namespace Fanex.NexHR.Services
             {
                 Empid = criteria.EmpId
             };
-            var employee = this._EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var subject = Messages.UpdatedCheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            email.Subject = Messages.UpdatedCheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             var content = new
             {
@@ -154,10 +154,10 @@ namespace Fanex.NexHR.Services
                 ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
                 Time = criteria.CheckTime.ToShortFormatedDate(),
                 Shift = criteria.Shift,
-                Url = this.BaseUrl
+                Url = this.BaseLink
             };
             email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
-            this._EmailService.SendEmail(
+            this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,

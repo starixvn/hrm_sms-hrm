@@ -155,7 +155,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/ChangeShift/Update/',
-                data: { shiftJson: shiftJson, shiftDetailJson: shiftDetailsJson, requestId: requestId },
+                data: { shiftJson: shiftJson, shiftDetailJson: shiftDetailsJson},
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {

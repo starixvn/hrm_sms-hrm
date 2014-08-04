@@ -32,18 +32,18 @@ namespace Fanex.NexHR.Controllers.Request
     public class RequestController : BaseController
     {
         #region protected services
-        protected readonly IEmployeeService _EmployeeService;
-        protected readonly IShiftService _ShiftService;
-        protected readonly ILeaveTypeService _LeaveTypeService;
-        protected readonly IRequestService _RequestService;
-        protected readonly ITeamService _TeamService;
-        protected readonly IKeepInViewRequestService _KeepInViewRequestService;
-        protected readonly IChangeShiftRequestService _ChangeShiftRequestService;
-        protected readonly ICheckInOutRequestService _CheckInOutRequestService;
-        protected readonly ILateInEarlyOutRequestService _LateInEarlyOutRequestService;
-        protected readonly ILeaveRequestService _LeaveRequestService;
-        protected readonly IOvertimeRequestService _OvertimeService;
-        protected readonly IWorkingCalendarService _WorkingCalendarService;
+        private IEmployeeService _employeeService;
+        private IShiftService _shiftService;
+        private ILeaveTypeService _leaveTypeService;
+        private IRequestService _requestService;
+        private ITeamService _teamService;
+        private IKeepInViewRequestService _keepInViewRequestService;
+        private IChangeShiftRequestService _changeShiftRequestService;
+        private ICheckInOutRequestService _checkInOutRequestService;
+        private ILateInEarlyOutRequestService _lateInEarlyOutRequestService;
+        private ILeaveRequestService _leaveRequestService;
+        private IOvertimeRequestService _overtimeService;
+        private IWorkingCalendarService _workingCalendarService;
         #endregion
 
         #region Ctor
@@ -66,20 +66,116 @@ namespace Fanex.NexHR.Controllers.Request
             IOvertimeRequestService overtimeService = null,
             IWorkingCalendarService workingCalendarService = null)
         {
-            _EmployeeService = employeeService ?? new EmployeeService();
-            _ShiftService = shiftService ?? new ShiftService();
-            _LeaveTypeService = leaveTypeService ?? new LeaveTypeService();
-            _RequestService = requestService ?? new RequestService();
-            _TeamService = teamService ?? new TeamService();
-            _KeepInViewRequestService = keepInViewRequestService ?? new KeepInViewRequestService();
-            _ChangeShiftRequestService = changeShiftRequestService ?? new ChangeShiftRequestService();
-            _CheckInOutRequestService = checkInOutRequestService ?? new CheckInOutRequestService();
-            _LateInEarlyOutRequestService = lateInEarlyOutRequestService ?? new LateInEarlyOutRequestService();
-            _LeaveRequestService = leaveRequestService ?? new LeaveRequestService();
-            _OvertimeService = overtimeService ?? new OvertimeRequestService();
-            _WorkingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            _employeeService = employeeService ?? new EmployeeService();
+            _shiftService = shiftService ?? new ShiftService();
+            _leaveTypeService = leaveTypeService ?? new LeaveTypeService();
+            _requestService = requestService ?? new RequestService();
+            _teamService = teamService ?? new TeamService();
+            _keepInViewRequestService = keepInViewRequestService ?? new KeepInViewRequestService();
+            _changeShiftRequestService = changeShiftRequestService ?? new ChangeShiftRequestService();
+            _checkInOutRequestService = checkInOutRequestService ?? new CheckInOutRequestService();
+            _lateInEarlyOutRequestService = lateInEarlyOutRequestService ?? new LateInEarlyOutRequestService();
+            _leaveRequestService = leaveRequestService ?? new LeaveRequestService();
+            _overtimeService = overtimeService ?? new OvertimeRequestService();
+            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
         }
         #endregion
+
+        public IEmployeeService EmployeeService
+        {
+            get
+            {
+                return this._employeeService;
+            }
+        }
+
+        public IShiftService ShiftService
+        {
+            get
+            {
+                return this._shiftService;
+            }
+        }
+
+        public ILeaveTypeService LeaveTypeService
+        {
+            get
+            {
+                return this._leaveTypeService;
+            }
+        }
+
+        public IRequestService RequestService
+        {
+            get
+            {
+                return this._requestService;
+            }
+        }
+
+        public ITeamService TeamService
+        {
+            get
+            {
+                return this._teamService;
+            }
+        }
+
+        public IKeepInViewRequestService KeepInViewRequestService
+        {
+            get
+            {
+                return this._keepInViewRequestService;
+            }
+        }
+
+        public IChangeShiftRequestService ChangeShiftRequestService
+        {
+            get
+            {
+                return this._changeShiftRequestService;
+            }
+        }
+
+        public ICheckInOutRequestService CheckInOutRequestService
+        {
+            get
+            {
+                return this._checkInOutRequestService;
+            }
+        }
+
+        public ILateInEarlyOutRequestService LateInEarlyOutRequestService
+        {
+            get
+            {
+                return this._lateInEarlyOutRequestService;
+            }
+        }
+
+        public ILeaveRequestService LeaveRequestService
+        {
+            get
+            {
+                return this._leaveRequestService;
+            }
+        }
+
+        public IOvertimeRequestService OvertimeService
+        {
+            get
+            {
+                return this._overtimeService;
+            }
+        }
+
+        public IWorkingCalendarService WorkingCalendarService
+        {
+            get
+            {
+                return this._workingCalendarService;
+            }
+        }
 
         public PartialViewResult CriteriaPanel(RequestViewModel request)
         {
@@ -141,7 +237,7 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             request.IsMember = employee.IsMember();
             if (request.IsMember)
             {
@@ -164,7 +260,7 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View HumanResourceViewHistory.</returns>
         public ActionResult HRViewHistory(long id, int type)
         {
-            IList<RequestEntity> entityList = _RequestService.GetHistoryRequest(id, type);
+            IList<RequestEntity> entityList = _requestService.GetHistoryRequest(id, type);
 
             ViewBag.requestId = id;
             ViewBag.requestType = type;
@@ -175,12 +271,12 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public bool DeleteWorkingTimeRequest(int id)
         {
-            return _RequestService.DeleteWorkingTimeRequest(id);
+            return _requestService.DeleteWorkingTimeRequest(id);
         }
 
         public JsonResult GetEmployeesByActingUser(int role, int requestType, string query)
         {
-            var supervisors = _RequestService.GetSupervisorByQuery(this.CurrentUser.Id, role, requestType, query.Trim(), includeLoginUser: true);
+            var supervisors = _requestService.GetSupervisorByQuery(this.CurrentUser.Id, role, requestType, query.Trim(), includeLoginUser: true);
 
             return Json(supervisors, JsonRequestBehavior.AllowGet);
         }
@@ -208,7 +304,7 @@ namespace Fanex.NexHR.Controllers.Request
                 Role = role,
                 RequestType = requestType
             };
-            IList<SupervisorNameModel> supervisors = _EmployeeService.GetSupervisorByRequestType(criteria);
+            IList<SupervisorNameModel> supervisors = _employeeService.GetSupervisorByRequestType(criteria);
             return supervisors;
         }
 
@@ -291,7 +387,7 @@ namespace Fanex.NexHR.Controllers.Request
         private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            request.TeamCollection = _TeamService.GetAll(getAllGroupCriteria);
+            request.TeamCollection = _teamService.GetAll(getAllGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
 
             bool? isLocal = null;
@@ -309,7 +405,7 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.Options = request;
             ViewBag.IsDailyRequest = isDailyRequest;
@@ -330,7 +426,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestType = (int)RequestType.ChangeShift,
             };
 
-            IList<SupervisorNameModel> supervisors = _EmployeeService.GetListSupervisorName(getListSupervisor);
+            IList<SupervisorNameModel> supervisors = _employeeService.GetListSupervisorName(getListSupervisor);
             var verifierList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Verifier);
             var approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver);
             viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();

@@ -58,7 +58,7 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = _RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
 
             return View(entityList);
         }
@@ -89,9 +89,9 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            decimal numberRequests = _RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
             GetVerifierApproverList(this.CurrentUser.Id, model);
-            var shifts = _ShiftService.GetAll(isShowOff: true);
+            var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             ViewBag.TotalRequest = numberRequests;
             ViewBag.UnavailDates = listUnavailDates;
@@ -113,7 +113,7 @@ namespace Fanex.NexHR.Controllers.Request
             criteria.CreatedBy = this.CurrentUser.Id;
             criteria.CreatedDate = DateTime.Now;
 
-            CommandResult result = _ChangeShiftRequestService.Insert(criteria);
+            CommandResult result = ChangeShiftRequestService.Insert(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -130,13 +130,13 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             ViewBag.UnavailDates = listUnavailDates;
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            var request = RequestService.GetRequestById(getRequestByIdcriteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
@@ -146,9 +146,9 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = id
             };
-            var changeShiftDetail = _ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+            var changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
             if (request != null && changeShiftDetail != null)
             {
@@ -166,14 +166,14 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             GetVerifierApproverList(employee.Id, model);
-            var shifts = _ShiftService.GetAll(isShowOff: true);
+            var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             ViewBag.IsView = false;
             return View(model);
         }
 
         [HttpPost]
-        public JsonResult Update(string shiftJson, string shiftDetailJson, int requestId)
+        public JsonResult Update(string shiftJson, string shiftDetailJson)
         {
             var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
@@ -181,7 +181,7 @@ namespace Fanex.NexHR.Controllers.Request
             criteria.ModifiedBy = this.CurrentUser.Id;
             criteria.ModifiedDate = DateTime.Now;
 
-            var result = _ChangeShiftRequestService.Update(criteria);
+            var result = ChangeShiftRequestService.Update(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -196,14 +196,14 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = id
             };
-            var request = _RequestService.GetRequestById(getRequestByIdcriteria);
+            var request = RequestService.GetRequestById(getRequestByIdcriteria);
             var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
             {
                 RequestId = id
             };
-            var changeShiftDetail = _ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+            var changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var employee = _EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
             if (request != null && changeShiftDetail != null)
             {
@@ -222,7 +222,7 @@ namespace Fanex.NexHR.Controllers.Request
             }
 
             GetVerifierApproverList(employee.Id, model);
-            var shifts = _ShiftService.GetAll(isShowOff: true);
+            var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             ViewBag.IsView = true;
             return View(model);
@@ -238,7 +238,7 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult ChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var model = GetChangeShiftDetail(employeeId, fromDate, toDate);
-            var shifts = _ShiftService.GetAll(isShowOff: true);
+            var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             return PartialView("ChangeShiftDetail", model);
         }
@@ -260,7 +260,7 @@ namespace Fanex.NexHR.Controllers.Request
                 GroupIds = string.Empty,
                 EmpId = employeeId
             };
-            IList<WorkingCalendarModel> calendars = _WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
+            IList<WorkingCalendarModel> calendars = WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
             foreach (WorkingCalendarModel item in calendars)
             {
                 var shiftDetail = new ChangeShiftDetailViewModel
@@ -330,7 +330,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = unvailableFromDate,
                 ToDate = unavailableToDate
             };
-            var listUnavailDates = _EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             return listUnavailDates;
         }
 

@@ -17,8 +17,16 @@ namespace Fanex.NexHR.ViewModels
     /// <summary>
     /// LeaveRequest ViewModel.
     /// </summary>
-    public class KeepInViewRequestViewModel : BaseRequestModel
+    public class KeepInViewRequestViewModel
     {
+        public long RequestId { get; set; }
+
+        [Required]
+        public string Employee { get; set; }
+
+        [Required]
+        public int EmployeeId { get; set; }
+
         public string RefNo { get; set; }
 
         public bool HalfDay { get; set; }
@@ -33,6 +41,9 @@ namespace Fanex.NexHR.ViewModels
         public string ToTime { get; set; }
 
         public bool CrossDay { get; set; }
+
+        [AllowHtml]
+        public string Remark { get; set; }
 
         public string Shift { get; set; }
 

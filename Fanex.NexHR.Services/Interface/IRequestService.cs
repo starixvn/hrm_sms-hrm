@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Services.Interface
     {
         bool DeleteWorkingTimeRequest(long id);
 
-        bool Process(string command, long requestId, int roleId, int processBy, string remark, out string errorMessage);
+        CommandResult Process(ProcessRequestCriteria criteria);
 
         RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
 

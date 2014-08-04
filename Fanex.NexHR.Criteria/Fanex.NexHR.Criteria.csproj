@@ -136,6 +136,8 @@
     <Compile Include="Request\GetRequestCriteria.cs" />
     <Compile Include="Request\GetRequestMonitoringCriteria.cs" />
     <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
+    <Compile Include="Request\KeepInView\InsertKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\UpdateKeepInViewRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\InsertLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\UpdateLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Request\Overtime\ProcessMultipleOvertimeCriteria.cs" />
     <Compile Include="Request\Overtime\ProcessSingleOvertimeCriteria.cs" />
     <Compile Include="Request\Overtime\UpdateOvertimeRequestCriteria.cs" />
+    <Compile Include="Request\ProcessRequestCriteria.cs" />
     <Compile Include="ResultCriteria.cs" />
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />
