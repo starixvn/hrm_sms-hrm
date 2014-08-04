@@ -78,6 +78,8 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get select list shift items.
         /// </summary>
+        /// <param name="statusId">Status Id.</param>
+        /// <param name="isShowOff">Is Show Off.</param>
         /// <returns>SelectListItem List.</returns>
         public IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false)
         {

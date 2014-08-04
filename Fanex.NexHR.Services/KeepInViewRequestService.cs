@@ -9,22 +9,16 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Threading.Tasks;
     using System.Web;
-    using System.Web.Mvc;
+    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interface;
-    using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Criteria.Request.KeepInView;
-    using Fanex.Common.Helper;
-    using Fanex.NexHR.Criteria.Employee;
 
     /// <summary>
     /// RequestService Class.

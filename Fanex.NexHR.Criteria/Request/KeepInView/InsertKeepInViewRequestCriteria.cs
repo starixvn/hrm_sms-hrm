@@ -31,7 +31,7 @@ namespace Fanex.NexHR.Criteria.Request.KeepInView
 
         public int ShiftId { get; set; }
 
-        [SpParam (Ignored = true)]
+        [SpParam(Ignored = true)]
         public string ShiftName { get; set; }
 
         public DateTime FromTime { get; set; }
