@@ -218,10 +218,10 @@ namespace Fanex.NexHR.Controllers.Request
         }
 
         /// <summary>
-        /// Function to 
+        /// Function to get acting employees.
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <param name="query">The query.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult GetActingEmployees(string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria()
@@ -539,7 +539,7 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.Groups = TeamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem

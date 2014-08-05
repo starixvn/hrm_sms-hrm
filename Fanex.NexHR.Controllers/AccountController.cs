@@ -58,7 +58,7 @@ namespace Fanex.NexHR.Controllers
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
             ViewBag.JobTitle = model.JobTitleId == null
             ? Resources.Labels.Unknown
-            : _lookupDataService.GetLookupByCodeAndId(LookupCodename.JobTitle, model.JobTitleId.Value).Name;
+            : _lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, model.JobTitleId.Value).Name;
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
             ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
@@ -107,7 +107,7 @@ namespace Fanex.NexHR.Controllers
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
             ViewBag.JobTitle = displayModel.JobTitleId == null
             ? Resources.Labels.Unknown
-            : _lookupDataService.GetLookupByCodeAndId(LookupCodename.JobTitle, displayModel.JobTitleId.Value).Name;
+            : _lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, displayModel.JobTitleId.Value).Name;
 
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
             ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);

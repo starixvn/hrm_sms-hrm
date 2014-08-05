@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Services.Interfaces
     using System.Linq;
     using Fanex.Caching;
     using Fanex.Common.Helper;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
 
@@ -166,7 +167,7 @@ namespace Fanex.NexHR.Services.Interfaces
         private void ResetJobTitleCache() 
         {
             var hashTable = this._cacheManager.Get<Hashtable>(_CacheKey_AllLookUpData);
-            var lookUpCode = LookupCodename.JobTitle.ToUpperInvariant();
+            var lookUpCode = Constants.JobTitle.ToUpperInvariant();
             if (hashTable == null)
             {
                 hashTable = new Hashtable();
@@ -174,7 +175,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTile = this.GetAll(getAllJobTitleCriteria);
             hashTable[lookUpCode] = listJobTile;

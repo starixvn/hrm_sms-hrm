@@ -286,7 +286,6 @@ namespace Fanex.NexHR.Controllers.Request
         /// Function to get employee by acting supervisor.
         /// </summary>
         /// <param name="role">Acting role.</param>
-        /// <param name="requestType">Request Type.</param>
         /// <param name="query">The query.</param>
         /// <returns>List employees.</returns>
         public JsonResult GetEmployeesByActingUser(int role, string query)

@@ -78,9 +78,9 @@ namespace Fanex.NexHR.Repositories
         /// Method get working schedule.
         /// </summary>
         /// <param name="criteria">Criteria to query DB.</param>
-        /// <param name="date">Report Date.</param>
+        /// <param name="workingDate">Report Date.</param>
         /// <returns>A list of working schedule model.</returns>
-        public IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime onDate)
+        public IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
@@ -97,7 +97,7 @@ namespace Fanex.NexHR.Repositories
                         var workingDay = new WorkingScheduleModel
                         {
                             Title = dttWorkingSchedule.Rows[0][i == 1 ? (i + 4) : ((i * 2) + 3)].ToString(),
-                            Start = new DateTime(onDate.Year, onDate.Month, i).ToShortDateString(),
+                            Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
                             Color = dttWorkingSchedule.Rows[0][i == 1 ? (i + 5) : ((i * 2) + 4)].ToString(),
                         };
                         list.Add(workingDay);

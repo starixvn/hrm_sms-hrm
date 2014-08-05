@@ -924,19 +924,7 @@ namespace Fanex.NexHR.Services
             var rowFooter = sheet.GetRow(rowIndex);
             rowFooter.Height = height;
 
-            rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
-            rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));
-            rowFooter.GetCell(6).SetCellValue(requestList.Sum(x => x.Mar));
-            rowFooter.GetCell(7).SetCellValue(requestList.Sum(x => x.Apr));
-            rowFooter.GetCell(8).SetCellValue(requestList.Sum(x => x.May));
-            rowFooter.GetCell(9).SetCellValue(requestList.Sum(x => x.Jun));
-            rowFooter.GetCell(10).SetCellValue(requestList.Sum(x => x.Jul));
-            rowFooter.GetCell(11).SetCellValue(requestList.Sum(x => x.Aug));
-            rowFooter.GetCell(12).SetCellValue(requestList.Sum(x => x.Sep));
-            rowFooter.GetCell(13).SetCellValue(requestList.Sum(x => x.Oct));
-            rowFooter.GetCell(14).SetCellValue(requestList.Sum(x => x.Nov));
-            rowFooter.GetCell(15).SetCellValue(requestList.Sum(x => x.Dec));
-            rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
+            RenderFooterForOvertimeReport(requestList, totalYearlyOTHours, rowFooter);
 
             hssfworkbook.RemoveSheetAt(0);
 
@@ -1242,6 +1230,29 @@ namespace Fanex.NexHR.Services
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;
+        }
+
+        /// <summary>
+        /// Function render footer for overtime report.
+        /// </summary>
+        /// <param name="requestList">Request List.</param>
+        /// <param name="totalYearlyOTHours">Total Yearly OTHours.</param>
+        /// <param name="rowFooter">Row Footer.</param>
+        private static void RenderFooterForOvertimeReport(IList<OvertimeAnnualReport> requestList, float totalYearlyOTHours, IRow rowFooter)
+        {
+            rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
+            rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));
+            rowFooter.GetCell(6).SetCellValue(requestList.Sum(x => x.Mar));
+            rowFooter.GetCell(7).SetCellValue(requestList.Sum(x => x.Apr));
+            rowFooter.GetCell(8).SetCellValue(requestList.Sum(x => x.May));
+            rowFooter.GetCell(9).SetCellValue(requestList.Sum(x => x.Jun));
+            rowFooter.GetCell(10).SetCellValue(requestList.Sum(x => x.Jul));
+            rowFooter.GetCell(11).SetCellValue(requestList.Sum(x => x.Aug));
+            rowFooter.GetCell(12).SetCellValue(requestList.Sum(x => x.Sep));
+            rowFooter.GetCell(13).SetCellValue(requestList.Sum(x => x.Oct));
+            rowFooter.GetCell(14).SetCellValue(requestList.Sum(x => x.Nov));
+            rowFooter.GetCell(15).SetCellValue(requestList.Sum(x => x.Dec));
+            rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
         }
 
         /// <summary>

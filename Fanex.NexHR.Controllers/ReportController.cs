@@ -15,6 +15,7 @@ namespace Fanex.NexHR.Controllers
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Security;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
@@ -563,8 +564,8 @@ namespace Fanex.NexHR.Controllers
             ViewBag.DefaultFromDate = model.FromDate;
             ViewBag.DefaultToDate = model.ToDate;
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria 
-            { 
-                LookupCode = LookupCodename.JobTitle
+            {
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem

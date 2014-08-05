@@ -14,6 +14,10 @@ namespace Fanex.NexHR.Core
     /// </summary>
     public static class Constants
     {
+        public const string JobTitle = "JT";
+
+        public const string MemoCategory = "MC";
+
         public const int GeneralLeave = 0;
 
         public const int AnnualLeave = 2;

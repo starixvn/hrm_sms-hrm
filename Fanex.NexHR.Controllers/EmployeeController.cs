@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Controllers
 
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
@@ -110,7 +110,7 @@ namespace Fanex.NexHR.Controllers
             var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.JobTitle = (model.JobTitleId == null)
             ? Resources.Labels.Unknown
-            : _lookupDataService.GetLookupByCodeAndId(LookupCodename.JobTitle, model.JobTitleId.Value).Name;
+            : _lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, model.JobTitleId.Value).Name;
 
             ViewBag.DefaultCalendar = model.IsDefaultSchedule;
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
@@ -823,7 +823,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             ViewBag.JobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
 

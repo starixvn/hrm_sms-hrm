@@ -70,7 +70,7 @@ namespace Fanex.NexHR.Controllers
             IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> jobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
             var scheduleArrangeViewModel = new ScheduleArrangeFilterViewModel
@@ -275,7 +275,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem

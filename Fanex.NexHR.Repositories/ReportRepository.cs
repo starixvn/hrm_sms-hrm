@@ -41,25 +41,7 @@ namespace Fanex.NexHR.Repositories
                         attendance.RequestList = new List<EmployeeAttendanceRequest>();
                         if (t != null && t.RequestType != null)
                         {
-                            var request = new EmployeeAttendanceRequest
-                            {
-                                RequestType = new RequestTypeModel { Id = Convert.ToInt16(t.RequestType) },
-                                FromDate = t.FromDate,
-                                ToDate = t.ToDate,
-                                FromTime = t.FromTime,
-                                ToTime = t.ToTime,
-                                CreatedDate = t.CreatedDate,
-                                Remark = t.Remark,
-                                TotalDays = Convert.ToDecimal(t.TotalDays),
-                                LeaveType = new LeaveType
-                                {
-                                    Id = t.LeaveTypeId == null ? 0 : t.LeaveTypeId,
-                                    Name = t.LeaveType
-                                },
-                                FromShift = t.FromShift,
-                                ToShift = t.ToShift,
-                                TotalMins = t.Time
-                            };
+                            EmployeeAttendanceRequest request = FillAttendanceRequest(t);
 
                             attendance.RequestList.Add(request);
                         }
@@ -303,6 +285,42 @@ namespace Fanex.NexHR.Repositories
                 .Select(x => new TeamSupervisorReportModel { GroupId = x.Key, SupervisorAction = x.ToList() }).ToList();
 
             return supervisors;
+        }
+
+        /// <summary>
+        /// Function to fill employee attendance request.
+        /// </summary>
+        /// <param name="t">dynamic object.</param>
+        /// <returns>EmployeeAttendance Request.</returns>
+        private EmployeeAttendanceRequest FillAttendanceRequest(dynamic t)
+        {
+            var request = new EmployeeAttendanceRequest
+            {
+                RequestType = new RequestTypeModel { Id = t.RequestType },
+                FromDate = t.FromDate,
+                ToDate = t.ToDate,
+                FromTime = t.FromTime,
+                ToTime = t.ToTime,
+                CreatedDate = t.CreatedDate,
+                Remark = t.Remark,
+                TotalDays = t.TotalDays,
+                LeaveType = FillLeaveType(t),
+                FromShift = t.FromShift,
+                ToShift = t.ToShift,
+                TotalMins = t.Time
+            };
+            return request;
+        }
+
+        private LeaveType FillLeaveType(dynamic t)
+        {
+            var leaveType = new LeaveType
+            {
+                Id = t.LeaveTypeId == null ? 0 : t.LeaveTypeId,
+                Name = t.LeaveType
+            };
+
+            return leaveType;
         }
     }
 }

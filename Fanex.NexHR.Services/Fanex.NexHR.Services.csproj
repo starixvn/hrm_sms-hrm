@@ -154,7 +154,6 @@
     <Compile Include="Interfaces\IReportService.cs" />
     <Compile Include="LateInEarlyOutRequestService.cs" />
     <Compile Include="LeaveRequestService.cs" />
-    <Compile Include="LookupCodename.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="EmployeeService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />

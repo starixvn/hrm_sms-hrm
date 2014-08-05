@@ -10,8 +10,8 @@
 namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
@@ -37,7 +37,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
-                LookupCode = LookupCodename.JobTitle
+                LookupCode = Constants.JobTitle
             };
             ViewBag.JobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
             return View();
