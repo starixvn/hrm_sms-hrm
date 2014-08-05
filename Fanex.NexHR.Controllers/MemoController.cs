@@ -11,14 +11,13 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Core;
 
     /// <summary>
     /// Memo Controller.
