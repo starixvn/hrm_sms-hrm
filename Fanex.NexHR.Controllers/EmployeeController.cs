@@ -478,7 +478,7 @@ namespace Fanex.NexHR.Controllers
                     Empid = this.CurrentUser.Id,
                     Date = DateTime.Now
                 };
-                IList<HRLeaderDashboardModel> model = _employeeService.GetHrLeaderDashboard(getHRLeaderDashboardCriteria);
+                IList<HRLeaderDashboardModel> model = _employeeService.GetHRLeaderDashboard(getHRLeaderDashboardCriteria);
 
                 return PartialView("MultiRoleManagementDashboard", model);
             }

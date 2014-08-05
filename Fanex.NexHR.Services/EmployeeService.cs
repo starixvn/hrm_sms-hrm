@@ -348,7 +348,7 @@ namespace Fanex.NexHR.Services
             return unavailableDates;
         }
 
-        public IList<HRLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
+        public IList<HRLeaderDashboardModel> GetHRLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<HRLeaderDashboardModel> dashboard = null;

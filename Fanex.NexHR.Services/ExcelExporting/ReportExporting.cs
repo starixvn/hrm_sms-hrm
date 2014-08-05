@@ -42,7 +42,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
         /// <param name="fromDate">Export From Date.</param>
         /// <param name="toDate">Export To Date.</param>
         /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
-        public HSSFWorkbook ExportHrRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
+        public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
 

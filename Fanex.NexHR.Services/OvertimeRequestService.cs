@@ -27,13 +27,11 @@ namespace Fanex.NexHR.Services
     public class OvertimeRequestService : BaseService, IOvertimeRequestService
     {
         private readonly IOvertimeRequestRepository _overtimeRepository;
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
 
         public OvertimeRequestService()
         {
             this._overtimeRepository = new OvertimeRequestRepository();
-            this._employeeRepository = new EmployeeRepository();
             this._emailService = new EmailService();
         }
 

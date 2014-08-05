@@ -258,7 +258,7 @@ namespace Fanex.NexHR.Controllers
             if (isExcel)
             {
                 string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportHrRequestStatistic(requests, fromDate, toDate);
+                var hssfworkbook = _exportExcelService.ExportHRRequestStatistic(requests, fromDate, toDate);
                 return ExcelFile(hssfworkbook, fileName);
             }
 

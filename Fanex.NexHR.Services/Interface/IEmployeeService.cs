@@ -72,7 +72,7 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 
-        IList<HRLeaderDashboardModel> GetHrLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
+        IList<HRLeaderDashboardModel> GetHRLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
 
         IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 
