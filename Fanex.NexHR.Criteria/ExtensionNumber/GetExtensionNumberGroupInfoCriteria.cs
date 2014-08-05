@@ -7,7 +7,7 @@
 //   <change who="Josh.Phan" date="2014.7.30">Created.</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.ExtensionNumber
+namespace Fanex.NexHR.Criteria.ExtensionNumber
 {
     using Fanex.Data.Repository;
 

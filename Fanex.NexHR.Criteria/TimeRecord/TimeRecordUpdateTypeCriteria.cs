@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2014.7.24">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.TimeRecord
+namespace Fanex.NexHR.Criteria.TimeRecord
 {
     using System;
     using Fanex.Data.Repository;

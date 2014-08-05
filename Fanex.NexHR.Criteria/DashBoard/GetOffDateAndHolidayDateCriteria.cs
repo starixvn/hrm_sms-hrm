@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetMySpaceCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetOffDateAndHolidayDateCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,23 +7,25 @@
 //   <change who="Bradley.Mac" date="2014.7.29">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.MySpace
+namespace Fanex.NexHR.Criteria.DashBoard
 {
     using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Get Off Date And Holiday Date Criteria.
     /// </summary>
-    public class GetMySpaceCriteria : CriteriaBase
+    public class GetOffDateAndHolidayDateCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
 
-        public DateTime? Date { get; set; }
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
 
         public override string GetSettingKey()
         {
-            return "Report_EmployeeDashBoard";
+            return "EmployeeCalendar_GetOffDate_HolidayDate";
         }
 
         public override bool IsValid()

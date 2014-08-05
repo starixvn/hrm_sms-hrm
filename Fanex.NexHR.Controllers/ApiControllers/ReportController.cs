@@ -13,8 +13,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Http;
-    using Fanex.NexHR.Criteria.Report.Attendance;
-    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
+    using Fanex.NexHR.Criteria.ExtensionNumber;
+    using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;

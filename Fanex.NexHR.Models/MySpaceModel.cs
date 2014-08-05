@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.Models
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// MySpace ViewModel.
@@ -58,7 +57,5 @@ namespace Fanex.NexHR.Models
         public decimal LateInEarlyOut { get; set; }
 
         public decimal TotalPendingOverTimeRequest { get; set; }
-
-        public IList<DateOfEmployeeForgotAndLateEarlyIOModel> DateOfEmployeeForgotAndLateEarlyIO { get; set; }
     }
 }

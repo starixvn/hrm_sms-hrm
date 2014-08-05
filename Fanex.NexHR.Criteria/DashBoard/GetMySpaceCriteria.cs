@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetEmployeeMissingRequestDateCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetMySpaceCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,23 +7,23 @@
 //   <change who="Bradley.Mac" date="2014.7.29">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.MySpace
+namespace Fanex.NexHR.Criteria.DashBoard
 {
     using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get Employee Missing Request Date Criteria.
+    /// TODO: Update summary.
     /// </summary>
-    public class GetEmployeeMissingRequestDateCriteria : CriteriaBase
+    public class GetMySpaceCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public override string GetSettingKey()
         {
-            return "Report_DateOfEmployeeForgotAndLateEarlyIO";
+            return "Report_EmployeeDashBoard";
         }
 
         public override bool IsValid()

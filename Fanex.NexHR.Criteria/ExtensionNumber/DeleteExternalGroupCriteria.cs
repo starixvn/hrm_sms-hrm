@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="GetExtensionNumberMemberByIdCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="DeleteExternalGroupCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,28 +7,26 @@
 //   <change who="Josh.Phan" date="2014.7.30">Created.</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.ExtensionNumber
+namespace Fanex.NexHR.Criteria.ExtensionNumber
 {
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get extension number of member by Id criteria.
+    /// Delete external group criteria.
     /// </summary>
-    public class GetExtensionNumberMemberByIdCriteria : CriteriaBase
+    public class DeleteExternalGroupCriteria : CriteriaBase
     {
-        public bool IsInternal { get; set; }
-
-        [SpParam(SqlParamName = "EmpExtID")]
-        public int EmployeeExtensionNoId { get; set; }
+        [SpParam(SqlParamName = "ExtID")]
+        public int ExternalId { get; set; }
 
         public override string GetSettingKey()
         {
-            return "ExtensionNO_GetEmployeeInfo";
+            return "ExtensionNO_DELETE_GroupExternal";
         }
 
         public override bool IsValid()
         {
-            return true;
+            return ExternalId > 0;
         }
     }
 }

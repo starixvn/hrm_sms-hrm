@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="DeleteExtensionNumberMemberCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetAllExtensionNumberCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,26 +7,24 @@
 //   <change who="Josh.Phan" date="2014.7.30">Created.</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.ExtensionNumber
+namespace Fanex.NexHR.Criteria.ExtensionNumber
 {
+    using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Delete extension number of member criteria.
+    /// Get all extension number criteria.
     /// </summary>
-    public class DeleteExtensionNumberMemberCriteria : CriteriaBase
+    public class GetAllExtensionNumberCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ExtID")]
-        public int ExtensionNumberId { get; set; }
-
         public override string GetSettingKey()
         {
-            return "ExtensionNO_DELETE_EmployeeInfo";
+            return "ExtensionNO_GetAll";
         }
 
         public override bool IsValid()
         {
-            return ExtensionNumberId > 0;
+            return true;
         }
     }
 }

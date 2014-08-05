@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.MySpace;
+    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Criteria.Shift;

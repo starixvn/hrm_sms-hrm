@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2014.8.1">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.Attendance
+namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;

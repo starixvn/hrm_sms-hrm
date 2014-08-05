@@ -20,8 +20,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Report.Attendance;
-    using Fanex.NexHR.Criteria.Report.WorkingHour;
+    using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;

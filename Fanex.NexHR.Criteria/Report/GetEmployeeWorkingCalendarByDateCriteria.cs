@@ -1,26 +1,31 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetSupervisorReportCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetEmployeeWorkingCalendarByDateCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
 // <history>
-//   <change who="Bradley.Mac" date="2014.7.17">Created</change>
+//   <change who="Bradley.Mac" date="2014.7.11">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.Supervisor
+namespace Fanex.NexHR.Criteria.Report
 {
+    using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get Supervisor Report Criteria.
+    /// Get Employee Working Calendar By Date Criteria.
     /// </summary>
-    public class GetSupervisorReportCriteria : CriteriaBase
+    public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     {
         public int? EmployeeId { get; set; }
 
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
         public string GroupIds { get; set; }
 
-        public int? ActionType { get; set; }
+        public string JobTitleId { get; set; }
 
         public byte? IsLocal { get; set; }
 
@@ -31,7 +36,7 @@ namespace Fanex.NexHR.Criteria.Report.Supervisor
 
         public override string GetSettingKey()
         {
-            return "EmployeeSupervisor_Get";
+            return "Report_EmployeeCalendarByDateRange";
         }
     }
 }

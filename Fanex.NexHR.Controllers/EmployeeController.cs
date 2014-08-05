@@ -24,7 +24,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -411,17 +410,7 @@ namespace Fanex.NexHR.Controllers
             var employeeId = this.CurrentUser.Id;
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = employeeId };
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = employeeId, Date = DateTime.Now };
-            var getDatesMissingRequestCriteria = new GetEmployeeMissingRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                Date = DateTime.Now
-            };
             MySpaceModel model = _employeeService.GetMySpace(getMySpaceCriteria);
-
-            if (model != null)
-            {
-                model.DateOfEmployeeForgotAndLateEarlyIO = _employeeService.GetDateOfEmployeeForgotAndLateEarlyIO(getDatesMissingRequestCriteria);
-            }
 
             var employee = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.ResetPassword = employee.PasswordReset;

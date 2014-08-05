@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetTotalWorkingHourWeeklyCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetReportWorkingHourSummaryCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,15 +7,15 @@
 //   <change who="Bradley.Mac" date="2014.7.31">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.WorkingHour
+namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get Total Working Hour Weekly Criteria.
+    /// Get Report Working Hour Summary Criteria.
     /// </summary>
-    public class GetTotalWorkingHourWeeklyCriteria : CriteriaBase
+    public class GetReportWorkingHourSummaryCriteria : CriteriaBase
     {
         public DateTime Fromdate { get; set; }
 
@@ -27,11 +27,9 @@ namespace Fanex.NexHR.Criteria.Report.WorkingHour
 
         public byte? IsLocal { get; set; }
 
-        public bool? IsDebug { get; set; }
-
         public override string GetSettingKey()
         {
-            return "Report_EmployeeTotalWorkingHourByWeek";
+            return "Report_WorkingHoursSummary";
         }
 
         public override bool IsValid()

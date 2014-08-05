@@ -17,7 +17,6 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
-    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
@@ -67,8 +66,6 @@ namespace Fanex.NexHR.Services.Interfaces
         CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria);
 
         MySpaceModel GetMySpace(GetMySpaceCriteria criteria);
-
-        IList<DateOfEmployeeForgotAndLateEarlyIOModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria);
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 

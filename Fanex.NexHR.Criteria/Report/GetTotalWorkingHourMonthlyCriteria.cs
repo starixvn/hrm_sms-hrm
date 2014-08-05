@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetReportWorkingHourSummaryCriteria.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="GetTotalWorkingHourMonthlyCriteria.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -7,19 +7,17 @@
 //   <change who="Bradley.Mac" date="2014.7.31">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Criteria.Report.WorkingHour
+namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// Get Report Working Hour Summary Criteria.
+    /// Get Total Working HourMonthlyCriteria.
     /// </summary>
-    public class GetReportWorkingHourSummaryCriteria : CriteriaBase
+    public class GetTotalWorkingHourMonthlyCriteria : CriteriaBase
     {
-        public DateTime Fromdate { get; set; }
-
-        public DateTime Todate { get; set; }
+        public DateTime ReportMonth { get; set; }
 
         public int? EmpId { get; set; }
 
@@ -27,9 +25,11 @@ namespace Fanex.NexHR.Criteria.Report.WorkingHour
 
         public byte? IsLocal { get; set; }
 
+        public bool? IsDebug { get; set; }
+
         public override string GetSettingKey()
         {
-            return "Report_WorkingHoursSummary";
+            return "Report_EmployeeTotalWorkingHourByMonth";
         }
 
         public override bool IsValid()

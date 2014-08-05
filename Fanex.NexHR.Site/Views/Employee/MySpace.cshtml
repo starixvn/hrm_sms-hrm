@@ -13,24 +13,6 @@
 }
 <h2>@Labels.MySpace</h2>
 @Html.Hidden("ChangePassword", (bool)ViewBag.ResetPassword)
-<ul id="forgotCheckInOutMenu" class="hide">
-    @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
-    {
-        if (item.IsMissingCheckIn || item.IsMissingCheckOut)
-        {
-        <li class="forgotCheckInOutMenuItem"><a command="/checkinout/create?suggestedDate=@item.AttendanceDate&isMissingCheckIn=@item.IsMissingCheckIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
-        }
-    }
-</ul>
-<ul id="lateInEarlyOutMenu" class="hide">
-    @foreach (var item in Model.DateOfEmployeeForgotAndLateEarlyIO)
-    {
-        if (item.IsLateIn || item.IsEarlyOut)
-        {
-        <li class="lateInEarlyOutMenuItem"><a command="/lateinearlyout/create?suggestedDate=@item.AttendanceDate&isLateIn=@item.IsLateIn.ToString()" href="javascript:void(0);">@item.AttendanceDate.ToDateMonthYearFormatedDate()</a></li>
-        }
-    }
-</ul>
 <table class="data" id="myspace">
     <thead>
         <tr>

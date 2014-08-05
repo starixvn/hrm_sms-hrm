@@ -22,7 +22,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
-    using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
@@ -294,18 +293,6 @@ namespace Fanex.NexHR.Services
             }
 
             return space;
-        }
-
-        public IList<DateOfEmployeeForgotAndLateEarlyIOModel> GetDateOfEmployeeForgotAndLateEarlyIO(GetEmployeeMissingRequestDateCriteria criteria)
-        {
-            IList<DateOfEmployeeForgotAndLateEarlyIOModel> dates = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                dates = this.GetData<DateOfEmployeeForgotAndLateEarlyIOModel>(criteria).ToList();
-            }
-
-            return dates;
         }
 
         /// <summary>

@@ -18,13 +18,13 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
-    using Fanex.NexHR.Criteria.Report.ExtensionNumber;
-    using Fanex.NexHR.Criteria.Report.TimeRecord;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -173,15 +173,15 @@ namespace Fanex.NexHR.Controllers
 
         [Authorize(Roles = "HR")]
         [HttpPost]
-        public JsonResult ProcessInOut(TimeRecordUpdateTypeCriteria model)
+        public JsonResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria)
         {
-            if (model != null)
+            if (criteria != null)
             {
-                model.ModifiedBy = this.CurrentUser.Id;
-                model.ModifiedDate = DateTime.Now;
+                criteria.ModifiedBy = this.CurrentUser.Id;
+                criteria.ModifiedDate = DateTime.Now;
             }
 
-            CommandResult commandResult = _reportService.ProcessInOut(model);
+            CommandResult commandResult = _reportService.ProcessInOut(criteria);
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
