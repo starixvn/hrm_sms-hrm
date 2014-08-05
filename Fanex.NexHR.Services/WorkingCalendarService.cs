@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Services
     using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -57,50 +58,59 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get WorkingCalendars By Date Range, groups and employee.
         /// </summary>
-        /// <param name="supervisorId">Supervisor Id.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Groups Id.</param>
-        /// <param name="jobTitles">Job titles.</param>
-        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>List WorkingCalendarModel.</returns>
-        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(
-            int supervisorId, 
-            DateTime fromDate, 
-            DateTime toDate, 
-            string groupIds,
-            string jobTitles, 
-            int? employeeId = null)
+        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria)
         {
-            var workingCalendarModels = _workingCalendarRepository.GetWorkingCalendarsForShiftArrange(supervisorId, fromDate, toDate, groupIds, jobTitles, employeeId);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<WorkingCalendarModel> workingCalendarModels = null;
+            if (criteria.IsValid())
+            {
+                workingCalendarModels = _workingCalendarRepository.GetWorkingCalendarsForShiftArrange(criteria);
+            }
 
             return workingCalendarModels;
         }
 
-        public bool InsertOrUpdateWorkingCalendars(ScheduleArrangeModel scheduleArrangeModel, out int errorCode, out string message)
+        public CommandResult InsertOrUpdateWorkingCalendars(InsertOrUpdateWorkingCalendarsCriteria criteria)
         {
-            var result = _workingCalendarRepository.InsertOrUpdateWorkingCalendars(scheduleArrangeModel, out errorCode, out message);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Insert(criteria);
+            }
             
             return result;
         }
 
-        public IList<ShiftStatisticModel> GetShiftStatistic(
-            int supervisorId, 
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isShowWholeCompany,
-            byte? isLocal)
+        /// <summary>
+        /// Get Shift Statistic.
+        /// </summary>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <returns>Shift Statistic Models.</returns>
+        public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)
         {
-            var shiftStatisticModels = _workingCalendarRepository.GetShiftStatistic(supervisorId, fromDate, toDate, groupIds, isShowWholeCompany, isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<ShiftStatisticModel> shiftStatisticModels = null;
+            if (criteria.IsValid())
+            {
+                shiftStatisticModels = this.GetData<ShiftStatisticModel>(criteria).ToList();
+            }
 
             return shiftStatisticModels;
         }
 
-        public IList<WorkingScheduleModel> GetWorkingSchedule(System.DateTime date, int id)
+        public IList<WorkingScheduleModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
         {
-            Check.Argument.IsNotNegativeOrZero(id, "id");
-            return this._workingCalendarRepository.GetWorkingSchedule(date, id);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<WorkingScheduleModel> workingSchedule = null;
+            if (criteria.IsValid())
+            {
+                workingSchedule = this._workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
+            }
+
+            return workingSchedule;
         }
 
         public IList<ViewModels.WorkingCalendarsViewModel> GetWorkingCalendars(

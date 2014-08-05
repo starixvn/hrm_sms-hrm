@@ -112,13 +112,5 @@ namespace Fanex.NexHR.Repositories
                 return entity;
             }
         }
-
-        public IList<SupervisorNameModel> GetEmployeeCanClaimOvertime()
-        {
-            using (ObjectDb db = new ObjectDb("OverTime_GetListEmpClaimOT"))
-            {
-                return db.Query<SupervisorNameModel>().ToList();
-            }
-        }
     }
 }

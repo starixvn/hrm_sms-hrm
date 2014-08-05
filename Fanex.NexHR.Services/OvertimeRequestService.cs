@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services
     using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
@@ -259,7 +260,13 @@ namespace Fanex.NexHR.Services
         /// <param name="content">The content mail.</param>
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
-            var employees = _employeeRepository.GetEmployeeCanClaimOvertime();
+            IList<SupervisorNameModel> employees = null;
+            var criteria = new GetListEmployeeClaimOvertimeCriteria();
+            if (criteria.IsValid())
+            {
+                employees = this.GetData<SupervisorNameModel>(criteria).ToList();
+            }
+
             if (employees != null)
             {
                 List<string> emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();

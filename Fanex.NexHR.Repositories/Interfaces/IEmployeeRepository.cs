@@ -23,7 +23,5 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<Employee> GetEmployees(ICriteria criteria);
 
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
-
-        IList<SupervisorNameModel> GetEmployeeCanClaimOvertime();
     }
 }

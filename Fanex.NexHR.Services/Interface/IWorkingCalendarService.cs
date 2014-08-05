@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Interface
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
@@ -19,19 +20,13 @@ namespace Fanex.NexHR.Services.Interface
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria);
 
-        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(
-            int supervisorId, 
-            DateTime fromDate, 
-            DateTime toDate, 
-            string groupIds, 
-            string jobTitles, 
-            int? employeeId = null);
+        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria);
 
-        bool InsertOrUpdateWorkingCalendars(ScheduleArrangeModel scheduleArrangeModel, out int errorCode, out string message);
+        CommandResult InsertOrUpdateWorkingCalendars(InsertOrUpdateWorkingCalendarsCriteria criteria);
 
-        IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal);
+        IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
 
-        IList<WorkingScheduleModel> GetWorkingSchedule(DateTime date, int id);
+        IList<WorkingScheduleModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null);
     }

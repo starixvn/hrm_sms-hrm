@@ -50,8 +50,11 @@
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
+    <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarByDateRangeCriteria.cs" />
+    <Compile Include="Calendar\GetWorkingCalendarsForShiftArrangeCriteria.cs" />
+    <Compile Include="Calendar\InsertOrUpdateWorkingCalendarsCriteria.cs" />
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="EmployeeSupervisor\UpdateSupervisorCriteria.cs" />
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
+    <Compile Include="Employee\GetListEmployeeClaimOvertimeCriteria.cs" />
     <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
     <Compile Include="GroupSupervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="GroupSupervisor\GetSupervisorByTeamIdCriteria.cs" />
@@ -168,6 +172,7 @@
     <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
     <Compile Include="Shift\GetEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
+    <Compile Include="Shift\GetShiftStatisticCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />
     <Compile Include="Shift\UpdateEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />

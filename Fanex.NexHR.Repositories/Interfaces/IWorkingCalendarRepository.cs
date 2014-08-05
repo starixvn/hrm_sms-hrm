@@ -19,19 +19,9 @@ namespace Fanex.NexHR.Repositories.Interfaces
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria);
 
-        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(
-            int supervisorId, 
-            DateTime fromDate, 
-            DateTime toDate, 
-            string groupIds,
-            string jobTitles, 
-            int? employeeId = null);
+        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria);
 
-        bool InsertOrUpdateWorkingCalendars(ScheduleArrangeModel scheduleArrangeModel, out int errorCode, out string message);
-
-        IList<ShiftStatisticModel> GetShiftStatistic(int supervisorId, DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal);
-
-        IList<WorkingScheduleModel> GetWorkingSchedule(DateTime date, int id);
+        IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime date);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null);
     }

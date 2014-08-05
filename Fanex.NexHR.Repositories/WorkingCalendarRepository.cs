@@ -51,22 +51,11 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Function to get WorkingCalendars By Date Range, groups and employee.
         /// </summary>
-        /// <param name="supervisorId">Supervisor Id.</param>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Groups Id.</param>
-        /// <param name="jobTitles">Job titles.</param>
-        /// <param name="employeeId">Employee Id.</param>
+        /// <param name="criteria">Criteria to query DB..</param>
         /// <returns>List WorkingCalendarModel.</returns>
-        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(
-            int supervisorId, 
-            DateTime fromDate, 
-            DateTime toDate, 
-            string groupIds,
-            string jobTitles, 
-            int? employeeId = null)
+        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria)
         {
-            using (var db = new ObjectDb("ShiftMng_GetShiftSchedule"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var workingCalendarList = db.Query<WorkingCalendarModel, Employee, Team, Shift, LeaveType, LeaveType, WorkingCalendarModel>(
                     (w, e, t, s, lv, lv2) =>
@@ -79,71 +68,24 @@ namespace Fanex.NexHR.Repositories
                         return w;
                     },
                     splitOn: "EmpId, GroupId, ShiftId, LeaveTypeId, LeaveTypeId2",
-                    parameterValues: new { supervisorId = supervisorId, fromtime = fromDate, totime = toDate, groupIds = groupIds, JobTitleId = jobTitles, empId = employeeId });
+                    parameterValues: criteria.GetSpParams());
 
                 return workingCalendarList.ToList();
             }
         }
 
         /// <summary>
-        /// Function to insert or update working calendars.
-        /// </summary>
-        /// <param name="scheduleArrangeModel">Schedule Arrange Model.</param>
-        /// <param name="errorCode">Error Code.</param>
-        /// <param name="message">Error message.</param>
-        /// <returns>Result of insert/update list working calendars.</returns>
-        public bool InsertOrUpdateWorkingCalendars(ScheduleArrangeModel scheduleArrangeModel, out int errorCode, out string message)
-        {
-            using (var db = new ObjectDb("ShiftMng_Set_ShiftSchedule"))
-            {
-                db.AddInParameter("@ModifiedDate", DbType.DateTime, scheduleArrangeModel.ModifiedDate);
-                db.AddInParameter("@ModifiedBy", DbType.Int32, scheduleArrangeModel.ModifiedBy);
-                db.AddInParameter("@ScheduleList", DbType.String, scheduleArrangeModel.ScheduleModelXML);
-                db.AddInParameter("@ShiftMultipleList", DbType.String, scheduleArrangeModel.ShiftMultipleXML);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                var result = db.ExecuteNonQuery() != 0;
-
-                message = db.GetParameterValue("ErrMsg") as string;
-                errorCode = (int)db.GetParameterValue("ErrCode");
-
-                return result;
-            }
-        }
-
-        public IList<ShiftStatisticModel> GetShiftStatistic(
-            int supervisorId,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupIds,
-            bool isShowWholeCompany, 
-            byte? isLocal)
-        {
-            using (var db = new ObjectDb("ShiftMng_RptShiftSchedule"))
-            {
-                var shiftStatisticModels = db.Query<ShiftStatisticModel>(
-                    new { supervisorId, fromtime = fromDate, totime = toDate, groupIds, isShowWholeCompany, isLocal });
-
-                return shiftStatisticModels.ToList();
-            }
-        }
-
-        /// <summary>
         /// Method get working schedule.
         /// </summary>
-        /// <param name="date">Working schedule's date time.</param>
-        /// <param name="id">Employee's id.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
+        /// <param name="date">Report Date.</param>
         /// <returns>A list of working schedule model.</returns>
-        public IList<WorkingScheduleModel> GetWorkingSchedule(DateTime date, int id)
+        public IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime date)
         {
-            using (var db = new ObjectDb("Report_EmployeeCalendarByMonth"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var ds = new DataSet();
-
-                db.AddInParameter("@reportDate", DbType.DateTime, date);
-                db.AddInParameter("@empId", DbType.Int32, id);
-                ds = db.ExecuteDataSet();
+                ds = db.ExecuteDataSet(criteria.GetSpParams());
                 var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
 
                 var list = new List<WorkingScheduleModel>();

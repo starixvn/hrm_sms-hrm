@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
+    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -96,9 +97,6 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "ShiftManager")]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
         {
-            var errorCode = 0;
-            var message = string.Empty;
-            
             var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
             var shiftMultipleDetail = JsonConverter.FromJsonArray<ShiftMultipleModel>(shiftMultiples);
             var scheduleArrangeModel = new ScheduleArrangeModel
@@ -109,9 +107,16 @@ namespace Fanex.NexHR.Controllers
                 ModifiedDate = DateTime.Now,
             };
 
-            _workingCalendarService.InsertOrUpdateWorkingCalendars(scheduleArrangeModel, out errorCode, out message);
+            var criteria = new InsertOrUpdateWorkingCalendarsCriteria()
+            {
+                ModifiedDate = scheduleArrangeModel.ModifiedDate,
+                ModifiedBy = scheduleArrangeModel.ModifiedBy,
+                ScheduleList = scheduleArrangeModel.ScheduleModelXML,
+                ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
+            };
+            CommandResult result = _workingCalendarService.InsertOrUpdateWorkingCalendars(criteria);
 
-            return Json(new { errorCode = errorCode, message = message }, JsonRequestBehavior.AllowGet);
+            return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -127,7 +132,16 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "ShiftManager")]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
-            var workingCalendars = _workingCalendarService.GetWorkingCalendarsForShiftArrange(this.CurrentUser.Id, fromDate, toDate, groupIds, jobTitles, employeeId);
+            var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
+            {
+                SupervisorID = this.CurrentUser.Id,
+                Fromtime = fromDate,
+                Totime = toDate,
+                GroupIds = groupIds,
+                JobTitleId = jobTitles,
+                EmpID = employeeId
+            };
+            var workingCalendars = _workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
             var scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars);
 
             var scheduleViewModel = new ScheduleViewModel
@@ -175,7 +189,16 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "ShiftManager,HR")]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
-            var shiftStatisticModels = _workingCalendarService.GetShiftStatistic(this.CurrentUser.Id, fromDate, toDate, groupIds, isShowWholeCompany, isLocal);
+            var getShiftCriteria = new GetShiftStatisticCriteria()
+            {
+                SupervisorID = this.CurrentUser.Id,
+                Fromtime = fromDate,
+                Totime = toDate,
+                GroupIds = groupIds,
+                IsShowWholeCompany = isShowWholeCompany,
+                IsLocal = isLocal
+            };
+            var shiftStatisticModels = _workingCalendarService.GetShiftStatistic(getShiftCriteria);
 
             var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
             {
@@ -203,12 +226,25 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult MyWorkingSchedule()
         {
-            return View(_workingCalendarService.GetWorkingSchedule(DateTime.Now, this.CurrentUser.Id));
+            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria()
+            {
+                ReportDate = DateTime.Now,
+                EmpId = this.CurrentUser.Id
+            };
+            IList<WorkingScheduleModel> workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
+
+            return View(workingSchedule);
         }
 
         public ActionResult GetWorkingSchedule(DateTime date, int id)
         {
-            var workingSchedule = _workingCalendarService.GetWorkingSchedule(date, id);
+            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria()
+            {
+                ReportDate = date,
+                EmpId = id
+            };
+            var workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
+
             return Json(workingSchedule, JsonRequestBehavior.AllowGet);
         }
 
