@@ -748,6 +748,7 @@ namespace Fanex.NexHR.Controllers
         {
             List<string> listVerifierName = null, listApproverName = null, listShiftName = null, listActingName = null;
             List<SupervisorNameModel> verifierList = null, approverList = null, shiftMonitorList = null, actingList = null;
+            string displayMore = "...";
             var getListSupervisor = new GetListSupervisorNameCriteria()
             {
                 EmpId = id,
@@ -766,7 +767,7 @@ namespace Fanex.NexHR.Controllers
             listVerifierName = verifierList.Count > 3 ? verifierList.Select(x => x.NickName).Take(3).ToList() : verifierList.Select(x => x.NickName).ToList();
             if (verifierList.Count > 3)
             {
-                listVerifierName.Add("...");
+                listVerifierName.Add(displayMore);
             }
 
             verifier = string.Join(", ", listVerifierName);
@@ -774,7 +775,7 @@ namespace Fanex.NexHR.Controllers
             listApproverName = approverList.Count > 3 ? approverList.Select(x => x.NickName).Take(3).ToList() : approverList.Select(x => x.NickName).ToList();
             if (approverList.Count > 3)
             {
-                listApproverName.Add("...");
+                listApproverName.Add(displayMore);
             }
 
             approver = string.Join(", ", listApproverName);
@@ -782,15 +783,14 @@ namespace Fanex.NexHR.Controllers
             listShiftName = shiftMonitorList.Count > 3 ? shiftMonitorList.Select(x => x.NickName).Take(3).ToList() : shiftMonitorList.Select(x => x.NickName).ToList();
             if (shiftMonitorList.Count > 3)
             {
-                listShiftName.Add("...");
+                listShiftName.Add(displayMore);
             }
 
             shiftManager = string.Join(", ", listShiftName);
-
             listActingName = actingList.Count > 3 ? actingList.Select(x => x.NickName).Take(3).ToList() : actingList.Select(x => x.NickName).ToList();
             if (actingList.Count > 3)
             {
-                listActingName.Add("...");
+                listActingName.Add(displayMore);
             }
 
             actingSupervisor = string.Join(", ", listActingName);

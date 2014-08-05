@@ -28,20 +28,17 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     {
         private readonly IReportService _reportService;
         private readonly ITeamService _teamService;
-        private readonly IEmployeeService _employeeService;
 
         public ReportController()
         {
             _reportService = new ReportService();
             _teamService = new TeamService();
-            _employeeService = new EmployeeService();
         }
 
-        public ReportController(IReportService reportService, ITeamService teamService, IEmployeeService employeeService)
+        public ReportController(IReportService reportService, ITeamService teamService)
         {
             _reportService = reportService;
             _teamService = teamService;
-            _employeeService = employeeService;
         }
 
         /// <summary>

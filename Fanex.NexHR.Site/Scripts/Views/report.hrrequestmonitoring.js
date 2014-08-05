@@ -44,7 +44,7 @@ function queryDataHrRequestMonitoring(isExcel) {
 		var template = $("#HrRequestMonitoringTemplate");
 
 		if (isExcel) {
-			var url = _global.root + "report/HrRequestMonitoringDetails?currentUserId=" + currentUserId + "&fromDate=" + fromDate + "&toDate=" + toDate
+			var url = _global.root + "report/HRRequestMonitoringDetails?currentUserId=" + currentUserId + "&fromDate=" + fromDate + "&toDate=" + toDate
 		+ "&maxRequest=" + maxRequest + "&empId=" + employeeId + "&group=" + group + "&isLocal=" + isLocal + "&isExcel=" + isExcel + "&viewRole=" + viewRole;
 			location.href = url;
 		}
@@ -63,7 +63,7 @@ function queryDataHrRequestMonitoring(isExcel) {
 			};
 
 			$.ajax({
-				url: _global.root + "report/HrRequestMonitoringDetails",
+				url: _global.root + "report/HRRequestMonitoringDetails",
 				data: params,
 				async: false
 			}).done(function (response) {

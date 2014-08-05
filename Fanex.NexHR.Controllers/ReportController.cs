@@ -173,7 +173,7 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <returns>Return View.</returns>
         [Authorize(Roles = "HR")]
-        public ActionResult HrRequestMonitoring()
+        public ActionResult HRRequestMonitoring()
         {
             var authorize = false;
             var year = DateTime.Now.Year;
@@ -220,7 +220,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="viewRole">HR View or Leader View.</param>
         /// <returns>Action Result.</returns>
         [Authorize(Roles = "HR,Verifier,Approver")]
-        public ActionResult HrRequestMonitoringDetails(
+        public ActionResult HRRequestMonitoringDetails(
             int currentUserId,
             DateTime fromDate,
             DateTime toDate,
@@ -570,7 +570,7 @@ namespace Fanex.NexHR.Controllers
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
-                Selected = j.Id.ToString() == string.Empty
+                Selected = string.IsNullOrEmpty(j.Id.ToString())
             }).ToList();
             if (isExcel)
             {
@@ -950,7 +950,7 @@ namespace Fanex.NexHR.Controllers
                 if (listRole.Any(x => x == (int)RoleSystem.Verifier))
                 {
                     int roleId = (int)RoleSystem.Verifier;
-                    if (currentUserrole == string.Empty)
+                    if (string.IsNullOrEmpty(currentUserrole))
                     {
                         currentUserrole = roleId.ToString();
                     }

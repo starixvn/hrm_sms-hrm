@@ -92,7 +92,6 @@ namespace Fanex.NexHR.Controllers
             foreach (SiteMapNode sectionNode in root.ChildNodes)
             {
                 var user = this.CurrentUser;
-                var userRole = user.RoleList;
                 //// section level
                 if (sectionNode.Roles.Count == 0 || this.CurrentUser.IsInRoles(sectionNode.Roles.Cast<string>().ToList<string>()))
                 {

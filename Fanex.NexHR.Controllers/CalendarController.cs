@@ -236,7 +236,7 @@ namespace Fanex.NexHR.Controllers
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
-                Selected = j.Id.ToString() == string.Empty
+                Selected = string.IsNullOrEmpty(j.Id.ToString())
             }).ToList();
 
             return View();

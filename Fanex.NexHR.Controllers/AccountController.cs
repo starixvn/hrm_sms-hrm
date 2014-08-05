@@ -87,10 +87,11 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public ActionResult Index(Employee employeeModel)
         {
-            string message = string.Empty;
-            employeeModel.Id = this.CurrentUser.Id;
-            employeeModel.Modifier = new Employee { Id = this.CurrentUser.Id };
+            var id = this.CurrentUser.Id;
+            employeeModel.Id = id;
+            employeeModel.Modifier = new Employee { Id = id };
             ModelState.Clear();
+
             UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
             CommandResult result = _employeeService.UpdatePersonalInformation(criteria);
             if (result.Code != 0)
@@ -103,7 +104,6 @@ namespace Fanex.NexHR.Controllers
                 ViewBag.IsUpdated = true;
             }
 
-            var id = this.CurrentUser.Id;
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             var displayModel = this._employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
@@ -111,9 +111,11 @@ namespace Fanex.NexHR.Controllers
             ViewBag.JobTitle = displayModel.JobTitleId == null
             ? Resources.Labels.Unknown
             : _lookupDataService.GetLookupByCodeAndId(LookupCodename.JobTitle, displayModel.JobTitleId.Value).Name;
+
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
             ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             ViewBag.DefaultCalendar = displayModel.IsDefaultSchedule;
+
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
             var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
             var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = displayModel.CountryCode };
