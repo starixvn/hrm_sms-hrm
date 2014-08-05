@@ -8,7 +8,7 @@ namespace Fanex.NexHR.Services
 {
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.TimesheetRecord;
 
     /// <summary>

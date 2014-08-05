@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>

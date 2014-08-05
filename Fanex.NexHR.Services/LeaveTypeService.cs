@@ -16,7 +16,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// LeaveType Service.

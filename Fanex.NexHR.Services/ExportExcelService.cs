@@ -23,7 +23,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.ExcelExporting;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;

@@ -28,7 +28,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// RequestService Class.
@@ -164,8 +164,8 @@ namespace Fanex.NexHR.Services
                         msg.AppendFormat(
                             _MsgKeepInViewHalfday, 
                             request.FromDate.ToDateMonthYearFormatedDate(), 
-                            request.FromTime.ToString("HH:mm"), 
-                            request.ToTime.ToString("HH:mm"), 
+                            request.FromTime.ToShortTime(), 
+                            request.ToTime.ToShortTime(), 
                             request.FromShift.Name);
                     }
                     else
@@ -196,7 +196,7 @@ namespace Fanex.NexHR.Services
                 {
                     if (fromDate.Month != toDate.Month)
                     {
-                        result = fromDate.ToString("dd MMM") + " - " + toDate.ToDateMonthYearFormatedDate();
+                        result = fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
                     }
                     else
                     {
@@ -294,29 +294,41 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Function to delete a working time request.
+        /// Function to delete a request.
         /// </summary>
-        /// <param name="id">WorkingTime Request Id.</param>
+        /// <param name="criteria">DeleteRequest Criteria.</param>
         /// <returns>Result of deleted.</returns>
-        public bool DeleteWorkingTimeRequest(long id)
+        public CommandResult Delete(DeleteRequestCriteria criteria)
         {
-            Check.Argument.IsNotNegativeOrZero(id, "id");
-            var getRequestByIdCriteria = new GetRequestByIdCriteria()
-            {
-                RequestId = id
-            };
-            RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = new CommandResult();
 
-            if (request != null)
+            if (criteria.IsValid())
             {
-                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
-                var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
-                taskSendMail.Start();
+                var getRequestByIdCriteria = new GetRequestByIdCriteria()
+                {
+                    RequestId = criteria.RequestId
+                };
+                RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
+                if (request != null)
+                {
+                    var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
+                    var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
+                    taskSendMail.Start();
 
-                return this.RequestRepository.DeleteWorkingTimeRequest(id);
+                    result = Repository.Delete(criteria);
+                }
+            }
+            else
+            {
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Resources.Messages.InvalidInputData
+                };
             }
 
-            return false;
+            return result;
         }
 
         public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
@@ -358,21 +370,18 @@ namespace Fanex.NexHR.Services
         /// <summary>
         /// Function to get Change shift request history.
         /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request type Id.</param>
+        /// <param name="criteria">GetHistoryRequest Criteria.</param>
         /// <returns>RequestEntity List.</returns>
-        public IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId)
+        public IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria)
         {
-            IList<RequestEntity> entityList = null;
-            entityList = this.RequestRepository.GetHistoryRequest(requestId, requestTypeId);
-            return entityList;
-        }
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<RequestEntity> histories = null;
+            if (criteria.IsValid())
+            {
+                histories = RequestRepository.GetHistoryRequest(criteria);
+            }
 
-        public IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser)
-        {
-            var supervisors = this.RequestRepository.GetSupervisorByQuery(empId, role, requestType, query, includeLoginUser);
-
-            return supervisors;
+            return histories;
         }
 
         /// <summary>

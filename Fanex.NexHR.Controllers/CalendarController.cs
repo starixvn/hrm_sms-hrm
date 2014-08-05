@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -32,27 +32,24 @@ namespace Fanex.NexHR.Controllers
     {
         private readonly IWorkingCalendarService _workingCalendarService;
         private readonly ITeamService _teamService;
-        private readonly IRequestService _requestService;
         private readonly IShiftService _shiftService;
         private readonly ILookupDataService _lookupDataService;
         private readonly IEmployeeService _employeeService;
 
         public CalendarController()
-            : this(null, null, null, null, null, null)
+            : this(null, null, null, null, null)
         {
         }
 
         public CalendarController(
             IWorkingCalendarService workingCalendarService, 
             ITeamService teamService, 
-            IRequestService requestService,
             IShiftService shiftService,
             ILookupDataService lookupDataService = null,
             IEmployeeService employeeService = null)
         {
             _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             _teamService = teamService ?? new TeamService();
-            _requestService = requestService ?? new RequestService();
             _shiftService = shiftService ?? new ShiftService();
             _lookupDataService = lookupDataService ?? new LookupDataService();
             _employeeService = employeeService ?? new EmployeeService();
@@ -210,10 +207,23 @@ namespace Fanex.NexHR.Controllers
             return View(shiftStatisticContentViewModel);
         }
 
+        /// <summary>
+        /// Function to get employees by shift monitor.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>Action Result.</returns>
         public ActionResult GetEmployeesByShiftMonitor(string query)
         {
-            var employees = _requestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RoleSystem.ShiftManager, null, query.Trim(), includeLoginUser: false);
+            var criteria = new GetEmployeeSupervisorByQueryCriteria() 
+            {
+                EmpId = this.CurrentUser.Id,
+                Role = (int)RoleSystem.ShiftManager,
+                RequestType = null,
+                Query = query.Trim(),
+                IncludeLoginUser = false
+            };
 
+            IList<SupervisorNameModel> employees = _employeeService.GetSupervisorByQuery(criteria);
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 

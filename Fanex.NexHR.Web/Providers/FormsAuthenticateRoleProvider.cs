@@ -17,7 +17,7 @@ namespace Fanex.NexHR.Web.Providers
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// Forms Authenticate Role Provider.

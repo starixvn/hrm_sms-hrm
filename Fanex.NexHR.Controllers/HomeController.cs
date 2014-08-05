@@ -11,7 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// Home Controller.

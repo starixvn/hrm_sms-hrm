@@ -27,7 +27,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -606,6 +606,17 @@ namespace Fanex.NexHR.Services
             }
 
             return supervisors;
+        }
+
+        public IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                return this.GetData<SupervisorNameModel>(criteria).ToList();
+            }
+
+            return null;
         }
 
         public CommandResult InsertEmployeeShiftManager(InsertShiftManagerCriteria criteria)

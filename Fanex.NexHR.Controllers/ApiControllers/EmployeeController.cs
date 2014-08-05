@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using Fanex.NexHR.Criteria.MySpace;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// Employee Controller API.

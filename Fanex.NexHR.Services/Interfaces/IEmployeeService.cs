@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
 // </history>
 
-namespace Fanex.NexHR.Services.Interface
+namespace Fanex.NexHR.Services.Interfaces
 {
     using System;
     using System.Collections.Generic;
@@ -107,5 +107,7 @@ namespace Fanex.NexHR.Services.Interface
         CommandResult UpdatePasswordResetStatus(UpdatePasswordResetStatusCriteria criteria);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
+
+        IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria);
     }
 }

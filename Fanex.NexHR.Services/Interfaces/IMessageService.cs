@@ -7,7 +7,7 @@
 //   <change who="Josh.Phan" date="2014.7.15">Created.</change>
 // </history>
 
-namespace Fanex.NexHR.Services.Interface
+namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Message;

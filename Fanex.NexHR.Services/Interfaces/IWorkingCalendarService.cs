@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.11.18">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Services.Interface
+namespace Fanex.NexHR.Services.Interfaces
 {
     using System;
     using System.Collections.Generic;

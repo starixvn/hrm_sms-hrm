@@ -6,7 +6,7 @@
 // <history>
 //   <change who="Anders.Le" date="2012.5.18">Created</change>
 // </history>
-namespace Fanex.NexHR.Services.Interface
+namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request;
@@ -16,7 +16,7 @@ namespace Fanex.NexHR.Services.Interface
 
     public interface IRequestService
     {
-        bool DeleteWorkingTimeRequest(long id);
+        CommandResult Delete(DeleteRequestCriteria criteria);
 
         CommandResult Process(ProcessRequestCriteria criteria);
 
@@ -24,9 +24,7 @@ namespace Fanex.NexHR.Services.Interface
 
         IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
 
-        IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId);
-
-        IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser);
+        IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria);
 
         CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria);
 

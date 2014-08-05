@@ -419,7 +419,7 @@ namespace Fanex.NexHR.Core
 
         public static string ToMonthAndDayFormatedDate(this DateTime date)
         {
-            return date.ToString("dd-MMM");
+            return date.ToString("dd MMM");
         }
 
         public static string ToMonthAndYearFormatedDate(this DateTime? date)
@@ -445,6 +445,11 @@ namespace Fanex.NexHR.Core
         public static string ToDateMonthYearFormatedDate(this DateTime date)
         {
             return date.ToString("dd MMM, yyyy");
+        }
+
+        public static string ToShortTime(this DateTime date)
+        {
+            return date.ToString("HH:mm");
         }
 
         public static string ToDateMonthYearFormatedDate(this DateTime? date)

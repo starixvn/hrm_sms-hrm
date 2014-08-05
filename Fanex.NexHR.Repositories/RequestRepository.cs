@@ -16,7 +16,6 @@ namespace Fanex.NexHR.Repositories
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -27,23 +26,6 @@ namespace Fanex.NexHR.Repositories
     /// </summary>
     public class RequestRepository : IRequestRepository
     {
-        public bool DeleteWorkingTimeRequest(long id)
-        {
-            using (ObjectDb db = new ObjectDb("WorkingTimeRequest_Delete"))
-            {
-                db.AddInParameter("@RequestId", DbType.Int64, id);
-                return db.ExecuteNonQuery() != 0;
-            }
-        }
-
-        public WorkingTimeRequest GetWorkingTimeRequest(long requestId)
-        {
-            using (ObjectDb db = new ObjectDb("WorkingTimeRequest_GetAllByRequestID"))
-            {
-                return db.Query<WorkingTimeRequest>(new { RequestID = requestId }).FirstOrDefault();
-            }
-        }
-
         /// <summary>
         /// Function to get request by requestId.
         /// </summary>
@@ -69,15 +51,14 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Function to get History request.
         /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="requestTypeId">Request Type Id.</param>
+        /// <param name="criteria">The criteria.</param>
         /// <returns>List Request Entity.</returns>
-        public IList<RequestEntity> GetHistoryRequest(long requestId, int requestTypeId)
+        public IList<RequestEntity> GetHistoryRequest(ICriteria criteria)
         {
             IList<RequestEntity> entityList = null;
-            using (var db = new ObjectDb("WorkingTimeRequest_GetRequestHistory"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(new { requestid = requestId, type = requestTypeId }))
+                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
                 {
                     if (reader != null)
                     {
@@ -181,16 +162,6 @@ namespace Fanex.NexHR.Repositories
             }
 
             return entityList;
-        }
-
-        public IList<SupervisorNameModel> GetSupervisorByQuery(int empId, int role, int? requestType, string query, bool includeLoginUser)
-        {
-            using (ObjectDb db = new ObjectDb("EmployeeSupervisor_GetByQuery"))
-            {
-                var supervisorList = db.Query<SupervisorNameModel>(
-                    new { empId, role, requestType, query, includeLoginUser }).ToList();
-                return supervisorList;
-            }
         }
 
         /// <summary>

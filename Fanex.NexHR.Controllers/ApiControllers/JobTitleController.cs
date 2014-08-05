@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Web.Http;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// JobTitle Controller.

@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Request;
 
@@ -260,10 +260,12 @@ namespace Fanex.NexHR.Controllers.Request
         /// <returns>View HumanResourceViewHistory.</returns>
         public ActionResult HRViewHistory(long id, int type)
         {
-            IList<RequestEntity> entityList = _requestService.GetHistoryRequest(id, type);
-
-            ViewBag.requestId = id;
-            ViewBag.requestType = type;
+            var criteria = new GetHistoryRequestCriteria()
+            {
+                RequestId = id,
+                RequestType = type
+            };
+            IList<RequestEntity> entityList = RequestService.GetHistoryRequest(criteria);
             ViewBag.EntityList = entityList;
             return View();
         }
@@ -271,13 +273,34 @@ namespace Fanex.NexHR.Controllers.Request
         [HttpPost]
         public bool DeleteWorkingTimeRequest(int id)
         {
-            return _requestService.DeleteWorkingTimeRequest(id);
+            var criteria = new DeleteRequestCriteria()
+            {
+                RequestId = id
+            };
+
+            CommandResult result = _requestService.Delete(criteria);
+            return result.Code == 0;
         }
 
-        public JsonResult GetEmployeesByActingUser(int role, int requestType, string query)
+        /// <summary>
+        /// Function to get employee by acting supervisor.
+        /// </summary>
+        /// <param name="role">Acting role.</param>
+        /// <param name="requestType">Request Type.</param>
+        /// <param name="query">The query.</param>
+        /// <returns>List employees.</returns>
+        public JsonResult GetEmployeesByActingUser(int role, string query)
         {
-            var supervisors = _requestService.GetSupervisorByQuery(this.CurrentUser.Id, role, requestType, query.Trim(), includeLoginUser: true);
+            var criteria = new GetEmployeeSupervisorByQueryCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                Role = (byte)role,
+                RequestType = null,
+                Query = query.Trim(),
+                IncludeLoginUser = true
+            };
 
+            IList<SupervisorNameModel> supervisors = EmployeeService.GetSupervisorByQuery(criteria);
             return Json(supervisors, JsonRequestBehavior.AllowGet);
         }
 

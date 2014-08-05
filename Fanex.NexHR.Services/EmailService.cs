@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Services
     using System.Configuration;
     using Fanex.MailDeliver.Model;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// Email Service.

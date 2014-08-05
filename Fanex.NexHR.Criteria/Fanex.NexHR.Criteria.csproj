@@ -59,6 +59,7 @@
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
+    <Compile Include="EmployeeSupervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
     <Compile Include="EmployeeSupervisor\InsertShiftManagerCriteria.cs" />
     <Compile Include="EmployeeSupervisor\UpdateOrderShiftArrangeCriteria.cs" />
     <Compile Include="EmployeeSupervisor\UpdateSupervisorCriteria.cs" />
@@ -104,6 +105,8 @@
     <Compile Include="Request\ChangeShift\UpdateChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\InsertCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\UpdateCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\DeleteRequestCriteria.cs" />
+    <Compile Include="Request\GetHistoryRequestCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Country\GetCountryByCodeCriteria.cs" />

@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// Check In Out Request Service.

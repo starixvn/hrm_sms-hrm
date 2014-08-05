@@ -7,22 +7,18 @@
 //   <change who="Quinn.Vo" date="2013.11.11">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Services.Interface
+namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
 
     public interface ILeaveRequestService
     {
         CommandResult Insert(InsertLeaveRequestCriteria criteria);
 
         CommandResult Update(UpdateLeaveRequestCriteria criteria);
-
-        bool DeleteWorkingTimeRequest(long id);
 
         IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria);
 

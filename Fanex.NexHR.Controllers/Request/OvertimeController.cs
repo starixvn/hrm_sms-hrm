@@ -17,13 +17,14 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interface;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
 
     /// <summary>
@@ -216,10 +217,23 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(new { success = true });
         }
 
+        /// <summary>
+        /// Function to 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public ActionResult GetActingEmployees(string query)
         {
-            var employees = RequestService.GetSupervisorByQuery(this.CurrentUser.Id, (int)RoleSystem.ActingSupervisor, null, query.Trim(), includeLoginUser: true);
+            var criteria = new GetEmployeeSupervisorByQueryCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                Role = (int)RoleSystem.ActingSupervisor,
+                RequestType = null,
+                Query = query.Trim(),
+                IncludeLoginUser = true
+            };
 
+            IList<SupervisorNameModel> employees = EmployeeService.GetSupervisorByQuery(criteria);
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 

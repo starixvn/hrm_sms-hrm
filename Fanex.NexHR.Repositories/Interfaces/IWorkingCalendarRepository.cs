@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria);
 
-        IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime date);
+        IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime onDate);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);
     }
