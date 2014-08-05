@@ -90,7 +90,6 @@
     <Compile Include="ScheduleArrangeFilterViewModel.cs" />
     <Compile Include="ScheduleArrangeViewModel.cs" />
     <Compile Include="ScheduleViewModel.cs" />
-    <Compile Include="SearchEmployeeModel.cs" />
     <Compile Include="Request\ChangeShiftDetailViewModel.cs" />
     <Compile Include="ShiftManagerViewModel.cs" />
     <Compile Include="Calendar\ShiftStatisticContentViewModel.cs" />

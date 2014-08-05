@@ -290,7 +290,7 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Function to fill employee attendance request.
         /// </summary>
-        /// <param name="t">dynamic object.</param>
+        /// <param name="t">Dynamic object.</param>
         /// <returns>EmployeeAttendance Request.</returns>
         private EmployeeAttendanceRequest FillAttendanceRequest(dynamic t)
         {
