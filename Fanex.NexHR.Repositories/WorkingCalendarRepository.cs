@@ -111,36 +111,16 @@ namespace Fanex.NexHR.Repositories
         /// <summary>
         /// Gets the working calendars.
         /// </summary>
-        /// <param name="empId">The employee identifier.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Query To date.</param>
-        /// <param name="groupId">The group identifier.</param>
-        /// <param name="jobTitleId">The job title identifier.</param>
-        /// <param name="isLocal">Expat or local.</param>
+        /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>IList WorkingCalendarsViewModel.</returns>
-        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(
-            int? empId, 
-            DateTime fromDate, 
-            DateTime toDate,
-            string groupId, 
-            string jobTitleId,
-            byte? isLocal = null)
+        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria)
         {
-            using (var db = new ObjectDb("Report_EmployeeCalendarByWeekly"))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var list = new List<WorkingCalendarsViewModel>();
                 var ds = new DataSet();
 
-                db.AddInParameter("@empId", DbType.Int32, empId);
-                db.AddInParameter("@fromtime", DbType.DateTime, fromDate);
-                db.AddInParameter("@totime", DbType.DateTime, toDate);
-                db.AddInParameter("@groupids", DbType.String, groupId);
-                db.AddInParameter("@JobTitleId", DbType.String, jobTitleId);
-                db.AddInParameter("@isLocal", DbType.Byte, isLocal);
-                db.AddOutParameter("@ErrCode", DbType.Int32, 8);
-                db.AddOutParameter("@ErrMsg", DbType.String, 200);
-
-                ds = db.ExecuteDataSet();
+                ds = db.ExecuteDataSet(criteria.GetSpParams());
                 var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
                 var totalColumns = dttWorkingCalendars.Columns.Count;
 

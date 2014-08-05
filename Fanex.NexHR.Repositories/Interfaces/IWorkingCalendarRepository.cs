@@ -23,6 +23,6 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime date);
 
-        IList<WorkingCalendarsViewModel> GetWorkingCalendars(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null);
+        IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);
     }
 }

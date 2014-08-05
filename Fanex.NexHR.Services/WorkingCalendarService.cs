@@ -113,15 +113,14 @@ namespace Fanex.NexHR.Services
             return workingSchedule;
         }
 
-        public IList<ViewModels.WorkingCalendarsViewModel> GetWorkingCalendars(
-            int? empId,
-            DateTime fromDate,
-            DateTime toDate,
-            string groupId, 
-            string jobTitleId,
-            byte? isLocal = null)
+        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
         {
-            var workingCalendarList = this._workingCalendarRepository.GetWorkingCalendars(empId, fromDate, toDate, groupId, jobTitleId, isLocal);
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<WorkingCalendarsViewModel> workingCalendarList = null;
+            if (criteria.IsValid())
+            {
+                workingCalendarList = this._workingCalendarRepository.GetWorkingCalendars(criteria);
+            }
 
             return workingCalendarList;
         }

@@ -311,7 +311,17 @@ namespace Fanex.NexHR.Controllers
            
             ViewBag.FromNewDate = fromDate;
             ViewBag.ToNewDate = toDate;
-            viewModel = _workingCalendarService.GetWorkingCalendars(empId, fromDate, toDate, groupId, jobTitleId, isLocal).ToList();
+            var criteria = new GetWorkingCalendarWeeklyCriteria()
+            {
+                EmpId = null,
+                Fromtime = fromDate,
+                Totime = toDate,
+                GroupIds = groupId,
+                JobTitleId = jobTitleId,
+                IsLocal = isLocal
+            };
+
+            viewModel = _workingCalendarService.GetWorkingCalendars(criteria).ToList();
             CheckChangeShiffAndHalfDayOff(fromDate, viewModel, userChangedShift, userHalfDayOffs);
             ViewBag.UserChangeShift = userChangedShift;
             ViewBag.HalfDayOffs = userHalfDayOffs;

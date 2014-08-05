@@ -54,6 +54,7 @@
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarByDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarsForShiftArrangeCriteria.cs" />
+    <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Calendar\InsertOrUpdateWorkingCalendarsCriteria.cs" />
     <Compile Include="DashBoard\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />

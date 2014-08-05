@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Report.Attendance;
     using Fanex.NexHR.Criteria.Report.WorkingHour;
@@ -290,10 +291,27 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        /// <summary>
+        /// Export Employee Working Calendar.
+        /// </summary>
+        /// <param name="fromDate">Export from date.</param>
+        /// <param name="toDate">Export to date.</param>
+        /// <param name="group">Filter by group.</param>
+        /// <param name="title">Filter by title.</param>
+        /// <returns>Excel file.</returns>
         public ActionResult EmployeeWorkingCalendar(DateTime fromDate, DateTime toDate, string group, string title)
         {
             string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var entity = _workingCalendarService.GetWorkingCalendars(null, fromDate, toDate, group, title);
+            var criteria = new GetWorkingCalendarWeeklyCriteria()
+            {
+                EmpId = null,
+                Fromtime = fromDate,
+                Totime = toDate,
+                GroupIds = group,
+                JobTitleId = title,
+                IsLocal = null
+            };
+            var entity = _workingCalendarService.GetWorkingCalendars(criteria);
             var hssfworkbook = _exportService.ExportEmployeeWorkingCalendar(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
