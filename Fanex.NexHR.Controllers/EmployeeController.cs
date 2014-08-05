@@ -116,7 +116,6 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Working = _employeeService.GetMySpace(getMySpaceCriteria);
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
             var workingCalendar = _employeeService.GetEmployeeShift(employeeShiftCriteria);
-            var shifts = _shiftService.GetAll();
             var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
             var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             if (countryName != null)
@@ -124,33 +123,13 @@ namespace Fanex.NexHR.Controllers
                 ViewBag.CountryName = countryName.CountryName;
             }
 
-            ViewBag.Sun = workingCalendar.SunShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.SunShift).Name;
-
-            ViewBag.Mon = workingCalendar.MonShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.MonShift).Name;
-
-            ViewBag.Tue = workingCalendar.TueShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.TueShift).Name;
-
-            ViewBag.Wed = workingCalendar.WedShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.WedShift).Name;
-
-            ViewBag.Thu = workingCalendar.ThuShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.ThuShift).Name;
-
-            ViewBag.Fri = workingCalendar.FriShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.FriShift).Name;
-
-            ViewBag.Sat = workingCalendar.SatShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.SatShift).Name;
+            ViewBag.Sun = workingCalendar.SunShiftName;
+            ViewBag.Mon = workingCalendar.MonShiftName;
+            ViewBag.Tue = workingCalendar.TueShiftName;
+            ViewBag.Wed = workingCalendar.WedShiftName;
+            ViewBag.Thu = workingCalendar.ThuShiftName;
+            ViewBag.Fri = workingCalendar.FriShiftName;
+            ViewBag.Sat = workingCalendar.SatShiftName;
 
             return View(model);
         }
@@ -348,13 +327,13 @@ namespace Fanex.NexHR.Controllers
                 var updateEmployeeShiftCriteria = new UpdateEmployeeShiftCriteria()
                 {
                     EmpId = model.EmpID,
-                    FriShift = model.FriShift,
-                    MonShift = model.MonShift,
-                    SatShift = model.SatShift,
-                    SunShift = model.SunShift,
-                    ThuShift = model.ThuShift,
-                    TueShift = model.TueShift,
-                    WedShift = model.WedShift
+                    FriShift = model.FriShiftId,
+                    MonShift = model.MonShiftId,
+                    SatShift = model.SatShiftId,
+                    SunShift = model.SunShiftId,
+                    ThuShift = model.ThuShiftId,
+                    TueShift = model.TueShiftId,
+                    WedShift = model.WedShiftId
                 };
                 CommandResult result = _employeeService.UpdateEmployeeShift(updateEmployeeShiftCriteria);
                 ViewBag.Updated = result.Code == 0;
@@ -764,7 +743,7 @@ namespace Fanex.NexHR.Controllers
                 actingList = supervisors.Where(x => x.ActionType == (int)RoleSystem.ActingSupervisor).ToList();
             }
 
-            listVerifierName = verifierList.Count > 3 ? verifierList.Select(x => x.NickName).Take(3).ToList() : verifierList.Select(x => x.NickName).ToList();
+            listVerifierName = verifierList.Select(x => x.NickName).Take(3).ToList();
             if (verifierList.Count > 3)
             {
                 listVerifierName.Add(displayMore);
@@ -772,7 +751,7 @@ namespace Fanex.NexHR.Controllers
 
             verifier = string.Join(", ", listVerifierName);
 
-            listApproverName = approverList.Count > 3 ? approverList.Select(x => x.NickName).Take(3).ToList() : approverList.Select(x => x.NickName).ToList();
+            listApproverName = approverList.Select(x => x.NickName).Take(3).ToList();
             if (approverList.Count > 3)
             {
                 listApproverName.Add(displayMore);
@@ -780,14 +759,14 @@ namespace Fanex.NexHR.Controllers
 
             approver = string.Join(", ", listApproverName);
 
-            listShiftName = shiftMonitorList.Count > 3 ? shiftMonitorList.Select(x => x.NickName).Take(3).ToList() : shiftMonitorList.Select(x => x.NickName).ToList();
+            listShiftName = shiftMonitorList.Select(x => x.NickName).Take(3).ToList();
             if (shiftMonitorList.Count > 3)
             {
                 listShiftName.Add(displayMore);
             }
 
             shiftManager = string.Join(", ", listShiftName);
-            listActingName = actingList.Count > 3 ? actingList.Select(x => x.NickName).Take(3).ToList() : actingList.Select(x => x.NickName).ToList();
+            listActingName = actingList.Select(x => x.NickName).Take(3).ToList();
             if (actingList.Count > 3)
             {
                 listActingName.Add(displayMore);

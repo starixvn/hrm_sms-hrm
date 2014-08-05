@@ -18,18 +18,32 @@ namespace Fanex.NexHR.Models
     {
         public int EmpID { get; set; }
 
-        public int? MonShift { get; set; }
+        public int? MonShiftId { get; set; }
 
-        public int? TueShift { get; set; }
+        public string MonShiftName { get; set; }
 
-        public int? WedShift { get; set; }
+        public int? TueShiftId { get; set; }
 
-        public int? ThuShift { get; set; }
+        public string TueShiftName { get; set; }
 
-        public int? FriShift { get; set; }
+        public int? WedShiftId { get; set; }
 
-        public int? SatShift { get; set; }
+        public string WedShiftName { get; set; }
 
-        public int? SunShift { get; set; }
+        public int? ThuShiftId { get; set; }
+
+        public string ThuShiftName { get; set; }
+
+        public int? FriShiftId { get; set; }
+
+        public string FriShiftName { get; set; }
+
+        public int? SatShiftId { get; set; }
+
+        public string SatShiftName { get; set; }
+
+        public int? SunShiftId { get; set; }
+
+        public string SunShiftName { get; set; }
     }
 }

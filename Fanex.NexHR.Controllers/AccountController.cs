@@ -29,24 +29,21 @@ namespace Fanex.NexHR.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private readonly IShiftService _shiftService;
         private readonly ILookupDataService _lookupDataService;
 
         private readonly IEmployeeService _employeeService;
 
         public AccountController()
-            : this(null, null, null)
+            : this(null, null)
         {
         }
 
         public AccountController(
             IEmployeeService employeeService = null,
-            ILookupDataService lookupDataService = null,
-            IShiftService shiftService = null)
+            ILookupDataService lookupDataService = null)
         {
             _employeeService = employeeService ?? new EmployeeService();
             _lookupDataService = lookupDataService ?? new LookupDataService();
-            _shiftService = shiftService ?? new ShiftService();
         }
 
         /// <summary>
@@ -134,35 +131,13 @@ namespace Fanex.NexHR.Controllers
         /// <param name="workingCalendar">The working calendar.</param>
         private void DisplayShiftForPersonalInformation(EmployeeShift workingCalendar)
         {
-            var shifts = _shiftService.GetAll();
-
-            ViewBag.Sun = workingCalendar.SunShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.SunShift).Name;
-
-            ViewBag.Mon = workingCalendar.MonShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.MonShift).Name;
-
-            ViewBag.Tue = workingCalendar.TueShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.TueShift).Name;
-
-            ViewBag.Wed = workingCalendar.WedShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.WedShift).Name;
-
-            ViewBag.Thu = workingCalendar.ThuShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.ThuShift).Name;
-
-            ViewBag.Fri = workingCalendar.FriShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.FriShift).Name;
-
-            ViewBag.Sat = workingCalendar.SatShift == null
-                ? "OFF"
-                : shifts.FirstOrDefault(i => i.Id == workingCalendar.SatShift).Name;
+            ViewBag.Sun = workingCalendar.SunShiftName;
+            ViewBag.Mon = workingCalendar.MonShiftName;
+            ViewBag.Tue = workingCalendar.TueShiftName;
+            ViewBag.Wed = workingCalendar.WedShiftName;
+            ViewBag.Thu = workingCalendar.ThuShiftName;
+            ViewBag.Fri = workingCalendar.FriShiftName;
+            ViewBag.Sat = workingCalendar.SatShiftName;
         }
 
         /// <summary>

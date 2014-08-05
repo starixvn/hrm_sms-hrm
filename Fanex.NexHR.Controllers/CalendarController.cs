@@ -313,7 +313,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.ToNewDate = toDate;
             var criteria = new GetWorkingCalendarWeeklyCriteria()
             {
-                EmpId = null,
+                EmpId = empId,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupId,
