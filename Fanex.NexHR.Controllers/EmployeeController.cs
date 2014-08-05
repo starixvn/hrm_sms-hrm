@@ -38,6 +38,7 @@ namespace Fanex.NexHR.Controllers
     /// Employee Controller.
     /// </summary>
     [Authorize]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class EmployeeController : BaseController
     {
         private readonly ITeamService _teamService;

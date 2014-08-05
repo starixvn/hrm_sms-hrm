@@ -38,6 +38,7 @@ namespace Fanex.NexHR.Controllers
     /// Report Controller.
     /// </summary>
     [Authorize]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
