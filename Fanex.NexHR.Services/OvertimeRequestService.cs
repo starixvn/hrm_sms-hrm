@@ -44,19 +44,14 @@ namespace Fanex.NexHR.Services
         public IList<OvertimeRequest> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<OvertimeRequest> overtimeRequests = null;
 
             if (criteria.IsValid())
             {
-                IEnumerable<OvertimeRequest> rawOvertimeRequests = GetData<OvertimeRequest>(criteria);
-
-                if (rawOvertimeRequests != null)
-                {
-                    overtimeRequests = rawOvertimeRequests.ToList();
-                }
+                IList<OvertimeRequest> overtimeRequests = GetData<OvertimeRequest>(criteria).ToList();
+                return overtimeRequests;
             }
 
-            return overtimeRequests;
+            return null;
         }
 
         /// <summary>
@@ -124,14 +119,8 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                //// Role HR
-                criteria.Role = "6";
-                IEnumerable<OvertimeAnnualReport> rawOvertimeReport = GetData<OvertimeAnnualReport>(criteria);
-
-                if (rawOvertimeReport != null)
-                {
-                    return rawOvertimeReport.ToList();
-                }
+                IList<OvertimeAnnualReport> overtimeReport = GetData<OvertimeAnnualReport>(criteria).ToList();
+                return overtimeReport;
             }
 
             return null;
@@ -148,14 +137,8 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                //// Role HR
-                criteria.Role = "6";
-                IEnumerable<OvertimeAnnualReport> overtimeReport = GetData<OvertimeAnnualReport>(criteria);
-
-                if (overtimeReport != null)
-                {
-                    return overtimeReport.ToList();
-                }
+                IList<OvertimeAnnualReport> overtimeReport = GetData<OvertimeAnnualReport>(criteria).ToList();
+                return overtimeReport;
             }
 
             return null;
@@ -223,19 +206,14 @@ namespace Fanex.NexHR.Services
         public IList<OvertimeRequest> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<OvertimeRequest> overtimeRequests = null;
 
             if (criteria.IsValid())
             {
-                IEnumerable<OvertimeRequest> rawOvertimeRequest = GetData<OvertimeRequest>(criteria);
-
-                if (rawOvertimeRequest != null)
-                {
-                    overtimeRequests = rawOvertimeRequest.ToList();
-                }
+                IList<OvertimeRequest> overtimeRequest = GetData<OvertimeRequest>(criteria).ToList();
+                return overtimeRequest;
             }
 
-            return overtimeRequests;
+            return null;
         }
 
         /// <summary>
@@ -246,19 +224,14 @@ namespace Fanex.NexHR.Services
         public IList<OvertimeRequest> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<OvertimeRequest> overtimeRequests = null;
 
             if (criteria.IsValid())
             {
-                IEnumerable<OvertimeRequest> rawOvertimeRequest = GetData<OvertimeRequest>(criteria);
-
-                if (rawOvertimeRequest != null)
-                {
-                    overtimeRequests = rawOvertimeRequest.ToList();
-                }
+                IList<OvertimeRequest> overtimeRequest = GetData<OvertimeRequest>(criteria).ToList();
+                return overtimeRequest;
             }
 
-            return overtimeRequests;
+            return null;
         }
 
         /// <summary>
@@ -311,12 +284,8 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                IEnumerable<OvertimeRequest> reportDetails = GetData<OvertimeRequest>(criteria);
-
-                if (reportDetails != null)
-                {
-                    return reportDetails.ToList();
-                }
+                IList<OvertimeRequest> reportDetails = GetData<OvertimeRequest>(criteria).ToList();
+                return reportDetails;
             }
 
             return null;

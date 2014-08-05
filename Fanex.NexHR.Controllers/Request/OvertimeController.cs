@@ -256,7 +256,8 @@ namespace Fanex.NexHR.Controllers.Request
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null
+                    Status = null,
+                    Role = this.CurrentUser.Roles
                 };
                 listEntity = this.OvertimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
@@ -268,7 +269,8 @@ namespace Fanex.NexHR.Controllers.Request
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null
+                    Status = null,
+                    Role = this.CurrentUser.Roles
                 };
                 listEntity = this.OvertimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
@@ -295,7 +297,7 @@ namespace Fanex.NexHR.Controllers.Request
                     SupervisorID = id,
                     EmployeeId = empId,
                     Month = Convert.ToDateTime(requestDate).Date,
-                    Role = "6"
+                    Role = this.CurrentUser.Roles
                 };
                 entityList = OvertimeService.HRGetNormalOvertimeRequest(getOvertimeNormalDailyByHRCriteria);
             }
@@ -306,7 +308,7 @@ namespace Fanex.NexHR.Controllers.Request
                     SupervisorID = id,
                     EmployeeId = empId,
                     Month = Convert.ToDateTime(requestDate).Date,
-                    Role = "6"
+                    Role = this.CurrentUser.Roles
                 };
                 entityList = OvertimeService.HRGetOvertimeRequest(getOvertimeByHRCriteria);
             }

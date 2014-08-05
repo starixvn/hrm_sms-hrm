@@ -30,10 +30,9 @@ namespace Fanex.NexHR.Repositories
         /// <returns>RequestEntity model.</returns>
         public RequestEntity GetOvertimeRequestById(ICriteria criteria)
         {
-            RequestEntity entityList = new RequestEntity();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entityList = db.QueryEntity<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                return db.QueryEntity<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
                     (re, reter, gr, ve, appr, rety, stt) =>
                     {
                         reter.Team = gr;
@@ -47,8 +46,6 @@ namespace Fanex.NexHR.Repositories
                     "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
                     criteria.GetSpParams());
             }
-
-            return entityList;
         }
 
         /// <summary>
@@ -58,10 +55,9 @@ namespace Fanex.NexHR.Repositories
         /// <returns>RequestEntity List.</returns>
         public IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
                     (re, reter, gr, ver, appr, rety, stt) =>
                     {
                         reter.Team = gr;
@@ -75,8 +71,6 @@ namespace Fanex.NexHR.Repositories
                     "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
                     criteria.GetSpParams()).ToList();
             }
-
-            return entityList;
         }
 
         /// <summary>
@@ -86,10 +80,9 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List of Request Entity.</returns>
         public IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
                     (re, reter, gr, ver, appr, rety, stt) =>
                     {
                         reter.Team = gr;
@@ -103,8 +96,6 @@ namespace Fanex.NexHR.Repositories
                     "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
                     criteria.GetSpParams()).ToList();
             }
-
-            return entityList.ToList();
         }
 
         /// <summary>
@@ -114,10 +105,9 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List of RequestEntity.</returns>
         public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entityList = db.Query<RequestEntity, Employee, Team, RequestEntity>(
+                return db.Query<RequestEntity, Employee, Team, RequestEntity>(
                     (re, reter, te) =>
                     {
                         reter.Team = te;
@@ -127,8 +117,6 @@ namespace Fanex.NexHR.Repositories
                     "RequesterID,GroupId",
                     criteria.GetSpParams()).ToList();
             }
-
-            return entityList;
         }
 
         /// <summary>
@@ -138,10 +126,9 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List of Overtime request.</returns>
         public IList<RequestEntity> GetMemberOvertimeMonthly(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entityList = db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
+                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
                     (re, reter, gr, ver, appr, rety, stt) =>
                     {
                         reter.Team = gr;
@@ -155,8 +142,6 @@ namespace Fanex.NexHR.Repositories
                     "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
                     criteria.GetSpParams()).ToList();
             }
-
-            return entityList.ToList();
         }
 
         /// <summary>

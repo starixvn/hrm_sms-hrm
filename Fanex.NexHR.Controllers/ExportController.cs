@@ -209,7 +209,8 @@ namespace Fanex.NexHR.Controllers
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null
+                    Status = null,
+                    Role = this.CurrentUser.Roles
                 };
                 entity = this._overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
@@ -221,7 +222,8 @@ namespace Fanex.NexHR.Controllers
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null
+                    Status = null,
+                    Role = this.CurrentUser.Roles
                 };
                 entity = this._overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
