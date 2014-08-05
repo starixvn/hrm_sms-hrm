@@ -10,17 +10,18 @@
 namespace Fanex.NexHR.Controllers.ApiControllers
 {
     using System;
-using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-using System.Web.Http;
-using Fanex.NexHR.Core;
-using Fanex.NexHR.Criteria.Calendar;
-using Fanex.NexHR.Criteria.Employee;
-using Fanex.NexHR.Criteria.EmployeeSupervisor;
-using Fanex.NexHR.Criteria.MySpace;
-using Fanex.NexHR.Models;
-using Fanex.NexHR.Services;
-using Fanex.NexHR.Services.Interface;
+    using System.Web.Http;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.MySpace;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interface;
 
     /// <summary>
     /// Employee Controller API.
@@ -194,6 +195,7 @@ using Fanex.NexHR.Services.Interface;
             return employee;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
         public string GetNewEmployeeCode()
         {
             var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();

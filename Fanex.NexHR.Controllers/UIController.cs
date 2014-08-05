@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -80,6 +81,7 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <returns>Return list.</returns>
         [NonAction]
+        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
         public IList<NavigationViewModel> GetNagivationData()
         {
             var navigationItemList = new List<NavigationViewModel>();

@@ -210,12 +210,7 @@ namespace Fanex.NexHR.Controllers
             var model = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var getAllCountryCriteria = new GetAllCountryCriteria();
             var countryList = _employeeService.GetAllCountry(getAllCountryCriteria);
-
-            model.ListCountryCode = new List<SelectListItem>();
-            foreach (var item in countryList)
-            {
-                model.ListCountryCode.Add(new SelectListItem { Text = item.CountryName, Value = item.CountryCode });
-            }
+            model.ListCountryCode = countryList.Select(x => new SelectListItem { Text = x.CountryName, Value = x.CountryCode }).ToList();
 
             CheckAdminUserRole();
             GetListSupervisorName(id, out verifier, out approver, out shiftManager, out actingSupervisor);
@@ -249,14 +244,7 @@ namespace Fanex.NexHR.Controllers
             {
                 UpdateEmployeeCriteria updateEmployeeCriteria = SetUpdateEmployeeCriteria(model);
                 CommandResult result = _employeeService.Update(updateEmployeeCriteria);
-                if (result.Code != 0)
-                {
-                    ViewBag.Updated = false;
-                }
-                else
-                {
-                    ViewBag.Updated = true;
-                }
+                ViewBag.Updated = result.Code == 0;
 
                 if (result.Code == 0 && this.CurrentUser.Id == model.Id)
                 {
@@ -270,10 +258,7 @@ namespace Fanex.NexHR.Controllers
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            foreach (var item in countryList)
-            {
-                model.ListCountryCode.Add(new SelectListItem { Text = item.CountryName, Value = item.CountryCode });
-            }
+            model.ListCountryCode = countryList.Select(x => new SelectListItem { Text = x.CountryName, Value = x.CountryCode }).ToList();
 
             GetListSupervisorName(model.Id, out verifier, out approver, out shiftManager, out actingSupervisor);
             model.Verifier = verifier;
