@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
+    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
