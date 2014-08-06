@@ -61,6 +61,7 @@
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calendar\HalfDayOff.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
@@ -76,10 +77,10 @@
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
-    <Compile Include="SupervisorReportGroupModel.cs" />
-    <Compile Include="SupervisorReportModel.cs" />
-    <Compile Include="TeamSupervisorModel.cs" />
-    <Compile Include="TeamSupervisorReportModel.cs" />
+    <Compile Include="Supervisor\SupervisorReportGroupModel.cs" />
+    <Compile Include="Supervisor\SupervisorReportModel.cs" />
+    <Compile Include="Supervisor\TeamSupervisorModel.cs" />
+    <Compile Include="Supervisor\TeamSupervisorReportModel.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
     <Compile Include="ExtensionNoModel.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="EmployeeShift.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Request\LeaveDetailModel.cs" />
-    <Compile Include="LeaveRequestModel.cs" />
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveSummaryByTeam.cs" />
     <Compile Include="RequestsMonitoring.cs" />
@@ -101,8 +101,8 @@
     <Compile Include="Calendar\ScheduleArrangeModel.cs" />
     <Compile Include="Calendar\ScheduleModel.cs" />
     <Compile Include="Calendar\ShiftMultipleModel.cs" />
-    <Compile Include="SupervisorModel.cs" />
-    <Compile Include="SupervisorNameModel.cs" />
+    <Compile Include="Supervisor\SupervisorModel.cs" />
+    <Compile Include="Supervisor\SupervisorNameModel.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Holiday.cs" />
     <Compile Include="LeaveType.cs" />
@@ -116,7 +116,6 @@
     <Compile Include="UserLoginModel.cs" />
     <Compile Include="WeekWorking.cs" />
     <Compile Include="Calendar\WorkingCalendarModel.cs" />
-    <Compile Include="WorkingTimeRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -14,7 +14,7 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Calendar;
 
     public interface IWorkingCalendarService
     {

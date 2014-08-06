@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.Request;
 

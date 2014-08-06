@@ -16,16 +16,17 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.ViewModels.Supervisor;
 
     /// <summary>
     /// Calendar Controller.

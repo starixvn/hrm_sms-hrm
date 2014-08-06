@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
 
     /// <summary>

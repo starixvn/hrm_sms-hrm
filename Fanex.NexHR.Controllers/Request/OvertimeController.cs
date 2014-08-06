@@ -17,16 +17,16 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Request.Overtime;
+    using Fanex.NexHR.Criteria.Overtime;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Overtime;
 
     /// <summary>
@@ -262,7 +262,7 @@ namespace Fanex.NexHR.Controllers.Request
         {
             ViewBag.Year = year;
             ViewBag.Calendar = calendar;
-            IList<OvertimeAnnualReport> listEntity = null;
+            IList<OvertimeAnnualReportViewModel> listEntity = null;
 
             if (calendar == 1)
             {

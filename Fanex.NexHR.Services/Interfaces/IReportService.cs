@@ -11,15 +11,15 @@ namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.ExtensionNumber;
-    using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.ViewModels.Report;
 
     public interface IReportService
     {

@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Message;
 
     /// <summary>
     /// The implement of Message service.

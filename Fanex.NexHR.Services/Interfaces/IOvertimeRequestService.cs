@@ -10,11 +10,11 @@
 namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Criteria.Request.Overtime;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Overtime;
 
     /// <summary>
     /// Interface Overtime Request Service.
@@ -27,9 +27,9 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<RequestEntity> GetOvertimeReportInYear(GetOvertimeReportInYearCriteria criteria);
 
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
+        IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
 
-        IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
+        IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
 
         IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeMonthlyCriteria criteria);
 

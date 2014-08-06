@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Web.Providers
     using System;
     using System.Collections.Generic;
     using System.Web.Security;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;

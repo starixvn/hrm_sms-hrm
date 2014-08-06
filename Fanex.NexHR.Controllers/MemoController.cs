@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Memo;
 
     /// <summary>
     /// Memo Controller.

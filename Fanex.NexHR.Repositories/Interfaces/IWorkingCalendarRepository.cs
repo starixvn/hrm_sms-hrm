@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Calendar;
 
     public interface IWorkingCalendarRepository
     {

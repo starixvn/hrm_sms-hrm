@@ -15,7 +15,10 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.ViewModels.Overtime;
+    using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
 
     public interface IExportExcelService
@@ -30,7 +33,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
         HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate);
 
-        HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReport> requestList, int year, int? calendar);
+        HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar);
 
         HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord);
 

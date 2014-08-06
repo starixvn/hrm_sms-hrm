@@ -20,16 +20,19 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Fanex.NexHR.ViewModels.Overtime;
+    using Fanex.NexHR.ViewModels.Report;
+    using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
     /// <summary>
@@ -200,7 +203,7 @@ namespace Fanex.NexHR.Controllers
         public ActionResult YearlyOvertimeReport(int year, string team, int? empId, int? calendar)
         {
             string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            IList<OvertimeAnnualReport> entity = null;
+            IList<OvertimeAnnualReportViewModel> entity = null;
             if (calendar == 1)
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria

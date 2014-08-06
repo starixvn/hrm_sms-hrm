@@ -12,19 +12,19 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.ExtensionNumber;
-    using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Report;
 
     /// <summary>
     /// Report Service.

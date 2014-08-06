@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Web;
 
     /// <summary>

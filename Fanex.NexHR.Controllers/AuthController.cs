@@ -15,7 +15,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Employee;
 
     /// <summary>
     /// AUTH Controller.
@@ -46,7 +46,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="model">LoginModel Object.</param>
         /// <returns>Action Result Login.</returns>
         [HttpPost]
-        public ActionResult Login(LoginModel model)
+        public ActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {

@@ -18,7 +18,7 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Calendar;
 
     /// <summary>
     /// WorkingCalendar Repository.

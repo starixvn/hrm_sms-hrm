@@ -13,7 +13,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.ViewModels.Report;
 
     public interface IReportRepository
     {

@@ -10,6 +10,7 @@
 namespace Fanex.NexHR.Models.Request
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Models.Supervisor;
 
     /// <summary>
     /// RequestRelated People.

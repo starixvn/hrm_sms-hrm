@@ -19,19 +19,23 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
     using Fanex.NexHR.Criteria.ExtensionNumber;
-    using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.ViewModels.ExtensionNumber;
+    using Fanex.NexHR.ViewModels.Report;
+    using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
     /// <summary>

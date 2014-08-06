@@ -16,10 +16,11 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Web.Http;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 

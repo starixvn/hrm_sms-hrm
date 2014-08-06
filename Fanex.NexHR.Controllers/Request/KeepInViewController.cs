@@ -15,12 +15,12 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>

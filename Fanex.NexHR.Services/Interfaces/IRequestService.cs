@@ -9,8 +9,8 @@
 namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 

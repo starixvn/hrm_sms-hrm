@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Services.Interfaces
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Message;
 
     /// <summary>
     /// The interface of Message service.

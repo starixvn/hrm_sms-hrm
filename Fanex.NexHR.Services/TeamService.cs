@@ -11,9 +11,10 @@ namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using Fanex.Common.Helper;
-    using Fanex.NexHR.Criteria.GroupSupervisor;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;

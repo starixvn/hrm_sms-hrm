@@ -14,12 +14,14 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Country;
-    using Fanex.NexHR.Criteria.DashBoard;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.EmployeeSupervisor;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.ViewModels.AnnualLeave;
 
     public interface IEmployeeService
     {

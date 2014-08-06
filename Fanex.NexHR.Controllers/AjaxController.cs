@@ -21,8 +21,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.Overtime;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
@@ -30,7 +30,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Fanex.NexHR.ViewModels.EmployeeGroup;
 
     /// <summary>
     /// Ajax Controller.

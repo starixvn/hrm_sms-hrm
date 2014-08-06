@@ -15,14 +15,15 @@ namespace Fanex.NexHR.Services
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request.Overtime;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Overtime;
 
     /// <summary>
     /// OvertimeRequest Service.
@@ -115,13 +116,13 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The list Overtime Annual Report.</returns>
-        public IList<OvertimeAnnualReport> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria)
+        public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeAnnualReport> overtimeReport = GetData<OvertimeAnnualReport>(criteria).ToList();
+                IList<OvertimeAnnualReportViewModel> overtimeReport = GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
                 return overtimeReport;
             }
 
@@ -133,13 +134,13 @@ namespace Fanex.NexHR.Services
         /// </summary>
         /// <param name="criteria">The criteria.</param>
         /// <returns>The list Overtime Annual Report.</returns>
-        public IList<OvertimeAnnualReport> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria)
+        public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeAnnualReport> overtimeReport = GetData<OvertimeAnnualReport>(criteria).ToList();
+                IList<OvertimeAnnualReportViewModel> overtimeReport = GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
                 return overtimeReport;
             }
 

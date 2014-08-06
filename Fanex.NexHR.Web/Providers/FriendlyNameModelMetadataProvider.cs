@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Web.Providers
 {
     using System;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
 

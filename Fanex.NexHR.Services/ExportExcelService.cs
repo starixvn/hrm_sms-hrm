@@ -21,10 +21,13 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.ExcelExporting;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.ViewModels.Overtime;
+    using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
@@ -851,7 +854,7 @@ namespace Fanex.NexHR.Services
         /// <param name="year">Year to export.</param>
         /// <param name="calendar">Calendar type.</param>
         /// <returns>HSSF Workbook.</returns>
-        public HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReport> requestList, int year, int? calendar)
+        public HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_YearlyOvertimeReportFilePathExcelTemplate);
@@ -1239,7 +1242,7 @@ namespace Fanex.NexHR.Services
         /// <param name="requestList">Request List.</param>
         /// <param name="totalYearlyOTHours">Total Yearly OTHours.</param>
         /// <param name="rowFooter">Row Footer.</param>
-        private static void RenderFooterForOvertimeReport(IList<OvertimeAnnualReport> requestList, float totalYearlyOTHours, IRow rowFooter)
+        private static void RenderFooterForOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, float totalYearlyOTHours, IRow rowFooter)
         {
             rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
             rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));

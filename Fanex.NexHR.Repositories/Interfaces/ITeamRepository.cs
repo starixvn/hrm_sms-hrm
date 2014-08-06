@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
     using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Supervisor;
 
     public interface ITeamRepository
     {
