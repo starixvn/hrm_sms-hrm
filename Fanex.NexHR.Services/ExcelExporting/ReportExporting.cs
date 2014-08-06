@@ -19,6 +19,9 @@ namespace Fanex.NexHR.Services.ExcelExporting
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using NPOI.HSSF.UserModel;
+    using NPOI.SS.UserModel;
+    using NPOI.SS.Util;
+
 
     /// <summary>
     /// Report Exporting.
@@ -321,22 +324,22 @@ namespace Fanex.NexHR.Services.ExcelExporting
             return hssfworkbook;
         }
 
-        private void MergeCell(NPOI.SS.UserModel.IRow row, int firstRow, int lastRow)
+        private void MergeCell(IRow row, int firstRow, int lastRow)
         {
-            NPOI.SS.Util.CellRangeAddress cra1 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 0, 0);
-            NPOI.SS.Util.CellRangeAddress cra2 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 1, 1);
-            NPOI.SS.Util.CellRangeAddress cra3 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 2, 2);
-            NPOI.SS.Util.CellRangeAddress cra4 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 3, 3);
+            var cra1 = new CellRangeAddress(firstRow, lastRow, 0, 0);
+            var cra2 = new CellRangeAddress(firstRow, lastRow, 1, 1);
+            var cra3 = new CellRangeAddress(firstRow, lastRow, 2, 2);
+            var cra4 = new CellRangeAddress(firstRow, lastRow, 3, 3);
             row.Sheet.AddMergedRegion(cra1);
             row.Sheet.AddMergedRegion(cra2);
             row.Sheet.AddMergedRegion(cra3);
             row.Sheet.AddMergedRegion(cra4);
         }
 
-        private void MergeCellTeam(NPOI.SS.UserModel.IRow row, int firstRow, int lastRow)
+        private void MergeCellTeam(IRow row, int firstRow, int lastRow)
         {
-            NPOI.SS.Util.CellRangeAddress cra1 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 0, 0);
-            NPOI.SS.Util.CellRangeAddress cra2 = new NPOI.SS.Util.CellRangeAddress(firstRow, lastRow, 1, 1);
+            var cra1 = new CellRangeAddress(firstRow, lastRow, 0, 0);
+            var cra2 = new CellRangeAddress(firstRow, lastRow, 1, 1);
             row.Sheet.AddMergedRegion(cra1);
             row.Sheet.AddMergedRegion(cra2);
         }

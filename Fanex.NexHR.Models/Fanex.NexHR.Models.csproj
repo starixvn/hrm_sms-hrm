@@ -64,7 +64,6 @@
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
-    <Compile Include="DateOfEmployeeForgotAndLateEarlyIOModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />
-    <Compile Include="Request\CheckInOutRequestModel.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
     <Compile Include="SupervisorReportGroupModel.cs" />
     <Compile Include="SupervisorReportModel.cs" />

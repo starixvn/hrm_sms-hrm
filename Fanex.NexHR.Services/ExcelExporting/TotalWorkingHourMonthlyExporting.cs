@@ -9,18 +9,9 @@
 
 namespace Fanex.NexHR.Services.ExcelExporting
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Web;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
@@ -93,7 +84,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var font = this._workbook.CreateFont();
             font.FontHeightInPoints = 14;
-            font.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.BOLD;
+            font.Boldweight = (short)FontBoldWeight.BOLD;
             return font;
         }
 
@@ -161,9 +152,9 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             ICellStyle cellStyle = _workbook.CreateCellStyle();
             cellStyle.Alignment = HorizontalAlignment.LEFT;
-            cellStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             return cellStyle;
         }
 
@@ -218,9 +209,9 @@ namespace Fanex.NexHR.Services.ExcelExporting
             ICellStyle cellStyle = _workbook.CreateCellStyle();
             cellStyle.Alignment = HorizontalAlignment.CENTER;
             cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
-            cellStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             return cellStyle;
         }
 
@@ -286,8 +277,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerFont = _workbook.CreateFont();
             headerFont.FontHeightInPoints = 11;
-            headerFont.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.BOLD;
-            headerFont.Color = NPOI.HSSF.Util.HSSFColor.WHITE.index;
+            headerFont.Boldweight = (short)FontBoldWeight.BOLD;
+            headerFont.Color = HSSFColor.WHITE.index;
             return headerFont;
         }
 
@@ -295,8 +286,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerWorkingHourFont = _workbook.CreateFont();
             headerWorkingHourFont.FontHeightInPoints = 11;
-            headerWorkingHourFont.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.BOLD;
-            headerWorkingHourFont.Color = NPOI.HSSF.Util.HSSFColor.BLACK.index;
+            headerWorkingHourFont.Boldweight = (short)FontBoldWeight.BOLD;
+            headerWorkingHourFont.Color = HSSFColor.BLACK.index;
             return headerWorkingHourFont;
         }
 
@@ -308,9 +299,9 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerWorkingHourFont = this.CreateHeaderWorkingHourFont();
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.GREY_40_PERCENT.index;
+            cellStyle.FillForegroundColor = HSSFColor.GREY_40_PERCENT.index;
             cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.GREY_40_PERCENT.index;
+            cellStyle.FillBackgroundColor = HSSFColor.GREY_40_PERCENT.index;
             cellStyle.Alignment = HorizontalAlignment.CENTER;
             cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
             cellStyle.WrapText = true;

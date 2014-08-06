@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     public interface ILeaveRequestService
     {

@@ -9,11 +9,6 @@
 
 namespace Fanex.NexHR.Services.ExcelExporting
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using Fanex.NexHR.Models;
     using NPOI.HSSF.UserModel;
 
     /// <summary>

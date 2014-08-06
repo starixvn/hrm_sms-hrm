@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Models
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
 
     /// <summary>

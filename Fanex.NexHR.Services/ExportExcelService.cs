@@ -26,6 +26,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
+    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
@@ -82,7 +83,7 @@ namespace Fanex.NexHR.Services
 
             var font = workbook.CreateFont();
             font.FontHeightInPoints = 18;
-            font.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.BOLD;
+            font.Boldweight = (short)FontBoldWeight.BOLD;
 
             var cell = rowTitle.CreateCell(1);
             cell.SetCellValue(titleString);
@@ -95,13 +96,13 @@ namespace Fanex.NexHR.Services
             var row = sheet.CreateRow(rowIndex);
             var font1 = workbook.CreateFont();
             font1.FontHeightInPoints = 11;
-            font1.Color = NPOI.HSSF.Util.HSSFColor.GREY_80_PERCENT.WHITE.index;
-            font1.Boldweight = (short)NPOI.SS.UserModel.FontBoldWeight.BOLD;
+            font1.Color = HSSFColor.GREY_80_PERCENT.WHITE.index;
+            font1.Boldweight = (short)FontBoldWeight.BOLD;
 
             ICellStyle cellStyle = workbook.CreateCellStyle();
-            cellStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.GREY_80_PERCENT.index;
+            cellStyle.FillForegroundColor = HSSFColor.GREY_80_PERCENT.index;
             cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.GREY_80_PERCENT.index;
+            cellStyle.FillBackgroundColor = HSSFColor.GREY_80_PERCENT.index;
             cellStyle.Alignment = HorizontalAlignment.CENTER;
             cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
             cellStyle.SetFont(font1);
@@ -171,18 +172,18 @@ namespace Fanex.NexHR.Services
             ICellStyle bodyStyle2 = workbook.CreateCellStyle();
             bodyStyle2.Alignment = HorizontalAlignment.CENTER;
             bodyStyle2.VerticalAlignment = VerticalAlignment.CENTER;
-            bodyStyle2.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle2.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             bodyStyle2.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            bodyStyle2.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle2.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
 
             ICellStyle bodyStyle3 = workbook.CreateCellStyle();
             bodyStyle3.Alignment = HorizontalAlignment.LEFT;
 
             ICellStyle bodyStyle4 = workbook.CreateCellStyle();
             bodyStyle4.Alignment = HorizontalAlignment.LEFT;
-            bodyStyle4.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle4.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             bodyStyle4.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            bodyStyle4.FillBackgroundColor = NPOI.HSSF.Util.HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle4.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
             ICell cellBody;
             //// Add data rows
             foreach (var totalWorkingHours in listTotalWorkingHours)
@@ -281,7 +282,7 @@ namespace Fanex.NexHR.Services
         /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord)
         {
-            TotalWorkingHourMonthlyExporting totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourMonthly, firstRecord);
+            var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourMonthly, firstRecord);
             return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourMonthly();
         }
 
@@ -295,7 +296,7 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
-            ReportExporting exportExcel = new ReportExporting();
+            var exportExcel = new ReportExporting();
             hssfworkbook = exportExcel.ExportWorkingCalendarSummary(calendars, fromDate, toDate);
 
             return hssfworkbook;
@@ -311,7 +312,7 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
-            ReportExporting exportExcel = new ReportExporting();
+            var exportExcel = new ReportExporting();
             hssfworkbook = exportExcel.ExportHRRequestStatistic(requests, fromDate, toDate);
 
             return hssfworkbook;
@@ -320,7 +321,7 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
-            ReportExporting exportExcel = new ReportExporting();
+            var exportExcel = new ReportExporting();
             hssfworkbook = exportExcel.ExportEmployeeSupervisor(supervisors);
 
             return hssfworkbook;
@@ -329,7 +330,7 @@ namespace Fanex.NexHR.Services
         public HSSFWorkbook ExportTeamSupervisor(List<TeamSupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
-            ReportExporting exportExcel = new ReportExporting();
+            var exportExcel = new ReportExporting();
             hssfworkbook = exportExcel.ExportTeamSupervisor(supervisors);
 
             return hssfworkbook;

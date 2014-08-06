@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Criteria.Request.Leave
     using System.Collections.Generic;
     using System.Text;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     /// <summary>
     /// UpdateLeaveRequest Criteria.

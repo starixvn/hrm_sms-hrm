@@ -9,8 +9,6 @@
 
 namespace Fanex.NexHR.Models
 {
-    using System.Diagnostics.CodeAnalysis;
-    
     /// <summary>
     /// Leave Summary.
     /// </summary>

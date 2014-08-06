@@ -9,9 +9,9 @@
 
 namespace Fanex.NexHR.ViewModels
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     /// <summary>
     /// LeaveDetail ViewModel.
