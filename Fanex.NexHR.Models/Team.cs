@@ -44,9 +44,5 @@ namespace Fanex.NexHR.Models
         public int TotalExpat { get; set; }
 
         public string MailGroup { get; set; }
-
-        public LeaderModel RawLeader { get; set; }
-
-        public AssistantLeaderModel RawAssistantLeader { get; set; }
     }
 }

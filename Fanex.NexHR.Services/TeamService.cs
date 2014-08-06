@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.GroupSupervisor;
@@ -18,7 +17,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Team Service.
@@ -50,31 +48,6 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 team = _teamRepository.GetById(criteria);
-
-                if (team != null)
-                {
-                    if (team.RawLeader != null)
-                    {
-                        var leader = new Employee
-                        {
-                            EmpId = team.RawLeader.LeaderId,
-                            NickName = team.RawLeader.NickName,
-                            FullName = team.RawLeader.FullName
-                        };
-                        team.Leader = leader;
-                    }
-
-                    if (team.RawAssistantLeader != null)
-                    {
-                        var assistantLeader = new Employee
-                        {
-                            EmpId = team.RawAssistantLeader.AssistantLeaderId,
-                            NickName = team.RawAssistantLeader.NickName,
-                            FullName = team.RawAssistantLeader.FullName
-                        };
-                        team.AssistantLeader = assistantLeader;
-                    }
-                }
             }
 
             return team;

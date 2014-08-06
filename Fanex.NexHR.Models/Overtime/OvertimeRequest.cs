@@ -10,8 +10,6 @@
 namespace Fanex.NexHR.Models.Overtime
 {
     using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     /// <summary>
     /// LateInEarlyOut Request.

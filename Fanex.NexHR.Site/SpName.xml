@@ -224,8 +224,10 @@
         <Setting Key="EmployeeGroup_GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="Group_Select" SpName="Group_Select" DbName="nexhrx" Plain="0">
         <Mapping DataField="groupId" ObjectProperty="Id"/>
+		<Mapping DataField="leaderID" ObjectProperty="Id"/>
         <Mapping DataField="LeaderNickName" ObjectProperty="NickName"/>
         <Mapping DataField="LeaderFullName" ObjectProperty="FullName"/>
+		<Mapping DataField="AssistantLeaderId" ObjectProperty="Id"/>
         <Mapping DataField="AssistantLeaderNickName" ObjectProperty="NickName"/>
         <Mapping DataField="AssistantLeaderFullName" ObjectProperty="FullName"/>
       </Setting>

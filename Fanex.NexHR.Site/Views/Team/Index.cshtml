@@ -66,10 +66,24 @@
 				</td>
 				<td>@team.Name
 				</td>
+				@if (team.Leader != null)
+	{
 				<td class="tooltip" title="@team.Leader.FullName">@team.Leader.NickName
 				</td>
+	}
+	else
+	{
+		<td></td>
+	}
+	@if (team.AssistantLeader != null)
+ {
 				<td class="tooltip" title="@team.AssistantLeader.FullName">@team.AssistantLeader.NickName
 				</td>
+ }
+ else
+ {
+	 <td></td>
+ }
 				<td>@team.MailGroup
 				</td>
 				<td>@team.TotalExpat

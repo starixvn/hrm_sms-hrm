@@ -61,7 +61,6 @@
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssistantLeaderModel.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
@@ -70,7 +69,6 @@
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="HRLeaderDashboardModel.cs" />
-    <Compile Include="LeaderModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MemberScheduleOrderModel.cs" />
     <Compile Include="Message.cs" />

@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Models.Overtime
 {
-
     /// <summary>
     /// Overtime Daily Report Model.
     /// </summary>

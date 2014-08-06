@@ -9,15 +9,12 @@
 
 namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Team Repository.
@@ -33,11 +30,11 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var team = db.QueryEntity<Team, LeaderModel, AssistantLeaderModel, Team>(
+                var team = db.QueryEntity<Team, Employee, Employee, Team>(
                         (t, ld, asld) =>
                         {
-                            t.RawLeader = ld;
-                            t.RawAssistantLeader = asld;
+                            t.Leader = ld;
+                            t.AssistantLeader = asld;
                             return t;
                         },
                         splitOn: "leaderID, AssistantLeaderId",
