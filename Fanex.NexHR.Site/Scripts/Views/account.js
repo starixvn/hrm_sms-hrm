@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
 
     //show or hide Defaul Calendar tag
     if ($('#IsDefaultSchedule').is(':checked')) {

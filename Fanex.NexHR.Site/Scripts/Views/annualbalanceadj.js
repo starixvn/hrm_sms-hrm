@@ -1,4 +1,7 @@
-﻿var _checked = false;
+﻿'use strict';
+/*global _global, _messages*/
+
+var _checked = false;
 var _totalDays = 0;
 var _ids;
 
@@ -28,7 +31,7 @@ $(document).ready(function () {
     });
 
     $('#addadj').click(function () {
-        _ids = new Array();
+        _ids = [];
         $('.aba').each(function (index, item) {
             var checked = $(item).prop('checked');
             if (checked) {
@@ -132,7 +135,7 @@ $(document).ready(function () {
         if ($form.valid()) {
             $.post(_global.root + 'ajax/ResetAnnualLeaves', $('form').serialize(), function (response) {
 
-                if (response == -1) {
+                if (response === -1) {
                     alert(_messages.invalidInputData);
                 }
                 else if (response) {
@@ -158,7 +161,7 @@ $(document).ready(function () {
         var check = true;
         var errorString = [];
         _totalDays = parseFloat($('#TotalDays').val());
-        if (_totalDays == null || _totalDays == "") {
+        if (_totalDays == null || _totalDays === "") {
             errorString.push("* The Total days field is required.");
         }
         if (errorString.length > 0) {

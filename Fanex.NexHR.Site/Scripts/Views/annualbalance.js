@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     $("#TeamId").multiselect();
 
     $("form").submit(function (e) {

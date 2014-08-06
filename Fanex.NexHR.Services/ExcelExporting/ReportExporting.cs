@@ -22,7 +22,6 @@ namespace Fanex.NexHR.Services.ExcelExporting
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-
     /// <summary>
     /// Report Exporting.
     /// </summary>
