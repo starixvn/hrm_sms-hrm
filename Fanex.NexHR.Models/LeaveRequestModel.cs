@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Models
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Fanex.NexHR.Models.Request;
 
     /// <summary>
     /// LeaveRequest Model.

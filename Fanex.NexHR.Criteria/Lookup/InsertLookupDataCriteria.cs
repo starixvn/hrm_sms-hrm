@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Criteria.Lookup
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Insert Lookup Data Criteria.
     /// </summary>
     public class InsertLookupDataCriteria : CriteriaBase
     {

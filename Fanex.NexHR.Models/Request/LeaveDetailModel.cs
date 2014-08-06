@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.11.5">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Models
+namespace Fanex.NexHR.Models.Request
 {
     using System;
 

@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2013.1.16">Apply StyleCop</change>
 // </history>
 
-namespace Fanex.NexHR.Models
+namespace Fanex.NexHR.Models.Overtime
 {
     using System;
     using System.Collections.Generic;

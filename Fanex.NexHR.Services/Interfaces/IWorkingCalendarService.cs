@@ -9,11 +9,11 @@
 
 namespace Fanex.NexHR.Services.Interfaces
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.ViewModels;
 
     public interface IWorkingCalendarService

@@ -25,7 +25,7 @@ namespace Fanex.NexHR.Models.Request
             }
         }
 
-        public int RequestFilter
+        public int FilterRequest
         {
             get 
             {
@@ -33,23 +33,23 @@ namespace Fanex.NexHR.Models.Request
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.CheckInOut;
+                        return (int)RequestFilter.CheckInOut;
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.LateInEarlyOut;
+                        return (int)RequestFilter.LateInEarlyOut;
                     case (int)RequestType.ChangeShift:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.ChangeShift;
+                        return (int)RequestFilter.ChangeShift;
                     case (int)RequestType.Leave:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
+                        return (int)RequestFilter.Leave;
                     case (int)RequestType.KeepInView:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
+                        return (int)RequestFilter.KeepInView;
                     default:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;
+                        return (int)RequestFilter.All;
                 }
             }
         }
 
-        public int RequestHistoryFilter
+        public int FilterRequestHistory
         {
             get
             {
@@ -57,18 +57,18 @@ namespace Fanex.NexHR.Models.Request
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.CheckInOut;
+                        return (int)RequestFilter.CheckInOut;
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.LateInEarlyOut;
+                        return (int)RequestFilter.LateInEarlyOut;
                     case (int)RequestType.ChangeShift:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.ChangeShift;
+                        return (int)RequestFilter.ChangeShift;
                     case (int)RequestType.Leave:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.Leave;
+                        return (int)RequestFilter.Leave;
                     case (int)RequestType.KeepInView:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.KeepInView;
+                        return (int)RequestFilter.KeepInView;
                     default:
-                        return (int)Fanex.NexHR.Core.Enums.RequestFilter.All;
+                        return (int)RequestFilter.All;
                 }
             }
         }

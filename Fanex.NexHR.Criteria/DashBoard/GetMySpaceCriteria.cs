@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Criteria.DashBoard
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Get My Space Criteria.
     /// </summary>
     public class GetMySpaceCriteria : CriteriaBase
     {

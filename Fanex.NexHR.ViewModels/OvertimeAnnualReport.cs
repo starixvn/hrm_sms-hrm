@@ -1,8 +1,11 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // <copyright file="OvertimeAnnualReport.cs" company="Nexcel Solutions Vietnam">
-// TODO: Update copyright text.
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
+// </history>
 
 namespace Fanex.NexHR.ViewModels
 {

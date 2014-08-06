@@ -9,7 +9,7 @@
 
 namespace Fanex.NexHR.ViewModels
 {
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
 
     /// <summary>
     /// ScheduleArrange ViewModel.

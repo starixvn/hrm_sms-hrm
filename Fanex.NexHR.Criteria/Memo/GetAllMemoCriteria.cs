@@ -12,7 +12,7 @@ namespace Fanex.NexHR.Criteria.Memo
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Get All Memo Criteria.
     /// </summary>
     public class GetAllMemoCriteria : CriteriaBase
     {

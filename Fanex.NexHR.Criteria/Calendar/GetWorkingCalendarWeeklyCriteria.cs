@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Criteria.Calendar
     using Fanex.Data.Repository;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Get Working Calendar Weekly Criteria.
     /// </summary>
     public class GetWorkingCalendarWeeklyCriteria : CriteriaBase
     {

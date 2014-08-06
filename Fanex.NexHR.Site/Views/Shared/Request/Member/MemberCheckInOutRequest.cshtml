@@ -62,7 +62,7 @@
                     @Html.Partial("Request/Member/SharedStatus", request)
 
                     <td>
-                    <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.RequestHistoryFilter"> @Labels.View </a>
+                    <a class="viewhistory" href="javascript:;" id="/request/hrviewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory"> @Labels.View </a>
                     </td>
 					<td class="td-warning">
 						@if (request.IsWarning)

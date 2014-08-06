@@ -7,12 +7,9 @@
 //   <change who="Quinn.Vo" date="2013.12.9">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Models
+namespace Fanex.NexHR.Models.Calendar
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// ShiftMultiple Model.

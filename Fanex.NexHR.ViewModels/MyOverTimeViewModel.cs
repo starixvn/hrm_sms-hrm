@@ -1,8 +1,11 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // <copyright file="MyOverTimeViewModel.cs" company="Nexcel Solutions Vietnam">
-// TODO: Update copyright text.
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// <history>
+//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
+// </history>
 
 namespace Fanex.NexHR.ViewModels
 {
@@ -11,7 +14,7 @@ namespace Fanex.NexHR.ViewModels
     using System.ComponentModel.DataAnnotations;
     using System.Text;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
 
     /// <summary>
     /// My Overtime ViewModel.

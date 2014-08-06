@@ -10,7 +10,7 @@
 namespace Fanex.NexHR.ViewModels
 {
     using System;
-    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Overtime;
 
     /// <summary>
     /// EmployeeAttendanceOvertime Model.

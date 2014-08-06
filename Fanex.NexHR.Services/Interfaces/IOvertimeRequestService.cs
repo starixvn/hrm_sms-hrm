@@ -1,10 +1,10 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------
 // <copyright file="IOvertimeRequestService.cs" company="Nexcel Solutions Vietnam">
-// TODO: Update copyright text.
+// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
 // <history>
-//   <change who="Paul.Nguyen" date="2013.12.03">Created</change>
+//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
 // </history>
 
 namespace Fanex.NexHR.Services.Interfaces
