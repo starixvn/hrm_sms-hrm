@@ -1,4 +1,8 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global, autoIndex*/
+/*exported deleteHoliday*/
+
+$(document).ready(function () {
 	var year = $('#year').val();
 
 	$('#submit').click(function () {
@@ -10,7 +14,7 @@
 
 function deleteHoliday(id) {
 	confirm('Are you sure you want to delete this holiday?', function () {
-		$.post(_global.root + 'ajax/DeleteHoliday', { id: id }, function (data) {
+		$.post(_global.root + 'ajax/DeleteHoliday', { id: id }, function () {
 			$('#row' + id).remove();
 			autoIndex();
 		});

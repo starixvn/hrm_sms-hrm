@@ -1,8 +1,12 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global, getParam*/
+/*exported*/
 
+$(document).ready(function () {
+	var id = $("#currentViewUser").val();
     var date = new Date().format("mm/dd/yyyy");
 
-    if (getParam('date') == date) {
+    if (getParam('date') === date) {
         $('#schedulemonth').attr('checked', true);
     }
     if (getParam('date') == null) {

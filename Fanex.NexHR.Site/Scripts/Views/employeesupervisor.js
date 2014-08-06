@@ -1,20 +1,64 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global, _messages*/
+/*exported*/
+
+function addToGrid(supervisorName, supervisorId, supervisorTeam) {
+	if (supervisorId.toString().length > 0 && supervisorName.length > 0) {
+		var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
+			+ '<a href="javascript:;" class="moveTop">Top</a>'
+            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td><td class="left">' 
+			+ supervisorTeam + '</td><td><input class="LeaveRole" checked type="checkbox"></td>'
+			+ '<td><input class="ChangeShiftRole" checked type="checkbox">'
+            + '</td><td><input class="LateInEarlyOutRole" checked type="checkbox"></td>'
+			+ '<td><input class="CheckInOutRole" checked type="checkbox"></td><td>'
+            + '<input class="OvertimeRole" checked type="checkbox"></td>'
+			+ '<td><input class="KeepInViewRole" checked type="checkbox"></td>'
+			+ '<td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
+
+		var object = html.find(".lnkremove").first().click(function () {
+			confirm("Are you sure you want to remove this?", function () {
+				object.parent().parent().remove();
+			});
+		});
+
+		var isExist = false;
+		var supervisors = $("#tblSupervisor tbody tr");
+		for (var i = 0; i < supervisors.length; i++) {
+			var supervisor = $(supervisors[i]).children().eq(1);
+			if (supervisorId === $(supervisor).attr("data-id")) {
+				isExist = true;
+			}
+		}
+
+		if (!isExist) {
+			if ($("#tblSupervisor tbody tr").first().length > 0) {
+				$("#tblSupervisor tbody tr").first().before(html);
+			}
+			else {
+				$("#tblSupervisor tbody").html(html);
+			}
+		}
+	}
+}
+
+$(document).ready(function () {
 	$("#group").multiselect();
+	var nickName;
 	$("#Supervisor").autocomplete({
 		source: function (request, response) {
 			var listIgnore = "";
 			var supervisors = $("#tblSupervisor").find("tbody tr");
 			for (var i = 0; i < supervisors.length; i++) {
 				var supervisor = $(supervisors[i]).children().eq(1);
-				listIgnore += $(supervisor).attr("data-id") + ","
+				listIgnore += $(supervisor).attr("data-id") + ",";
 			}
 
 			var urlAllEmployee = _global.root + 'api/employee/getemployees';
 			var params = {
 				query: $.trim(request.term),
 				$top: 10
-			}
-			if ($("#supervisorRole").val() == "True") {
+			};
+			if ($("#supervisorRole").val() === "True") {
 				$.ajax({
 					url: urlAllEmployee,
 					data: params,
@@ -23,7 +67,7 @@
 							return {
 								label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
 								value: item.Id > 0 ? item.Id : item.EmpId
-							}
+							};
 						}));
 					}
 				});
@@ -42,7 +86,7 @@
 							return {
 								label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
 								value: item.Id > 0 ? item.Id : item.EmpId
-							}
+							};
 						}));
 					}
 				});
@@ -69,17 +113,20 @@
 		}
 	});
 
-	// $(".chosen-select").chosen();
-
 	$("#lknAdd").click(function () {
 		var supervisorName = $("#Supervisor").val();
 		var supervisorId = $("#SupervisorId").val();
 		var supervisorTeam = $("#SupervisorTeam").val();
 		if (supervisorId.length > 0 && supervisorName.length > 0) {
-			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
-            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td><td class="left">' + supervisorTeam + '</td><td><input class="LeaveRole" checked type="checkbox"></td><td><input class="ChangeShiftRole" checked type="checkbox">'
-                + '</td><td><input class="LateInEarlyOutRole" checked type="checkbox"></td><td><input class="CheckInOutRole" checked type="checkbox"></td><td>'
-                + '<input class="OvertimeRole" checked type="checkbox"></td><td><input class="KeepInViewRole" checked type="checkbox"></td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
+			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
+			+ '<a href="javascript:;" class="moveTop">Top</a>'
+            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName
+			+ '</td><td class="left">' + supervisorTeam + '</td><td><input class="LeaveRole" checked type="checkbox"></td>'
+			+ '<td><input class="ChangeShiftRole" checked type="checkbox">'
+            + '</td><td><input class="LateInEarlyOutRole" checked type="checkbox"></td>'
+			+ '<td><input class="CheckInOutRole" checked type="checkbox"></td><td>'
+            + '<input class="OvertimeRole" checked type="checkbox"></td><td><input class="KeepInViewRole" checked type="checkbox"></td>'
+			+ '<td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
 			var object = html.find(".lnkremove").first().click(function () {
 				confirm("Are you sure you want to remove this?", function () {
@@ -91,7 +138,7 @@
 			var supervisors = $("#tblSupervisor tbody tr");
 			for (var i = 0; i < supervisors.length; i++) {
 				var supervisor = $(supervisors[i]).children().eq(1);
-				if (supervisorId == $(supervisor).attr("data-id")) {
+				if (supervisorId === $(supervisor).attr("data-id")) {
 					isExist = true;
 				}
 			}
@@ -104,7 +151,7 @@
 					$("#tblSupervisor tbody").html(html);
 				}
 
-				$("#Supervisor").val("")
+				$("#Supervisor").val("");
 				$("#SupervisorId").val("");
 				$("#Supervisor").focus();
 			}
@@ -150,32 +197,32 @@
 
 			var supervisorId = supervisorTR.attr("data-id");
 
-			if (leaveTR.attr("checked") == "checked") {
+			if (leaveTR.attr("checked") === "checked") {
 				leaves += supervisorId + ",";
 			}
 
-			if (changeshiftTR.attr("checked") == "checked") {
+			if (changeshiftTR.attr("checked") === "checked") {
 				changeshifts += supervisorId + ",";
 			}
 
-			if (lateinearlyoutTR.attr("checked") == "checked") {
+			if (lateinearlyoutTR.attr("checked") === "checked") {
 				lateinearlyouts += supervisorId + ",";
 			}
 
-			if (checkinoutTR.attr("checked") == "checked") {
+			if (checkinoutTR.attr("checked") === "checked") {
 				checkinouts += supervisorId + ",";
 			}
 
-			if (overtimeTR.attr("checked") == "checked") {
+			if (overtimeTR.attr("checked") === "checked") {
 				overtimes += supervisorId + ",";
 			}
 
-			if (keepinviewTR.attr("checked") == "checked") {
+			if (keepinviewTR.attr("checked") === "checked") {
 				keepinviews += supervisorId + ",";
 			}
 		}
 
-		if (ForView == "Employee") {
+		if (ForView === "Employee") {
 			$.ajax({
 				type: 'POST',
 				url: _global.root + 'employee/Supervisor',
@@ -253,49 +300,21 @@
 		var groups = $("#group").val() != null ? $("#group").val().join() : "";
 
 		$.getJSON(
-	        _global.root + 'api/employee/getemployees'
-	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
-	        , function (data) {
-	        	for (var i = 0; i < data.length; i++) {
-	        		addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	        	}
-
-	        }).error(function () {
-	        	alert(_messages.errorTryAgain);
-	        });
+		_global.root + 'api/employee/getemployees',
+		{
+			query: '',
+			groupIds: groups,
+			enable: null,
+			isDelete: null,
+			titleId: null
+		},
+		function (data) {
+			for (var i = 0; i < data.length; i++) {
+				addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+			}
+		}).error(function () {
+			alert(_messages.errorTryAgain);
+		});
 	});
 
 });
-
-function addToGrid(supervisorName, supervisorId, supervisorTeam) {
-    if (supervisorId.toString().length > 0 && supervisorName.length > 0) {
-        var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
-            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td><td class="left">' + supervisorTeam + '</td><td><input class="LeaveRole" checked type="checkbox"></td><td><input class="ChangeShiftRole" checked type="checkbox">'
-                + '</td><td><input class="LateInEarlyOutRole" checked type="checkbox"></td><td><input class="CheckInOutRole" checked type="checkbox"></td><td>'
-                + '<input class="OvertimeRole" checked type="checkbox"></td><td><input class="KeepInViewRole" checked type="checkbox"></td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
-
-        var object = html.find(".lnkremove").first().click(function () {
-            confirm("Are you sure you want to remove this?", function () {
-                object.parent().parent().remove();
-            });
-        });
-
-        var isExist = false;
-        var supervisors = $("#tblSupervisor tbody tr");
-        for (var i = 0; i < supervisors.length; i++) {
-            var supervisor = $(supervisors[i]).children().eq(1);
-            if (supervisorId == $(supervisor).attr("data-id")) {
-                isExist = true;
-            }
-        }
-
-        if (!isExist) {
-            if ($("#tblSupervisor tbody tr").first().length > 0) {
-                $("#tblSupervisor tbody tr").first().before(html);
-            }
-            else {
-                $("#tblSupervisor tbody").html(html);
-            }
-        }
-    }
-}

@@ -1,13 +1,18 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global, _messages*/
+/*exported*/
+
+$(document).ready(function () {
 	$("#group").multiselect();
 
+	var nickName;
 	$("#Supervisor").autocomplete({
 		source: function (request, response) {
 			var listIgnore = "";
 			var supervisors = $("#tblSupervisor").find("tbody tr");
 			for (var i = 0; i < supervisors.length; i++) {
 				var supervisor = $(supervisors[i]).children().eq(1);
-				listIgnore += $(supervisor).attr("data-id") + ","
+				listIgnore += $(supervisor).attr("data-id") + ",";
 			}
 
 			$.ajax({
@@ -21,7 +26,7 @@
 						return {
 							label: item.NickName + ' (' + item.FullName + ')' + ' - ' + item.Team.Name,
 							value: item.EmpId > 0 ? item.EmpId : item.Id
-						}
+						};
 					}));
 				}
 			});
@@ -55,7 +60,8 @@
 
 	function addToGrid(supervisorName, supervisorId, supervisorTeam) {
 		if (supervisorId.toString().length > 0 && supervisorName.length > 0) {
-			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
+			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
+			+ '<a href="javascript:;" class="moveTop">Top</a>'
             + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
             + '<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
@@ -70,7 +76,7 @@
 			var supervisors = $("#tblSupervisor tbody tr");
 			for (var i = 0; i < supervisors.length; i++) {
 				var supervisor = $(supervisors[i]).children().eq(1);
-				if (supervisorId == $(supervisor).attr("data-id")) {
+				if (supervisorId === $(supervisor).attr("data-id")) {
 					isExist = true;
 				}
 			}
@@ -91,7 +97,8 @@
 		var supervisorId = $("#SupervisorId").val();
 		var supervisorTeam = $("#SupervisorTeam").val();
 		if (supervisorId.length > 0 && supervisorName.length > 0) {
-			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a><a href="javascript:;" class="moveTop">Top</a>'
+			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
+			+ '<a href="javascript:;" class="moveTop">Top</a>'
             + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
             + '<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
@@ -106,7 +113,7 @@
 			var supervisors = $("#tblSupervisor tbody tr");
 			for (var i = 0; i < supervisors.length; i++) {
 				var supervisor = $(supervisors[i]).children().eq(1);
-				if (supervisorId == $(supervisor).attr("data-id")) {
+				if (supervisorId === $(supervisor).attr("data-id")) {
 					isExist = true;
 				}
 			}
@@ -119,7 +126,7 @@
 					$("#tblSupervisor tbody").html(html);
 				}
 
-				$("#Supervisor").val("")
+				$("#Supervisor").val("");
 				$("#SupervisorId").val("");
 				$("#Supervisor").focus();
 			}
@@ -130,16 +137,22 @@
 		var groups = $("#group").val() != null ? $("#group").val().join() : "";
 
 		$.getJSON(
-	        _global.root + 'api/employee/getemployees'
-	        , { query: '', groupIds: groups, enable: null, isDelete: null, titleId: null }
-	        , function (data) {
-	        	for (var i = 0; i < data.length; i++) {
-	        		addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
-	        	}
-
-	        }).error(function () {
-	        	alert(_messages.errorTryAgain);
-	        });
+		_global.root + 'api/employee/getemployees',
+		{
+			query: '',
+			groupIds: groups,
+			enable: null,
+			isDelete: null,
+			titleId: null
+		},
+		function (data) {
+			for (var i = 0; i < data.length; i++) {
+				addToGrid(data[i].NickName + ' (' + data[i].FullName + ')', data[i].EmpId > 0 ? data[i].EmpId : data[i].Id, data[i].Team.Name);
+			}
+		})
+		.error(function () {
+			alert(_messages.errorTryAgain);
+		});
 	});
 
 	$(".lnkremove").on("click", function () {
@@ -170,7 +183,7 @@
 			var supervisorId = supervisorTR.attr("data-id");
 			arrangeShift += supervisorId + ",";
 		}
-		if (ForView == "Employee") {
+		if (ForView === "Employee") {
 			$.ajax({
 				type: 'POST',
 				url: _global.root + 'employee/ShiftManager',
@@ -208,7 +221,7 @@
 				}
 			});
 		}
-		
+
 	});
 
 	$(".moveTop, .up, .down").on("click", function () {

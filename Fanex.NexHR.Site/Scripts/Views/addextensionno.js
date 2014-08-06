@@ -2,45 +2,45 @@
 /*global _global*/
 
 function bindingDataToDropdown() {
+	var dropdownTeam = $("#TeamId");
+
 	if ($("#IsInternal").is(":checked")) {
 		$.getJSON(_global.root + 'api/report/GetGroupExtension', { isInternal: true, groupId: null },
-function (data) {
-	if (data[0] != null) {
-		$("#TeamId").empty();
-		var options = "";
-		for (var i = 0; i < data.length; i++) {
-			options += "<option value='" + data[i].Value + "'>" + data[i].Text + "</option>";
-		}
-		$("#TeamId").html(options);
-	}
-});
+		function (data) {
+			if (data[0] != null) {
+				dropdownTeam.empty();
+				var options = "";
+				for (var i = 0; i < data.length; i++) {
+					options += "<option value='" + data[i].Value + "'>" + data[i].Text + "</option>";
+				}
+				dropdownTeam.html(options);
+			}
+		});
 	}
 	else {
 		$.getJSON(_global.root + 'api/report/GetGroupExtension', { isInternal: false, groupId: null },
-function (data) {
-	if (data[0] != null) {
-		$("#TeamId").empty();
-		var options = "";
-		for (var i = 0; i < data.length; i++) {
-			options += "<option value='" + data[i].Value + "'>" + data[i].Text + "</option>";
-		}
-		$("#TeamId").html(options);
-	}
-});
+		function (data) {
+			if (data[0] != null) {
+				dropdownTeam.empty();
+				var options = "";
+				for (var i = 0; i < data.length; i++) {
+					options += "<option value='" + data[i].Value + "'>" + data[i].Text + "</option>";
+				}
+				dropdownTeam.html(options);
+			}
+		});
 	}
 }
 
-function checkForChecked() {
-
+function checkInternal() {
 	if ($("#IsInternal").is(":checked")) {
-
-		if ($("#EmpId").val() > 0) {
-			var FullName = $("#NickName").val() + ' (' + $("#FullName").val() + ')';
-			$("#Employee").val(FullName);
-		}
-
 		$("#FullName, #NickName").attr('readonly', true);
 		$("#EmployeeField").show();
+
+		if ($("#EmpId").val() > 0) {
+			var fullName = $("#NickName").val() + ' (' + $("#FullName").val() + ')';
+			$("#Employee").val(fullName);
+		}
 	}
 	else {
 		$("#FullName, #NickName").attr('readonly', false);
@@ -49,16 +49,18 @@ function checkForChecked() {
 }
 
 $(document).ready(function () {
-	var IsAddForm = $("#IsAddForm").val();
-	if (IsAddForm === "True") {
+	var isAddForm = $("#IsAddForm").val();
+	if (isAddForm === "True") {
 		bindingDataToDropdown();
 	}
-	checkForChecked();
+	checkInternal();
 
 	$("#IsInternal").change(function () {
 		bindingDataToDropdown();
-		checkForChecked();
+		checkInternal();
 	});
+
+	var nickName;
 	$("#Employee").autocomplete({
 		source: function (request, response) {
 			$.ajax({
@@ -80,7 +82,7 @@ $(document).ready(function () {
 		},
 		minLength: 1,
 		select: function (event, ui) {
-			var nickName = ui.item.label;
+			nickName = ui.item.label;
 			$('#Employee').val(nickName);
 			$('#EmpId').val(ui.item.value);
 
@@ -88,7 +90,7 @@ $(document).ready(function () {
 			$('#NickName').val(ui.item.nickname);
 		},
 		focus: function (event, ui) {
-			var nickName = ui.item.label;
+			nickName = ui.item.label;
 			$('#Employee').val(nickName);
 			$('#EmpId').val(ui.item != null ? ui.item.value : "");
 			$('#FullName').val(ui.item.fullname);
@@ -96,14 +98,14 @@ $(document).ready(function () {
 			event.preventDefault();
 		},
 		change: function (event, ui) {
-			var nickName = ui.item != null ? ui.item.label : "";
+			nickName = ui.item != null ? ui.item.label : "";
 			$('#Employee').val(nickName);
 			$('#EmpId').val(ui.item != null ? ui.item.value : "");
 			$('#FullName').val(ui.item.fullname);
 			$('#NickName').val(ui.item.nickname);
 		},
 		close: function () {
-			$('#Employee').val('');
+			$('#Employee').val(nickName);
 		}
 	});
 

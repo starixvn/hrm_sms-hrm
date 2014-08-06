@@ -1,6 +1,6 @@
 ﻿'use strict';
 /*global _global,autoIndex*/
-/*exported deleteMessage*/
+/*exported deleteMessage, detailMessage*/
 
 var init = function () {
 	var effectedDateModel = $('#EffectedDate').val(),
@@ -23,7 +23,7 @@ var deleteMessage = function (messageId) {
 };
 
 var detailMessage = function (messageId) {
-	var jqxhr = $.post(_global.root + 'Message/UpdateReadStatusOfMessage', { id: messageId }, function () {
+	$.post(_global.root + 'Message/UpdateReadStatusOfMessage', { id: messageId }, function () {
 	}).always(function () {
 		window.location.href = '/message/detailByEmployee/' + messageId;
 	});

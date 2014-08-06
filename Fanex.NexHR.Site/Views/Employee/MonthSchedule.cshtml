@@ -13,10 +13,9 @@
     <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
-<script>
-    var id = @ViewBag.Id;
-</script>
+
 <h2>
+@Html.Hidden("currentViewUser", (int)ViewBag.Id)
     The Monthly Working Schedule of @ViewBag.Employee.NickName</h2>
 @{
     if (((Employee)ViewBag.Employee).IsDefaultSchedule)

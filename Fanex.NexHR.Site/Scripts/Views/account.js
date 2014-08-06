@@ -2,23 +2,27 @@
 /*global _global*/
 
 $(document).ready(function () {
+	//Show or hide default calendar.
+	var defaultCalendar = $("#dfsCalendar");
 
-    //show or hide Defaul Calendar tag
-    if ($('#IsDefaultSchedule').is(':checked')) {
-        $("#dfsCalendar").show();
-    } else {
-        $("#dfsCalendar").hide();
-    }
-    $('#IsDefaultSchedule').click(function () {
-        $("#dfsCalendar").toggle();
-    });
+	if ($('#IsDefaultSchedule').is(':checked')) {
+		defaultCalendar.show();
+	} else {
+		defaultCalendar.hide();
+	}
 
-    $("#generate").on("click", function () {
-        $.ajax({
-            url: _global.root + 'api/employee/GetNewEmployeeCode',
-            success: function (data) {
-                $("#Code").val("X" + data);
-            }
-        });
-    });
+	// Toggle default schedule.
+	$('#IsDefaultSchedule').click(function () {
+		defaultCalendar.toggle();
+	});
+
+	// Generate new employee code.
+	$("#generate").on("click", function () {
+		$.ajax({
+			url: _global.root + 'api/employee/GetNewEmployeeCode',
+			success: function (data) {
+				$("#Code").val("X" + data);
+			}
+		});
+	});
 });

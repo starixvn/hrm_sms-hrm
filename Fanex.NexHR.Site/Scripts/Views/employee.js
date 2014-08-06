@@ -1,43 +1,23 @@
-﻿$(document).ready(function () {
-	checkDisabledUser();
-	$("#group").multiselect();
-	var jobTitleId = $('#jobtitleid').val();
+﻿'use strict';
+/*global _global, _messages, getParam*/
+/* exported index, resetPassword*/
 
-	$('#title').val(jobTitleId);
-	$('#title').chosen();
-	$("#title").trigger("liszt:updated");
+var rowIndex = 1;
+function index() {
+	return rowIndex++;
+}
 
-	$('#keyword').keyup(function (event) {
-		if (event.keyCode == 13) {
-			$("#userdata").dataTable().fnDestroy();
-			query(jobTitleId);
-		}
-	});
+function actingLoading(element) {
+	$(element).attr("origin-value", $(element).attr("value"));
+	$(element).attr("value", 'Processing');
+	$(element).attr("disabled", "disabled");
+}
 
-	var q = getParam('query');
-	if (q != null) {
-		$('#keyword').val(q);
-	}
-
-	//search onload
-	query(jobTitleId);
-
-	$('#query').live("click", function (evt) {
-		evt.preventDefault();
-		
-		$("#userdata").dataTable().fnDestroy();
-		query(jobTitleId);
-	});
-
-	$("#basicExcel").click(function () {
-		exportExcel($(this));
-	});
-
-	$("#detailsExcel").click(function () {
-		exportExcel($(this));
-	});
-
-});
+function reloadButtonText(element) {
+	$(element).attr("value", $(element).attr("origin-value"));
+	$(element).removeAttr("disabled");
+	$("#blocker").hide();
+}
 
 function checkDisabledUser() {
 	if ($("#enable").attr("checked")) {
@@ -49,13 +29,14 @@ function checkDisabledUser() {
 }
 
 function query(jobTitleId) {
-	if (jobTitleId == undefined || jobTitleId == '') {
+	if (jobTitleId === undefined || jobTitleId === '') {
 		jobTitleId = $('#title').val();
 	}
 
-	var query = $('#keyword').val();
+	var keyword = $('#keyword').val();
 	actingLoading('#query', true);
 
+	var enable = null;
 	if ($("#enable").attr("checked")) {
 		enable = true;
 	}
@@ -77,26 +58,32 @@ function query(jobTitleId) {
 	}
 
 	var groups = $("#group").val() != null ? $("#group").val().join() : "";
-	if (groups == "") {
+	if (groups === "") {
 		var groupid = $('#groupid').val();
 		groups = groupid;
-		//$("#group").multiselect("widget").find(":checkbox[value='" + groups + "']").attr("checked", "checked");
 		$("#group option[value='" + groups + "']").prop("selected", 1);
 		$("#group").multiselect("refresh");
 	}
 
 	var isLocal = $("#category").val();
-	if (isLocal == "0") {
+	if (isLocal === "0") {
 		isLocal = false;
 	}
-	if (isLocal == "1") {
+	if (isLocal === "1") {
 		isLocal = true;
 	}
 
 	$.getJSON(
-	_global.root + 'api/employee/getemployees'
-	, { query: query, groupIds: groups, enable: enable, isDelete: isDelete, titleId: jobTitleId, isLocal: isLocal }
-	, function (data) {
+	_global.root + 'api/employee/getemployees',
+	{
+		query: keyword,
+		groupIds: groups,
+		enable: enable,
+		isDelete: isDelete,
+		titleId: jobTitleId,
+		isLocal: isLocal
+	},
+	function (data) {
 		if (data.length > 0) {
 			rowIndex = 1;
 			$('#userdata tbody').children().remove();
@@ -153,15 +140,9 @@ function query(jobTitleId) {
 	$('#keyword').focus().select();
 }
 
-var rowIndex = 1;
-function index() {
-	return rowIndex++;
-}
-
-
 function resetPassword(id, nickName) {
 	confirm("Are you sure you want to reset " + nickName + "'s password?", function () {
-		$.post(_global.root + 'ajax/ResetPassword', { id: id }, function (data) {
+		$.post(_global.root + 'ajax/ResetPassword', { id: id }, function () {
 		});
 	});
 }
@@ -170,9 +151,10 @@ function exportExcel(object) {
 
 	var jobTitleId = $('#title').val();
 	var groups = $("#group").val() != null ? $("#group").val().join() : "";
-	var query = $('#keyword').val();
+	var keyword = $('#keyword').val();
 	var url = null;
 
+	var enable = null;
 	if ($("#enable").attr("checked")) {
 		enable = true;
 	}
@@ -194,35 +176,65 @@ function exportExcel(object) {
 	}
 
 	var isLocal = $("#category").val();
-	if (isLocal == "0") {
+	if (isLocal === "0") {
 		isLocal = false;
 	}
-	if (isLocal == "1") {
+	if (isLocal === "1") {
 		isLocal = true;
 	}
 
 	var controllerPath;
-	if (object.attr("id") == "basicExcel") {
+	if (object.attr("id") === "basicExcel") {
 		controllerPath = "export/EmployeeBasicInfo?query=";
 	}
-	if (object.attr("id") == "detailsExcel") {
+	if (object.attr("id") === "detailsExcel") {
 		controllerPath = "export/EmployeeDetailsInfo?query=";
 	}
 
-	url = _global.root + controllerPath + query + "&groupIds=" + groups
+	url = _global.root + controllerPath + keyword + "&groupIds=" + groups
 		+ "&enable=" + enable + "&isDelete=" + isDelete + "&titleId=" + jobTitleId + "&isLocal=" + isLocal;
 
 	location.href = url;
 }
 
-function actingLoading(element, disabled) {
-	$(element).attr("origin-value", $(element).attr("value"));
-	$(element).attr("value", 'Processing');
-	$(element).attr("disabled", "disabled");
-}
+$(document).ready(function () {
+	var jobTitleId = $('#jobtitleid').val();
+	var dropDownTittle = $('#title');
+	checkDisabledUser();
+	$("#group").multiselect();
 
-function reloadButtonText(element) {
-	$(element).attr("value", $(element).attr("origin-value"));
-	$(element).removeAttr("disabled");
-	$("#blocker").hide();
-}
+
+	dropDownTittle.val(jobTitleId);
+	dropDownTittle.chosen();
+	dropDownTittle.trigger("liszt:updated");
+
+	$('#keyword').keyup(function (event) {
+		if (event.keyCode === 13) {
+			$("#userdata").dataTable().fnDestroy();
+			query(jobTitleId);
+		}
+	});
+
+	var q = getParam('query');
+	if (q != null) {
+		$('#keyword').val(q);
+	}
+
+	//search onload
+	query(jobTitleId);
+
+	$('#query').live("click", function (evt) {
+		evt.preventDefault();
+
+		$("#userdata").dataTable().fnDestroy();
+		query(jobTitleId);
+	});
+
+	$("#basicExcel").click(function () {
+		exportExcel($(this));
+	});
+
+	$("#detailsExcel").click(function () {
+		exportExcel($(this));
+	});
+});

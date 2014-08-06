@@ -458,7 +458,7 @@
     </resourceSet>
     <resourceSet name="memberrequestpersonalspacejs" type="js">
       <resource reference="sitejs"/>
-      <resource path="~/scripts/views/creteria.js"/>
+      <resource path="~/scripts/views/criteria.js"/>
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/memberrequest.personalspace.js" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
@@ -473,7 +473,7 @@
 
     <resourceSet name="employeerequesthrspacejs" type="js">
       <resource reference="sitejs"/>
-      <resource path="~/scripts/views/creteria.js"/>
+      <resource path="~/scripts/views/criteria.js"/>
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/request/employeerequest.hrspace.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />

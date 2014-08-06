@@ -1,11 +1,7 @@
-﻿$(document).ready(function () {
-	$("#FromDate").datepicker({
-		changeMonth: true,
-		changeYear: true,
-		dateFormat: "dd M, yy"
-	});
+﻿'use strict';
 
-	$("#ToDate").datepicker({
+$(document).ready(function () {
+	$("#FromDate, #ToDate").datepicker({
 		changeMonth: true,
 		changeYear: true,
 		dateFormat: "dd M, yy"

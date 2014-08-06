@@ -6,169 +6,137 @@ var _totalDays = 0;
 var _ids;
 
 $(document).ready(function () {
-    $('.checkuncheckall').click(function () {
-        _checked = !_checked;
-        $('.aba').prop('checked', _checked);
-        $('.checkuncheckall').prop('checked', _checked);
-        if (_checked) {
-            $('tr').addClass('selected');
-        }
-        else {
-            $('tr').removeClass('selected');
-        }
-    });
+	$('.checkuncheckall').click(function () {
+		_checked = !_checked;
+		$('.aba').prop('checked', _checked);
+		$('.checkuncheckall').prop('checked', _checked);
+		if (_checked) {
+			$('tr').addClass('selected');
+		}
+		else {
+			$('tr').removeClass('selected');
+		}
+	});
 
-    $("#errors-model-state").hide();
+	$("#errors-model-state").hide();
 
-    $('.aba').click(function () {
-        var tr = $(this).parent().parent();
-        if (tr.hasClass('selected')) {
-            tr.removeClass();
-        }
-        else {
-            tr.addClass('selected');
-        }
-    });
+	$('.aba').click(function () {
+		var tr = $(this).parent().parent();
+		if (tr.hasClass('selected')) {
+			tr.removeClass();
+		}
+		else {
+			tr.addClass('selected');
+		}
+	});
 
-    $('#addadj').click(function () {
-        _ids = [];
-        $('.aba').each(function (index, item) {
-            var checked = $(item).prop('checked');
-            if (checked) {
-                _ids.push($(item).attr('data-id'));
-            }
-        });
+	$('#addadj').click(function () {
+		_ids = [];
+		$('.aba').each(function (index, item) {
+			var checked = $(item).prop('checked');
+			if (checked) {
+				_ids.push($(item).attr('data-id'));
+			}
+		});
 
-        $('#EmpIds').val(_ids);
+		$('#EmpIds').val(_ids);
 
-        if (_ids.length > 0) {
-            $('#insertform').dialog({
-                modal: true,
-                width: 410,
-                height: 275,
-                open: function () {
-                    $('#TotalDays').val('');
-                }
-            });
-        }
-        else {
-            alert('Please choose at least one employee to continue!');
-        }
-    });
+		if (_ids.length > 0) {
+			$('#insertform').dialog({
+				modal: true,
+				width: 410,
+				height: 275,
+				open: function () {
+					$('#TotalDays').val('');
+				}
+			});
+		}
+		else {
+			alert('Please choose at least one employee to continue!');
+		}
+	});
 
-    $('#resetblc').click(function () {
+	$('#resetblc').click(function () {
+		$('#resetform').dialog({
+			modal: true,
+			width: 410,
+			height: 235,
+			open: function () {
+				$('#TotalDays').val('');
+			}
+		});
+	});
 
-        $('#resetform').dialog({
-            modal: true,
-            width: 410,
-            height: 235,
-            open: function () {
-                $('#TotalDays').val('');
-            }
-        });
+	$('#insert').click(function () {
+		var annualLeaveMuiltiple = {
+			EmpIds: $("#EmpIds").val(),
+			Description: $("#Description").val(),
+			AffectedFrom: $("#AffectedFrom").val(),
+			TotalDays: $("#TotalDays").val()
+		};
+		var annualJsonFormat = JSON.stringify(annualLeaveMuiltiple);
+		var validate = validateInput();
+		if (validate) {
+			$.ajax({
+				type: 'POST',
+				url: _global.root + 'ajax/AdjustAnnualLeaves',
+				data: { annualLeaveJson: annualJsonFormat },
+				dataType: 'json',
+				success: function (response) {
+					if (response) {
+						document.location = _global.root + 'annualleavebalance/index';
+					} else {
+						$("#errors-model-state").show();
+						$("#errors-model-state").html("* " + response.errors);
+					}
+				}
+			});
+		}
+	});
 
-    });
+	$('#resetform form').submit(function (evt) {
+		evt.preventDefault();
+		var $form = $(this);
+		_totalDays = parseFloat($('#TotalDays').val());
 
-    $('#insert').click(function () {
+		if ($form.valid()) {
+			$.post(_global.root + 'ajax/ResetAnnualLeaves', $('form').serialize(), function (response) {
+				if (response === -1) {
+					alert(_messages.invalidInputData);
+				}
+				else if (response) {
+					$('#resetform').dialog('close');
+				}
+				else {
+					alert(_messages.errorTryAgain);
+				}
+			});
+		}
+	});
 
-        var annualLeaveMuiltiple = {
-            EmpIds: $("#EmpIds").val(),
-            Description: $("#Description").val(),
-            AffectedFrom: $("#AffectedFrom").val(),
-            TotalDays: $("#TotalDays").val()
-        };
-        var annualJsonFormat = JSON.stringify(annualLeaveMuiltiple);
-        var validate = validateInput();
-        if (validate) {
-            $.ajax({
-                type: 'POST',
-                url: _global.root + 'ajax/AdjustAnnualLeaves',
-                data: { annualLeaveJson: annualJsonFormat },
-                dataType: 'json',
-                success: function (response) {
-                    if (response) {
-                        document.location = _global.root + 'annualleavebalance/index';
-                    } else {
-                        $("#errors-model-state").show();
-                        $("#errors-model-state").html("* " + response.errors);
-                    }
-                }
-            });
-        }
+	$('#cancel').click(function () {
+		$('#insertform').dialog('close');
+	});
 
-    });
+	$('#cancelReset').click(function () {
+		$('#resetform').dialog('close');
+	});
 
-    //    $('#insertform form').submit(function (evt) {
-    ////        if (!evt.preventDefault) {
-    ////            evt.preventDefault = function () {
-    ////                evt.returnValue = false; //ie
-    ////            };
-    ////        }
-    //        var $form = $(this);
-    //        _totalDays = parseFloat($('#TotalDays').val());
-    //        if ($form.valid()) {
-    //            $.post(_global.root + 'ajax/AdjustAnnualLeaves', $('form').serialize(), function (response) {
+	function validateInput() {
+		var check = true;
+		var errorString = [];
+		_totalDays = parseFloat($('#TotalDays').val());
 
-    //                if (response == -1) {
-    //                    alert(_messages.invalidInputData);
-    //                }
-    //                else if (response) {
-    //                    $.each(_ids, function (index, value) {
-    //                        var currentAnnualLeaveBalance = parseFloat($('#alb' + value).text());
-    //                        $('#alb' + value).text(currentAnnualLeaveBalance + _totalDays);
-    //                    });
-    //                    $('#insertform').dialog('close');
-    //                    alert("True");
-    //                }
-    //                else {
-    //                    alert(_messages.errorTryAgain);
-    //                }
-    //            });
-    //        }
-    //    });
+		if (_totalDays == null || _totalDays === "") {
+			errorString.push("* The Total days field is required.");
+		}
 
-    $('#resetform form').submit(function (evt) {
-        evt.preventDefault();
-        var $form = $(this);
-        _totalDays = parseFloat($('#TotalDays').val());
+		if (errorString.length > 0) {
+			$("#errors-model-state").show();
+			$("#errors-model-state").html(errorString.join("</br>"));
+			return false;
+		}
 
-        if ($form.valid()) {
-            $.post(_global.root + 'ajax/ResetAnnualLeaves', $('form').serialize(), function (response) {
-
-                if (response === -1) {
-                    alert(_messages.invalidInputData);
-                }
-                else if (response) {
-
-                    $('#resetform').dialog('close');
-                }
-                else {
-                    alert(_messages.errorTryAgain);
-                }
-            });
-        }
-    });
-
-    $('#cancel').click(function () {
-        $('#insertform').dialog('close');
-    });
-
-    $('#cancelReset').click(function () {
-        $('#resetform').dialog('close');
-    });
-
-    function validateInput() {
-        var check = true;
-        var errorString = [];
-        _totalDays = parseFloat($('#TotalDays').val());
-        if (_totalDays == null || _totalDays === "") {
-            errorString.push("* The Total days field is required.");
-        }
-        if (errorString.length > 0) {
-            $("#errors-model-state").show();
-            $("#errors-model-state").html(errorString.join("</br>"));
-            return false;
-        }
-        return check;
-    }
+		return check;
+	}
 });

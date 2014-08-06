@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+
+$(document).ready(function () {
     $("#ActualFromDate, #ActualToDate, #FromDate, #ToDate").datepicker({
         changeMonth: true,
         changeYear: true

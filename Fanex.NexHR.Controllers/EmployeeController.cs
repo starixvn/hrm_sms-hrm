@@ -287,6 +287,7 @@ namespace Fanex.NexHR.Controllers
 
             ViewBag.Employee = employee;
             ViewBag.Shifts = _shiftService.GetSelectList();
+            ViewBag.Id = id;
             if (employee.IsDefaultSchedule)
             {
                 var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
@@ -295,7 +296,6 @@ namespace Fanex.NexHR.Controllers
             }
             else
             {
-                ViewBag.Id = id;
                 return View("MonthSchedule");
             }
         }

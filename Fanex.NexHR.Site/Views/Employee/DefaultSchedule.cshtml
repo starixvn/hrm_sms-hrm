@@ -15,22 +15,19 @@
     <span class="step">@ViewBag.Title</span>
 }
 
-<script>
-    var id = @ViewBag.Employee.Id;
-</script>
 <h2>The Default Working Schedule of @ViewBag.Employee.NickName</h2>
 <div class="container_24">
 @using (Html.BeginForm())
 {
-
+	@Html.Hidden("currentViewUser", (int)ViewBag.Id)
     @Html.ValidationSummary(true)
-    if ((bool)ViewBag.Updated)
-    {
+   	if ((bool)ViewBag.Updated)
+	{
         <div class="success flash">@Messages.Saved</div> 
-    }
+	}
 
     if (((Employee)ViewBag.Employee).IsDefaultSchedule)
-    {
+	{
         <div class="section">
             <input id="scheduledefault" type="radio" name="schedule" />
             <label for="scheduledefault">Default working schedule</label>
@@ -38,7 +35,7 @@
              <input id="schedulemonth" type="radio" name="schedule" />
               <label for="schedulemonth">View by month</label>
          </div>
-    }
+	}
     
     <div class="clear"></div>
     

@@ -1,5 +1,5 @@
-﻿/*global _global*/
-"use strict";
+﻿"use strict";
+/*global _global*/
 
 function exportExcel() {
 	var url = null;
