@@ -24,12 +24,12 @@
 {
 
     @Html.ValidationSummary(true)
-    if (ViewBag.Updated == true)
+    if ((bool)ViewBag.Updated)
     {
         <div class="success flash">@Messages.Saved</div> 
     }
 
-    if (((Employee)ViewBag.Employee).IsDefaultSchedule == true)
+    if (((Employee)ViewBag.Employee).IsDefaultSchedule)
     {
         <div class="section">
             <input id="scheduledefault" type="radio" name="schedule" />

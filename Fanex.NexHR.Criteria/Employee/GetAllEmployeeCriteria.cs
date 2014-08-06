@@ -25,20 +25,19 @@ namespace Fanex.NexHR.Criteria.Employee
         {
             get
             {
-                int? disableUsers;
-                if (EnableUser == true)
+                int? disableUsers = null;
+                if (EnableUser.HasValue)
                 {
-                    disableUsers = 0;
+                    if (EnableUser.Value)
+                    {
+                        disableUsers = 0;
+                    }
+                    else
+                    {
+                        disableUsers = 1;
+                    }
                 }
-                else if (EnableUser == false)
-                {
-                    disableUsers = 1;
-                }
-                else
-                {
-                    disableUsers = null;
-                }
-
+                
                 return disableUsers;
             }
         }
@@ -47,18 +46,17 @@ namespace Fanex.NexHR.Criteria.Employee
         {
             get
             {
-                int? deleteUsers;
-                if (IsDeleteUser == true)
+                int? deleteUsers = null;
+                if (IsDeleteUser.HasValue)
                 {
-                    deleteUsers = 1;
-                }
-                else if (IsDeleteUser == false)
-                {
-                    deleteUsers = 0;
-                }
-                else
-                {
-                    deleteUsers = null;
+                    if (IsDeleteUser.Value)
+                    {
+                        deleteUsers = 1;
+                    }
+                    else
+                    {
+                        deleteUsers = 0;
+                    }
                 }
 
                 return deleteUsers;
@@ -69,20 +67,19 @@ namespace Fanex.NexHR.Criteria.Employee
         {
             get
             {
-                int? localUser;
-                if (IsLocalUser == false)
+                int? localUser = null;
+                if (IsLocalUser.HasValue)
                 {
-                    localUser = 0;
+                    if (IsLocalUser.Value)
+                    {
+                        localUser = 1;
+                    }
+                    else
+                    {
+                        localUser = 0;
+                    }
                 }
-                else if (IsLocalUser == true)
-                {
-                    localUser = 1;
-                }
-                else
-                {
-                    localUser = null;
-                }
-
+ 
                 return localUser;
             }
         }

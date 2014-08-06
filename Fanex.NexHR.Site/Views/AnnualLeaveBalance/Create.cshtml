@@ -19,7 +19,7 @@
 <div class="bunhat" style="min-width: 400px">
     @Html.ValidationSummary(true)
 
-    @if (ViewBag.Inserted == true)
+    @if ((bool)ViewBag.Inserted)
     {
     <div class="success">@Messages.AdjustSuccessfully</div> 
     }

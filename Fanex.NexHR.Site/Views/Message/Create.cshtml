@@ -21,7 +21,7 @@
 {
 	<div class="container_24 bunhat">
 		<div class="validation-summary-errors" id="error" style="display:none;"></div>
-		@if (ViewBag.Updated == true)
+		@if ((bool)ViewBag.Updated)
 		{
 			<div class="success flash">
 				Created Successful!</div> 

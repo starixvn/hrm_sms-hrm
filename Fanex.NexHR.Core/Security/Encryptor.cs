@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.Core.Security
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Security.Cryptography;
     using System.Text;
     using Fanex.NexHR.Core.Enums;

@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -21,11 +20,8 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// LeaveRequest Service.

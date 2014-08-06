@@ -11,7 +11,7 @@ namespace Fanex.NexHR.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
     /// <summary>
@@ -91,19 +91,19 @@ namespace Fanex.NexHR.ViewModels
                 {
                     switch (this.OvertimeStatus.Value)
                     {
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Pending:
+                        case (byte)CurrentRequestStatus.Pending:
                             return Labels.Pending.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Verified:
+                        case (byte)CurrentRequestStatus.Verified:
                             return Labels.Verified.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.NotVerified:
+                        case (byte)CurrentRequestStatus.NotVerified:
                             return Labels.NotVerified.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Approved:
+                        case (byte)CurrentRequestStatus.Approved:
                             return Labels.Approved.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Rejected:
+                        case (byte)CurrentRequestStatus.Rejected:
                             return Labels.Rejected.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Processed:
+                        case (byte)CurrentRequestStatus.Processed:
                             return Labels.Processed.ToLower();
-                        case (byte)Fanex.NexHR.Core.Enums.CurrentRequestStatus.Void:
+                        case (byte)CurrentRequestStatus.Void:
                             return Labels.Void.ToLower();
                         default:
                             return string.Empty;

@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.12.11">Created</change>
 // </history>
 
-namespace Fanex.NexHR.ViewModels
+namespace Fanex.NexHR.ViewModels.Overtime
 {
     using System;
     using System.Collections.Generic;

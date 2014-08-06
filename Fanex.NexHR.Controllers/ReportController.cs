@@ -912,7 +912,7 @@ namespace Fanex.NexHR.Controllers
         /// <param name="model">ExtensionNoModel model.</param>
         private void CheckExternalEmployee(ExtensionNoModel model)
         {
-            if (model.IsInternal == false)
+            if (!model.IsInternal)
             {
                 foreach (var modelError in ModelState)
                 {

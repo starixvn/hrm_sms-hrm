@@ -1409,7 +1409,7 @@ namespace Fanex.NexHR.Services
                 gender = "M";
             }
 
-            if (item.IsLocal == true)
+            if (item.IsLocal)
             {
                 category = "Local";
             }
@@ -1537,7 +1537,7 @@ namespace Fanex.NexHR.Services
                 gender = "M";
             }
 
-            if (item.IsLocal == true)
+            if (item.IsLocal)
             {
                 category = "Local";
             }

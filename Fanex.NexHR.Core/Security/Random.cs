@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Core.Security
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Security.Cryptography;
 
     /// <summary>

@@ -9,12 +9,10 @@
 
 namespace Fanex.NexHR.Services.Interfaces
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.GroupSupervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.ViewModels;
 
     public interface ITeamService
     {

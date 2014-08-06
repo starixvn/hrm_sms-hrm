@@ -7,7 +7,7 @@
 //   <change who="Paul.Nguyen" date="2013.11.12">Initialize</change>
 // </history>
 
-namespace Fanex.NexHR.ViewModels
+namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
     using System.Collections.Generic;

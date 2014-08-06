@@ -231,7 +231,7 @@ namespace Fanex.NexHR.Services
                     criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
                 }
 
-                if (criteria.IsLocal == true)
+                if (criteria.IsLocal)
                 {
                     criteria.IsExpatUseHoliday = false;
                 }

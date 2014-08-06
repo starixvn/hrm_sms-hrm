@@ -9,17 +9,12 @@
 // </history>
 namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Data;
-    using Fanex.Data.Dapper;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.ViewModels;
 
     /// <summary>
     /// Employee Repository.

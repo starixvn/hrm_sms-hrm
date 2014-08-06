@@ -181,7 +181,7 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
-            model.ExcludedRequestTrans = model.ExcludedRequestTrans ? false : true;
+            model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);

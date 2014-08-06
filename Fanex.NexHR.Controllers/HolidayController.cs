@@ -10,7 +10,6 @@
 namespace Fanex.NexHR.Controllers
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;

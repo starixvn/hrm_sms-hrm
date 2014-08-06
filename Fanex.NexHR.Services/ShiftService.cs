@@ -15,8 +15,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
@@ -35,11 +33,11 @@ namespace Fanex.NexHR.Services
             var allShifts = GetData<Shift>(new GetAllShiftCriteria()).ToList();
             if (statusId == (int)ShiftStatus.Active)
             {
-                allShifts = allShifts.Where(t => t.IsDisabled == false).ToList();
+                allShifts = allShifts.Where(t => !t.IsDisabled).ToList();
             }
             else if (statusId == (int)ShiftStatus.Disabled)
             {
-                allShifts = allShifts.Where(t => t.IsDisabled == true).ToList();
+                allShifts = allShifts.Where(t => t.IsDisabled).ToList();
             }
 
             if (isShowOff)

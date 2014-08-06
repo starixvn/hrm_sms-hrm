@@ -18,12 +18,12 @@
 {
 	<div class="bunhat">
 		@Html.ValidationSummary(false)
-		@if (ViewBag.Updated == true)
+		@if ((bool)ViewBag.Updated)
   {
 			<div class="success flash">
 				Saved</div> 
   }
-  else if (ViewBag.Updated == false)
+  else if ((bool)ViewBag.Updated)
   { 
 			<div class="error flash">@Messages.ErrorTryAgain</div> 
   }

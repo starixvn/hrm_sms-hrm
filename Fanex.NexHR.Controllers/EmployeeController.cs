@@ -285,7 +285,7 @@ namespace Fanex.NexHR.Controllers
 
             ViewBag.Employee = employee;
             ViewBag.Shifts = _shiftService.GetSelectList();
-            if (employee.IsDefaultSchedule == true)
+            if (employee.IsDefaultSchedule)
             {
                 var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
                 var model = _employeeService.GetEmployeeShift(employeeShiftCriteria);

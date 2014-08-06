@@ -7,7 +7,7 @@
 //   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
 // </history>
 
-namespace Fanex.NexHR.ViewModels
+namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
     using System.Collections.Generic;

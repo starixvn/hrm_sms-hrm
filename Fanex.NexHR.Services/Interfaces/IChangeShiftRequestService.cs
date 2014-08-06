@@ -10,11 +10,9 @@
 namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// Interface Change Shift Request Service.

@@ -14,7 +14,7 @@
 @using (Html.BeginForm("Index", "Account", FormMethod.Post))
 {
     @Html.ValidationSummary()
-    if (ViewBag.IsUpdated == true)
+    if ((bool)ViewBag.IsUpdated)
     {
     <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div>
     }
@@ -58,10 +58,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Chinese Name:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.ChineseName)
@@ -75,10 +75,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         D.O.B:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DatePickerFor(model => model.DateOfBirth)
@@ -92,10 +92,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Place Of Birth:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.PlaceOfBirth)
@@ -109,10 +109,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Ethnic:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.Ethnic)
@@ -126,10 +126,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Native:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.Native)
@@ -143,10 +143,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Religion:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.Religion)
@@ -160,10 +160,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Gender:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DropDownListFor(model => model.Gender, (IList<SelectListItem>)ViewBag.Genders)
@@ -177,10 +177,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Nationality:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DropDownListFor(model => model.CountryCode, (IList<SelectListItem>)ViewBag.Countries)
@@ -194,10 +194,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Marriage:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages)
@@ -211,10 +211,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Card No:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.CardNo)
@@ -228,10 +228,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Date Of Issue Of ID Card:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DatePickerFor(model => model.DateOfIdCard)
@@ -245,10 +245,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Place Of Issue Of ID Card:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.PlaceOfIdCard)
@@ -262,10 +262,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Passport No:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.PassportNo)
@@ -279,10 +279,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Passport Exp:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.DatePickerFor(model => model.PassportExp)
@@ -297,10 +297,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Qualification:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.Qualification)
@@ -314,10 +314,10 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Major:
                     </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "role")">
+                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
                         @if (Model.AllowEditPersonalInformation)
                         {
                             @Html.TextBoxFor(model => model.Major)
@@ -376,7 +376,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Phone:
                     </div>
                     <div class="pcontent">
@@ -393,7 +393,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Skype:
                     </div>
                     <div class="pcontent">
@@ -410,7 +410,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Yahoo:
                     </div>
                     <div class="pcontent">
@@ -427,7 +427,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Address:
                     </div>
                     <div class="pcontent">
@@ -444,7 +444,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <div class="label @(Model.AllowEditPersonalInformation == true ? "allowEdit" : "")">
+                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
                         Current Address:
                     </div>
                     <div class="pcontent">
@@ -595,7 +595,7 @@
                     </div>
                 </div>
                 @{
-                        if (ViewBag.DefaultCalendar == true)
+                        if ((bool)ViewBag.DefaultCalendar)
                         {
                     <div class="line">
                         <div class="label2">

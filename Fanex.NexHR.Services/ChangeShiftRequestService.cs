@@ -20,8 +20,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 

@@ -19,7 +19,7 @@
 <h2>
     The Monthly Working Schedule of @ViewBag.Employee.NickName</h2>
 @{
-    if (((Employee)ViewBag.Employee).IsDefaultSchedule == true)
+    if (((Employee)ViewBag.Employee).IsDefaultSchedule)
     {
     <div class="section">
         <input id="scheduledefault" type="radio" name="schedule" />

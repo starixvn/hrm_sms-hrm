@@ -10,19 +10,18 @@
 namespace Fanex.NexHR.Site
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Net;
     using System.Web;
     using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.NexHR.Web.Providers;
 
     /// <summary>
     /// MVC Application.
     /// </summary>
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -54,29 +53,13 @@ namespace Fanex.NexHR.Site
                 defaults: new { controller = "employee", action = "myspace", id = UrlParameter.Optional });
         }
 
-        public static void RegisterCustomModelBinder()
-        {
-        }
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-            Fanex.Data.Configuration.DbSettingProviderManager.Current.Start();
+            DbSettingProviderManager.Current.Start();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
-        }
-
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            /*if (Context.Response.StatusCode == 401)
-            {
-                Response.Redirect("~/home/accessdenied?url=" + Request.Url.AbsoluteUri);
-            }*/
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
         }
 
         /// <summary>
@@ -87,8 +70,8 @@ namespace Fanex.NexHR.Site
         [ValidateInput(false)]
         protected void Application_Error(object sender, EventArgs e)
         {
-            ////var exception = Server.GetLastError().GetBaseException();
-            ////LogService.Error(exception.Message, exception);
+            var exception = Server.GetLastError().GetBaseException();
+            LogService.Error(exception.Message, exception);
 
             ////var serverError = Server.GetLastError() as HttpException;
             ////int errorCode = serverError != null ? serverError.GetHttpCode() : (int)HttpStatusCode.InternalServerError;

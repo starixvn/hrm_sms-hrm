@@ -150,7 +150,7 @@ namespace Fanex.NexHR.Controllers
             {
                 if (!user.CanOT)
                 {
-                    sectionItem.Childs.RemoveAll(row => row.Title.ToUpper() == overtime.ToUpper());
+                    sectionItem.Childs.RemoveAll(row => string.Compare(row.Title, overtime, StringComparison.OrdinalIgnoreCase) == 0);
                 }
             }
         }

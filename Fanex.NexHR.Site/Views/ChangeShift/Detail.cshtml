@@ -21,7 +21,7 @@
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary(true)
-        if (ViewBag.Updated == true)
+        if ((bool)ViewBag.Updated)
         {
         <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />

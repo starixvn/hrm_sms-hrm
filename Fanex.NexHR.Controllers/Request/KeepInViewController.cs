@@ -21,7 +21,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Request;
 
     /// <summary>
     /// KeepInView Controller.

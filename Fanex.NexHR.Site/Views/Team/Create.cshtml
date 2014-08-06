@@ -22,7 +22,7 @@
 {
 <div class="bunhat">
     @Html.ValidationSummary(true)
-    @if (ViewBag.Inserted == true)
+    @if ((bool)ViewBag.Inserted)
     {
     <div class="success">@Messages.TeamCreated</div> 
     }
