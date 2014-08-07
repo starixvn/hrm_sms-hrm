@@ -11,12 +11,14 @@ namespace Fanex.NexHR.Criteria.Request.KeepInView
 {
     using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
 
     /// <summary>
     /// InsertKeepInViewRequest Criteria.
     /// </summary>
     public class InsertKeepInViewRequestCriteria : CriteriaBase
     {
+        [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }

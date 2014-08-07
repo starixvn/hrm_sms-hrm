@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
     using System.Collections.Generic;
     using System.Text;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models.Request;
 
     /// <summary>
@@ -22,6 +23,7 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
     {
         private readonly string _changeShiftDetailTpl = "<Request OnDate='{0}' FromShift='{1}' ToShift='{2}' Remark='{3}'></Request>";
 
+        [Output]
         public long RequestId { get; set; }
         
         public int EmpId { get; set; }

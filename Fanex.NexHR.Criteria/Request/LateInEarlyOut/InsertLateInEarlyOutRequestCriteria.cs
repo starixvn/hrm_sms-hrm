@@ -11,12 +11,14 @@ namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
 {
     using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
 
     /// <summary>
     /// InsertLateInEarlyOutRequest Criteria.
     /// </summary>
     public class InsertLateInEarlyOutRequestCriteria : CriteriaBase
     {
+        [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }

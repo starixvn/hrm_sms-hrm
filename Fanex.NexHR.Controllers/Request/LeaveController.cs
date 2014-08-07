@@ -164,6 +164,7 @@ namespace Fanex.NexHR.Controllers.Request
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = this.CurrentUser.Id;
+            criteria.ModifiedDate = DateTime.Now;
 
             CommandResult result = LeaveRequestService.Update(criteria);
 
@@ -260,7 +261,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmpId = employeeId
             };
             IList<WorkingCalendarModel> calendars = WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
-            IList<LeaveDetailModel> leaveRequestDetail = null;
+            IList<LeaveDetailModel> leaveRequestDetail = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
                 var leaveDetailCriteria = new GetLeaveRequestDetailByIdCriteria()

@@ -198,6 +198,7 @@
     </resourceSet>
     <resourceSet name="leavejs" type="js">
       <resource reference="sitejs"/>
+      <resource path="~/scripts/views/Request/request.common.js" />
       <resource path="~/scripts/views/Request/leave.request.js" />
     </resourceSet>
     <resourceSet name="leavedetailjs" type="js">
@@ -238,6 +239,7 @@
     </resourceSet>
     <resourceSet name="changeshiftjs" type="js">
       <resource reference="sitejs"/>
+      <resource path="~/scripts/views/Request/request.common.js" />
       <resource path="~/scripts/views/Request/changeshift.request.js" />
       <resource path="~/scripts/views/search.request.js" />
     </resourceSet>

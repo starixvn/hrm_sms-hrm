@@ -70,8 +70,8 @@ namespace Fanex.NexHR.Site
         [ValidateInput(false)]
         protected void Application_Error(object sender, EventArgs e)
         {
-            var exception = Server.GetLastError().GetBaseException();
-            LogService.Error(exception.Message, exception);
+            ////var exception = Server.GetLastError().GetBaseException();
+            ////LogService.Error(exception.Message, exception);
 
             ////var serverError = Server.GetLastError() as HttpException;
             ////int errorCode = serverError != null ? serverError.GetHttpCode() : (int)HttpStatusCode.InternalServerError;

@@ -42,7 +42,7 @@ namespace Fanex.NexHR.Services
             CommandResult commandResult = null;
             if (criteria.IsValid())
             {
-                commandResult = Repository.Insert(criteria);
+                commandResult = Repository.Insert(criteria, hasGetOutputParams: true);
                 if (commandResult.Code == 0)
                 {
                     var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
@@ -147,18 +147,8 @@ namespace Fanex.NexHR.Services
 
                 emailModel.Subject = subject;
                 string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
-                var content = new
-                {
-                    Leader = emailModel.SendToNickName,
-                    Member = criteria.EmployeeName,
-                    RequestId = criteria.RequestId,
-                    ForDate = forDate,
-                    Remark = criteria.Remark,
-                    LeaveType = criteria.LeaveTypeName,
-                    Url = this.BaseLink
-                };
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
-                emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
+                emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
                 this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -191,18 +181,8 @@ namespace Fanex.NexHR.Services
 
                 emailModel.Subject = subject;
                 string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
-                var content = new
-                {
-                    Leader = emailModel.SendToNickName,
-                    Member = criteria.EmployeeName,
-                    RequestId = criteria.RequestId,
-                    ForDate = forDate,
-                    Remark = criteria.Remark,
-                    LeaveType = criteria.LeaveTypeName,
-                    Url = this.BaseLink
-                };
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
-                emailModel.Body = RazorEngine.Razor.Parse(emailModel.Body, content);
+                emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
                 this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -257,16 +237,7 @@ namespace Fanex.NexHR.Services
                 subject += " on " + model.FromDate.ToDateMonthYearFormatedDate();
             }
 
-            var content = new
-            {
-                RefNo = model.RefNO,
-                Leader = sendToNickName,
-                Member = model.Requester.NickName,
-                Reason = reason,
-                Url = this.BaseLink
-            };
-
-            var body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            var body = string.Format(bodyTemplate, sendToNickName, sendToNickName, model.Requester.NickName, model.RefNO, reason);
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 mailTo,

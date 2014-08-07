@@ -17,22 +17,8 @@
     @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift" }))
     {
         @Html.ValidationSummary()
-
-
-        <div id="shift-unavailable" class="ui-state-error ui-corner-all" style="padding: 0.7em;
-            color: Red;">
-            @Labels.CannotCreateRequest
-        </div>
         <div class="validation-summary-errors" id="errors-model-state">
         </div>
-       
-
-        if ((bool)ViewBag.Requested)
-        {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div> 
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
-        }
 
         if (ViewBag.TotalRequest >= 2)
         {

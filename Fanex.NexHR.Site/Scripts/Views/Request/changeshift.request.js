@@ -1,23 +1,14 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global, RequestCommon*/
+
+$(document).ready(function () {
 
     //$('form').areYouSure();
     var _checkTopManager = false;
     $(".datepicker").attr('readonly', 'readonly');
     //$(".dropdown").chosen();
     $("#errors-model-state").hide();
-
     $("#shift-unavailable").hide();
-
-    function checkHasData() {
-        var hasData = $("#item_HasData").val();
-        if (hasData == "True") {
-            return false;
-        }
-        else {
-            getTable();
-        }
-        hasData = "False";
-    }
 
     $('#shiftinfo').tooltip({
         track: true,
@@ -30,12 +21,12 @@
 
     $("#Employee").blur(function () {
         $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
-				function (response) {
-				    if (response != null) {
-				        $(".datepicker").attr("disabledDate", response.join(","));
-				    }
-				}
-			);
+                function (response) {
+                    if (response != null) {
+                        $(".datepicker").attr("disabledDate", response.join(","));
+                    }
+                }
+            );
     });
 
     function getTable() {
@@ -73,6 +64,7 @@
 
 
     $("input[name='submit']").click(function () {
+        RequestCommon.removeErrorMsg(false);
         checkIsTopManager();
         var shift = {
             EmpId: $("#EmployeeId").val(),
@@ -95,11 +87,9 @@
         });
         var shiftJson = JSON.stringify(shift);
         var shiftDetailsJson = JSON.stringify(shiftDetails);
-        var successed = $("#successed").val();
         var year = $("#year").val();
-        var validate = ValidateForm();
 
-        if (validate) {
+        if (new ValidateForm()) {
             $.ajax({
                 type: 'POST',
                 url: '/ChangeShift/Create/',
@@ -108,12 +98,10 @@
                 success: function (response) {
                     if (response.Code === 0) {
                         $('form').removeClass("dirty");
-                        confirm('Successfull!\nPress OK to continue', function () {
-                            document.location = _global.root + "ChangeShift/EmployeeView/" + year;
-                        });
+                        var successMsg = "Your request have been sent successfully!";
+                        RequestCommon.showSuccessMsg(successMsg, "ChangeShift/EmployeeView");
                     } else {
-                        $("#errors-model-state").html("* " + response.Message);
-                        $("#errors-model-state").show();
+                        RequestCommon.showErrorMsg(response.message, $("#Employee"));
                     }
                 }
             });
@@ -123,10 +111,11 @@
 
     //Submit Edit
     $("input[name='submitEdit']").click(function () {
-        var requestId = $("#requestId").val();
+        RequestCommon.removeErrorMsg(false);
+        var requestId = $("#RequestId").val();
         var shift = {
             RequestId: requestId,
-            Employee: $("#EmployeeId").val(),
+            EmpId: $("#EmployeeId").val(),
             FromDate: $("#FromDate").val(),
             ToDate: $("#ToDate").val(),
             Remark: $("#Remark").val(),
@@ -138,16 +127,14 @@
         var shiftDetails = [];
         $("#tblchangeshift tbody tr").each(function () {
             shiftDetails.push({
-                Date: $('td:first-child', this).html(),
+                OnDate: $('td:first-child', this).html(),
                 FromShiftId: $('#item_FromShiftId', this).val(),
                 ToShiftId: $('td select', this).val(),
                 Remark: $('td #item_Remark', this).val()
             });
         });
 
-        var successed = $("#successed").val();
-        var year = $("#year").val();
-        var validate = ValidateForm();
+        var validate = new ValidateForm();
         var shiftJson = JSON.stringify(shift);
         var shiftDetailsJson = JSON.stringify(shiftDetails);
 
@@ -155,14 +142,15 @@
             $.ajax({
                 type: 'POST',
                 url: '/ChangeShift/Update/',
-                data: { shiftJson: shiftJson, shiftDetailJson: shiftDetailsJson},
+                data: { shiftJson: shiftJson, shiftDetailJson: shiftDetailsJson },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.success) {
+                    if (response.Code === 0) {
                         $('form').removeClass("dirty");
-                        alert("Data Saved!");
+                        var successMsg = "Your request have been sent successfully!";
+                        RequestCommon.showSuccessMsg(successMsg, "ChangeShift/EmployeeView");
                     } else {
-                        $("#errors-model-state").html("* " + response.errors);
+                        RequestCommon.showErrorMsg(response.message, $("#Employee"));
                     }
                 }
             });
@@ -172,7 +160,7 @@
     });
 
     function disableControlForDetail() {
-        if ($("#IsView").val() == "True") {
+        if ($("#IsView").val() === "True") {
             $("input").attr("disabled", "disabled");
             $("select").attr("disabled", "disabled");
             $("textarea").attr("disabled", "disabled");
@@ -194,21 +182,21 @@
         var end = $("[name='ToDate']").datepicker('getDate');
         var days = (end - start) / 1000 / 60 / 60 / 24;
 
-        if (empName == null || empName == "") {
+        if (empName == null || empName === "") {
             errorString.push("* The Employee field is required.");
         }
-        if (fromDate == null || fromDate == "") {
+        if (fromDate == null || fromDate === "") {
             errorString.push("* From Date field is required.");
         }
-        if (toDate == null || toDate == "") {
+        if (toDate == null || toDate === "") {
             errorString.push("* To Date field is required.");
         }
 
-        if (_checkTopManager == false) {
-            if (verifier == null || verifier == "") {
+        if (_checkTopManager === false) {
+            if (verifier == null || verifier === "") {
                 errorString.push("* Verifier is required.");
             }
-            if (approver == null || approver == "") {
+            if (approver == null || approver === "") {
                 errorString.push("* Approver is required.");
             }
         }
@@ -226,8 +214,8 @@
 
     function checkIsTopManager() {
         var employeeId = $("#EmployeeId").val();
-        if (employeeId != null || employee != "") {
-            var employee = $.ajax({
+        if (employeeId != null) {
+            $.ajax({
                 url: _global.root + 'api/employee/GetEmployee',
                 data: {
                     id: employeeId

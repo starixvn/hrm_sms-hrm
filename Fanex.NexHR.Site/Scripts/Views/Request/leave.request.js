@@ -1,4 +1,7 @@
-﻿var LeaveRequest = function ($) {
+﻿'use strict';
+/*global _global, RequestCommon*/
+
+var LeaveRequest = (function ($) {
     return {
         verifierId: null,
         approverId: null,
@@ -18,6 +21,7 @@
         currentLeaveBalance: null,
         generalLeaveType: null,
         maternityLeaveType: null,
+        isTopManager: false,
 
         init: function () {
             LeaveRequest.generalLeaveType = "0";
@@ -65,7 +69,7 @@
 
             $('#btnSubmit').click(function (evt) {
                 evt.preventDefault();
-                LeaveRequest.removeErrorMsg(false);
+                RequestCommon.removeErrorMsg(false);
                 LeaveRequest.saveLeaveRequest();
             });
 
@@ -83,6 +87,7 @@
             }
         },
         saveLeaveRequest: function () {
+            
             LeaveRequest.checkIsTopManager();
             var validate = LeaveRequest.validateForm();
             if (validate) {
@@ -92,6 +97,7 @@
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
                     EmployeeName: LeaveRequest.employee.val(),
+                    RequestType: 6,
                     FromDate: LeaveRequest.fromDate.val(),
                     ToDate: LeaveRequest.toDate.val(),
                     LeaveTypeId: LeaveRequest.leaveTypeId.val(),
@@ -101,16 +107,16 @@
                     Remark: $("#Remark").val(),
                     VerifierId: LeaveRequest.verifierId.val(),
                     ApproverId: LeaveRequest.approverId.val()
-                }
+                };
                 var requestDetails = [];
                 var leaveDate = "";
                 var isHalfDay = false;
                 var fromTime = new Date();
                 var toTime = new Date();
-                if (LeaveRequest.leaveTypeId.val() == "0") {
+                if (LeaveRequest.leaveTypeId.val() === "0") {
                     $(".tabledata tbody tr").each(function () {
                         leaveDate = $.trim($("td.tdleavedate", this).first().attr("data-date"));
-                        isHalfDay = $("td input.chkhalfday", this).first().attr("checked") == "checked";
+                        isHalfDay = $("td input.chkhalfday", this).first().attr("checked") === "checked";
                         fromTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddlfromtime", this).first().val()) : ""));
                         toTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddltotime", this).first().val()) : ""));
 
@@ -154,7 +160,7 @@
                     });
                 }
 
-                if (LeaveRequest.requestId.val() == -1) {
+                if (LeaveRequest.requestId.val() === "-1") {
                     LeaveRequest.insertLeaveRequest(leaveRequest, requestDetails);
                 }
                 else {
@@ -170,13 +176,13 @@
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
                     $('.validation-summary-valid').show();
-                    if (response.Code == 0) {
+                    if (response.Code === 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
-                        LeaveRequest.showSuccessMsg(successMsg, "Leave/EmployeeView");
+                        RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
                     }
                     else {
-                        LeaveRequest.showErrorMsg(response.message, LeaveRequest.employee);
+                        RequestCommon.showErrorMsg(response.message, LeaveRequest.employee);
                     }
                 }
             });
@@ -189,13 +195,13 @@
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
                     $('.validation-summary-valid').show();
-                    if (response.Code == 0) {
+                    if (response.Code === 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
-                        LeaveRequest.showSuccessMsg(successMsg, "Leave/EmployeeView");
+                        RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
                     }
                     else {
-                        LeaveRequest.showErrorMsg(response.message, LeaveRequest.employee);
+                        RequestCommon.showErrorMsg(response.message, LeaveRequest.employee);
                     }
                 }
             });
@@ -206,7 +212,7 @@
             var toDate = LeaveRequest.toDate.val();
             var employeeId = LeaveRequest.employeeId.val();
 
-            if (leaveType == "0") {
+            if (leaveType === "0") {
                 $("#grbHalfDay").hide();
                 $("#grbTotalDay").hide();
                 LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
@@ -218,7 +224,7 @@
                 leaveDetailContainer.empty();
             }
 
-            if (isHalfDay && leaveType != "0") {
+            if (isHalfDay && leaveType !== "0") {
                 LeaveRequest.bindHalfDay();
             }
             else {
@@ -264,7 +270,7 @@
             var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
             var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 5));
 
-            if (leaveType == LeaveRequest.generalLeaveType) {
+            if (leaveType === LeaveRequest.generalLeaveType) {
                 $("#grbHalfDay").hide();
                 $("#grbTotalDay").hide();
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
@@ -280,7 +286,7 @@
                 var leaveDetailContainer = $("#tbldetail");
                 leaveDetailContainer.empty();
 
-                if (leaveType == LeaveRequest.maternityLeaveType) {
+                if (leaveType === LeaveRequest.maternityLeaveType) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
                     LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
                     LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
@@ -398,7 +404,7 @@
                                 return {
                                     label: item.NickName + ' (' + item.FullName + ')',
                                     value: item.OwnerId
-                                }
+                                };
                             }));
                         }
                     });
@@ -409,7 +415,7 @@
                     LeaveRequest.employee.val(nickName);
                     LeaveRequest.employeeId.val(ui.item.value);
                     LeaveRequest.eventAfterChangeEmployee();
-                    LeaveRequest.removeErrorMsg(true);
+                    RequestCommon.removeErrorMsg(true);
                 },
                 focus: function (event, ui) {
                     nickName = ui.item.label;
@@ -445,7 +451,7 @@
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
                             }
 
                             LeaveRequest.verifierId.empty();
@@ -453,12 +459,12 @@
                         }
                     });
 
-                $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+            $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
                     function (response) {
                         if (response != null) {
                             var options = "";
                             for (var i = 0; i < response.length; i++) {
-                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>"
+                                options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
                             }
 
                             LeaveRequest.approverId.empty();
@@ -468,32 +474,9 @@
 
             LeaveRequest.leaveTypeId.val(2);
         },
-        showErrorMsg: function (msg, htmlObject) {
-            $('.validation-summary-valid').addClass('validation-summary-errors');
-            var msgWrp = $('.validation-summary-valid').find('ul:first');
-            msgWrp.append("<li>" + LeaveRequest.htmlDecode(msg) + "</li>");
-            htmlObject.addClass("input-validation-error");
-        },
-        removeErrorMsg: function (isReset) {
-            if (isReset) {
-                $(".validation-summary-errors").addClass("validation-summary-valid").removeClass("validation-summary-errors");
-            }
-            var msgWrp = $('.validation-summary-valid').removeClass('validation-summary-errors');
-            msgWrp.find('ul:first').html("");
-        },
-        showSuccessMsg: function (msg, url, msec) {
-            var msgWrp = $('.validation-summary-valid').addClass('success').find('ul:first');
-            msgWrp.append("<li>" + LeaveRequest.htmlDecode(msg) + "</li>");
-            confirm('Successfull!\nPress OK to continue', function () {
-                location.href = _global.root + url;
-            });
-        },
-        htmlDecode: function (value) {
-            return $('<div/>').html(value).text();
-        },
         enableControlForEdit: function () {
             $("#RefNo").attr("disabled", "disabled");
-            if (LeaveRequest.leaveTypeId.val() == "0") {
+            if (LeaveRequest.leaveTypeId.val() === "0") {
                 $("#grbHalfDay").hide();
                 $("#grbTotalDay").hide();
             }
@@ -504,7 +487,7 @@
             }
         },
         bindLeaveRequestDetailForEdit: function () {
-            if (LeaveRequest.leaveTypeId.val() == "0") {
+            if (LeaveRequest.leaveTypeId.val() === "0") {
                 LeaveRequest.showLeaveDetail(LeaveRequest.employeeId.val(),
                 LeaveRequest.fromDate.val(),
                 LeaveRequest.toDate.val(),
@@ -512,11 +495,10 @@
             }
         },
         disableControlForDetail: function () {
-            if ($("#IsView").val() == "True") {
+            if ($("#IsView").val() === "True") {
                 $("input").attr("disabled", "disabled");
                 $("select").attr("disabled", "disabled");
                 $("textarea").attr("disabled", "disabled");
-                $("#searchbox").removeAttr("disabled");
             }
         },
         validateForm: function () {
@@ -532,23 +514,23 @@
             var end = $("[name='ToDate']").datepicker('getDate');
             var days = (end - start) / 1000 / 60 / 60 / 24;
 
-            if (empName != undefined && (empName == null || empName == "")) {
+            if (empName !== undefined && (empName === null || empName === "")) {
                 errorString.push("* The Employee field is required.");
             }
 
-            if (fromDate == null || fromDate == "") {
+            if (fromDate === null || fromDate === "") {
                 errorString.push("* From Date field is required.");
             }
 
-            if (toDate == null || toDate == "") {
+            if (toDate === null || toDate === "") {
                 errorString.push("* To Date field is required.");
             }
 
-            if (_checkTopManager == false) {
-                if (verifier == null || verifier == "") {
+            if (LeaveRequest.isTopManager === false) {
+                if (verifier === null || verifier === "") {
                     errorString.push("* Verifier is required.");
                 }
-                if (approver == null || approver == "") {
+                if (approver === null || approver === "") {
                     errorString.push("* Approver is required.");
                 }
             }
@@ -567,8 +549,8 @@
         },
         checkIsTopManager: function () {
             var employeeId = $("#EmployeeId").val();
-            if (employeeId != null || employee != "") {
-                var employee = $.ajax({
+            if (employeeId !== null) {
+                $.ajax({
                     url: _global.root + 'api/employee/GetEmployee',
                     data: {
                         id: employeeId
@@ -576,14 +558,14 @@
                     async: false,
                     success: function (data) {
                         $(data).each(function (index, item) {
-                            _checkTopManager = item.IsTopManager;
+                            LeaveRequest.isTopManager = item.IsTopManager;
                         });
                     }
                 });
             }
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     LeaveRequest.init();

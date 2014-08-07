@@ -11,12 +11,14 @@ namespace Fanex.NexHR.Criteria.Request.CheckInOut
 {
     using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
 
     /// <summary>
     /// InsertCheckInOutRequest Criteria.
     /// </summary>
     public class InsertCheckInOutRequestCriteria : CriteriaBase
     {
+        [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }

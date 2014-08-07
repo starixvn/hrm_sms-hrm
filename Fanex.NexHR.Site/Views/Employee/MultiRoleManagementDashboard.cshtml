@@ -1,7 +1,8 @@
-﻿@model List<HRLeaderDashboardModel>
+﻿@using Fanex.NexHR.ViewModels.Request
+@model List<HRLeaderDashboardModel>
 <h2 class="section">
     My members' requests</h2>
-@foreach (var item in Model)
+@foreach (HRLeaderDashboardModel item in Model)
 {
     if (item.RoleId == (int)RoleSystem.Verifier)
     {
@@ -10,18 +11,18 @@
     <table class="data" id="myspace">
         <thead>
             <tr>
-                <th rowspan="2" class="firstColumn">@Fanex.NexHR.Resources.Labels.Request
+                <th rowspan="2" class="firstColumn">@Labels.Request
                 </th>
-                <th rowspan="2">@Fanex.NexHR.Resources.Labels.Pending
+                <th rowspan="2">@Labels.Pending
                 </th>
                 <th colspan="3" class="center">
-                    @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToString("dd MMM, yyyy")
+                    @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
                 </th>
             </tr>
             <tr>
-                <th>@Fanex.NexHR.Resources.Labels.Verified
+                <th>@Labels.Verified
                 </th>
-                <th>@Fanex.NexHR.Resources.Labels.NotVerified
+                <th>@Labels.NotVerified
                 </th>
             </tr>
         </thead>
@@ -39,7 +40,7 @@
         var minRequestDate = DateTime.Now.AddMonths(-4).Date;
             }
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.CheckInOut
+                <td class="firstColumn">@Labels.CheckInOut
                 </td>
                 <td>
                     @if (item.TotalPendingCheckInOutRequest > 0)
@@ -59,7 +60,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.LateInEarlyOut
+                <td class="firstColumn">@Labels.LateInEarlyOut
                 </td>
                 <td>
                     @if (item.TotalPendingLateInEarlyOutRequest > 0)
@@ -79,7 +80,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.ChangeShift
+                <td class="firstColumn">@Labels.ChangeShift
                 </td>
                 <td>
                     @if (item.TotalPendingChangeShiftRequest > 0)
@@ -99,7 +100,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Leave
+                <td class="firstColumn">@Labels.Leave
                 </td>
                 <td>
                     @if (item.TotalPendingLeaveRequest > 0)
@@ -119,7 +120,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
+                <td class="firstColumn">@Labels.KeepInView
                 </td>
                 <td>
                     @if (item.TotalPendingKivRequest > 0)
@@ -140,7 +141,7 @@
             </tr>
 
 			<tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Overtime
+                <td class="firstColumn">@Labels.Overtime
                 </td>
                 <td>
                     @if (item.TotalPendingOvertime > 0)
@@ -169,18 +170,18 @@
     <table class="data" id="myspace">
         <thead>
             <tr>
-                <th rowspan="2" class="firstColumn">@Fanex.NexHR.Resources.Labels.Request
+                <th rowspan="2" class="firstColumn">@Labels.Request
                 </th>
-                <th rowspan="2">@Fanex.NexHR.Resources.Labels.Pending
+                <th rowspan="2">@Labels.Pending
                 </th>
                 <th colspan="3" class="center">
-                    @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToString("dd MMM, yyyy")
+                    @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
                 </th>
             </tr>
             <tr>
-                <th>@Fanex.NexHR.Resources.Labels.Approved
+                <th>@Labels.Approved
                 </th>
-                <th>@Fanex.NexHR.Resources.Labels.Rejected
+                <th>@Labels.Rejected
                 </th>
             </tr>
         </thead>
@@ -198,7 +199,7 @@
 		var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
             }
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.CheckInOut
+                <td class="firstColumn">@Labels.CheckInOut
                 </td>
                 <td>
                     @if (item.TotalPendingCheckInOutRequest > 0)
@@ -218,7 +219,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.LateInEarlyOut
+                <td class="firstColumn">@Labels.LateInEarlyOut
                 </td>
                 <td>
                     @if (item.TotalPendingLateInEarlyOutRequest > 0)
@@ -238,7 +239,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.ChangeShift
+                <td class="firstColumn">@Labels.ChangeShift
                 </td>
                 <td>
                     @if (item.TotalPendingChangeShiftRequest > 0)
@@ -258,7 +259,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Leave
+                <td class="firstColumn">@Labels.Leave
                 </td>
                 <td>
                     @if (item.TotalPendingLeaveRequest > 0)
@@ -278,7 +279,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.KeepInView
+                <td class="firstColumn">@Labels.KeepInView
                 </td>
                 <td>
                     @if (item.TotalPendingKivRequest > 0)
@@ -298,7 +299,7 @@
                 </td>
             </tr>
 			<tr>
-                <td class="firstColumn">@Fanex.NexHR.Resources.Labels.Overtime
+                <td class="firstColumn">@Labels.Overtime
                 </td>
                 <td>
                     @if (item.TotalPendingOvertime > 0)
@@ -320,6 +321,4 @@
         </tbody>
     </table>
     }
-
-
 }

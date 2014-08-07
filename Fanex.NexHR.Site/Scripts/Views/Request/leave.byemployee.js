@@ -1,4 +1,7 @@
-﻿var LeaveRequestView = function ($) {
+﻿'use strict';
+/*global _global, autoIndex*/
+
+var LeaveRequestView = (function ($) {
     return {
         dialogReason: null,
         requestId: null,
@@ -47,30 +50,29 @@
                 bodyHandler: function () {
                     var object = $(this);
 
-                    return "<div class='tooltip'>"
-                        + "<table class='table-tooltip checkinout'>"
-                        + "<tr class='hasborder'>"
-                        + "<td class='col11'>" + "<span class='bold'>" + object.attr("data-verifier") + "</span>" + " (Verifier)</td>"
-                        + "<td class='col2'>"
-                        + "<span class='bold'>" + object.attr("data-verifier-status") + "</span>"
-                        + (object.attr("data-verified-date").length > 0 ? (" (" + object.attr("data-verified-date") + ")") : "")
-                        + "</td>"
-                        + "</tr>"
-                        + "<tr class='hasborder'>"
-                        + "<td class='col11'>" + "<span class='bold'>" + object.attr("data-approver") + "</span>"  + " (Approver)</td>"
-                        + "<td class='col2'>"
-                        + "<span class='bold'>" + object.attr("data-approver-status") + "</span>"
-                        + (object.attr("data-approved-date").length > 0 ? (" (" + object.attr("data-approved-date") + ")") : "")
-                        + "</td>"
-                        + "</tr>"
-                        + "<tr>"
-                        + "<td class='col11'>" + "<span class='bold'>" + object.attr("data-hr") + "</span>" + " (HR)</td>"
-                        + "<td class='col2'>"
-                        + "<span class='bold'>" + object.attr("data-hr-status") + "</span>"
-                        + (object.attr("data-processed-date").length > 0 ? (" (" + object.attr("data-processed-date") + ")") : "")
-                        + "</td>"
-                        + "</tr>"
-                        + "</table></div>";
+                    return "<div class='tooltip'>" +
+                        "<table class='table-tooltip checkinout'>" +
+                        "<tr class='hasborder'>" + 
+                        "<td class='col11'>" + "<span class='bold'>" + object.attr("data-verifier") + "</span>" + " (Verifier)</td>" + 
+                        "<td class='col2'>" + 
+                        "<span class='bold'>" + object.attr("data-verifier-status") + "</span>" + 
+                        (object.attr("data-verified-date").length > 0 ? (" (" + object.attr("data-verified-date") + ")") : "") + 
+                        "</td>" + 
+                        "</tr>" + 
+                        "<tr class='hasborder'>" + 
+                        "<td class='col11'>" + "<span class='bold'>" + object.attr("data-approver") + "</span>"  + " (Approver)</td>" + 
+                        "<td class='col2'>" + 
+                        "<span class='bold'>" + object.attr("data-approver-status") + "</span>" +
+                        "</td>" + 
+                        "</tr>" + 
+                        "<tr>" + 
+                        "<td class='col11'>" + "<span class='bold'>" + object.attr("data-hr") + "</span>" + " (HR)</td>" + 
+                        "<td class='col2'>" + 
+                        "<span class='bold'>" + object.attr("data-hr-status") + "</span>" + 
+                        (object.attr("data-processed-date").length > 0 ? (" (" + object.attr("data-processed-date") + ")") : "") + 
+                        "</td>" + 
+                        "</tr>" + 
+                        "</table></div>";
                 }
             });
         },
@@ -131,7 +133,7 @@
             });
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     LeaveRequestView.init();

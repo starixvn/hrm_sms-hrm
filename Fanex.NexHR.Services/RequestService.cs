@@ -747,18 +747,9 @@ namespace Fanex.NexHR.Services
             var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester);
             var toDate = request.ToDate;
             var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays);
-
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                ForDate = forDate,
-                Remark = request.Remark,
-                LeaveName = request.LeaveType.Name,
-            };
-
+            var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
             
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],

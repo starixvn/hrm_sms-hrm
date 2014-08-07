@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Core
+﻿@using Fanex.NexHR.ViewModels.Request
+@using Fanex.NexHR.Models.Request
+@using Fanex.NexHR.Core
 @model LeaveDetailViewModel
 @{
     Layout = null;
@@ -64,11 +66,11 @@
                     var leaveSelected = string.Empty;
                     var offSelected = string.Empty;
                     var workSelected = string.Empty;
-                    if (item.WorkType == (int)WorkTypes.Leave)
+                    if (item.WorkType == (int)WorkType.Leave)
                     {
                         leaveSelected = "selected";
                     }
-                    else if (item.WorkType == (int)WorkTypes.Off)
+                    else if (item.WorkType == (int)WorkType.Off)
                     {
                         offSelected = "selected";
                     }
@@ -80,7 +82,7 @@
                         <select class="ddlWorkType">
                             <option value= "2" @leaveSelected>Leave</option>
                             <option value= "3" @workSelected>On Duty</option>
-                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkTypes.Off)
+                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
                             {
                                 <option value= "1" @offSelected>Off</option>
                             }
@@ -99,14 +101,14 @@
                     </td>
                     <td>
                         <div class="timehalfday">
-                            @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToString("HH:mm")), new { @class = "ddlfromtime" })
+                            @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @class = "ddlfromtime" })
                             @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
                             *
                         </div>
                     </td>
                     <td>
                         <div class="timehalfday">
-                            @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToString("HH:mm")), new { @class = "ddltotime" })
+                            @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @class = "ddltotime" })
                             @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
                             *
                         </div>

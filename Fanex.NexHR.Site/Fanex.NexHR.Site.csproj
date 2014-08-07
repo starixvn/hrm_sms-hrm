@@ -340,6 +340,7 @@
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\report.staffrepresentative.js" />
     <Content Include="Scripts\Views\report.totalworkinghourweekly.js" />
+    <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.js" />
     <Content Include="Scripts\Views\reportovertimerequest.js" />
     <Content Include="Scripts\Views\timerecord.detail.js" />

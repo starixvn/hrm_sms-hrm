@@ -54,7 +54,7 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
                 {
                     foreach (ChangeShiftDetailModel item in RequestDetail)
                     {
-                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShift, item.ToShift, item.Remark);
+                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShiftId, item.ToShiftId, item.Remark);
                     }
                 }
 

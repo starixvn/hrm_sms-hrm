@@ -177,6 +177,7 @@ namespace Fanex.NexHR.Repositories
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
+                    relatedPeople = new RequestRelatedPeopleModel();
                     relatedPeople.Requester = multi.Read<SupervisorNameModel>().FirstOrDefault();
                     relatedPeople.Verifier = multi.Read<SupervisorNameModel>().FirstOrDefault();
                     relatedPeople.Approver = multi.Read<SupervisorNameModel>().FirstOrDefault();
@@ -287,7 +288,7 @@ namespace Fanex.NexHR.Repositories
                     Name = reader.ToString("ShiftName")
                 },
                 RequestedDate = reader.ToDateTime("RequestedDate"),
-                TotalMins = reader.ToInt("Time"),
+                TotalMins = reader.ToInt("Minutes"),
                 //// Keep in view
                 CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
                 //// Change shift

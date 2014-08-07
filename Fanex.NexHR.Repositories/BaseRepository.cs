@@ -54,7 +54,7 @@ namespace Fanex.NexHR.Repositories
                 Hashtable hash = criteria.GetSpParams();
                 hash = (new ResultCriteria()).AddSpParams(hash);
                 int result = db.ExecuteNonQuery(hash);
-                if (result == 1 && hasGetOutputParams)
+                if (result == -1 && hasGetOutputParams)
                 {
                     SetValueForOutputProperty(criteria, hash);
                 }

@@ -147,15 +147,14 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestId = id
             };
             var changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
             if (request != null && changeShiftDetail != null)
             {
                 model = new ChangeShiftViewModel
                 {
-                    Employee = employee.NickName,
-                    EmployeeId = employee.Id,
+                    RequestId = request.Id,
+                    Employee = this.CurrentUser.NickName,
+                    EmployeeId = this.CurrentUser.Id,
                     FromDate = request.FromDate.Date,
                     ToDate = request.ToDate.Date,
                     VerifierId = request.VerifiedBy.Id,
@@ -165,7 +164,7 @@ namespace Fanex.NexHR.Controllers.Request
                 };
             }
 
-            GetVerifierApproverList(employee.Id, model);
+            GetVerifierApproverList(this.CurrentUser.Id, model);
             var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             ViewBag.IsView = false;
@@ -177,7 +176,6 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.EmpId = this.CurrentUser.Id;
             criteria.ModifiedBy = this.CurrentUser.Id;
             criteria.ModifiedDate = DateTime.Now;
 

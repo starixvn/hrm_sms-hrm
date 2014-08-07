@@ -13,6 +13,7 @@ namespace Fanex.NexHR.Criteria.Request.Leave
     using System.Collections.Generic;
     using System.Text;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models.Request;
 
     /// <summary>
@@ -24,9 +25,11 @@ namespace Fanex.NexHR.Criteria.Request.Leave
             "<LeaveRequestDetail RequestId='{0}' EmpId='{1}' OnDate='{2}' " 
             + "LeaveType='{3}' IsHalfDay='{4}' WorkType='{5}' FromTime='{6}' ToTime='{7}'></LeaveRequestDetail>";
 
+        [Output]
         public long RequestId { get; set; }
 
-        public int EmpId { get; set; }
+        [SpParam(SqlParamName = "EmpId")]
+        public int EmployeeId { get; set; }
 
         [SpParam(Ignored = true)]
         public string EmployeeName { get; set; }
@@ -72,7 +75,7 @@ namespace Fanex.NexHR.Criteria.Request.Leave
                         value.AppendFormat(
                             _LeaveRequestDetailTpl, 
                             0,
-                            EmpId, 
+                            EmployeeId, 
                             detail.LeaveDate,
                             detail.WorkType == 2 ? detail.LeaveTypeId.ToString() : string.Empty, 
                             detail.IsHalfDay, 
@@ -93,7 +96,7 @@ namespace Fanex.NexHR.Criteria.Request.Leave
 
         public override bool IsValid()
         {
-            return EmpId > 0 && FromDate <= ToDate;
+            return EmployeeId > 0 && FromDate <= ToDate;
         }
     }
 }

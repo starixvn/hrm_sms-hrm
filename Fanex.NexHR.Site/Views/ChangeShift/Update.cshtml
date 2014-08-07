@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.Request.ChangeShiftViewModel
+﻿@using Fanex.NexHR.ViewModels.Request
+@model ChangeShiftViewModel
 @{
     ViewBag.Title = "Update Change Shift Request";
 }
@@ -18,20 +19,10 @@
 }
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
-
-<div class="model-state" id="errors-model-state">
-</div>
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary(true)
-        if ((bool)ViewBag.Updated)
-        {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
-        }
-         <div id="shift-unavailable" class="ui-state-error ui-corner-all">
-            @Labels.CannotCreateRequest
+        <div class="validation-summary-errors" id="errors-model-state">
         </div>
         <div class="formrow">
             <div class="label">
@@ -98,6 +89,7 @@
         <div class="formrow">
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
+                @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.RequestId)
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
                 @Html.Hidden("IsView", (bool)ViewBag.IsView)
