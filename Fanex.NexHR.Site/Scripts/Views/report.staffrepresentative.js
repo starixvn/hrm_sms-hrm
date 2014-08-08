@@ -1,26 +1,5 @@
-﻿$(document).ready(function () {
-	$('#group').multiselect();
-	$("#title").multiselect({
-		noneSelectedText: 'Select positions',
-		selectedText: '# selected',
-		selectedList: 0
-	});
-	//submitForm(false);
-
-	$("#submit").click(function () {
-		submitForm(false);
-	});
-	$("#excel").click(function () {
-		submitForm(true);
-	});
-
-	$("#submitTeam").click(function () {
-		submitFormTeam(false);
-	});
-	$("#excelTeam").click(function () {
-		submitFormTeam(true);
-	});
-});
+﻿'use strict';
+/*global _global*/
 
 function submitForm(isExcel) {
 	var url;
@@ -41,8 +20,8 @@ function submitForm(isExcel) {
 		isLocal = 1;
 	}
 	if (isExcel) {
-		url = _global.root + "report/EmployeeSupervisorDetails?employeeId=" + employeeId + "&groups=" + group + "&supervisorType=" + supervisorType
-		+ "&isExcel=" + isExcel + "&isLocal=" + isLocal;
+		url = _global.root + "report/EmployeeSupervisorDetails?employeeId=" + employeeId + "&groups=" + group +
+			"&supervisorType=" + supervisorType + "&isExcel=" + isExcel + "&isLocal=" + isLocal;
 
 		location.href = url;
 	}
@@ -70,16 +49,13 @@ function submitForm(isExcel) {
 function submitFormTeam(isExcel) {
 	var group = $("#group").val() != null ? $("#group").val().join() : "";
 	if (isExcel) {
-		url = _global.root + "report/TeamSupervisorDetails?groups=" + group + "&isExcel=" + isExcel;
+		var url = _global.root + "report/TeamSupervisorDetails?groups=" + group + "&isExcel=" + isExcel;
 
 		location.href = url;
 	}
 	else {
 		var template = $("#TeamSupervisorDetails");
-		var params = {
-			groups: group,
-			isExcel: isExcel,
-		};
+		var params = { groups: group, isExcel: isExcel };
 
 		$.ajax({
 			url: _global.root + "report/TeamSupervisorDetails",
@@ -91,3 +67,27 @@ function submitFormTeam(isExcel) {
 		});
 	}
 }
+
+$(document).ready(function () {
+	$('#group').multiselect();
+	$("#title").multiselect({
+		noneSelectedText: 'Select positions',
+		selectedText: '# selected',
+		selectedList: 0
+	});
+	//submitForm(false);
+
+	$("#submit").click(function () {
+		submitForm(false);
+	});
+	$("#excel").click(function () {
+		submitForm(true);
+	});
+
+	$("#submitTeam").click(function () {
+		submitFormTeam(false);
+	});
+	$("#excelTeam").click(function () {
+		submitFormTeam(true);
+	});
+});

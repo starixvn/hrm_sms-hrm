@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 	$("form").submit(function (e) {
 		e.preventDefault();
-		var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+		$("#TeamId").val() != null ? $("#TeamId").val().join() : "";
 		var postToUrl = "AnnualLeaveBalance/index?year=";
 		var url = submitData(postToUrl);
 		location.href = url;
@@ -20,12 +20,12 @@ $(document).ready(function () {
 
 	var submitData = function (postToUrl) {
 		var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-		var url = _global.root + postToUrl + $("#Year").val()
-        + "&TeamIds=" + teams + "&Employee=" + $("#Employee").val()
-        + "&EmployeeId=" + $("#EmployeeId").val()
-        + "&MinAnnualBalance=" + $("#MinAnnualBalance").val()
-        + "&Category=" + $("#Category").val();
+		var url = _global.root + postToUrl + $("#Year").val() +
+		"&TeamIds=" + teams + "&Employee=" + $("#Employee").val() +
+		"&EmployeeId=" + $("#EmployeeId").val() +
+		"&MinAnnualBalance=" + $("#MinAnnualBalance").val() +
+		"&Category=" + $("#Category").val();
 
 		return url;
-	}
+	};
 });

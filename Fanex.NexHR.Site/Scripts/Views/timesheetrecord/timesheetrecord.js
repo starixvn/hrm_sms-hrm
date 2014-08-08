@@ -1,7 +1,8 @@
-﻿
-$(document).ready(function () {
-    var query = "";
+﻿'use strict';
+/*global _global*/
 
+$(document).ready(function () {
+    var nickName = "";
     $("#EmployeeName").autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -15,7 +16,7 @@ $(document).ready(function () {
                         return {
                             label: item.NickName + ' (' + item.FullName + ')',
                             value: item.Id
-                        }
+                        };
                     }));
                 }
             });

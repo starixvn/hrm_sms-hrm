@@ -12,8 +12,8 @@ function exportExcel() {
 	var title = $("#title").val() != null ? $("#title").val().join() : "";
 	var url = null;
 
-	url = _global.root + "export/EmployeeWorkingCalendar?fromDate=" + fromDate + "&toDate=" + toDate
-+ "&group=" + group + "&title=" + title;
+	url = _global.root + "export/EmployeeWorkingCalendar?fromDate=" + fromDate + "&toDate=" + toDate + 
+		"&group=" + group + "&title=" + title;
 	location.href = url;
 }
 

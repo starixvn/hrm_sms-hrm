@@ -21,6 +21,8 @@ var LeaveRequest = (function ($) {
         currentLeaveBalance: null,
         generalLeaveType: null,
         maternityLeaveType: null,
+        isFromTimeAfterDay: null,
+        isToTimeAfterDay: null,
         isTopManager: false,
 
         init: function () {
@@ -42,6 +44,8 @@ var LeaveRequest = (function ($) {
             LeaveRequest.annualBalance = $("#lblAnnualBalance");
             LeaveRequest.keepInViewBalance = $("#lblKeepInViewBalance");
             LeaveRequest.currentLeaveBalance = $("#lblCurrentLeaveBalance");
+            LeaveRequest.isFromTimeAfterDay = $("#IsFromTimeAfterDay");
+            LeaveRequest.isToTimeAfterDay = $("#IsToTimeAfterDay");
 
             LeaveRequest.autocomplete();
             LeaveRequest.totalDays.prop('readonly', true);
@@ -66,14 +70,36 @@ var LeaveRequest = (function ($) {
             LeaveRequest.leaveTypeId.change(function () {
                 LeaveRequest.leaveTypeChange();
             });
-
+            LeaveRequest.isFromTimeAfterDay.change(function () {
+                LeaveRequest.timeChange();
+            });
+            LeaveRequest.fromTime.change(function () {
+                LeaveRequest.timeChange();
+            });
+            LeaveRequest.toTime.change(function () {
+                LeaveRequest.timeChange();
+            });
             $('#btnSubmit').click(function (evt) {
                 evt.preventDefault();
                 RequestCommon.removeErrorMsg(false);
                 LeaveRequest.saveLeaveRequest();
             });
 
+            LeaveRequest.timeChange();
             LeaveRequest.disableControlForDetail();
+        },
+        timeChange: function () {
+            var checked = LeaveRequest.isFromTimeAfterDay.attr("checked");
+            if (checked === "checked" || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
+                LeaveRequest.isToTimeAfterDay.attr("checked", "checked");
+                var toDate = new Date(LeaveRequest.fromDate.val());
+                toDate.setDate(toDate.getDate() + 1);
+                LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
+            }
+            else {
+                LeaveRequest.isToTimeAfterDay.removeAttr("checked");
+                LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+            }
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
             var leaveDetailContainer = $("#tbldetail");
@@ -87,19 +113,17 @@ var LeaveRequest = (function ($) {
             }
         },
         saveLeaveRequest: function () {
-            
             LeaveRequest.checkIsTopManager();
             var validate = LeaveRequest.validateForm();
             if (validate) {
-                $('.validation-summary-valid').hide();
-                $('.validation-summary-valid').removeClass("validation-summary-errors");
+                RequestCommon.removeErrorMsg(false);
                 var leaveRequest = {
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
                     EmployeeName: LeaveRequest.employee.val(),
                     RequestType: 6,
                     FromDate: LeaveRequest.fromDate.val(),
-                    ToDate: LeaveRequest.toDate.val(),
+                    ToDate: (LeaveRequest.halfDayOff.attr("checked") === "checked" ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val()),
                     LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(":selected").text(),
                     TotalDays: LeaveRequest.totalDays.val(),
@@ -175,14 +199,13 @@ var LeaveRequest = (function ($) {
                 url: '/Leave/Create',
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
-                    $('.validation-summary-valid').show();
                     if (response.Code === 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
                     }
                     else {
-                        RequestCommon.showErrorMsg(response.message, LeaveRequest.employee);
+                        RequestCommon.showErrorMsg(response.Message, LeaveRequest.employee);
                     }
                 }
             });
@@ -194,14 +217,13 @@ var LeaveRequest = (function ($) {
                 url: '/Leave/Update',
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
-                    $('.validation-summary-valid').show();
                     if (response.Code === 0) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
                     }
                     else {
-                        RequestCommon.showErrorMsg(response.message, LeaveRequest.employee);
+                        RequestCommon.showErrorMsg(response.Message, LeaveRequest.employee);
                     }
                 }
             });
@@ -515,33 +537,34 @@ var LeaveRequest = (function ($) {
             var days = (end - start) / 1000 / 60 / 60 / 24;
 
             if (empName !== undefined && (empName === null || empName === "")) {
-                errorString.push("* The Employee field is required.");
+                errorString.push("The Employee field is required.");
             }
 
             if (fromDate === null || fromDate === "") {
-                errorString.push("* From Date field is required.");
+                errorString.push("From Date field is required.");
             }
 
             if (toDate === null || toDate === "") {
-                errorString.push("* To Date field is required.");
+                errorString.push("To Date field is required.");
             }
 
             if (LeaveRequest.isTopManager === false) {
                 if (verifier === null || verifier === "") {
-                    errorString.push("* Verifier is required.");
+                    errorString.push("Verifier is required.");
                 }
                 if (approver === null || approver === "") {
-                    errorString.push("* Approver is required.");
+                    errorString.push("Approver is required.");
                 }
             }
 
             if (days < 0) {
-                errorString.push("* To Date must be greater than From Date.");
+                errorString.push("To Date must be greater than From Date.");
             }
 
             if (errorString.length > 0) {
-                $("#errors-model-state").show();
-                $("#errors-model-state").html(errorString.join("</br>"));
+                RequestCommon.showErrorMsg(errorString.join(" - "));
+                //                $("#errors-model-state").show();
+                //                $("#errors-model-state").html(errorString.join("</br>"));
                 return false;
             }
 

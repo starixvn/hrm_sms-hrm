@@ -1,23 +1,9 @@
-﻿$(document).ready(function () {
-    bindMenu('.Pending', 'pendingMenu');
-
-    $(".viewhistory").click(function () {
-        var url = $(this).attr("id");
-        $.get(url, function (data) {
-            $('#dialoghistorycontent').html(data);
-            $("#dialoghistorycontent").dialog({
-                modal: true,
-                minHeight: 0,
-                width: 1100,
-                title: 'Request History'
-            });
-        });
-    });
-});
+﻿'use strict';
+/*global _global, autoIndex*/
 
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
-        $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function (data) {
+        $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function () {
             $('#row' + id).remove();
             autoIndex();
         });
@@ -44,3 +30,20 @@ function bindMenu(element, menu) {
         processRequest(command, eventElement);
     });
 }
+
+$(document).ready(function () {
+    bindMenu('.Pending', 'pendingMenu');
+
+    $(".viewhistory").click(function () {
+        var url = $(this).attr("id");
+        $.get(url, function (data) {
+            $('#dialoghistorycontent').html(data);
+            $("#dialoghistorycontent").dialog({
+                modal: true,
+                minHeight: 0,
+                width: 1100,
+                title: 'Request History'
+            });
+        });
+    });
+});

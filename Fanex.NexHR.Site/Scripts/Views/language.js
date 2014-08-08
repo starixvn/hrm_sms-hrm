@@ -1,4 +1,6 @@
-﻿_labels = {
+﻿/*global _labels: true, _messages: true*/
+
+_labels = {
 	test: 'nothing'
 };
 

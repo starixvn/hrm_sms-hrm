@@ -1,9 +1,10 @@
-﻿$(document).ready(function () {
-    bindMenu('#forgotInOut', 'forgotCheckInOutMenu');
-    bindMenu('#lateInEarlyOut', 'lateInEarlyOutMenu');
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     $("#changePasswordDialog").hide();
 
-    if ($("#ChangePassword").val() == "True") {
+    if ($("#ChangePassword").val() === "True") {
         $("#changePasswordDialog").show().dialog({
             autoOpen: true,
             height: 210,
@@ -25,7 +26,7 @@
                         type: 'POST',
                         url: _global.root + 'ajax/UpdatePasswordResetStatus',
                         data: { status: false },
-                        success: function (response) {
+                        success: function () {
                         }
                     });
                 }
@@ -33,12 +34,3 @@
         });
     }
 });
-
-function bindMenu(element, menu) {
-    $(element).contextMenu({
-        menu: menu
-    },
-	function (command, eventElement) {
-	    window.location.href = command;
-	});
-}

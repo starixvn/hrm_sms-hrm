@@ -1,4 +1,31 @@
-﻿var MemberOvertime = function ($) {
+﻿'use strict';
+/*global _global*/
+
+function calculateTotalOTHours(selector) {
+	var sumResult = 0;
+	selector.each(function () {
+		var value = $(this).text().trim();
+		if (value !== "") {
+			if (!isNaN(value) && value.lenght !== 0) {
+				sumResult += parseFloat(value);
+			}
+		}
+	});
+	return sumResult;
+}
+
+function requestToCalculateOTHours() {
+	var sumNormal = calculateTotalOTHours($(".sumnormal"));
+	$("#sumnormal").text(sumNormal.toFixed(2));
+
+	var sumOff = calculateTotalOTHours($(".sumoff"));
+	$("#sumoff").text(sumOff.toFixed(2));
+
+	var sumPublic = calculateTotalOTHours($(".sumpublic"));
+	$("#sumpublic").text(sumPublic.toFixed(2));
+}
+
+var MemberOvertime = (function ($) {
     return {
         dialogMail: null,
         maxDate: null,
@@ -59,7 +86,7 @@
                 dataType: "json",
                 url: _global.root + 'Overtime/ReminderClaimOvertime',
                 data: { subject: subject, content: content },
-                success: function (response) {
+                success: function () {
                     alert("Sent success!");
                 }
             });
@@ -97,19 +124,18 @@
             var month = $("#Month").val();
             var year = $("#Year").val();
             var monthYear = year + "-" + month + "-01";
-            var statusId = $("#statusId").val() == "0" ? "" : $("#statusId").val();
+            var statusId = $("#statusId").val() === "0" ? "" : $("#statusId").val();
             var employeeId = $("#EmployeeId").val();
 
             MemberOvertime.bindMemberOvertimeDetail(monthYear, employeeId, teamIds, statusId);
         },
         bindMemberOvertimeDetail: function (month, employeeId, teamIds, statusId) {
-            var isHRView = $("#IsHRView").val();
-            var action = $("#IsHRView").val() == "True" ? "MemberOvertimeViewByHR" : "MemberOvertimeViewByLeader";
+            var action = $("#IsHRView").val() === "True" ? "MemberOvertimeViewByHR" : "MemberOvertimeViewByLeader";
 
             var memberOvertimeContainer = $("#memberOvertimeDetail");
             var params = {
                 "month": month,
-                "employeeId": ((employeeId == 0) ? null : employeeId),
+                "employeeId": ((employeeId === 0) ? null : employeeId),
                 "teamIds": teamIds,
                 "statusId": statusId
             };
@@ -124,34 +150,10 @@
             }
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     MemberOvertime.init();
     requestToCalculateOTHours();
 });
 
-function requestToCalculateOTHours() {
-    var sumNormal = calculateTotalOTHours($(".sumnormal"));
-    $("#sumnormal").text(sumNormal.toFixed(2));
-
-    var sumOff = calculateTotalOTHours($(".sumoff"));
-    $("#sumoff").text(sumOff.toFixed(2));
-
-    var sumPublic = calculateTotalOTHours($(".sumpublic"));
-    $("#sumpublic").text(sumPublic.toFixed(2));
-}
-
-function calculateTotalOTHours(selector) {
-    var sumResult = 0;
-    var formUpdate = $("#formUpdateOT").val();
-    selector.each(function () {
-        var value = $(this).text().trim();
-        if (value != "") {
-            if (!isNaN(value) && value.lenght != 0) {
-                sumResult += parseFloat(value);
-            }
-        }
-    });
-    return sumResult;
-}

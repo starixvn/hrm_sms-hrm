@@ -98,8 +98,9 @@
             @Html.DatePickerFor(model => model.ToDate)
             <span class="time hide">
                 @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+            </span>
+            <span class="hide">
                 @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
-                @Html.LabelFor(model => model.IsToTimeAfterDay, "Is after day")
             </span>
         </div>
         <div class="clear">

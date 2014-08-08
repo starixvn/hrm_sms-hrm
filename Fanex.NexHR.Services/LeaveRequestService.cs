@@ -146,7 +146,9 @@ namespace Fanex.NexHR.Services
                 }
 
                 emailModel.Subject = subject;
-                string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                string forDate = criteria.TotalDays == (decimal)0.5 
+                    ? GetStringDateForLeaveRequest(criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
+                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
@@ -180,7 +182,9 @@ namespace Fanex.NexHR.Services
                 }
 
                 emailModel.Subject = subject;
-                string forDate = GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                string forDate = criteria.TotalDays == (decimal)0.5
+                    ? GetStringDateForLeaveRequest(criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
+                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
                 emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
                 emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 

@@ -87,7 +87,6 @@ $(document).ready(function () {
         });
         var shiftJson = JSON.stringify(shift);
         var shiftDetailsJson = JSON.stringify(shiftDetails);
-        var year = $("#year").val();
 
         if (new ValidateForm()) {
             $.ajax({
@@ -101,7 +100,7 @@ $(document).ready(function () {
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "ChangeShift/EmployeeView");
                     } else {
-                        RequestCommon.showErrorMsg(response.message, $("#Employee"));
+                        RequestCommon.showErrorMsg(response.Message, $("#Employee"));
                     }
                 }
             });
@@ -150,7 +149,7 @@ $(document).ready(function () {
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "ChangeShift/EmployeeView");
                     } else {
-                        RequestCommon.showErrorMsg(response.message, $("#Employee"));
+                        RequestCommon.showErrorMsg(response.Message, $("#Employee"));
                     }
                 }
             });
@@ -183,30 +182,29 @@ $(document).ready(function () {
         var days = (end - start) / 1000 / 60 / 60 / 24;
 
         if (empName == null || empName === "") {
-            errorString.push("* The Employee field is required.");
+            errorString.push("The Employee field is required.");
         }
         if (fromDate == null || fromDate === "") {
-            errorString.push("* From Date field is required.");
+            errorString.push("From Date field is required.");
         }
         if (toDate == null || toDate === "") {
-            errorString.push("* To Date field is required.");
+            errorString.push("To Date field is required.");
         }
 
         if (_checkTopManager === false) {
             if (verifier == null || verifier === "") {
-                errorString.push("* Verifier is required.");
+                errorString.push("Verifier is required.");
             }
             if (approver == null || approver === "") {
-                errorString.push("* Approver is required.");
+                errorString.push("Approver is required.");
             }
         }
 
         if (days < 0) {
-            errorString.push("* To Date must be greater than From Date.");
+            errorString.push("To Date must be greater than From Date.");
         }
         if (errorString.length > 0) {
-            $("#errors-model-state").show();
-            $("#errors-model-state").html(errorString.join("</br>"));
+            RequestCommon.showErrorMsg(errorString.join(" - "));
             return false;
         }
         return check;

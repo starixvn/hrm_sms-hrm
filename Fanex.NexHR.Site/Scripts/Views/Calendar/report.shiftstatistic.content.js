@@ -1,4 +1,7 @@
-﻿var ShiftStatisticContent = function ($) {
+﻿'use strict';
+/*global ShiftStatistic*/
+
+var ShiftStatisticContent = (function ($) {
     return {
         groupId: null,
         isShowWholeCompany: null,
@@ -24,7 +27,7 @@
                 var groupIds = groups != null ? groups.join() : "";
 
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatisticContent.previousFromDate.val(),
-                        ShiftStatisticContent.previousToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") == "checked"));
+                        ShiftStatisticContent.previousToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") === "checked"));
             });
 
             ShiftStatisticContent.next.on("click", function () {
@@ -32,11 +35,11 @@
                 var groupIds = groups != null ? groups.join() : "";
 
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatisticContent.nextFromDate.val(),
-                    ShiftStatisticContent.nextToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") == "checked"));
+                    ShiftStatisticContent.nextToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") === "checked"));
             });
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     ShiftStatisticContent.init();

@@ -119,17 +119,9 @@ namespace Fanex.NexHR.Services
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.NickName,
-                RequestId = criteria.RequestId,
-                ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            var forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark);
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
@@ -153,17 +145,9 @@ namespace Fanex.NexHR.Services
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.NickName,
-                RequestId = criteria.RequestId,
-                ForDate = GetMessageDateString(criteria.FromDate, criteria.ToDate),
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            var forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark);
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,

@@ -1,8 +1,11 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     $('#TotalMinutes').prop('readonly', true);
     var successed = $("#successed").val();
     var year = $("#year").val();
-    if (successed == "true") {
+    if (successed === "true") {
         confirm('Successfull!\nPress OK to continue', function () {
             document.location = _global.root + "Overtime/EmployeeView/" + year;
         });
@@ -19,7 +22,7 @@
 
     $('#IsOvertimeHours').change(function () {
         var isOvertimeHours = $("#IsOvertimeHours").attr("checked");
-        if (isOvertimeHours == "checked") {
+        if (isOvertimeHours === "checked") {
             $('#shift-row').hide();
             $('#time-row').show();
             $('#totalhours-row').show();

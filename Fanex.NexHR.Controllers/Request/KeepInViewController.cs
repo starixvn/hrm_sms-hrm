@@ -58,7 +58,7 @@ namespace Fanex.NexHR.Controllers.Request
                 EmployeeId = this.CurrentUser.Id,
                 Date = DateTime.Now.Date,
                 Shift = (shift == null) ? string.Empty : shift.Name,
-                ShiftId = (shift == null) ? 0 : shift.ShiftID
+                ShiftId = (shift == null) ? 0 : shift.Id
             };
 
             GetVerifierApproverList(this.CurrentUser.Id, model);

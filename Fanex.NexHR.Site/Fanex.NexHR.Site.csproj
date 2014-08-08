@@ -21,8 +21,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <JSLintSkip>
-    </JSLintSkip>
+    <JSLintSkip>|\Scripts\chosen\|\Scripts\datatable\|\Scripts\Libs\|\Scripts\MultiSelect\|\Scripts\tiny_mce\</JSLintSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -382,10 +381,9 @@
     <Content Include="Scripts\Views\Overtime\overtime.command.request.js" />
     <Content Include="Scripts\Views\Overtime\hrovertimereport.js" />
     <Content Include="Scripts\Views\Overtime\overtimereportdetails.js" />
-    <Content Include="Scripts\Views\PageCheckDirty.js" />
+    <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\changeshift.byemployee.js" />
-    <Content Include="Scripts\Views\Overtime\dailyovertime.member.detail.js" />
     <Content Include="Scripts\Views\Overtime\dailyovertime.member.js" />
     <Content Include="Scripts\Views\Overtime\monthlyovertime.member.detail.js" />
     <Content Include="Scripts\Views\Overtime\monthlyovertime.member.js" />
@@ -397,7 +395,6 @@
     <Content Include="Scripts\Views\employeeshiftmanager.js" />
     <Content Include="Scripts\Views\employeesupervisor.js" />
     <Content Include="Scripts\Views\jobtitle.js" />
-    <Content Include="Scripts\Views\jquery.tablesorter.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.hrspace.js" />
     <Content Include="Scripts\Views\Overtime\overtime.request.js" />
@@ -407,7 +404,6 @@
     <Content Include="Scripts\Views\Calendar\schedulearrangedetail.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
-    <Content Include="Scripts\Views\Request\request.keepinviewdetail.js" />
     <Content Include="Scripts\Views\team.edit.js" />
     <Content Include="Scripts\Views\team.js" />
     <Content Include="Scripts\Views\team.management.js" />
@@ -783,13 +779,10 @@
     <Content Include="Scripts\Views\report.timesheet.js" />
     <Content Include="Scripts\Views\employee.monthschedule.js" />
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
-    <Content Include="Scripts\Views\jquery.fixedheadertable.js" />
-    <Content Include="Scripts\Views\jquery.mousewheel.js" />
     <Content Include="Scripts\Views\Request\checkinout.byemployee.js" />
     <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\Request\changeshift.request.js" />
     <Content Include="Scripts\Views\myworkingschedule.js" />
-    <Content Include="Scripts\Views\request.myrequest.js" />
     <Content Include="Scripts\Views\Request\checkinout.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
     <Content Include="Scripts\Views\Request\lateinearlyout.request.js" />

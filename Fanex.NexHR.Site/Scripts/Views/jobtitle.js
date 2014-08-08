@@ -1,43 +1,26 @@
 ﻿/// <reference path="../Libs/jquery.min.js" />
+/*global actingButton, _global, noInformation, reloadButtonText, _messages, getParam*/
+/*exported deleteJobTitle, index, editJobTile, CancelUpdate, UpdateJobTitle*/
+"use strict";
 
 
-$(document).ready(function () {
+var rowIndex = 1;
+function canNotUpdate(id) {
+	$('#txtJobTile_' + id).val($('#spanJobTitle_' + id).text());
+}
 
-	$('#keyword').keyup(function (event) {
-		if (event.keyCode == 13) {
-			query();
-		}
-	});
-
-	var q = getParam('query');
-	if (q != null) {
-		$('#keyword').val(q);
-	}
-
-	//search onload
-	query();
-
-	$('#query').click(function (evt) {
-		evt.preventDefault();
-		query();
-	});
-
-	$('#keyword').keypress(function (event) {
-		if ($(this).val().length >= 2) {
-			query();
-		}
-	});
-});
+function index() {
+	return rowIndex++;
+}
 
 function query() {
-
-	var query = $('#keyword').val();
+	var value = $('#keyword').val();
 	actingButton('#query', true);
 
 	$.getJSON(
-	_global.root + 'api/jobtitle/getjobtitle'
-	, { query: query }
-	, function (data) {
+	_global.root + 'api/jobtitle/getjobtitle',
+	{ query: value }, 
+	function (data) {
 		//console.log(data);
 		if (data.length > 0) {
 			rowIndex = 1;
@@ -54,11 +37,9 @@ function query() {
 		reloadButtonText('#query');
 		alert(_messages.errorTryAgain);
 	});
-	//$('#keyword').focus().select();
 }
 
 function deleteJobTitle(id) {
-
 	confirm('Are you sure you want to delete?', function () {
 		$.post(_global.root + 'ajax/DeleteJobTitle',
 			{ id: id },
@@ -83,7 +64,7 @@ function editJobTile(id) {
 	$('#btnCancelUpdateJT_' + id).show();
 }
 
-function CancelUpdate(id) {
+function cancelUpdate(id) {
 	$('#spanJobTitle_' + id).show();
 	$('#txtJobTile_' + id).hide();
 	$('#btnEditJobTitle_' + id).show();
@@ -91,25 +72,24 @@ function CancelUpdate(id) {
 	$('#btnCancelUpdateJT_' + id).hide();
 }
 
-function UpdateJobTitle(id) {
 
+function updateJobTitle(id) {
 	var o = $('#txtJobTile_' + id);
-
 	if (o.val().length > 100 || o.val().length < 3) {
 		alert("Length of job title must be between " +
-					3 + " and " + 100 + ".");       
-		CanNotUpdate(id);
+					3 + " and " + 100 + ".");
+		canNotUpdate(id);
 		return false;
 	}
 
 	confirm('Are you sure you want to change?', function () {
 		var jobTitle = $('#txtJobTile_' + id).val();
-		if (jobTitle == '') {
+		if (jobTitle === '') {
 			alert(_messages.errorTryAgain);
-			CanNotUpdate(id);
+			canNotUpdate(id);
 		}
 		var oldTitle = $('#spanJobTitle_' + id).val();
-		if (jobTitle != oldTitle) {
+		if (jobTitle !== oldTitle) {
 			$.post(_global.root + 'ajax/UpdatetJobTitle',
 			{ id: id, name: jobTitle },
 			function (response) {
@@ -118,27 +98,18 @@ function UpdateJobTitle(id) {
 				}
 				else {
 					alert(_messages.errorTryAgain);
-					CanNotUpdate(id);
+					canNotUpdate(id);
 				}
 			}).error(function () {
 				alert(_messages.errorTryAgain);
-				CanNotUpdate(id);
+				canNotUpdate(id);
 			});
 		}
 		else {
 			alert(_messages.errorTryAgain);
-			CanNotUpdate(id);
+			canNotUpdate(id);
 		}
 	});
-}
-
-function CanNotUpdate(id) {
-	$('#txtJobTile_' + id).val($('#spanJobTitle_' + id).text());
-}
-
-var rowIndex = 1;
-function index() {
-	return rowIndex++;
 }
 
 $(function () {
@@ -199,5 +170,53 @@ $(function () {
 
 	$("#btnNewJobTitle").click(function () {
 		$("#dialog-form").dialog("open");
+	});
+});
+
+$(document).ready(function () {
+
+	$('#keyword').keyup(function (event) {
+		if (event.keyCode === 13) {
+			query();
+		}
+	});
+
+	var q = getParam('query');
+	if (q != null) {
+		$('#keyword').val(q);
+	}
+
+	//search onload
+	query();
+
+	$('#query').click(function (evt) {
+		evt.preventDefault();
+		query();
+	});
+
+	$('#keyword').keypress(function () {
+		if ($(this).val().length >= 2) {
+			query();
+		}
+	});
+
+	$("#data").on("click", ".lnkEdit", function () {
+		var jobTitleId = $(this).attr("data-id");
+		editJobTile(jobTitleId);
+	});
+
+	$("#data").on("click", ".lnkSave", function () {
+		var jobTitleId = $(this).attr("data-id");
+		updateJobTitle(jobTitleId);
+	});
+
+	$("#data").on("click", ".lnkCancel", function () {
+		var jobTitleId = $(this).attr("data-id");
+		cancelUpdate(jobTitleId);
+	});
+
+	$("#data").on("click", ".lnkDelete", function () {
+		var jobTitleId = $(this).attr("data-id");
+		deleteJobTitle(jobTitleId);
 	});
 });

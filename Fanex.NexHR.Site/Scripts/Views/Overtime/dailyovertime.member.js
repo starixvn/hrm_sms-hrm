@@ -1,4 +1,31 @@
-﻿var DailyOvertimeMember = function ($) {
+﻿'use strict';
+/*global _global, ConstantRequest, CommandOvertime*/
+
+function calculateTotalOTHours(selector) {
+	var sumResult = 0;
+	selector.each(function () {
+		var value = $(this).text().trim();
+		if (value !== "") {
+			if (!isNaN(value) && value.lenght !== 0) {
+				sumResult += parseFloat(value);
+			}
+		}
+	});
+	return sumResult;
+}
+
+function requestToCalculateOTHours() {
+	var sumNormal = calculateTotalOTHours($(".sumnormal"));
+	$("#sumnormal").text(sumNormal.toFixed(2));
+
+	var sumOff = calculateTotalOTHours($(".sumoff"));
+	$("#sumoff").text(sumOff.toFixed(2));
+
+	var sumPublic = calculateTotalOTHours($(".sumpublic"));
+	$("#sumpublic").text(sumPublic.toFixed(2));
+}
+
+var DailyOvertimeMember = (function ($) {
     return {
         btnAccept: null,
         btnNotAccept: null,
@@ -132,39 +159,15 @@
         },
 
         backAction: function () {
-            var isHRView = DailyOvertimeMember.isHRView.val() == "True";
+            var isHRView = DailyOvertimeMember.isHRView.val() === "True";
             var url = _global.root + (isHRView ? "Overtime/EmployeeOvertime" : "Overtime/MemberOvertime");
             $(location).attr('href', url);
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     DailyOvertimeMember.init();
     requestToCalculateOTHours();
 });
 
-function requestToCalculateOTHours() {
-    var sumNormal = calculateTotalOTHours($(".sumnormal"));
-    $("#sumnormal").text(sumNormal.toFixed(2));
-
-    var sumOff = calculateTotalOTHours($(".sumoff"));
-    $("#sumoff").text(sumOff.toFixed(2));
-
-    var sumPublic = calculateTotalOTHours($(".sumpublic"));
-    $("#sumpublic").text(sumPublic.toFixed(2));
-}
-
-function calculateTotalOTHours(selector) {
-    var sumResult = 0;
-    var formUpdate = $("#formUpdateOT").val();
-    selector.each(function () {
-        var value = $(this).text().trim();
-        if (value != "") {
-            if (!isNaN(value) && value.lenght != 0) {
-                sumResult += parseFloat(value);
-            }
-        }
-    });
-    return sumResult;
-}

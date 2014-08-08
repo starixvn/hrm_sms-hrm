@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     $("#TeamId").multiselect();
     $("#StartDate, #EndDate").attr('readonly', true);
 
@@ -20,14 +23,14 @@
         var endDate = $("#EndDate").val();
         var employee = $("#Employee").val();
 
-        var url = _global.root + "report/TotalWorkingHourWeekly?startDate=" + startDate
-		+ "&endDate=" + endDate
-		+ "&Employee=" + employee
-		+ "&TeamIds=" + teams
-		+ "&EmployeeId=" + employeeId
-		+ "&isLocal=" + isLocal
-		+ "&requestData=" + true
-		+ "&isExcel=" + isExcel;
+        var url = _global.root + "report/TotalWorkingHourWeekly?startDate=" + startDate +
+		"&endDate=" + endDate +
+		"&Employee=" + employee +
+		"&TeamIds=" + teams +
+		"&EmployeeId=" + employeeId +
+		"&isLocal=" + isLocal +
+		"&requestData=" + true + 
+		"&isExcel=" + isExcel;
 
         location.href = url;
     }

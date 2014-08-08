@@ -60,10 +60,10 @@ $(document).ready(function () {
 
 	function addToGrid(supervisorName, supervisorId, supervisorTeam) {
 		if (supervisorId.toString().length > 0 && supervisorName.length > 0) {
-			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
-			+ '<a href="javascript:;" class="moveTop">Top</a>'
-            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
-            + '<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
+			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>' +
+			'<a href="javascript:;" class="moveTop">Top</a>' +
+			'</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>' + 
+			'<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
 			var object = html.find(".lnkremove").first().click(function () {
 				confirm("Are you sure you want to remove this?", function () {
@@ -97,10 +97,10 @@ $(document).ready(function () {
 		var supervisorId = $("#SupervisorId").val();
 		var supervisorTeam = $("#SupervisorTeam").val();
 		if (supervisorId.length > 0 && supervisorName.length > 0) {
-			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>'
-			+ '<a href="javascript:;" class="moveTop">Top</a>'
-            + '</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>'
-            + '<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
+			var html = $('<tr><td><a href="javascript:;" class="up">Up | </a><a href="javascript:;" class="down">Down | </a>' +
+			'<a href="javascript:;" class="moveTop">Top</a>' +
+			'</td><td class="left" data-id="' + supervisorId + '">' + supervisorName + '</td>' + 
+			'<td class="left">' + supervisorTeam + '</td><td><a href="javascript:;" class="lnkremove">Remove</a></td></tr>');
 
 			var object = html.find(".lnkremove").first().click(function () {
 				confirm("Are you sure you want to remove this?", function () {

@@ -16,8 +16,6 @@ namespace Fanex.NexHR.Models
     /// </summary>
     public class Shift : EntityBase<int>
     {
-        public int ShiftID { get; set; }
-
         public string BeginCheckInTime { get; set; }
 
         public string EndCheckInTime { get; set; }

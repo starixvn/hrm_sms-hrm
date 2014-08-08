@@ -191,8 +191,8 @@ function exportExcel(object) {
 		controllerPath = "export/EmployeeDetailsInfo?query=";
 	}
 
-	url = _global.root + controllerPath + keyword + "&groupIds=" + groups
-		+ "&enable=" + enable + "&isDelete=" + isDelete + "&titleId=" + jobTitleId + "&isLocal=" + isLocal;
+	url = _global.root + controllerPath + keyword + "&groupIds=" + groups + 
+		"&enable=" + enable + "&isDelete=" + isDelete + "&titleId=" + jobTitleId + "&isLocal=" + isLocal;
 
 	location.href = url;
 }

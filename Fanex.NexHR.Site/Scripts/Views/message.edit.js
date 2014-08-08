@@ -120,7 +120,7 @@ $(document).ready(function () {
 				groups = createStringResult($('#group').val()),
 				sendToEmails = getEmail("", $('#employee option:selected'));
 
-			sendToEmails = sendToEmails != undefined ? getEmail(sendToEmails, $('#group option:selected'))
+			sendToEmails = sendToEmails !== undefined ? getEmail(sendToEmails, $('#group option:selected'))
 													: getEmail("", $('#group option:selected'));
 
 			$('#EmployeeIds').val(employees);

@@ -1,11 +1,14 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     $('#calendar').fullCalendar({
         theme: true,
         header:
 		{
-		    left: '',
-		    center: 'title',
-		    right: 'prev,next'
+			left: '',
+			center: 'title',
+			right: 'prev,next'
 		},
         firstDay: 1,
         editable: false,
@@ -15,8 +18,8 @@
                 dataType: 'json',
                 data:
 				{
-				    date: $('#calendar').fullCalendar('getDate').format("mm/dd/yyyy"),
-				    id: _global.employeeId
+					date: $('#calendar').fullCalendar('getDate').format("mm/dd/yyyy"),
+					id: _global.employeeId
 				},
                 success: function (data) {
                     var events = [];

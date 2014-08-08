@@ -45,7 +45,7 @@
     <tbody>
     </tbody>
 </table>
-<script id="itemTemplate" type="text/x-jquery-tmpl">      
+<script id="itemTemplate" type="text/x-jquery-tmpl">
      <tr id="row${Id}">
             <td>
               ${index()}
@@ -53,41 +53,37 @@
             <td class="left" style="width: 340px">
                 <span id="spanJobTitle_${Id}"> ${Name}</span>
                 <input type="text" value="${Name}" id="txtJobTile_${Id}" style="display:none;height:22px;width: 300px;"/> 
-            </td>     
-            
+            </td>
             <td >
-                ${TotalExpat}             
-            </td>    
-
+                ${TotalExpat}
+            </td>
             <td >
-                ${TotalLocal}               
-            </td>    
-                   
+                ${TotalLocal}
+            </td>
             <td >
                 {{if Value!='0'}}
                     <a href="/employee/usermanagement/?jobtitleid=${Id}">${Value}</a>
                 {{else}}
                     0
-                {{/if}}                
-            </td>                        
+                {{/if}}
+            </td>
            <td class="cmd">
-                    <a href="#" onclick="editJobTile('${Id}')" id='btnEditJobTitle_${Id}'><img src="@Url.Content("~/Styles/Images/edit-icon.png")" /></a>                    
-                    <a href="#" id="btnUpdateJT_${Id}" style="display:none" onclick="UpdateJobTitle('${Id}')" title="Apply">
+                    <a href="#" class="lnkEdit" data-id = ${Id} id='btnEditJobTitle_${Id}'><img src="@Url.Content("~/Styles/Images/edit-icon.png")" /></a>
+                    <a href="#" class="lnkSave" data-id = ${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
                         <img src="@Url.Content("~/Styles/Images/approve.png")" />
                     </a>
-                    <a href="#" id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" onclick="CancelUpdate('${Id}')" title="Cancel">
+                    <a href="#" class="lnkCancel" data-id = ${Id} id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" title="Cancel">
                         <img src="@Url.Content("~/Styles/Images/reject.png")" />
-                    </a>                    
+                    </a>
             </td>
-            <td  class="cmd">              
+            <td  class="cmd">
              {{if Value!='0'}}
                      <a href="#" style="cursor:default"><img src="@Url.Content("~/Styles/Images/disabled-delete.png")" /></a> 
                 {{else}}
-                      <a href="#" onclick="deleteJobTitle('${Id}')" id="${Id}"><img src="@Url.Content("~/Styles/Images/delete-icon.png")" /></a> 
-                {{/if}}    
-                            
-            </td>            
-        </tr>     
+                      <a href="#" class="lnkDelete" data-id = ${Id} id="${Id}"><img src="@Url.Content("~/Styles/Images/delete-icon.png")" /></a> 
+                {{/if}}
+            </td>
+        </tr>
 </script>
 <script id="mytemplate" type="text/html">
 </script>

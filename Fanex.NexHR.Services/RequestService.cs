@@ -775,18 +775,10 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester);
-            var toDate = request.ToDate;
-            var forDate = GetMessageDateString(request.FromDate, toDate);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                ForDate = forDate,
-                Remark = request.Remark
-            };
-
+            var forDate = GetMessageDateString(request.FromDate, request.ToDate);
+            var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],

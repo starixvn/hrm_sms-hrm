@@ -42,7 +42,7 @@
       <resource path="~/scripts/libs/jquery.cookie.js" />
       <resource path="~/Scripts/MultiSelect/prettify.js" />
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
-      <resource path="~/Scripts/views/PageCheckDirty.js" />
+      <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
 	  <resource path="~/scripts/views/home.js" />
     </resourceSet>
@@ -645,10 +645,7 @@
       <resource path="~/scripts/views/Overtime/overtime.command.request.js" />
       <resource path="~/scripts/views/overtime/dailyovertime.member.js" />
     </resourceSet>
-    <resourceSet name="dailyovertimememberdetailjs" type="js">
-      <resource path="~/scripts/views/overtime/dailyovertime.member.detail.js" />
-    </resourceSet>
-
+    
     <resourceSet name="myspacecss" type="css">
       <resource reference="sitecss"/>
     </resourceSet>

@@ -1,4 +1,7 @@
-﻿var ShiftStatistic = function ($) {
+﻿'use strict';
+/*global _global*/
+
+var ShiftStatistic = (function ($) {
     return {
         groupId: null,
         fromDate: null,
@@ -15,14 +18,15 @@
             ShiftStatistic.groupId.multiselect();
             ShiftStatistic.category = $("#category");
 
-            ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(), '', (ShiftStatistic.isShowWholeCompany.attr("checked") == "checked"), ShiftStatistic.category.val());
+            ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(), '', 
+				(ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.category.val());
 
             ShiftStatistic.submit.on("click", function () {
                 var groups = ShiftStatistic.groupId.val();
                 var groupIds = groups != null ? groups.join() : "";
                 //console.log(ShiftStatistic.isShowWholeCompany.attr("checked") == "checked");
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(),
-                    groupIds, (ShiftStatistic.isShowWholeCompany.attr("checked") == "checked"), ShiftStatistic.category.val());
+                    groupIds, (ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.category.val());
 
             });
         },
@@ -45,7 +49,7 @@
             }
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     ShiftStatistic.init();

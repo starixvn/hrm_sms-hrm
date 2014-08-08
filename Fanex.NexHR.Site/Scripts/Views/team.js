@@ -1,21 +1,13 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
 
+var nickName = "";
+$(document).ready(function () {
 	//Validation Leader field
 	$("#Leader").rules("add", {
-			required: true,
-			messages: {
-			required: "The Leader field is required",
-			}
+		required: true,
+		messages: { required: "The Leader field is required" }
 	});
-
-    //Validation Assistant leader field
-//    $("#AssistantLeader").rules("add", {
-//         required: true,
-//         messages: {
-//           required: "Assistant Leader field is required",
-//         }
-//    });
-
 	//Seach leader
 	$("#Leader").autocomplete({
 		source: function (request, response) {
@@ -23,8 +15,8 @@
 				url: _global.root + 'api/employee/getemployees',
 				data: {
 					query: request.term,
-                    enable:false,
-                    isDelete:false,
+					enable: false,
+					isDelete: false,
 					$top: 10
 				},
 				success: function (data) {
@@ -32,7 +24,7 @@
 						return {
 							label: item.NickName + ' (' + item.FullName + ')',
 							value: item.Id
-						}
+						};
 					}));
 				}
 			});
@@ -73,7 +65,7 @@
 						return {
 							label: item.NickName + ' (' + item.FullName + ')',
 							value: item.Id
-						}
+						};
 					}));
 				}
 			});
@@ -100,12 +92,3 @@
 		}
 	});
 });
-
-//function deleteTeam(id) {
-//    confirm('Are you sure you want to delete?', function () {
-//        $.post(_global.root + 'ajax/DeleteTeam', { id: id }, function (data) {
-//            $('#row' + id).remove();
-//            autoIndex();
-//        });
-//    });
-//}

@@ -1,4 +1,19 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+function exportExcel() {
+	var year = $("#Year").val();
+	var month = $("#Month").val();
+	var calendar = $("#calendar").val();
+	var employeeId = $("#EmployeeId").val();
+	var url = null;
+
+	url = _global.root + "export/EmployeeOvertimeRecord?year=" + year + "&month=" + month +
+		"&calendar=" + calendar + "&empId=" + employeeId;
+	location.href = url;
+}
+
+$(document).ready(function () {
     var dateRangePicker = $('#DateControl');
 
     dateRangePicker.monPickr({
@@ -23,15 +38,3 @@
     });
 
 });
-
-function exportExcel() {
-    var year = $("#Year").val();
-    var month = $("#Month").val();
-    var calendar = $("#calendar").val();
-    var employeeId = $("#EmployeeId").val();
-    var url = null;
-
-    url = _global.root + "export/EmployeeOvertimeRecord?year=" + year + "&month=" + month
-                        + "&calendar=" + calendar + "&empId=" + employeeId;
-    location.href = url;
-}

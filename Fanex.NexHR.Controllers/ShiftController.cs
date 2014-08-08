@@ -115,7 +115,7 @@ namespace Fanex.NexHR.Controllers
                 HourTimeOut = GetHour(shift.BeginCheckOutTime),
                 MinuteTimeOut = GetMinute(shift.BeginCheckOutTime),
                 IsDisabled = shift.IsDisabled,
-                ShiftId = shift.ShiftID,
+                ShiftId = shift.Id,
                 IsInAfterDay = shift.IsInAfterDay,
                 IsOutAfterDay = shift.IsOutAfterDay,
                 IsUsed = shift.IsUsed

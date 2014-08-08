@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
+
+$(document).ready(function () {
     var dateRangePicker = $('#DateControl');
 
     dateRangePicker.monPickr({
@@ -33,16 +36,16 @@
     function submitForm(isExportExcel) {
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var employee = $("#Employee").val();
-        var employeeId = employee == "" ? "" : $("#EmployeeId").val();
+        var employeeId = employee.length > 0 ? $("#EmployeeId").val() : "";
         var isLocal = $("#IsLocal").val();
 
-        var url = _global.root + "report/TotalWorkingHourMonthly?Month=" + $("#Month").val()
-        + "&Year=" + $("#Year").val()
-        + "&TeamIds=" + teams
-        + "&EmployeeId=" + employeeId
-        + "&Employee=" + employee
-        + "&IsExportExcel=" + isExportExcel
-        + "&isLocal=" + isLocal;
+        var url = _global.root + "report/TotalWorkingHourMonthly?Month=" + $("#Month").val() +
+			"&Year=" + $("#Year").val() +
+			"&TeamIds=" + teams +
+			"&EmployeeId=" + employeeId +
+			"&Employee=" + employee +
+			"&IsExportExcel=" + isExportExcel + 
+			"&isLocal=" + isLocal;
 
         location.href = url;
     }

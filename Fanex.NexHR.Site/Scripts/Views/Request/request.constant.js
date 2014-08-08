@@ -1,4 +1,6 @@
-﻿var ConstantRequest = function ($) {
+﻿'use strict';
+
+var ConstantRequest = (function () {
     return {
         CONSTANT_ACCEPT: null,
         CONSTANT_NOTACCEPT: null,
@@ -18,7 +20,7 @@
             ConstantRequest.CONSTANT_RESET = "Reset";
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     ConstantRequest.init();

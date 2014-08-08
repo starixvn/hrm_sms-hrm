@@ -12,22 +12,22 @@
 	$.fn.marquee = function (rootArgs) {
 		var that = $(this);
 		var textWidth = that.textWidth(),
-                offset = that.width(),
-                width = offset,
-                css = {
-                	'text-indent': that.css('text-indent'),
-                	'overflow': that.css('overflow'),
-                	'white-space': that.css('white-space')
-                },
-                marqueeCss = {
-                	'text-indent': width,
-                	'overflow': 'hidden',
-                	'white-space': 'nowrap'
-                },
-                args = $.extend(true, { count: -1, speed: 1e1, leftToRight: false }, rootArgs),
-                i = 0,
-                stop = textWidth * -1,
-                dfd = $.Deferred();
+			offset = that.width(),
+			width = offset,
+				css = {
+					'text-indent': that.css('text-indent'),
+					'overflow': that.css('overflow'),
+					'white-space': that.css('white-space')
+				},
+				marqueeCss = {
+					'text-indent': width,
+					'overflow': 'hidden',
+					'white-space': 'nowrap'
+				},
+				args = $.extend(true, { count: -1, speed: 1e1, leftToRight: false }, rootArgs),
+				i = 0,
+				stop = textWidth * -1,
+				dfd = $.Deferred();
 		function go() {
 			if (!that.length) {
 				return dfd.reject();

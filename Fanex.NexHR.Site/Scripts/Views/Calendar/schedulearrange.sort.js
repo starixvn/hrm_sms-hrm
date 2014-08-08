@@ -1,4 +1,7 @@
-﻿var ScheduleArrangeSort = function ($) {
+﻿'use strict';
+/*global _global*/
+
+var ScheduleArrangeSort = (function ($) {
     return {
         btnSave: null,
         btnCancel: null,
@@ -28,8 +31,7 @@
                         employeeOrders: JSON.stringify(employeeOrders)
                     },
                     success: function (data) {
-                        if (data.errorCode == 0) {
-                            //alert("Saved success!");
+                        if (data.errorCode === 0) {
                             location.href = _global.root + "Calendar/arrangeschedule";
                         }
                         else {
@@ -37,11 +39,6 @@
                         }
                     }
                 });
-            });
-
-            ScheduleArrangeSort.btnCancel.on("click", function () {
-                //$("#dialogSortcontent").dialog('close');
-                //$(".ui-dialog").find(".dialog").dialog("close");
             });
 
             $(".moveTop, .up, .down").on("click", function () {
@@ -66,7 +63,7 @@
             });
         }
     };
-} (jQuery);
+} (jQuery));
 
 $(document).ready(function () {
     ScheduleArrangeSort.init();

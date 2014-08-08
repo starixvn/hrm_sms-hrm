@@ -1,289 +1,298 @@
-﻿var OvertimeMemberDetail = function ($) {
-    return {
-        init: function () {
-            $("#chkAll").change(function () {
-                OvertimeMemberDetail.checkAllChange($(this).attr("checked") == "checked");
-            });
+﻿'use strict';
+/*global _global, CommandOvertime, ConstantRequest, fadeOutMessage, MemberOvertime*/
 
-            $("#lnkAccept").on("click", function () {
-                OvertimeMemberDetail.acceptAllRequest();
-            });
+var OvertimeMemberDetail = (function ($) {
+	return {
+		init: function () {
+			$("#chkAll").change(function () {
+				OvertimeMemberDetail.checkAllChange($(this).attr("checked") === "checked");
+			});
 
-            $("#lnkNotAccept").on("click", function () {
-                OvertimeMemberDetail.notAcceptAllRequest();
-            });
+			$("#lnkAccept").on("click", function () {
+				OvertimeMemberDetail.acceptAllRequest();
+			});
 
-            $("#lnkApprove").on("click", function () {
-                OvertimeMemberDetail.approveAllRequest();
-            });
+			$("#lnkNotAccept").on("click", function () {
+				OvertimeMemberDetail.notAcceptAllRequest();
+			});
 
-            $("#lnkReject").on("click", function () {
-                OvertimeMemberDetail.rejectAllRequest();
-            });
+			$("#lnkApprove").on("click", function () {
+				OvertimeMemberDetail.approveAllRequest();
+			});
 
-            $("#lnkProcess").on("click", function () {
-                OvertimeMemberDetail.processAllRequest();
-            });
+			$("#lnkReject").on("click", function () {
+				OvertimeMemberDetail.rejectAllRequest();
+			});
 
-            $("#lnkVoid").on("click", function () {
-                OvertimeMemberDetail.voidAllRequest();
-            });
-        },
-        checkAllChange: function (isChecked) {
-            $(".chkSelect").attr("checked", isChecked)
-        },
-        acceptAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            var isShowWarning = false;
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to accept all?', function () {
-                    var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-                    var requestIds = "";
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".verifier-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                        else {
-                            isShowWarning = true;
-                        }
-                    }
+			$("#lnkProcess").on("click", function () {
+				OvertimeMemberDetail.processAllRequest();
+			});
 
-                    if (isShowWarning) {
-                        alert("There are some request which you doesn't role to Accept.");
-                    }
+			$("#lnkVoid").on("click", function () {
+				OvertimeMemberDetail.voidAllRequest();
+			});
+		},
+		checkAllChange: function (isChecked) {
+			$(".chkSelect").attr("checked", isChecked);
+		},
+		acceptAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var isShowWarning = false;
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to accept all?', function () {
+					var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+					var requestIds = "";
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".verifier-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+						else {
+							isShowWarning = true;
+						}
+					}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+					if (isShowWarning) {
+						alert("There are some request which you doesn't role to Accept.");
+					}
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_ACCEPT, requestIds: requestIds }, function (response) {
-                        fadeOutMessage();
-                        if (response != true) {
-                            alert(response);
-                            return;
-                        }
-                        else {
-                            MemberOvertime.submitEvent();
-                        }
-                    });
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
 
-            return false;
-        },
-        notAcceptAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            var isShowWarning = false;
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to accept all?', function () {
+					$.post(_global.root + 'ajax/ProcessMultipleOvertime',
+						{ command: ConstantRequest.CONSTANT_ACCEPT, requestIds: requestIds }, function (response) {
+							fadeOutMessage();
+							if (response !== true) {
+								alert(response);
+								return;
+							}
+							else {
+								MemberOvertime.submitEvent();
+							}
+						});
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
 
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".verifier-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                        else {
-                            isShowWarning = true;
-                        }
-                    }
+			return false;
+		},
+		notAcceptAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var requestIds = "";
+			var isShowWarning = false;
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to accept all?', function () {
 
-                    if (isShowWarning) {
-                        alert("There are some request which you doesn't role to Not Accept.");
-                    }
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".verifier-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+						else {
+							isShowWarning = true;
+						}
+					}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+					if (isShowWarning) {
+						alert("There are some request which you doesn't role to Not Accept.");
+					}
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_NOTACCEPT, requestIds: requestIds }, function (response) {
-                        fadeOutMessage();
-                        if (response != true) {
-                            alert(response);
-                            return;
-                        }
-                        else {
-                            MemberOvertime.submitEvent();
-                        }
-                    });
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
 
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
+					$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_NOTACCEPT, requestIds: requestIds },
+						function (response) {
+							fadeOutMessage();
+							if (response !== true) {
+								alert(response);
+								return;
+							}
+							else {
+								MemberOvertime.submitEvent();
+							}
+						});
 
-            return false;
-        },
-        approveAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            var isShowWarning = false;
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to approve all?', function () {
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".approver-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                        else {
-                            isShowWarning = true;
-                        }
-                    }
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
 
-                    if (isShowWarning) {
-                        alert("There are some request has verified yet.");
-                    }
+			return false;
+		},
+		approveAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var requestIds = "";
+			var isShowWarning = false;
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to approve all?', function () {
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".approver-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+						else {
+							isShowWarning = true;
+						}
+					}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+					if (isShowWarning) {
+						alert("There are some request has verified yet.");
+					}
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_APPROVE, requestIds: requestIds }, function (response) {
-                        fadeOutMessage();
-                        if (response != true) {
-                            alert(response);
-                            return;
-                        }
-                        else {
-                            MemberOvertime.submitEvent();
-                        }
-                    });
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
 
-            return false;
-        },
-        rejectAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            var isShowWarning = false;
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to reject all?', function () {
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".approver-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                        else {
-                            isShowWarning = true;
-                        }
-                    }
+					$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_APPROVE, requestIds: requestIds },
+					function (response) {
+						fadeOutMessage();
+						if (response !== true) {
+							alert(response);
+							return;
+						}
+						else {
+							MemberOvertime.submitEvent();
+						}
+					});
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
 
-                    if (isShowWarning) {
-                        alert("There are some request has verified yet.");
-                    }
+			return false;
+		},
+		rejectAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var requestIds = "";
+			var isShowWarning = false;
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to reject all?', function () {
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".approver-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+						else {
+							isShowWarning = true;
+						}
+					}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+					if (isShowWarning) {
+						alert("There are some request has verified yet.");
+					}
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_REJECT, requestIds: requestIds }, function (response) {
-                        fadeOutMessage();
-                        if (response != true) {
-                            alert(response);
-                            return;
-                        }
-                        else {
-                            MemberOvertime.submitEvent();
-                        }
-                    });
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
 
-            return false;
-        },
-        processAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to process all?', function () {
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".hr-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                    }
+					$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_REJECT, requestIds: requestIds },
+					function (response) {
+						fadeOutMessage();
+						if (response !== true) {
+							alert(response);
+							return;
+						}
+						else {
+							MemberOvertime.submitEvent();
+						}
+					});
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+			return false;
+		},
+		processAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var requestIds = "";
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to process all?', function () {
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".hr-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+					}
 
-                    CommandOvertime.checkInvalidOvertime(requestIds);
-                    if (CommandOvertime.isInvalid) {
-                        confirm('There are some overtimes are invalid. Are you sure you want to process?', function () {
-                            $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds }, function (response) {
-                                fadeOutMessage();
-                                if (response != true) {
-                                    alert(response);
-                                    return;
-                                }
-                                else {
-                                    MemberOvertime.submitEvent();
-                                }
-                            });
-                        });
-                    }
-                    else {
-                        $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds }, function (response) {
-                            fadeOutMessage();
-                            if (response != true) {
-                                alert(response);
-                                return;
-                            }
-                            else {
-                                MemberOvertime.submitEvent();
-                            }
-                        });
-                    }
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
 
-            return false;
-        },
-        voidAllRequest: function () {
-            var objectSelected = $("input[type='checkbox'].chkSelect:checked");
-            var requestIds = "";
-            if (objectSelected.length > 0) {
-                confirm('Are you sure you want to void all?', function () {
-                    for (var i = 0; i < objectSelected.length; i++) {
-                        if ($(objectSelected[i]).parent().parent().find(".hr-pending").length > 0) {
-                            requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
-                        }
-                    }
+					CommandOvertime.checkInvalidOvertime(requestIds);
+					if (CommandOvertime.isInvalid) {
+						confirm('There are some overtimes are invalid. Are you sure you want to process?', function () {
+							$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
+								function (response) {
+									fadeOutMessage();
+									if (response !== true) {
+										alert(response);
+										return;
+									}
+									else {
+										MemberOvertime.submitEvent();
+									}
+								});
+						});
+					}
+					else {
+						$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
+							function (response) {
+								fadeOutMessage();
+								if (response !== true) {
+									alert(response);
+									return;
+								}
+								else {
+									MemberOvertime.submitEvent();
+								}
+							});
+					}
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
 
-                    if (requestIds.length > 0) {
-                        requestIds = requestIds.substring(0, requestIds.length - 1);
-                    }
+			return false;
+		},
+		voidAllRequest: function () {
+			var objectSelected = $("input[type='checkbox'].chkSelect:checked");
+			var requestIds = "";
+			if (objectSelected.length > 0) {
+				confirm('Are you sure you want to void all?', function () {
+					for (var i = 0; i < objectSelected.length; i++) {
+						if ($(objectSelected[i]).parent().parent().find(".hr-pending").length > 0) {
+							requestIds += $(objectSelected[i]).attr("data-requestId") + ",";
+						}
+					}
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_VOID, requestIds: requestIds }, function (response) {
-                        fadeOutMessage();
-                        if (response != true) {
-                            alert(response);
-                            return;
-                        }
-                        else {
-                            MemberOvertime.submitEvent();
-                        }
-                    });
-                });
-            }
-            else {
-                alert('Please choose at least one request to continue!');
-            }
-            return false;
-        }
-    };
-} (jQuery);
+					if (requestIds.length > 0) {
+						requestIds = requestIds.substring(0, requestIds.length - 1);
+					}
+
+					$.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_VOID, requestIds: requestIds },
+						function (response) {
+							fadeOutMessage();
+							if (response !== true) {
+								alert(response);
+								return;
+							}
+							else {
+								MemberOvertime.submitEvent();
+							}
+						});
+				});
+			}
+			else {
+				alert('Please choose at least one request to continue!');
+			}
+			return false;
+		}
+	};
+} (jQuery));
 
 $(document).ready(function () {
     OvertimeMemberDetail.init();

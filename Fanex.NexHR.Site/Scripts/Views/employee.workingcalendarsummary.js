@@ -29,8 +29,8 @@ function exportExcel() {
 		var group = $("#group").val() != null ? $("#group").val().join() : "";
 		var title = $("#title").val() != null ? $("#title").val().join() : "";
 
-		url = _global.root + "report/WorkingCalendarSummary?fromDate=" + fromDate + "&toDate=" + toDate + "&teamIds=" + group
-		+ "&jobTitleId=" + title + "&employeeId=" + employeeId + "&isLocal=" + isLocal + "&isExcel=" + true;
+		url = _global.root + "report/WorkingCalendarSummary?fromDate=" + fromDate + "&toDate=" + toDate + "&teamIds=" + group + 
+			"&jobTitleId=" + title + "&employeeId=" + employeeId + "&isLocal=" + isLocal + "&isExcel=" + true;
 		location.href = url;
 	}
 }

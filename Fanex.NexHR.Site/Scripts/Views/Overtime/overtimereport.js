@@ -1,101 +1,18 @@
-﻿$(document).ready(function () {
+﻿'use strict';
+/*global _global*/
 
-	$("#OTSummary").toggleClass("active");
-
-	//getYearlyReportDetails
-	getYearlyReportDetails();
-
-	$('#group').multiselect();
-	//submit form
-	$("#submit").click(function () {
-		getYearlyReportDetails();
-	});
-
-	$("#excel").click(function () {
-		var employee = $('#Employee').val();
-		var empId = $("#EmpId").val();
-		var team = $("#group").val() != null ? $("#group").val().join() : "";
-		var year = $("#Year").val();
-		var calendarType = $("#calendar").val();
-		if (employee == null || employee == "") {
-			empId = "";
-		}
-
-		var url = _global.root + "export/YearlyOvertimeReport?year=" + year + "&team=" + team
-                               + "&empId=" + empId + "&calendar=" + calendarType;
-		location.href = url;
-	});
-
-	//autocomplete
-	$("#Employee").autocomplete({
-		source: function (request, response) {
-			$.ajax({
-				url: _global.root + 'api/employee/getemployees',
-				data: {
-					query: request.term
-				},
-				success: function (data) {
-					response($.map(data, function (item) {
-						return {
-							label: item.NickName + ' (' + item.FullName + ')',
-							value: item.Id
-						}
-					}));
-				}
-			});
-		},
-		minLength: 1,
-		select: function (event, ui) {
-			nickName = ui.item.label;
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item.value);
-		},
-		focus: function (event, ui) {
-			nickName = ui.item.label;
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item != null ? ui.item.value : "");
-			event.preventDefault();
-		},
-		change: function (event, ui) {
-			nickName = ui.item != null ? ui.item.label : "";
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item != null ? ui.item.value : "");
-		},
-		close: function () {
-			$('#Employee').val(nickName);
+var nickName = '';
+function calculateTotalOTHours(selector) {
+	var sumResult = 0;
+	selector.each(function () {
+		var value = $(this).text().trim();
+		if (value !== "") {
+			if (!isNaN(value) && value.lenght !== 0) {
+				sumResult += parseFloat(value);
+			}
 		}
 	});
-
-	//requestToCalculateOTHours();
-
-});
-
-function getYearlyReportDetails() {
-	var employee = $('#Employee').val();
-	var empId = $("#EmpId").val();
-	var team = $("#group").val() != null ? $("#group").val().join() : "";
-	var year = $("#Year").val();
-	var calendarType = $("#calendar").val();
-	if (employee == null || employee == "") {
-		empId = "";
-	}
-	var reportDetails = $("#yearlyReportDetails");
-	var params = {
-		"empId": empId,
-		"team": team,
-		"year": year,
-		"calendar": calendarType
-	};
-
-	$.ajax({
-		url: _global.root + "overtime/GetYearlyOvertimeReport",
-		data: params,
-		async: false
-	}).done(function (response) {
-		reportDetails.empty();
-		reportDetails.html(response);
-	});
-	requestToCalculateOTHours();
+	return sumResult;
 }
 
 function requestToCalculateOTHours() {
@@ -152,17 +69,100 @@ function requestToCalculateOTHours() {
 	$("#sumdec").text(sumDec.toFixed(2));
 }
 
-function calculateTotalOTHours(selector) {
-	var sumResult = 0;
-	selector.each(function () {
-		var value = $(this).text().trim();
-		if (value != "") {
-			if (!isNaN(value) && value.lenght != 0) {
-				sumResult += parseFloat(value);
-			}
-		}
+function getYearlyReportDetails() {
+	var employee = $('#Employee').val();
+	var empId = $("#EmpId").val();
+	var team = $("#group").val() != null ? $("#group").val().join() : "";
+	var year = $("#Year").val();
+	var calendarType = $("#calendar").val();
+	if (employee == null || employee === "") {
+		empId = "";
+	}
+	var reportDetails = $("#yearlyReportDetails");
+	var params = {
+		"empId": empId,
+		"team": team,
+		"year": year,
+		"calendar": calendarType
+	};
+
+	$.ajax({
+		url: _global.root + "overtime/GetYearlyOvertimeReport",
+		data: params,
+		async: false
+	}).done(function (response) {
+		reportDetails.empty();
+		reportDetails.html(response);
 	});
-	return sumResult;
+	requestToCalculateOTHours();
 }
 
 
+
+$(document).ready(function () {
+
+	$("#OTSummary").toggleClass("active");
+	//getYearlyReportDetails
+	getYearlyReportDetails();
+
+	$('#group').multiselect();
+	//submit form
+	$("#submit").click(function () {
+		getYearlyReportDetails();
+	});
+
+	$("#excel").click(function () {
+		var employee = $('#Employee').val();
+		var empId = $("#EmpId").val();
+		var team = $("#group").val() != null ? $("#group").val().join() : "";
+		var year = $("#Year").val();
+		var calendarType = $("#calendar").val();
+		if (employee == null || employee === "") {
+			empId = "";
+		}
+
+		var url = _global.root + "export/YearlyOvertimeReport?year=" + year + "&team=" + team + 
+		"&empId=" + empId + "&calendar=" + calendarType;
+		location.href = url;
+	});
+
+	//autocomplete
+	$("#Employee").autocomplete({
+		source: function (request, response) {
+			$.ajax({
+				url: _global.root + 'api/employee/getemployees',
+				data: {
+					query: request.term
+				},
+				success: function (data) {
+					response($.map(data, function (item) {
+						return {
+							label: item.NickName + ' (' + item.FullName + ')',
+							value: item.Id
+						};
+					}));
+				}
+			});
+		},
+		minLength: 1,
+		select: function (event, ui) {
+			nickName = ui.item.label;
+			$('#Employee').val(nickName);
+			$('#EmpId').val(ui.item.value);
+		},
+		focus: function (event, ui) {
+			nickName = ui.item.label;
+			$('#Employee').val(nickName);
+			$('#EmpId').val(ui.item != null ? ui.item.value : "");
+			event.preventDefault();
+		},
+		change: function (event, ui) {
+			nickName = ui.item != null ? ui.item.label : "";
+			$('#Employee').val(nickName);
+			$('#EmpId').val(ui.item != null ? ui.item.value : "");
+		},
+		close: function () {
+			$('#Employee').val(nickName);
+		}
+	});
+});
