@@ -34,7 +34,7 @@ namespace Fanex.NexHR.ViewModels.Calendar
 
         public List<string> WorkingDays { get; set; }
 
-        public List<WorkingScheduleModel> WorkingSchedule { get; set; }
+        public List<WorkingScheduleViewModel> WorkingSchedule { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime FromDate { get; set; }

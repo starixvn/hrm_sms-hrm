@@ -29,13 +29,6 @@
 		</div>
 		<div class="grid_1 gridlabel">@Labels.Title</div>
 		<div class="grid_5">
-			@*  <select id="title" class="title-select">
-                <option value="">@Labels.AllTitles</option>
-                @foreach (Fanex.NexHR.Models.LookupData item in ViewBag.JobTitles)
-                { 
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>*@
 			@Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, Labels.AllTitles, new { @class = "title-select" })
 		</div>
 	</div>
@@ -90,7 +83,7 @@
 </div>
 <div class="clear">
 </div>
-<table id="userdata">
+<table id="userdata" class="data">
 	<thead>
 		<tr>
 			<th>
@@ -131,10 +124,6 @@
 	<tbody>
 	</tbody>
 </table>
-@*    <div id="blocker">
-        <div>
-            Loading ...</div>
-    </div>*@
 <div style="clear: both">
 </div>
 <input type="hidden" id="jobtitleid" value="@ViewBag.JobTitleId" />
@@ -179,5 +168,4 @@
             {{/if}}
         </td>
     </tr>
-    
 </script>

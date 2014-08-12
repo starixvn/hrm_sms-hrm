@@ -39,7 +39,7 @@
         </div>
         <div class="grid_6">
             <select id="group" multiple="multiple" class="team-select">
-                @foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+                @foreach (Team item in ViewBag.Groups)
                 { 
                     <option value="@item.Id">@item.Name</option>
                 }

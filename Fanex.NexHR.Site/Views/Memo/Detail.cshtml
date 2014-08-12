@@ -1,6 +1,6 @@
-﻿@model Fanex.NexHR.Models.Memo
-@using Fanex.NexHR.Core;
-@{        
+﻿@using Fanex.NexHR.Core;
+@model Memo
+@{
     var memoSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = memoSubject + " - " + Labels.Memo;    
 }
@@ -82,7 +82,6 @@
             </tr>
         </tbody>
     </table> 
-    @*<a href="@Url.Action("index")" class="button">@Labels.Back</a>*@
     <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
 }
 else

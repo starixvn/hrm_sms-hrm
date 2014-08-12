@@ -1,4 +1,5 @@
-﻿@model List<RequestsMonitoring>
+﻿@using Fanex.NexHR.ViewModels.Request
+@model List<RequestsMonitoring>
 <table class="data persist-area" id="HrRequestTable">
 	<thead>
 		<tr class="persist-header">
@@ -34,7 +35,7 @@
 	  int index = 1;
 	  var requestModel = new RequestViewModel();
 
-	  foreach (Fanex.NexHR.Models.RequestsMonitoring request in Model)
+	  foreach (RequestsMonitoring request in Model)
 	  {
 
 		  requestModel = new RequestViewModel

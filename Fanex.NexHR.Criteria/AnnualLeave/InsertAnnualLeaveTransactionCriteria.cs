@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Criteria.AnnualLeave
     {
         public int EmpId { get; set; }
 
-        public int RequestId { get; set; }
+        public int? RequestId { get; set; }
 
         public string Description { get; set; }
 

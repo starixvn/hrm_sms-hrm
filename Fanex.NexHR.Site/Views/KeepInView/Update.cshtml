@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.KeepInViewRequestViewModel
+﻿@using Fanex.NexHR.ViewModels.Request
+@model KeepInViewRequestViewModel
 @using System.Web.Mvc.Html5;
 @{
     ViewBag.Title = "Update My KIV Request";
@@ -22,7 +23,7 @@
 
         if ((bool)ViewBag.Updated)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
+        <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
         <input type="hidden" id="year" value="@ViewBag.Year" />
         }
@@ -143,7 +144,6 @@
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Update"/>
-                @*<a href="@Url.Action("employeeview", "keepinview")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

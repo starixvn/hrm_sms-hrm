@@ -101,10 +101,10 @@ namespace Fanex.NexHR.Services
             return shiftStatisticModels;
         }
 
-        public IList<WorkingScheduleModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
+        public IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<WorkingScheduleModel> workingSchedule = null;
+            IList<WorkingScheduleViewModel> workingSchedule = null;
             if (criteria.IsValid())
             {
                 workingSchedule = this._workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);

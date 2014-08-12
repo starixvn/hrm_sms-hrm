@@ -48,7 +48,9 @@
     <Setting Key="Report_EmployeeDashBoard" SpName="Report_EmployeeDashBoard" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_HRLeaderDashBoard" SpName="Report_HRLeaderDashBoard" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id"/>
+    </Setting>
     <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByMonth" SpName="Report_EmployeeCalendarByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>

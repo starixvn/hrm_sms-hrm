@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, ScheduleArrange*/
+/*global _global, ScheduleArrangeCommon, ScheduleArrange*/
 
 var ScheduleArrangeDetail = (function ($) {
 	return {
@@ -22,13 +22,15 @@ var ScheduleArrangeDetail = (function ($) {
 		chkAllSaturday: null,
 		chkAllSunday: null,
 		currentShiftDate: null,
-		hasChangeValue: null,
 		allShifts: null,
 		lnkSort: null,
 		lnkSave: null,
+		messageComfirm: null,
 
 		init: function () {
-			ScheduleArrangeDetail.hasChangeValue = false;
+			ScheduleArrangeDetail.messageComfirm = "Are you sure to refresh the screen based on your filter condition? " +
+				"Data you have entered may not be saved." +
+				" </br></br>  Click OK to proceed or Cancel to come back and save first";
 			ScheduleArrangeDetail.previous = $(".lnkPrevious");
 			ScheduleArrangeDetail.next = $(".lnkNext");
 			ScheduleArrangeDetail.previousFromDate = $("#PreviousFromDate");
@@ -50,9 +52,7 @@ var ScheduleArrangeDetail = (function ($) {
 			ScheduleArrangeDetail.lnkSort = $(".lnkSort");
 			ScheduleArrangeDetail.lnkSave = $(".lnkSave");
 
-			window.onbeforeunload = ScheduleArrangeDetail.confirmExit;
-			//ScheduleArrangeDetail.shiftAutocomplete();
-			//ScheduleArrangeDetail.shiftAutocomplete($(".shift").first());
+			window.onbeforeunload = ScheduleArrangeCommon.confirmExit;
 
 			$(".shift").on("focus", function () {
 				var $this = $(this);
@@ -72,7 +72,6 @@ var ScheduleArrangeDetail = (function ($) {
 			});
 
 			ScheduleArrangeDetail.lnkSort.on("click", function () {
-				//                location.href = _global.root + "Calendar/MemberScheduleInOrder";
 				var url = _global.root + "Calendar/MemberScheduleInOrder";
 				$.get(url, function (data) {
 					$('#dialogSortcontent').html(data);
@@ -97,7 +96,7 @@ var ScheduleArrangeDetail = (function ($) {
 
 					var trObject = objectSelected.parent().parent();
 					ScheduleArrangeDetail.checkWarningRow(trObject);
-					ScheduleArrangeDetail.hasChangeValue = true;
+					ScheduleArrangeCommon.hasChangeValue = true;
 				}
 				else {
 					alert('Please choose at least one day to off!');
@@ -117,7 +116,7 @@ var ScheduleArrangeDetail = (function ($) {
 					if (ScheduleArrangeDetail.allShifts[i].Code.toLowerCase() === $.trim(object.val().toLowerCase())) {
 						shiftId = ScheduleArrangeDetail.allShifts[i].Id;
 						shiftCode = ScheduleArrangeDetail.allShifts[i].Code;
-						if (ScheduleArrangeDetail.allShifts[i].Id === "-1") {
+						if (ScheduleArrangeDetail.allShifts[i].Id === -1) {
 							isOffDay = true;
 						}
 
@@ -164,80 +163,12 @@ var ScheduleArrangeDetail = (function ($) {
 
 			$(".lnkSaveRow").on("click", function () {
 				var trObject = $(this).parent().parent();
-				var scheduleArranges = [];
-				var shiftMultiples = [];
-				var employeeId = "";
-				var workDate = "";
-				var shiftId = "";
-				var isOffDay = false;
-				var isHoliday = false;
-				var isPublic = false;
-				var shiftMultipleId = "";
-
-				employeeId = $("td.tdemployee", trObject).first().attr("data-employeeid");
-
-				if (employeeId !== "undefined" && employeeId > 0) {
-					var tdObjects = $("td.shiftdate", trObject);
-					isPublic = $("input[type='checkbox'].chkIsPublic", trObject).attr("checked") === "checked";
-					shiftMultipleId = $("input[type='text'].multipleShift", trObject).first().attr("data-shiftid");
-					workDate = $("input[type='text'].multipleShift", trObject).first().attr("data-date");
-
-					// for shift multiple
-					shiftMultiples.push({
-						EmployeeId: employeeId,
-						ForDate: workDate,
-						ShiftId: shiftMultipleId
-					});
-
-					// for schedule arrange
-					for (var j = 0; j < tdObjects.length; j++) {
-						workDate = $("input[type='text'].shift", tdObjects[j]).first().attr("data-date");
-						shiftId = $("input[type='text'].shift", tdObjects[j]).first().attr("data-shiftid");
-						isOffDay = $("input[type='text'].shift", tdObjects[j]).first().hasClass("offday");
-						isHoliday = $("input[type='text'].shift", tdObjects[j]).first().hasClass("holiday");
-
-						if (shiftId === "undefined" || shiftId === "-1") {
-							shiftId = "";
-						}
-
-						if (isHoliday) {
-							isOffDay = false;
-						}
-
-						if (workDate !== "undefined" && Date.parse(workDate)) {
-							scheduleArranges.push({
-								EmployeeId: employeeId,
-								WorkDate: workDate,
-								ShiftId: shiftId,
-								IsHoliday: isHoliday,
-								IsOffDay: isOffDay,
-								IsPublic: isPublic
-							});
-						}
-					}
-
-					$.ajax({
-						type: 'POST',
-						dataType: "json",
-						url: '/Calendar/ArrangeSchedule',
-						data: { scheduleArranges: JSON.stringify(scheduleArranges), shiftMultiples: JSON.stringify(shiftMultiples) },
-						success: function (response) {
-							if (response.errorCode === 0) {
-								ScheduleArrangeDetail.showSuccessMsgInRow();
-							}
-							else {
-								ScheduleArrangeDetail.showErrorMsgInRow(response.message);
-							}
-						}
-					});
-				}
-
-				return false;
+				ScheduleArrangeDetail.saveRow(trObject);
 			});
 
 			ScheduleArrangeDetail.previous.on("click", function () {
-				if (ScheduleArrangeDetail.hasChangeValue) {
-					confirm(ScheduleArrange.messageComfirm, function () {
+				if (ScheduleArrangeCommon.hasChangeValue) {
+					confirm(ScheduleArrangeDetail.messageComfirm, function () {
 						ScheduleArrangeDetail.queryPreviousAction();
 					});
 				}
@@ -247,8 +178,8 @@ var ScheduleArrangeDetail = (function ($) {
 			});
 
 			ScheduleArrangeDetail.next.on("click", function () {
-				if (ScheduleArrangeDetail.hasChangeValue) {
-					confirm(ScheduleArrange.messageComfirm, function () {
+				if (ScheduleArrangeCommon.hasChangeValue) {
+					confirm(ScheduleArrangeDetail.messageComfirm, function () {
 						ScheduleArrangeDetail.queryNextAction();
 					});
 				}
@@ -286,7 +217,7 @@ var ScheduleArrangeDetail = (function ($) {
 
 						var trObject = objectSelected.parent().parent();
 						ScheduleArrangeDetail.checkWarningRow(trObject);
-						ScheduleArrangeDetail.hasChangeValue = true;
+						ScheduleArrangeCommon.hasChangeValue = true;
 						$(this).dialog("close");
 					},
 					Cancel: function () {
@@ -311,11 +242,10 @@ var ScheduleArrangeDetail = (function ($) {
 						var inputObject = ScheduleArrangeDetail.currentShiftDate.parent().prev().find("input[type='text']");
 						if (shiftId !== "undefined" && shiftCode.length > 0) {
 							ScheduleArrangeDetail.currentShiftDate.attr("title", shiftCode).addClass("tooltip");
-							// ScheduleArrangeDetail.currentShiftDate.val(ScheduleArrangeDetail.currentShiftDate.val() + " / " + shiftCode);
 							inputObject.attr("data-shiftid", shiftId);
 						}
 
-						ScheduleArrangeDetail.hasChangeValue = true;
+						ScheduleArrangeCommon.hasChangeValue = true;
 						$(this).dialog("close");
 					},
 					Cancel: function () {
@@ -354,14 +284,14 @@ var ScheduleArrangeDetail = (function ($) {
 
 			$(".lnkUnCheckAll").on("click", function () {
 				$("input[type='checkbox']:not(.chkIsPublic)").removeAttr("checked");
-				ScheduleArrangeDetail.hasChangeValue = true;
+				ScheduleArrangeCommon.hasChangeValue = true;
 
 				return false;
 			});
 
 			$(".lnkCheckAll").on("click", function () {
 				$("input[type='checkbox']:not(.chkIsPublic)").attr("checked", true);
-				ScheduleArrangeDetail.hasChangeValue = true;
+				ScheduleArrangeCommon.hasChangeValue = true;
 
 				return false;
 			});
@@ -378,7 +308,7 @@ var ScheduleArrangeDetail = (function ($) {
 
 					var trObject = objectSelected.parent().parent();
 					ScheduleArrangeDetail.checkWarningRow(trObject);
-					ScheduleArrangeDetail.hasChangeValue = true;
+					ScheduleArrangeCommon.hasChangeValue = true;
 				}
 				else {
 					alert('Please choose at least one day to off!');
@@ -399,7 +329,7 @@ var ScheduleArrangeDetail = (function ($) {
 
 					var trObject = objectSelected.parent().parent();
 					ScheduleArrangeDetail.checkWarningRow(trObject);
-					ScheduleArrangeDetail.hasChangeValue = true;
+					ScheduleArrangeCommon.hasChangeValue = true;
 				}
 				else {
 					alert('Please choose at least one day to work!');
@@ -419,7 +349,7 @@ var ScheduleArrangeDetail = (function ($) {
 					inputShifts.attr("data-shiftid", shiftId);
 					inputShifts.removeClass("offday");
 
-					ScheduleArrangeDetail.hasChangeValue = true;
+					ScheduleArrangeCommon.hasChangeValue = true;
 				}
 
 				return false;
@@ -605,13 +535,14 @@ var ScheduleArrangeDetail = (function ($) {
 					isShowOff: true
 				},
 				success: function (data) {
+					console.log(data);
 					ScheduleArrangeDetail.allShifts = data;
 				}
 			});
 		},
 		queryNextAction: function () {
-			ScheduleArrange.fromDate.val(ScheduleArrangeDetail.nextFromDate.val());
-			ScheduleArrange.toDate.val(ScheduleArrangeDetail.nextToDate.val());
+			$("#FromDate").val(ScheduleArrangeDetail.nextFromDate.val());
+			$("#ToDate").val(ScheduleArrangeDetail.nextToDate.val());
 
 			var groups = ScheduleArrangeDetail.groupId.val();
 			var groupIds = groups != null ? groups.join() : "";
@@ -622,8 +553,8 @@ var ScheduleArrangeDetail = (function ($) {
                         ScheduleArrangeDetail.nextToDate.val(), ScheduleArrangeDetail.employeeId.val(), groupIds, jobTitles);
 		},
 		queryPreviousAction: function () {
-			ScheduleArrange.fromDate.val(ScheduleArrangeDetail.previousFromDate.val());
-			ScheduleArrange.toDate.val(ScheduleArrangeDetail.previousToDate.val());
+			$("#FromDate").val(ScheduleArrangeDetail.previousFromDate.val());
+			$("#ToDate").val(ScheduleArrangeDetail.previousToDate.val());
 
 			var groups = ScheduleArrangeDetail.groupId.val();
 			var groupIds = groups != null ? groups.join() : "";
@@ -633,35 +564,56 @@ var ScheduleArrangeDetail = (function ($) {
 			ScheduleArrange.bindScheduleArrangeByDate(ScheduleArrangeDetail.previousFromDate.val(),
                         ScheduleArrangeDetail.previousToDate.val(), ScheduleArrangeDetail.employeeId.val(), groupIds, jobTitles);
 		},
-		saveArrangeSchedule: function () {
+		saveRow: function (trObject) {
 			var scheduleArranges = [];
 			var shiftMultiples = [];
 			var employeeId = "";
 			var workDate = "";
-			var shiftMultipleId = "";
+			var shiftId = "";
+			var isOffDay = false;
+			var isHoliday = false;
 			var isPublic = false;
-			var trObjects = $(".tabledata tbody tr");
-			var tdObjects = [];
-			if (trObjects.length > 0) {
-				for (var i = 0; i < trObjects.length; i++) {
-					employeeId = $("td.tdemployee", trObjects[i]).first().attr("data-employeeid");
-					// for schedule arrange
-					if (employeeId !== "undefined" && employeeId > 0) {
-						isPublic = $("input[type='checkbox'].chkIsPublic", trObjects[i]).attr("checked") === "checked";
-						shiftMultipleId = $("input[type='text'].multipleShift", trObjects[i]).first().attr("data-shiftid");
-						workDate = $("input[type='text'].multipleShift", trObjects[i]).first().attr("data-date");
+			var shiftMultipleId = "";
 
-						// for shift multiple
-						shiftMultiples.push({
+			employeeId = $("td.tdemployee", trObject).first().attr("data-employeeid");
+
+			if (employeeId !== "undefined" && employeeId > 0) {
+				var tdObjects = $("td.shiftdate", trObject);
+				isPublic = $("input[type='checkbox'].chkIsPublic", trObject).attr("checked") === "checked";
+				shiftMultipleId = $("input[type='text'].multipleShift", trObject).first().attr("data-shiftid");
+				workDate = $("input[type='text'].multipleShift", trObject).first().attr("data-date");
+
+				// for shift multiple
+				shiftMultiples.push({
+					EmployeeId: employeeId,
+					ForDate: workDate,
+					ShiftId: shiftMultipleId
+				});
+
+				// for schedule arrange
+				for (var j = 0; j < tdObjects.length; j++) {
+					workDate = $("input[type='text'].shift", tdObjects[j]).first().attr("data-date");
+					shiftId = $("input[type='text'].shift", tdObjects[j]).first().attr("data-shiftid");
+					isOffDay = $("input[type='text'].shift", tdObjects[j]).first().hasClass("offday");
+					isHoliday = $("input[type='text'].shift", tdObjects[j]).first().hasClass("holiday");
+
+					if (shiftId === "undefined" || shiftId === "-1") {
+						shiftId = "";
+					}
+
+					if (isHoliday) {
+						isOffDay = false;
+					}
+
+					if (workDate !== "undefined" && Date.parse(workDate)) {
+						scheduleArranges.push({
 							EmployeeId: employeeId,
-							ForDate: workDate,
-							ShiftId: shiftMultipleId.length === 0 ? 0 : shiftMultipleId
+							WorkDate: workDate,
+							ShiftId: shiftId,
+							IsHoliday: isHoliday,
+							IsOffDay: isOffDay,
+							IsPublic: isPublic
 						});
-
-						tdObjects = $("td.shiftdate", trObjects[i]);
-						for (var j = 0; j < tdObjects.length; j++) {
-							ScheduleArrangeDetail.pushToScheduleArrange(scheduleArranges, tdObjects[j], employeeId, workDate, isPublic);
-						}
 					}
 				}
 
@@ -672,35 +624,16 @@ var ScheduleArrangeDetail = (function ($) {
 					data: { scheduleArranges: JSON.stringify(scheduleArranges), shiftMultiples: JSON.stringify(shiftMultiples) },
 					success: function (response) {
 						if (response.errorCode === 0) {
-							ScheduleArrangeDetail.showSuccessMsg();
-							ScheduleArrangeDetail.hasChangeValue = false;
+							ScheduleArrangeCommon.showSuccessMsgInRow();
 						}
 						else {
-							ScheduleArrangeDetail.showErrorMsg(response.message);
+							ScheduleArrangeCommon.showErrorMsgInRow(response.message);
 						}
 					}
 				});
 			}
-		},
-		pushToScheduleArrange: function (scheduleArranges, tdObject, employeeId, WorkDate, isPublic) {
-			var workDate = $("input[type='text'].shift", tdObject).first().attr("data-date");
-			var shiftId = $("input[type='text'].shift", tdObject).first().attr("data-shiftid");
-			var isOffDay = $("input[type='text'].shift", tdObject).first().hasClass("offday");
-			var isHoliday = $("input[type='text'].shift", tdObject).first().hasClass("holiday");
 
-			shiftId = (shiftId === "undefined" || shiftId === "-1") ? "" : shiftId;
-			isOffDay = isHoliday ? false : isOffDay;
-
-			if (workDate !== "undefined" && Date.parse(workDate)) {
-				scheduleArranges.push({
-					EmployeeId: employeeId,
-					WorkDate: workDate,
-					ShiftId: shiftId,
-					IsHoliday: isHoliday,
-					IsOffDay: isOffDay,
-					IsPublic: isPublic
-				});
-			}
+			return false;
 		},
 		shiftAutocomplete: function (evt) {
 			var shiftCode = "";
@@ -727,7 +660,7 @@ var ScheduleArrangeDetail = (function ($) {
 					shiftCode = ui.item.label;
 					$(this).val(shiftCode);
 					$(this).attr("data-shiftid", ui.item.value);
-					ScheduleArrangeDetail.hasChangeValue = true;
+					ScheduleArrangeCommon.hasChangeValue = true;
 
 					return false;
 				},
@@ -742,39 +675,6 @@ var ScheduleArrangeDetail = (function ($) {
 					return false;
 				}
 			});
-		},
-		showSuccessMsg: function () {
-			$(".summary").show();
-			$(".success").show();
-			$(".validation-summary-errors").hide();
-
-			setTimeout(function () {
-				$(".summary").hide();
-			}, 4000);
-
-			alert('Saved Successfull!\nPress OK to continue');
-		},
-		showErrorMsg: function (message) {
-			$(".summary").show();
-			$(".success").hide();
-			$(".validation-summary-errors").show();
-
-			setTimeout(function () {
-				$(".summary").hide();
-			}, 4000);
-
-			alert(message + '\nPress OK to continue');
-		},
-		showSuccessMsgInRow: function () {
-			alert('Saved Successfull!\nPress OK to continue');
-		},
-		showErrorMsgInRow: function (message) {
-			alert(message + '\nPress OK to continue');
-		},
-		confirmExit: function () {
-			if (ScheduleArrangeDetail.hasChangeValue) {
-				return "You have unsaved changes on this page. If you leave this page, those changes will be lost.";
-			}
 		}
 	};
 } (jQuery));

@@ -1,5 +1,8 @@
-﻿@using Fanex.NexHR.Models.Request
+﻿@using Fanex.NexHR.Resources;
+@using Fanex.NexHR.Models.Overtime;
+@using Fanex.NexHR.ViewModels.Overtime;
 @using System.Configuration;
+
 @model OvertimeReportViewModel
 @{
     ViewBag.Title = Labels.MyOvertimeRequest;
@@ -40,7 +43,7 @@
         @Html.HiddenFor(model => model.EmpId)
     </div>
 
-    <input type="submit" name="submit" value="@Fanex.NexHR.Resources.Labels.Submit" class="button-primary button"/>
+    <input type="submit" name="submit" value="@Labels.Submit" class="button-primary button"/>
 
     <div class="clear">
     </div>
@@ -64,7 +67,7 @@
                 <th>@Labels.PublicHoliday
                 </th>
                 <th>
-                    Details
+                    @Labels.Details
                 </th>
                 <th>@Labels.Edit
                 </th>

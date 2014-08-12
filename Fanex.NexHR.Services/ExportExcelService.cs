@@ -389,15 +389,15 @@ namespace Fanex.NexHR.Services
                 row.Height = height;
 
                 row.GetCell(0).SetCellValue(index);
-                row.GetCell(1).SetCellValue(item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy"));
+                row.GetCell(1).SetCellValue(item.AttendanceDate.Value.ToDayOfWeekFormatedDate());
                 row.GetCell(2).SetCellValue(item.Code);
                 row.GetCell(3).SetCellValue(item.NickName);
                 row.GetCell(4).SetCellValue(item.FullName);
                 row.GetCell(5).SetCellValue(item.TeamCode);
                 row.GetCell(6).SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ?
-                    string.Empty : (item.ShiftCode + " (" + item.ExpectedInTime + "-" + item.ExpectedOutTime + ")"));
-                row.GetCell(7).SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToString("HH:mm") : string.Empty);
-                row.GetCell(8).SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToString("HH:mm") : string.Empty);
+                    string.Empty : item.ShiftCode);
+                row.GetCell(7).SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToShortTime() : string.Empty);
+                row.GetCell(8).SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToShortTime() : string.Empty);
                 row.GetCell(9).SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
                 row.GetCell(10).SetCellValue(Utilities.MinuteToTime(item.LateIn));
                 row.GetCell(11).SetCellValue(Utilities.MinuteToTime(item.EarlyOut));
@@ -901,18 +901,18 @@ namespace Fanex.NexHR.Services
                 row.GetCell(2).SetCellValue(item.FullName);
                 row.GetCell(3).SetCellValue(item.NickName);
 
-                row.GetCell(4).SetCellValue(item.Jan);
-                row.GetCell(5).SetCellValue(item.Feb);
-                row.GetCell(6).SetCellValue(item.Mar);
-                row.GetCell(7).SetCellValue(item.Apr);
-                row.GetCell(8).SetCellValue(item.May);
-                row.GetCell(9).SetCellValue(item.Jun);
-                row.GetCell(10).SetCellValue(item.Jul);
-                row.GetCell(11).SetCellValue(item.Aug);
-                row.GetCell(12).SetCellValue(item.Sep);
-                row.GetCell(13).SetCellValue(item.Oct);
-                row.GetCell(14).SetCellValue(item.Nov);
-                row.GetCell(15).SetCellValue(item.Dec);
+                row.GetCell(4).SetCellValue(item.Jan == 0 ? string.Empty : item.Jan.ToString());
+                row.GetCell(5).SetCellValue(item.Feb == 0 ? string.Empty : item.Feb.ToString());
+                row.GetCell(6).SetCellValue(item.Mar == 0 ? string.Empty : item.Mar.ToString());
+                row.GetCell(7).SetCellValue(item.Apr == 0 ? string.Empty : item.Apr.ToString());
+                row.GetCell(8).SetCellValue(item.May == 0 ? string.Empty : item.May.ToString());
+                row.GetCell(9).SetCellValue(item.Jun == 0 ? string.Empty : item.Jun.ToString());
+                row.GetCell(10).SetCellValue(item.Jul == 0 ? string.Empty : item.Jul.ToString());
+                row.GetCell(11).SetCellValue(item.Aug == 0 ? string.Empty : item.Aug.ToString());
+                row.GetCell(12).SetCellValue(item.Sep == 0 ? string.Empty : item.Sep.ToString());
+                row.GetCell(13).SetCellValue(item.Oct == 0 ? string.Empty : item.Oct.ToString());
+                row.GetCell(14).SetCellValue(item.Nov == 0 ? string.Empty : item.Nov.ToString());
+                row.GetCell(15).SetCellValue(item.Dec == 0 ? string.Empty : item.Dec.ToString());
 
                 totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jun + item.Aug + item.Sep
                     + item.Oct + item.Oct + item.Nov + item.Dec;

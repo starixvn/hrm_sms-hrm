@@ -1,5 +1,5 @@
 ﻿@using Fanex.NexHR.Core;
-@model Fanex.NexHR.ViewModels.TimesheetViewModel
+@model Fanex.NexHR.ViewModels.Report.TimesheetViewModel
 @{
     ViewBag.Title = "My timesheet";
 }
@@ -104,22 +104,18 @@
     </tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-    <tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
-        <td>${index()}</td>
+	{{if IsWeekend == true}}
+		<tr {{if IsNotWork != 0}}class="offdate weekend"{{else ShiftId }} class="weekend" {{else}} class="noshift weekend"{{/if}}>
+	{{else}}
+		<tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
+	{{/if}}
 
-		{{if IsWeekend == true}}
-            <td>
-                <a class="weekend" href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-                    ${jsonToDetailsDate(AttendanceDate)}
-                </a>
-            </td>
-        {{else}}
-            <td>
-                <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-                    ${jsonToDetailsDate(AttendanceDate)}
-                </a>
-            </td>
-        {{/if}}
+        <td>${index()}</td>
+		<td>
+            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+                ${jsonToDetailsDate(AttendanceDate)}
+            </a>
+        </td>
 
         <td title="${FullName}" class="tooltip">
             ${NickName}

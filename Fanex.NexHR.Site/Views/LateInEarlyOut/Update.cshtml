@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.LateInEarlyOutRequestViewModel
+﻿@using Fanex.NexHR.ViewModels.Request
+@model LateInEarlyOutRequestViewModel
 @using System.Web.Mvc.Html5;
 @{
     ViewBag.Title = "Update My Late In Early Out Request";
@@ -22,7 +23,7 @@
 
         if ((bool)ViewBag.Updated)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
+        <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
         <input type="hidden" id="year" value="@ViewBag.Year" />
         }

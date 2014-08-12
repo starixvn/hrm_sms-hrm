@@ -295,6 +295,7 @@ namespace Fanex.NexHR.Controllers
                 var criteria = new InsertAnnualLeaveTransactionCriteria()
                 {
                     EmpId = model.EmpId,
+                    RequestId = null,
                     Description = model.Description,
                     FromDate = model.AffectedFrom,
                     DeductDays = model.DeductDays,

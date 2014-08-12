@@ -1,8 +1,7 @@
-﻿@using Fanex.NexHR.Models.Request
+﻿@using Fanex.NexHR.Models.Overtime
 @model IList<OvertimeRequest>
 @using (Html.BeginForm())
 {
-    var isShowWarning = false; 
     <table class="data" id="data">
         <thead>
             <tr>
@@ -32,7 +31,6 @@
             {
                 foreach (OvertimeRequest request in Model)
                 {
-                    isShowWarning = false;
                 <tr id="row@(request.Id)">
                     @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
                     {

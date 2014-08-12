@@ -1,12 +1,8 @@
 ﻿@model Fanex.NexHR.Models.Holiday
 @using System.Web.Mvc.Html5;
-
-
 @{
     ViewBag.Title = Labels.Holiday;
 }
-
-
 @section css{
     @Url.CombresLink("holidayeditcss")
 }
@@ -31,9 +27,7 @@
     {
         <div class="success flash">Edited Successful!</div> 
     }
-    
         @Html.HiddenFor(model => model.Id)
-
 		<br />
         <div class="formrow">
 			<div class="label">
@@ -44,18 +38,6 @@
 					@Html.ValidationMessageFor(model => model.HolidayName)
 			</div>
 		</div>
-		
-        @*<div class="formrow" style="display:none">
-			<div class="label">
-					@Html.LabelFor(model => model.ActualFromDate)
-				</div>
-			<div class="input">
-                    @Html.DatePickerFor(model => model.ActualFromDate)
-					@Html.ValidationMessageFor(model => model.ActualFromDate)                   
-			</div>
-            @Html.HiddenFor(model => model.ActualToDate)
-		</div>*@
-		
         <div class="formrow">
 			<div class="label">
 					Date(s)
@@ -65,10 +47,8 @@
                         var numDay = (Model.ToDate- Model.FromDate).TotalDays + 1;    
                     }
                     <input type="number" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay">
-                    
             </div>
         </div>
-		
         <div class="formrow">
 			<div class="label">
 					@Html.LabelFor(model => model.FromDate)
@@ -83,7 +63,6 @@
                     @Html.LabelFor(model => model.ToDate)
             </div>
             <div class="input">
-                    
                     @Html.DatePickerFor(model => model.ToDate)
 					@Html.ValidationMessageFor(model => model.ToDate)
 			</div>

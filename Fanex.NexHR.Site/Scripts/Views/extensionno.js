@@ -41,7 +41,6 @@ $(document).ready(function () {
 
 });
 
-
 $(function () {
 	var name = $("#name"),
 			allFields = $([]).add(name),

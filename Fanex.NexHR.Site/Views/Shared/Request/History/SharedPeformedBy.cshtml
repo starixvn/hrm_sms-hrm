@@ -1,7 +1,8 @@
-﻿@model Fanex.NexHR.Models.Request.RequestEntity
+﻿@using Fanex.NexHR.Models.Request
+@model RequestEntity
 
 @{
-var request = (Fanex.NexHR.Models.Request.RequestEntity)Model;
+var request = (RequestEntity)Model;
 switch (request.Status.Id)
 {
     case (byte)CurrentRequestStatus.Pending:
@@ -30,7 +31,7 @@ switch (request.Status.Id)
         break;
     default:
      <td>
-    </td>   
+    </td>
         break;
 }
 }

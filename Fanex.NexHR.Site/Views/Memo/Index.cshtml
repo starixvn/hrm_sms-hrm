@@ -1,7 +1,5 @@
-﻿@*@model IList<Fanex.NexHR.Models.Memo>*@
-@model Fanex.NexHR.ViewModels.MemoViewModel
-@using Fanex.NexHR.Models
-@using Fanex.NexHR.Core;
+﻿@using Fanex.NexHR.ViewModels.Memo
+@model MemoViewModel
 @{
     ViewBag.Title = "Company Memo";
 }
@@ -26,7 +24,6 @@
             @Html.LabelFor(model => model.Year)
         </div>
         <div class="grid_3">
-            @*@Html.LabelFor(model=>model.Year)*@
             @Html.YearPickerFor(model => model.Year, 2010)
         </div>
         <div class="grid_2 formrow">

@@ -28,7 +28,7 @@
     {
         <tbody>
             @{int index = 1;}
-            @foreach (var request in Model)
+            @foreach (RequestEntity request in Model)
             {
                 var requestDate = request.IsHalfDay
                         ? (request.FromDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime.ToString("HH:mm") + " - " + request.ToTime.ToString("HH:mm") + ")")

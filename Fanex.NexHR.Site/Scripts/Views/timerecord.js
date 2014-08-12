@@ -45,7 +45,7 @@ var TimeRecord = (function ($) {
 			var params = {
 				"fromDate": TimeRecord.fromDate.val(),
 				"toDate": TimeRecord.toDate.val(),
-				"employeeId": ((employeeId === 0) ? null : employeeId),
+				"employeeId": ((employeeId === "0") ? null : employeeId),
 				"groupIds": groupIds,
 				"isLocal": isLocal
 			};

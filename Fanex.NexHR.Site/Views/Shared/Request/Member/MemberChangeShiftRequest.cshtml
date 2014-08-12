@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+﻿@using Fanex.NexHR.Models.Request
+@model IList<RequestEntity>
 
 <table class="data persist-area">
     <thead>
@@ -26,7 +27,7 @@
     {
         <tbody>
             @{int index = 1;}
-            @foreach (var request in Model)
+            @foreach (RequestEntity request in Model)
             {
                 var requestDetail = new { requestid = @request.Id, type = @request.RequestType.FilterRequestHistory };
                 

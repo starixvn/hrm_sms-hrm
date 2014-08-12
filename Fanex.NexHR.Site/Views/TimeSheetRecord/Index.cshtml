@@ -19,7 +19,7 @@
 
         if ((bool)ViewBag.Requested)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div>
+        <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />
         <input type="hidden" id="year" value="@ViewBag.Year" />
         }
@@ -49,7 +49,7 @@
         </div>
          <div class="formrow">
             <div class="label">
-                @Fanex.NexHR.Resources.Labels.RequestTime
+                @Labels.RequestTime
             </div>
             <div class="input">
            @* new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now*@

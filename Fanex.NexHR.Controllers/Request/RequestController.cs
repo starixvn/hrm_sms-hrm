@@ -267,6 +267,7 @@ namespace Fanex.NexHR.Controllers.Request
             };
             IList<RequestEntity> entityList = RequestService.GetHistoryRequest(criteria);
             ViewBag.EntityList = entityList;
+            ViewBag.requestType = type;
             return View();
         }
 
@@ -411,11 +412,16 @@ namespace Fanex.NexHR.Controllers.Request
             var getAllGroupCriteria = new GetAllGroupCriteria();
             request.TeamCollection = _teamService.GetAll(getAllGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
+            int? employeeId = null;
+            if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
+            {
+                employeeId = request.EmployeeId;
+            }
 
             bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                EmpId = request.EmployeeId,
+                EmpId = employeeId,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
                 GroupIds = request.TeamIds,

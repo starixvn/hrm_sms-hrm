@@ -1,4 +1,5 @@
-﻿@model AnnualLeaveBalanceMultiViewModel
+﻿@using Fanex.NexHR.ViewModels.AnnualLeave
+@model AnnualLeaveBalanceMultiViewModel
 @{
     ViewBag.Title = Labels.MultipleInsert;
 }
@@ -39,8 +40,8 @@
             @Html.HiddenFor(model => model.EmpIds)
         </div>
         <div class="input">
-            <input type="button" value="@Fanex.NexHR.Resources.Labels.Add" id="insert" />
-            <input type="button" value="@Fanex.NexHR.Resources.Labels.Cancel" id="cancel" />
+            <input type="button" value="@Labels.Add" id="insert" />
+            <input type="button" value="@Labels.Cancel" id="cancel" />
         </div>
     </div>
 }

@@ -28,9 +28,6 @@
             <td>Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></td>
         </tr>
     </table>
-    @*@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong>
-    <br />
-    Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong>*@
 </div>
 
 @using (Html.BeginForm())
@@ -41,9 +38,7 @@
     <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
     <div class="button-icon">
         <span class="icon plus"></span>@Html.ActionLink(Labels.LeaveRequest, "Create")</div>
-    
 }
-
     <table class="data" id="data">
         <thead>
             <tr>

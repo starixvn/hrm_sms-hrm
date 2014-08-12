@@ -1,10 +1,10 @@
-﻿@using Fanex.NexHR.Resources
-@model Fanex.NexHR.ViewModels.TotalWorkingHoursViewModel
+﻿@using Fanex.NexHR.ViewModels.Report
+@using Fanex.NexHR.ViewModels.Request
+@model TotalWorkingHoursViewModel
 
 @{
     ViewBag.Title = Labels.ReportWorkingHours;
 }
-
 @section css{
     @Url.CombresLink("totalworkinghourcss")
     @Url.CombresLink("managerequestscss")
@@ -45,14 +45,12 @@
             </select>
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
-
         <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.FromDate)
         </div>
         <div class="grid_6">
             @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
-
         <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.ToDate)
         </div>
@@ -61,7 +59,6 @@
         </div>
         <div class="clear"></div>
         <div class="space"></div>
-
         <div class="grid_2 gridlabel">
             <label for="IsLocal">Category</label>
         </div>
@@ -87,14 +84,9 @@
                                 selected = "selected";
                             }
                         }
-                        
                         <option @selected value="@team.Id">@team.Name</option> 
                     }
                 }
-                @*@foreach (Fanex.NexHR.Models.Team team in ViewBag.Groups)
-                { 
-                    <option selected="@(ViewBag.TeamId == team.Id)" value="@team.Id">@team.Name</option>
-                }*@
             </select>
         </div>
 
@@ -141,7 +133,7 @@
 {
     <tbody>
     @{int index = 1;}
-    @foreach (Fanex.NexHR.Models.TotalWorkingHours item in ViewBag.EntityList)
+    @foreach (TotalWorkingHours item in ViewBag.EntityList)
     {
         var requestModel = new RequestViewModel
         {
@@ -189,5 +181,3 @@ else
     @RazorHelper.DisplayNoInformation(colspan: 13);
 }
 </table>
-
-

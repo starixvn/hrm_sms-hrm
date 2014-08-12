@@ -1,4 +1,5 @@
-﻿@model AnnualLeaveBalanceModel
+﻿@using Fanex.NexHR.ViewModels.AnnualLeave
+@model AnnualLeaveBalanceModel
 @{
     ViewBag.Title = Labels.AdjustAnnualLeaveBalance;
 }
@@ -19,7 +20,7 @@
 <div class="bunhat" style="min-width: 400px">
     @Html.ValidationSummary(true)
 
-    @if ((bool)ViewBag.Inserted)
+    @if (ViewBag.Inserted != null && (bool)ViewBag.Inserted)
     {
     <div class="success">@Messages.AdjustSuccessfully</div> 
     }

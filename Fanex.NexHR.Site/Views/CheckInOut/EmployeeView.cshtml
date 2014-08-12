@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.Models.Request.RequestEntity>
+﻿@using Fanex.NexHR.Models.Request
+@model IList<RequestEntity>
 @{
     ViewBag.Title = Labels.MyCheckInOutRequests;
 }
@@ -44,7 +45,7 @@
             <tbody>
                 @{int index = 1;}
                 @{string selectedClass = string.Empty;}
-                @foreach (var request in Model)
+                @foreach (RequestEntity request in Model)
                 {
                     selectedClass = (index % 2 == 0) ? "class=odd" : string.Empty;
                         

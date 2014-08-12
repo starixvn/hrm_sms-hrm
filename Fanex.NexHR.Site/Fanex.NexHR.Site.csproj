@@ -330,6 +330,7 @@
     <Content Include="Images\warning.png" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
     <Content Include="Scripts\Views\employee.message.js" />
@@ -993,7 +994,6 @@
     <Content Include="Views\Leave\Update.cshtml" />
     <Content Include="Views\Employee\MySpace.cshtml" />
     <Content Include="Views\ChangeShift\Create.cshtml" />
-    <Content Include="Views\Team\Shift\Index.cshtml" />
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
     <Content Include="Views\ChangeShift\Update.cshtml" />
     <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
@@ -1096,7 +1096,6 @@
     <Content Include="Views\Overtime\ViewDetails.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
     <Content Include="Views\Overtime\Update.cshtml" />
-    <Content Include="Views\Shared\Request\History\ViewOvertimeRequestHistory.cshtml" />
     <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />
     <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
     <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />

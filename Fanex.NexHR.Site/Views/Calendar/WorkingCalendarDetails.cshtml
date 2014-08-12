@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.ViewModels.WorkingCalendarsViewModel>
+﻿@using Fanex.NexHR.ViewModels.Calendar
+@model IList<WorkingCalendarsViewModel>
 @section css{
     @Url.CombresLink("workingcalendarscss")
 }
@@ -50,14 +51,12 @@
                     </th>
                     }
                 }
-            </tr>                       
-                            
+            </tr>
         }
     </thead>
     <tbody>
         @{
             var leaves = string.Empty;
-            
         }
         @foreach (WorkingCalendarsViewModel employee in Model)
         {
@@ -94,7 +93,7 @@
                         }
 
                         if (arrLeaves.Count() > 1)
-                        {    
+                        {
                     <th class="leaveday leavehalfday2">
                         @leaves
                     </th>
@@ -169,7 +168,6 @@
                         {
                             leaves = leaves.Substring(0, leaves.Length - 1);
                         }
-                                        
                     <th class="leaveday leavehalfday2" title="@leaves">
                         @leaves
                     </th>

@@ -1,5 +1,5 @@
 ﻿@using Fanex.NexHR.Core;
-@model Fanex.NexHR.ViewModels.EmployeeAttendanceViewModel
+@model Fanex.NexHR.ViewModels.Report.EmployeeAttendanceViewModel
 @{
     ViewBag.Title = "Attendance report";
 }
@@ -206,7 +206,12 @@
     </tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-    <tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
+	{{if IsWeekend == true}}
+		<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row weekend" {{else}} class="weekend" {{/if}}>
+	{{else}}
+		<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
+	{{/if}}
+    
         <td>${index()}</td>
 
 		{{if IsWeekend == true}}

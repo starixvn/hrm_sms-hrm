@@ -66,7 +66,7 @@ namespace Fanex.NexHR.Controllers
             var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
             var countryName = _employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;
-
+            ViewBag.IsUpdated = false;
             this.DisplayDefaultValuesOfDropDownListsForPersonalInformation();
             this.DisplayShiftForPersonalInformation(workingCalendar);
 

@@ -120,8 +120,7 @@ namespace Fanex.NexHR.ViewModels.Report
             {
                 if (AttendanceDate != null)
                 {
-                    string date = AttendanceDate.Value.ToString("ddd");
-                    if (date == "Sat" || date == "Sun")
+                    if (AttendanceDate.Value.DayOfWeek == DayOfWeek.Sunday || AttendanceDate.Value.DayOfWeek == DayOfWeek.Saturday)
                     {
                         return true;
                     }

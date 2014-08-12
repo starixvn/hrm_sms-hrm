@@ -973,12 +973,12 @@ div.confirm div.inputRemark textarea
     font-weight: bold;
 }
 
-.weekend
+table.data tr.weekend
 {
-	color: #F7819F;
+	background-color: #F7819F;
 }
 
-<<<<<<< HEAD
+
 .td-warning
 {
     width: 16px;

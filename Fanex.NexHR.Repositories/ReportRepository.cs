@@ -297,7 +297,7 @@ namespace Fanex.NexHR.Repositories
         {
             var request = new EmployeeAttendanceRequest
             {
-                RequestType = new RequestTypeModel { Id = t.RequestType },
+                RequestType = new RequestTypeModel { Id = (short)t.RequestType },
                 FromDate = t.FromDate,
                 ToDate = t.ToDate,
                 FromTime = t.FromTime,

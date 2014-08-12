@@ -76,7 +76,6 @@ namespace Fanex.NexHR.Repositories
         /// </summary>
         /// <param name="criteria">GetRequest Criteria.</param>
         /// <returns>List of RequestEntity.</returns>
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
@@ -87,78 +86,6 @@ namespace Fanex.NexHR.Repositories
                     if (reader != null)
                     {
                         entityList = FillData(reader);
-                        ////while (reader.Read())
-                        ////{
-                        ////    var entity = new RequestEntity
-                        ////    {
-                        ////        Id = reader.ToInt("RequestId"),
-                        ////        CreatedDate = reader.ToDateTime("CreatedDate"),
-                        ////        Status = new RequestStatus { Id = reader.ToByte("Status") },
-                        ////        RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                        ////        TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
-                        ////        RequestedDate = reader.ToDateTime("RequestDate"),
-                        ////        IsWarning = reader.ToBool("IsWarning"),
-                        ////        Requester = new Employee
-                        ////        {
-                        ////            Id = reader.To<int>("RequesterID"),
-                        ////            NickName = reader.To<string>("Requester"),
-                        ////            FullName = reader.To<string>("FullNameRequester"),
-                        ////            Team = new Team
-                        ////            {
-                        ////                Name = reader.To<string>("Team"),
-                        ////                Code = reader.To<string>("TeamCode")
-                        ////            }
-                        ////        },
-                        ////        ModifiedBy = new Employee
-                        ////        {
-                        ////            Id = reader.To<int>("ModifiedByID"),
-                        ////            NickName = reader.To<string>("ModifiedBy"),
-                        ////            FullName = reader.To<string>("FullNameModified"),
-                        ////        },
-                        ////        VerifiedBy = new Employee
-                        ////        {
-                        ////            Id = reader.To<int>("VerifierID"),
-                        ////            NickName = reader.To<string>("VerifierBy"),
-                        ////            FullName = reader.To<string>("FullNameVerifierBy"),
-                        ////        },
-                        ////        ApprovedBy = new Employee
-                        ////        {
-                        ////            Id = reader.To<int>("ApproverId"),
-                        ////            NickName = reader.To<string>("ApproverBy"),
-                        ////            FullName = reader.To<string>("FullNameApproverBy"),
-                        ////        },
-                        ////        ProcessedBy = new Employee
-                        ////        {
-                        ////            Id = reader.To<int>("HrId"),
-                        ////            NickName = reader.To<string>("HrBy"),
-                        ////            FullName = reader.To<string>("FullNameHrBy"),
-                        ////        },
-                        ////        ModifiedDate = reader.ToDateTime("ModifiedDate"),
-                        ////        FromShift = new Shift { Name = reader.To<string>("FromShift") },
-                        ////        ToShift = new Shift { Name = reader.To<string>("ToShift") },
-                        ////        TotalMins = reader.ToInt("Time"),
-                        ////        FromDate = reader.ToDateTime("FromDate"),
-                        ////        ToDate = reader.ToDateTime("ToDate"),
-                        ////        FromTime = reader.ToDateTime("FromTime"),
-                        ////        ToTime = reader.ToDateTime("ToTime"),
-                        ////        TotalDays = reader.ToDecimal("TotalDays"),
-                        ////        IsHalfDay = reader.ToShort("RequestType") == 7 && reader.ToDouble("TotalDays") == 0.5,
-                        ////        LeaveType = new LeaveType
-                        ////        {
-                        ////            Id = reader.ToInt("LeaveTypeId"),
-                        ////            Name = reader.ToString("LeaveType")
-                        ////        },
-                        ////        Remark = reader.ToString("Remark"),
-                        ////        VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                        ////        ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                        ////        ProcessedStatus = reader.ToInt("HRStatus"),
-                        ////        ApprovedDate = reader.ToDateTime("ApprovedDate"),
-                        ////        VerifiedDate = reader.ToDateTime("VerifiedDate"),
-                        ////        ProcessedDate = reader.ToDateTime("HrDate"),
-                        ////        RefNO = reader.ToString("RefNo")
-                        ////    };
-                        ////    entityList.Add(entity);
-                        ////}
                     }
                 }
             }
@@ -234,13 +161,12 @@ namespace Fanex.NexHR.Repositories
                 FromDate = reader.ToDateTime("FromDate"),
                 ToDate = reader.ToDateTime("ToDate"),
                 TotalDays = reader.ToDecimal("TotalDays"),
-                IsHalfDay = reader.ToDouble("TotalDays") == 0.5 && reader.ToInt("LeaveType") != 0,
-                ////keep in view reader.ToBool("IsHalfDay") reader.ToShort("RequestType") == 7 && reader.ToDouble("TotalDays") == 0.5,
+                IsHalfDay = reader.ToBool("IsHalfDay"),
                 FromTime = reader.ToDateTime("FromTime"),
                 ToTime = reader.ToDateTime("ToTime"),
                 LeaveType = new LeaveType
                 {
-                    Id = reader.ToInt("LeaveType"),
+                    Id = reader.ToInt("LeaveTypeId"),
                     Name = reader.ToString("LeaveTypeName")
                 },
                 Remark = reader.ToString("Remark"),
@@ -249,50 +175,51 @@ namespace Fanex.NexHR.Repositories
                 RefNO = reader.ToString("RefNo"),
                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
-                ProcessedDate = reader.ToDateTime("HrDate"),
+                ProcessedDate = reader.ToDateTime("ProcessedDate"),
                 Requester = new Employee
                 {
                     Id = reader.ToInt("RequesterId"),
-                    NickName = reader.ToString("Requester"),
-                    FullName = reader.ToString("FullNameRequester"),
+                    NickName = reader.ToString("RequesterNickName"),
+                    FullName = reader.ToString("RequesterFullName"),
                     Team = new Team 
-                    { 
-                        Name = reader.ToString("Team"), 
-                        Code = reader.ToString("TeamCode") 
+                    {
+                        Id = reader.ToInt("GroupId"),
+                        Code = reader.ToString("GroupCode"),
+                        Name = reader.ToString("GroupName")
                     }
                 },
                 ModifiedBy = new Employee
                 {
-                    Id = reader.ToInt("ModifiedByID"),
-                    NickName = reader.ToString("ModifiedBy"),
-                    FullName = reader.ToString("FullNameModified")
+                    Id = reader.ToInt("ModifiedById"),
+                    NickName = reader.ToString("ModifiedByNickName"),
+                    FullName = reader.ToString("ModifiedByFullName")
                 },
                 VerifiedBy = new Employee
                 {
-                    Id = reader.ToInt("VerifierID"),
-                    NickName = reader.ToString("VerifierBy"),
-                    FullName = reader.ToString("FullNameVerifierBy"),
+                    Id = reader.ToInt("VerifierId"),
+                    NickName = reader.ToString("VerifierNickName"),
+                    FullName = reader.ToString("VerifierFullName"),
                 },
                 ApprovedBy = new Employee
                 {
-                    Id = reader.ToInt("ApproverID"),
-                    NickName = reader.ToString("ApproverBy"),
-                    FullName = reader.ToString("FullNameApproverBy"),
+                    Id = reader.ToInt("ApproverId"),
+                    NickName = reader.ToString("ApproverNickName"),
+                    FullName = reader.ToString("ApproverFullName"),
                 },
                 ProcessedBy = new Employee
                 {
-                    Id = reader.ToInt("HrId"),
-                    NickName = reader.ToString("HrBy"),
-                    FullName = reader.ToString("FullNameHrBy"),
+                    Id = reader.ToInt("ProcessedId"),
+                    NickName = reader.ToString("ProcessedNickName"),
+                    FullName = reader.ToString("ProcessedFullName"),
                 },
                 //// Late In, Early Out
                 FromShift = new Shift
                 {
-                    Id = reader.ToInt("ShiftId"),
-                    Name = reader.ToString("ShiftName")
+                    Id = reader.ToInt("FromShiftId"),
+                    Name = reader.ToString("FromShiftName")
                 },
                 RequestedDate = reader.ToDateTime("RequestedDate"),
-                TotalMins = reader.ToInt("Minutes"),
+                TotalMins = reader.ToInt("TotalMinutes"),
                 //// Keep in view
                 CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
                 //// Change shift
@@ -305,7 +232,8 @@ namespace Fanex.NexHR.Repositories
                 ModifiedDate = reader.ToDateTime("ModifiedDate"),
                 VerifiedStatus = reader.ToInt("VerifiedStatus"),
                 ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                ProcessedStatus = reader.ToInt("HRStatus"),
+                ProcessedStatus = reader.ToInt("ProcessedStatus"),
+                ReworkCount = reader.ToInt("ReworkCount")
             };
 
             return entity;

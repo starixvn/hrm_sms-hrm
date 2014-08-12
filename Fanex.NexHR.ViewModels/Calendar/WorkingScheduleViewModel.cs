@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="WorkingScheduleModel.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="WorkingScheduleViewModel.cs" company="Nexcel Solutions Vietnam">
 // Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -12,7 +12,7 @@ namespace Fanex.NexHR.ViewModels.Calendar
     /// <summary>
     /// WorkingSchedule Model.
     /// </summary>
-    public class WorkingScheduleModel
+    public class WorkingScheduleViewModel
     {
         public string Title { get; set; }
 

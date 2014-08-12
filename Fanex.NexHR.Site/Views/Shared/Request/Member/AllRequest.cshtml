@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Models.Request
+﻿@using Fanex.NexHR.Services
+@using Fanex.NexHR.Models.Request
+@using Fanex.NexHR.ViewModels.Request
 @model IList<RequestEntity>
 <table class="data persist-area">
     <thead>
@@ -13,9 +15,8 @@
             <th>
                 @Labels.Request
             </th>
-            @*<th>@Labels.RequestDate</th>*@
             <th>
-                Details
+                @Labels.Details
             </th>
             <th>@Labels.Remark
             </th>
@@ -75,7 +76,7 @@
                         }
                     </td>
                     <td class="left">
-                        @Html.Raw(Fanex.NexHR.Services.RequestService.ToRequestMessage(request))
+                        @Html.Raw(RequestService.ToRequestMessage(request))
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
                     { 

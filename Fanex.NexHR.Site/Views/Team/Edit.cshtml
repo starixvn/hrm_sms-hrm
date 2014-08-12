@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.TeamViewModel
+﻿@using Fanex.NexHR.ViewModels.EmployeeGroup
+@model TeamViewModel
 
 @{
     ViewBag.Title = "Edit Team's Informations";
@@ -22,7 +23,7 @@
 {
 <div class="bunhat">
     @Html.ValidationSummary(true)
-    @if ((bool)ViewBag.Updated)
+    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
     {
     <div class="success">@Messages.TeamUpdated</div> 
     }

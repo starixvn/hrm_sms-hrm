@@ -1,6 +1,6 @@
 ﻿@helper NagivationItem(List<NavigationViewModel> navItemList)
     {
-        foreach (var navItem in navItemList)
+		foreach (NavigationViewModel navItem in navItemList)
         {
     <div id="@navItem.Id" class="el" data-hashovermenu="@(!string.IsNullOrWhiteSpace(navItem.HoverController))">
         <span class="xicon @navItem.Icon"></span>

@@ -26,7 +26,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
 
-        IList<WorkingScheduleModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);
+        IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria);
     }

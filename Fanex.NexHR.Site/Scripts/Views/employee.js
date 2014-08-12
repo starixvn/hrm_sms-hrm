@@ -100,12 +100,12 @@ function query(jobTitleId) {
 			});
 
 			$("#userdata").dataTable({
-				"sScrollY": "530px",
+				"sScrollY": "100%",
 				"sScrollX": "100%",
 				"sScrollXInner": "100%",
 				"bScrollCollapse": true,
 				"bFilter": true,
-				"bSort": true,
+				"bSort": false,
 				"bSortClasses": false,
 				"bPaginate": true,
 				"sPaginationType": "full_numbers",
@@ -113,7 +113,7 @@ function query(jobTitleId) {
 				"bJQueryUI": true,
 				'bLengthChange': false,
 				//"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-				'iDisplayLength': 50,
+				'iDisplayLength': 17,
 				"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [7, 8, 9]}]
 			});
 			$("#title").trigger("liszt:updated");

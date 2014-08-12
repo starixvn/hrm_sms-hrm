@@ -1,5 +1,5 @@
-﻿@using Fanex.NexHR.Resources
-@model Fanex.NexHR.ViewModels.TotalWorkingHourWeeklyViewModel
+﻿@using Fanex.NexHR.ViewModels.Report
+@model TotalWorkingHourWeeklyViewModel
 @{
 	ViewBag.Title = "Total Working Hour Weekly";
 }
@@ -65,7 +65,6 @@
 				selected = "selected";
 			}
 		}
-                        
 					<option @selected value="@team.Id">@team.Name</option> 
 	}
 				}
@@ -126,12 +125,12 @@
                 <td class="left">@item.Section</td>
                 <td class="left">@item.FullNameNick</td>
                 <td class="left">@item.Nick</td>
-                <td>@item.CountWorkDay.ToString("0.0")</td>        
+                <td>@item.CountWorkDay.ToString("0.0")</td>
                 @for (int i = 0; i < item.WorkingHours.Count; i++)
                   {
                     <td>@item.WorkingHours[i]</td>
-                  }            
-            </tr>  
+                  }
+            </tr>
         }
     }
     </tbody>
@@ -140,6 +139,5 @@ else
 { 
     @RazorHelper.DisplayNoInformation(colspan: firstRecord.WorkingHours.Count + 6);
 }
-              
 </table>
 }

@@ -104,7 +104,7 @@
     <Compile Include="Report\TotalWorkingHoursViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummaryViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarsViewModel.cs" />
-    <Compile Include="Calendar\WorkingScheduleModel.cs" />
+    <Compile Include="Calendar\WorkingScheduleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

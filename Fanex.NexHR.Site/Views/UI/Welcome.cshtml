@@ -1,8 +1,4 @@
 ﻿@model Fanex.NexHR.Models.Employee
-@*<div class="grid_8 account">
-    Hello @Html.ActionLink(Model.FullName, "index", "account", routeValues: null, htmlAttributes: new { @class = "username", title = "Account information" })
-    <img src="~/employee/avatar/@(Model.NickName).jpg" />
-</div>*@
 <div id="user_utilities" class="dropdown_navigation">
     <h2>
         @Model.FullName - <i>@Model.NickName</i>

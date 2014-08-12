@@ -244,7 +244,7 @@ namespace Fanex.NexHR.Controllers
                 ReportDate = DateTime.Now,
                 EmpId = this.CurrentUser.Id
             };
-            IList<WorkingScheduleModel> workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
+            IList<WorkingScheduleViewModel> workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
 
             return View(workingSchedule);
         }

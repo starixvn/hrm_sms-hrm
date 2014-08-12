@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.SupervisorViewModel
+﻿@using Fanex.NexHR.ViewModels.Supervisor
+@model SupervisorViewModel
 @{
 	ViewBag.Title = "Update Supervisor";
 }
@@ -56,7 +57,7 @@
  {
 		<span class="title team">@Labels.Team</span> <span class="control">
 			<select id="group" multiple="multiple" class="team-select">
-				@foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+				@foreach (Team item in ViewBag.Groups)
 	{ 
 					<option value="@item.Id">@item.Name</option>
 	}

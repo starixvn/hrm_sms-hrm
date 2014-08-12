@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.ShiftManagerViewModel
+﻿@using Fanex.NexHR.ViewModels.Supervisor
+@model ShiftManagerViewModel
 @{
 	ViewBag.Title = "Update Shift Manager";
 }
@@ -40,7 +41,7 @@
 <div class="addnew-supervisor">
 	<span class="title">@Labels.Team</span> <span class="control">
 		<select id="group" multiple="multiple" class="team-select">
-			@foreach (Fanex.NexHR.Models.Team item in ViewBag.Groups)
+			@foreach (Team item in ViewBag.Groups)
    { 
 				<option value="@item.Id">@item.Name</option>
    }

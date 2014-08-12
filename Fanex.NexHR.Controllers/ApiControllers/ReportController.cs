@@ -124,7 +124,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 var getGroupInfoCriteria = new GetExtensionNumberGroupInfoCriteria
                 {
                     IsInternal = isInternal,
-                    GroupID = (int)groupId
+                    GroupID = groupId
                 };
                 IEnumerable<ExtensionNoModel> data = _reportService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
                 var selectList = data.Select(x => new System.Web.Mvc.SelectListItem

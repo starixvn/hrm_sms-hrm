@@ -37,7 +37,6 @@
                 { 
                     <td>
                         @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shift, "Id", "Code", item.ToShiftId), new { @class = "item_ToShift" })
-                        @*@Html.DropDownListFor(model => item.ToShift, new SelectList(ViewBag.Shift, "Id", "Code"), new { @class = "item_ToShift" })*@
                     </td>
                     <td>@Html.TextBoxFor(model => item.Remark) </td>
                 }

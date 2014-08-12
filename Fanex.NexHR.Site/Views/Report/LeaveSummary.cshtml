@@ -1,4 +1,5 @@
-﻿@model Fanex.NexHR.ViewModels.LeaveSummaryViewModel
+﻿@using Fanex.NexHR.ViewModels.AnnualLeave
+@model LeaveSummaryViewModel
 
 @{
     ViewBag.Title = Labels.LeaveSummary;
@@ -85,8 +86,8 @@
         <tr>
             <th>@(Model.Year - 1)</th>
             <th>@Model.Year</th>
-            <th>@Labels.Jan</th>            
-            <th>@Labels.Feb</th>            
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
             <th>@Labels.Mar</th>
             <th>@Labels.Apr</th>
             <th>@Labels.May</th>
@@ -99,8 +100,6 @@
             <th>@Labels.Dec</th>
         </tr>
     </thead>
-    
-    
     @*Check if exists*@
     @{
         bool checkSummaryList = true;
@@ -159,14 +158,12 @@
                     </tr>
                 }
             }
-
     </tbody>
     }
     else
     { 
         @RazorHelper.DisplayNoInformation(18)
     }
-            
 </table>
 
 

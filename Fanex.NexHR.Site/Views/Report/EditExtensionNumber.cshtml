@@ -20,9 +20,9 @@
     {
         @Html.ValidationSummary()
 
-        if ((bool)ViewBag.Updated)
+        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div>
+        <div class="success">@Messages.RequestUpdated</div>
         <input type="hidden" id="successed" value="true" />
         }
         

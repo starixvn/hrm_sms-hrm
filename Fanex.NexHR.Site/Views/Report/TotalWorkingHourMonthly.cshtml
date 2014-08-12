@@ -1,11 +1,9 @@
-﻿@using Fanex.NexHR.Resources
-@model Fanex.NexHR.ViewModels.TotalWorkingHourMonthlyViewModel
+﻿@using Fanex.NexHR.ViewModels.Report
+@model TotalWorkingHourMonthlyViewModel
 
 @{
     ViewBag.Title = Labels.TotalWorkingHourMonthly;
 }
-
-
 @section css{
     @Url.CombresLink("totalworkinghourmonthlycss")
     @Url.CombresLink("managerequestscss")
@@ -34,7 +32,6 @@
             @Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
             @Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
         </div>
-
          <div class="grid_2 gridlabel">
                 Category
             </div>
@@ -68,7 +65,6 @@
                 }
             </select>
         </div>
-
         <div class="grid_2">
             @Html.LabelFor(model => model.Employee)
         </div>
@@ -76,7 +72,6 @@
             @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
-
         <div class="grid_5">
             <input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit"/>
             <input id="btnExcel" type="submit" value="Excel"/>
@@ -97,20 +92,18 @@
             <th>@Labels.FullNameNick</th>
             <th>@Labels.Nick</th>
             <th>@Labels.CountWorkDay</th>
-            @{
-                for (int i = 0; i < firstRecord.WorkingHours.Count; i++)
-                  {
-					var stringDate = firstRecord.WorkingHours[i].Split('(')[1].Split(')')[0].Trim();
-					if (stringDate == "Sat" || stringDate == "Sun")
-					{
-						<th class="weekend">@firstRecord.WorkingHours[i]</th>
-					}
-					else
-					{
-						<th>@firstRecord.WorkingHours[i]</th>
-					}
-				  }
-            }
+            @for (int i = 0; i < firstRecord.WorkingHours.Count; i++)
+            {
+				var stringDate = firstRecord.WorkingHours[i].Split('(')[1].Split(')')[0].Trim();
+				if (stringDate == "Sat" || stringDate == "Sun")
+				{
+					<th class="weekend">@firstRecord.WorkingHours[i]</th>
+				}
+				else
+				{
+					<th>@firstRecord.WorkingHours[i]</th>
+				}
+			}
         </tr>
     </thead>
    
@@ -137,8 +130,8 @@
                 @for (int i = 0; i < item.WorkingHours.Count; i++)
 				{
                     <td>@item.WorkingHours[i]</td>
-				}            
-            </tr>  
+				}
+            </tr>
 		}
 	}
     </tbody>
@@ -147,7 +140,6 @@ else
 { 
     @RazorHelper.DisplayNoInformation(colspan: firstRecord.WorkingHours.Count + 6);
 }
-              
 </table>
 }
 

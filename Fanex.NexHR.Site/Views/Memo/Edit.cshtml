@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.Models.Memo
+﻿@model Memo
 @{
     ViewBag.Title = Labels.Edit;
 }
@@ -207,7 +207,6 @@
             <div class="grid_17">
                 @Html.AntiForgeryToken()
                 <input type="submit" value="Save" id="saveMemo" class="button-primary submit" />
-                @*<a href="@Url.Action("index", "memo")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

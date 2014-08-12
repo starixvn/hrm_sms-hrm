@@ -81,7 +81,7 @@ namespace Fanex.NexHR.Repositories
         /// <param name="criteria">Criteria to query DB.</param>
         /// <param name="workingDate">Report Date.</param>
         /// <returns>A list of working schedule model.</returns>
-        public IList<WorkingScheduleModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
+        public IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
@@ -89,13 +89,13 @@ namespace Fanex.NexHR.Repositories
                 ds = db.ExecuteDataSet(criteria.GetSpParams());
                 var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
 
-                var list = new List<WorkingScheduleModel>();
+                var list = new List<WorkingScheduleViewModel>();
                 if (dttWorkingSchedule.Rows.Count != 0)
                 {
                     var loopNum = (dttWorkingSchedule.Columns.Count - 5) / 2;
                     for (int i = 1; i <= loopNum; i++)
                     {
-                        var workingDay = new WorkingScheduleModel
+                        var workingDay = new WorkingScheduleViewModel
                         {
                             Title = dttWorkingSchedule.Rows[0][i == 1 ? (i + 4) : ((i * 2) + 3)].ToString(),
                             Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
@@ -136,10 +136,10 @@ namespace Fanex.NexHR.Repositories
                     empWorkingCalendar.EmpCode = row["EmpCode"].ToString();
                     empWorkingCalendar.Days = (totalColumns - 6) / 2;
                     List<string> days = new List<string>();
-                    List<WorkingScheduleModel> workingSchedule = new List<WorkingScheduleModel>();
+                    List<WorkingScheduleViewModel> workingSchedule = new List<WorkingScheduleViewModel>();
                     for (int i = 1; i <= empWorkingCalendar.Days; i++)
                     {
-                        var workingDay = new WorkingScheduleModel
+                        var workingDay = new WorkingScheduleViewModel
                         {
                             Title = row[i == 1 ? (i + 5) : ((i * 2) + 4)].ToString(),
                             Color = row[i == 1 ? (i + 6) : ((i * 2) + 5)].ToString()

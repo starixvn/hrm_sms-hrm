@@ -1,4 +1,5 @@
-﻿@using System.Web.Mvc.Html5
+﻿@using Fanex.NexHR.ViewModels.Shifts
+@using System.Web.Mvc.Html5
 @model ShiftViewModel
 
 @{
@@ -47,7 +48,7 @@
         <div class="input">
             @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn" })
             :
-            @Html.Html5Number(0, 59, 1, Model.MuniteTimeIn, new { Name = "MuniteTimeIn", MaxLength = "2", id = "MuniteTimeIn" })
+            @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MuniteTimeIn", MaxLength = "2", id = "MuniteTimeIn" })
             @Html.CheckBoxFor(model => model.IsInAfterDay)
             @Html.LabelFor(model => model.IsInAfterDay)
         </div>
@@ -60,7 +61,7 @@
         <div class="input">
             @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut" })
             :
-            @Html.Html5Number(0, 59, 1, Model.MuniteTimeOut, new { Name = "MuniteTimeOut", MaxLength = "2", id = "MuniteTimeOut" })
+            @Html.Html5Number(0, 59, 1, Model.MinuteTimeOut, new { Name = "MuniteTimeOut", MaxLength = "2", id = "MuniteTimeOut" })
             @Html.CheckBoxFor(model => model.IsOutAfterDay)
             @Html.LabelFor(model => model.IsOutAfterDay)
         </div>

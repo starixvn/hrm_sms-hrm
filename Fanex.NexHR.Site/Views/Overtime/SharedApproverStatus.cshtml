@@ -1,7 +1,8 @@
-﻿@model Fanex.NexHR.Models.Request.RequestEntity
+﻿@using Fanex.NexHR.Models.Request
+@model RequestEntity
 
 @{
-    var request = (Fanex.NexHR.Models.Request.RequestEntity)Model;
+    var request = (RequestEntity)Model;
     if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
     {
         switch (request.Status.Id)

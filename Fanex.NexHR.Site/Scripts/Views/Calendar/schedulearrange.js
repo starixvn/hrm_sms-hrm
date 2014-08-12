@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, ScheduleArrangeDetail*/
+/*global _global, ScheduleArrangeCommon*/
 
 var ScheduleArrange = (function ($) {
 	return {
@@ -28,11 +28,9 @@ var ScheduleArrange = (function ($) {
 			ScheduleArrange.currentWeek = $("#btnCurrentWeek");
 			ScheduleArrange.btnSave = $("#btnSave");
 			ScheduleArrange.scheduleContent = $("#scheduleContent");
-
 			ScheduleArrange.groupId.multiselect();
 			ScheduleArrange.jobTitle.multiselect();
 			ScheduleArrange.employeeAutocomplete();
-
 			ScheduleArrange.bindScheduleArrangeByDate(ScheduleArrange.fromDate.val(), ScheduleArrange.toDate.val(), null, "", "");
 
 			ScheduleArrange.submit.on("click", function () {
@@ -40,7 +38,7 @@ var ScheduleArrange = (function ($) {
 					ScheduleArrange.employeeId.val("");
 				}
 
-				if (ScheduleArrangeDetail.hasChangeValue) {
+				if (ScheduleArrangeCommon.hasChangeValue) {
 					confirm(ScheduleArrange.messageComfirm, function () {
 						ScheduleArrange.queryAction(ScheduleArrange.fromDate.val(),
                         ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
@@ -60,7 +58,7 @@ var ScheduleArrange = (function ($) {
 					ScheduleArrange.employeeId.val("");
 				}
 
-				if (ScheduleArrangeDetail.hasChangeValue) {
+				if (ScheduleArrangeCommon.hasChangeValue) {
 					confirm(ScheduleArrange.messageComfirm, function () {
 						ScheduleArrange.queryAction(ScheduleArrange.fromDate.val(),
                         ScheduleArrange.toDate.val(), ScheduleArrange.employeeId.val());
@@ -73,7 +71,7 @@ var ScheduleArrange = (function ($) {
 			});
 
 			ScheduleArrange.btnSave.on("click", function () {
-				ScheduleArrangeDetail.saveArrangeSchedule();
+				ScheduleArrangeCommon.saveArrangeSchedule();
 			});
 
 			ScheduleArrange.employee.on("keypress", function (evt) {
