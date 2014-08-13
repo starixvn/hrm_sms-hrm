@@ -1002,7 +1002,7 @@
   <data name="MyMessage" xml:space="preserve">
     <value>My messages</value>
   </data>
-   <data name="RequestWarning" xml:space="preserve">
+  <data name="RequestWarning" xml:space="preserve">
     <value>This request need to verify again!</value>
   </data>
   <data name="Notification" xml:space="preserve">
@@ -1022,5 +1022,17 @@
   </data>
   <data name="IsRead" xml:space="preserve">
     <value>Is Read</value>
+  </data>
+  <data name="AccumulationLeave" xml:space="preserve">
+    <value>Per 5 Years Accumulation Leave</value>
+  </data>
+  <data name="KeepInViewLeave" xml:space="preserve">
+    <value>Keep In View Leave</value>
+  </data>
+  <data name="LocalLeave" xml:space="preserve">
+    <value>Local leave</value>
+  </data>
+  <data name="StandardLeave" xml:space="preserve">
+    <value>Standard Leave</value>
   </data>
 </root>

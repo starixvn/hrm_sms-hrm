@@ -7,7 +7,7 @@
     @Url.CombresLink("sitecss")
 }
 @section js{
-    @Url.CombresLink("sitejs")
+    @Url.CombresLink("employeeaanualbalancejs")
 }
 @section Breadcrumb
 {
@@ -24,7 +24,9 @@
     {
     <div class="success">@Messages.AdjustSuccessfully</div> 
     }
-    
+
+	@Html.HiddenFor(model => model.LocalLeave)
+
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.TotalDays)
@@ -35,6 +37,15 @@
         </div>
     </div>
     
+	<div class="formrow">
+		<div class="label">
+			<label>@Labels.LocalLeave</label>
+		</div>
+		<div class="input">
+			@RazorHelper.LocalLeaveDropDownList(controlName: "localLeave")
+		</div>
+	</div>
+
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.Description)
@@ -59,7 +70,7 @@
             @Html.HiddenFor(model => model.EmpId)
         </div>
         <div class="input">
-            <input type="submit" value="@Labels.Adjust" />
+            <input type="submit" value="@Labels.Adjust" id="AddBalance"/>
             <a class="button" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@Labels.Cancel</a>
         </div>
     </div>

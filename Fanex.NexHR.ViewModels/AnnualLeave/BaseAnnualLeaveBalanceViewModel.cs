@@ -45,6 +45,8 @@ namespace Fanex.NexHR.ViewModels.AnnualLeave
             }
         }
 
+        public int LocalLeave { get; set; }
+
         /// <summary>
         /// Method Validate.
         /// </summary>

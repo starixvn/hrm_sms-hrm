@@ -375,3 +375,13 @@
     </select>
         
 }
+
+@helper LocalLeaveDropDownList(short action = 0, string controlName = "", string classObject = "")
+    {
+    <select id="@controlName">
+        <option @(action == 1 ? "selected" : "") value="@Convert.ToByte(@LocalLeave.StandardLeave)">@Labels.StandardLeave</option>
+        <option @(action == 2 ? "selected" : "") value="@Convert.ToByte(@LocalLeave.AccumulationLeave)">@Labels.AccumulationLeave</option>
+        <option @(action == 3 ? "selected" : "") value="@Convert.ToByte(@LocalLeave.KIVLeave)">@Labels.KeepInViewLeave</option>
+    </select>
+        
+}

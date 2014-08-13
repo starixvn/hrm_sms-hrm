@@ -728,5 +728,10 @@
 		<resource reference="sitejs"/>
 		<resource path="~/scripts/views/employee.message.js" />
 	</resourceSet>
+
+	<resourceSet name="employeeaanualbalancejs" type="js">
+		  <resource reference="sitejs"/>
+		  <resource path="~/scripts/views/employee.annualleavebalance.js" />
+	</resourceSet>
   </resourceSets>
 </combres>

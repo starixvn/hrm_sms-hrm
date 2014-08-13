@@ -122,14 +122,19 @@
             </th>
             <th rowspan="2">@Labels.Nick
             </th>
-            <th colspan="2">@Labels.AnnualLeave
+            <th rowspan="2">@Labels.KeepInView
             </th>
+			<th rowspan="2">@Labels.AnnualLeave
+			</th>
             <th colspan="12">
-                Take Annual Leave @Model.Year
+                Leave's Report @Model.Year
             </th>
             <th rowspan="2">
                 Balance of AL @Model.Year
             </th>
+			<th rowspan="2">
+				Balance of KIV @Model.Year
+			</th>
             @if (Roles.IsUserInRole("HR"))
             {
                 <th rowspan="2">@Labels.Edit
@@ -137,10 +142,6 @@
             }
         </tr>
         <tr>
-            <th>@(Model.Year - 1)
-            </th>
-            <th>@Model.Year
-            </th>
             <th>@Labels.Jan
             </th>
             <th>@Labels.Feb
@@ -388,6 +389,8 @@
                     }  
                         }
                     </td>
+					<td>
+					</td>
                     @if (Roles.IsUserInRole("HR"))
                     {
                         <td>
@@ -402,7 +405,7 @@
     }
     else
     { 
-        @RazorHelper.DisplayNoInformation(18)
+        @RazorHelper.DisplayNoInformation(19)
     }
 </table>
 <div class="hide">

@@ -31,6 +31,8 @@
         <div class="success flash">@Messages.Saved</div> 
     }
     
+	@Html.HiddenFor(model => model.LocalLeave)
+
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.TotalDays)
@@ -41,6 +43,15 @@
         </div>
     </div>
     
+	<div class="formrow">
+		<div class="label">
+			<label>@Labels.LocalLeave</label>
+		</div>
+		<div class="input">
+			@RazorHelper.LocalLeaveDropDownList(controlName: "localLeave")
+		</div>
+	</div>
+
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.Description)

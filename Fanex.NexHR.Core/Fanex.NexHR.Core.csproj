@@ -76,6 +76,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\Command.cs" />
+    <Compile Include="Enums\LocalLeave.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
     <Compile Include="Enums\AttendanceFilter.cs" />
     <Compile Include="Enums\MessageCategory.cs" />

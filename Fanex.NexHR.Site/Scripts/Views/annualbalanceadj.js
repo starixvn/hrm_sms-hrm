@@ -45,7 +45,7 @@ $(document).ready(function () {
 			$('#insertform').dialog({
 				modal: true,
 				width: 410,
-				height: 275,
+				height: 315,
 				open: function () {
 					$('#TotalDays').val('');
 				}
@@ -72,7 +72,8 @@ $(document).ready(function () {
 			EmpIds: $("#EmpIds").val(),
 			Description: $("#Description").val(),
 			AffectedFrom: $("#AffectedFrom").val(),
-			TotalDays: $("#TotalDays").val()
+			TotalDays: $("#TotalDays").val(),
+			LocalLeave: $("#localLeave").val()
 		};
 		var annualJsonFormat = JSON.stringify(annualLeaveMuiltiple);
 		var validate = validateInput();
