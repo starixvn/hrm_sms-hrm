@@ -19,6 +19,8 @@ namespace Fanex.NexHR.ViewModels.Request
     /// </summary>
     public class LateInEarlyOutRequestViewModel
     {
+        public long RequestId { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }

@@ -28,6 +28,7 @@ namespace Fanex.NexHR.Criteria.Request
 
         public string Comment { get; set; }
 
+        [SpParam(Ignored = true)]
         public string Action { get; set; }
 
         /// <summary>

@@ -9,8 +9,8 @@ function processRequest(command, eventElement, remark) {
     { command: command, requestId: requestId, roleId: roleId, remark: remark },
         function (response) {
             fadeOutMessage();
-            if (response !== true) {
-                alert(response);
+            if (response.Code !== 0) {
+                alert(response.Message);
                 return;
             }
             else {

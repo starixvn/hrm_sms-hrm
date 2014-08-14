@@ -21,7 +21,6 @@
     @Html.Hidden("RequestType", (int)RequestType.Leave)
     @Html.Hidden("RequestId", Model.RequestId)
     @Html.Hidden("IsView", (bool)ViewBag.IsView)
-    @Html.ValidationSummary()
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.RefNo, Labels.RefNo1)

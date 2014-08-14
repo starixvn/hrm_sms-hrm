@@ -121,13 +121,7 @@ namespace Fanex.NexHR.Repositories
                     var groupGo = ConfigurationManager.AppSettings["EmailGo"].ToString();
                     //// send email(s)
                     var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath("~/app_data/emails/MemoNotification.cshtml"));
-
-                    var content = new
-                    {
-                        Subject = criteria.Subject,
-                        Link = link + "memo/detail/" + result
-                    };
-                    var body = RazorEngine.Razor.Parse(bodyTemplate, content);
+                    var body = string.Format(bodyTemplate, criteria.Subject, link + "memo/detail/" + result);
                     this._emailService.SendEmail(
                         ConfigurationManager.AppSettings["Email"],
                         groupGo,
@@ -169,13 +163,7 @@ namespace Fanex.NexHR.Repositories
                     var groupGo = ConfigurationManager.AppSettings["EmailGo"].ToString();
                     //// send email(s)
                     var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath("~/app_data/emails/EditMemoNotification.cshtml"));
-
-                    var content = new
-                    {
-                        Subject = criteria.Subject,
-                        Link = link + "memo/detail/" + criteria.Id
-                    };
-                    var body = RazorEngine.Razor.Parse(bodyTemplate, content);
+                    var body = string.Format(bodyTemplate, criteria.Subject, link + "memo/detail/" + result);
                     this._emailService.SendEmail(
                         ConfigurationManager.AppSettings["Email"],
                         groupGo,

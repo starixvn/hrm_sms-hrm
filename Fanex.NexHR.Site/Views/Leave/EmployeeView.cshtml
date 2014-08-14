@@ -117,7 +117,7 @@
                     }*@
                     <td class="highlight">@request.TotalDays.ToString("0.0")
                     </td>
-                    <td class="ddMMyyyy tooltip" title="@request.CreatedDate.ToShortFormatedDate()" >
+                    <td>
                         @request.CreatedDate.ToShortFormatedDate()
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))

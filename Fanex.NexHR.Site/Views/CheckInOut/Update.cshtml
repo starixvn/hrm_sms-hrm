@@ -22,7 +22,7 @@
     
         @Html.ValidationSummary()
 
-        if ((bool)ViewBag.Updated)
+        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
         <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
@@ -46,11 +46,7 @@
                 @Html.LabelFor(model => model.RequestType)
             </div>
             <div class="input">
-                @{
-        RequestType enumDisplayStatus = ((RequestType)@Model.RequestType);
-        string stringValue = enumDisplayStatus.ToString();
-                }
-                @stringValue
+                @(Model.RequestType == 1 ? "Check in" : "Check out")
             </div>
         </div>
         
@@ -91,12 +87,7 @@
                 @Html.LabelFor(model => model.Shift)
             </div>
             <div class="input">
-                <span id="shiftname">@Model.Shift</span> @*<a id="shiftinfo" href="javascript:;" title="@Fanex.NexHR.Resources.Labels.ShiftInfo">
-                <span class="icon shiftinfo"> </span>
-            </a>
-            <div class="hide">
-            @RazorHelper.ShiftInfoTable(ViewBag.Shifts)
-            </div>*@
+                <span id="shiftname">@Model.Shift</span>
             </div>
         </div>
         
@@ -133,13 +124,12 @@
             <div class="input">
                 @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.Type)
+                @Html.HiddenFor(model => model.RequestType)
+				@Html.HiddenFor(model => model.RequestId)
                 @Html.HiddenFor(model => model.Shift)
                 @Html.Hidden("InTime")
                 @Html.Hidden("OutTime")
-                @Html.Hidden("RequestType", (int)RequestType.CheckIn)
                 <input type="submit" value="@Labels.Update"/>
-                @*<a href="@Url.Action("employeeview", "checkinout")" class="button">@Labels.Back</a>*@
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

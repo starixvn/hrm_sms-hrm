@@ -104,21 +104,17 @@ namespace Fanex.NexHR.Services
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.NickName,
-                Type = criteria.RequestType == (short)RequestType.CheckIn
-                    ? RequestType.CheckIn.ToString().ToLower()
-                    : RequestType.CheckOut.ToString().ToLower(),
-                RequestId = criteria.RequestId,
-                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Time = criteria.CheckTime.ToShortFormatedDate(),
-                Shift = criteria.Shift,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body, 
+                email.SendToNickName,
+                employee.NickName, 
+                criteria.RequestType == (short)RequestType.CheckIn ? RequestType.CheckIn.ToString() : RequestType.CheckOut.ToString(),
+                    criteria.OnDate.ToDateMonthYearFormatedDate(),
+                    criteria.Shift,
+                    criteria.CheckTime.ToShortTime(), 
+                    criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
@@ -142,21 +138,17 @@ namespace Fanex.NexHR.Services
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedCheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.NickName,
-                Type = criteria.RequestType == (short)RequestType.CheckIn
-                    ? RequestType.CheckIn.ToString().ToLower()
-                    : RequestType.CheckOut.ToString().ToLower(),
-                RequestId = criteria.RequestId,
-                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Time = criteria.CheckTime.ToShortFormatedDate(),
-                Shift = criteria.Shift,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                employee.NickName,
+                criteria.RequestType == (short)RequestType.CheckIn ? RequestType.CheckIn.ToString() : RequestType.CheckOut.ToString(),
+                    criteria.OnDate.ToDateMonthYearFormatedDate(),
+                    criteria.Shift,
+                    criteria.CheckTime.ToShortTime(),
+                    criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,

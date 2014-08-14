@@ -2,22 +2,21 @@
 /*global _global, fadeOutMessage, showMessage*/
 
 function processRequest(command, eventElement, remark) {
-    var requestId = $(eventElement).attr('requestId');
-    var roleId = $(eventElement).attr('roleId');
-    showMessage('Processing');
-    $.post(_global.root + 'ajax/processrequest',
-    { command: command, requestId: requestId, roleId: roleId, remark: remark },
-    function (response) {
-        fadeOutMessage();
-        if (response !== true) {
-            alert(response);
-            return;
-        }
-        else {
-            $(eventElement).removeClass().destroyContextMenu();
-            window.location.reload();
-        }
-    });
+	var requestId = $(eventElement).attr('requestId');
+	var roleId = $(eventElement).attr('roleId');
+	showMessage('Processing');
+	$.post(_global.root + 'ajax/processrequest',
+	{ command: command, requestId: requestId, roleId: roleId, remark: remark },
+	function (response) {
+		fadeOutMessage();
+		if (response.Code !== 0) {
+			alert(response.Message);
+			return;
+		}
+		else {
+			window.location.reload();
+		}
+	});
 }
 
 function bindMenu(element, menu) {

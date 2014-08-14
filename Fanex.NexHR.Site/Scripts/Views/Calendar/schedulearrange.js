@@ -93,7 +93,7 @@ var ScheduleArrange = (function ($) {
 			var params = {
 				"fromDate": fromDate,
 				"toDate": toDate,
-				"employeeId": ((employeeId === 0) ? null : employeeId),
+				"employeeId": ((employeeId === "0") ? null : employeeId),
 				"groupIds": groupIds,
 				"jobTitles": jobTitles
 			};

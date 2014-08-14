@@ -15,6 +15,7 @@
             </th>
             <th>@Labels.Shift
             </th>
+			<th>@Labels.Date</th>
             <th>@Labels.RequestTime
             </th>
             <th>@Labels.CreatedDate
@@ -43,6 +44,8 @@
                     <td class="highlight">@request.RequestType.ToString()
                     </td>
                     <td class="highlight">@request.FromShift.Name.ToString()
+                    </td>
+                    <td class="ddMMyyyyhhmm highlight">@request.FromDate.ToDateMonthYearFormatedDate()
                     </td>
                     <td class="ddMMyyyyhhmm highlight">@request.RequestedDate.ToShortFormatedDate()
                     </td>

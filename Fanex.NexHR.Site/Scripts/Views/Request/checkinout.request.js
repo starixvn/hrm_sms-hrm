@@ -20,7 +20,7 @@ function updateZeroPrefix() {
 }
 
 function bindingHourAndMinute() {
-    if (($('#RequestType').val() === "1") || ($('#RequestType_1').attr("checked") === "checked")) {
+    if ($('#RequestType_1').attr("checked") === "checked") {
         $('#Hour').val($('#InTime').val().substring(0, 2));
         $('#Minute').val($('#InTime').val().trim().substring(3, 5));
     }

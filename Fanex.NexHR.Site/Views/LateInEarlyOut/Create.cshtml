@@ -20,7 +20,7 @@
     {
         @Html.ValidationSummary()
 
-        if ((bool)ViewBag.Requested)
+        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
         <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />
@@ -31,7 +31,7 @@
             @Labels.CannotCreateRequest
         </div>
 
-        if (ViewBag.TotalRequest >= 2)
+        if (ViewBag.TotalRequest >= 1)
         {
 
         <div class="ui-state-error ui-corner-all">

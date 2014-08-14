@@ -535,7 +535,6 @@ var ScheduleArrangeDetail = (function ($) {
 					isShowOff: true
 				},
 				success: function (data) {
-					console.log(data);
 					ScheduleArrangeDetail.allShifts = data;
 				}
 			});

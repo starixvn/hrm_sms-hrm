@@ -9,13 +9,13 @@
             if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             {
             <td>
-                <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
             </td>
             }
             else if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             {
             <td>
-                <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
             </td>
             }
             else
@@ -31,13 +31,13 @@
             if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             {
             <td>
-                <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
             </td>
             }
             else if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             { 
             <td>
-                <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
             </td>
             }
             else
@@ -51,7 +51,7 @@
             if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             {
                 <td>
-                    <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
                 </td>
             }
             else
@@ -67,7 +67,7 @@
             if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
             {
             <td>
-                <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions-reset tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions-reset tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
             </td>   
             }
             else

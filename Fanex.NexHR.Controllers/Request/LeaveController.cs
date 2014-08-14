@@ -51,7 +51,7 @@ namespace Fanex.NexHR.Controllers.Request
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
-                RequestType = (int)RequestFilter.Leave,
+                RequestType = (int)RequestType.Leave,
                 FromDate = fromDate,
                 ToDate = toDate
             };

@@ -44,7 +44,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            var unavailableDates = EmployeeService.GetOffDateAndHolidayDate(criteria);
+            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(criteria);
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
@@ -82,7 +82,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            var unavailableDates = EmployeeService.GetOffDateAndHolidayDate(getOffAndHolidaycriteria);
+            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(getOffAndHolidaycriteria);
             var criteria = new InsertKeepInViewRequestCriteria()
             {
                 EmpId = model.EmployeeId,
@@ -137,7 +137,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            var unavailableDates = EmployeeService.GetOffDateAndHolidayDate(criteria);
+            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(criteria);
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
@@ -188,7 +188,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            var unavailableDates = EmployeeService.GetOffDateAndHolidayDate(getOffAndHolidaycriteria);
+            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(getOffAndHolidaycriteria);
 
             var criteria = new UpdateKeepInViewRequestCriteria()
             {

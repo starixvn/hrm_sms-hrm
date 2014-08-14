@@ -53,7 +53,7 @@ namespace Fanex.NexHR.Controllers.Request
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
-                RequestType = (int)RequestFilter.LateInEarlyOut,
+                RequestType = (int)RequestType.LateIn,
                 FromDate = fromDate,
                 ToDate = toDate
             };
@@ -135,6 +135,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             var viewModel = new LateInEarlyOutRequestViewModel()
             {
+                RequestId = request.Id,
                 Employee = this.CurrentUser.NickName,
                 EmployeeId = this.CurrentUser.Id,
                 Date = request.RequestedDate,
@@ -167,6 +168,7 @@ namespace Fanex.NexHR.Controllers.Request
             CheckIsTopManager(model);
             var criteria = new UpdateLateInEarlyOutRequestCriteria()
             {
+                RequestId = model.RequestId,
                 EmpId = model.EmployeeId,
                 OnDate = model.Date,
                 RequestType = model.RequestType,

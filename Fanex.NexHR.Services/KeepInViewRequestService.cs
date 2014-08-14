@@ -105,18 +105,15 @@ namespace Fanex.NexHR.Services
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.InsertedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
 
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                LeaderName = email.SendToNickName,
-                MemberName = employee.NickName,
-                RequestId = criteria.RequestId,
-                Date = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Shift = criteria.ShiftName,
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate(),
+                criteria.ShiftName,
+                criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
@@ -140,18 +137,16 @@ namespace Fanex.NexHR.Services
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                LeaderName = email.SendToNickName,
-                MemberName = employee.NickName,
-                RequestId = criteria.RequestId,
-                Date = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Shift = criteria.ShiftName,
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+            
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate(),
+                criteria.ShiftName,
+                criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,

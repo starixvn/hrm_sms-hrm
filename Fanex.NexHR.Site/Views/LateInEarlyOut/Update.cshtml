@@ -21,7 +21,7 @@
     {
         @Html.ValidationSummary()
 
-        if ((bool)ViewBag.Updated)
+        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
         <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
@@ -37,7 +37,7 @@
                 @Fanex.NexHR.Resources.Labels.RequestCode
             </div>
             <div class="input">
-                <strong>Rq.@Model.Id</strong>
+                <strong>Rq.@Model.RequestId</strong>
             </div>
         </div>
         
@@ -113,8 +113,8 @@
             <div class="label">
                 @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.Type)
-                @Html.Hidden("RequestType", (int)RequestType.LateIn)
+                @Html.HiddenFor(model => model.RequestType)
+				@Html.HiddenFor(model => model.RequestId)
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Update"/>

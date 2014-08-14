@@ -105,21 +105,17 @@ namespace Fanex.NexHR.Services
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
                 + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.DisplayName,
-                Type = criteria.RequestType == (short)RequestType.LateIn
-                    ? "a " + Resources.Labels.LateIn.ToLower()
-                    : "an " + Resources.Labels.EarlyOut.ToLower(),
-                RequestId = criteria.RequestId,
-                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Minute = criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+   
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                employee.NickName,
+                criteria.RequestType == (short)RequestType.LateIn ? "a " + Resources.Labels.LateIn : "an " + Resources.Labels.EarlyOut,
+                criteria.OnDate.ToDateMonthYearFormatedDate(),
+                criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
+                criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
@@ -144,21 +140,17 @@ namespace Fanex.NexHR.Services
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedLateInEarlyOutEmailSubject + " " + employee.NickName
                 + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            var content = new
-            {
-                Leader = email.SendToNickName,
-                Member = employee.DisplayName,
-                Type = criteria.RequestType == (short)RequestType.LateIn
-                    ? "a " + Resources.Labels.LateIn.ToLower()
-                    : "an " + Resources.Labels.EarlyOut.ToLower(),
-                RequestId = criteria.RequestId,
-                ForDate = criteria.OnDate.ToDateMonthYearFormatedDate(),
-                Minute = criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                Remark = criteria.Remark,
-                Url = this.BaseLink
-            };
-            email.Body = RazorEngine.Razor.Parse(bodyTemplate, content);
+
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                employee.NickName,
+                criteria.RequestType == (short)RequestType.LateIn ? "a " + Resources.Labels.LateIn : "an " + Resources.Labels.EarlyOut,
+                criteria.OnDate.ToDateMonthYearFormatedDate(),
+                criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
+                criteria.Remark);
+
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,

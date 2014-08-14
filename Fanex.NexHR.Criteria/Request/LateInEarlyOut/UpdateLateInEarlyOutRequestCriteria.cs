@@ -35,8 +35,6 @@ namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
 
         public int ModifiedBy { get; set; }
 
-        public string RefNo { get; set; }
-
         public int? VerifierId { get; set; }
 
         public int? ApproverId { get; set; }

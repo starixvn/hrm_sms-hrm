@@ -21,7 +21,7 @@
     {
         @Html.ValidationSummary(true)
 
-        if ((bool)ViewBag.Updated)
+        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
         <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
@@ -138,7 +138,7 @@
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.DisplayName)
+				@Html.HiddenFor(model => model.RequestId)
                 @Html.HiddenFor(model => model.Shift)
                 @Html.HiddenFor(model => model.ShiftId)
             </div>

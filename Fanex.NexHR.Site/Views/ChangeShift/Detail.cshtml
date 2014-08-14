@@ -21,16 +21,6 @@
 </div>
     @using (Html.BeginForm())
     {
-        @Html.ValidationSummary(true)
-        if ((bool)ViewBag.Updated)
-        {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
-        }
-         <div id="shift-unavailable" class="ui-state-error ui-corner-all">
-            @Labels.CannotCreateRequest
-        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)

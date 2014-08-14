@@ -13,7 +13,8 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
 		url: _global.root + "ajax/GetMessageDetailRequest",
 		async: false,
 		type: 'post',
-		data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "fromtime": fromTime, "totime": toTime,
+		data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
+			"fromtime": fromTime, "totime": toTime,
 			"createddate": createdDate, "fromshiftCode": fromShift,
 			"toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
 			"overtimetype": overtimeType, "isOvertimehours": isOvertimeHours
@@ -93,8 +94,7 @@ function view() {
 						"<td class='col1'>Details</td>" +
 						"<td class='col2'>" + result +
 						"</td></tr><tr><td>Remark</td><td class='col2'>" +
-						((object.attr('data-requesttype') === "1" || object.attr('data-requesttype') === "2") ? "N/A" :
-						object.attr('data-remark')) + "</td></tr></table></div>";
+						object.attr('data-remark') + "</td></tr></table></div>";
 				}
 			});
 

@@ -41,7 +41,8 @@ namespace Fanex.NexHR.Services
         private const string _MsgLeaveOneDay = "<span class='req leave'>{0}</span> 1 day";
         private const string _MsgGeneralLeaveHalfDay = "<span class='req leave'>{0}</span> 0.5 day";
         private const string _MsgLeaveDuringWorking = "<span class='req leave'>{0} ({1}-{2})</span> {3} minutes";
-        private const string _MsgChangeShift = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
+        private const string _MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
+        private const string _MsgChangeShift = "<span class='req changeshift'>{0}</span>";
         private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
         private const string _MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2}";
         private const string _MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2}";
@@ -142,15 +143,12 @@ namespace Fanex.NexHR.Services
                     msg.Append(message);
                     break;
                 case (int)RequestType.ChangeShift:
-                    msg.AppendFormat(
-                        _MsgChangeShift,
-                        request.FromDate.ToDateMonthYearFormatedDate(),
-                        request.ToDate.ToDateMonthYearFormatedDate(),
-                        request.CreatedDate.ToDateMonthYearFormatedDate());
+                    message = GetMessageForChangeShift(request);
+                    msg.Append(message);
                     break;
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    msg.AppendFormat(_MsgCheckInOut, HourFormat(request.FromDate), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    msg.AppendFormat(_MsgCheckInOut, request.RequestedDate.ToShortTime(), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
                 case (int)RequestType.LateIn:
                     msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
@@ -409,7 +407,8 @@ namespace Fanex.NexHR.Services
             if (relatedPeople.EmailSetting.AllowSendVerifier
                 && !(relatedPeople.Approver != null && relatedPeople.Verifier != null
                 && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email) && !string.IsNullOrWhiteSpace(relatedPeople.Approver.Email)
-                && relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase)))
+                && (relatedPeople.EmailSetting.AllowSendApprover 
+                || !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase))))
             {
                 emailModel = GetMailVerifier(relatedPeople, emailModel);
             }
@@ -444,23 +443,14 @@ namespace Fanex.NexHR.Services
         }
 
         /// <summary>
-        /// Function to get Hour format from date.
-        /// </summary>
-        /// <param name="date">Input a date.</param>
-        /// <returns>String format of date.</returns>
-        protected static string HourFormat(DateTime date)
-        {
-            return date.ToString("HH:mm");
-        }
-
-        /// <summary>
         /// Function to get string date for leave request.
         /// </summary>
+        /// <param name="requestedDate">The requested date.</param>
         /// <param name="fromDate">The From date.</param>
         /// <param name="toDate">The To date.</param>
         /// <param name="totalDays">Total days.</param>
         /// <returns>String detail date.</returns>
-        protected string GetStringDateForLeaveRequest(DateTime fromDate, DateTime toDate, decimal totalDays)
+        protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             var forDate = string.Empty;
             if (totalDays > 1)
@@ -475,7 +465,7 @@ namespace Fanex.NexHR.Services
                 }
                 else
                 {
-                    forDate = string.Format(_MailContentLeaveHalfDay, fromDate.ToDateMonthYearFormatedDate(), HourFormat(fromDate), HourFormat(toDate));
+                    forDate = string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
                 }
             }
 
@@ -503,12 +493,37 @@ namespace Fanex.NexHR.Services
             else if ((request.TotalDays - (decimal)0.5) == 0)
             {
                 messageDetail = string.Format(
-                _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), HourFormat(request.FromTime), HourFormat(request.ToTime));
+                _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
             }
             else
             {
                 messageDetail = string.Format(
-                    _MsgLeaveDuringWorking, leaveDate, HourFormat(request.FromDate), HourFormat(request.ToDate), (request.ToDate - request.FromDate).TotalMinutes);
+                    _MsgLeaveDuringWorking, leaveDate, request.FromDate.ToShortTime(), request.ToDate.ToShortTime(), (request.ToDate - request.FromDate).TotalMinutes);
+            }
+
+            return messageDetail;
+        }
+
+        /// <summary>
+        /// Function to get message for change shift request.
+        /// </summary>
+        /// <param name="request">Request Entity.</param>
+        /// <returns>Return detail of change shift request.</returns>
+        private static string GetMessageForChangeShift(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            if (request.FromDate.Date == request.ToDate.Date)
+            {
+                messageDetail = string.Format(
+                        _MsgChangeShiftOneDay,
+                        request.FromShift.Name,
+                        request.ToShift.Name,
+                        request.FromDate.ToDateMonthYearFormatedDate());
+            }
+            else
+            {
+                var date = GetMessageDateString(request.FromDate, request.ToDate);
+                messageDetail = string.Format(_MsgChangeShift, date);
             }
 
             return messageDetail;
@@ -626,26 +641,14 @@ namespace Fanex.NexHR.Services
                 forDate = " on " + request.FromDate.ToDateMonthYearFormatedDate();
             }
 
-            var bodyContent = new
-            {
-                Employee = employee.NickName,
-                RequestId = request.Id,
-                Action = command,
-                ForDate = forDate,
-                RequestType = request.RequestType.Name,
-                ProcessUser = processUser.NickName,
-                DisplayNameOfProcessUser = processUser.FullName,
-                Url = this._baseUrl
-            };
-
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(body, employee.NickName, request.RequestType.Name, forDate, command, processUser.NickName, processUser.FullName);
 
             var subject = string.Format(
                 Resources.Messages.ProcessSubject,
                 request.RequestType.Name,
                 forDate,
-                bodyContent.Action,
+                command,
                 processUser.NickName);
 
             this._emailService.SendEmail(
@@ -744,9 +747,11 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester);
-            var toDate = request.ToDate;
-            var forDate = GetStringDateForLeaveRequest(request.FromDate, toDate, request.TotalDays);
+            var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester.NickName);
+            var forDate = request.TotalDays == (decimal)0.5
+                ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
+                : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
+
             var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
@@ -774,7 +779,7 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester);
+            var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.NickName);
             var forDate = GetMessageDateString(request.FromDate, request.ToDate);
             var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
@@ -803,24 +808,16 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType.Id == (short)RequestType.LateIn
-                ? Resources.Labels.LateIn
-                : Resources.Labels.EarlyOut;
-
-            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, requestType, request.Requester.NickName);
-            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                ForDate = forDate,
-                RequestType = requestType,
-                Minute = request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
-                Remark = request.Remark
-            };
-
+            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestType.Name, request.Requester.NickName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body, 
+                sendToNickName,
+                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
+                request.RequestType.Name, 
+                request.FromDate.ToDateMonthYearFormatedDate(), 
+                request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -845,25 +842,17 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var requestType = request.RequestType.Id == (short)RequestType.CheckIn
-                ? Resources.Labels.CheckIn
-                : Resources.Labels.CheckOut;
-
-            var subject = string.Format(Messages.MessageCheckInOutRequest, requestType, request.Requester);
-
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                RequestType = request.RequestType.Name.ToLower(),
-                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
-                Time = HourFormat(request.RequestedDate),
-                Shift = request.FromShift.Name,
-                Remark = request.Remark
-            };
-
+            var subject = string.Format(Messages.MessageCheckInOutRequest, request.RequestType.Name, request.Requester.NickName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
+                request.RequestType.Name.ToLower(), 
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                request.FromShift.Name,
+                request.RequestedDate.ToShortTime(),
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -888,18 +877,15 @@ namespace Fanex.NexHR.Services
             string sendToNickName,
             string templateEmailPath)
         {
-            var subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                Employee = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                Date = request.FromDate.ToDateMonthYearFormatedDate(),
-                Shift = request.FromShift.Name,
-                Remark = request.Remark
-            };
-
+            var subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester.NickName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                request.FromShift.Name,
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1191,20 +1177,17 @@ namespace Fanex.NexHR.Services
             };
             var shift = this.GetDataEntity<Shift>(criteria);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.Name.ToLower(),
-                ForDate = request.FromDate.ToDateMonthYearFormatedDate(),
-                Time = HourFormat(request.FromDate),
-                Shift = shift != null ? shift.Name : string.Empty,
-                Url = this._baseUrl,
-                Action = command
-            };
-
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                command,
+                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                request.RequestType.Name,
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                shift != null ? shift.Name : string.Empty,
+                request.FromDate.ToShortTime(),
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1240,25 +1223,16 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = GetStringDateForLateInEarlyOutRequest(request.FromDate, request.ToDate);
-
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.Id == (short)RequestType.LateIn
-                                ? "a " + Resources.Labels.LateIn.ToLower()
-                                : "an " + Resources.Labels.EarlyOut.ToLower(),
-                ForDate = forDate,
-                Minute = isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
-                Remark = request.Remark,
-                Url = this._baseUrl,
-                Action = command
-            };
-
-            body = RazorEngine.Razor.Parse(body, bodyContent);
-
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                command,
+                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                request.RequestType.Name,
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
+                request.Remark);
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
@@ -1292,18 +1266,15 @@ namespace Fanex.NexHR.Services
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
             var forDate = GetMessageDateString(request.FromDate, request.ToDate);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.Name.ToLower(),
-                ForDate = forDate,
-                Remark = request.Remark,
-                Action = command
-            };
-
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                command,
+                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                request.RequestType.Name,
+                forDate,
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1337,22 +1308,19 @@ namespace Fanex.NexHR.Services
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = GetStringDateForLeaveRequest(request.FromDate, request.ToDate, request.TotalDays);
-
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.Name.ToLower(),
-                ForDate = forDate,
-                Remark = request.Remark,
-                LeaveName = request.LeaveType.Name,
-                Url = this._baseUrl,
-                Action = command
-            };
-
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            var forDate = request.TotalDays == (decimal)0.5
+                ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
+                : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
+            body = string.Format(
+                body, 
+                sendToNickName, 
+                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                command, 
+                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                request.RequestType.Name, 
+                forDate, 
+                request.LeaveType.Name, 
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1392,20 +1360,16 @@ namespace Fanex.NexHR.Services
             };
             var shift = this.GetDataEntity<Shift>(criteria);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var bodyContent = new
-            {
-                SendToNickName = sendToNickName,
-                ProcessUser = string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                RequestType = request.RequestType.Name.ToLower(),
-                Date = request.FromDate.ToDateMonthYearFormatedDate(),
-                Shift = shift != null ? shift.Name : string.Empty,
-                Remark = request.Remark,
-                Url = this._baseUrl,
-                Action = command
-            };
-
-            body = RazorEngine.Razor.Parse(body, bodyContent);
+            body = string.Format(
+                body,
+                sendToNickName,
+                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                command,
+                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                request.RequestType.Name,
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                shift != null ? shift.Name : string.Empty,
+                request.Remark);
 
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
@@ -1413,28 +1377,6 @@ namespace Fanex.NexHR.Services
                 mailCc,
                 subject,
                 body);
-        }
-
-        /// <summary>
-        /// Function to get string date for late in, early out request.
-        /// </summary>
-        /// <param name="fromDate">The From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <returns>String detail date.</returns>
-        private string GetStringDateForLateInEarlyOutRequest(DateTime fromDate, DateTime toDate)
-        {
-            var date = string.Empty;
-
-            if (toDate == null || (toDate - fromDate).Days == 0)
-            {
-                date = fromDate.ToDateMonthYearFormatedDate();
-            }
-            else
-            {
-                date = "from " + fromDate.ToDateMonthYearFormatedDate() + " to " + toDate.ToDateMonthYearFormatedDate();
-            }
-
-            return date;
         }
     }
 }

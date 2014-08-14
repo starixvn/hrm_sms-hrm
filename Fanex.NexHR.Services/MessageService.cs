@@ -297,18 +297,9 @@ namespace Fanex.NexHR.Services
         /// <param name="content">The Content of message.</param>
         /// <param name="sendToEmail">The send to email.</param>
         /// <param name="emailTemplatePath">The email template.</param>
-        private void SendEmail(
-            string subject, 
-            string content, 
-            string sendToEmail,
-            string emailTemplatePath)
+        private void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
         {
-            var emailContent = new
-            {
-                Subject = subject,
-                Content = content
-            };
-            var body = RazorEngine.Razor.Parse(emailTemplatePath, emailContent);
+            var body = string.Format(emailTemplatePath, subject, content);
 
             _emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],

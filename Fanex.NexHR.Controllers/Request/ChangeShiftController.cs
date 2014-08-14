@@ -85,7 +85,7 @@ namespace Fanex.NexHR.Controllers.Request
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
-                RequestType = (int)RequestFilter.LateInEarlyOut,
+                RequestType = (int)RequestType.ChangeShift,
                 FromDate = fromDate,
                 ToDate = toDate
             };

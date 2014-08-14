@@ -308,7 +308,6 @@ input[type="submit"],input[type="reset"], input[type="button"], a.button, button
 	display: inline-block;
 	position: relative;
 	padding: 0 8px;
-	height: 26px;
 	line-height: 25px;
 	color: #fff !important;
 	text-decoration: none !important;
@@ -318,6 +317,13 @@ input[type="submit"],input[type="reset"], input[type="button"], a.button, button
 	vertical-align:bottom;
 	width:75px;
 }
+
+@-moz-document url-prefix() {
+	input[type="submit"],input[type="reset"], input[type="button"], a.button, button[type="button"] {
+		line-height: 20px;
+	}
+}
+
 input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, a.button:hover, button[type="button"]:hover {
 	cursor: pointer;
 	text-decoration: none;
@@ -354,6 +360,7 @@ a.button
 	height:26px;
 	width:auto !important;
 	min-width: 60px;
+	line-height: 24px;
 }
 .odd
 {
@@ -794,7 +801,7 @@ div.tooltip
 
 table.table-tooltip
 {
-    min-width:320px;
+    min-width:420px;
     color: #000
 }
 table.table-tooltip tr.hasborder
@@ -819,7 +826,7 @@ table.table-tooltip tr td.col1
 
 table.table-tooltip tr td.col11
 {
-    width: 100px;
+    width: 150px;
     text-align:right;
 }
 

@@ -296,22 +296,29 @@ namespace Fanex.NexHR.Services
 
             return space;
         }
+        
+        public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
+        {
+            IList<DateTime> offAndHoliday = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            if (criteria.IsValid())
+            {
+                offAndHoliday = this.GetData<DateTime>(criteria).ToList();
+            }
+
+            return offAndHoliday;
+        }
 
         /// <summary>
         /// Get Off Date And Holiday Date.
         /// </summary>
         /// <param name="criteria">Criteria to query DB.</param>
         /// <returns>List of Date Time.</returns>
-        public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
+        public IList<DateTime> GetNotOffOrHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
         {
-            IList<DateTime> availableDates = null;
+            IList<DateTime> availableDates = GetOffDateAndHolidayDate(criteria);
             IList<DateTime> unavailableDates = new List<DateTime>();
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                availableDates = this.GetData<DateTime>(criteria).ToList();
-            }
-
+            
             if (availableDates != null)
             {
                 for (var dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
@@ -333,7 +340,7 @@ namespace Fanex.NexHR.Services
                     }
                 }
             }
-            
+
             return unavailableDates;
         }
 

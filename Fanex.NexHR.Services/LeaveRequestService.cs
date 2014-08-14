@@ -132,8 +132,8 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPath">Path of template email.</param>
         private void SendMailForInsertLeaveSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel emailModel = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 string subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
                 if (criteria.TotalDays > 1)
@@ -145,19 +145,19 @@ namespace Fanex.NexHR.Services
                     subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
                 }
 
-                emailModel.Subject = subject;
-                string forDate = criteria.TotalDays == (decimal)0.5 
-                    ? GetStringDateForLeaveRequest(criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
-                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
-                emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
-                emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
+                email.Subject = subject;
+                string forDate = criteria.TotalDays == (decimal)0.5
+                ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
+                : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                email.Body = Utilities.ReadTextFile(templateEmailPath);
+                email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
                 this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
-                emailModel.SendTo,
-                emailModel.SendCc,
-                emailModel.Subject,
-                emailModel.Body);
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
             }
         }
 
@@ -168,8 +168,8 @@ namespace Fanex.NexHR.Services
         /// <param name="templateEmailPath">Path of template email.</param>
         private void SendMailForUpdateLeaveSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel emailModel = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
-            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
+            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 string subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
                 if (criteria.TotalDays > 1)
@@ -181,19 +181,19 @@ namespace Fanex.NexHR.Services
                     subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
                 }
 
-                emailModel.Subject = subject;
+                email.Subject = subject;
                 string forDate = criteria.TotalDays == (decimal)0.5
-                    ? GetStringDateForLeaveRequest(criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
-                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.ToDate, criteria.TotalDays);
-                emailModel.Body = Utilities.ReadTextFile(templateEmailPath);
-                emailModel.Body = string.Format(emailModel.Body, emailModel.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
+                    ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
+                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                email.Body = Utilities.ReadTextFile(templateEmailPath);
+                email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
                 this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
-                emailModel.SendTo,
-                emailModel.SendCc,
-                emailModel.Subject,
-                emailModel.Body);
+                email.SendTo,
+                email.SendCc,
+                email.Subject,
+                email.Body);
             }
         }
 
@@ -209,11 +209,11 @@ namespace Fanex.NexHR.Services
             {
                 RequestId = requestId
             };
-            EmailModel emailModel = GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit);
-            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
+            EmailModel email = GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var leaveRequest = GetRequestById(criteria);
-                this.SendMailForReeditRequest(leaveRequest, reason, emailModel.SendToNickName, templateEmailPath, emailModel.SendTo, emailModel.SendCc);
+                this.SendMailForReeditRequest(leaveRequest, reason, email.SendToNickName, templateEmailPath, email.SendTo, email.SendCc);
             }
         }
 
@@ -241,7 +241,12 @@ namespace Fanex.NexHR.Services
                 subject += " on " + model.FromDate.ToDateMonthYearFormatedDate();
             }
 
-            var body = string.Format(bodyTemplate, sendToNickName, sendToNickName, model.Requester.NickName, model.RefNO, reason);
+            var body = string.Format(
+                bodyTemplate, 
+                sendToNickName,
+                string.Format("{0} ({1})", model.Requester.NickName, model.Requester.FullName),
+                model.RefNO, 
+                reason);
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 mailTo,

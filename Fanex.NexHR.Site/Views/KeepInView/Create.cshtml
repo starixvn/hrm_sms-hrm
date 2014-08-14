@@ -20,7 +20,7 @@
         @Html.Hidden("RequestType", (int)RequestType.KeepInView)
         @Html.ValidationSummary()
 
-        if ((bool)ViewBag.Requested)
+        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
         <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />

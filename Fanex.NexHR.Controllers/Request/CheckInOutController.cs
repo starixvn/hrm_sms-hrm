@@ -104,7 +104,7 @@ namespace Fanex.NexHR.Controllers.Request
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = this.CurrentUser.Id,
-                RequestType = (int)RequestFilter.CheckInOut,
+                RequestType = (int)RequestType.CheckIn,
                 FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
                 ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
             };
@@ -194,6 +194,7 @@ namespace Fanex.NexHR.Controllers.Request
             var viewModel = new CheckInOutRequestViewModel()
             {
                 RequestId = request.Id,
+                RequestType = request.RequestType.Id,
                 Employee = this.CurrentUser.NickName,
                 EmployeeId = this.CurrentUser.Id,
                 ForDate = request.RequestedDate.Date,
@@ -226,6 +227,7 @@ namespace Fanex.NexHR.Controllers.Request
             GetVerifierApproverList(model.EmployeeId, model);
             var criteria = new UpdateCheckInOutRequestCriteria()
             {
+                RequestId = model.RequestId,
                 EmpId = model.EmployeeId,
                 OnDate = model.AttendantDate,
                 CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),

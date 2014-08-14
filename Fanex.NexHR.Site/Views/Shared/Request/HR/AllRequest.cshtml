@@ -71,8 +71,8 @@
                             }
                             else if (request.RequestType.Id == (int)RequestType.ChangeShift)
                             { 
-                                <a href="@Url.Action("hrviewdetail", "request", requestDetail)">@request.RequestType.Name</a>
-                            }
+                                <a href="~/ChangeShift/Detail?id=@request.Id">@request.RequestType.Name</a>
+							}
                             else
                             {
                                 <a href="@Url.Action("hrview", "request", requestModel)">@request.RequestType.Name</a>
