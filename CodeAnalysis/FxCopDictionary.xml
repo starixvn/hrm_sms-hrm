@@ -5,8 +5,7 @@
     <Unrecognized />
     <Deprecated />
     <Compound />
-    <DiscreteExceptions>
-    </DiscreteExceptions>
+    <DiscreteExceptions />
   </Words>
   <Acronyms>
     <CasingExceptions>
@@ -140,6 +139,7 @@
       <Acronym>Xi</Acronym>
       <Acronym>XML</Acronym>
       <Acronym>Zh</Acronym>
+      <Acronym>KIV</Acronym>
     </CasingExceptions>
   </Acronyms>
 </Dictionary>
