@@ -102,6 +102,8 @@ namespace Fanex.NexHR.Controllers
                 Id = id
             };
             var memo = _memoService.GetById(criteria);
+            ViewBag.Updated = false;
+
             return View(memo);
         }
 
@@ -168,6 +170,8 @@ namespace Fanex.NexHR.Controllers
                 LookupCode = Constants.MemoCategory
             };
             ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.Updated = false;
+
             return View(new Memo
             {
                 SentTo = "All Staff",

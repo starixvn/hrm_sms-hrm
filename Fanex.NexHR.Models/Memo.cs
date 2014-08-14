@@ -10,7 +10,9 @@
 namespace Fanex.NexHR.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web;
 
     /// <summary>
     /// Memo Class.
@@ -54,5 +56,36 @@ namespace Fanex.NexHR.Models
         public int CheckForEdit { get; set; }
 
         public bool SendMail { get; set; }
+
+        public List<string> MemoDetailLink
+        {
+            get
+            {
+                var allLinks = new List<string>();
+                if (MemoType == 1)
+                {
+                    string[] links = Contents.Split(';');
+                    if (links.Length > 0)
+                    {
+                        foreach (var link in links)
+                        {
+                            string item =
+                            "<a href='"
+                            + HttpUtility.HtmlEncode(link)
+                            + "'> "
+                            + HttpUtility.HtmlEncode(link.Split('/')[link.Split('/').Length - 1])
+                            + "</a> </br>";
+                            allLinks.Add(item);
+                        }
+                    }
+                }
+                else
+                {
+                    allLinks.Add(Contents);
+                }
+
+                return allLinks;
+            }
+        }
     }
 }
