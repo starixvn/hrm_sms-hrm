@@ -73,7 +73,7 @@ $(document).ready(function () {
 			Description: $("#Description").val(),
 			AffectedFrom: $("#AffectedFrom").val(),
 			TotalDays: $("#TotalDays").val(),
-			LocalLeave: $("#localLeave").val()
+			LocalLeave: $("#LocalLeave").val()
 		};
 		var annualJsonFormat = JSON.stringify(annualLeaveMuiltiple);
 		var validate = validateInput();

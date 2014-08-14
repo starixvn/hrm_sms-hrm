@@ -333,7 +333,6 @@
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
-    <Content Include="Scripts\Views\employee.annualleavebalance.js" />
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
     <Content Include="Scripts\Views\message.edit.js" />

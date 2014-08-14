@@ -2,12 +2,13 @@
 @model AnnualLeaveBalanceModel
 @{
     ViewBag.Title = Labels.AdjustAnnualLeaveBalance;
+	var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }
 @section css{
     @Url.CombresLink("sitecss")
 }
 @section js{
-    @Url.CombresLink("employeeaanualbalancejs")
+    @Url.CombresLink("sitejs")
 }
 @section Breadcrumb
 {
@@ -25,8 +26,6 @@
     <div class="success">@Messages.AdjustSuccessfully</div> 
     }
 
-	@Html.HiddenFor(model => model.LocalLeave)
-
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.TotalDays)
@@ -42,7 +41,7 @@
 			<label>@Labels.LocalLeave</label>
 		</div>
 		<div class="input">
-			@RazorHelper.LocalLeaveDropDownList(controlName: "localLeave")
+			@Html.DropDownListFor(model => model.LocalLeave, localLeaveTypes)
 		</div>
 	</div>
 
@@ -70,7 +69,7 @@
             @Html.HiddenFor(model => model.EmpId)
         </div>
         <div class="input">
-            <input type="submit" value="@Labels.Adjust" id="AddBalance"/>
+            <input type="submit" value="@Labels.Adjust"/>
             <a class="button" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@Labels.Cancel</a>
         </div>
     </div>

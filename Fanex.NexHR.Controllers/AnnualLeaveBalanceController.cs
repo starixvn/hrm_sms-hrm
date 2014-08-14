@@ -21,7 +21,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
 
     /// <summary>
@@ -128,6 +127,8 @@ namespace Fanex.NexHR.Controllers
         [ChildActionOnly]
         public PartialViewResult MultipleInsert()
         {
+            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
+
             return PartialView(new AnnualLeaveBalanceMultiViewModel
             {
                 AffectedFrom = DateTime.Now
@@ -204,6 +205,7 @@ namespace Fanex.NexHR.Controllers
             AnnualLeaveBalanceModel model = _employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             return View(model);
         }
@@ -220,6 +222,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
             var command = formCollection["command"];
 
             if (command == Resources.Labels.Delete)
@@ -266,15 +269,22 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Create new annual leave balance.
+        /// </summary>
+        /// <param name="id">The employee Id.</param>
+        /// <returns>The create view.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Create(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
+
             return View(new AnnualLeaveBalanceModel
             {
                 EmpId = id,
-                AffectedFrom = DateTime.Now
+                AffectedFrom = DateTime.Now,
             });
         }
 
@@ -289,6 +299,7 @@ namespace Fanex.NexHR.Controllers
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             if (ModelState.IsValid)
             {

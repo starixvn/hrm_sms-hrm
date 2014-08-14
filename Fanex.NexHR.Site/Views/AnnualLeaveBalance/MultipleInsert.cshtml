@@ -2,12 +2,12 @@
 @model AnnualLeaveBalanceMultiViewModel
 @{
     ViewBag.Title = Labels.MultipleInsert;
+	var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }
 @using (Html.BeginForm())
 {
     <div class="validation-summary-errors" id="errors-model-state">
             </div>
-    @Html.HiddenFor(model => model.LocalLeave)
 	
     <div class="formrow">
         <div class="label">
@@ -17,13 +17,13 @@
             @Html.EditorFor(model => model.TotalDays)
         </div>
     </div>
-    
+
 	<div class="formrow">
 		<div class="label">
 			<label>@Labels.LocalLeave</label>
 		</div>
 		<div class="input">
-			@RazorHelper.LocalLeaveDropDownList(controlName: "localLeave")
+			@Html.DropDownListFor(model => model.LocalLeave, localLeaveTypes)
 		</div>
 	</div>
 	

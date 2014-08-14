@@ -2,6 +2,7 @@
 @model AnnualLeaveBalanceModel
 @{
     ViewBag.Title = "Edit " + ViewBag.Employee.NickName + "'s annual leave balance";
+	var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -31,7 +32,6 @@
         <div class="success flash">@Messages.Saved</div> 
     }
     
-	@Html.HiddenFor(model => model.LocalLeave)
 
     <div class="formrow">
         <div class="label">
@@ -42,13 +42,13 @@
             @Html.ValidationMessageFor(model => model.TotalDays)
         </div>
     </div>
-    
+
 	<div class="formrow">
 		<div class="label">
 			<label>@Labels.LocalLeave</label>
 		</div>
 		<div class="input">
-			@RazorHelper.LocalLeaveDropDownList(controlName: "localLeave")
+			@Html.DropDownListFor(model => model.LocalLeave, localLeaveTypes)
 		</div>
 	</div>
 
