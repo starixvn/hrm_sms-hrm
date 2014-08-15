@@ -135,7 +135,10 @@ $(document).ready(function () {
 				data: form.serialize(),
 				success: function (commandResult) {
 					if (commandResult.Code === 0) {
-						document.location = _global.root + "Message/Index";
+						$('#messageInfo').show();
+						setTimeout(function () {
+							document.location = _global.root + "Message/Index";
+						}, 2500);
 					}
 					else {
 						$("#error").html(commandResult.message);

@@ -72,12 +72,14 @@
 						<td class="left">
 							@if (message.IsRead)
 							{
-								<a href="/message/DetailByEmployee/@message.MessageId">@message.Subject</a>
+								<a href="/message/DetailByEmployee/@message.MessageId">
+									<span style="color:rgb(66, 127, 204);">@message.Subject</span>
+								</a>
 							}
 							else
 							{
 								<a href="javascript:;" onclick="detailMessage(@message.MessageId)">
-									<span style="color:Black;font-weight:bold;">@message.Subject</span>
+									@message.Subject
 								</a>
 							}
 						</td>

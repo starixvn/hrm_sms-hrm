@@ -24,11 +24,8 @@
 {
 	<div class="container_24 bunhat">
 		<div class="validation-summary-errors" id="error" style="display:none;"></div>
-		@if ((bool)ViewBag.Updated)
-		{
-			<div class="success flash">
-				Created Successful!</div>
-		}
+		<div id="messageInfo" class="success" style="display:none;">@Messages.SavedSuccessfully</div>
+
 		@Html.Hidden("messageId", message.MessageId)
 		@Html.Hidden("messageSubject", message.Subject)
 		@Html.Hidden("messageFromDate", message.FromDate)

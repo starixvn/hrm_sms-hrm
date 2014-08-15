@@ -21,11 +21,8 @@
 {
 	<div class="container_24 bunhat">
 		<div class="validation-summary-errors" id="error" style="display:none;"></div>
-		@if ((bool)ViewBag.Updated)
-		{
-			<div class="success flash">
-				Created Successful!</div> 
-		}
+		<div id="messageInfo" class="success" style="display:none;">@Messages.CreatedSuccessfully</div>
+
 		@Html.HiddenFor(model => model.EmployeeIds)
 		@Html.HiddenFor(model => model.GroupIds)
 		@Html.HiddenFor(model => model.Category)

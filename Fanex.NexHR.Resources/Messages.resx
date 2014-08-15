@@ -159,6 +159,9 @@
   <data name="CheckInOutEmailSubject" xml:space="preserve">
     <value>Check in/out request from</value>
   </data>
+  <data name="CreatedSuccessfully" xml:space="preserve">
+    <value>Created Successfully!</value>
+  </data>
   <data name="CurrentALCanBeUsed" xml:space="preserve">
     <value>Current annual leave day(s) balance can be used</value>
   </data>
@@ -272,6 +275,9 @@
   </data>
   <data name="Saved" xml:space="preserve">
     <value>Saved</value>
+  </data>
+  <data name="SavedSuccessfully" xml:space="preserve">
+    <value>Saved Successfully!</value>
   </data>
   <data name="SearchEmployee" xml:space="preserve">
     <value>search employee...</value>
