@@ -354,6 +354,7 @@ namespace Fanex.NexHR.Controllers
                 Calendar = calendar.Value
             };
             List<OvertimeExcelReport> entity = _overtimeService.OvertimeRecord(getOvertimeRecordCriteria).ToList();
+
             var hssfworkbook = _exportService.ExportEmployeeOvertimeRecord(entity, calendar, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);

@@ -14,7 +14,9 @@
 }
 
 @section Breadcrumb {
-    <a class="step">HR</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">HR</a>
+	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+	<a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
  @using (Html.BeginForm())
