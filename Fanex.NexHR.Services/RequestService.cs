@@ -70,7 +70,6 @@ namespace Fanex.NexHR.Services
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
 
         #endregion
-        private string _baseUrl;
         private IEmployeeRepository _employeeRepository;
         private IEmailService _emailService;
         private IRequestRepository _requestRepository;
@@ -80,7 +79,6 @@ namespace Fanex.NexHR.Services
             this._employeeRepository = new EmployeeRepository();
             this._requestRepository = new RequestRepository();
             this._emailService = new EmailService();
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public RequestService(
@@ -91,7 +89,6 @@ namespace Fanex.NexHR.Services
             this._employeeRepository = employeeRepository;
             this._emailService = emailService;
             this._requestRepository = requestRepository;
-            this._baseUrl = "http://" + HttpContext.Current.Request.Url.Authority;
         }
 
         public IEmployeeRepository EmployeeRepository
@@ -115,14 +112,6 @@ namespace Fanex.NexHR.Services
             get
             {
                 return this._requestRepository;
-            }
-        }
-
-        public string BaseLink
-        {
-            get
-            {
-                return this._baseUrl;
             }
         }
 

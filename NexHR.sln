@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Site", "Fanex.NexHR.Site\Fanex.NexHR.Site.csproj", "{405929F6-B1DC-49E5-B936-E342B36C87ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Core", "Fanex.NexHR.Core\Fanex.NexHR.Core.csproj", "{2493CFDA-E539-4F5C-BE9D-4AE823E42473}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A0210FE-616F-4A2C-90B3-59C26F3D3DB1}"
@@ -49,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAnalysis", "CodeAnalysi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Criteria", "Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj", "{089B8314-1793-403B-ADA8-E83E842C275E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Site", "Fanex.NexHR.Site\Fanex.NexHR.Site.csproj", "{405929F6-B1DC-49E5-B936-E342B36C87ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,16 +59,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
-		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|x86.ActiveCfg = Release|Any CPU
 		{2493CFDA-E539-4F5C-BE9D-4AE823E42473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2493CFDA-E539-4F5C-BE9D-4AE823E42473}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2493CFDA-E539-4F5C-BE9D-4AE823E42473}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -159,6 +149,16 @@ Global
 		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{089B8314-1793-403B-ADA8-E83E842C275E}.Release|x86.ActiveCfg = Release|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,8 +166,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{41C13575-C69E-442C-BB46-665FFDF81164} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
 		{E962400A-4E25-4F66-9E5B-5E69B0E057F3} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
-		{405929F6-B1DC-49E5-B936-E342B36C87ED} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
 		{D1D9A098-0EE6-41F8-8198-111CB66A493A} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
+		{405929F6-B1DC-49E5-B936-E342B36C87ED} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
 		{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168} = {2E6B8649-5225-47A3-A3F8-9FB7197F3A33}
 		{2493CFDA-E539-4F5C-BE9D-4AE823E42473} = {2E6B8649-5225-47A3-A3F8-9FB7197F3A33}
 		{7789CD20-1DC9-4077-921C-2548023BBC62} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
