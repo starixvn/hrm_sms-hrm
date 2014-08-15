@@ -2,51 +2,58 @@
 /*global _global*/
 
 $(document).ready(function () {
-    var dateRangePicker = $('#DateControl');
+	var dateRangePicker = $('#DateControl');
 
-    dateRangePicker.monPickr({
-        showDateRange: false,
-        sortDesc: true,
-        minDate: $("#MinDate").val(),
-        maxDate: $("#MaxDate").val(),
-        today: undefined,
-        month: undefined,
-        afterChangeMonth: function () {
-            var Month = dateRangePicker.monPickr("getMonth", "MM");
-            var Year = dateRangePicker.monPickr("getMonth", "yyyy");
-            $('#Month').val(Month);
-            $('#Year').val(Year);
-        }
-    });
+	dateRangePicker.monPickr({
+		showDateRange: false,
+		sortDesc: true,
+		minDate: $("#MinDate").val(),
+		maxDate: $("#MaxDate").val(),
+		today: undefined,
+		month: undefined,
+		afterChangeMonth: function () {
+			var Month = dateRangePicker.monPickr("getMonth", "MM");
+			var Year = dateRangePicker.monPickr("getMonth", "yyyy");
+			$('#Month').val(Month);
+			$('#Year').val(Year);
+		}
+	});
 
-    $(".monpickr-dropdown").hide();
+	$(".monpickr-dropdown").hide();
 
-    $("#TeamId").multiselect();
+	$("#TeamId").multiselect();
 
-    $("#btnSubmit").click(function (e) {
-        e.preventDefault();
-        submitForm(false);
-    }).focus();
+	$("#btnSubmit").click(function (e) {
+		e.preventDefault();
+		submitForm(false);
+	}).focus();
 
-    $("#btnExcel").click(function (e) {
-        e.preventDefault();
-        submitForm(true);
-    });
+	$("#btnExcel").click(function (e) {
+		e.preventDefault();
+		submitForm(true);
+	});
 
-    function submitForm(isExportExcel) {
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var employee = $("#Employee").val();
-        var employeeId = employee.length > 0 ? $("#EmployeeId").val() : "";
-        var isLocal = $("#IsLocal").val();
+	function submitForm(isExportExcel) {
+		var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
+		var employee = $("#Employee").val();
+		var employeeId = employee.length > 0 ? $("#EmployeeId").val() : "";
+		var isLocal = $("#IsLocal").val();
 
-        var url = _global.root + "report/TotalWorkingHourMonthly?Month=" + $("#Month").val() +
+		var url = _global.root + "report/TotalWorkingHourMonthly?Month=" + $("#Month").val() +
 			"&Year=" + $("#Year").val() +
 			"&TeamIds=" + teams +
 			"&EmployeeId=" + employeeId +
 			"&Employee=" + employee +
-			"&IsExportExcel=" + isExportExcel + 
+			"&IsExportExcel=" + isExportExcel +
 			"&isLocal=" + isLocal;
 
-        location.href = url;
-    }
+		location.href = url;
+	}
+
+	var weekendColumn = $("table.data th.weekend");
+	weekendColumn.each(function (i) {
+		var index = weekendColumn[i].cellIndex;
+		var column = $("table.data td").filter(":nth-child(" + (index + 1) + ")");
+		column.css("background-color", "#F7819F");
+	});
 });
