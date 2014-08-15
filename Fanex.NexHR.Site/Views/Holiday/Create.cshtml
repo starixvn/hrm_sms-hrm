@@ -25,7 +25,7 @@
     <div class="container_24 bunhat" style="min-width: 400px">
     
     @Html.ValidationSummary(true)
-    @if ((bool)ViewBag.Updated)
+    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
     {
         <div class="success flash">Created Successful!</div> 
     }

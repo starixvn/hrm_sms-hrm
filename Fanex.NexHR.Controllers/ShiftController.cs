@@ -139,6 +139,7 @@ namespace Fanex.NexHR.Controllers
             {
                 var criteria = new UpdateShiftCriteria()
                 {
+                    ShiftId = model.ShiftId,
                     Name = model.Name,
                     CheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeIn.ToString().PadLeft(2, '0'),
                     CheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeOut.ToString().PadLeft(2, '0'),

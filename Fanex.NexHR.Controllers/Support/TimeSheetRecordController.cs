@@ -33,6 +33,7 @@ namespace Fanex.NexHR.Controllers.Support
             _supportService = supportService ?? new SupportService();
         }
 
+        [NonAction]
         public ActionResult Index()
         {
             var model = new TimeSheetRecordViewModel()
@@ -49,6 +50,7 @@ namespace Fanex.NexHR.Controllers.Support
         /// </summary>
         /// <param name="model">TimeSheetRecord ViewModel.</param>
         /// <returns>Boolean to check.</returns>
+        [NonAction]
         [HttpPost]
         public ActionResult Index(TimeSheetRecordViewModel model)
         {
