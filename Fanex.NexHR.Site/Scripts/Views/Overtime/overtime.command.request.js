@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, ConstantRequest, fadeOutMessage, showMessage, MemberOvertime*/
+/*global _global, ConstantRequest, fadeOutMessage, showMessage, MemberOvertime, CommandOvertime*/
 
 window.CommandOvertime = (function ($) {
 	return {

@@ -111,11 +111,11 @@ var MemberOvertime = (function ($) {
 			});
 
 			$('.row').hover(
-                function () {
-                	$(this).addClass('rowhover');
-                }, function () {
-                	$(this).removeClass('rowhover');
-                });
+				function () {
+					$(this).addClass('rowhover');
+				}, function () {
+					$(this).removeClass('rowhover');
+				});
 		},
 		submitEvent: function () {
 			var teams = MemberOvertime.teamId.val();
@@ -143,11 +143,11 @@ var MemberOvertime = (function ($) {
 
 			if (memberOvertimeContainer.length > 0) {
 				$.get(_global.root + "Overtime/" + action, params)
-                        .done(function (content) {
-                        	memberOvertimeContainer.empty();
-                        	memberOvertimeContainer.html(content);
-                        	requestToCalculateOTHours();
-                        });
+						.done(function (content) {
+							memberOvertimeContainer.empty();
+							memberOvertimeContainer.html(content);
+							requestToCalculateOTHours();
+						});
 			}
 		}
 	};
