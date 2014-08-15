@@ -1,7 +1,7 @@
 ﻿'use strict';
 /*global _global, ConstantRequest, fadeOutMessage, showMessage, MemberOvertime*/
 
-var CommandOvertime = (function ($) {
+window.CommandOvertime = (function ($) {
 	return {
 		isInvalid: null,
 
@@ -125,5 +125,5 @@ var CommandOvertime = (function ($) {
 } (jQuery));
 
 $(document).ready(function () {
-    CommandOvertime.init();
+	CommandOvertime.init();
 });
