@@ -192,6 +192,7 @@ namespace Fanex.NexHR.Controllers.Request
 
             var criteria = new UpdateKeepInViewRequestCriteria()
             {
+                RequestId = model.RequestId,
                 EmpId = model.EmployeeId,
                 OnDate = model.Date,
                 RequestType = (int)RequestType.KeepInView,
@@ -203,7 +204,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                 ToTime = model.CrossDay
                 ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 ModifiedBy = this.CurrentUser.Id,

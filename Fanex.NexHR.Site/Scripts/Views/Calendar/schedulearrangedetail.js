@@ -517,12 +517,15 @@ var ScheduleArrangeDetail = (function ($) {
 			var numberOffCurrent = $(trObject).find("td.shiftdate input.offday").length;
 			if (numberOffDefault < numberOffCurrent) {
 				$(trObject).find("td a.lnkremove").parent().addClass("overOffdayInWeek").removeClass("upOffdayInWeek");
+				$(trObject).find("td a.lnkremove").parent().html('<span class="icon-warning"></span>');
 			}
 			else if (numberOffDefault > numberOffCurrent) {
 				$(trObject).find("td a.lnkremove").parent().addClass("upOffdayInWeek").removeClass("overOffdayInWeek");
+				$(trObject).find("td a.lnkremove").parent().html('<a class="lnkremove" href="javascript:;">-</a>');
 			}
 			else {
 				$(trObject).find("td a.lnkremove").parent().removeClass("overOffdayInWeek").removeClass("upOffdayInWeek");
+				$(trObject).find("td a.lnkremove").parent().html('<a class="lnkremove" href="javascript:;">-</a>');
 			}
 		},
 		getAllShift: function () {

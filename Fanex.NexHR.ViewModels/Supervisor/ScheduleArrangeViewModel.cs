@@ -20,6 +20,8 @@ namespace Fanex.NexHR.ViewModels.Supervisor
 
         public string NickName { get; set; }
 
+        public string FullName { get; set; }
+
         public string TeamCode { get; set; }
 
         public string TeamName { get; set; }
