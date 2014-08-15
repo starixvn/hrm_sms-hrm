@@ -13,7 +13,7 @@ namespace Fanex.NexHR.Site.AppStart
 {
     using System.Web.Routing;
     using global::Combres;
-    
+
     /// <summary>
     /// COMBRES class.
     /// </summary>
