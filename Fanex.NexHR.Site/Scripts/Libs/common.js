@@ -134,22 +134,7 @@ $(document).ready(function(){
 		}
 	}
 
-	var clonedHeaderRow;
-	$(".persist-area").each(function () {
-		clonedHeaderRow = $(".persist-header", this);
-		clonedHeaderRow
-			.before(clonedHeaderRow.clone())
-			.css("width", clonedHeaderRow.width())
-			.addClass("floatingHeader")
-			.removeClass("persist-header");
-	});
-
-	$(".content_scroll")
-		.scroll(updateTableHeaders)
-		.trigger("scroll");
-	$(window).resize(function() {
-		updateTableHeaders();
-	});
+	floatingHeader();
 
 	$('.processing-submit').click(function (evt) {
 		actingButton('.processing-submit', true);
@@ -168,6 +153,26 @@ function backToPreviousPageAction() {
         parent.history.back();
         return false;
     });
+}
+
+function floatingHeader()
+{
+	var clonedHeaderRow;
+	$(".persist-area").each(function () {
+		clonedHeaderRow = $(".persist-header", this);
+		clonedHeaderRow
+			.before(clonedHeaderRow.clone())
+			.css("width", clonedHeaderRow.width())
+			.addClass("floatingHeader")
+			.removeClass("persist-header");
+	});
+
+	$(".content_scroll")
+		.scroll(updateTableHeaders)
+		.trigger("scroll");
+	$(window).resize(function() {
+		updateTableHeaders();
+	});
 }
 
 function checkBadDates(mydate) {

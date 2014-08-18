@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, ScheduleArrangeCommon, ScheduleArrange*/
+/*global _global, ScheduleArrangeCommon, ScheduleArrange, floatingHeader*/
 
 var ScheduleArrangeDetail = (function ($) {
 	return {
@@ -28,6 +28,7 @@ var ScheduleArrangeDetail = (function ($) {
 		messageComfirm: null,
 
 		init: function () {
+			floatingHeader();
 			ScheduleArrangeDetail.messageComfirm = "Are you sure to refresh the screen based on your filter condition? " +
 				"Data you have entered may not be saved." +
 				" </br></br>  Click OK to proceed or Cancel to come back and save first";
@@ -62,7 +63,7 @@ var ScheduleArrangeDetail = (function ($) {
 			});
 
 			ScheduleArrangeDetail.lnkSave.on("click", function () {
-				ScheduleArrangeDetail.saveArrangeSchedule();
+				ScheduleArrangeCommon.saveArrangeSchedule();
 				return false;
 			});
 
@@ -371,6 +372,8 @@ var ScheduleArrangeDetail = (function ($) {
 			ScheduleArrangeDetail.changeWeekDay();
 			ScheduleArrangeDetail.getAllShift();
 			ScheduleArrangeDetail.checkWarningAllRow();
+
+			
 		},
 		changeWeekDay: function () {
 			ScheduleArrangeDetail.chkAllMonday.on("change", function () {

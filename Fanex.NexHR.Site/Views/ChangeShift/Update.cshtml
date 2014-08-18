@@ -40,8 +40,7 @@
             <div class="input">
                 @Html.DatePickerFor(model => model.FromDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
-             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
         <div class="formrow">
@@ -51,8 +50,7 @@
             <div class="input">
                 @Html.DatePickerFor(model => model.ToDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
-             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
          <div class="formrow">

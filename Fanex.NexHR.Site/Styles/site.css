@@ -980,7 +980,7 @@ div.confirm div.inputRemark textarea
     font-weight: bold;
 }
 
-table.data tr.weekend
+table.data tr td.weekend
 {
 	background-color: #F7819F;
 }

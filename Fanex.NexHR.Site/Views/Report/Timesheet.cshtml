@@ -104,18 +104,22 @@
     </tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-	{{if IsWeekend == true}}
-		<tr {{if IsNotWork != 0}}class="offdate weekend"{{else ShiftId }} class="weekend" {{else}} class="noshift weekend"{{/if}}>
-	{{else}}
-		<tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
-	{{/if}}
-
+	<tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
         <td>${index()}</td>
-		<td>
-            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-                ${jsonToDetailsDate(AttendanceDate)}
-            </a>
-        </td>
+
+		{{if IsWeekend == true}}
+			<td class="weekend">
+				<a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+					${jsonToDetailsDate(AttendanceDate)}
+				</a>
+			</td>
+		{{else}}
+			<td>
+				<a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+					${jsonToDetailsDate(AttendanceDate)}
+				</a>
+			</td>
+		{{/if}}
 
         <td title="${FullName}" class="tooltip">
             ${NickName}

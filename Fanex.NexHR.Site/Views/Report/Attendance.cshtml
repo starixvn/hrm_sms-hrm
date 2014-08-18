@@ -206,12 +206,7 @@
     </tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-	{{if IsWeekend == true}}
-		<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row weekend" {{else}} class="weekend" {{/if}}>
-	{{else}}
-		<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
-	{{/if}}
-    
+	<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
         <td>${index()}</td>
 
 		{{if IsWeekend == true}}

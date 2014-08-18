@@ -429,7 +429,7 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !isDailyRequest,
                 Role = CheckRoleAccordingToRequestType(requestViewType),
-                SupervisorId = null,
+                SupervisorId = this.CurrentUser.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
