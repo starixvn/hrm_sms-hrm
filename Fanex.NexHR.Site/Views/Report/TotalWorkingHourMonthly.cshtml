@@ -36,7 +36,15 @@
                 Category
             </div>
             <div class="grid_3">
-                @RazorHelper.CategoryDropDownList("IsLocal", Model.IsLocal.ToString())
+						@{
+				var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+			}
+			@Html.DropDownList("IsLocal", category, new { @class = "category" })
             </div>
         <div class="clear"></div>
         <div class="space"></div>
