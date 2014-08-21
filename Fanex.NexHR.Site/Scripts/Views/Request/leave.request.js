@@ -89,16 +89,18 @@ var LeaveRequest = (function ($) {
 			LeaveRequest.disableControlForDetail();
 		},
 		timeChange: function () {
-			var checked = LeaveRequest.isFromTimeAfterDay.attr("checked");
-			if (checked === "checked" || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
-				LeaveRequest.isToTimeAfterDay.attr("checked", "checked");
-				var toDate = new Date(LeaveRequest.fromDate.val());
-				toDate.setDate(toDate.getDate() + 1);
-				LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
-			}
-			else {
-				LeaveRequest.isToTimeAfterDay.removeAttr("checked");
-				LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+			if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
+				var checked = LeaveRequest.isFromTimeAfterDay.attr("checked");
+				if (checked === "checked" || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
+					LeaveRequest.isToTimeAfterDay.attr("checked", "checked");
+					var toDate = new Date(LeaveRequest.fromDate.val());
+					toDate.setDate(toDate.getDate() + 1);
+					LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
+				}
+				else {
+					LeaveRequest.isToTimeAfterDay.removeAttr("checked");
+					LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+				}
 			}
 		},
 		showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
