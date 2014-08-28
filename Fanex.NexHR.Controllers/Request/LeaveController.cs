@@ -236,7 +236,7 @@ namespace Fanex.NexHR.Controllers.Request
             var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
             {
                 EmpId = employeeId,
-                RequestId = requestId,
+                RequestId = requestId == -1 ? null : requestId,
                 EffectedDay = toDate.HasValue ? toDate.Value : DateTime.Now.Date
             };
             EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);

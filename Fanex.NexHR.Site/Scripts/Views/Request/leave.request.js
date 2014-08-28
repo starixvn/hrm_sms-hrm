@@ -292,7 +292,7 @@ var LeaveRequest = (function ($) {
 			var newMaxDate = new Date(maxDate);
 
 			var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
-			var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 5));
+			var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
 
 			if (leaveType === LeaveRequest.generalLeaveType) {
 				$("#grbHalfDay").hide();
@@ -311,7 +311,7 @@ var LeaveRequest = (function ($) {
 				leaveDetailContainer.empty();
 
 				if (leaveType === LeaveRequest.maternityLeaveType) {
-					tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
+					tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
 					LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
 					LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
 				}
@@ -323,9 +323,13 @@ var LeaveRequest = (function ($) {
 						leaveTypeId: leaveType
 					},
 					function (response) {
-						if (response != null) {
+						if (!$.isEmptyObject(response)) {
 							LeaveRequest.fromDate.attr("disabledDate", response.join(","));
 							LeaveRequest.toDate.attr("disabledDate", response.join(","));
+						}
+						else {
+							LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+							LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
 						}
 					});
 				}

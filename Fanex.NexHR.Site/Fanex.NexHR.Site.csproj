@@ -406,7 +406,9 @@
     <Content Include="Scripts\Libs\modernizr.js" />
     <Content Include="Scripts\Libs\monPickr-0.0.3.js" />
     <Content Include="Scripts\tiny_mce\langs\en.js" />
-    <Content Include="Scripts\tiny_mce\license.txt" />
+    <Content Include="Scripts\tiny_mce\license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\tiny_mce\plugins\advhr\css\advhr.css" />
     <Content Include="Scripts\tiny_mce\plugins\advhr\editor_plugin.js" />
     <Content Include="Scripts\tiny_mce\plugins\advhr\editor_plugin_src.js" />

@@ -392,12 +392,12 @@ namespace Fanex.NexHR.Services
             {
                 emailModel = GetMailApprover(relatedPeople);
             }
-            
+
             if (relatedPeople.EmailSetting.AllowSendVerifier
-                && !(relatedPeople.Approver != null && relatedPeople.Verifier != null
-                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email) && !string.IsNullOrWhiteSpace(relatedPeople.Approver.Email)
-                && (relatedPeople.EmailSetting.AllowSendApprover 
-                || !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase))))
+                && relatedPeople.Verifier != null
+                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
+                && (string.IsNullOrWhiteSpace(emailModel.SendTo)
+                || !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase)))
             {
                 emailModel = GetMailVerifier(relatedPeople, emailModel);
             }
