@@ -150,7 +150,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         {
             IEnumerable<DateTime> dates = null;
             var fromDate = new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1);
-            var toDate = new DateTime(date.AddMonths(3).Year, date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).Month, 1).AddDays(-1);
+            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
+            var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
 
             if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave || leaveTypeId.Value == Constants.BusinessTrip))
             {
