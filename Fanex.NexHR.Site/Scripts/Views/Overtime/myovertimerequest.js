@@ -67,9 +67,6 @@ function checkIsUpdateForm() {
 
 function rangeTextBox(textbox, min, max) {
 	var textboxValue = textbox.val();
-	console.log("aaa");
-	console.log(min);
-	console.log(max);
 	var check = textboxValue % 0.5 === 0;
 	if (check) {
 		var isNotInRange = (textboxValue < min) || (textboxValue > parseFloat(max));
