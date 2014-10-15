@@ -210,16 +210,10 @@
                     <td class="tooltip" title="@leave.Employee.FullName">@leave.Employee.NickName
                     </td>
                     <td>
-                        @{
-					if (leave.AnnualLeaveLastYear > 0)
+					@if (leave.CreditKIV > 0)
 					{
-                            <span>@leave.AnnualLeaveLastYear.ToString("0.0")</span>
+                            <span>@leave.CreditKIV.ToString("0.0")</span>
 					}
-					if (leave.AnnualLeaveLastYear < 0)
-					{
-                            <span class="red">@leave.AnnualLeaveLastYear.ToString("0.0")</span>
-					}     
-                        }
                     </td>
                     <td>
                         @{
@@ -390,6 +384,16 @@
                         }
                     </td>
 					<td>
+					@{
+						if (leave.KIVBalance > 0)
+						{
+							<span>@leave.KIVBalance.ToString("0.0")</span>
+						}
+					if (leave.KIVBalance < 0)
+						{
+							<span class="red">@leave.KIVBalance.ToString("0.0")</span>
+						}
+					}
 					</td>
                     @if (Roles.IsUserInRole("HR"))
 					{

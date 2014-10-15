@@ -18,6 +18,8 @@ namespace Fanex.NexHR.Models
 
         public float AnnualLeaveLastYear { get; set; }
 
+        public float CreditKIV { get; set; }
+
         public float AnnualLeaveCurrentYear { get; set; }
 
         public float Jan { get; set; }
@@ -45,6 +47,8 @@ namespace Fanex.NexHR.Models
         public float Dec { get; set; }
 
         public float LeaveBalance { get; set; }
+
+        public float KIVBalance { get; set; }
 
         public string Remark { get; set; }
     }
