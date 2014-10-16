@@ -373,7 +373,7 @@
                     </td>
                     <td>
                         @{
-					if (leave.LeaveBalance > 0)
+					if (leave.LeaveBalance >= 0)
 					{
                             <span>@leave.LeaveBalance.ToString("0.0")</span>
 					}
@@ -385,7 +385,7 @@
                     </td>
 					<td>
 					@{
-						if (leave.KIVBalance > 0)
+						if (leave.KIVBalance >= 0)
 						{
 							<span>@leave.KIVBalance.ToString("0.0")</span>
 						}
