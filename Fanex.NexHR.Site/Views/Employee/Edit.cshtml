@@ -58,6 +58,15 @@
 				</div>
 				<div class="line">
 					<div class="label">
+						@Html.LabelFor(model => model.EmployeeCard)
+					</div>
+					<div class="input">
+						@Html.TextBoxFor(model => model.EmployeeCard, new { maxlength = "10" })
+						@Html.ValidationMessageFor(model => model.EmployeeCard)
+					</div>
+				</div>
+				<div class="line">
+					<div class="label">
 						@Html.LabelFor(model => model.DomainUsername)
 					</div>
 					<div class="input">

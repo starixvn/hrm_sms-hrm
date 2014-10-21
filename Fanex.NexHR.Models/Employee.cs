@@ -31,6 +31,8 @@ namespace Fanex.NexHR.Models
 
         public string NickName { get; set; }
 
+        public string EmployeeCard { get; set; }
+
         public string ChineseName { get; set; }
 
         public string Password { get; set; }

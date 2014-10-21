@@ -836,6 +836,7 @@ namespace Fanex.NexHR.Controllers
                 DomainUsername = model.DomainUsername,
                 FullName = model.FullName,
                 NickName = model.NickName,
+                EmployeeCard = model.EmployeeCard,
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 JobTitleId = model.JobTitleId,

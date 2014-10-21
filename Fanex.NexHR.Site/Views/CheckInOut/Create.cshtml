@@ -23,7 +23,7 @@
 
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestCreated</div>
+        <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />
         <input type="hidden" id="year" value="@ViewBag.Year" />
         }
@@ -171,7 +171,7 @@
                 @Html.Hidden("RequestType", (int)RequestType.CheckIn)
             </div>
             <div class="input">
-                <input type="submit" value="@Fanex.NexHR.Resources.Labels.Request"/>
+                <input type="submit" value="@Labels.Request"/>
                @* <a href="~/checkinout/employeeview" class="button">@Labels.Back</a>*@
                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>

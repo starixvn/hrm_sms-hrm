@@ -27,6 +27,8 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public string NickName { get; set; }
 
+        public string EmployeeCard { get; set; }
+
         [SpParam(SqlParamName = "DOB")]
         public DateTime? DateOfBirth { get; set; }
 
