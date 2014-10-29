@@ -7,9 +7,9 @@ $(document).ready(function () {
     if ($("#IsUsed").val() === "True") {
         $("#Name").attr("disabled", "disabled");
         $("#HourTimeIn").attr("disabled", "disabled");
-        $("#MuniteTimeIn").attr("disabled", "disabled");
+        $("#MinuteTimeIn").attr("disabled", "disabled");
         $("#HourTimeOut").attr("disabled", "disabled");
-        $("#MuniteTimeOut").attr("disabled", "disabled");
+        $("#MinuteTimeOut").attr("disabled", "disabled");
         $("#IsInAfterDay").attr("disabled", "disabled");
         $("#IsOutAfterDay").attr("disabled", "disabled");
     }

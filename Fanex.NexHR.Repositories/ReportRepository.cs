@@ -34,26 +34,37 @@ namespace Fanex.NexHR.Repositories
         /// <returns>List Of EmployeeAttendanceModel.</returns>
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
         {
+            var listAttendance = new List<EmployeeAttendanceModel>();
+            var currentAttendance = new EmployeeAttendanceModel();
+
             using (ObjectDb objectDb = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
+                objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
                     (attendance, t) =>
                     {
-                        attendance.RequestList = new List<EmployeeAttendanceRequest>();
+                        if (currentAttendance == null 
+                            || currentAttendance.EmpId != attendance.EmpId 
+                            || currentAttendance.AttendanceDate.Value.Date != attendance.AttendanceDate.Value.Date)
+                        {
+                            listAttendance.Add(attendance);
+                            currentAttendance = attendance;
+                            currentAttendance.RequestList = new List<EmployeeAttendanceRequest>();
+                        }
+
                         if (t != null && t.RequestType != null)
                         {
                             EmployeeAttendanceRequest request = FillAttendanceRequest(t);
 
-                            attendance.RequestList.Add(request);
+                            currentAttendance.RequestList.Add(request);
                         }
 
-                        return attendance;
+                        return currentAttendance;
                     },
                     splitOn: "RequestType",
                     parameterValues: criteria.GetSpParams());
-
-                return entity.ToList();
             }
+
+            return listAttendance;
         }
 
         /// <summary>
