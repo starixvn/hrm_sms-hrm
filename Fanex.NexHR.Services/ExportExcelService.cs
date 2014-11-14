@@ -458,17 +458,14 @@ namespace Fanex.NexHR.Services
             //// render hearder
             var rowTakeLeave = sheet.GetRow(2);
             var cellTakeLeave = rowTakeLeave.GetCell(5);
-            cellTakeLeave.SetCellValue("Take annual leave " + year);
-
-            var rowAnnualleave = sheet.GetRow(3);
-            var cellAnnualleaveLastYear = rowAnnualleave.GetCell(3);
-            var cellAnnualleaveCurrentYear = rowAnnualleave.GetCell(4);
-            cellAnnualleaveLastYear.SetCellValue(year - 1);
-            cellAnnualleaveCurrentYear.SetCellValue(year);
+            cellTakeLeave.SetCellValue("Leave's Report " + year);
 
             var rowAnnualBalance = sheet.GetRow(2);
             var cellAnnualBalance = rowAnnualBalance.GetCell(17);
             cellAnnualBalance.SetCellValue("Balance Of AL " + year);
+
+            var cellKIVBalance = rowAnnualBalance.GetCell(18);
+            cellKIVBalance.SetCellValue("Balance Of KIV " + year);
 
             //// render body
             var rowIndex = _RowStartBodyLeaveSummary;
@@ -500,7 +497,7 @@ namespace Fanex.NexHR.Services
                         row.GetCell(0).SetCellValue(index);
                         row.GetCell(1).SetCellValue(leaveSummary.Employee.NickName);
                         row.GetCell(2).SetCellValue(leaveSummary.Employee.FullName);
-                        row.GetCell(3).SetCellValue(leaveSummary.AnnualLeaveLastYear);
+                        row.GetCell(3).SetCellValue(leaveSummary.CreditKIV);
                         row.GetCell(4).SetCellValue(leaveSummary.AnnualLeaveCurrentYear);
                         row.GetCell(5).SetCellValue(leaveSummary.Jan);
                         row.GetCell(6).SetCellValue(leaveSummary.Feb);
@@ -515,7 +512,7 @@ namespace Fanex.NexHR.Services
                         row.GetCell(15).SetCellValue(leaveSummary.Nov);
                         row.GetCell(16).SetCellValue(leaveSummary.Dec);
                         row.GetCell(17).SetCellValue(leaveSummary.LeaveBalance);
-                        row.GetCell(18).SetCellValue(leaveSummary.Remark);
+                        row.GetCell(18).SetCellValue(leaveSummary.KIVBalance);
 
                         index++;
                         rowIndex++;
