@@ -222,11 +222,10 @@ namespace Fanex.NexHR.Services
                         RequestId = criteria.RequestId
                     };
                     RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
-                    var templateEmailPathForRequester = HttpContext.Current.Server.MapPath(_EmailTemplatePathForRequester);
                     var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
 
                     var sendMailTask = new Task(() 
-                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRequester, templateEmailPathForRelated));
+                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRelated));
                     sendMailTask.Start();
                 }
             }
@@ -523,13 +522,11 @@ namespace Fanex.NexHR.Services
         /// <param name="command">The command.</param>
         /// <param name="request">The request.</param>
         /// <param name="processBy">The process user.</param>
-        /// <param name="templateEmailPathForRequester">The template email path for requester.</param>
         /// <param name="templateEmailPathForRelated">The template email path for send to related people.</param>
         private void SendMailProcess(
             string command,
             RequestEntity request,
             int processBy,
-            string templateEmailPathForRequester,
             string templateEmailPathForRelated)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
@@ -540,10 +537,6 @@ namespace Fanex.NexHR.Services
             command = this.GetPassiveNameOfCommand(command);
 
             EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
-            ////if (emailModel.IsAllowSendRequester)
-            ////{
-            ////    this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
-            ////}
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
@@ -607,44 +600,6 @@ namespace Fanex.NexHR.Services
             }
 
             return action;
-        }
-
-        /// <summary>
-        /// Function to send mail to requester.
-        /// </summary>
-        /// <param name="command">Type of changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which change status request.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
-        private void SendToRequester(string command, RequestEntity request, Employee employee, Employee processUser, string templateEmailPath)
-        {
-            string forDate = string.Empty;
-            if (request.TotalDays > 1)
-            {
-                forDate = " from " + request.FromDate.ToDateMonthYearFormatedDate() + " to " + request.ToDate.ToDateMonthYearFormatedDate();
-            }
-            else
-            {
-                forDate = " on " + request.FromDate.ToDateMonthYearFormatedDate();
-            }
-
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(body, employee.NickName, request.RequestType.Name, forDate, command, processUser.NickName, processUser.FullName);
-
-            var subject = string.Format(
-                Resources.Messages.ProcessSubject,
-                request.RequestType.Name,
-                forDate,
-                command,
-                processUser.NickName);
-
-            this._emailService.SendEmail(
-                ConfigurationManager.AppSettings["Email"],
-                employee.Email,
-                string.Empty,
-                subject,
-                body);
         }
 
         /// <summary>

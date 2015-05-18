@@ -2,16 +2,16 @@
 /*global _global, _messages*/
 
 function toggleHalfDay() {
-    if ($('#HalfDay').prop('checked')) {
-        $('#timeGroup').show();
-    }
-    else {
-        $('#timeGroup').hide();
-    }
+	if ($('#HalfDay').prop('checked')) {
+		$('#timeGroup').show();
+	}
+	else {
+		$('#timeGroup').hide();
+	}
 }
 
 function bindHalfDay() {
-    toggleHalfDay();
+	toggleHalfDay();
 }
 
 $(document).ready(function () {
@@ -35,20 +35,20 @@ $(document).ready(function () {
 
 	$('.datepicker').change(function () {
 		$.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: $("#Date").val() },
-        function (data) {
-        	debugger;
-        	if (data != null) {
-        		$('#shiftName').text(data.Name);
-        		$('#Shift').val(data.Name);
-        		$('#ShiftId').val(data.Id);
-        		$('input[type=submit]').show();
-        	}
-        	else {
-        		$('#shiftName').text(_messages.notAvailable);
-        		$('#Shift').val(_messages.notAvailable);
-        		$('#ShiftId').val('0');
-        		//$('input[type=submit]').hide();
-        	}
-        });
+	function (data) {
+		debugger;
+		if (data != null) {
+			$('#shiftName').text(data.Name);
+			$('#Shift').val(data.Name);
+			$('#ShiftId').val(data.Id);
+			$('input[type=submit]').show();
+		}
+		else {
+			$('#shiftName').text(_messages.notAvailable);
+			$('#Shift').val(_messages.notAvailable);
+			$('#ShiftId').val('0');
+			//$('input[type=submit]').hide();
+		}
+	});
 	});
 });
