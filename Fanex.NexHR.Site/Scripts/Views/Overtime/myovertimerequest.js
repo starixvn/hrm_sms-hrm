@@ -240,7 +240,7 @@ $(document).ready(function () {
 			focusedTexbox === "request_PublicHours") {
 			if (focusedTexbox === "request_NormalHours") {
 				if (TotalHours >= TotalShiftHours) {
-					var normalLitmit = (TotalHours - TotalShiftHours) + 0.25;
+					var normalLitmit = (TotalHours - TotalShiftHours) + 0.09;
 
 					if (normalLitmit < 0) {
 						normalLitmit = 0;
@@ -256,7 +256,7 @@ $(document).ready(function () {
 				}
 			}
 			else {
-				var offOrHolidayLimit = TotalHours + 0.25;
+				var offOrHolidayLimit = TotalHours + 0.09;
 				offOrHolidayLimit = parseFloat(offOrHolidayLimit.toFixed(2));
 				rangeTextBox(object, 0, offOrHolidayLimit);
 			}

@@ -334,6 +334,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             ViewBag.Shifts = _shiftService.GetSelectList();
+            ViewBag.Id = model.EmpID;
 
             return View(model);
         }

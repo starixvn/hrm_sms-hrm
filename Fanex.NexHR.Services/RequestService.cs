@@ -40,7 +40,7 @@ namespace Fanex.NexHR.Services
         private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
         private const string _MsgLeaveOneDay = "<span class='req leave'>{0}</span> 1 day";
         private const string _MsgGeneralLeaveHalfDay = "<span class='req leave'>{0}</span> 0.5 day";
-        private const string _MsgLeaveDuringWorking = "<span class='req leave'>{0} ({1}-{2})</span> {3} minutes";
+        private const string _MsgLeavePublicHoliday = "<span class='req leave'>{0}</span>";
         private const string _MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         private const string _MsgChangeShift = "<span class='req changeshift'>{0}</span>";
         private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
@@ -477,7 +477,7 @@ namespace Fanex.NexHR.Services
             }
             else if (request.TotalDays == 1)
             {
-                messageDetail = string.Format(_MsgLeaveOneDay, GetMessageDateString(request.FromDate, request.ToDate));
+                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
             }
             else if ((request.TotalDays - (decimal)0.5) == 0)
             {
@@ -486,8 +486,7 @@ namespace Fanex.NexHR.Services
             }
             else
             {
-                messageDetail = string.Format(
-                    _MsgLeaveDuringWorking, leaveDate, request.FromDate.ToShortTime(), request.ToDate.ToShortTime(), (request.ToDate - request.FromDate).TotalMinutes);
+                messageDetail = string.Format(_MsgLeavePublicHoliday, leaveDate);
             }
 
             return messageDetail;
@@ -541,10 +540,10 @@ namespace Fanex.NexHR.Services
             command = this.GetPassiveNameOfCommand(command);
 
             EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
-            if (emailModel.IsAllowSendRequester)
-            {
-                this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
-            }
+            ////if (emailModel.IsAllowSendRequester)
+            ////{
+            ////    this.SendToRequester(command, request, employee, processUser, templateEmailPathForRequester);
+            ////}
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {

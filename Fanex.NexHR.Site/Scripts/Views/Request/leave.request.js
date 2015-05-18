@@ -21,6 +21,7 @@ var LeaveRequest = (function ($) {
 		currentLeaveBalance: null,
 		generalLeaveType: null,
 		maternityLeaveType: null,
+		publicHolidayLeaveType: null,
 		isFromTimeAfterDay: null,
 		isToTimeAfterDay: null,
 		isTopManager: false,
@@ -28,6 +29,7 @@ var LeaveRequest = (function ($) {
 		init: function () {
 			LeaveRequest.generalLeaveType = "0";
 			LeaveRequest.maternityLeaveType = "12";
+			LeaveRequest.publicHolidayLeaveType = "13";
 			LeaveRequest.verifierId = $("#VerifierId");
 			LeaveRequest.approverId = $("#ApproverId");
 			LeaveRequest.leaveTypeId = $("#LeaveTypeId");
@@ -290,7 +292,6 @@ var LeaveRequest = (function ($) {
 			var employeeId = LeaveRequest.employeeId.val();
 			var maxDate = new Date(LeaveRequest.fromDate.attr("maxDate"));
 			var newMaxDate = new Date(maxDate);
-
 			var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
 			var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
 
@@ -312,6 +313,11 @@ var LeaveRequest = (function ($) {
 
 				if (leaveType === LeaveRequest.maternityLeaveType) {
 					tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
+					LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+					LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+				}
+				else if(leaveType === LeaveRequest.publicHolidayLeaveType)
+				{
 					LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
 					LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
 				}

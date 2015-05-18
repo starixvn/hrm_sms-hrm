@@ -4,6 +4,7 @@ var ScheduleArrangeCommon = (function () {
 	return {
 		messageComfirm: null,
 		hasChangeValue: null,
+		currentShiftDate: null,
 
 		init: function () {
 			ScheduleArrangeCommon.messageComfirm = "Are you sure to refresh the screen based on your filter condition? " +

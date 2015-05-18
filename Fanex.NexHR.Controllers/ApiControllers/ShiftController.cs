@@ -40,7 +40,8 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 Date = date
             };
 
-            return _shiftService.GetByDate(criteria);
+            Shift shift = _shiftService.GetByDate(criteria);
+            return shift;
         }
     }
 }

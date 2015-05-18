@@ -743,7 +743,7 @@ div.header {
     display: block;
     right: 8px;
     text-shadow: rgba(255, 255, 255, 0.7) 0px 1px 0px;
-    min-width: 130px; }
+    min-width: 140px; }
     div.header #user_utilities h2 
     {
         width:auto !important;

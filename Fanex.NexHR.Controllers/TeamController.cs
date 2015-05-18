@@ -128,9 +128,9 @@ namespace Fanex.NexHR.Controllers
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 Leader = team.Leader != null ? team.Leader.DisplayName : string.Empty,
-                LeaderId = team.Leader != null ? team.Leader.EmpId : 0,
+                LeaderId = team.Leader != null ? team.Leader.Id : 0,
                 AssistantLeader = team.AssistantLeader != null ? team.AssistantLeader.DisplayName : string.Empty,
-                AssistantLeaderId = team.AssistantLeader != null ? team.AssistantLeader.EmpId : 0,
+                AssistantLeaderId = team.AssistantLeader != null ? team.AssistantLeader.Id : 0,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = this.CurrentUser.Id
             };

@@ -20,6 +20,6 @@ namespace Fanex.NexHR.Models.Calendar
 
         public DateTime ForDate { get; set; }
 
-        public int ShiftId { get; set; }
+        public int? ShiftId { get; set; }
     }
 }

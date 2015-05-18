@@ -21,7 +21,6 @@ var ScheduleArrangeDetail = (function ($) {
 		chkAllFriday: null,
 		chkAllSaturday: null,
 		chkAllSunday: null,
-		currentShiftDate: null,
 		allShifts: null,
 		lnkSort: null,
 		lnkSave: null,
@@ -240,9 +239,9 @@ var ScheduleArrangeDetail = (function ($) {
 					"Ok": function () {
 						var shiftCode = $.trim($("#shifthalfday").val());
 						var shiftId = $("#shifthalfday").attr("data-shiftid");
-						var inputObject = ScheduleArrangeDetail.currentShiftDate.parent().prev().find("input[type='text']");
+						var inputObject = ScheduleArrangeCommon.currentShiftDate.parent().prev().find("input[type='text']");
 						if (shiftId !== "undefined" && shiftCode.length > 0) {
-							ScheduleArrangeDetail.currentShiftDate.attr("title", shiftCode).addClass("tooltip");
+							ScheduleArrangeCommon.currentShiftDate.attr("title", shiftCode).addClass("tooltip");
 							inputObject.attr("data-shiftid", shiftId);
 						}
 
@@ -278,8 +277,7 @@ var ScheduleArrangeDetail = (function ($) {
 			$(".lnkAddShift").on("click", function () {
 				$("#shifthalfday").val("");
 				$("#shifthalfday").removeAttr("data-shiftid");
-
-				ScheduleArrangeDetail.currentShiftDate = $(this);
+				ScheduleArrangeCommon.currentShiftDate = $(this);
 				$("#dialog-halfday").dialog("open");
 			});
 
@@ -373,7 +371,7 @@ var ScheduleArrangeDetail = (function ($) {
 			ScheduleArrangeDetail.getAllShift();
 			ScheduleArrangeDetail.checkWarningAllRow();
 
-			
+
 		},
 		changeWeekDay: function () {
 			ScheduleArrangeDetail.chkAllMonday.on("change", function () {

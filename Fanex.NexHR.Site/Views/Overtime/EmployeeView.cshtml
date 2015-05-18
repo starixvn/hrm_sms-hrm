@@ -133,9 +133,10 @@
                     }
                     var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
                     var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
-
-                    if (currentDate >= canEditFrom && currentDate <= canEditTo)
-                    {
+					
+					//if (currentDate >= canEditFrom && currentDate <= canEditTo)
+					if (request.Status == null || (int)(request.Status.Id) == 1)
+					{
                             <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
                                 <img src="/Styles/Images/edit-icon.png"></a>
                     }
