@@ -151,7 +151,7 @@
         classOfInput += " " + classOfleavetype;
     }
 
-    if (workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-48))
+	if (!Roles.IsUserInRole("SystemAdmin") && workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-28))
     {
         isShowCheckBox = false;
         disabledAttribute = "disabled";
