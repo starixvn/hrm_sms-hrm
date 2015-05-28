@@ -5,38 +5,38 @@
     <file relUrl="Scripts/Libs/PageCheckDirty.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/media/css/media.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/chosen/chosen.css" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="Styles/Calendar/schedulearrange.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/ui-bg_glass_75_dadada_1x400.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/Aristo/images/bg_fallback.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="App_Data/combres_full_with_annotation.xml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/advlink/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Nagivation.sitemap" publishTime="08/18/2014 17:33:32" />
+    <file relUrl="Scripts/tiny_mce/plugins/fullscreen/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/advlink/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/fullpage/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/paste/pasteword.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Employee/Create.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="bin/Fanex.NexHR.Resources.pdb" publishTime="03/16/2015 15:06:47" />
+    <file relUrl="bin/Fanex.NexHR.Resources.pdb" publishTime="05/28/2015 15:41:36" />
     <file relUrl="Scripts/tiny_mce/plugins/advlist/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/report.hrrequestmonitoring.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/chosen/chosen.jquery.js" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/js/image.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/buttons.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Content/themes/base/minified/images/ui-icons_888888_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/themes/base/images/ui-bg_glass_65_ffffff_1x400.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/Libs/date.js" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Scripts/tiny_mce/plugins/style/props.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/base/jquery.ui.all.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Images/info.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/UI/Header.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/themes/base/jquery.ui.progressbar.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="App_Data/Emails/CheckInOutApproval.cshtml" publishTime="08/18/2014 17:33:32" />
-    <file relUrl="Styles/report.overtimerequest.css" publishTime="01/14/2014 17:59:58" />
     <file relUrl="Views/Calendar/MemberScheduleInOrder.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/account.css" publishTime="03/19/2014 10:28:13" />
     <file relUrl="Content/themes/base/jquery.ui.tooltip.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/report.attendance.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/images/ui-icons_2e83ff_256x240.png" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="Styles/themes/Aristo/images/icon_sprite.png" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="bin/Fanex.NexHR.Controllers.dll" publishTime="03/17/2015 12:44:20" />
+    <file relUrl="bin/Fanex.NexHR.Controllers.dll" publishTime="05/28/2015 15:51:06" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/css/attributes.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/report.staffrepresentative.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/anchor.htm" publishTime="11/12/2012 16:36:12" />
@@ -45,9 +45,10 @@
     <file relUrl="Scripts/tiny_mce/plugins/autoresize/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Message/Detail.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/Views/Calendar/schedulearrange.common.js" publishTime="03/16/2015 15:26:24" />
+    <file relUrl="Scripts/Views/Calendar/schedulearrange.common.js" publishTime="05/28/2015 15:22:45" />
     <file relUrl="Scripts/Views/employee.workingschedule.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/insertdatetime/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Report/LeaveSummary.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Report/EmployeeSupervisorDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/quicktime.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/advhr/js/rule.js" publishTime="11/12/2012 16:36:12" />
@@ -60,7 +61,6 @@
     <file relUrl="Scripts/tiny_mce/plugins/fullscreen/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/Member/MemberLeaveRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="bin/System.Net.Http.dll" publishTime="08/08/2013 16:42:37" />
-    <file relUrl="Styles/Images/disabled-delete.png" publishTime="01/11/2013 16:11:43" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/History/SharedStatus.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Views/Team/Index.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -84,7 +84,8 @@
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="App_Data/Emails/KeepInViewRequest.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/cite.htm" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Criteria.dll" publishTime="03/16/2015 15:06:57" />
+    <file relUrl="bin/Fanex.NexHR.Criteria.dll" publishTime="05/28/2015 15:41:42" />
+    <file relUrl="bin/Microsoft.Practices.Unity.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/attributes.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/base/images/ui-icons_454545_256x240.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/tabfocus/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -95,8 +96,8 @@
     <file relUrl="Styles/request.css" publishTime="02/14/2014 13:34:36" />
     <file relUrl="Styles/Images/tipsy.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/visualchars/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/template/blank.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Error.cshtml" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Scripts/Views/Request/leave.request.js" publishTime="12/04/2014 09:31:11" />
     <file relUrl="Scripts/Views/home.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/table/js/merge_cells.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/nonbreaking/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -105,23 +106,25 @@
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/highcontrast/content.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/bullet.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/message.edit.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Views/Shared/Request/Member/MemberChangeShiftRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Views/Shared/Request/HR/HRViewLeaveRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/Images/delete-icon.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Repositories.dll" publishTime="03/16/2015 15:06:59" />
+    <file relUrl="bin/Fanex.NexHR.Repositories.dll" publishTime="05/28/2015 15:41:44" />
+    <file relUrl="bin/Combres.Mvc.xml" publishTime="08/18/2014 17:33:35" />
     <file relUrl="Views/Request/HRViewHistory.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="bin/App_Data/Emails/ChangeShift.Request.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Request/Member.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="bin/Fanex.NexHR.Resources.dll" publishTime="03/16/2015 15:06:47" />
+    <file relUrl="bin/Fanex.NexHR.Resources.dll" publishTime="05/28/2015 15:41:36" />
     <file relUrl="Views/Shared/Request/History/SharedPeformedBy.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/preview/preview.html" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/img/button_bg.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/uicon.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/cite.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Styles/Images/bg-demo-docs-param.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/Aristo/images/ui-icons_222222_256x240.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/MultiSelect/ba.hashchange.js" publishTime="09/16/2013 17:30:50" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/themes/base/images/ui-icons_cd0a0a_256x240.png" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="Scripts/datatable/jquery.dataTables.js" publishTime="11/21/2013 18:24:16" />
     <file relUrl="Scripts/chosen/chosen-sprite.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Calendar/ShiftStatisticContent.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/themes/Aristo/images/slider_handles.png" publishTime="11/12/2012 16:36:13" />
@@ -131,6 +134,7 @@
     <file relUrl="Scripts/Views/reportovertimerequest.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/employee.edit.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="bin/App_Data/Emails/LateInEarlyOut.Request.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Report/TotalWorkingHours.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/js/source_editor.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/insertdatetime/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -141,23 +145,23 @@
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="bin/System.Web.dll" publishTime="03/18/2010 19:31:26" />
     <file relUrl="Scripts/Libs/jquery.ui.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Models.dll" publishTime="03/16/2015 15:06:54" />
+    <file relUrl="bin/Fanex.NexHR.Models.dll" publishTime="05/28/2015 15:41:41" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_75_dadada_1x400.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/tiny_mce_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/example_dependency/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/advlink/link.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/System.Web.Mvc.dll" publishTime="08/08/2013 16:42:36" />
-    <file relUrl="Views/Employee/DefaultSchedule.cshtml" publishTime="01/14/2015 14:11:09" />
+    <file relUrl="Views/Employee/DefaultSchedule.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="Scripts/tiny_mce/plugins/lists/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/memberovertime.css" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="bin/Fanex.NexHR.Services.pdb" publishTime="03/16/2015 15:07:02" />
+    <file relUrl="bin/Fanex.NexHR.Services.pdb" publishTime="05/28/2015 15:51:05" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/langs/en.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/media/moxieplayer.swf" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/license.txt" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/fullpage/css/fullpage.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/Overtime/monthlyovertime.member.detail.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Shared/Request/History/ViewCheckInOutRequestHistory.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="Views/Overtime/EmployeeView.cshtml" publishTime="02/11/2015 14:49:57" />
+    <file relUrl="Views/Overtime/EmployeeView.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="Content/themes/base/jquery.ui.resizable.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/realmedia.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/example/js/dialog.js" publishTime="11/12/2012 16:36:12" />
@@ -172,18 +176,20 @@
     <file relUrl="Content/themes/base/jquery.ui.slider.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/paste/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/Request/memberrequestdetail.personalspace.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/jquery.ui.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-undecided.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/shortcuts.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/login.css" publishTime="11/26/2013 17:55:48" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_flat_0_aaaaaa_40x100.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/criteria.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Content/themes/base/images/ui-icons_222222_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Employee/Edit.cshtml" publishTime="11/14/2014 17:40:52" />
     <file relUrl="Styles/Images/excel.gif" publishTime="09/20/2013 11:13:31" />
     <file relUrl="Views/Team/Edit.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/searchreplace/css/searchreplace.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/visualchars/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/example/img/example.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Memo/Create.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Views/Request/CriteriaPanel.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -204,7 +210,6 @@
     <file relUrl="Images/bg_home.jpg" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/preview/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/simple/skins/default/ui.css" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/corners.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/Request/employeerequestdetail.hrspace.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="bin/Enyim.Caching.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/themes/base/images/ui-icons_222222_256x240.png" publishTime="11/12/2012 16:36:13" />
@@ -228,14 +233,12 @@
     <file relUrl="Scripts/Views/employee.workingcalendars.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/signin_icon.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/960.css" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/Overtime/monthlyovertime.member.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Styles/Images/demo-spindown-open.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Message/Edit.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/dotless.Core.dll" publishTime="08/18/2014 17:33:35" />
     <file relUrl="Scripts/tiny_mce/plugins/nonbreaking/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/ui-bg_flat_75_ffffff_40x100.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="App_Data/Emails/MemoNotification.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Styles/Images/ui-icons_cd0a0a_256x240.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/logo.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="App_Data/Emails/LateInEarlyOutApproval.cshtml" publishTime="08/18/2014 17:33:32" />
@@ -245,6 +248,7 @@
     <file relUrl="Content/themes/base/jquery.ui.theme.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="bin/App_Data/Emails/KeepInViewApproval.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Content/themes/base/jquery.ui.datepicker.css" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Content/themes/base/jquery.ui.core.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/ui-icons_2e83ff_256x240.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="ExcelTemplates/EmployeeSupervisorTemplate.xls" publishTime="08/18/2014 17:33:32" />
     <file relUrl="bin/System.dll" publishTime="03/18/2010 19:31:26" />
@@ -252,6 +256,8 @@
     <file relUrl="Images/Logo.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/titlebg.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/print/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/advimage/js/image.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Styles/jquery.fixedheadertable.theme.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/flash.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-tongue-out.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/WebActivator.dll" publishTime="08/08/2013 16:42:41" />
@@ -267,13 +273,15 @@
     <file relUrl="ExcelTemplates/LeaveSummaryTemplate.xls" publishTime="11/14/2014 17:40:51" />
     <file relUrl="Content/themes/base/jquery.ui.all.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/directionality/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/jquery.dataTables.css" publishTime="03/10/2014 09:59:17" />
+    <file relUrl="Scripts/tiny_mce/plugins/autoresize/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/Overtime/overtime.request.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Styles/monPickr-0.0.3.css" publishTime="11/21/2013 18:24:16" />
     <file relUrl="Scripts/tiny_mce/plugins/legacyoutput/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Content/themes/base/minified/images/ui-icons_888888_256x240.png" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Scripts/tiny_mce/themes/advanced/editor_template.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/employeesupervisor.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Styles/workingcalendars.css" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Content/themes/base/minified/images/ui-icons_454545_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Shared/Request/History/ViewLeaveRequestHistory.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/Images/edit-icon.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/HR/HRViewLateInEarlyOutRequest.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -281,7 +289,6 @@
     <file relUrl="Scripts/tiny_mce/plugins/legacyoutput/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Styles/Images/picon.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/Images/FullCalendar/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/table/css/cell.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/js/charmap.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/spellchecker/img/wline.gif" publishTime="11/12/2012 16:36:12" />
@@ -293,10 +300,9 @@
     <file relUrl="Scripts/MultiSelect/jquery.multiselect.js" publishTime="02/10/2014 13:36:59" />
     <file relUrl="Views/AnnualLeaveBalance/MultipleReset.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Holiday/Create.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Content/themes/base/jquery.ui.button.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/_ViewStart.cshtml" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/keepinview.css" publishTime="11/12/2013 18:11:11" />
+    <file relUrl="Web.config" publishTime="05/28/2015 15:51:11" />
     <file relUrl="Images/bgLogin.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/contextmenu/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/highcontrast/ui.css" publishTime="11/12/2012 16:36:12" />
@@ -311,7 +317,7 @@
     <file relUrl="Views/Overtime/YearlyReport.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Account/Index.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/menu_check.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Content/themes/base/minified/images/ui-icons_454545_256x240.png" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Content/themes/base/jquery.ui.button.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Report/TeamSupervisorDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Employee/ShiftManager.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Report/Index.cshtml" publishTime="08/18/2014 17:33:33" />
@@ -320,12 +326,9 @@
     <file relUrl="Content/themes/base/minified/images/ui-icons_cd0a0a_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/autosave/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/History/ViewLateInEarlyOutRequestHistory.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="Scripts/tiny_mce/plugins/template/template.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/js/link.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/example/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Libs/jquery.tooltip.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Libs/fxHeader.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/table.css" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Views/AnnualLeaveBalance/Edit.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="Scripts/Views/shift.js" publishTime="11/14/2014 17:40:51" />
     <file relUrl="Scripts/tiny_mce/plugins/fullscreen/fullscreen.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/ManageExternalGroup.cshtml" publishTime="01/10/2014 17:28:18" />
@@ -336,8 +339,10 @@
     <file relUrl="Scripts/tiny_mce/plugins/template/css/template.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/arrow.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/progress.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Styles/Images/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Employee/UserManagement.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Index.aspx" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/advhr/rule.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/demo-spindown-closed.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/timerecord.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Holiday/Index.cshtml" publishTime="08/18/2014 17:33:33" />
@@ -347,8 +352,9 @@
     <file relUrl="Styles/Images/footer.jpg" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/spellchecker/css/content.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/Member/AllRequest.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="bin/Fanex.NexHR.Models.pdb" publishTime="03/16/2015 15:06:54" />
+    <file relUrl="bin/Fanex.NexHR.Models.pdb" publishTime="05/28/2015 15:41:41" />
     <file relUrl="bin/Combres.dll" publishTime="08/18/2014 17:33:35" />
+    <file relUrl="Views/TimeSheetRecord/Index.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Content/themes/base/minified/jquery.ui.resizable.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/menusplit.jpg" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/ins.js" publishTime="11/12/2012 16:36:12" />
@@ -356,12 +362,11 @@
     <file relUrl="Scripts/tiny_mce/plugins/style/css/props.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/base/images/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Styles/Images/reject.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Libs/common.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Report/TotalWorkingHourMonthly.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Shared/Request/HR/AllRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/media/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/memberrequestdetailpersonalspace.css" publishTime="12/26/2013 16:34:28" />
-    <file relUrl="Views/TimeSheetRecord/Index.cshtml" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Scripts/Views/Overtime/hrovertimereport.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/abbr.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/paste/pastetext.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/emplyeeshiftmanager.css" publishTime="08/18/2014 17:33:33" />
@@ -376,24 +381,21 @@
     <file relUrl="Scripts/tiny_mce/plugins/table/cell.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/noneditable/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-wink.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Core.pdb" publishTime="03/16/2015 15:06:52" />
+    <file relUrl="bin/Fanex.NexHR.Core.pdb" publishTime="05/28/2015 15:41:40" />
     <file relUrl="Scripts/tiny_mce/plugins/advimage/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/bbcode/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Overtime/MemberOvertimeViewByHR.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/vertical.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/Request/memberrequest.personalspace.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/table.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/jquery.ui.progressbar.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/about.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/message.css" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/layer/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Core.dll" publishTime="03/16/2015 15:06:52" />
+    <file relUrl="bin/Fanex.NexHR.Core.dll" publishTime="05/28/2015 15:41:40" />
     <file relUrl="Scripts/Libs/jquery.validate.unobtrusive.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/Images/FullCalendar/ui-bg_highlight-hard_100_f2f5f7_1x100.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_100_e4f1fb_1x400.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-foot-in-mouth.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.dialog.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Views/ChangeShift/Detail.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/titlebg.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/Overtime/dailyovertime.member.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
@@ -408,11 +410,12 @@
     <file relUrl="Images/windowsLive.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/img/button_bg_black.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/simple/editor_template.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/emotions/js/emotions.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/employee.detail.css" publishTime="01/08/2014 12:50:26" />
     <file relUrl="Styles/themes/base/jquery.ui.button.css" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="Content/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Leave/EmployeeView.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/Request/request.constant.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Scripts/Views/Request/memberrequest.personalspace.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/font.css" publishTime="05/28/2013 11:39:30" />
     <file relUrl="Views/Overtime/YearlyReportDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/colorpicker.jpg" publishTime="11/12/2012 16:36:12" />
@@ -424,16 +427,17 @@
     <file relUrl="Scripts/tiny_mce/plugins/preview/jscripts/embed.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/advhr/css/advhr.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/AddNewMember.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Views/AnnualLeaveBalance/Create.cshtml" publishTime="05/18/2015 14:59:07" />
+    <file relUrl="Views/AnnualLeaveBalance/Create.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_80_d7ebf9_1x400.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Views/Message/Index.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Images/irongrip.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Avatars/avatar.jpg" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/Calendar/schedulearrangedetail.js" publishTime="03/16/2015 15:28:32" />
+    <file relUrl="Scripts/tiny_mce/plugins/pagebreak/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/Views/Calendar/schedulearrangedetail.js" publishTime="05/28/2015 15:22:45" />
     <file relUrl="Scripts/Views/Calendar/report.shiftstatistic.content.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Report/EditExtensionNumber.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/report.totalworkinghours.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Content/themes/base/images/ui-icons_888888_256x240.png" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="Views/Calendar/MyWorkingSchedule.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/UI/Welcome.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/myrequest.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Employee/ChangePwd.cshtml" publishTime="08/18/2014 17:33:33" />
@@ -443,7 +447,6 @@
     <file relUrl="Views/Report/TimeRecordDetail.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Images/facebook.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Auth/Login.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Styles/report.requestmonitoring.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/table/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/App_Data/Emails/RequestApproval.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Images/lock.png" publishTime="11/12/2012 16:36:12" />
@@ -453,51 +456,48 @@
     <file relUrl="bin/App_Data/Emails/Leave.Request.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/chosen/chosen.jquery.min.js" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_65_ffffff_1x400.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="bin/Combres.xml" publishTime="08/18/2014 17:33:35" />
     <file relUrl="Content/themes/base/minified/jquery.ui.autocomplete.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Shared/Request/History/ViewKeepInViewRequestHistory.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="App_Data/Emails/Leave.Request.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/Views/holiday.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/paste/js/pasteword.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/twitter.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/ChangeShift/Update.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/buttons.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/employee.search.in.company.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Styles/tinymce.css" publishTime="05/28/2013 11:39:31" />
+    <file relUrl="Styles/report.overtimerequest.css" publishTime="01/14/2014 17:59:58" />
     <file relUrl="App_Code/RazorHelper.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/CheckInOut/EmployeeView.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Shared/Request/Member/MemberLateInEarlyOutRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/fullpage/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Views/Calendar/ArrangeScheduleDetail.cshtml" publishTime="03/12/2015 14:36:08" />
     <file relUrl="Scripts/tiny_mce/plugins/advhr/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Repositories.pdb" publishTime="03/16/2015 15:06:58" />
+    <file relUrl="bin/Fanex.NexHR.Repositories.pdb" publishTime="05/28/2015 15:41:44" />
     <file relUrl="Images/panel_bg.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/Member/MemberCheckInOutRequest.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="Views/Message/DetailByEmployee.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Views/Report/TotalWorkingHourWeekly.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="favicon.ico" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/confirm.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/employee.defaultschedule.css" publishTime="05/28/2013 11:39:30" />
-    <file relUrl="Views/Team/Create.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Views/JobTitle/JobTitleManagement.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/employee.message.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/shockwave.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-sealed.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/calendar.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/themes/base/jquery.ui.theme.css" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="08/08/2013 16:42:37" />
+    <file relUrl="Views/Request/DailyRequestsView.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/source_editor.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/RequestMonitoring.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/template/js/template.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="App_Data/Emails/CheckInOut.Request.cshtml" publishTime="08/18/2014 17:33:32" />
+    <file relUrl="Scripts/tiny_mce/plugins/paste/js/pasteword.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/calendar.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Libs/modernizr.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/Timesheet.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/jquery.ui.dialog.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Calendar/WorkingCalendars.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/example/img/example.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Message/Index.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-cool.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/FullCalendar/ui-icons_2694e8_256x240.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/del.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/Member/MemberKeepInViewRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/datatable/jquery.tablesorter.js" publishTime="01/23/2014 12:18:38" />
-    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="08/13/2014 10:06:06" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/tabs.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/windowsmedia.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/employee.monthschedule.css" publishTime="11/12/2012 16:36:13" />
@@ -507,13 +507,13 @@
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-cry.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Global.asax" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/element_common.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/themes/Aristo/images/ui-icons_454545_256x240.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/Views/holiday.edit.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/extensionno.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/jquery.ui.spinner.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Message/Create.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Scripts/Views/myworkingschedule.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/memo.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/themes/advanced/img/trans.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Images/icon-save.png" publishTime="11/21/2013 17:16:34" />
     <file relUrl="Views/Report/RequestMonitoringDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Libs/jquery.min.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/timerecord.detail.js" publishTime="08/18/2014 17:33:33" />
@@ -523,19 +523,19 @@
     <file relUrl="Views/Employee/Detail.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/example/dialog.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/contactlist.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="bin/Fanex.NexHR.ViewModels.pdb" publishTime="03/16/2015 15:06:57" />
+    <file relUrl="bin/Fanex.NexHR.ViewModels.pdb" publishTime="05/28/2015 15:41:43" />
     <file relUrl="Views/Holiday/Edit.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/datatable/FixedColumns.js" publishTime="11/21/2013 18:24:16" />
     <file relUrl="Views/Memo/Detail.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Styles/themes/base/jquery.ui.base.css" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Views/AnnualLeaveBalance/MultipleInsert.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Views/AnnualLeaveBalance/MultipleInsert.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="Scripts/tiny_mce/plugins/table/merge_cells.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-kiss.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="App_Data/Emails/ReeditRequest.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/Views/Calendar/schedulearrange.sort.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Content/themes/base/minified/jquery.ui.tabs.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/utils/editable_selects.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/ui.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/jquery.ui.autocomplete.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Views/Employee/Index.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/UI/GlobalScript.cshtml" publishTime="11/08/2013 18:10:47" />
@@ -546,10 +546,11 @@
     <file relUrl="Scripts/Views/employee.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/System.Web.WebPages.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Images/signin_icon.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="App_Data/Emails/CheckInOut.Request.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="ExcelTemplates/YearlyOvertimeReportTemplate.xls" publishTime="06/11/2014 15:22:06" />
     <file relUrl="Styles/Images/FullCalendar/ui-icons_3d80b3_256x240.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Scripts/Views/Overtime/myovertimerequest.js" publishTime="12/17/2014 14:40:40" />
+    <file relUrl="Scripts/Views/Overtime/myovertimerequest.js" publishTime="05/28/2015 15:22:45" />
     <file relUrl="Styles/employeechangeshift.css" publishTime="11/14/2013 18:24:37" />
     <file relUrl="Scripts/tiny_mce/plugins/contextmenu/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shift/Edit.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -560,9 +561,8 @@
     <file relUrl="Styles/site.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/jquery.ui.accordion.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_222222_256x240.png" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="Scripts/Views/Overtime/hrovertimereport.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/Libs/jquery.tipsy.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/Images/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/ChangeShift/Detail.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/style/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/template.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/content.css" publishTime="11/12/2012 16:36:12" />
@@ -582,15 +582,15 @@
     <file relUrl="Content/themes/base/minified/jquery.ui.slider.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/table/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/searchreplace/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/table/js/table.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Images/icon-save.png" publishTime="11/21/2013 17:16:34" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_flat_15_cd0a0a_40x100.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Styles/themes/base/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Views/LateInEarlyOut/Create.cshtml" publishTime="09/05/2014 09:22:47" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-innocent.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/button.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/ui-icons_222222_256x240.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/template/blank.htm" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Calendar/ArrangeScheduleDetail.cshtml" publishTime="05/28/2015 15:22:46" />
     <file relUrl="App_Data/Emails/ChangeShiftCancelation.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/Libs/jquery.tmpl.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/jquery.fixedheadertable.css" publishTime="11/12/2012 16:36:13" />
@@ -603,7 +603,6 @@
     <file relUrl="Scripts/tiny_mce/plugins/bbcode/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/abbr.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/table/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/preview/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/warning.png" publishTime="01/28/2014 14:54:36" />
     <file relUrl="Views/Overtime/ViewDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_65_ffffff_1x400.png" publishTime="01/11/2013 16:11:42" />
@@ -614,8 +613,8 @@
     <file relUrl="Views/Home/AccountSuspended.cshtml" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/searchreplace/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/AnnualLeaveBalance/Employee.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="favicon.ico" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="bin/Fanex.NexHR.Web.pdb" publishTime="03/16/2015 15:07:08" />
+    <file relUrl="Styles/tinymce.css" publishTime="05/28/2013 11:39:31" />
+    <file relUrl="bin/Fanex.NexHR.Web.pdb" publishTime="05/28/2015 15:51:07" />
     <file relUrl="Styles/Images/FullCalendar/ui-icons_cd0a0a_256x240.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="ExcelTemplates/WorkingCalendarSummaryTemplate.xls" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
@@ -623,13 +622,14 @@
     <file relUrl="Views/KeepInView/EmployeeView.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/searchreplace/searchreplace.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/slash-gray.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/style.css" publishTime="12/25/2014 15:52:23" />
-    <file relUrl="Scripts/Views/Request/keepinview.create.js" publishTime="03/17/2015 12:49:11" />
+    <file relUrl="Styles/style.css" publishTime="05/28/2015 15:22:46" />
+    <file relUrl="Scripts/Views/Request/keepinview.create.js" publishTime="05/28/2015 15:22:46" />
     <file relUrl="bin/Fasterflect.dll" publishTime="08/18/2014 17:33:35" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_diagonals-thick_90_eeeeee_40x40.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/example/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/report.attendance.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/keepinview.css" publishTime="11/12/2013 18:11:11" />
     <file relUrl="Scripts/tiny_mce/plugins/table/css/table.css" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/content.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/panel_bg.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="App_Data/Emails/KeepInViewApproval.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Message/ViewMessageOfEmployee.cshtml" publishTime="08/18/2014 17:33:33" />
@@ -646,7 +646,6 @@
     <file relUrl="Scripts/Views/account.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/save/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/fullpage/fullpage.htm" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/themes/advanced/editor_template.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/ui.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/App_Data/Emails/MemoNotification.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/example/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -655,51 +654,55 @@
     <file relUrl="bin/System.Net.Http.WebRequest.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Scripts/tiny_mce/plugins/pagebreak/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/UI/NavBar.cshtml" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Scripts/Views/report.attendance.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Overtime/HRMonthlyReportDetails.cshtml" publishTime="08/11/2014 12:45:13" />
     <file relUrl="App_Data/Emails/MessageNotification.cshtml" publishTime="08/18/2014 17:33:32" />
+    <file relUrl="Scripts/tiny_mce/themes/advanced/img/trans.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/sprite_v.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Overtime/OTExcelReportDetails.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/Views/report.totalworkinghourmonthly.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/media/media.htm" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/themes/simple/langs/en.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/video.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/cancel.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Team/TeamSupervisor.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="bin/App_Data/Emails/KeepInViewRequest.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Caching.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/autosave/langs/en.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/noneditable/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/js/color_picker.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/img/button_bg_silver.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/autosave/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/images/ui-icons_cd0a0a_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/Libs/jquery.validate.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/System.Web.Http.WebHost.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="ExcelTemplates/HrRequestStatisticTemplate.xls" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/img/icons.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/timesheetrecord/timesheetrecord.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/searchreplace/js/searchreplace.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/menu.css" publishTime="05/28/2013 11:39:30" />
-    <file relUrl="Content/themes/base/images/ui-icons_222222_256x240.png" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Scripts/tiny_mce/plugins/searchreplace/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/report.timesheet.css" publishTime="05/28/2013 11:39:31" />
     <file relUrl="bin/System.Web.Mvc.Html5.dll" publishTime="08/08/2013 16:42:36" />
     <file relUrl="Views/Overtime/MemberOvertime.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/Views/Request/employeerequest.hrspace.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Styles/themes/base/jquery.ui.slider.css" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Scripts/datatable/jquery.dataTables.js" publishTime="11/21/2013 18:24:16" />
+    <file relUrl="Scripts/Views/Overtime/monthlyovertime.member.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Content/themes/base/jquery.ui.selectable.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="bin/Fanex.NexHR.Criteria.pdb" publishTime="05/28/2015 15:41:42" />
     <file relUrl="Views/Report/TimeRecord.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/menu_arrow.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="bin/System.Web.Razor.dll" publishTime="05/28/2015 15:22:45" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/link.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/media/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/System.Net.Http.Formatting.xml" publishTime="08/08/2013 16:42:37" />
-    <file relUrl="Styles/Images/bg-demo-docs-param.gif" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/corners.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/HR/HRViewCheckInOutRequest.cshtml" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="Scripts/tiny_mce/plugins/style/props.htm" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Message/DetailByEmployee.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/media/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/js/acronym.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Content/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="01/11/2013 16:11:42" />
+    <file relUrl="Styles/Calendar/schedulearrange.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/chosen/chosen.proto.js" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/table/js/cell.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/workingcalendardatatable.css" publishTime="01/23/2014 12:18:38" />
@@ -715,15 +718,15 @@
     <file relUrl="Styles/employeesupervisor.css" publishTime="01/21/2014 13:05:50" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="App_Data/Emails/LeaveApproval.cshtml" publishTime="08/18/2014 17:33:32" />
-    <file relUrl="Scripts/tiny_mce/plugins/fullscreen/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/layer/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="App_Data/combres_minimal.xml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Scripts/tiny_mce/plugins/table/table.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Images/calendar.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.spinner.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/employee.create.css" publishTime="01/21/2014 13:05:50" />
-    <file relUrl="bin/Fanex.NexHR.Criteria.pdb" publishTime="03/16/2015 15:06:56" />
-    <file relUrl="Scripts/Views/myworkingschedule.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Styles/report.totalworkinghours.css" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="Styles/report.requestmonitoring.css" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/buttons.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/preview/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/ui_black.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/themes/Aristo/images/progress_bar.gif" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/tiny_mce.js" publishTime="11/12/2012 16:36:12" />
@@ -737,9 +740,10 @@
     <file relUrl="App_Data/Emails/CheckInOutCancelation.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="bin/Microsoft.Practices.EnterpriseLibrary.Data.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/Views/search.request.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="bin/Microsoft.Practices.ServiceLocation.dll" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Styles/themes/Aristo/images/icon_sprite.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Views/Overtime/MemberOvertimeViewByLeader.cshtml" publishTime="04/14/2014 10:27:37" />
     <file relUrl="Views/Report/WorkingCalendarSummary.cshtml" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Styles/workingcalendars.css" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Images/sprite_ico_2012-05-15.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_2e83ff_256x240.png" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/wordcount/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -747,9 +751,10 @@
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/dialog.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/Attendance.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/ins.htm" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Site.pdb" publishTime="03/17/2015 12:44:25" />
+    <file relUrl="bin/Fanex.NexHR.Site.pdb" publishTime="05/28/2015 15:51:09" />
     <file relUrl="Scripts/Views/report.totalworkinghours.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="08/08/2013 16:42:37" />
+    <file relUrl="Scripts/tiny_mce/plugins/advhr/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Styles/Images/FullCalendar/ui-bg_highlight-hard_100_f2f5f7_1x100.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/template/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.selectable.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="App_Data/Emails/ChangeShiftApproval.cshtml" publishTime="08/18/2014 17:33:32" />
@@ -761,17 +766,17 @@
     <file relUrl="Views/Calendar/ArrangeSchedule.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/lists/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Employee/MySpace.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/noneditable/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Shared/_Layout.cshtml" publishTime="08/13/2014 10:06:06" />
     <file relUrl="Styles/timerecord.css" publishTime="01/27/2014 10:09:06" />
-    <file relUrl="Views/Request/DailyRequestsView.cshtml" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Scripts/tiny_mce/plugins/example/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.button.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/template/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/themes/base/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Scripts/tiny_mce/plugins/advimage/js/image.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Calendar/MyWorkingSchedule.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/Images/disabled-delete.png" publishTime="01/11/2013 16:11:43" />
     <file relUrl="Scripts/tiny_mce/plugins/style/js/props.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.ViewModels.dll" publishTime="03/16/2015 15:06:57" />
+    <file relUrl="bin/Fanex.NexHR.ViewModels.dll" publishTime="05/28/2015 15:41:43" />
     <file relUrl="Styles/annualbalance.css" publishTime="01/14/2014 14:43:09" />
-    <file relUrl="Views/AnnualLeaveBalance/Edit.cshtml" publishTime="05/18/2015 14:59:53" />
+    <file relUrl="Styles/themes/base/jquery.ui.theme.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/emotions/img/smiley-surprised.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Shared/Request/History/ViewChangeShiftRequestHistory.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/paste/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
@@ -781,26 +786,25 @@
     <file relUrl="Styles/themes/base/images/ui-icons_2e83ff_256x240.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="bin/App_Data/Emails/EditMemoNotification.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Styles/Images/ui-icons_454545_256x240.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Microsoft.Practices.Unity.dll" publishTime="08/18/2014 17:33:34" />
+    <file relUrl="Scripts/tiny_mce/plugins/template/template.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/checkinout.bymanager.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/themes/base/jquery.ui.resizable.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="bin/Couchbase.dll" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="bin/Fanex.NexHR.Services.dll" publishTime="03/16/2015 15:07:02" />
+    <file relUrl="bin/Fanex.NexHR.Services.dll" publishTime="05/28/2015 15:51:05" />
     <file relUrl="Scripts/tiny_mce/plugins/fullpage/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/report.timesheet.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Calendar/ShiftStatistic.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/Fanex.Common.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/acronym.htm" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Fanex.NexHR.Site.dll" publishTime="03/17/2015 12:44:25" />
+    <file relUrl="bin/Fanex.NexHR.Site.dll" publishTime="05/28/2015 15:51:09" />
     <file relUrl="Scripts/tiny_mce/plugins/preview/example.html" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/img/button.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/Views/team.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="App_Data/Emails/ReeditRequest.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Images/blue_numbers.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/language.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/plugins/print/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/employeerequestdetailhrspace.css" publishTime="12/25/2013 15:29:24" />
     <file relUrl="Scripts/tiny_mce/plugins/example/langs/en.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/jquery.fixedheadertable.theme.css" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="bin/System.Web.Http.WebHost.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Views/Shift/Create.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="ExcelTemplates/EmployeeDetailsInfoTemplate.xls" publishTime="06/11/2014 15:22:06" />
     <file relUrl="Scripts/tiny_mce/plugins/save/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
@@ -810,10 +814,10 @@
     <file relUrl="Scripts/tiny_mce/plugins/directionality/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/Views/employeeshiftmanager.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/themes/base/jquery.ui.selectable.css" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="bin/Combres.xml" publishTime="08/18/2014 17:33:35" />
+    <file relUrl="Scripts/Views/Request/employeerequest.hrspace.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="ExcelTemplates/EmployeeBasicInfoTemplate.xls" publishTime="01/13/2014 15:44:56" />
     <file relUrl="bin/Fanex.Data.dll" publishTime="08/18/2014 17:33:34" />
-    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/ui.css" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Views/Team/Create.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Styles/themes/Aristo/jquery.ui.css" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Views/UI/StatusDropDownList.cshtml" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Scripts/tiny_mce/plugins/paste/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
@@ -832,18 +836,18 @@
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/o2k7/ui_silver.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.datepicker.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_flat_75_ffffff_40x100.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Views/Report/TotalWorkingHourWeekly.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/Views/Request/leave.request.js" publishTime="05/28/2015 15:22:46" />
+    <file relUrl="Scripts/Libs/fxHeader.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Content/themes/base/minified/jquery.ui.menu.min.css" publishTime="01/11/2013 16:11:42" />
     <file relUrl="Scripts/tiny_mce/plugins/inlinepopups/skins/clearlooks2/window.css" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/plugins/table/js/row.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Overtime/OvertimeRequestDetails.cshtml" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Scripts/tiny_mce/plugins/advhr/rule.htm" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/Views/criteria.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Scripts/tiny_mce/themes/simple/img/icons.gif" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/memo.edit.css" publishTime="05/28/2013 11:39:30" />
     <file relUrl="Views/ChangeShift/EmployeeView.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/ui-icons_888888_256x240.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/plugins/pagebreak/editor_plugin_src.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/emotions/js/emotions.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Styles/Images/icons.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Views/Report/ExtensionNo.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Views/Shared/Request/HR/HRViewKeepInViewRequest.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -854,14 +858,13 @@
     <file relUrl="Styles/themes/base/images/ui-bg_glass_75_dadada_1x400.png" publishTime="11/12/2012 16:36:13" />
     <file relUrl="Styles/employee.edit.css" publishTime="01/09/2014 09:53:19" />
     <file relUrl="Styles/Images/bg.jpg" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="App_Data/Emails/LeaveCancelation.cshtml" publishTime="08/18/2014 17:33:32" />
-    <file relUrl="bin/App_Data/Emails/LateInEarlyOut.Request.cshtml" publishTime="08/18/2014 17:33:32" />
+    <file relUrl="Scripts/Libs/common.js" publishTime="08/18/2014 17:33:32" />
     <file relUrl="bin/Fasterflect.xml" publishTime="08/18/2014 17:33:35" />
     <file relUrl="Styles/Images/drop.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/System.Web.Http.WebHost.dll" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Scripts/Views/team.management.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_50_3baae3_1x400.png" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="bin/Combres.Mvc.xml" publishTime="08/18/2014 17:33:35" />
+    <file relUrl="bin/Microsoft.Practices.ServiceLocation.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Views/Overtime/SharedVerifierStatus.cshtml" publishTime="08/18/2014 17:33:33" />
     <file relUrl="Styles/Images/FullCalendar/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/Scripts/tiny_mce/license.txt" publishTime="11/12/2012 16:36:12" />
@@ -870,7 +873,7 @@
     <file relUrl="ExcelTemplates/WorkingCalendarTemplate.xls" publishTime="01/14/2014 14:43:09" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Scripts/Views/Request/leave.byemployee.js" publishTime="08/18/2014 17:33:33" />
-    <file relUrl="Views/Report/LeaveSummary.cshtml" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Views/Shared/Request/Member/MemberChangeShiftRequest.cshtml" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/xhtmlxtras/attributes.htm" publishTime="11/12/2012 16:36:12" />
     <file relUrl="ExcelTemplates/AttendanceReportTemplate.xls" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Views/Shared/Request/HR/SharedStatus.cshtml" publishTime="08/18/2014 17:33:34" />
@@ -883,18 +886,16 @@
     <file relUrl="Scripts/Views/memo.edit.js" publishTime="08/18/2014 17:33:33" />
     <file relUrl="bin/NPOI.dll" publishTime="08/18/2014 17:33:34" />
     <file relUrl="Scripts/tiny_mce/plugins/table/row.htm" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Styles/jquery.ui.css" publishTime="11/12/2012 16:36:13" />
-    <file relUrl="Images/irongrip.png" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="Scripts/tiny_mce/plugins/template/js/template.js" publishTime="11/12/2012 16:36:12" />
     <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/img/items.gif" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/themes/advanced/skins/default/content.css" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="App_Data/Emails/MemoNotification.cshtml" publishTime="08/18/2014 17:33:32" />
     <file relUrl="Content/themes/base/minified/jquery.ui.accordion.min.css" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="Web.config" publishTime="05/18/2015 14:59:34" />
-    <file relUrl="bin/Fanex.NexHR.Web.dll" publishTime="03/16/2015 15:07:08" />
-    <file relUrl="Scripts/tiny_mce/plugins/advhr/langs/en_dlg.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Content/themes/base/jquery.ui.core.css" publishTime="01/11/2013 16:11:42" />
-    <file relUrl="bin/Fanex.NexHR.Controllers.pdb" publishTime="03/17/2015 12:44:20" />
-    <file relUrl="Scripts/tiny_mce/plugins/autoresize/editor_plugin.js" publishTime="11/12/2012 16:36:12" />
-    <file relUrl="Scripts/tiny_mce/themes/simple/langs/en.js" publishTime="11/12/2012 16:36:12" />
+    <file relUrl="bin/Fanex.NexHR.Web.dll" publishTime="05/28/2015 15:51:07" />
+    <file relUrl="Scripts/Views/team.js" publishTime="08/18/2014 17:33:33" />
+    <file relUrl="Styles/themes/Aristo/images/ui-icons_454545_256x240.png" publishTime="11/12/2012 16:36:13" />
+    <file relUrl="bin/Fanex.NexHR.Controllers.pdb" publishTime="05/28/2015 15:51:06" />
+    <file relUrl="App_Data/Emails/LeaveCancelation.cshtml" publishTime="08/18/2014 17:33:32" />
+    <file relUrl="Styles/Images/FullCalendar/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="11/12/2012 16:36:12" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="08/08/2013 16:42:37" />
     <file relUrl="Scripts/MultiSelect/prettify.css" publishTime="09/16/2013 17:30:50" />
     <file relUrl="Styles/Images/close.png" publishTime="11/12/2012 16:36:12" />

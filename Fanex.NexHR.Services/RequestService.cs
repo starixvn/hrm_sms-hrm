@@ -852,7 +852,7 @@ namespace Fanex.NexHR.Services
 
             if (command == Command.NotAccept.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Accepted.ToLower());
+                return string.Format(Messages.HasNotBeen, Labels.Accepted.ToLower());
             }
 
             if (command == Command.Approve.ToString())

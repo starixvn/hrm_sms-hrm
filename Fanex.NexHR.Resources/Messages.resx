@@ -190,7 +190,7 @@
     <value>has been {0}</value>
   </data>
   <data name="HasNotBeen" xml:space="preserve">
-    <value>has not been {1}</value>
+    <value>has not been {0}</value>
   </data>
   <data name="InsertedKeepInViewEmailSubject" xml:space="preserve">
     <value>Keep in view request from</value>

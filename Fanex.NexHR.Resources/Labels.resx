@@ -724,7 +724,7 @@
     <value>Total Working Day(s) in</value>
   </data>
   <data name="Accepted" xml:space="preserve">
-    <value>Accepted</value>
+    <value>Verified</value>
   </data>
   <data name="NotAccepted" xml:space="preserve">
     <value>Not Accepted</value>
@@ -853,7 +853,7 @@
     <value>Process</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Verify</value>
   </data>
   <data name="NotAccept" xml:space="preserve">
     <value>Not Accept</value>
