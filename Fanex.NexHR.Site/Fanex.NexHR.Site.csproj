@@ -1078,6 +1078,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="combres.readme" />
+    <Content Include="Web.local.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.local.Debug.config">
+      <DependentUpon>Web.local.config</DependentUpon>
+    </Content>
+    <Content Include="Web.local.Release.config">
+      <DependentUpon>Web.local.config</DependentUpon>
+    </Content>
+    <None Include="Deployment.ignore" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

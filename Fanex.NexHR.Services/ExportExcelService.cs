@@ -1802,7 +1802,7 @@ namespace Fanex.NexHR.Services
 
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    detail = string.Format(_MsgCheckInOut, request.FromDate.ToString("HH:mm"), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    detail = string.Format(_MsgCheckInOut, request.RequestedDate.ToString("HH:mm"), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
                 case (int)RequestType.LateIn:
