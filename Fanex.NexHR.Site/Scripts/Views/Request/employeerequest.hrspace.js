@@ -115,12 +115,12 @@ $(document).ready(function () {
             "&ToDate=" + $("#ToDate").val() +
             "&StatusId=" + $("#statusId").val() +
             "&RequestType=" + requestType +
-            "&IsLocal=" + isLocal + 
+            "&IsLocal=" + isLocal +
             "&IsDailyRequest=" + isDailyRequest;
 
-			location.href = url;
-		}
-	});
+            location.href = url;
+        }
+    });
 
     $("#btnExcel").click(function () {
         var action = $("#ActionRequest").val() + "WorkingTimeRequest";
@@ -135,9 +135,8 @@ $(document).ready(function () {
             "&ToDate=" + $("#ToDate").val() +
             "&StatusId=" + $("#statusId").val() +
             "&RequestType=" + requestType +
-            "&IsLocal=" + isLocal + 
+            "&IsLocal=" + isLocal +
             "&IsDailyRequest=" + isDailyRequest;
-
         location.href = url;
     });
 });

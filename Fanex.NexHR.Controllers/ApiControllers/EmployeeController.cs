@@ -149,7 +149,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
         public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime date, int? leaveTypeId = null)
         {
             IEnumerable<DateTime> dates = null;
-            var fromDate = new DateTime(date.AddMonths(-1).Year, date.AddMonths(-1).Month, 1);
+            var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
             var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
 

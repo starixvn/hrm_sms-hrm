@@ -361,36 +361,6 @@ namespace Fanex.NexHR.Controllers
         }
 
         /// <summary>
-        /// ActionResult ViewWorkingTimeRequest.
-        /// </summary>
-        /// <param name="model">Request ViewModel.</param>
-        /// <returns>View Working Time Request.</returns>
-        public ActionResult ViewWorkingTimeRequest(RequestViewModel model)
-        {
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
-            bool? isLocal = null;
-            var criteria = new GetRequestCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                GroupIds = model.TeamIds,
-                Status = GetStatus(model.StatusId),
-                RequestType = model.RequestType,
-                IsQueryByCreatedDate = !model.IsDailyRequest,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.HRSpace),
-                SupervisorId = null,
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
-            };
-
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
-
-            return ExcelFile(hssfworkbook, fileName);
-        }
-
-        /// <summary>
         /// ActionResult MemberWorkingTimeRequest.
         /// </summary>
         /// <param name="model">Request ViewModel.</param>
@@ -404,7 +374,7 @@ namespace Fanex.NexHR.Controllers
             bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 GroupIds = model.TeamIds,
@@ -412,7 +382,7 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsDailyRequest,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.PersonalSpace),
-                SupervisorId = null,
+                SupervisorId = this.CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
@@ -436,7 +406,8 @@ namespace Fanex.NexHR.Controllers
             bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                SupervisorId = this.CurrentUser.Id,
+                EmpId = model.EmployeeId == -1 ? null : new int? (model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 GroupIds = model.TeamIds,
@@ -444,37 +415,6 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsDailyRequest,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.HRSpace),
-                SupervisorId = null,
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
-            };
-
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
-            return ExcelFile(hssfworkbook, fileName);
-        }
-
-        /// <summary>
-        /// ActionResult EmployeeViewWorkingTimeRequest.
-        /// </summary>
-        /// <param name="model">Request ViewModel.</param>
-        /// <returns>View Employee Working Time Request.</returns>
-        public ActionResult EmployeeViewWorkingTimeRequest(RequestViewModel model)
-        {
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
-
-            bool? isLocal = null;
-            var criteria = new GetRequestCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                GroupIds = model.TeamIds,
-                Status = GetStatus(model.StatusId),
-                RequestType = model.RequestType,
-                IsQueryByCreatedDate = !model.IsDailyRequest,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
-                SupervisorId = null,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 
@@ -496,7 +436,7 @@ namespace Fanex.NexHR.Controllers
             bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 GroupIds = model.TeamIds,
@@ -504,7 +444,7 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsDailyRequest,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
-                SupervisorId = null,
+                SupervisorId = this.CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
             };
 

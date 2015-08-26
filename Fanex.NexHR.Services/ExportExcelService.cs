@@ -1677,7 +1677,7 @@ namespace Fanex.NexHR.Services
             cellName.SetCellValue(item.Requester.FullName);
             if (item.RequestType.Id == (int)RequestType.Leave)
             {
-                cellRequest.SetCellValue(item.LeaveType);
+                cellRequest.SetCellValue(item.LeaveType.Name);
             }
             else
             {

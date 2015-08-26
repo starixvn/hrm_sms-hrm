@@ -1129,7 +1129,7 @@ namespace Fanex.NexHR.Services
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,
-                request.FromDate.ToShortTime(),
+                request.RequestedDate.ToShortTime(),
                 request.Remark);
 
             this._emailService.SendEmail(
