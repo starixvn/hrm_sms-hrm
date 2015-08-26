@@ -33,3 +33,4 @@ $tf*/
 /Fanex.NexHR.Controllers/obj
 /Fanex.NexHR.Controllers/bin
 /Fanex.NexHR.Site/Logs
+*.Publish.xml
