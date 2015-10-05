@@ -407,7 +407,7 @@ namespace Fanex.NexHR.Controllers
             var criteria = new GetRequestCriteria()
             {
                 SupervisorId = this.CurrentUser.Id,
-                EmpId = model.EmployeeId == -1 ? null : new int? (model.EmployeeId),
+                EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 GroupIds = model.TeamIds,
