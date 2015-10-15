@@ -97,7 +97,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
         CommandResult ChangePassword(ChangePasswordCriteria criteria);
 
-        CommandResult ResetPassword(int empId, string originalPassword);
+        CommandResult ResetPassword(int empId, string originalPassword, int modifiedBy);
 
         CommandResult UpdateSupervisor(UpdateSupervisorCriteria criteria);
 

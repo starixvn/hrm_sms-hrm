@@ -7,3 +7,8 @@ table.data tr:nth-child(odd)
 {
 	background-color: transparent !important;
 }
+
+.memocontent
+{
+    line-height: 26px;
+    }

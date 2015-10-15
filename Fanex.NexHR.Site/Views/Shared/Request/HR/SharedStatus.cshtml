@@ -7,7 +7,7 @@ if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
 {
     <td>
         @*<a href="javascript:void(0);" class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>*@
-        <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
+        <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
     </td>
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)

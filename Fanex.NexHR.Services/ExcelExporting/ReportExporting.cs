@@ -75,16 +75,15 @@ namespace Fanex.NexHR.Services.ExcelExporting
                 row.Height = height;
 
                 row.GetCell(0).SetCellValue(index);
-                row.GetCell(1).SetCellValue(item.Requester.Id);
-                row.GetCell(2).SetCellValue(item.Requester.FullName);
-                row.GetCell(3).SetCellValue(item.Requester.NickName);
-                row.GetCell(4).SetCellValue(item.Requester.Team.Name);
-                row.GetCell(5).SetCellValue(item.TotalLeave);
-                row.GetCell(6).SetCellValue(item.TotalUnpaidLeave);
-                row.GetCell(7).SetCellValue(item.TotalChangeShift);
-                row.GetCell(8).SetCellValue(item.TotalLateIn);
-                row.GetCell(9).SetCellValue(item.TotalEarlyOut);
-                row.GetCell(10).SetCellValue(item.TotalCheckInOut);
+                row.GetCell(1).SetCellValue(item.Requester.FullName);
+                row.GetCell(2).SetCellValue(item.Requester.NickName);
+                row.GetCell(3).SetCellValue(item.Requester.Team.Name);
+                row.GetCell(4).SetCellValue(item.TotalLeave);
+                row.GetCell(5).SetCellValue(item.TotalUnpaidLeave);
+                row.GetCell(6).SetCellValue(item.TotalChangeShift);
+                row.GetCell(7).SetCellValue(item.TotalLateIn);
+                row.GetCell(8).SetCellValue(item.TotalEarlyOut);
+                row.GetCell(9).SetCellValue(item.TotalCheckInOut);
 
                 rowIndex++;
                 index++;

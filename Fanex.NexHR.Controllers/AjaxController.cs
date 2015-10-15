@@ -400,7 +400,7 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public int ResetPassword(int id)
         {
-            CommandResult result = _employeeService.ResetPassword(id, "123456");
+            CommandResult result = _employeeService.ResetPassword(id, "123456", this.CurrentUser.Id);
             return result.Code;
         }
 

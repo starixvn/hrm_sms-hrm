@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, actingButton, noInformation, reloadButtonText, _messages, dontBlock:true*/
+/*global _global, actingButton, jsonToFullDateTime2, noInformation, reloadButtonText, _messages, dontBlock:true*/
 /*exported index*/
 
 var nickName;
@@ -93,7 +93,9 @@ function view() {
 						"<tr class='hasborder'>" +
 						"<td class='col1'>Details</td>" +
 						"<td class='col2'>" + result +
-						"</td></tr><tr><td>Remark</td><td class='col2'>" +
+						"</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
+						jsonToFullDateTime2(object.attr('data-createddate')) +
+						"</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
 						object.attr('data-remark') + "</td></tr></table></div>";
 				}
 			});

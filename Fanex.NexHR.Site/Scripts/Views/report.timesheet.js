@@ -1,54 +1,54 @@
 ﻿'use strict';
-/*global _global, actingButton, noInformation, reloadButtonText, _messages, dontBlock:true*/
+/*global _global, actingButton, jsonToFullDateTime2, noInformation, reloadButtonText, _messages, dontBlock:true*/
 /*exported index*/
 
 var rowIndex = 1;
 function index() {
-	return rowIndex++;
+    return rowIndex++;
 }
 
-function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, createddate, fromShift, toShift, 
+function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, createddate, fromShift, toShift,
 	totalDays, totalMins, overtimeType, isOvertimeHours) {
-	var result = '';
-	dontBlock = true;
-	$.ajax({
-		url: _global.root + "ajax/GetMessageDetailRequest",
-		async: false,
-		type: 'post',
-		data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate" : fromDate,
-			"fromtime": fromTime, "totime": toTime, "createddate": createddate, "fromshiftCode": fromShift,
-			"toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-			"overtimetype": overtimeType, "isOvertimehours": isOvertimeHours
-		},
-		success: function (data) {
-			result = data;
-		}
-	});
-	dontBlock = false;
-	return result;
+    var result = '';
+    dontBlock = true;
+    $.ajax({
+        url: _global.root + "ajax/GetMessageDetailRequest",
+        async: false,
+        type: 'post',
+        data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
+            "fromtime": fromTime, "totime": toTime, "createddate": createddate, "fromshiftCode": fromShift,
+            "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
+            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours
+        },
+        success: function (data) {
+            result = data;
+        }
+    });
+    dontBlock = false;
+    return result;
 }
 
 function view() {
-	var $form = $('form');
-	if (!$form.valid()) {
-		return;
-	}
+    var $form = $('form');
+    if (!$form.valid()) {
+        return;
+    }
 
-	actingButton('#view', true);
-	$('#nodata').remove();
-	$.getJSON("/api/report/timesheet", $('form').serialize(), function (response) {
-		if (response.length > 0) {
-			rowIndex = 1;
-			$('#data tbody').children().remove();
-			$('#itemTemplate').tmpl(response).appendTo('#data');
+    actingButton('#view', true);
+    $('#nodata').remove();
+    $.getJSON("/api/report/timesheet", $('form').serialize(), function (response) {
+        if (response.length > 0) {
+            rowIndex = 1;
+            $('#data tbody').children().remove();
+            $('#itemTemplate').tmpl(response).appendTo('#data');
 
-			$('.tooltip-request').tooltip({
-				track: true,
-				delay: 0,
-				showURL: false,
-				bodyHandler: function () {
-					var object = $(this);
-					var result = getMessageDetail(
+            $('.tooltip-request').tooltip({
+                track: true,
+                delay: 0,
+                showURL: false,
+                bodyHandler: function () {
+                    var object = $(this);
+                    var result = getMessageDetail(
                         object.attr('data-requesttype'),
                         object.attr('data-fromdate'),
                         object.attr('data-todate'),
@@ -62,63 +62,65 @@ function view() {
                         object.attr('data-ottype'),
                         object.attr('data-isothours'));
 
-					return "<div class='tooltip'>" +
+                    return "<div class='tooltip'>" +
 						"<table class='table-tooltip checkinout'>" +
 						"<tr class='hasborder'>" +
 						"<td class='col1'>Details</td>" +
 						"<td class='col2'>" + result +
-						"</td></tr><tr><td>Remark</td><td class='col2'>" +
-						object.attr('data-remark') + 
+						"</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
+						jsonToFullDateTime2(object.attr('data-createddate')) +
+						"</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
+						object.attr('data-remark') +
 						"</td></tr></table></div>";
-				}
-			});
+                }
+            });
 
-			$('.tooltip-overtime').tooltip({
-				track: true,
-				delay: 0,
-				showURL: false,
-				bodyHandler: function () {
-					var object = $(this);
+            $('.tooltip-overtime').tooltip({
+                track: true,
+                delay: 0,
+                showURL: false,
+                bodyHandler: function () {
+                    var object = $(this);
 
-					return "<div class='tooltip '>" +
+                    return "<div class='tooltip '>" +
 						"<div class='overtime-tooltip'>" +
-						object.attr('data-fromtime') + 
+						object.attr('data-fromtime') +
 						"-" + object.attr('data-totime') + "</div></div>";
-				}
-			});
-		}
-		else {
-			$('#data tbody').children().remove();
-			$(noInformation(13)).appendTo('#data');
-		}
-		reloadButtonText('#view');
-	}).error(function () {
-		reloadButtonText('#view');
-		alert(_messages.errorTryAgain);
-	});
+                }
+            });
+        }
+        else {
+            $('#data tbody').children().remove();
+            $(noInformation(13)).appendTo('#data');
+        }
+        reloadButtonText('#view');
+    }).error(function () {
+        reloadButtonText('#view');
+        alert(_messages.errorTryAgain);
+    });
 }
 
 $(document).ready(function () {
-	$('#monthPickr').monPickr({
-		showDateRange: false,
-		today: new Date(),
-		minDate: '2010/1/1',
-		maxDate: $('#maxDate').val(),
-		sortDesc: true,
-		afterChangeMonth: function () {
-			var Month = $('#monthPickr').monPickr("getMonth", "MM");
-			var Year = $('#monthPickr').monPickr("getMonth", "yyyy");
-			$('#Month').val(Month);
-			$('#Year').val(Year);
-		}
-	});
+    $('#monthPickr').monPickr({
+        showDateRange: false,
+        today: new Date(),
+        minDate: '2010/1/1',
+        maxDate: $('#maxDate').val(),
+        sortDesc: true,
+        afterChangeMonth: function () {
+            var Month = $('#monthPickr').monPickr("getMonth", "MM");
+            var Year = $('#monthPickr').monPickr("getMonth", "yyyy");
+            $('#Month').val(Month);
+            $('#Year').val(Year);
+        }
+    });
 
-	view();
+    view();
 
-	$('#view').click(function (evt) {
-		evt.preventDefault();
-		view();
-	});
+    $('#view').click(function (evt) {
+        evt.preventDefault();
+        view();
+    });
 });
 
 

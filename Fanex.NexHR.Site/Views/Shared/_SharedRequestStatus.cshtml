@@ -7,7 +7,7 @@ switch (request.Status.Id)
 {
     case (byte)CurrentRequestStatus.Pending:
         <td>
-            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip @request.Status.ToString()" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.RequestedDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
+            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip @request.Status.ToString()">@request.Status.ToString()</a>
         </td>
         break;
     case (byte)CurrentRequestStatus.Verified:

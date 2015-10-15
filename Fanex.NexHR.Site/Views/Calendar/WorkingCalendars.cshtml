@@ -22,7 +22,7 @@
 @using (Html.BeginGetForm())
 {
 	var displayFrom = ((DateTime)ViewBag.FromDate).ToString("dd MMM, yyyy");
-	var displayTo = ((DateTime)ViewBag.ToDate).ToString("dd MMMM, yyyy");
+	var displayTo = ((DateTime)ViewBag.ToDate).ToString("dd MMM, yyyy");
 	<div class="container_24 bunhat">
 		<div class="grid_24">
 			<div class="grid_2 gridlabel">
@@ -52,18 +52,12 @@
 			<div class="grid_6">
 				@Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
 			</div>
-
-
-			
 			<div class="clear">
 			</div>
 			<div class="space">
 			</div>
 			<div class="clear">
 			</div>
-			
-
-
 			<div class="grid_2 gridlabel">
 				Employee
 			</div>
@@ -71,25 +65,12 @@
 				@Html.Editor("Employee")
 				@Html.Hidden("EmployeeId")
 			</div>
-
-
-									<div class="grid_2 gridlabel">
+				<div class="grid_2 gridlabel">
 				Category
 			</div>
 			<div class="grid_3">
-				@*@{
-	var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-				}
-				@Html.DropDownList("category", category, new { @class = "category" })
-*@
                 @RazorHelper.CategoryDropDownList("category", "category", "")
 			</div>
-
 			<div class="grid_2 gridlabel">
 				<input type="button" value="@Labels.Submit" id="submit"/>
 			</div>
@@ -104,8 +85,6 @@
 	</div>
 	<div class="clear">
 	</div>
-
-    
 	<div class="grid_1 gridlabel" style="float: right;">
 		<a id="prev" class="lnkPrevious" href="javascript:;">&lt;&lt; Previous</a>
 		|| <span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
@@ -116,10 +95,7 @@
 	</div>
 
 }
-@*<div id="blocker">
-    <div>
-        Loading ...</div>
-</div>*@
+
 <table id="workingCalendarDetails" class="pretty">
 </table>
 <br />

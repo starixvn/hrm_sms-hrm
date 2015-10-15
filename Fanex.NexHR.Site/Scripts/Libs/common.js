@@ -109,6 +109,8 @@ $(document).ready(function(){
 				beforeShowDay: checkBadDates,
 				showOn: "button",
 				buttonImageOnly: true,
+                changeMonth: true,
+                changeYear: true,
 				buttonImage: _global.root + "images/calendar.png"
 			});
 		} 
@@ -117,6 +119,8 @@ $(document).ready(function(){
 				dateFormat: "dd M, yy",
 				showOn: "button",
 				buttonImageOnly: true,
+                changeMonth: true,
+                changeYear: true,
 				buttonImage: _global.root + "images/calendar.png"
 			});
 		}
@@ -282,9 +286,20 @@ function jsonToDate(jsonDate) {
 }
 
 function jsonToFullDateTime(jsonDate) {
-	var date = Date.parse(jsonDate);
+    var date = Date.parse(jsonDate);
 	if(date != null) {
 		return date.format("ddd, dd mmm, yyyy HH:MM:ss");
+	}
+	else {
+		return "";
+	}
+}
+
+function jsonToFullDateTime2(jsonDate) {
+
+    var date = new Date(jsonDate);
+	if(date != null) {
+		return date.format("dd mmm, yyyy HH:MM:ss");
 	}
 	else {
 		return "";

@@ -168,10 +168,19 @@ namespace Fanex.NexHR.Core
         /// <param name="fromYear">Default from year 2000.</param>
         /// <param name="currentYear">Default current year 2000.</param>
         /// <returns>MVCHtml String.</returns>
-        public static MvcHtmlString YearPicker(this HtmlHelper htmlHelper, string name, int fromYear = 2000, int currentYear = 2000)
+        public static MvcHtmlString YearPicker(this HtmlHelper htmlHelper, string name, int fromYear = 2000, int currentYear = 2000, bool isShowAll = false)
         {
             var list = new List<SelectListItem>();
             var toYear = DateTime.Now.GetMaxDate().Year;
+
+            if (isShowAll)
+            {
+                list.Add(new SelectListItem
+                {
+                    Text = Labels.All,
+                    Value = "0"
+                });
+            }
 
             for (var i = toYear + 1; i >= fromYear; i--)
             {
@@ -191,12 +200,13 @@ namespace Fanex.NexHR.Core
         public static MvcHtmlString YearPickerFor<TModel, TValue>(
             this HtmlHelper<TModel> html,
             Expression<Func<TModel, TValue>> expression,
-            int fromYear = 2000)
+            int fromYear = 2000,
+            bool isShowAll = false)
         {
             var metaData = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
             var currentYear = (int)metaData.Model;
 
-            return html.YearPicker(metaData.PropertyName, fromYear, currentYear);
+            return html.YearPicker(metaData.PropertyName, fromYear, currentYear, isShowAll);
         }
 
         public static HelperResult RenderSection(

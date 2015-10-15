@@ -515,7 +515,7 @@ namespace Fanex.NexHR.Services
         /// <param name="empId">Employee id.</param>
         /// <param name="originalPassword">Default Password.</param>
         /// <returns>Command Result.</returns>
-        public CommandResult ResetPassword(int empId, string originalPassword)
+        public CommandResult ResetPassword(int empId, string originalPassword, int modifiedBy)
         {
             CommandResult result = null;
             string hashPassword = Encryptor.ComputeHash(_HashProvider, originalPassword);
@@ -523,7 +523,8 @@ namespace Fanex.NexHR.Services
             {
                 EmpId = empId,
                 Password = hashPassword,
-                PasswordReset = true
+                PasswordReset = true,
+                ModifiedBy = modifiedBy
             };
 
             if (criteria.IsValid())

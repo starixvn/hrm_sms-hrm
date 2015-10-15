@@ -16,7 +16,14 @@
     var shiftCodeForHalfday = string.Empty;
     var classOfleavetype = string.Empty;
     
-    if (workingCalendarModel.IsLeaveDay)
+    if (workingCalendarModel.IsLeaveOffDay)
+    {
+        valueOfInput = "Off";
+        classOfInput = "offday";
+        disabledAttribute = "disabled";
+        isShowCheckBox = false;
+    }
+    else if (workingCalendarModel.IsLeaveDay)
     {
         disabledAttribute = "disabled";
         isShowCheckBox = false;
@@ -66,13 +73,6 @@
         }
         
         //isShowCheckBox = false;
-    }
-    else if (workingCalendarModel.IsLeaveOffDay)
-    {
-        valueOfInput = "Off";
-        classOfInput = "offday";
-        disabledAttribute = "disabled";
-        isShowCheckBox = false;
     }
     else if (workingCalendarModel.IsOffDay)
     {

@@ -25,6 +25,8 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public bool PasswordReset { get; set; }
 
+        public int ModifiedBy { get; set; }
+
         public override string GetSettingKey()
         {
             return "Employee_ChangePassword";
