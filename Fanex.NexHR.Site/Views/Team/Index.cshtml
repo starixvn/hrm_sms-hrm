@@ -1,6 +1,6 @@
 ﻿@model IList<Team>
 @{
-	ViewBag.Title = "Team Management";
+	ViewBag.Title = "Section Management";
 }
 @section css{
 	@Url.CombresLink("sitecss")
@@ -13,7 +13,7 @@
 }
 <h2>@ViewBag.Title</h2>
 <div class="button-icon">
-	<span class="icon plus"></span>@Html.ActionLink("New Team", "Create")</div>
+	<span class="icon plus"></span>@Html.ActionLink("New Section", "Create")</div>
 <div class="clear">
 </div>
 <div class="space">
@@ -26,11 +26,11 @@
 			</th>
 			<th>@Labels.Code
 			</th>
-			<th>@Labels.Team
+			<th>Section
 			</th>
-			<th>@Labels.Leader
+			<th>Section Head
 			</th>
-			<th>@Labels.AssitantLeader
+			<th>Assist.Section Head
 			</th>
 			<th>
 				Email
@@ -47,11 +47,11 @@
 			<th>
 				@Labels.Edit
 			</th>
-			<th>
-				@Labels.Delete
+            <th>
+				Roles
 			</th>
 			<th>
-				@Labels.Supervisor
+				@Labels.Delete
 			</th>
 		</tr>
 	</thead>
@@ -84,7 +84,7 @@
  {
 	 <td></td>
  }
-				<td>@team.MailGroup
+				<td class="left">@team.MailGroup
 				</td>
 				<td>@team.TotalExpat
 				</td>
@@ -106,6 +106,9 @@
 					<a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
 						<img src="~/Styles/Images/edit-icon.png" /></a>
 				</td>
+                <td class="cmd">
+					<a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
+				</td>
 				<td class="cmd">
 					@{
 	  if (team.NoOfMembers > 0)
@@ -119,9 +122,7 @@
 	  }
 					}
 				</td>
-				<td class="cmd">
-					<a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
-				</td>
+				
 				@Html.Hidden("groupid", team.Id)
 			</tr>
   }

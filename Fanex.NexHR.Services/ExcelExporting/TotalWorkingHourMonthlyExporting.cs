@@ -54,8 +54,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
         /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportTotalWorkingHourMonthly()
         {
-            this.CreateSheet();
-            this.ExportHeaderTitle();
+            this.CreateSheet(Labels.TotalWorkingHourMonthly);
+            this.ExportHeaderTitle(Labels.TotalWorkingHourMonthly);
             if (this.IsHaveTableHeader(this._totalWorkingHourMonthly))
             {
                 this.ExportTable();
@@ -64,17 +64,29 @@ namespace Fanex.NexHR.Services.ExcelExporting
             return this._workbook;
         }
 
-        private void CreateSheet()
+        public HSSFWorkbook ExportTotalWorkingHourDaily()
         {
-            _sheet = this._workbook.CreateSheet(Labels.TotalWorkingHourMonthly);
+            this.CreateSheet(Labels.TotalWorkingHourDaily);
+            this.ExportHeaderTitle(Labels.TotalWorkingHourDaily);
+            if (this.IsHaveTableHeader(this._totalWorkingHourMonthly))
+            {
+                this.ExportTable();
+            }
+
+            return this._workbook;
         }
 
-        private void ExportHeaderTitle()
+        private void CreateSheet(string sheetName)
+        {
+            _sheet = this._workbook.CreateSheet(sheetName);
+        }
+
+        private void ExportHeaderTitle(string title)
         {
             var row = _sheet.CreateRow(_RowIndexOfHeaderTitle);
             var font = CreateHeaderTitleFont();
             var cell = row.CreateCell(1);
-            cell.SetCellValue(Labels.TotalWorkingHourMonthly);
+            cell.SetCellValue(title);
             cell.CellStyle = this._workbook.CreateCellStyle();
             cell.CellStyle.SetFont(font);
             _sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 4));

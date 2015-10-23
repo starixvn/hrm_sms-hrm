@@ -101,6 +101,18 @@ namespace Fanex.NexHR.Services
             return shiftStatisticModels;
         }
 
+        public IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<EmployeeShiftModel> employeeShifts = null;
+            if (criteria.IsValid())
+            {
+                employeeShifts = _workingCalendarRepository.GetEmployeeShift(criteria);
+            }
+
+            return employeeShifts;
+        }
+
         public IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");

@@ -322,6 +322,16 @@
       <resource path="~/scripts/views/Calendar/report.shiftstatistic.content.js" />
     </resourceSet>
 
+    <resourceSet name="employeeshiftjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/Calendar/report.employeeshift.js" />
+    </resourceSet>
+    <resourceSet name="employeeshiftcss" type="css">
+      <resource reference="sitecss"/>
+      <resource path="~/styles/Calendar/report.employeeshift.css" />
+    </resourceSet>
+    
     <resourceSet name="myrequestcss" type="css">
       <resource reference="sitecss"/>
 
@@ -443,6 +453,12 @@
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/report.totalworkinghourmonthly.js" />
+    </resourceSet>
+
+    <resourceSet name="totalworkinghourdailyjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/report.totalworkinghourdaily.js" />
     </resourceSet>
 
 		<resourceSet name="totalworkinghourweeklycss" type="css">

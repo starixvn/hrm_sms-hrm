@@ -289,6 +289,12 @@ namespace Fanex.NexHR.Services
             return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourMonthly();
         }
 
+        public HSSFWorkbook ExportTotalWorkingHourDaily(IList<TotalWorkingHourMonthly> totalWorkingHourDaily, TotalWorkingHourMonthly firstRecord)
+        {
+            var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourDaily, firstRecord);
+            return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourDaily();
+        }
+
         /// <summary>
         /// Method Export Total Working Calendar Summary.
         /// </summary>
@@ -410,7 +416,8 @@ namespace Fanex.NexHR.Services
                     foreach (var request in item.RequestList)
                     {
                         requests += "- " + request.RequestType.Name + ": " + this.GetRequestDetail(request)
-                            + (string.IsNullOrEmpty(request.Remark) ? string.Empty : " --> " + request.Remark) + "\r\n";
+                            + "\r\n- Create date: " + request.CreatedDate.ToDateMonthYearFormatedDate()
+                            + (string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark) + "\r\n";
                     }
 
                     requests = requests.Substring(0, requests.Length - 2);

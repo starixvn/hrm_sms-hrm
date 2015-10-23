@@ -37,6 +37,8 @@ namespace Fanex.NexHR.Services.Interfaces
 
         HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord);
 
+        HSSFWorkbook ExportTotalWorkingHourDaily(IList<TotalWorkingHourMonthly> totalWorkingHourDaily, TotalWorkingHourMonthly firstRecord);
+
         HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees);
 
         HSSFWorkbook ExportEmployeeDetailsInfo(IList<Employee> employees);

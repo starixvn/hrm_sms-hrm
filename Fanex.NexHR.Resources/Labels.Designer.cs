@@ -835,6 +835,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee Shift.
+        /// </summary>
+        public static string EmployeeShift {
+            get {
+                return ResourceManager.GetString("EmployeeShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee&apos;s view.
         /// </summary>
         public static string EmployeeView {
@@ -2365,6 +2374,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show whole section.
+        /// </summary>
+        public static string ShowWholeSection {
+            get {
+                return ResourceManager.GetString("ShowWholeSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Since Last Month.
         /// </summary>
         public static string SinceLastMonth {
@@ -2604,6 +2622,15 @@ namespace Fanex.NexHR.Resources {
         public static string TotalWorkingDays {
             get {
                 return ResourceManager.GetString("TotalWorkingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Working Hours Daily.
+        /// </summary>
+        public static string TotalWorkingHourDaily {
+            get {
+                return ResourceManager.GetString("TotalWorkingHourDaily", resourceCulture);
             }
         }
         

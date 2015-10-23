@@ -22,10 +22,9 @@
     <siteMapNode title="HR space" roles="HR" >
       <siteMapNode title="Employees' requests" controller="request" action="hrview" icon="user1" roles="HR" />
       <siteMapNode title="Employees' Overtimes" controller="overtime" action="EmployeeOvertime" icon="user1" roles="HR" />
-      <!--<siteMapNode title="Overtime Report" controller="overtime" action="YearlyReport" icon="calendar1" roles="HR" />-->
       <siteMapNode title="Requests Statistics" controller="report" action="HRRequestMonitoring" icon="search" roles="HR"/>
       <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
-      <siteMapNode title="Team management" controller="team" action="index" icon="setting" />
+      <siteMapNode title="Section management" controller="team" action="index" icon="setting" />
       <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" roles="SystemAdmin"/>
       <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
       <siteMapNode title="Time Record" controller="report" action="timerecord" icon="calendar1" roles="HR"/>
@@ -38,10 +37,6 @@
       <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1"/>
       <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
       <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6"/>
-      <!--<siteMapNode title="Leave summary" controller="report" action="leavesummary" icon="calendar4" />-->
-      <!--<siteMapNode title="Total working hours" controller="report" action="totalworkinghours" icon="clock" />-->
-      <!--<siteMapNode title="Holiday" controller="holiday" action="index" icon="holiday" />
-      <siteMapNode title="Shift info" controller="shift" action="index" icon="calendar3" />-->
       <siteMapNode title="Extension numbers" controller="report" action="extensionno" icon="mobile" />
       <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
     </siteMapNode>

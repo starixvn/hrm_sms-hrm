@@ -2,7 +2,7 @@
 @model TeamViewModel
 
 @{
-    ViewBag.Title = "Edit Team's Informations";
+    ViewBag.Title = "Edit Section's Informations";
 }
 
 @section css{
@@ -13,7 +13,7 @@
 }
 @section Breadcrumb {
     <a class="step">HR Space</a>
-    <a class="step" href="@Url.Action("index", "team")">Team Management</a>
+    <a class="step" href="@Url.Action("index", "team")">Section Management</a>
     <span class="step">@ViewBag.Title</span>
 }
 
@@ -56,7 +56,7 @@
     
     <div class="formrow">
         <div class="label">
-            @Html.LabelFor(model => model.Leader)
+            @Html.LabelFor(model => model.Leader, "Head")
         </div>
         <div class="input">
             @Html.TextBox("Leader", Model.Leader, new { placeholder = Messages.SearchEmployeeWatermark })
@@ -70,7 +70,7 @@
     
     <div class="formrow">
         <div class="label">
-            @Html.LabelFor(model => model.AssistantLeader)
+            @Html.LabelFor(model => model.AssistantLeader, "Assist Head")
         </div>
         <div class="input">
             @Html.TextBox("AssistantLeader", Model.AssistantLeader , new { placeholder = Messages.SearchEmployeeWatermark })

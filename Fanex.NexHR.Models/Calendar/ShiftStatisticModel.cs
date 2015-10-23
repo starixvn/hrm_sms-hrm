@@ -14,6 +14,8 @@ namespace Fanex.NexHR.Models.Calendar
     /// </summary>
     public class ShiftStatisticModel
     {
+        public int ShiftId { get; set; }
+
         public string ShiftCode { get; set; }
 
         public int WorkMonday { get; set; }

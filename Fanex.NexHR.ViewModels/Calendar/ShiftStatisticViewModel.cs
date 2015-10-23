@@ -23,5 +23,7 @@ namespace Fanex.NexHR.ViewModels.Calendar
         public DateTime ToDate { get; set; }
 
         public IList<Team> Teams { get; set; }
+
+        public bool IsShowWholeCompany { get; set; }
     }
 }

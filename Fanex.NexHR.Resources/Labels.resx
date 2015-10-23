@@ -1035,4 +1035,13 @@
   <data name="StandardLeave" xml:space="preserve">
     <value>Standard Leave</value>
   </data>
+  <data name="TotalWorkingHourDaily" xml:space="preserve">
+    <value>Total Working Hours Daily</value>
+  </data>
+  <data name="EmployeeShift" xml:space="preserve">
+    <value>Employee Shift</value>
+  </data>
+  <data name="ShowWholeSection" xml:space="preserve">
+    <value>Show whole section</value>
+  </data>
 </root>

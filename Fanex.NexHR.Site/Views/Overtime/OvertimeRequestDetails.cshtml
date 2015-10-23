@@ -14,10 +14,7 @@
                 <th>@Labels.TimeOut
                 </th>
                 <th>
-                    Total Time
-                </th>
-                <th>
-                    Working Hours
+                    @Labels.TotalHours
                 </th>
                 <th>@Labels.NormalDay
                 </th>
@@ -53,9 +50,6 @@
                     <td>@request.TimeIn
                     </td>
                     <td>@request.TimeOut
-                    </td>
-                    <td>
-                        @request.TotalWorkHoursTime
                     </td>
                     <td class="totalHours">
                         @if (request.TotalWorkHours > 0)
@@ -171,8 +165,6 @@
         <tfoot>
             <tr class="sum">
                 <td colspan="1" class="sumhours">@Labels.TotalOvertimeHours:
-                </td>
-                <td colspan="1">
                 </td>
                 <td colspan="1">
                 </td>

@@ -27,6 +27,8 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria);
 
+        IList<TotalWorkingHourMonthly> GetTotalWorkingHourDaily(GetTotalWorkingHourDailyCriteria criteria);
+
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria);
         
         IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria);

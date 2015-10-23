@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Models.Supervisor
 @model List<TeamSupervisorModel>
 @{
-	ViewBag.Title = "Team Supervisor";
+	ViewBag.Title = "Section Supervisor";
 }
 @section css{
 	@Url.CombresLink("teamsupervisorcss")
@@ -11,14 +11,14 @@
 }
 @section Breadcrumb {
 	<a class="step">HR Space</a>
-	<a href="~/team/index/" class="step">Team Management</a>
+	<a href="~/team/index/" class="step">Section Management</a>
 	<a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 <table class="data" style="width: auto; min-width: 800px;">
 	<thead>
 		<tr>
-			<th class="supervisor-team">@Labels.Team
+			<th class="supervisor-team">Section
 			</th>
 			<th>
 				Action

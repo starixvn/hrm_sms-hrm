@@ -28,9 +28,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Supervisor;
 
-    /// <summary>
-    /// Calendar Controller.
-    /// </summary>
     public class CalendarController : BaseController
     {
         private readonly IWorkingCalendarService _workingCalendarService;
@@ -58,10 +55,6 @@ namespace Fanex.NexHR.Controllers
             _employeeService = employeeService ?? new EmployeeService();
         }
 
-        /// <summary>
-        /// Action Arrange Schedule.
-        /// </summary>
-        /// <returns>Action Result.</returns>
         [HttpGet]
         [Authorize(Roles = "ShiftManager")]
         public ActionResult ArrangeSchedule()
@@ -87,12 +80,6 @@ namespace Fanex.NexHR.Controllers
             return View(scheduleArrangeViewModel);
         }
 
-        /// <summary>
-        /// Post Action Arrange Schedule.
-        /// </summary>
-        /// <param name="scheduleArranges">Schedule Arrange.</param>
-        /// <param name="shiftMultiples">Shift Multiple.</param>
-        /// <returns>Action Result.</returns>
         [HttpPost]
         [Authorize(Roles = "ShiftManager")]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
@@ -119,15 +106,6 @@ namespace Fanex.NexHR.Controllers
             return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Action for load arrange schedule detail.
-        /// </summary>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <param name="groupIds">Groups id string.</param>
-        /// <param name="jobTitles">Job titles.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <returns>Action Result.</returns>
         [HttpGet]
         [Authorize(Roles = "ShiftManager")]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
@@ -154,10 +132,6 @@ namespace Fanex.NexHR.Controllers
             return View(scheduleViewModel);
         }
 
-        /// <summary>
-        /// Action to list of all shift in date range.
-        /// </summary>
-        /// <returns>Action Result.</returns>
         [Authorize(Roles = "ShiftManager,HR")]
         public ActionResult ShiftStatistic()
         {
@@ -177,21 +151,12 @@ namespace Fanex.NexHR.Controllers
             return View(shiftStatisticViewModel);
         }
 
-        /// <summary>
-        /// Action to get list shift count in date range.
-        /// </summary>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <param name="groupIds">Groups Id.</param>
-        /// <param name="isShowWholeCompany">Is Show Whole Company.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>Action Result.</returns>
         [Authorize(Roles = "ShiftManager,HR")]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
             var getShiftCriteria = new GetShiftStatisticCriteria()
             {
-                SupervisorID = this.CurrentUser.Id,
+                SupervisorID = CurrentUser.Id,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupIds,
@@ -204,17 +169,64 @@ namespace Fanex.NexHR.Controllers
             {
                 FromDate = fromDate, 
                 ToDate = toDate,
-                ShiftStatisticModels = shiftStatisticModels
+                ShiftStatisticModels = shiftStatisticModels,
+                GroupIds = groupIds,
+                IsShowWholeCompany = isShowWholeCompany,
+                IsLocal = isLocal
             };
 
             return View(shiftStatisticContentViewModel);
         }
 
-        /// <summary>
-        /// Function to get employees by shift monitor.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <returns>Action Result.</returns>
+        [Authorize(Roles = "ShiftManager,HR")]
+        public ActionResult EmployeeShift(
+            DateTime? workDate,
+            int? shiftId,
+            string teamIds,
+            bool? isShowWholeCompany,
+            byte? isLocal = null)
+        {
+            var model = new EmployeeShiftViewModel
+            {
+                TeamIds = teamIds == null ? string.Empty : teamIds,
+                WorkDate = workDate.HasValue ? workDate.Value : DateTime.Now,
+                IsLocal = isLocal,
+                IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
+                ShiftId = shiftId.HasValue ? shiftId.Value : -1,
+                Shifts = _shiftService.GetAll()
+            };
+
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            model.Teams = _teamService.GetAll(getAllGroupCriteria);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "ShiftManager,HR")]
+        public ActionResult EmployeeShiftContent(
+            DateTime workDate,
+            int? shiftId,
+            string teamIds,
+            int? employeeId,
+            bool? isShowWholeCompany,
+            byte? isLocal = null)
+        {
+            var criteria = new GetEmployeeShiftDateCriteria() 
+            {
+                WorkDate = workDate,
+                ShiftId = shiftId,
+                EmployeeId = employeeId,
+                SupervisorID = CurrentUser.Id,
+                IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
+                TeamIds = teamIds,
+                IsLocal = isLocal
+            };
+
+            IList<EmployeeShiftModel> employeeShifts = _workingCalendarService.GetEmployeeShift(criteria);
+
+            return View(employeeShifts);
+        }
+
         public ActionResult GetEmployeesByShiftMonitor(string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria() 
@@ -291,16 +303,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Workings the calendar details.
-        /// </summary>
-        /// <param name="empId">The employee identifier.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Query To date.</param>
-        /// <param name="groupId">The group identifier.</param>
-        /// <param name="jobTitleId">The job title identifier.</param>
-        /// <param name="isLocal">Expat or local.</param>
-        /// <returns>ActionResult Return Partial view Working calendar Details.</returns>
         public ActionResult WorkingCalendarDetails(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null)
         {
             var viewModel = new List<WorkingCalendarsViewModel>();

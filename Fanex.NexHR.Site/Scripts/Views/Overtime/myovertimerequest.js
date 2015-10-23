@@ -130,7 +130,7 @@ $(document).ready(function () {
 					Schedule: $('#request_ShiftId', this).val(),
 					TimeIn: $('td:eq(2)', this).html().trim(),
 					TimeOut: $('td:eq(3)', this).html().trim(),
-					TotalWorkHours: $('td:eq(5)', this).html().trim() !== "" ? $('td:eq(5)', this).html().trim() : 0,
+					TotalWorkHours: $('td:eq(4)', this).html().trim() !== "" ? $('td:eq(4)', this).html().trim() : 0,
 					NormalHours: $('td #request_NormalHours', this).val(),
 					OffHours: $('td #request_OffHours', this).val(),
 					PublicHours: $('td #request_PublicHours', this).val(),
@@ -226,7 +226,7 @@ $(document).ready(function () {
 	var textbox = $("input[type='text'].inputDay");
 	textbox.keyup(function () {
 		var row = $(this).parent().parent();
-		var TotalHours = parseFloat($('td:eq(5)', row).html().trim());
+		var TotalHours = parseFloat($('td:eq(4)', row).html().trim());
 		//        var NormalHours = parseFloat($('td #request_NormalHours', row).val());
 		//        var OffHours = parseFloat($('td #request_OffHours', row).val());
 		//        var PublicHours = parseFloat($('td #request_PublicHours', row).val());

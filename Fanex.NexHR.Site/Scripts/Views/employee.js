@@ -111,10 +111,10 @@ function query(jobTitleId) {
 				"sPaginationType": "full_numbers",
 				"bInfo": true,
 				"bJQueryUI": true,
-				'bLengthChange': false,
-				//"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-				'iDisplayLength': 17,
-				"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [7, 8, 9]}]
+				'bLengthChange': true,
+				"aLengthMenu": [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, "All"]],
+				'iDisplayLength': 20,
+				"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [7, 9, 10]}]
 			});
 			$("#title").trigger("liszt:updated");
 		}

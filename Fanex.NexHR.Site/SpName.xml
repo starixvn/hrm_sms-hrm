@@ -58,6 +58,7 @@
 		<Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1"></Setting>
     <Setting Key="Report_DateOfEmployeeForgotAndLateEarlyIO" SpName="Report_DateOfEmployeeForgotAndLateEarlyIO" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByMonth" SpName="Report_EmployeeTotalWorkingHourByMonth" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_EmployeeTotalWorkingHourByDay" SpName="Report_EmployeeTotalWorkingHourByDay" DbName="nexhrx" Plain="0"></Setting>
 		<Setting Key="Report_EmployeeTotalWorkingHourByWeek" SpName="Report_EmployeeTotalWorkingHourByWeek" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
@@ -203,6 +204,7 @@
       <Mapping DataField="Saturday" ObjectProperty="WorkSaturday"/>
       <Mapping DataField="Sunday" ObjectProperty="WorkSunday"/>
     </Setting>
+    <Setting Key="Employee_Shift_GetByDate" SpName="Employee_Shift_GetByDate" DbName="nexhrx" Plain="0"></Setting>
     
     <Setting Key="EmployeeCalendar_GetUnavailRequestDate" SpName="EmployeeCalendar_GetUnavailRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeForRelatedTeam" SpName="Employee_GetEmployeeForRelatedTeam" DbName="nexhrx" Plain="0"></Setting>

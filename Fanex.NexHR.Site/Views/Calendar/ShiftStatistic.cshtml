@@ -2,6 +2,8 @@
 @model ShiftStatisticViewModel
 @{
     ViewBag.Title = @Labels.ShiftStatisticReport;
+    var displayFrom = (Model.FromDate).ToString("dd MMM, yyyy");
+    var displayTo = (Model.ToDate).ToString("dd MMM, yyyy");
 }
 @section css{
     @Url.CombresLink("shiftstatisticcss")
@@ -16,33 +18,42 @@
 <div class="container_24 bunhat">
     <div class="grid_19">
         <div class="row">
+            <div class="grid_1 gridlabel">
+                @Html.Label("Week")
+            </div>
+            <div class="grid_7">
+                @Html.TextBox("FromDate", displayFrom, new { @class = "startDateOfWeek" })
+                @Html.TextBox("ToDate", displayTo, new { @class = "endDateOfWeek" })
+                <img alt="" class="weekPickerImg" src="~/images/calendar.png" />
+                <div class="week-picker">
+                </div>
+            </div>
             <div class="grid_2 gridlabel">
-                Category
+                @Labels.Category
             </div>
             <div class="grid_3">
-                @{
-                    var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-                }
-                @Html.DropDownList("category", category, new { @class = "category" })
+                @RazorHelper.CategoryDropDownList("IsLocal", classHTML: "category", selectedId: string.Empty)
             </div>
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="row">
             <div class="grid_1">
                 @Labels.Team
             </div>
-            <div class="grid_10">
+            <div class="grid_7">
                 <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
                     @foreach (Team team in Model.Teams)
                     { 
                         <option value="@team.Id">@team.Name</option>
                     }
                 </select>
-                <input style="vertical-align: 0px" id="chkIsShowWholeCompany" type="checkbox" />
-                <label for="chkIsShowWholeCompany">
-                    Show whole section</label>
+            </div>
+            <div class="grid_4">
+                @Html.CheckBoxFor(model => model.IsShowWholeCompany)
+                @Html.LabelFor(model => model.IsShowWholeCompany, Labels.ShowWholeSection)
             </div>
             <div class="grid_2">
                 <input type="button" value="@Labels.Submit" id="btnSubmit"/>
@@ -50,8 +61,6 @@
             <div class="clear">
             </div>
         </div>
-        @Html.HiddenFor(model => model.FromDate)
-        @Html.HiddenFor(model => model.ToDate)
     </div>
 </div>
 <div class="clear">

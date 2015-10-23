@@ -26,6 +26,9 @@ var ShiftStatisticContent = (function ($) {
                 var groups = ShiftStatisticContent.groupId.val();
                 var groupIds = groups != null ? groups.join() : "";
 
+                ShiftStatistic.fromDate.val(ShiftStatisticContent.previousFromDate.val());
+                ShiftStatistic.toDate.val(ShiftStatisticContent.previousToDate.val());
+
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatisticContent.previousFromDate.val(),
                         ShiftStatisticContent.previousToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") === "checked"));
             });
@@ -33,6 +36,9 @@ var ShiftStatisticContent = (function ($) {
             ShiftStatisticContent.next.on("click", function () {
                 var groups = ShiftStatisticContent.groupId.val();
                 var groupIds = groups != null ? groups.join() : "";
+
+                ShiftStatistic.fromDate.val(ShiftStatisticContent.nextFromDate.val());
+                ShiftStatistic.toDate.val(ShiftStatisticContent.nextToDate.val());
 
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatisticContent.nextFromDate.val(),
                     ShiftStatisticContent.nextToDate.val(), groupIds, (ShiftStatisticContent.isShowWholeCompany.attr("checked") === "checked"));

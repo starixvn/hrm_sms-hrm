@@ -1,0 +1,98 @@
+﻿@using Fanex.NexHR.ViewModels.Calendar
+@model EmployeeShiftViewModel
+@{
+    ViewBag.Title = @Labels.EmployeeShift;
+    var shifts = Model.Shifts;
+    var shift = new Shift();
+    shift.Id = -1;
+    shift.Name = "-- " + Labels.All + " --";
+    shifts.Insert(0, shift);
+    }
+@section css{
+    @Url.CombresLink("employeeshiftcss")
+}
+@section js{
+    @Url.CombresLink("employeeshiftjs")
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step" href="@Url.Action("shiftStatistic", "calendar")">@Labels.ShiftStatisticReport</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+<div class="container_24 bunhat">
+    <div class="grid_2 gridlabel">
+        @Html.LabelFor(model => model.WorkDate, Labels.Date)
+    </div>
+    <div class="grid_4">
+        @Html.DatePickerFor(model => model.WorkDate, minDate: new DateTime(2010, 01, 01))
+    </div>
+    <div class="grid_2 gridlabel">
+        @Html.LabelFor(model => model.ShiftId, Labels.Shift)
+    </div>
+    <div class="grid_4">
+        @Html.DropDownListFor(model => model.ShiftId, new SelectList(Model.Shifts, "Id", "Name"))
+    </div>
+    <div class="grid_1 gridlabel">
+        @Html.LabelFor(model => model.Team)
+    </div>
+    <div class="grid_6">
+        <select id="TeamId" multiple="multiple" name="TeamId">
+            @{
+                var teamIds = Model.TeamIds != null ? ((string)Model.TeamIds).Split(',') : null;
+                var selected = string.Empty;
+                foreach (Team team in Model.Teams)
+                {
+                    selected = string.Empty;
+                    if (teamIds != null)
+                    {
+                        int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                        if (pos > -1)
+                        {
+                            selected = "selected";
+                        }
+                    }
+                        
+                <option @selected value="@team.Id">@team.Name</option> 
+                }
+            }
+        </select>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    
+    <div class="grid_2 gridlabel">
+        @Html.LabelFor(model => model.Employee)
+    </div>
+    <div class="grid_4">
+        @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+        @Html.HiddenFor(model => model.EmployeeId)
+    </div>
+    <div class="grid_2 gridlabel">
+        @Html.LabelFor(model => model.IsLocal, Labels.Category)
+    </div>
+    <div class="grid_4">
+        @RazorHelper.CategoryDropDownList("IsLocal", classHTML: "category", selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty)
+    </div>
+    <div class="grid_4 gridlabel">
+        @Html.CheckBoxFor(model => model.IsShowWholeCompany)
+        @Html.LabelFor(model => model.IsShowWholeCompany, Labels.ShowWholeSection)
+    </div>
+    <div class="grid_2">
+        <input type="button" value="@Labels.Submit" id="btnSubmit"/>
+    </div>
+    <div class="clear">
+    </div>
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<br />
+<div id="employeeshift">
+</div>

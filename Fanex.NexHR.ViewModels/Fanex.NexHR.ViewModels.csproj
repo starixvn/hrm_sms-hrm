@@ -47,7 +47,9 @@
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
+    <Compile Include="Calendar\EmployeeShiftViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
+    <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />
     <Compile Include="Message\MessageViewModel.cs" />
     <Compile Include="EmployeeGroup\TeamSupervisorViewModel.cs" />

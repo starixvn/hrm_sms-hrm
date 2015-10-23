@@ -7,6 +7,7 @@ var ShiftStatistic = (function ($) {
         fromDate: null,
         toDate: null,
         isShowWholeCompany: null,
+        isLocal: null,
         submit: null,
 
         init: function () {
@@ -14,19 +15,19 @@ var ShiftStatistic = (function ($) {
             ShiftStatistic.fromDate = $("#FromDate");
             ShiftStatistic.toDate = $("#ToDate");
             ShiftStatistic.submit = $("#btnSubmit");
-            ShiftStatistic.isShowWholeCompany = $("#chkIsShowWholeCompany");
+            ShiftStatistic.isShowWholeCompany = $("#IsShowWholeCompany");
             ShiftStatistic.groupId.multiselect();
-            ShiftStatistic.category = $("#category");
+            ShiftStatistic.isLocal = $("#IsLocal");
 
-            ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(), '', 
-				(ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.category.val());
+            ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(), '',
+				(ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.isLocal.val());
 
             ShiftStatistic.submit.on("click", function () {
                 var groups = ShiftStatistic.groupId.val();
                 var groupIds = groups != null ? groups.join() : "";
-                //console.log(ShiftStatistic.isShowWholeCompany.attr("checked") == "checked");
+
                 ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(),
-                    groupIds, (ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.category.val());
+                    groupIds, (ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.isLocal.val());
 
             });
         },

@@ -24,5 +24,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
         IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);
+
+        IList<EmployeeShiftModel> GetEmployeeShift(ICriteria criteria);
     }
 }

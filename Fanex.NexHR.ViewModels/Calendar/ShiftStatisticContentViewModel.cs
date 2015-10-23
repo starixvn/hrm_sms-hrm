@@ -22,6 +22,12 @@ namespace Fanex.NexHR.ViewModels.Calendar
 
         public DateTime ToDate { get; set; }
 
+        public string GroupIds { get; set; }
+
+        public bool IsShowWholeCompany { get; set; }
+
+        public byte? IsLocal { get; set; }
+
         public IList<ShiftStatisticModel> ShiftStatisticModels { get; set; }
     }
 }

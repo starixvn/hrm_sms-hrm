@@ -67,6 +67,18 @@ namespace Fanex.NexHR.Services
             return totalWorkingHours;
         }
 
+        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourDaily(GetTotalWorkingHourDailyCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<TotalWorkingHourMonthly> totalWorkingHours = null;
+            if (criteria.IsValid())
+            {
+                totalWorkingHours = _reportRepository.GetTotalWorkingHourMonthly(criteria);
+            }
+
+            return totalWorkingHours;
+        }
+
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");

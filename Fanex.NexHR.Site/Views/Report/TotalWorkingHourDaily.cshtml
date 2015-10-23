@@ -1,0 +1,83 @@
+﻿@using Fanex.NexHR.ViewModels.Report
+@model TotalWorkingHourDailyViewModel
+
+@{
+    ViewBag.Title = Labels.TotalWorkingHourDaily;
+}
+@section css{
+    @Url.CombresLink("totalworkinghourmonthlycss")
+    @Url.CombresLink("managerequestscss")
+}
+@section js{
+    @Url.CombresLink("totalworkinghourdailyjs")
+}
+
+@section Breadcrumb {
+    <a class="step">HR</a> 
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+ @using (Html.BeginForm())
+ {        
+    <div class="container_24 bunhat">
+        <div class="grid_2">
+            @Labels.Date
+        </div>
+        <div class="grid_6">
+            @Html.DatePicker("WorkDate", Model.WorkDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
+        </div>
+         <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_3">
+						@{
+				var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+			}
+			@Html.DropDownList("IsLocal", category, new { @class = "category" })
+            </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="grid_2 gridlabel">
+            @Html.LabelFor(model => model.Team)
+        </div>
+        <div class="grid_6">
+            <select id="TeamId" multiple="multiple" name="TeamId">
+                @{
+                    var teamIds = Model.TeamIds != null ? ((string)Model.TeamIds).Split(',') : null;
+                    var selected = string.Empty;
+                    foreach (Team team in ViewBag.Groups)
+                    {
+                        selected = string.Empty;
+                        if (teamIds != null)
+                        {
+                            int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                            if (pos > -1)
+                            {
+                                selected = "selected";
+                            }
+                        }
+                        
+                        <option @selected value="@team.Id">@team.Name</option> 
+                    }
+                }
+            </select>
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="grid_4">
+            @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+            @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+        <div class="grid_5">
+            <input id="btnExcel" type="submit" value="Excel"/>
+        </div>
+        <div class="clear"></div>
+    </div>
+}

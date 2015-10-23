@@ -42,7 +42,6 @@ namespace Fanex.NexHR.Controllers
     /// Report Controller.
     /// </summary>
     [Authorize]
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
@@ -449,6 +448,49 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.TeamIds = model.TeamIds;
 
+            return View(model);
+        }
+
+        public ActionResult TotalWorkingHourDaily(
+            DateTime? workDate,
+            string teamIds,
+            string employee,
+            int? employeeId,
+            bool isExportExcel = false,
+            byte? isLocal = null)
+        {
+            var model = new TotalWorkingHourDailyViewModel
+            {
+                TeamIds = teamIds == null ? string.Empty : teamIds,
+                Employee = employee,
+                WorkDate = workDate.HasValue ? workDate.Value : DateTime.Now,
+                EmployeeId = string.IsNullOrEmpty(employee) ? null : employeeId,
+                IsExportExcel = isExportExcel,
+                IsLocal = isLocal
+            };
+
+            if (model.IsExportExcel)
+            {
+                var criteria = new GetTotalWorkingHourDailyCriteria()
+                {
+                    EmpId = string.IsNullOrEmpty(employee) ? null : employeeId,
+                    GroupIds = model.TeamIds,
+                    IsLocal = isLocal,
+                    WorkDate = model.WorkDate
+                };
+                var totalWorkingHourDaily = _reportService.GetTotalWorkingHourDaily(criteria);
+                var firstRecord = totalWorkingHourDaily != null && totalWorkingHourDaily.Any() ? totalWorkingHourDaily[0] : null;
+
+                string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
+                var hssfworkbook = _exportExcelService.ExportTotalWorkingHourDaily(totalWorkingHourDaily, firstRecord);
+                return ExcelFile(hssfworkbook, fileName);
+            }
+            else
+            {
+                var getAllGroupCriteria = new GetAllGroupCriteria();
+                ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            }
+            
             return View(model);
         }
 

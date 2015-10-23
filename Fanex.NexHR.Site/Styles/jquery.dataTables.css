@@ -88,7 +88,8 @@ table.dataTable tr.even td.sorting_3
  */
 .dataTables_length
 {
-    float: left;
+    float: right;
+    line-height: 26px;
 }
 
 
@@ -100,6 +101,11 @@ table.dataTable tr.even td.sorting_3
     float: right;
     text-align: right;
 }
+
+#userdata_length label select
+{
+    min-width: 60px !important;
+    }
 
 
 /*
