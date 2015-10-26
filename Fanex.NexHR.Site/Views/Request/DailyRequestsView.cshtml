@@ -14,10 +14,14 @@
 }
 <h2>@ViewBag.Title</h2>
 <div>
-    @Html.Partial("CriteriaPanelDaily", Model)
+    @Html.Partial("CriteriaPanel", Model)
 </div>
 
-@switch (Model.RequestType)
+@{
+    IList<RequestEntity> entityAll = ViewBag.EntityList;
+    Html.RenderPartial("Request/HR/AllRequest", entityAll);
+    }
+@*@switch (Model.RequestType)
 {
     case (int)RequestFilter.All: // All Request
         IList<RequestEntity> entityAll = ViewBag.EntityList;
@@ -43,5 +47,5 @@
         IList<RequestEntity> entityKeepInView = ViewBag.EntityList;
         Html.RenderPartial("Request/HR/HRViewKeepInViewRequest", entityKeepInView);
         break;
-}
+}*@
 <div id="dialoghistorycontent"/>

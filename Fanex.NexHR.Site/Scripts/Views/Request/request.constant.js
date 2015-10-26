@@ -9,6 +9,7 @@ var ConstantRequest = (function () {
         CONSTANT_PROCESS: null,
         CONSTANT_VOID: null,
         CONSTANT_RESET: null,
+        CONSTANT_VOIDBYSA: null,
 
         init: function () {
             ConstantRequest.CONSTANT_ACCEPT = "Accept";
@@ -18,6 +19,7 @@ var ConstantRequest = (function () {
             ConstantRequest.CONSTANT_PROCESS = "Process";
             ConstantRequest.CONSTANT_VOID = "Void";
             ConstantRequest.CONSTANT_RESET = "Reset";
+            ConstantRequest.CONSTANT_VOIDBYSA = "VoidBySA";
         }
     };
 } (jQuery));

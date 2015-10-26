@@ -1,0 +1,54 @@
+﻿@using Fanex.NexHR.Models.Request
+@model RequestEntity
+
+@{
+    var request = (RequestEntity)Model;
+if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
+{
+    <td>
+        <span class="sa-void tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
+    </td>
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.Verified)
+{
+    <td>
+        <span class="sa-void tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+    </td>
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
+{
+    <td>
+        <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+    </td>
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.Approved)
+{
+    <td>
+        <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="sa-void tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+    </td>
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.Rejected)
+{
+    <td>
+        <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+    </td>
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.Processed)
+{
+    <td>
+        <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="sa-void tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+    </td> 
+}
+else if (request.Status.Id == (byte)CurrentRequestStatus.Void)
+{
+    <td>
+        <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+    </td> 
+}
+else
+{
+     <td>
+        <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+    </td>   
+}
+}

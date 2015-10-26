@@ -193,25 +193,34 @@
 @helper VerifierAndApproverMenu()
     {
     <ul id="verifierMenu" class="hide">
-        <li class="accepted"><a command="Accept" href="javascript:;">@Fanex.NexHR.Resources.Labels.Verified</a>
+        <li class="accepted"><a command="Accept" href="javascript:;">@Labels.Verified</a>
         </li>
-        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Fanex.NexHR.Resources.Labels.NotVerified</a>
+        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
         </li>
     </ul>
     <ul id="approverMenu" class="hide">
-        <li class="approved"><a command="Approve" href="javascript:;">@Fanex.NexHR.Resources.Labels.Approve</a>
+        <li class="approved"><a command="Approve" href="javascript:;">@Labels.Approve</a>
         </li>
-         <li class="rejected"><a command="Reject" href="javascript:;">@Fanex.NexHR.Resources.Labels.Reject</a>
+         <li class="rejected"><a command="Reject" href="javascript:;">@Labels.Reject</a>
         </li>
     </ul>
 }
 @helper ResetMenu()
     {
     <ul id="resetMenu" class="hide">
-        <li class="reset"><a command="Reset" href="javascript:;">@Fanex.NexHR.Resources.Labels.Reset</a>
+        <li class="reset"><a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
     </ul>
 }
+
+@helper VoidMenu()
+    {
+    <ul id="voidMenu" class="hide">
+        <li class="void"><a command="VoidBySA" href="javascript:;">@Labels.Void</a>
+        </li>
+    </ul>
+}
+
 @helper VerifierAndApproverOvertimeMenu()
     {
     <ul id="verifierPendingMenu" class="hide">
@@ -275,9 +284,9 @@
 @helper HrMenu()
     {
     <ul id="hrMenu" class="hide">
-        <li class="processed"><a command="Process" href="javascript:;">@Fanex.NexHR.Resources.Labels.Process</a>
+        <li class="processed"><a command="Process" href="javascript:;">@Labels.Process</a>
         </li>
-        <li class="void"><a command="Void" href="javascript:;">@Fanex.NexHR.Resources.Labels.Void</a>
+        <li class="void"><a command="Void" href="javascript:;">@Labels.Void</a>
         </li>
     </ul>
 }

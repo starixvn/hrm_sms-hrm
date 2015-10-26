@@ -880,7 +880,7 @@ namespace Fanex.NexHR.Services
                 return string.Format(Messages.HasBeen, Labels.Reseted.ToLower());
             }
 
-            return string.Empty;
+            return string.Format(Messages.HasBeen, Labels.Void.ToLower());
         }
 
         private EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)

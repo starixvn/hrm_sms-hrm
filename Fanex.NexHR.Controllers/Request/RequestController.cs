@@ -32,18 +32,18 @@ namespace Fanex.NexHR.Controllers.Request
     public class RequestController : BaseController
     {
         #region protected services
-        private IEmployeeService _employeeService;
-        private IShiftService _shiftService;
-        private ILeaveTypeService _leaveTypeService;
-        private IRequestService _requestService;
-        private ITeamService _teamService;
-        private IKeepInViewRequestService _keepInViewRequestService;
-        private IChangeShiftRequestService _changeShiftRequestService;
-        private ICheckInOutRequestService _checkInOutRequestService;
-        private ILateInEarlyOutRequestService _lateInEarlyOutRequestService;
-        private ILeaveRequestService _leaveRequestService;
-        private IOvertimeRequestService _overtimeService;
-        private IWorkingCalendarService _workingCalendarService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IShiftService _shiftService;
+        private readonly ILeaveTypeService _leaveTypeService;
+        private readonly IRequestService _requestService;
+        private readonly ITeamService _teamService;
+        private readonly IKeepInViewRequestService _keepInViewRequestService;
+        private readonly IChangeShiftRequestService _changeShiftRequestService;
+        private readonly ICheckInOutRequestService _checkInOutRequestService;
+        private readonly ILateInEarlyOutRequestService _lateInEarlyOutRequestService;
+        private readonly ILeaveRequestService _leaveRequestService;
+        private readonly IOvertimeRequestService _overtimeService;
+        private readonly IWorkingCalendarService _workingCalendarService;
         #endregion
 
         #region Ctor
@@ -182,11 +182,6 @@ namespace Fanex.NexHR.Controllers.Request
             return PartialView(request);
         }
 
-        /// <summary>
-        /// ActionResult Member.
-        /// </summary>
-        /// <param name="request">Request ViewModel.</param>
-        /// <returns>View Member.</returns>
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult Member(RequestViewModel request)
         {
@@ -200,11 +195,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(request);
         }
 
-        /// <summary>
-        ///  ActionResult HumanResourceView.
-        /// </summary>
-        /// <param name="request">Request ViewModel.</param>
-        /// <returns>View HumanResource.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult HRView(RequestViewModel request)
         {
@@ -222,11 +212,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(request);
         }
 
-        /// <summary>
-        /// ActionResult DailyView.
-        /// </summary>
-        /// <param name="request">Request ViewModel.</param>
-        /// <returns>View DailyRequest.</returns>
         public ActionResult DailyView(RequestViewModel request)
         {
             if (request.StatusId == -1)
@@ -252,12 +237,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View("DailyRequestsView", request);
         }
 
-        /// <summary>
-        /// ActionResult View History.
-        /// </summary>
-        /// <param name="id">RequestHistory id.</param>
-        /// <param name="type">Request type.</param>
-        /// <returns>View HumanResourceViewHistory.</returns>
         public ActionResult HRViewHistory(long id, int type)
         {
             var criteria = new GetHistoryRequestCriteria()
@@ -269,6 +248,23 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.EntityList = entityList;
             ViewBag.requestType = type;
             return View();
+        }
+
+        [Authorize(Roles = "SystemAdmin")]
+        public ActionResult VoidRequest(RequestViewModel request)
+        {
+            if (request.StatusId == -1)
+            {
+                request.StatusId = 0;
+                request.IsDailyRequest = true;
+                request.FromDate = request.ToDate;
+            }
+
+            ViewBag.IsAllowChangeStatus = true;
+            ViewBag.Action = "VoidRequest";
+            GetRequests(request, RequestViewType.HRSpace, request.IsDailyRequest);
+
+            return View(request);
         }
 
         [HttpPost]
@@ -283,12 +279,6 @@ namespace Fanex.NexHR.Controllers.Request
             return result.Code == 0;
         }
 
-        /// <summary>
-        /// Function to get employee by acting supervisor.
-        /// </summary>
-        /// <param name="role">Acting role.</param>
-        /// <param name="query">The query.</param>
-        /// <returns>List employees.</returns>
         public JsonResult GetEmployeesByActingUser(int role, string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria()
@@ -331,13 +321,6 @@ namespace Fanex.NexHR.Controllers.Request
             return supervisors;
         }
 
-        /// <summary>
-        /// Check if user can and has permission to edit a request.
-        /// </summary>
-        /// <param name="status">Status of request.</param>
-        /// <param name="employeeId">Which employee request belong to.</param>
-        /// <param name="creatorId">The person who creates this request.</param>
-        /// <returns>Return true if current user can edit this request.</returns>
         protected bool Editable(byte status, int employeeId, int creatorId)
         {
             if (status != (byte)CurrentRequestStatus.Pending ||
@@ -351,11 +334,6 @@ namespace Fanex.NexHR.Controllers.Request
             }
         }
 
-        /// <summary>
-        /// Method check Role.
-        /// </summary>
-        /// <param name="requestViewType">RequestViewType model.</param>
-        /// <returns>Role after check.</returns>
         protected string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
         {
             var role = string.Empty;
@@ -375,11 +353,6 @@ namespace Fanex.NexHR.Controllers.Request
             return role;
         }
 
-        /// <summary>
-        /// Function to get statusIds.
-        /// </summary>
-        /// <param name="statusId">Status Id from UI.</param>
-        /// <returns>Status Ids.</returns>
         protected string GetStatus(int statusId)
         {
             string statusIds;
@@ -400,12 +373,6 @@ namespace Fanex.NexHR.Controllers.Request
             return statusIds;
         }
 
-        /// <summary>
-        /// Function GetRequests.
-        /// </summary>
-        /// <param name="request">Request ViewModel.</param>
-        /// <param name="requestViewType">Request View Types.</param>
-        /// <param name="isDailyRequest">Is Daily Request.</param>
         [NonAction]
         private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
@@ -440,11 +407,6 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.EntityList = requestList;
         }
 
-        /// <summary>
-        /// Gets the verifier approver list.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
         {
             var getListSupervisor = new GetListSupervisorNameCriteria()

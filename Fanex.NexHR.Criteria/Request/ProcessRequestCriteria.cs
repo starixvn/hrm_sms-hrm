@@ -54,6 +54,10 @@ namespace Fanex.NexHR.Criteria.Request
             {
                 key = "WorkingTimeRequest_ResetRequest";
             }
+            else
+            {
+                key = "WorkingTimeRequest_VoidRequest_bySA";
+            }
 
             return key;
         }

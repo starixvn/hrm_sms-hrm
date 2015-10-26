@@ -30,6 +30,7 @@ function bindMenu(element, menu) {
                 ConfirmedDialog.dialog({
                     height: 210,
                     width: 430,
+                    autoOpen: true,
                     modal: true,
                     buttons: {
                         "OK": function () {
@@ -45,9 +46,11 @@ function bindMenu(element, menu) {
 
                 break;
             case 'Void':
+            case 'VoidBySA':
                 ConfirmedDialog.dialog({
                     height: 210,
                     width: 430,
+                    autoOpen: true,
                     modal: true,
                     buttons: {
                         "OK": function () {
@@ -78,6 +81,7 @@ $(document).ready(function () {
 
     bindMenu('.hr-actions', 'hrMenu');
     bindMenu('.hr-actions-reset', 'resetMenu');
+    bindMenu('.sa-void', 'voidMenu');
 
     $(".viewhistory").click(function () {
         var url = $(this).attr("id");

@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -28,6 +29,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Supervisor;
 
+    [Authorize]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class CalendarController : BaseController
     {
         private readonly IWorkingCalendarService _workingCalendarService;

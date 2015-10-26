@@ -510,6 +510,7 @@ input:-moz-placeholder {
 .approver-actions-reset {padding:5px 12px 5px 0px; margin-left: 12px;}
 .hr-actions {padding:5px 12px 5px 0px; margin-left: 12px;}
 .hr-actions-reset {padding:5px 12px 5px 0px; margin-left: 12px;}
+.sa-void {padding:5px 12px 5px 0px; margin-left: 12px;}
 .Pending {padding:5px 12px 0px 0px }
 .reedit {padding:5px 12px 0px 0px }
 .menu {padding:5px 12px 0px 0px }
@@ -519,9 +520,10 @@ input:-moz-placeholder {
 .verifier-actions:hover {background: url(images/arrow.png) no-repeat right 10px}   
 .verifier-actions-reset:hover {background: url(images/arrow.png) no-repeat right 10px} 
 .approver-actions:hover {background: url(images/arrow.png) no-repeat right 10px}    
-.approver-actions-reset:hover {background: url(images/arrow.png) no-repeat right 10px}    
+.approver-actions-reset:hover {background: url(images/arrow.png) no-repeat right 10px}
 .hr-actions:hover {background: url(images/arrow.png) no-repeat right 10px}    
-.hr-actions-reset:hover {background: url(images/arrow.png) no-repeat right 10px}   
+.hr-actions-reset:hover {background: url(images/arrow.png) no-repeat right 10px}
+.sa-void:hover {background: url(images/arrow.png) no-repeat right 10px}
 .menu:hover {background: url(images/arrow.png) no-repeat right 10px}
 /* hover menu*/
 .hoveraction 
@@ -668,6 +670,20 @@ input:-moz-placeholder {
 .xicon.remove {
 	background-position: -216px -96px;
 }
+.xicon.finger {
+	background-position: -168px -24px;
+}
+.xicon.message1 {
+	background-position: -72px 0px;
+}
+.xicon.schedule {
+	background-position: -144px -216px;
+}
+
+.xicon.schedule1 {
+	background-position: 0px -240px;
+}
+
 #message
 {
 	position: absolute;
