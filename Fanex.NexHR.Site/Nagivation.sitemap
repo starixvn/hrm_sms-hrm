@@ -39,7 +39,7 @@
       <siteMapNode title="Extension numbers" controller="report" action="extensionno" icon="mobile" />
       <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
     </siteMapNode>
-    <siteMapNode title="SA space">
+    <siteMapNode title="SA space" roles="SystemAdmin">
       <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" roles="SystemAdmin"/>
       <siteMapNode title="Void request" controller="request" action="voidrequest" icon="user1" roles="SystemAdmin"/>
     </siteMapNode>

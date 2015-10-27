@@ -10,6 +10,7 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
@@ -62,14 +63,27 @@ namespace Fanex.NexHR.Services
         public IList<Team> GetAll(GetAllGroupCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
-            IList<Team> allTeam = null;
+            IList<Team> teams = null;
 
             if (criteria.IsValid())
             {
-                allTeam = _teamRepository.GetAll(criteria);
+                teams = _teamRepository.GetAll(criteria);
             }
 
-            return allTeam;
+            return teams;
+        }
+
+        public IList<Team> GetBySupervisor(GetGroupBySupervisorCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<Team> teams = null;
+
+            if (criteria.IsValid())
+            {
+                teams = GetData<Team>(criteria).ToList();
+            }
+
+            return teams;
         }
 
         /// <summary>

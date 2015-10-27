@@ -21,6 +21,8 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<Team> GetAll(GetAllGroupCriteria criteria);
 
+        IList<Team> GetBySupervisor(GetGroupBySupervisorCriteria criteria);
+
         CommandResult AddNewTeam(InsertNewGroupCriteria criteria);
 
         CommandResult UpdateTeam(UpdateGroupCriteria criteria);

@@ -376,8 +376,12 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            request.TeamCollection = _teamService.GetAll(getAllGroupCriteria);
+            var getGroupCriteria = new GetGroupBySupervisorCriteria() 
+            { 
+                SupervisorId = CurrentUser.Id
+            };
+
+            request.TeamCollection = _teamService.GetBySupervisor(getGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))

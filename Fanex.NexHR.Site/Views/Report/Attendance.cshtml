@@ -20,6 +20,7 @@
         @Html.ValidationSummary(true)
         
         @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+         @Html.HiddenFor(model => model.SupervisorId)
         <div class="grid_2 gridlabel">
             @Labels.DateRange
         </div>
@@ -50,7 +51,6 @@
         </div>
         <div class="grid_6">
             @Html.DatePicker("FromDate", Model.FromDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
-            @*<input type="text" id="pickdate" />*@
         </div>
         <div class="grid_2">
             To date
@@ -58,12 +58,10 @@
         <div class="grid_4">
             @Html.DatePicker("ToDate", Model.ToDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
-        
         <div class="clear">
         </div>
         <div class="space">
         </div>
-        
         <div class="grid_2">
             @Html.LabelFor(model => model.AttendanceType, "Request")
         </div>
@@ -89,17 +87,17 @@
             @if (Model.IsMember)
             {
                 <span class="isMember">@Model.TeamName</span>
-				@Html.Hidden("EmployeeGroupId", Model.GroupIds)
-			}
-			else
-			{
+                @Html.Hidden("EmployeeGroupId", Model.GroupIds)
+            }
+            else
+            {
                 <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
                     @foreach (Team item in ViewBag.Groups)
-					{ 
+                    { 
                         <option value="@item.Id">@item.Name</option>
-					}
+                    }
                 </select>
-			}
+            }
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.EmpId)
@@ -109,7 +107,7 @@
             @Html.HiddenFor(model => model.EmpId)
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
-		 @Html.HiddenFor(model => model.IsMember)
+        @Html.HiddenFor(model => model.IsMember)
         
         <div class="clear">
         </div>
@@ -121,11 +119,11 @@
         </div>
         
         <div class="grid_2 gridlabel">
-            Category
+            @Labels.Category
         </div>
         <div class="grid_4">
             @{
-			var category = new List<SelectListItem>
+            var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"}, 
@@ -137,7 +135,7 @@
         
 
         
-        <div class="grid_4" style="margin-top:5px;">
+        <div class="grid_4" style="margin-top: 5px;">
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
@@ -151,7 +149,7 @@
         </div>
         <div class="clear">
         </div>
-	}
+    }
 </div>
 <div class="clear">
 </div>
@@ -199,7 +197,8 @@
             <th>
                 @Labels.Note
             </th>
-            <th></th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>

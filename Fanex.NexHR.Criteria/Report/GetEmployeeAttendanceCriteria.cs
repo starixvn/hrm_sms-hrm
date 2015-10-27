@@ -17,6 +17,8 @@ namespace Fanex.NexHR.Criteria.Report
     /// </summary>
     public class GetEmployeeAttendanceCriteria : CriteriaBase
     {
+        public int? SupervisorId { get; set; }
+
         public DateTime Fromtime { get; set; }
 
         public DateTime Totime { get; set; }

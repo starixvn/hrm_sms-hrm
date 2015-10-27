@@ -118,6 +118,7 @@ namespace Fanex.NexHR.Controllers
 
             var criteria = new GetEmployeeAttendanceCriteria()
             {
+                SupervisorId = model.SupervisorId,
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
                 AttendanceType = model.AttendanceType,

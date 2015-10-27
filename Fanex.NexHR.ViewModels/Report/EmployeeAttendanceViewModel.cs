@@ -41,5 +41,7 @@ namespace Fanex.NexHR.ViewModels.Report
         public string TeamName { get; set; }
 
         public byte? IsLocal { get; set; }
+
+        public int SupervisorId { get; set; }
     }
 }

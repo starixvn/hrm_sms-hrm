@@ -82,11 +82,13 @@ namespace Fanex.NexHR.Controllers
         /// <returns>Render view Attendance.</returns>
         public ActionResult Attendance()
         {
-            var currentUserId = this.CurrentUser.Id;
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = currentUserId };
+            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            {
+                SupervisorId = CurrentUser.Id
+            };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = CurrentUser.Id };
 
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = _teamService.GetBySupervisor(getGroupCriteria);
             var model = new EmployeeAttendanceViewModel
             {
                 FromDate = DateTime.Now,
@@ -94,6 +96,7 @@ namespace Fanex.NexHR.Controllers
                 GroupIds = string.Empty,
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
+                SupervisorId = CurrentUser.Id
             };
 
             Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
