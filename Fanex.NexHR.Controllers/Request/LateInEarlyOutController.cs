@@ -216,19 +216,33 @@ namespace Fanex.NexHR.Controllers.Request
 
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = CurrentUser.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.LateInEarlyOut,
                 IsQueryByCreatedDate = false,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
-                SupervisorId = null,
+                SupervisorId = CurrentUser.Id,
                 IsLocal = null
             };
 
             IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
 
             return View(entityList);
+        }
+
+        public ActionResult GetActualLateInEarlyOut(int employeeId, DateTime workDate)
+        {
+            var criteria = new GetActualLateInEarlyOutCriteria()
+            {
+                EmployeeId = employeeId,
+                WorkDate = workDate
+            };
+
+            EmployeeLateInEarlyOutModel lateInEarlyOut = LateInEarlyOutRequestService.GetActualLateInEarlyOut(criteria);
+            lateInEarlyOut = lateInEarlyOut == null ? new EmployeeLateInEarlyOutModel() : lateInEarlyOut;
+
+            return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

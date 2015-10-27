@@ -220,6 +220,7 @@ namespace Fanex.NexHR.Repositories
                 },
                 RequestedDate = reader.ToDateTime("RequestedDate"),
                 TotalMins = reader.ToInt("TotalMinutes"),
+                ActualLateInEarlyOut = reader.ToInt("ActualInOutMins"),
                 //// Keep in view
                 CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
                 //// Change shift

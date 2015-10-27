@@ -11,6 +11,7 @@ namespace Fanex.NexHR.Services.Interfaces
 {
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     /// <summary>
     /// Interface Late In Early Out Request Service.
@@ -20,5 +21,7 @@ namespace Fanex.NexHR.Services.Interfaces
         CommandResult Insert(InsertLateInEarlyOutRequestCriteria criteria);
 
         CommandResult Update(UpdateLateInEarlyOutRequestCriteria criteria);
+
+        EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria);
     }
 }

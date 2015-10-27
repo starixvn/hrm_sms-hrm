@@ -106,6 +106,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual Time.
+        /// </summary>
+        public static string ActualTime {
+            get {
+                return ResourceManager.GetString("ActualTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual working day.
         /// </summary>
         public static string ActualWorkingDay {

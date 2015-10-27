@@ -6,13 +6,13 @@
 if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
 {
     <td>
-        <span class="sa-void tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
+        <a href="javascript:void(0);" class="sa-void tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
     </td>
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.Verified)
 {
     <td>
-        <span class="sa-void tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
+        <a href="javascript:void(0);" class="sa-void tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
     </td>
 }
 else if (request.Status.Id == (byte)CurrentRequestStatus.NotVerified)

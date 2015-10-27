@@ -1044,4 +1044,7 @@
   <data name="ShowWholeSection" xml:space="preserve">
     <value>Show whole section</value>
   </data>
+  <data name="ActualTime" xml:space="preserve">
+    <value>Actual Time</value>
+  </data>
 </root>

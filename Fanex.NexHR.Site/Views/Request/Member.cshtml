@@ -16,8 +16,12 @@
 <div>
     @Html.Partial("CriteriaPanel", Model)
 </div>
-@*select view here*@
-@switch (Model.RequestType)
+@{
+    IList<RequestEntity> entityAll = ViewBag.EntityList;
+    Html.RenderPartial("Request/HR/AllRequest", entityAll);
+    }
+
+@*@switch (Model.RequestType)
 {
     case (int)RequestFilter.All: // All Request
         IList<RequestEntity> entityAll = ViewBag.EntityList;
@@ -43,6 +47,6 @@
         IList<RequestEntity> entityKeepInView = ViewBag.EntityList;
         Html.RenderPartial("Request/Member/MemberKeepInViewRequest", entityKeepInView);
         break;
-}
+}*@
 @Html.Partial("ConfirmedProcessRequest")
 <div id="dialoghistorycontent" ></div>

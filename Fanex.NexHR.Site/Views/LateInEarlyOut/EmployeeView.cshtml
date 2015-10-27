@@ -35,7 +35,9 @@
                 </th>
                 <th>@Labels.Time
                 </th>
-                <th>Request Date
+                <th>@Labels.ActualTime
+                </th>
+                <th>@Labels.RequestDate
                 </th>
                 <th>@Labels.Shift
                 </th>
@@ -50,10 +52,10 @@
         </thead>
         @if (Model.Count > 0)
         {
+            int index = 1;
             <tbody>
-                @{int index = 1;}
                 @foreach (var request in Model)
-                { 
+                {
                     <tr id="row@(request.Id)">
                         <td>@(index++)
                         </td>
@@ -62,8 +64,17 @@
                         </td>
                         <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.RequestType.Id)
                         </td>
-                        
-                        <td class="ddMMyyyyhhmm">@request.FromDate.ToDateMonthYearFormatedDate()
+                        <td class="highlight">
+                        @if (request.ActualLateInEarlyOut == 0)
+                        {
+                            <span>N/A</span>
+                        }
+                        else
+                        {
+                            @RazorHelper.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestType.Id);
+                        }
+                        </td>
+                        <td class="highlight ddMMyyyyhhmm">@request.FromDate.ToDateMonthYearFormatedDate()
                         </td>
                         <td>@request.FromShift.Name
                         </td>
@@ -72,7 +83,7 @@
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
                         { 
                             <td class="tooltip" title="@request.Remark">
-                                <span class="icon remark" alt="remark" />
+                                <span class="icon remark" />
                             </td>
                         }
                         else

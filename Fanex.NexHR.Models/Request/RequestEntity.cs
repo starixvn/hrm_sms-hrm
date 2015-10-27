@@ -78,6 +78,8 @@ namespace Fanex.NexHR.Models.Request
         // LateIn-EarlyOut
         public int TotalMins { get; set; }
 
+        public int ActualLateInEarlyOut { get; set; }
+
         // Overtime
         public short OvertimeType { get; set; }
 

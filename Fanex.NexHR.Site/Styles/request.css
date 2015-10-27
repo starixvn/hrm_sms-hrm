@@ -13,3 +13,6 @@ input#Minute
 {
     width: 30px;
 }
+#lateInHours, #earlyOutHours {
+	font-weight: bold;
+}

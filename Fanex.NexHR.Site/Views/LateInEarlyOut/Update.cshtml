@@ -68,6 +68,9 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1),
                 unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+
+                <span id="lateIn"> ※ Actual Late In: <span id="lateInHours">N/A</span></span>
+                <span id="earlyOut"> ※ Actual Early Out: <span id="earlyOutHours">N/A</span></span>
             </div>
         </div>
         

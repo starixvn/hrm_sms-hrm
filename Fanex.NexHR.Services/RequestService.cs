@@ -44,8 +44,8 @@ namespace Fanex.NexHR.Services
         private const string _MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         private const string _MsgChangeShift = "<span class='req changeshift'>{0}</span>";
         private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
-        private const string _MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2}";
-        private const string _MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2}";
+        private const string _MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2} ({3})";
+        private const string _MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2} ({3})";
         private const string _MsgKeepInView = "<span class='req keepinview'>{0}</span> {1}";
         private const string _MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> {3}";
 
@@ -137,13 +137,16 @@ namespace Fanex.NexHR.Services
                     break;
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    msg.AppendFormat(_MsgCheckInOut, request.RequestedDate.ToShortTime(), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+                    msg.AppendFormat(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
                 case (int)RequestType.LateIn:
-                    msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
+                    var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
+                    msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
                     break;
                 case (int)RequestType.EarlyOut:
-                    msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate));
+                    var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
+                    msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
                     break;
                 case (int)RequestType.KeepInView:
                     if ((double)request.TotalDays == 0.5)

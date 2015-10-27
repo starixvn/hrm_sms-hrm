@@ -10,15 +10,16 @@
 namespace Fanex.NexHR.Services
 {
     using System.Threading.Tasks;
-    using System.Web;
-    using Fanex.Common.Helper;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+using System.Web;
+using Fanex.Common.Helper;
+using Fanex.NexHR.Core;
+using Fanex.NexHR.Core.Enums;
+using Fanex.NexHR.Criteria.Employee;
+using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+using Fanex.NexHR.Models;
+using Fanex.NexHR.Models.Request;
+using Fanex.NexHR.Resources;
+using Fanex.NexHR.Services.Interfaces;
 
     /// <summary>
     /// LateInEarlyOutRequest Service.
@@ -87,6 +88,18 @@ namespace Fanex.NexHR.Services
             }
 
             return result;
+        }
+
+        public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            EmployeeLateInEarlyOutModel lateInEarlyOut = null;
+            if (criteria.IsValid())
+            {
+                lateInEarlyOut = GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
+            }
+
+            return lateInEarlyOut;
         }
 
         /// <summary>

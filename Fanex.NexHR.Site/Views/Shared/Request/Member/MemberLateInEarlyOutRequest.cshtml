@@ -15,9 +15,9 @@
             </th>
             <th>@Labels.Time
             </th>
-            <th>@Labels.FromDate
+            <th>@Labels.ActualTime
             </th>
-            <th>@Labels.ToDate
+            <th>@Labels.Date
             </th>
             <th>@Labels.Shift
             </th>
@@ -49,9 +49,17 @@
                     </td>
                     <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.RequestType.Id)
                     </td>
-                    <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()
+                    <td class="highlight">
+                        @if (request.ActualLateInEarlyOut == 0)
+                        {
+                            <span>N/A</span>
+                        }
+                        else
+                        {
+                            @RazorHelper.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestType.Id);
+                        }
                     </td>
-                    <td class="ddMMyyyy highlight">@request.ToDate.ToDateMonthYearFormatedDate()
+                    <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()
                     </td>
                     <td>@request.FromShift.Name.ToString()
                     </td>

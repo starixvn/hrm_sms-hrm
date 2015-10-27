@@ -29,6 +29,7 @@
     <Setting Key="EmployeeCalendar_UpdateWeekWorking" SpName="EmployeeCalendar_UpdateWeekWorking" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     
     <Setting Key="WorkingTimeRequest_Insert" SpName="WorkingTimeRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert_LateInEarlyOutRequest" SpName="WorkingTimeRequest_Insert_LateInEarlyOutRequest" DbName="nexhrx" Plain="0"></Setting>

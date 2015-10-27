@@ -246,13 +246,13 @@ namespace Fanex.NexHR.Controllers.Request
 
             var criteria = new GetRequestCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = CurrentUser.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.KeepInView,
                 IsQueryByCreatedDate = false,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
-                SupervisorId = null,
+                SupervisorId = CurrentUser.Id,
                 IsLocal = null
             };
 
