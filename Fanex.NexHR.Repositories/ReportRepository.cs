@@ -222,6 +222,25 @@ namespace Fanex.NexHR.Repositories
             return entities;
         }
 
+        public IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria)
+        {
+            IList<LeaveSummary> unpaidLeaves = null;
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                unpaidLeaves = db.Query<LeaveSummary, Employee, Team, LeaveSummary>(
+                    (leave, emp, team) =>
+                    {
+                        leave.Employee = emp;
+                        emp.Team = team;
+                        return leave;
+                    },
+                       splitOn: "EmpId, GroupId",
+                       parameterValues: criteria.GetSpParams()).ToList();
+            }
+
+            return unpaidLeaves;
+        }
+
         /// <summary>
         /// Function to get time records.
         /// </summary>

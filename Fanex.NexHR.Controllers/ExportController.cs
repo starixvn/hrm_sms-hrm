@@ -160,7 +160,7 @@ namespace Fanex.NexHR.Controllers
             IList<LeaveSummary> leaveSummary = _reportService.GetAnnualLeaveBalanceReport(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
-            var leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(leaveSummary, teams);
+            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(leaveSummary, teams);
 
             var hssfworkbook = _exportService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
 

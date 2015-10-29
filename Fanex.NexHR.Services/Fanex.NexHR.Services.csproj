@@ -96,9 +96,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseService.cs" />
+    <Compile Include="ExtensionNumberService.cs" />
     <Compile Include="ExcelExporting\ITotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="ExcelExporting\ReportExporting.cs" />
     <Compile Include="ExcelExporting\TotalWorkingHourMonthlyExporting.cs" />
+    <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
     <Compile Include="Interfaces\ISupportService.cs" />

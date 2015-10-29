@@ -35,7 +35,7 @@ namespace Fanex.NexHR.Services
         /// <param name="body">Body of email.</param>
         public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCc,  string subject, string body)
         {
-            if (!Utilities.IsValidEmail(senderEmail) || !Utilities.IsValidEmail(receiverEmail))
+            if (!Utilities.IsValidEmail(senderEmail) || !Utilities.IsValidEmail(receiverEmail) || ConfigSettings.IsDisabledSendMail)
             {
                 return;
             }

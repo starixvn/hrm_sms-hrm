@@ -19,7 +19,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
@@ -33,16 +32,11 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Calendar;
-    using Fanex.NexHR.ViewModels.ExtensionNumber;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
-    /// <summary>
-    /// Report Controller.
-    /// </summary>
     [Authorize]
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
@@ -76,10 +70,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Action Result Attendance.
-        /// </summary>
-        /// <returns>Render view Attendance.</returns>
         public ActionResult Attendance()
         {
             var getGroupCriteria = new GetGroupBySupervisorCriteria()
@@ -120,12 +110,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action to get real time record.
-        /// </summary>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
             if (!fromDate.HasValue || !toDate.HasValue)
@@ -147,15 +131,6 @@ namespace Fanex.NexHR.Controllers
             return View(timeRecordViewModel);
         }
 
-        /// <summary>
-        /// Get Time Record Details.
-        /// </summary>
-        /// <param name="fromDate">Get From Date.</param>
-        /// <param name="toDate">Get To Date.</param>
-        /// <param name="groupIds">Group Ids.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="isLocal">Expat Or Local.</param>
-        /// <returns>Time Record Details.</returns>
         public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
             if (!Roles.IsUserInRole("HR"))
@@ -176,10 +151,6 @@ namespace Fanex.NexHR.Controllers
             return View(timeRecords);
         }
 
-        /// <summary>
-        /// Employee request monitoring in current month.
-        /// </summary>
-        /// <returns>Return View.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult HRRequestMonitoring()
         {
@@ -214,19 +185,6 @@ namespace Fanex.NexHR.Controllers
             return View("RequestMonitoring", model);
         }
 
-        /// <summary>
-        /// ActionResult HumanResourceRequestMonitoring.
-        /// </summary>
-        /// <param name="currentUserId">Current user id.</param>
-        /// <param name="fromDate">Query from date.</param>
-        /// <param name="toDate">Query to date.</param>
-        /// <param name="maxRequest">Max request.</param>
-        /// <param name="empId">Employee Id.</param>
-        /// <param name="group">Filter groups.</param>
-        /// <param name="isLocal">Expat or local.</param>
-        /// <param name="isExcel">Export to excel.</param>
-        /// <param name="viewRole">HR View or Leader View.</param>
-        /// <returns>Action Result.</returns>
         [Authorize(Roles = "HR,Verifier,Approver")]
         public ActionResult HRRequestMonitoringDetails(
             int currentUserId,
@@ -273,10 +231,6 @@ namespace Fanex.NexHR.Controllers
             return PartialView("RequestMonitoringDetails", requests);
         }
 
-        /// <summary>
-        /// ActionResult LeaderRequestMonitoring.
-        /// </summary>
-        /// <returns>RequestMonitoring View.</returns>
         [Authorize(Roles = "Verifier,Approver")]
         public ActionResult LeaderRequestMonitoring()
         {
@@ -303,18 +257,6 @@ namespace Fanex.NexHR.Controllers
             return View("RequestMonitoring", model);
         }
 
-        /// <summary>
-        /// ActionResult TotalWorkingHours.
-        /// </summary>
-        /// <param name="teamIds">Team's id.</param>
-        /// <param name="employee">Employee name.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Count to Date.</param>
-        /// <param name="dateOption">Date Options.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="isExportExcel">Is exported to Excel.</param>
-        /// <param name="isLocal">Is Expat or local.</param>
-        /// <returns>View TotalWorkingHours.</returns>
         public ActionResult TotalWorkingHours(
             string teamIds,
             string employee,
@@ -343,11 +285,6 @@ namespace Fanex.NexHR.Controllers
             return TotalWorkingHours(model);
         }
 
-        /// <summary>
-        /// ActionResult TotalWorkingHours.
-        /// </summary>
-        /// <param name="model">TotalWorkingHours ViewModel.</param>
-        /// <returns>View of TotalWorkingHours.</returns>
         [HttpPost]
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
         {
@@ -389,17 +326,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Totals the working hour monthly.
-        /// </summary>
-        /// <param name="month">The month will be filtered.</param>
-        /// <param name="year">The year will be filtered.</param>
-        /// <param name="teamIds">The team ids.</param>
-        /// <param name="employee">The employee.</param>
-        /// <param name="employeeId">The employee identifier.</param>
-        /// <param name="isExportExcel">If set to <c>true</c> [is export excel].</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>The view of TotalWorkingHourMonthly.</returns>
         public ActionResult TotalWorkingHourMonthly(
             int? month,
             int? year,
@@ -498,18 +424,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Total Working Hour Weekly.
-        /// </summary>
-        /// <param name="startDate">Query from Date.</param>
-        /// <param name="endDate">Query to Date.</param>
-        /// <param name="employee">Employee Display name.</param>
-        /// <param name="teamIds">List of team id.</param>
-        /// <param name="employeeId">Employee id.</param>
-        /// <param name="isLocal">Expat or local.</param>
-        /// <param name="requestData">Request data or not.</param>
-        /// <param name="isExcel">Is exported excel.</param>
-        /// <returns>The view of TotalWorkingHourWeekly.</returns>
         public ActionResult TotalWorkingHourWeekly(
             DateTime? startDate,
             DateTime? endDate,
@@ -567,18 +481,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Working Calendar Summary.
-        /// </summary>
-        /// <param name="employeeId">Employee id.</param>
-        /// <param name="employee">Employee full name.</param>
-        /// <param name="fromDate">Query from date.</param>
-        /// <param name="toDate">Query to date.</param>
-        /// <param name="teamIds">List of tem id.</param>
-        /// <param name="jobTitleId">Job title id.</param>
-        /// <param name="isLocal">Expat Or Local.</param>
-        /// <param name="isExcel">View Only Or Export Excel.</param>
-        /// <returns>Action Result.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules",
             "SP2101:MethodMustNotContainMoreLinesThan",
             Justification = "Reviewed. Suppression is OK here.")]
@@ -643,21 +545,12 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult LeaveSummary.
-        /// </summary>
-        /// <param name="teamIds">Team's id.</param>
-        /// <param name="employee">Employee name.</param>
-        /// <param name="year">Current Year.</param>
-        /// <param name="employeeId">Employee's Id.</param>
-        /// <param name="minAnnualBalance">Min Annual Balance.</param>
-        /// <returns>View LeaveSummary.</returns>
-        public ActionResult LeaveSummary(
+        public ActionResult UnpaidLeaveSummary(
             string teamIds,
             string employee,
             int? year = null,
             int? employeeId = null,
-            int? minAnnualBalance = null)
+            int? category = null)
         {
             var model = new LeaveSummaryViewModel
             {
@@ -665,19 +558,14 @@ namespace Fanex.NexHR.Controllers
                 TeamIds = teamIds,
                 Employee = employee,
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
-                MinAnnualBalance = minAnnualBalance.HasValue ? minAnnualBalance.Value : 0
+                Category = category
             };
 
-            return LeaveSummary(model);
+            return UnpaidLeaveSummary(model);
         }
 
-        /// <summary>
-        /// ActionResult LeaveSummary.
-        /// </summary>
-        /// <param name="model">LeaveSummary ViewModel.</param>
-        /// <returns>View LeaveSummary.</returns>
         [HttpPost]
-        public ActionResult LeaveSummary(LeaveSummaryViewModel model)
+        public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
             if (model == null)
             {
@@ -688,16 +576,15 @@ namespace Fanex.NexHR.Controllers
                 };
             }
 
-            var criteria = new GetAnnualLeaveBalanceCriteria()
+            var criteria = new GetUnpaidLeaveCriteria()
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 GroupIds = model.TeamIds,
                 IsLocal = null,
-                Role = string.Empty,
-                SupervisorID = null
+                SupervisorId = null
             };
-            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
+            IList<LeaveSummary> entityList = _reportService.GetUnpaidLeave(criteria);
 
             IList<Team> teams = new List<Team>();
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -707,164 +594,13 @@ namespace Fanex.NexHR.Controllers
             ViewBag.TeamIds = model.TeamIds;
             ViewBag.EntityList = entityList;
 
-            var leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(entityList, teams);
+            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(entityList, teams);
 
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
         }
 
-        /// <summary>
-        /// Extension Number Index.
-        /// </summary>
-        /// <returns>View ExtensionNo.</returns>
-        public ActionResult ExtensionNo()
-        {
-            var authorize = false;
-            var listRole = this.CurrentUser.RoleList;
-            if (listRole != null)
-            {
-                authorize = listRole.Any(x => x == (int)RoleSystem.HR);
-            }
-
-            ViewBag.Authorize = authorize;
-            IEnumerable<ExtensionNoModel> lstEntity = _reportService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
-            var model = (from item in lstEntity
-                         group item by item.TeamName into g
-                         select new ExtensionNumberViewModel() { Name = g.Key, ListExt = g.ToList() }).ToList();
-
-            return View(model);
-        }
-
-        [Authorize(Roles = "HR")]
-        public ActionResult AddNewMember()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Add new extension member.
-        /// </summary>
-        /// <param name="model">The extension number model.</param>
-        /// <returns>The view after add new number.</returns>
-        [HttpPost]
-        [Authorize(Roles = "HR")]
-        public ActionResult AddNewMember(ExtensionNoModel model)
-        {
-            CheckExternalEmployee(model);
-            if (ModelState.IsValid)
-            {
-                var criteria = new InsertExtensionNumberCriteria
-                {
-                    FullName = model.FullName,
-                    NickName = model.NickName,
-                    ExtensionNo = model.ExtensionNo,
-                    IsInternal = model.IsInternal,
-                    EmpID = model.EmpId,
-                    GroupID = model.TeamId,
-                };
-
-                CommandResult commandResult = _reportService.AddNewExtensionNoMember(criteria);
-                ViewBag.Requested = commandResult.Code == 0;
-            }
-
-            return View();
-        }
-
-        /// <summary>
-        /// Edit extension number.
-        /// </summary>
-        /// <param name="isInternal">The boolean is internal or not.</param>
-        /// <param name="empExtID">The extension Id.</param>
-        /// <returns>THe Action Result.</returns>
-        [Authorize(Roles = "HR")]
-        public ActionResult EditExtensionNumber(bool isInternal, int empExtID)
-        {
-            var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
-            {
-                IsInternal = isInternal,
-                EmployeeExtensionNoId = empExtID
-            };
-            ExtensionNoModel model = _reportService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = isInternal,
-                GroupID = null
-            };
-            IEnumerable<ExtensionNoModel> groups = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
-
-            if (groups != null)
-            {
-                ViewBag.Group = groups.Select(x => new SelectListItem
-                {
-                    Text = x.TeamName,
-                    Value = x.TeamId.ToString()
-                }).ToList();
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
-        /// ActionResult EditExtensionNumber.
-        /// </summary>
-        /// <param name="model">ExtensionNoModel model.</param>
-        /// <returns>View Index when edit successful.</returns>
-        [HttpPost]
-        [Authorize(Roles = "HR")]
-        public ActionResult EditExtensionNumber(ExtensionNoModel model)
-        {
-            CheckExternalEmployee(model);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = model.IsInternal,
-                GroupID = null
-            };
-            IEnumerable<ExtensionNoModel> group = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
-            ViewBag.Group = group.Select(x => new SelectListItem
-            {
-                Text = x.TeamName,
-                Value = x.TeamId.ToString()
-            }).ToList();
-            if (ModelState.IsValid)
-            {
-                var updateExtensionNoCriteria = new UpdateExtensionNumberMemberCriteria
-                {
-                    FullName = model.FullName,
-                    NickName = model.NickName,
-                    ExtensionNo = model.ExtensionNo,
-                    IsInternal = model.IsInternal,
-                    ExtID = model.EmpExtID,
-                    EmpID = model.EmpId,
-                    GroupID = model.TeamId
-                };
-                CommandResult commandResult = _reportService.UpdateExtensionNoMember(updateExtensionNoCriteria);
-                ViewBag.Updated = commandResult.Code == 0;
-                return RedirectToAction("ExtensionNo");
-            }
-            else
-            {
-                return View();
-            }
-        }
-
-        public ActionResult ManageExternalGroup()
-        {
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = false,
-                GroupID = null
-            };
-            IEnumerable<ExtensionNoModel> group = _reportService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
-            return View(group);
-        }
-
-        /// <summary>
-        /// Method excel report for Overtime.
-        /// </summary>
-        /// <param name="month">Request month.</param>
-        /// <param name="year">Request year.</param>
-        /// <returns>View OvertimeReport.</returns>
         public ActionResult OvertimeReport(int? month, int? year)
         {
             if (!month.HasValue)
@@ -890,15 +626,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Employee Supervisor Details.
-        /// </summary>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="groups">Filter by group.</param>
-        /// <param name="supervisorType">Supervisor type.</param>
-        /// <param name="isExcel">Export Excel Or query data.</param>
-        /// <param name="isLocal">Expat or local.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult EmployeeSupervisorDetails(int? employeeId, string groups, int? supervisorType, bool? isExcel, byte? isLocal = null)
         {
             var getSupervisorReportCriteria = new GetSupervisorReportCriteria()
@@ -930,12 +657,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Method Get Team Supervisors Details.
-        /// </summary>
-        /// <param name="groups">Query according to specific groups.</param>
-        /// <param name="isExcel">Is Export Excel.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult TeamSupervisorDetails(string groups, bool? isExcel)
         {
             var criteria = new GetAllTeamSupervisorCriteria()
@@ -956,26 +677,6 @@ namespace Fanex.NexHR.Controllers
             }
         }
 
-        /// <summary>
-        /// Method Check External Employee.
-        /// </summary>
-        /// <param name="model">ExtensionNoModel model.</param>
-        private void CheckExternalEmployee(ExtensionNoModel model)
-        {
-            if (!model.IsInternal)
-            {
-                foreach (var modelError in ModelState)
-                {
-                    string propertyName = modelError.Key;
-
-                    if (propertyName.Contains("EmpId"))
-                    {
-                        ModelState[propertyName].Errors.Clear();
-                    }
-                }
-            }
-        }
-
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
         {
             MemoryStream output = new MemoryStream();
@@ -983,10 +684,6 @@ namespace Fanex.NexHR.Controllers
             return File(output.ToArray(), "application/vnd.ms-excel", fileName);
         }
 
-        /// <summary>
-        /// Check Current User's roles.
-        /// </summary>
-        /// <returns>Roles in String format.</returns>
         private string GetUserRoles()
         {
             string currentUserrole = string.Empty;

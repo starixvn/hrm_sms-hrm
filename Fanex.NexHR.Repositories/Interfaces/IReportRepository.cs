@@ -30,6 +30,8 @@ namespace Fanex.NexHR.Repositories.Interfaces
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria);
 
+        IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria);
+
         IList<TimeRecordModel> GetTimeRecords(ICriteria criteria);
 
         IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria);

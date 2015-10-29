@@ -9,9 +9,6 @@
 
 namespace Fanex.NexHR.ViewModels.AnnualLeave
 {
-    /// <summary>
-    /// LeaveSummary ViewModel.
-    /// </summary>
     public class LeaveSummaryViewModel
     {
         public int Year { get; set; }

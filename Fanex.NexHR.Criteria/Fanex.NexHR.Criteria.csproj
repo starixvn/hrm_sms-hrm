@@ -77,6 +77,7 @@
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
+    <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
     <Compile Include="Report\GetTotalWorkingHourDailyCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />

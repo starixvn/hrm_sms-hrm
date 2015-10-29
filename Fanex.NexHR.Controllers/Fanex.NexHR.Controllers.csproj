@@ -99,6 +99,7 @@
     <Compile Include="ErrorController.cs" />
     <Compile Include="EmployeeController.cs" />
     <Compile Include="ExportController.cs" />
+    <Compile Include="ExtensionNumberController.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="HolidayController.cs" />
     <Compile Include="HomeController.cs" />

@@ -7,9 +7,9 @@ $(document).ready(function () {
     $("form").submit(function (e) {
         e.preventDefault();
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var url = _global.root + "report/leavesummary?year=" + $("#Year").val() +
-			"&TeamIds=" + teams + "&Employee=" + $("#Employee").val() + 
-			"&EmployeeId=" + $("#EmployeeId").val();
+        var url = _global.root + "report/UnpaidLeaveSummary?year=" + $("#Year").val() +
+			"&TeamIds=" + teams + "&Employee=" + $("#Employee").val() +
+			"&EmployeeId=" + $("#EmployeeId").val() + "&category=" + $("#Category").val();
         location.href = url;
     });
 
@@ -17,7 +17,7 @@ $(document).ready(function () {
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var url = _global.root + "export/leavesummary?year=" + $("#Year").val() +
 		"&TeamIds=" + teams + "&Employee=" + $("#Employee").val() + 
-		"&EmployeeId=" + $("#EmployeeId").val();
+		"&EmployeeId=" + $("#EmployeeId").val() + "&category=" + $("#Category").val();
         location.href = url;
     });
 });

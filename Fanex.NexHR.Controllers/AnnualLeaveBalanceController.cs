@@ -118,7 +118,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.MinAnnualBalance = model.MinAnnualBalance;
             ViewBag.Category = model.Category;
 
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = _reportService.GetAnnualLeaveByTeam(entityList, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = _reportService.GetLeaveByTeam(entityList, teams);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);

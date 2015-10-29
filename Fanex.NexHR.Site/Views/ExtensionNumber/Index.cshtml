@@ -77,7 +77,7 @@
                 @if ((bool)ViewBag.Authorize)
                 {
                     <td>
-                        <a href="@Url.Action("EditExtensionNumber", "report", new { isInternal = ext.IsInternal, empExtID = ext.EmpExtID })">
+                        <a href="@Url.Action("Edit", "ExtensionNumber", new { isInternal = ext.IsInternal, empExtID = ext.EmpExtID })">
                             <img src="~/Styles/Images/edit-icon.png" alt="Delete" /></a>
                     </td>
                     <td>

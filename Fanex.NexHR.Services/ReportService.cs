@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Services
     using System.Collections.Generic;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -50,11 +49,6 @@ namespace Fanex.NexHR.Services
             return totalWorkingHours;
         }
 
-        /// <summary>
-        /// Get Total Working Hour Monthly.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Of TotalWorkingHourMonthly.</returns>
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -103,11 +97,6 @@ namespace Fanex.NexHR.Services
             return requestMonitoring;
         }
 
-        /// <summary>
-        /// Get Employee Attendance Report.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List of EmployeeAttendanceModel.</returns>
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -132,15 +121,19 @@ namespace Fanex.NexHR.Services
             return annualLeaveBalance;
         }
 
-        #region Get leave summary by team
+        public IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<LeaveSummary> unpaidLeaves = null;
+            if (criteria.IsValid())
+            {
+                unpaidLeaves = _reportRepository.GetUnpaidLeave(criteria);
+            }
 
-        /// <summary>
-        /// This function use for sorting leave summaries. Any leave summary of employee will be grouped by team. (For easier displaying in view).
-        /// </summary>
-        /// <param name="leaveSummaryList">Leave summary List.</param>
-        /// <param name="teams">Team List.</param>
-        /// <returns>List Annual Leave.</returns>        
-        public IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
+            return unpaidLeaves;
+        }
+
+        public IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
         {
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = AddManagementTeamFirstPosition(teams);
 
@@ -178,169 +171,6 @@ namespace Fanex.NexHR.Services
             }
 
             return leaveSummaryByTeamList;
-        }
-        #endregion
-
-        /// <summary>
-        /// Get all extension number.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The enumerator ExtensionNoModel.</returns>
-        public IEnumerable<ExtensionNoModel> GetAllExtensionNo(GetAllExtensionNumberCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IEnumerable<ExtensionNoModel> extensionNumbers = null;
-
-            if (criteria.IsValid())
-            {
-                extensionNumbers = GetData<ExtensionNoModel>(criteria);
-            }
-
-            return extensionNumbers;
-        }
-
-        /// <summary>
-        /// Get all extension group info.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The enumerator Extension No Model.</returns>
-        public IEnumerable<ExtensionNoModel> GetAllExtensionGroupInfo(GetExtensionNumberGroupInfoCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IEnumerable<ExtensionNoModel> groupsInfo = null;
-
-            if (criteria.IsValid())
-            {
-                groupsInfo = GetData<ExtensionNoModel>(criteria);
-            }
-
-            return groupsInfo;
-        }
-
-        /// <summary>
-        /// Insert new extension number member.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command result.</returns>
-        public CommandResult AddNewExtensionNoMember(InsertExtensionNumberCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Insert(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Get extension number of employee.
-        /// </summary>
-        /// <param name="criteria">THe criteria.</param>
-        /// <returns>The extension number.</returns>
-        public ExtensionNoModel GetEmployeeExtensionNoById(GetExtensionNumberMemberByIdCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            ExtensionNoModel extensionNumber = new ExtensionNoModel();
-
-            if (criteria.IsValid())
-            {
-                extensionNumber = GetDataEntity<ExtensionNoModel>(criteria);
-            }
-
-            return extensionNumber;
-        }
-
-        /// <summary>
-        /// Update extension number of member.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult UpdateExtensionNoMember(UpdateExtensionNumberMemberCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Delete extension number of member.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult DeleteExtensionNumber(DeleteExtensionNumberMemberCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Delete(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Insert new external group.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult AddNewExternalGroup(InsertExternalGroupCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Insert(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Update external group.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult EditExternalGroup(UpdateExternalNumberCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Delete external group.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult DeleteExternalGroup(DeleteExternalGroupCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Delete(criteria);
-            }
-
-            return commandResult;
         }
 
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)

@@ -1,6 +1,6 @@
 ﻿@model ExtensionNoModel
 @{
-    ViewBag.Title = "Update Extension Number";
+    ViewBag.Title = "New Extension Number";
 }
 @section css{
     @Url.CombresLink("extensionnocss")
@@ -10,7 +10,7 @@
 }
 @section Breadcrumb {
     <a class="step">Company</a> 
-    <a class="step" href="@Url.Action("extensionno", "report")">Extension Numbers</a>
+    <a class="step" href="@Url.Action("index", "ExtensionNumber")">Extension Numbers</a>
     <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
@@ -20,9 +20,9 @@
     {
         @Html.ValidationSummary()
 
-        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Messages.RequestUpdated</div>
+        <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />
         }
         
@@ -31,7 +31,7 @@
                 @Html.LabelFor(model => model.IsInternal)
             </div>
             <div class="input">
-                @Html.CheckBoxFor(model => model.IsInternal, new { @checked = "checked" })
+                @Html.CheckBoxFor(model => model.IsInternal)
             </div>
         </div>
         <div class="formrow">
@@ -39,7 +39,7 @@
                 @Html.Label("Group")
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.TeamId, (List<SelectListItem>)ViewBag.Group)
+                @Html.DropDownListFor(model => model.TeamId, new List<SelectListItem>())
             </div>
         </div>
         
@@ -82,10 +82,11 @@
         <div class="formrow">
             <div class="label">
                 @Html.Hidden("EmpId")
+                @Html.Hidden("IsAddForm", "True")
             </div>
             <div class="input">
-                <input type="submit" value="@Fanex.NexHR.Resources.Labels.Update"/>
-                <a href="~/report/extensionno" class="button">@Labels.Back</a>
+                <input type="submit" value="@Fanex.NexHR.Resources.Labels.Add"/>
+                <a href="~/ExtensionNumber/index" class="button">@Labels.Back</a>
             </div>
         </div>
     }

@@ -33,9 +33,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
 
-    /// <summary>
-    /// Ajax Controller.
-    /// </summary>
     [Authorize]
     public class AjaxController : BaseController
     {
@@ -46,16 +43,11 @@ namespace Fanex.NexHR.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly ILookupDataService _lookupDataService;
         private readonly IReportService _reportService;
+        private readonly IExtensionNumberService _extensionNumberService;
 
         public AjaxController()
+            : this(null, null, null, null, null, null, null, null)
         {
-            _requestService = new RequestService();
-            _holidayService = new HolidayService();
-            _memoService = new MemoService();
-            _teamService = new TeamService();
-            _employeeService = new EmployeeService();
-            _lookupDataService = new LookupDataService();
-            _reportService = new ReportService();
         }
 
         public AjaxController(
@@ -65,7 +57,8 @@ namespace Fanex.NexHR.Controllers
             ITeamService teamService,
             IEmployeeService employeeService,
             ILookupDataService lookupDataService,
-            IReportService reportService)
+            IReportService reportService,
+            IExtensionNumberService extensionNumberService)
         {
             _requestService = requestService ?? new RequestService();
             _holidayService = holidayService ?? new HolidayService();
@@ -74,6 +67,7 @@ namespace Fanex.NexHR.Controllers
             _teamService = teamService ?? new TeamService();
             _lookupDataService = lookupDataService ?? new LookupDataService();
             _reportService = reportService ?? new ReportService();
+            _extensionNumberService = extensionNumberService ?? new ExtensionNumberService();
         }
 
         [HttpPost]
@@ -310,11 +304,6 @@ namespace Fanex.NexHR.Controllers
             return _memoService.Delete(criteria);
         }
 
-        /// <summary>
-        /// Add new Team.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns>The error code.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         public int AddNewTeam(TeamViewModel model)
@@ -333,11 +322,6 @@ namespace Fanex.NexHR.Controllers
             return commandResult.Code;
         }
 
-        /// <summary>
-        /// Delete team.
-        /// </summary>
-        /// <param name="id">The Team Id.</param>
-        /// <returns>Message result delete.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         public string DeleteTeam(int id)
@@ -412,7 +396,7 @@ namespace Fanex.NexHR.Controllers
             {
                 ExtensionNumberId = extId
             };
-            CommandResult commandResult = _reportService.DeleteExtensionNumber(criteria);
+            CommandResult commandResult = _extensionNumberService.DeleteExtensionNumber(criteria);
             return commandResult.Code == 0;
         }
 
@@ -424,7 +408,7 @@ namespace Fanex.NexHR.Controllers
             {
                 FullName = groupName
             };
-            CommandResult commandResult = _reportService.AddNewExternalGroup(criteria);
+            CommandResult commandResult = _extensionNumberService.AddNewExternalGroup(criteria);
             return commandResult.Code == 0;
         }
 
@@ -436,7 +420,7 @@ namespace Fanex.NexHR.Controllers
             {
                 ExternalId = extId
             };
-            CommandResult commandResult = _reportService.DeleteExternalGroup(criteria);
+            CommandResult commandResult = _extensionNumberService.DeleteExternalGroup(criteria);
             return commandResult.Code == 0;
         }
 
@@ -449,7 +433,7 @@ namespace Fanex.NexHR.Controllers
                 ExternalId = extId,
                 FullName = groupName
             };
-            CommandResult commandResult = _reportService.EditExternalGroup(criteria);
+            CommandResult commandResult = _extensionNumberService.EditExternalGroup(criteria);
             return commandResult.Code == 0;
         }
 

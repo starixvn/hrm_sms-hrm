@@ -37,25 +37,9 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria);
 
-        IList<LeaveSummaryByTeam> GetAnnualLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
+        IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria);
 
-        IEnumerable<ExtensionNoModel> GetAllExtensionNo(GetAllExtensionNumberCriteria criteria);
-
-        IEnumerable<ExtensionNoModel> GetAllExtensionGroupInfo(GetExtensionNumberGroupInfoCriteria criteria);
-
-        CommandResult AddNewExtensionNoMember(InsertExtensionNumberCriteria criteria);
-
-        ExtensionNoModel GetEmployeeExtensionNoById(GetExtensionNumberMemberByIdCriteria criteria);
-
-        CommandResult UpdateExtensionNoMember(UpdateExtensionNumberMemberCriteria criteria);
-
-        CommandResult DeleteExtensionNumber(DeleteExtensionNumberMemberCriteria criteria);
-
-        CommandResult AddNewExternalGroup(InsertExternalGroupCriteria criteria);
-
-        CommandResult EditExternalGroup(UpdateExternalNumberCriteria criteria);
-
-        CommandResult DeleteExternalGroup(DeleteExternalGroupCriteria criteria);
+        IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
 
         IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
 

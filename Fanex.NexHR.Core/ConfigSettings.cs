@@ -48,5 +48,13 @@ namespace Fanex.NexHR.Core
                 return Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"].ToString());
             }
         }
+
+        public static bool IsDisabledSendMail
+        {
+            get
+            {
+                return Converter.ToBool(ConfigurationManager.AppSettings["IsDisabledSendMail"].ToString());
+            }
+        }
     }
 }
