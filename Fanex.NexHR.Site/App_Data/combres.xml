@@ -471,30 +471,16 @@
 			<resource path="~/scripts/views/report.totalworkinghourweekly.js" />
 		</resourceSet>
     
-    <resourceSet name="memberrequestpersonalspacecss" type="css">
-      <resource reference="sitecss"/>
-      <resource path="~/styles/criteriapanel.css" />
-    </resourceSet>
-    <resourceSet name="memberrequestpersonalspacejs" type="js">
-      <resource reference="sitejs"/>
-      <resource path="~/scripts/views/criteria.js"/>
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Request/memberrequest.personalspace.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
-      <resource path="~/scripts/libs/date.js" />
-      <resource path="~/scripts/views/date.filter.js" />
-    </resourceSet>
-
-    <resourceSet name="employeerequesthrspacecss" type="css">
+    <resourceSet name="employeerequestcss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
-    <resourceSet name="employeerequesthrspacejs" type="js">
+    <resourceSet name="employeerequestjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/criteria.js"/>
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/request/employeerequest.hrspace.js" />
+      <resource path="~/scripts/views/request/employeerequest.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />

@@ -48,10 +48,11 @@
                                 <td>-</td>
                             }
 
-                            @Html.Partial("Request/History/SharedStatus", request)
-                            @Html.Partial("Request/History/SharedPeformedBy", request)
+                            <td>@request.Status.ToString()</td>
+
+                            @Html.Partial("History/SharedPeformedBy", request)
                            
-                        </tr>  
+                        </tr>
             }
             </tbody>
         }

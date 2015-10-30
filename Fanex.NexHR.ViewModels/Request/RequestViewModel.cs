@@ -14,22 +14,20 @@ namespace Fanex.NexHR.ViewModels.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// Request ViewModel.
-    /// </summary>
     public class RequestViewModel
     {
         public RequestViewModel()
         {
-            this.StatusId = -1;
-            this.FromDate = DateTime.Now.AddDays(-60);
+            this.StatusId = -2;
+            this.FromDate = DateTime.Now.Date;
             this.ToDate = DateTime.Now.Date;
             this.DateOption = 0;
             this.TeamIds = null;
             this.EmployeeId = -1;
             this.RequestType = (int)RequestFilter.All;
-            this.IsDailyRequest = false;
         }
 
         public int DateOption { get; set; }
@@ -62,9 +60,52 @@ namespace Fanex.NexHR.ViewModels.Request
 
         public byte? IsLocal { get; set; }
 
-        public bool IsDailyRequest { get; set; }
+        public int CurrentUserId { get; set; }
 
-        public bool IsMember { get; set; }
+        public RequestViewType ViewType { get; set; }
+
+        public string ActionName
+        {
+            get
+            {
+                var action = string.Empty;
+                switch (ViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                        action = "Member";
+                        break;
+                    case RequestViewType.HRSpace:
+                        action = "HRView";
+                        break;
+                    case RequestViewType.CompanySpace:
+                        action = "DailyView";
+                        break;
+                    case RequestViewType.SASpace:
+                        action = "VoidRequest";
+                        break;
+                }
+
+                return action;
+            }
+        }
+
+        public bool IsAllowChangeStatus
+        {
+            get
+            {
+                return ViewType != RequestViewType.CompanySpace;
+            }
+        }
+
+        public bool IsFilterByAffectedDate
+        {
+            get
+            {
+                return ViewType != RequestViewType.PersonalSpace;
+            }
+        }
+
+        public IList<RequestEntity> Requests { get; set; }
 
         public IList<SelectListItem> GetSelecListItemTeam
         {
@@ -103,6 +144,56 @@ namespace Fanex.NexHR.ViewModels.Request
                 }
 
                 return selecListItemTeam;
+            }
+        }
+
+        public string BreadcrumbText
+        {
+            get
+            {
+                var breadcrumbText = string.Empty;
+                switch (ViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                        breadcrumbText = Labels.Personal;
+                        break;
+                    case RequestViewType.HRSpace:
+                        breadcrumbText = Labels.HRSpace;
+                        break;
+                    case RequestViewType.CompanySpace:
+                        breadcrumbText = Labels.CompanySpace;
+                        break;
+                    case RequestViewType.SASpace:
+                        breadcrumbText = Labels.SASpace;
+                        break;
+                }
+
+                return breadcrumbText;
+            }
+        }
+
+        public string PageTitle
+        {
+            get
+            {
+                var pageTitle = string.Empty;
+                switch (ViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                        pageTitle = Labels.MemberRequest;
+                        break;
+                    case RequestViewType.HRSpace:
+                        pageTitle = Labels.EmployeeRequest;
+                        break;
+                    case RequestViewType.CompanySpace:
+                        pageTitle = Labels.DailyRequests;
+                        break;
+                    case RequestViewType.SASpace:
+                        pageTitle = Labels.VoidRequest;
+                        break;
+                }
+
+                return pageTitle;
             }
         }
     }

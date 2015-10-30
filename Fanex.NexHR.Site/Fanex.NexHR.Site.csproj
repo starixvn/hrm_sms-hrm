@@ -299,7 +299,7 @@
     <Content Include="Scripts\Views\employeesupervisor.js" />
     <Content Include="Scripts\Views\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
-    <Content Include="Scripts\Views\Request\employeerequest.hrspace.js" />
+    <Content Include="Scripts\Views\Request\employeerequest.js" />
     <Content Include="Scripts\Views\Overtime\overtime.request.js" />
     <Content Include="Scripts\Views\report.leavesumary.js" />
     <Content Include="Scripts\Views\report.totalworkinghours.js" />
@@ -675,7 +675,6 @@
     <Content Include="Scripts\Views\annualbalanceadj.js" />
     <Content Include="Scripts\Views\criteria.js" />
     <Content Include="Scripts\Views\employee.search.in.team.js" />
-    <Content Include="Scripts\Views\Request\memberrequest.personalspace.js" />
     <Content Include="Scripts\Views\checkinout.bymanager.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Libs\date.js" />
@@ -881,7 +880,6 @@
     <Content Include="Views\Home\AccessDenied.cshtml" />
     <Content Include="Views\CheckInOut\Create.cshtml" />
     <Content Include="Views\Holiday\Create.cshtml" />
-    <Content Include="Views\Request\Index.cshtml" />
     <Content Include="Views\Memo\Index.cshtml" />
     <Content Include="Views\Memo\Edit.cshtml" />
     <Content Include="Views\Memo\Create.cshtml" />
@@ -920,16 +918,6 @@
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Report\RequestMonitoring.cshtml" />
     <Content Include="Views\Report\TotalWorkingHours.cshtml" />
-    <Content Include="Views\Request\Member.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberLeaveRequest.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberChangeShiftRequest.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberLateInEarlyOutRequest.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberCheckInOutRequest.cshtml" />
-    <Content Include="Views\Request\HRView.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewLeaveRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewChangeShiftRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewLateInEarlyOutRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewCheckInOutRequest.cshtml" />
     <Content Include="Views\Report\UnpaidLeaveSummary.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Create.cshtml" />
@@ -946,19 +934,19 @@
     <Content Include="Views\Home\AccountSuspended.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Request\HRViewHistory.cshtml" />
+    <Content Include="Views\Request\ViewHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\Request\History\ViewCheckInOutRequestHistory.cshtml" />
+    <Content Include="Views\Request\History\ViewCheckInOutRequestHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\Request\History\ViewLateInEarlyOutRequestHistory.cshtml" />
+    <Content Include="Views\Request\History\ViewLateInEarlyOutRequestHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\Request\History\ViewChangeShiftRequestHistory.cshtml" />
+    <Content Include="Views\Request\History\ViewChangeShiftRequestHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\Request\History\ViewLeaveRequestHistory.cshtml" />
+    <Content Include="Views\Request\History\ViewLeaveRequestHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ExtensionNumber\Index.cshtml" />
@@ -989,7 +977,6 @@
     <Content Include="App_Data\Emails\MessageNotification.cshtml" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
-    <Content Include="Views\Request\DailyRequestsView.cshtml" />
     <Content Include="Views\Employee\ChangePwd.cshtml" />
     <Content Include="Views\Overtime\ViewDetails.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
@@ -1007,21 +994,14 @@
     <Content Include="Views\KeepInView\EmployeeView.cshtml" />
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\WorkingCalendarDetails.cshtml" />
-    <Content Include="Views\Shared\Request\HR\HRViewKeepInViewRequest.cshtml" />
     <Content Include="Views\Calendar\ArrangeSchedule.cshtml" />
     <Content Include="Views\Calendar\ArrangeScheduleDetail.cshtml" />
-    <Content Include="Views\Shared\Request\Member\AllRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\AllRequest.cshtml" />
-    <Content Include="Views\Shared\Request\Member\MemberKeepInViewRequest.cshtml" />
     <Content Include="Views\Calendar\ShiftStatistic.cshtml" />
     <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
-    <Content Include="Views\Shared\Request\HR\SharedStatus.cshtml" />
-    <Content Include="Views\Shared\Request\Member\SharedStatus.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\TimeSheetRecord\Index.cshtml" />
-    <Content Include="Views\Shared\Request\History\ViewKeepInViewRequestHistory.cshtml" />
-    <Content Include="Views\Shared\Request\History\SharedStatus.cshtml" />
+    <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
     <Content Include="Views\Overtime\OvertimeRequestDetails.cshtml" />
     <Content Include="Views\Overtime\YearlyReport.cshtml" />
     <Content Include="Views\Overtime\YearlyReportDetails.cshtml" />
@@ -1050,11 +1030,11 @@
     <Content Include="Views\Calendar\MemberScheduleInOrder.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
-    <Content Include="Views\Shared\Request\History\SharedPeformedBy.cshtml" />
+    <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
     <Content Include="Views\Report\OvertimeReport.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Report\TimeRecordDetail.cshtml" />
-    <Content Include="Views\Shared\ConfirmedProcessRequest.cshtml" />
+    <Content Include="Views\Request\ConfirmedProcessRequest.cshtml" />
     <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
@@ -1093,8 +1073,7 @@
     <Content Include="Views\Report\TotalWorkingHourDaily.cshtml" />
     <Content Include="Views\Calendar\EmployeeShift.cshtml" />
     <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
-    <Content Include="Views\Request\VoidRequest.cshtml" />
-    <Content Include="Views\Shared\Request\HR\SharedStatusVoidBySA.cshtml" />
+    <Content Include="Views\Request\EmployeeRequest.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

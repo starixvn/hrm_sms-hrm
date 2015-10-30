@@ -90,6 +90,8 @@
             <th rowspan="2">
                 #
             </th>
+            <th rowspan="2">@Labels.FullName
+            </th>
             <th rowspan="2">@Labels.Nick
             </th>
             <th colspan="12">
@@ -163,7 +165,9 @@
                 <tr>
                     <td>@(index++)
                     </td>
-                    <td class="tooltip" title="@leave.Employee.FullName">@leave.Employee.NickName
+                    <td class="left">@leave.Employee.FullName
+                    </td>
+                    <td class="tooltip left" title="@leave.Employee.FullName">@leave.Employee.NickName
                     </td>
                     @if (leave.Jan > 0)
                     {

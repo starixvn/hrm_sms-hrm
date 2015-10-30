@@ -581,8 +581,8 @@ namespace Fanex.NexHR.Controllers
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 GroupIds = model.TeamIds,
-                IsLocal = null,
-                SupervisorId = null
+                IsLocal = (byte?)model.Category,
+                SupervisorId = CurrentUser.Id
             };
             IList<LeaveSummary> entityList = _reportService.GetUnpaidLeave(criteria);
 

@@ -17,22 +17,22 @@
 {
     case (int)RequestFilter.CheckInOut:
         IList<RequestEntity> entityCheckInOut = ViewBag.EntityList;
-        Html.RenderPartial("Request/History/ViewCheckInOutRequestHistory", entityCheckInOut);
+        Html.RenderPartial("History/ViewCheckInOutRequestHistory", entityCheckInOut);
         break;
     case (int)RequestFilter.LateInEarlyOut:
         IList<RequestEntity> entityLateInEarlyOut = ViewBag.EntityList;
-        Html.RenderPartial("Request/History/ViewLateInEarlyOutRequestHistory", entityLateInEarlyOut);
+        Html.RenderPartial("History/ViewLateInEarlyOutRequestHistory", entityLateInEarlyOut);
         break;
     case (int)RequestFilter.ChangeShift:
         IList<RequestEntity> entityChangeShift = ViewBag.EntityList;
-        Html.RenderPartial("Request/History/ViewChangeShiftRequestHistory", entityChangeShift);
+        Html.RenderPartial("History/ViewChangeShiftRequestHistory", entityChangeShift);
         break;
     case (int)RequestFilter.Leave:
         IList<RequestEntity> entityLeave = ViewBag.EntityList;
-        Html.RenderPartial("Request/History/ViewLeaveRequestHistory", entityLeave);
+        Html.RenderPartial("History/ViewLeaveRequestHistory", entityLeave);
         break;
     case (int)RequestFilter.KeepInView:
         IList<RequestEntity> entityOKeepInView = ViewBag.EntityList;
-        Html.RenderPartial("Request/History/ViewKeepInViewRequestHistory", entityOKeepInView);
+        Html.RenderPartial("History/ViewKeepInViewRequestHistory", entityOKeepInView);
         break;
 }

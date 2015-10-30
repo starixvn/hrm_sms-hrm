@@ -508,13 +508,13 @@
     <value>Save</value>
   </data>
   <data name="MemberRequest" xml:space="preserve">
-    <value>Member's Request</value>
+    <value>Member's request</value>
   </data>
   <data name="RequestType" xml:space="preserve">
     <value>Request type</value>
   </data>
   <data name="EmployeeRequest" xml:space="preserve">
-    <value>Employee's requests</value>
+    <value>Employee's request</value>
   </data>
   <data name="AddAjustment" xml:space="preserve">
     <value>Add adjustment</value>
@@ -661,7 +661,7 @@
     <value>Reset</value>
   </data>
   <data name="DailyRequests" xml:space="preserve">
-    <value>Daily Requests</value>
+    <value>Daily request</value>
   </data>
   <data name="RequestFor" xml:space="preserve">
     <value>Request For</value>
@@ -1046,5 +1046,11 @@
   </data>
   <data name="ActualTime" xml:space="preserve">
     <value>Actual Time</value>
+  </data>
+  <data name="SASpace" xml:space="preserve">
+    <value>SA Space</value>
+  </data>
+  <data name="VoidRequest" xml:space="preserve">
+    <value>Void request</value>
   </data>
 </root>

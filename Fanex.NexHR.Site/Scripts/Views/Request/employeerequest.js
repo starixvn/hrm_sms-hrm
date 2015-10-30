@@ -25,11 +25,81 @@ function bindMenu(element, menu) {
     },
     function (command, eventElement) {
         var ConfirmedDialog = $("#confirmedDialog");
+        var heigh = 210;
+        var width = 430;
         switch (command) {
+            case 'Accept':
+                ConfirmedDialog.dialog({
+                    height: heigh,
+                    width: width,
+                    modal: true,
+                    buttons: {
+                        "OK": function () {
+                            var remark = $("#reasonToProcess").val();
+                            processRequest(command, eventElement, remark);
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to verify?');
+                break;
+            case 'NotAccept':
+                ConfirmedDialog.dialog({
+                    height: heigh,
+                    width: width,
+                    modal: true,
+                    buttons: {
+                        "OK": function () {
+                            var remark = $("#reasonToProcess").val();
+                            processRequest(command, eventElement, remark);
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                ConfirmedDialog.dialog('option', 'title', 'Are you sure you dont want to verify?');
+                break;
+            case 'Approve':
+                ConfirmedDialog.dialog({
+                    height: heigh,
+                    width: width,
+                    modal: true,
+                    buttons: {
+                        "OK": function () {
+                            var remark = $("#reasonToProcess").val();
+                            processRequest(command, eventElement, remark);
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to approve?');
+                break;
+            case 'Reject':
+                ConfirmedDialog.dialog({
+                    height: heigh,
+                    width: width,
+                    modal: true,
+                    buttons: {
+                        "OK": function () {
+                            var remark = $("#reasonToProcess").val();
+                            processRequest(command, eventElement, remark);
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to reject?');
+                break;
             case 'Process':
                 ConfirmedDialog.dialog({
-                    height: 210,
-                    width: 430,
+                    height: heigh,
+                    width: width,
                     autoOpen: true,
                     modal: true,
                     buttons: {
@@ -48,8 +118,8 @@ function bindMenu(element, menu) {
             case 'Void':
             case 'VoidBySA':
                 ConfirmedDialog.dialog({
-                    height: 210,
-                    width: 430,
+                    height: heigh,
+                    width: width,
                     autoOpen: true,
                     modal: true,
                     buttons: {
@@ -75,11 +145,14 @@ function bindMenu(element, menu) {
 }
 
 $(document).ready(function () {
-    // menu
     $("#TeamId").multiselect();
     $("#confirmedDialog").hide();
 
     bindMenu('.hr-actions', 'hrMenu');
+    bindMenu('.verifier-actions', 'verifierMenu');
+    bindMenu('.approver-actions', 'approverMenu');
+    bindMenu('.verifier-actions-reset', 'resetMenu');
+    bindMenu('.approver-actions-reset', 'resetMenu');
     bindMenu('.hr-actions-reset', 'resetMenu');
     bindMenu('.sa-void', 'voidMenu');
 
@@ -107,7 +180,7 @@ $(document).ready(function () {
             e.preventDefault();
         }
         else {
-            var action = $("#ActionRequest").val();
+            var action = $("#ActionName").val();
             var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
             var requestType = $("input[type='radio'][name='RequestType']:checked").val();
             var isLocal = $("#IsLocal").val();
@@ -127,7 +200,7 @@ $(document).ready(function () {
     });
 
     $("#btnExcel").click(function () {
-        var action = $("#ActionRequest").val() + "WorkingTimeRequest";
+        var action = $("#ActionName").val() + "WorkingTimeRequest";
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
         var requestType = $("input[type='radio'][name='RequestType']:checked").val();
         var isLocal = $("#IsLocal").val();

@@ -11,7 +11,7 @@
       <siteMapNode title="My overtime" controller="overtime" action="employeeview" icon="calendar1" />
       <siteMapNode title="My Timesheet" controller="report" action="timesheet" icon="calendar8" />
       <siteMapNode title="My calendar" controller="calendar" action="myworkingschedule" icon="calendar" />
-      <siteMapNode title="Members' requests" controller="request" action="member" icon="user1" roles="Approver, Verifier"/>
+      <siteMapNode title="Members' request" controller="request" action="member" icon="user1" roles="Approver, Verifier"/>
       <siteMapNode title="Members' overtimes" controller="overtime" action="memberovertime" icon="user1" roles="Approver, Verifier"/>
       <siteMapNode title="Requests statistic" controller="report" action="LeaderRequestMonitoring" icon="search" roles="Approver, Verifier" id="1"/>
       <siteMapNode title="Schedule Arrange" controller="Calendar" action="ArrangeSchedule" icon="schedule1" roles="ShiftManager"/>
@@ -20,7 +20,7 @@
 	  <siteMapNode title="My messages" controller="message" action="viewMessageOfEmployee" icon="message1" />
     </siteMapNode>
     <siteMapNode title="HR space" roles="HR" >
-      <siteMapNode title="Employees' requests" controller="request" action="hrview" icon="user1" roles="HR" />
+      <siteMapNode title="Employees' request" controller="request" action="hrview" icon="user1" roles="HR" />
       <siteMapNode title="Employees' Overtimes" controller="overtime" action="EmployeeOvertime" icon="user1" roles="HR" />
       <siteMapNode title="Requests Statistics" controller="report" action="HRRequestMonitoring" icon="search" roles="HR"/>
       <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
@@ -33,10 +33,10 @@
     <siteMapNode title="Company space">
       <siteMapNode title="Contact list" controller="employee" action="index" icon="users" />
       <siteMapNode title="Working calendars" controller="calendar" action="workingcalendars" icon="calendar" />
-      <siteMapNode title="Daily requests" controller="request" action="dailyview"  icon="user1"/>
+      <siteMapNode title="Daily request" controller="request" action="dailyview"  icon="user1"/>
       <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
       <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6"/>
-      <siteMapNode title="Unpiad leave" controller="report" action="UnpaidLeaveSummary" icon="calendar6"/>
+      <siteMapNode title="Unpiad leave" controller="report" action="UnpaidLeaveSummary" icon="calendar7"/>
       <siteMapNode title="Extension numbers" controller="ExtensionNumber" action="Index" icon="mobile" />
       <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
     </siteMapNode>

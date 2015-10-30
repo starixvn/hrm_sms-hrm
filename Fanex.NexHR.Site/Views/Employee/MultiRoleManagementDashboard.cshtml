@@ -35,7 +35,7 @@
             FromDate = DateTime.Now.AddDays(-7),
             StatusId = (byte)CurrentRequestStatus.Pending,
             TeamIds = string.Empty,
-            IsDailyRequest = false
+            ViewType = RequestViewType.PersonalSpace
         };
         var minRequestDate = DateTime.Now.AddMonths(-4).Date;
             }
@@ -192,7 +192,7 @@
 			FromDate = DateTime.Now.AddDays(-7),
 			StatusId = (byte)CurrentRequestStatus.Pending,
 			TeamIds = string.Empty,
-			IsDailyRequest = false
+            ViewType = RequestViewType.PersonalSpace
 		};
 		var minRequestDate = DateTime.Now.AddMonths(-4).Date; 
             }

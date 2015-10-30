@@ -619,7 +619,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Daily Requests.
+        ///   Looks up a localized string similar to Daily request.
         /// </summary>
         public static string DailyRequests {
             get {
@@ -835,7 +835,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Employee&apos;s requests.
+        ///   Looks up a localized string similar to Employee&apos;s request.
         /// </summary>
         public static string EmployeeRequest {
             get {
@@ -1456,7 +1456,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Member&apos;s Request.
+        ///   Looks up a localized string similar to Member&apos;s request.
         /// </summary>
         public static string MemberRequest {
             get {
@@ -2203,6 +2203,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SA Space.
+        /// </summary>
+        public static string SASpace {
+            get {
+                return ResourceManager.GetString("SASpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -2775,6 +2784,15 @@ namespace Fanex.NexHR.Resources {
         public static string Void {
             get {
                 return ResourceManager.GetString("Void", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Void request.
+        /// </summary>
+        public static string VoidRequest {
+            get {
+                return ResourceManager.GetString("VoidRequest", resourceCulture);
             }
         }
         

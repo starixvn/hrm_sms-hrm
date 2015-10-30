@@ -13,24 +13,18 @@ namespace Fanex.NexHR.Core.Enums
     using Fanex.Common.Extensions;
 
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
-    public enum RequestViewType : int
+    public enum RequestViewType
     {
-        /// <summary>
-        /// PersonalSpace item.
-        /// </summary>
-        [StringValue("PersonalSpace")]
+        [StringValue("Personal")]
         PersonalSpace = 1,
 
-        /// <summary>
-        /// HRSpace item.
-        /// </summary>
-        [StringValue("HrSpace")]
+        [StringValue("HR Space")]
         HRSpace = 2,
 
-        /// <summary>
-        /// CompanySpace item.
-        /// </summary>
-        [StringValue("CompanySpace")]
-        CompanySpace = 3
+        [StringValue("Company Space")]
+        CompanySpace = 3,
+
+        [StringValue("SA Space")]
+        SASpace = 4
     }
 }

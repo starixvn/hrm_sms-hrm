@@ -24,6 +24,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
 
     /// <summary>
     /// Request Controller.
@@ -185,67 +186,49 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult Member(RequestViewModel request)
         {
-            request.IsMember = true;
-            
-            ViewBag.IsAllowChangeStatus = true;
-            ViewBag.Leader = true;
-            ViewBag.Action = "Member";
+            if (request.StatusId == -2)
+            {
+                request.StatusId = -1;
+                request.FromDate = DateTime.Now.AddDays(-60);
+            }
 
-            this.GetRequests(request, RequestViewType.PersonalSpace, request.IsDailyRequest);
-            return View(request);
+            request.StatusId = request.StatusId == -2 ? -1 : request.StatusId;
+            request.ViewType = RequestViewType.PersonalSpace;
+            GetRequests(request);
+            return View("EmployeeRequest", request);
         }
 
         [Authorize(Roles = "HR")]
         public ActionResult HRView(RequestViewModel request)
         {
-            if (request.StatusId == -1)
-            {
-                request.StatusId = 0;
-                request.IsDailyRequest = true;
-                request.FromDate = request.ToDate;
-            }
+            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
+            request.ViewType = RequestViewType.HRSpace;
 
-            ViewBag.IsAllowChangeStatus = true;
-            ViewBag.Action = "HRView";
-            this.GetRequests(request, RequestViewType.HRSpace, request.IsDailyRequest);
+            GetRequests(request);
 
-            return View(request);
+            return View("EmployeeRequest", request);
         }
 
         public ActionResult DailyView(RequestViewModel request)
         {
-            if (request.StatusId == -1)
-            {
-                request.StatusId = 0;
-                request.IsDailyRequest = true;
-                request.FromDate = request.ToDate;
-            }
+            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = this.CurrentUser.Id };
-            var employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            request.IsMember = employee.IsMember();
-            if (request.IsMember)
-            {
-                request.Team = employee.Team.Name;
-                request.TeamIds = employee.Team.Id.ToString();
-            }
+            request.ViewType = RequestViewType.CompanySpace;
 
-            this.GetRequests(request, RequestViewType.CompanySpace, request.IsDailyRequest);
-            ViewBag.IsAllowChangeStatus = false;
-            ViewBag.Action = "DailyView";
+            GetRequests(request);
 
-            return View("DailyRequestsView", request);
+            return View("EmployeeRequest", request);
         }
 
-        public ActionResult HRViewHistory(long id, int type)
+        public ActionResult ViewHistory(long id, int type)
         {
             var criteria = new GetHistoryRequestCriteria()
             {
                 RequestId = id,
                 RequestType = type
             };
-            IList<RequestEntity> entityList = RequestService.GetHistoryRequest(criteria);
-            ViewBag.EntityList = entityList;
+            IList<RequestEntity> requests = RequestService.GetHistoryRequest(criteria);
+            ViewBag.EntityList = requests;
             ViewBag.requestType = type;
             return View();
         }
@@ -253,18 +236,12 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult VoidRequest(RequestViewModel request)
         {
-            if (request.StatusId == -1)
-            {
-                request.StatusId = 0;
-                request.IsDailyRequest = true;
-                request.FromDate = request.ToDate;
-            }
+            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
 
-            ViewBag.IsAllowChangeStatus = true;
-            ViewBag.Action = "VoidRequest";
-            GetRequests(request, RequestViewType.HRSpace, request.IsDailyRequest);
+            request.ViewType = RequestViewType.SASpace;
+            GetRequests(request);
 
-            return View(request);
+            return View("EmployeeRequest", request);
         }
 
         [HttpPost]
@@ -374,7 +351,7 @@ namespace Fanex.NexHR.Controllers.Request
         }
 
         [NonAction]
-        private void GetRequests(RequestViewModel request, RequestViewType requestViewType, bool isDailyRequest)
+        private void GetRequests(RequestViewModel request)
         {
             var getGroupCriteria = new GetGroupBySupervisorCriteria() 
             { 
@@ -398,17 +375,15 @@ namespace Fanex.NexHR.Controllers.Request
                 GroupIds = request.TeamIds,
                 Status = GetStatus(request.StatusId),
                 RequestType = request.RequestType,
-                IsQueryByCreatedDate = !isDailyRequest,
-                Role = CheckRoleAccordingToRequestType(requestViewType),
-                SupervisorId = this.CurrentUser.Id,
+                IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
+                Role = CheckRoleAccordingToRequestType(request.ViewType),
+                SupervisorId = CurrentUser.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
-            ViewBag.Options = request;
-            ViewBag.IsDailyRequest = isDailyRequest;
-            ViewBag.EntityList = requestList;
+            request.CurrentUserId = CurrentUser.Id;
+            request.Requests = requestList;
         }
 
         private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
