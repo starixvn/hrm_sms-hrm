@@ -9,12 +9,12 @@
 
 namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
@@ -24,11 +24,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using System;
 
-    /// <summary>
-    /// Request Controller.
-    /// </summary>
     [Authorize]
     public class RequestController : BaseController
     {
