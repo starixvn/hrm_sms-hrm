@@ -246,8 +246,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
                 row = sheet.GetRow(rowIndex);
                 row.Height = height;
 
-                row.GetCell(4).SetCellValue(item.ActionName);
-                row.GetCell(5).SetCellValue(item.Supervisors);
+                row.GetCell(5).SetCellValue(item.ActionName);
+                row.GetCell(6).SetCellValue(item.Supervisors);
 
                 if (rowCount == 0)
                 {
@@ -255,6 +255,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
                     row.GetCell(1).SetCellValue(item.Employee.NickName);
                     row.GetCell(2).SetCellValue(item.Employee.FullName);
                     row.GetCell(3).SetCellValue(item.Employee.Team.Code);
+                    row.GetCell(4).SetCellValue(item.Employee.MemberRoleAbbreviation);
 
                     MergeCell(row, rowIndex, rowIndex + 3);
 
@@ -331,10 +332,12 @@ namespace Fanex.NexHR.Services.ExcelExporting
             var cra2 = new CellRangeAddress(firstRow, lastRow, 1, 1);
             var cra3 = new CellRangeAddress(firstRow, lastRow, 2, 2);
             var cra4 = new CellRangeAddress(firstRow, lastRow, 3, 3);
+            var cra5 = new CellRangeAddress(firstRow, lastRow, 4, 4);
             row.Sheet.AddMergedRegion(cra1);
             row.Sheet.AddMergedRegion(cra2);
             row.Sheet.AddMergedRegion(cra3);
             row.Sheet.AddMergedRegion(cra4);
+            row.Sheet.AddMergedRegion(cra5);
         }
 
         private void MergeCellTeam(IRow row, int firstRow, int lastRow)
