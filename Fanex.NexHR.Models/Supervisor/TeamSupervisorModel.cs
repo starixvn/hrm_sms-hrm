@@ -12,9 +12,6 @@ namespace Fanex.NexHR.Models.Supervisor
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// Team Supervisor Model.
-    /// </summary>
     public class TeamSupervisorModel
     {
         public int TeamId { get; set; }
@@ -33,7 +30,7 @@ namespace Fanex.NexHR.Models.Supervisor
             {
                 if (ActionType > 0)
                 {
-                    return ((SupervisorActionType)ActionType).ToString();
+                    return Enumerations.GetStringValue((SupervisorActionType)ActionType);
                 }
 
                 return string.Empty;

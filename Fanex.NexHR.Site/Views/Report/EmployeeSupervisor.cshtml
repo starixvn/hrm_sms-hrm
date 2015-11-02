@@ -20,7 +20,7 @@
 	<div class="container_24 bunhat">
 		<div class="grid_2 gridlabel">
 			<label for="Employee">
-				Employee</label>
+				@Labels.Employee</label>
 		</div>
 		<div class="grid_6">
 			@Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
@@ -36,7 +36,7 @@
 			</select>
 		</div>
 		<div class="grid_2 gridlabel">
-			Category
+			@Labels.Category
 		</div>
 		<div class="grid_3">
 			@RazorHelper.CategoryDropDownList("category", "category", "")
@@ -49,13 +49,14 @@
 		</div>
 		<div class="space">
 		</div>
-		<div class="grid_2 gridlabel">
-			<label for="IsLocal">
-				Supervisor</label>
+@*		<div class="grid_2 gridlabel">
+			<label>
+				@Labels.Roles</label>
 		</div>
 		<div class="grid_4">
 			@RazorHelper.SupervisorRolesDropDownList(0, "Supervisor")
-		</div>
+		</div>*@
+        <div class="grid_2 gridlabel">&nbsp;</div>
 		<div class="grid_5">
 			<input id="submit" type="button" value="@Labels.Submit"/>
 			<input id="excel" type="button" value="Excel" />

@@ -16,6 +16,7 @@ namespace Fanex.NexHR.ViewModels.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Core;
 
     public class RequestViewModel
     {
@@ -151,24 +152,7 @@ namespace Fanex.NexHR.ViewModels.Request
         {
             get
             {
-                var breadcrumbText = string.Empty;
-                switch (ViewType)
-                {
-                    case RequestViewType.PersonalSpace:
-                        breadcrumbText = Labels.Personal;
-                        break;
-                    case RequestViewType.HRSpace:
-                        breadcrumbText = Labels.HRSpace;
-                        break;
-                    case RequestViewType.CompanySpace:
-                        breadcrumbText = Labels.CompanySpace;
-                        break;
-                    case RequestViewType.SASpace:
-                        breadcrumbText = Labels.SASpace;
-                        break;
-                }
-
-                return breadcrumbText;
+                return Enumerations.GetStringValue(ViewType);
             }
         }
 

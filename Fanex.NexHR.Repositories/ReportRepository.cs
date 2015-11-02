@@ -22,16 +22,8 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
 
-    /// <summary>
-    /// Report Repository.
-    /// </summary>
     public class ReportRepository : IReportRepository
     {
-        /// <summary>
-        /// Get Employee Attendance Report.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Of EmployeeAttendanceModel.</returns>
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
         {
             var listAttendance = new List<EmployeeAttendanceModel>();
@@ -67,11 +59,6 @@ namespace Fanex.NexHR.Repositories
             return listAttendance;
         }
 
-        /// <summary>
-        /// Get Request Monitoring.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Request Monitoring.</returns>
         public IList<RequestsMonitoring> GetRequestMonitoring(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -90,11 +77,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Get Total Working Hours.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Total Working Hours.</returns>
         public IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -114,11 +96,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Get Total Working Hours Monthly.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Total Working Hours.</returns>
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -156,11 +133,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Get Total Working Hours Weekly.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Of Total Working Hour Monthly.</returns>
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -198,11 +170,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Get Annual Leave Balance Report.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Leave Summary.</returns>
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
         {
             IList<LeaveSummary> entities = null;
@@ -241,11 +208,6 @@ namespace Fanex.NexHR.Repositories
             return unpaidLeaves;
         }
 
-        /// <summary>
-        /// Function to get time records.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List of time records.</returns>
         public IList<TimeRecordModel> GetTimeRecords(ICriteria criteria)
         {
             IList<TimeRecordModel> timeRecords = null;
@@ -277,32 +239,27 @@ namespace Fanex.NexHR.Repositories
             return calendars;
         }
 
-        /// <summary>
-        /// Method Get Supervisor Report.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List of Supervisor Group Model.</returns>
-        public List<SupervisorReportGroupModel> GetSupervisorReport(ICriteria criteria)
+        public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)
         {
-            List<SupervisorReportModel> supervisors = null;
-            List<SupervisorReportGroupModel> groupingSupervisor = null;
+            IList<SupervisorReportModel> supervisors = null;
+
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                supervisors = db.Query<SupervisorReportModel>(criteria.GetSpParams()).ToList();
+                supervisors = db.Query<SupervisorReportModel, Employee, Team, SupervisorReportModel>(
+                    (su, e, g) =>
+                    {
+                        su.Employee = e;
+                        e.Team = g;
+                        return su;
+                    },
+                    splitOn: "EmpId, GroupId",
+                    parameterValues: criteria.GetSpParams()).ToList();
             }
 
-            groupingSupervisor = supervisors.GroupBy(x => x.EmpId)
-                .Select(x => new SupervisorReportGroupModel { EmployeeId = x.Key, SupervisorAction = x.ToList() }).ToList();
-
-            return groupingSupervisor;
+            return supervisors;
         }
 
-        /// <summary>
-        /// Method Get All Team Supervisors.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Of Team Supervisor Report Model.</returns>
-        public List<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)
+        public IList<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)
         {
             List<TeamSupervisorModel> entities = null;
             List<TeamSupervisorReportModel> supervisors = null;
@@ -318,11 +275,6 @@ namespace Fanex.NexHR.Repositories
             return supervisors;
         }
 
-        /// <summary>
-        /// Function to fill employee attendance request.
-        /// </summary>
-        /// <param name="t">Dynamic object.</param>
-        /// <returns>EmployeeAttendance Request.</returns>
         private EmployeeAttendanceRequest FillAttendanceRequest(dynamic t)
         {
             var request = new EmployeeAttendanceRequest

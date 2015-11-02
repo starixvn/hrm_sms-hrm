@@ -1053,4 +1053,16 @@
   <data name="VoidRequest" xml:space="preserve">
     <value>Void request</value>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="SectionManagement" xml:space="preserve">
+    <value>Section Management</value>
+  </data>
+  <data name="AuthorityLevel" xml:space="preserve">
+    <value>Authority Level</value>
+  </data>
 </root>

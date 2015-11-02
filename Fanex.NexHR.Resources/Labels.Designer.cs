@@ -97,6 +97,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual Date.
         /// </summary>
         public static string ActualDate {
@@ -345,6 +354,15 @@ namespace Fanex.NexHR.Resources {
         public static string Aug {
             get {
                 return ResourceManager.GetString("Aug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authority Level.
+        /// </summary>
+        public static string AuthorityLevel {
+            get {
+                return ResourceManager.GetString("AuthorityLevel", resourceCulture);
             }
         }
         
@@ -2203,6 +2221,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roles.
+        /// </summary>
+        public static string Roles {
+            get {
+                return ResourceManager.GetString("Roles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SA Space.
         /// </summary>
         public static string SASpace {
@@ -2262,6 +2289,15 @@ namespace Fanex.NexHR.Resources {
         public static string Section {
             get {
                 return ResourceManager.GetString("Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Management.
+        /// </summary>
+        public static string SectionManagement {
+            get {
+                return ResourceManager.GetString("SectionManagement", resourceCulture);
             }
         }
         

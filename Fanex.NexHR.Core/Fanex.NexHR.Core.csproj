@@ -74,6 +74,7 @@
     <Compile Include="Attributes\OutputAttribute.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\Command.cs" />
     <Compile Include="Enums\LocalLeave.cs" />

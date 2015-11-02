@@ -196,20 +196,21 @@ namespace Fanex.NexHR.Services
             return calendars;
         }
 
-        public List<SupervisorReportGroupModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
+        public IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
         {
-            List<SupervisorReportGroupModel> groupingSupervisors = null;
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<SupervisorReportModel> supervisors = null;
             if (criteria.IsValid())
             {
-                groupingSupervisors = _reportRepository.GetSupervisorReport(criteria);
+                supervisors = _reportRepository.GetSupervisorReport(criteria);
             }
 
-            return groupingSupervisors;
+            return supervisors;
         }
 
-        public List<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria)
+        public IList<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria)
         {
-            List<TeamSupervisorReportModel> supervisors = null;
+            IList<TeamSupervisorReportModel> supervisors = null;
             if (criteria.IsValid())
             {
                 supervisors = _reportRepository.GetAllTeamSupervisor(criteria);
@@ -230,11 +231,6 @@ namespace Fanex.NexHR.Services
             return commandResult;
         }
 
-        /// <summary>
-        /// Add management team in first position.
-        /// </summary>
-        /// <param name="teams">The list team.</param>
-        /// <returns>The list Leave Summary by Team.</returns>
         private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(
             IList<Team> teams)
         {

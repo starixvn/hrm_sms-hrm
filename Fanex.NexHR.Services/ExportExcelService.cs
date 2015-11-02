@@ -327,7 +327,7 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors)
+        public HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();
@@ -336,7 +336,7 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportTeamSupervisor(List<TeamSupervisorReportModel> supervisors)
+        public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();

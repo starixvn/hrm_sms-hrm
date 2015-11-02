@@ -9,22 +9,12 @@
 
 namespace Fanex.NexHR.Models.Supervisor
 {
-    /// <summary>
-    /// Supervisor Report Model.
-    /// </summary>
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+
     public class SupervisorReportModel
     {
-        public int EmpId { get; set; }
-
-        public string FullName { get; set; }
-
-        public string NickName { get; set; }
-
-        public int GroupIds { get; set; }
-
-        public string Code { get; set; }
-
-        public string Name { get; set; }
+        public Employee Employee { get; set; }
 
         public string Supervisors { get; set; }
 
@@ -34,22 +24,7 @@ namespace Fanex.NexHR.Models.Supervisor
         {
             get
             {
-                if (ActionType > 0)
-                {
-                    switch (ActionType)
-                    {
-                        case 2:
-                            return "Verified By";
-                        case 3:
-                            return "Approved By";
-                        case 4:
-                            return "Shift Arrangement";
-                        case 5:
-                            return "On Behalf Request";
-                    }
-                }
-
-                return string.Empty;
+                return Enumerations.GetStringValue((SupervisorActionType)ActionType);
             }
         }
     }

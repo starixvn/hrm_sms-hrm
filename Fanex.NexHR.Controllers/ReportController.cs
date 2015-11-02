@@ -60,7 +60,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         public ReportController()
-            : this(null, null, null, null)
+            : this(null, null, null, null, null)
         {
         }
 
@@ -635,7 +635,7 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = isLocal,
                 ActionType = supervisorType
             };
-            List<SupervisorReportGroupModel> supervisors = _reportService.GetSupervisorReport(getSupervisorReportCriteria);
+            IList<SupervisorReportModel> supervisors = _reportService.GetSupervisorReport(getSupervisorReportCriteria);
 
             if (isExcel.Value)
             {
@@ -663,7 +663,7 @@ namespace Fanex.NexHR.Controllers
             {
                 GroupIds = groups,
             };
-            List<TeamSupervisorReportModel> supervisors = _reportService.GetAllTeamSupervisor(criteria);
+            IList<TeamSupervisorReportModel> supervisors = _reportService.GetAllTeamSupervisor(criteria);
 
             if (isExcel.Value)
             {

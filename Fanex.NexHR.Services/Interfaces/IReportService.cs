@@ -45,9 +45,9 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria);
 
-        List<SupervisorReportGroupModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
+        IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
-        List<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria);
+        IList<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria);
         
         CommandResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria);
     }

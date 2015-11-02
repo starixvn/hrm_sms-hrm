@@ -18,6 +18,6 @@ namespace Fanex.NexHR.Models.Supervisor
     {
         public int GroupId { get; set; }
 
-        public List<TeamSupervisorModel> SupervisorAction { get; set; }
+        public IList<TeamSupervisorModel> SupervisorAction { get; set; }
     }
 }

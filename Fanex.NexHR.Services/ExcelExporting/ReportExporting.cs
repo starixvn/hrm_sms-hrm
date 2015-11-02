@@ -219,12 +219,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export Employee Supervisor.
-        /// </summary>
-        /// <param name="supervisors">SupervisorReportGroup Model.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
-        public HSSFWorkbook ExportEmployeeSupervisor(List<SupervisorReportGroupModel> supervisors)
+        public HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
 
@@ -242,29 +237,25 @@ namespace Fanex.NexHR.Services.ExcelExporting
             var height = sheet.GetRow(_RowStartBodyEmployeeSupervisor).Height;
             var groupIndex = 1;
 
-            foreach (var item in supervisors)
+            foreach (SupervisorReportModel item in supervisors)
             {
                 rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
                 var row = sheet.GetRow(rowIndex);
-                foreach (var supervisor in item.SupervisorAction)
-                {
-                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                    row = sheet.GetRow(rowIndex);
-                    row.Height = height;
-                    row.GetCell(0).SetCellValue(groupIndex);
-                    row.GetCell(1).SetCellValue(supervisor.NickName);
-                    row.GetCell(2).SetCellValue(supervisor.FullName);
-                    row.GetCell(3).SetCellValue(supervisor.Code);
-                    row.GetCell(4).SetCellValue(supervisor.ActionName);
-                    row.GetCell(5).SetCellValue(supervisor.Supervisors);
-                    rowIndex++;
-                }
 
-                groupIndex++;
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                row = sheet.GetRow(rowIndex);
+                row.Height = height;
+                row.GetCell(0).SetCellValue(groupIndex);
+                row.GetCell(1).SetCellValue(item.Employee.NickName);
+                row.GetCell(2).SetCellValue(item.Employee.FullName);
+                row.GetCell(3).SetCellValue(item.Employee.Team.Code);
+                row.GetCell(4).SetCellValue(item.ActionName);
+                row.GetCell(5).SetCellValue(item.Supervisors);
+                rowIndex++;
 
-                var firstRow = rowIndex - item.SupervisorAction.Count;
-                var lastRow = rowIndex - 1;
-                MergeCell(row, firstRow, lastRow);
+                //var firstRow = rowIndex - item.SupervisorAction.Count;
+                //var lastRow = rowIndex - 1;
+                //MergeCell(row, firstRow, lastRow);
             }
 
             hssfworkbook.RemoveSheetAt(0);
@@ -272,12 +263,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export Excel Team Supervisors.
-        /// </summary>
-        /// <param name="supervisors">List Of Team Supervisor Report Model.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
-        public HSSFWorkbook ExportTeamSupervisor(List<TeamSupervisorReportModel> supervisors)
+        public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
             HSSFWorkbook hssfworkbook;
 
