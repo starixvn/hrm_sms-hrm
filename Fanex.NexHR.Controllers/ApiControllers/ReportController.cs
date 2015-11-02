@@ -49,7 +49,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return employeeAttendance;
         }
 
-        [HttpPost]
+        [HttpGet]
         public IList<EmployeeAttendanceModel> Timesheet([FromUri]TimesheetViewModel model)
         {
             var fromDate = new DateTime(model.Year, model.Month, 1);

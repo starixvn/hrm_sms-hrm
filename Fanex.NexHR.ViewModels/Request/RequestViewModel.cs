@@ -12,11 +12,11 @@ namespace Fanex.NexHR.ViewModels.Request
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Core;
 
     public class RequestViewModel
     {

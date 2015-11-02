@@ -236,26 +236,42 @@ namespace Fanex.NexHR.Services.ExcelExporting
             var rowCopy = _RowStartBodyEmployeeSupervisor;
             var height = sheet.GetRow(_RowStartBodyEmployeeSupervisor).Height;
             var groupIndex = 1;
+            int rowCount = 0;
 
             foreach (SupervisorReportModel item in supervisors)
             {
-                rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
                 var row = sheet.GetRow(rowIndex);
-
+                rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 row = sheet.GetRow(rowIndex);
                 row.Height = height;
-                row.GetCell(0).SetCellValue(groupIndex);
-                row.GetCell(1).SetCellValue(item.Employee.NickName);
-                row.GetCell(2).SetCellValue(item.Employee.FullName);
-                row.GetCell(3).SetCellValue(item.Employee.Team.Code);
+
                 row.GetCell(4).SetCellValue(item.ActionName);
                 row.GetCell(5).SetCellValue(item.Supervisors);
-                rowIndex++;
 
-                //var firstRow = rowIndex - item.SupervisorAction.Count;
-                //var lastRow = rowIndex - 1;
-                //MergeCell(row, firstRow, lastRow);
+                if (rowCount == 0)
+                {
+                    row.GetCell(0).SetCellValue(groupIndex);
+                    row.GetCell(1).SetCellValue(item.Employee.NickName);
+                    row.GetCell(2).SetCellValue(item.Employee.FullName);
+                    row.GetCell(3).SetCellValue(item.Employee.Team.Code);
+
+                    MergeCell(row, rowIndex, rowIndex + 3);
+
+                    rowCount++;
+                    rowIndex++;
+                }
+                else if (rowCount == 3)
+                {
+                    rowCount = 0;
+                    rowIndex++;
+                    groupIndex++;
+                }
+                else
+                {
+                    rowCount++;
+                    rowIndex++;
+                }
             }
 
             hssfworkbook.RemoveSheetAt(0);
