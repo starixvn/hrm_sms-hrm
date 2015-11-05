@@ -248,7 +248,7 @@
     <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
-    <Content Include="Styles\report.manpower.css" />
+    <Content Include="Styles\Report\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />

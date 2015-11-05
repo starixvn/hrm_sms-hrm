@@ -7,7 +7,6 @@
 //   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
 // </history>
 
-
 namespace Fanex.NexHR.Models
 {
     using Fanex.NexHR.Core;

@@ -26,6 +26,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
@@ -34,7 +35,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
-    using Fanex.NexHR.Models.Report;
 
     /// <summary>
     /// Export Controller.

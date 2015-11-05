@@ -14,13 +14,13 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
-    using Fanex.NexHR.Models.Report;
 
     public interface IExportExcelService
     {

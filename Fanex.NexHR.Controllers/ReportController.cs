@@ -27,6 +27,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
@@ -35,7 +36,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
-    using Fanex.NexHR.Models.Report;
 
     [Authorize]
     public class ReportController : BaseController
@@ -711,6 +711,7 @@ namespace Fanex.NexHR.Controllers
             };
 
             IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+            model.Manpowers = manpowers;
 
             return View(model);
         }

@@ -233,7 +233,7 @@ namespace Fanex.NexHR.Services
             return commandResult;
         }
 
-        public IList<ManpowerModel> GetManpower (GetManpowerCriteria criteria)
+        public IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<ManpowerModel> manpowers = null;
