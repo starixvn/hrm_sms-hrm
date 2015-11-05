@@ -35,6 +35,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
+    using Fanex.NexHR.Models.Report;
 
     [Authorize]
     public class ReportController : BaseController
@@ -675,6 +676,43 @@ namespace Fanex.NexHR.Controllers
             {
                 return PartialView(supervisors);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Manpower(int? year)
+        {
+            var model = new ManpowerViewModel()
+            {
+                Year = year.HasValue ? year.Value : DateTime.Now.Year
+            };
+
+            var criteria = new GetManpowerCriteria()
+            {
+                Year = model.Year
+            };
+
+            IList<ManpowerModel> manpowers = _reportService.GetManpower(criteria);
+            model.Manpowers = manpowers;
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult ManpowerCategory(int? year)
+        {
+            var model = new ManpowerCategoryViewModel()
+            {
+                Year = year.HasValue ? year.Value : DateTime.Now.Year
+            };
+
+            var criteria = new GetManpowerCategoryCriteria()
+            {
+                Year = model.Year
+            };
+
+            IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+
+            return View(model);
         }
 
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)

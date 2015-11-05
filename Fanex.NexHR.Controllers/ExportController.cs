@@ -34,6 +34,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
+    using Fanex.NexHR.Models.Report;
 
     /// <summary>
     /// Export Controller.
@@ -451,6 +452,22 @@ namespace Fanex.NexHR.Controllers
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
+        public ActionResult Manpower(int year)
+        {
+            string fileName = "ManpowerReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+
+            var criteria = new GetManpowerCriteria()
+            {
+                Year = year
+            };
+
+            IList<ManpowerModel> manpowers = _reportService.GetManpower(criteria);
+
+            var hssfworkbook = _exportService.ExportManpower(manpowers, year);
+
             return ExcelFile(hssfworkbook, fileName);
         }
 

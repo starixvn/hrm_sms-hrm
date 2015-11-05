@@ -7,11 +7,12 @@
 //   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
 // </history>
 
+
 namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// Lookup Data.
-    /// </summary>
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+
     public class LookupData
     {
         public int Id { get; set; }
@@ -27,5 +28,15 @@ namespace Fanex.NexHR.Models
         public int TotalLocal { get; set; }
 
         public int TotalExpat { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public string CategoryName
+        {
+            get
+            {
+                return Enumerations.GetStringValue((JobTitleCategory)CategoryId);
+            }
+        }
     }
 }

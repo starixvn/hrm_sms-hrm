@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Core;
 @model Fanex.NexHR.ViewModels.Report.EmployeeAttendanceViewModel
 @{
-    ViewBag.Title = "Attendance report";
+    ViewBag.Title = @Labels.AttendanceReport;
 }
 @section css{
     @Url.CombresLink("attendancereportcss")
@@ -10,10 +10,10 @@
     @Url.CombresLink("attendancereportjs")
 }
 @section Breadcrumb {
-    <a class="step">Member Request</a> <span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>
-    Attendance report</h2>
+    @ViewBag.Title</h2>
 <div class="container_24 bunhat">
     @using (Html.BeginGetForm())
     {
@@ -144,7 +144,7 @@
             &nbsp</div>
         
         <div class="grid_6">
-            <input type="button" value="@Labels.Submit" id="view"/>
+            <input type="submit" value="@Labels.Submit" id="view"/>
             <input type="button" value="Excel" id="btnExcel" />
         </div>
         <div class="clear">

@@ -144,7 +144,15 @@
 
       <resource path="~/scripts/views/employee.workingschedule.js" />
     </resourceSet>
-
+    
+    <resourceSet name="manpowerreportcss" type="css">
+      <resource reference="sitecss"/>
+      <resource path="~/styles/report/report.manpower.css" />
+    </resourceSet>
+    <resourceSet name="manpowerreportjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/report/report.manpower.js" />
+    </resourceSet>
     <resourceSet name="attendancereportcss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/report.attendance.css" />

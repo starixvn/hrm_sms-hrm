@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -49,6 +50,8 @@
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
     <Compile Include="Calendar\EmployeeShiftViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
+    <Compile Include="Report\ManpowerCategoryViewModel.cs" />
+    <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />
     <Compile Include="Message\MessageViewModel.cs" />

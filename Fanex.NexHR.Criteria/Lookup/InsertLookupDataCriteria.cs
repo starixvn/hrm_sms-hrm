@@ -20,6 +20,8 @@ namespace Fanex.NexHR.Criteria.Lookup
 
         public string Name { get; set; }
 
+        public string CategoryId { get; set; }
+
         public override string GetSettingKey()
         {
             return "LookupData_Insert";

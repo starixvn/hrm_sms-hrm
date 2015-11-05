@@ -356,12 +356,13 @@ namespace Fanex.NexHR.Controllers
 
         [Authorize(Roles = "HR")]
         [HttpPost]
-        public bool InsertJobTitle(string name)
+        public bool InsertJobTitle(string name, int categoryId)
         {
             var criteria = new InsertLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle,
-                Name = name
+                Name = name,
+                CategoryId = categoryId.ToString()
             };
             CommandResult commandResult = _lookupDataService.Insert(criteria);
             return commandResult.Code == 0;
@@ -369,12 +370,13 @@ namespace Fanex.NexHR.Controllers
 
         [Authorize(Roles = "HR")]
         [HttpPost]
-        public bool UpdatetJobTitle(int id, string name)
+        public bool UpdatetJobTitle(int id, string name, int categoryId)
         {
             var criteria = new UpdateLookupDataCriteria
             {
                 Id = id,
-                Name = name
+                Name = name,
+                CategoryId = categoryId.ToString()
             };
             CommandResult commandResult = _lookupDataService.Update(criteria);
             return commandResult.Code == 0;

@@ -10,6 +10,7 @@
 namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
@@ -19,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
@@ -229,6 +231,32 @@ namespace Fanex.NexHR.Services
             }
 
             return commandResult;
+        }
+
+        public IList<ManpowerModel> GetManpower (GetManpowerCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<ManpowerModel> manpowers = null;
+
+            if (criteria.IsValid())
+            {
+                manpowers = GetData<ManpowerModel>(criteria).ToList();
+            }
+
+            return manpowers;
+        }
+
+        public IList<ManpowerCategoryModel> GetManpowerCategory(GetManpowerCategoryCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<ManpowerCategoryModel> manpowers = null;
+
+            if (criteria.IsValid())
+            {
+                manpowers = GetData<ManpowerCategoryModel>(criteria).ToList();
+            }
+
+            return manpowers;
         }
 
         private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(

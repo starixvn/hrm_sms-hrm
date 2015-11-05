@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
+    using Fanex.NexHR.Models.Report;
 
     public interface IExportExcelService
     {
@@ -54,5 +55,7 @@ namespace Fanex.NexHR.Services.Interfaces
         HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors);
 
         HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors);
+
+        HSSFWorkbook ExportManpower(IList<ManpowerModel> manpowers, int year);
     }
 }

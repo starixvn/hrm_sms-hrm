@@ -233,6 +233,7 @@
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\contactlist.js" />
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
+    <Content Include="Scripts\Views\Report\report.manpower.js" />
     <Content Include="Scripts\Views\report.totalworkinghourdaily.js" />
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
@@ -247,6 +248,7 @@
     <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
+    <Content Include="Styles\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />
@@ -1074,6 +1076,8 @@
     <Content Include="Views\Calendar\EmployeeShift.cshtml" />
     <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
+    <Content Include="Views\Report\Manpower.cshtml" />
+    <Content Include="ExcelTemplates\ManpowerReportTemplate.xls" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

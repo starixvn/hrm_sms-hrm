@@ -13,9 +13,11 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using System.Collections.Generic;
     using System.Web.Http;
     using Fanex.NexHR.Criteria.Report;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
+    using System.Linq;
 
     public class ReportController : ApiController
     {

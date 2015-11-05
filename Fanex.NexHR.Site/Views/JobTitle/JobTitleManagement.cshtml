@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Job title management";
+    ViewBag.Title = @Labels.JobTitleManagement;
 }
 @section css{
     @Url.CombresLink("jobtitlecss")
@@ -10,15 +10,13 @@
 @section Breadcrumb {
     <a class="step" href="#">@ViewBag.Title</a>
 }
-<script>
-    var enable = true;
-</script>
+
 <h2>@ViewBag.Title</h2>
 <div class="container_24 bunhat">
     @Labels.Keyword
     <input id="keyword" type="text" placeholder="@Messages.JobTitle"/>
     <div class="button-icon">
-        <span class="icon plus"></span><a href="#" id="btnNewJobTitle">New Job Title</a></div>
+        <span class="icon plus"></span><a href="javascript:;" id="btnNewJobTitle">@Labels.NewJobTitle</a></div>
 </div>
 <div class="clear">
 </div>
@@ -30,11 +28,13 @@
             </th>
             <th style="width: 340px">@Labels.JobTitle
             </th>
-            <th>Total Expat
+            <th>@Labels.Category
             </th>
-             <th>Total Local
+            <th>@Labels.TotalExpat
             </th>
-             <th>Total
+            <th>@Labels.TotalLocal
+            </th>
+             <th>@Labels.Total
             </th>
             <th>@Labels.Edit
             </th>
@@ -54,6 +54,9 @@
                 <span id="spanJobTitle_${Id}"> ${Name}</span>
                 <input type="text" value="${Name}" id="txtJobTile_${Id}" style="display:none;height:22px;width: 300px;"/> 
             </td>
+            <td class="left">
+                ${CategoryName}
+            </td>
             <td >
                 ${TotalExpat}
             </td>
@@ -68,19 +71,19 @@
                 {{/if}}
             </td>
            <td class="cmd">
-                    <a href="#" class="lnkEdit" data-id = ${Id} id='btnEditJobTitle_${Id}'><img src="@Url.Content("~/Styles/Images/edit-icon.png")" /></a>
-                    <a href="#" class="lnkSave" data-id = ${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
+                    <a href="javascript:;" class="lnkEdit" data-id = ${Id} id='btnEditJobTitle_${Id}' data-categoryId="${CategoryId}"><img src="@Url.Content("~/Styles/Images/edit-icon.png")" /></a>
+                    <a href="javascript:;" class="lnkSave" data-id = ${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
                         <img src="@Url.Content("~/Styles/Images/approve.png")" />
                     </a>
-                    <a href="#" class="lnkCancel" data-id = ${Id} id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" title="Cancel">
+                    <a href="javascript:;" class="lnkCancel" data-id = ${Id} id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" title="Cancel">
                         <img src="@Url.Content("~/Styles/Images/reject.png")" />
                     </a>
             </td>
             <td  class="cmd">
              {{if Value!='0'}}
-                     <a href="#" style="cursor:default"><img src="@Url.Content("~/Styles/Images/disabled-delete.png")" /></a> 
+                     <a href="javascript:;" style="cursor:default"><img src="@Url.Content("~/Styles/Images/disabled-delete.png")" /></a> 
                 {{else}}
-                      <a href="#" class="lnkDelete" data-id = ${Id} id="${Id}"><img src="@Url.Content("~/Styles/Images/delete-icon.png")" /></a> 
+                      <a href="javascript:;" class="lnkDelete" data-id = ${Id} id="${Id}"><img src="@Url.Content("~/Styles/Images/delete-icon.png")" /></a> 
                 {{/if}}
             </td>
         </tr>
@@ -91,10 +94,34 @@
     <p class="validateTips">
     </p>
     <form>
-    <fieldset>
-        <label for="name">
-            Job title</label>
-        <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-    </fieldset>
+        <div class="formrow">
+            <div class="label">
+                <label for="name">@Labels.JobTitle</label>
+            </div>
+            <div class="input">
+                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                <label for="category">@Labels.Category</label>
+            </div>
+            <div class="input">
+                @{
+                var types = new List<SelectListItem>
+                {
+                    new SelectListItem() {Text = Labels.Worker, Value = ((int)JobTitleCategory.Worker).ToString()},
+                    new SelectListItem() {Text = Labels.Staff, Value = ((int)JobTitleCategory.Staff).ToString()},
+                    new SelectListItem() {Text = Labels.Executive, Value = ((int)JobTitleCategory.Executive).ToString()},
+                    new SelectListItem() {Text = Labels.ExecutiveWithPosition, Value = ((int)JobTitleCategory.ExecutiveWithPosition).ToString()},
+                    new SelectListItem() {Text = Labels.Management, Value = ((int)JobTitleCategory.Management).ToString()}
+                };
+            }
+            @Html.DropDownList("category", types)
+            @Html.Hidden("isUpdate")
+            @Html.Hidden("jobtitleId")
+            </div>
+        </div>
+
     </form>
 </div>

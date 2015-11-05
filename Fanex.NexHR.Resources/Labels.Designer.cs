@@ -349,6 +349,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attendance report.
+        /// </summary>
+        public static string AttendanceReport {
+            get {
+                return ResourceManager.GetString("AttendanceReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aug.
         /// </summary>
         public static string Aug {
@@ -516,6 +525,15 @@ namespace Fanex.NexHR.Resources {
         public static string CompanySpace {
             get {
                 return ResourceManager.GetString("CompanySpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmed Resigned.
+        /// </summary>
+        public static string ConfirmedResigned {
+            get {
+                return ResourceManager.GetString("ConfirmedResigned", resourceCulture);
             }
         }
         
@@ -889,6 +907,33 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Executive.
+        /// </summary>
+        public static string Executive {
+            get {
+                return ResourceManager.GetString("Executive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executive With Position.
+        /// </summary>
+        public static string ExecutiveWithPosition {
+            get {
+                return ResourceManager.GetString("ExecutiveWithPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing.
+        /// </summary>
+        public static string Existing {
+            get {
+                return ResourceManager.GetString("Existing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Feb.
         /// </summary>
         public static string Feb {
@@ -1177,6 +1222,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Job Title Management.
+        /// </summary>
+        public static string JobTitleManagement {
+            get {
+                return ResourceManager.GetString("JobTitleManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Joined Date.
         /// </summary>
         public static string JoinedDate {
@@ -1438,11 +1492,38 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Management.
+        /// </summary>
+        public static string Management {
+            get {
+                return ResourceManager.GetString("Management", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manager&apos;s View.
         /// </summary>
         public static string ManagerView {
             get {
                 return ResourceManager.GetString("ManagerView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manpower report.
+        /// </summary>
+        public static string ManpowerReport {
+            get {
+                return ResourceManager.GetString("ManpowerReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SMS Manpower Monthly Reports.
+        /// </summary>
+        public static string ManpowerReportTitle {
+            get {
+                return ResourceManager.GetString("ManpowerReportTitle", resourceCulture);
             }
         }
         
@@ -1686,6 +1767,24 @@ namespace Fanex.NexHR.Resources {
         public static string NewCheckInOutRequest {
             get {
                 return ResourceManager.GetString("NewCheckInOutRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Hire.
+        /// </summary>
+        public static string NewHire {
+            get {
+                return ResourceManager.GetString("NewHire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Job Title.
+        /// </summary>
+        public static string NewJobTitle {
+            get {
+                return ResourceManager.GetString("NewJobTitle", resourceCulture);
             }
         }
         
@@ -1947,6 +2046,15 @@ namespace Fanex.NexHR.Resources {
         public static string Phone {
             get {
                 return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Probation Resigned.
+        /// </summary>
+        public static string ProbationResigned {
+            get {
+                return ResourceManager.GetString("ProbationResigned", resourceCulture);
             }
         }
         
@@ -2455,6 +2563,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staff.
+        /// </summary>
+        public static string Staff {
+            get {
+                return ResourceManager.GetString("Staff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Staff ID.
         /// </summary>
         public static string StaffId {
@@ -2509,7 +2626,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team.
+        ///   Looks up a localized string similar to Section.
         /// </summary>
         public static string Team {
             get {
@@ -2626,11 +2743,38 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Expat.
+        /// </summary>
+        public static string TotalExpat {
+            get {
+                return ResourceManager.GetString("TotalExpat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total hours.
         /// </summary>
         public static string TotalHours {
             get {
                 return ResourceManager.GetString("TotalHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Local.
+        /// </summary>
+        public static string TotalLocal {
+            get {
+                return ResourceManager.GetString("TotalLocal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Manpower.
+        /// </summary>
+        public static string TotalManpower {
+            get {
+                return ResourceManager.GetString("TotalManpower", resourceCulture);
             }
         }
         
@@ -2847,6 +2991,15 @@ namespace Fanex.NexHR.Resources {
         public static string Work {
             get {
                 return ResourceManager.GetString("Work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worker.
+        /// </summary>
+        public static string Worker {
+            get {
+                return ResourceManager.GetString("Worker", resourceCulture);
             }
         }
         

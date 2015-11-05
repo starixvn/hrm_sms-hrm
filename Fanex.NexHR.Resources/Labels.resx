@@ -265,7 +265,7 @@
     <value>Since Last Month</value>
   </data>
   <data name="Team" xml:space="preserve">
-    <value>Team</value>
+    <value>Section</value>
   </data>
   <data name="ToDate" xml:space="preserve">
     <value>To Date</value>
@@ -1064,5 +1064,56 @@
   </data>
   <data name="AuthorityLevel" xml:space="preserve">
     <value>Authority Level</value>
+  </data>
+  <data name="Executive" xml:space="preserve">
+    <value>Executive</value>
+  </data>
+  <data name="ExecutiveWithPosition" xml:space="preserve">
+    <value>Executive With Position</value>
+  </data>
+  <data name="JobTitleManagement" xml:space="preserve">
+    <value>Job Title Management</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="NewJobTitle" xml:space="preserve">
+    <value>New Job Title</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="TotalExpat" xml:space="preserve">
+    <value>Total Expat</value>
+  </data>
+  <data name="TotalLocal" xml:space="preserve">
+    <value>Total Local</value>
+  </data>
+  <data name="Worker" xml:space="preserve">
+    <value>Worker</value>
+  </data>
+  <data name="AttendanceReport" xml:space="preserve">
+    <value>Attendance report</value>
+  </data>
+  <data name="ConfirmedResigned" xml:space="preserve">
+    <value>Confirmed Resigned</value>
+  </data>
+  <data name="Existing" xml:space="preserve">
+    <value>Existing</value>
+  </data>
+  <data name="ManpowerReport" xml:space="preserve">
+    <value>Manpower report</value>
+  </data>
+  <data name="NewHire" xml:space="preserve">
+    <value>New Hire</value>
+  </data>
+  <data name="ProbationResigned" xml:space="preserve">
+    <value>Probation Resigned</value>
+  </data>
+  <data name="TotalManpower" xml:space="preserve">
+    <value>Total Manpower</value>
+  </data>
+  <data name="ManpowerReportTitle" xml:space="preserve">
+    <value>SMS Manpower Monthly Reports</value>
   </data>
 </root>

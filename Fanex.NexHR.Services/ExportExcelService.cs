@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
@@ -46,6 +47,7 @@ namespace Fanex.NexHR.Services
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
         private const int _RowStartBodyYearlyOvertimeReport = 5;
+        private const int _RowStartBodyManpower = 4;
         
         private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
@@ -56,6 +58,7 @@ namespace Fanex.NexHR.Services
         private const string _EmployeeDetailsInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeDetailsInfoTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
+        private const string _ManpowerFilePathExcelTemplate = "~\\ExcelTemplates\\ManpowerReportTemplate.xls";
 
         private const string _MsgLeave = "{1} ({0} days)";
         private const string _MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
@@ -436,6 +439,188 @@ namespace Fanex.NexHR.Services
                 rowIndex++;
                 index++;
             }
+
+            //// remove sheet & row template
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
+        public HSSFWorkbook ExportManpower(IList<ManpowerModel> manpowers, int year)
+        {
+            HSSFWorkbook hssfworkbook;
+            var templatePath = HttpContext.Current.Server.MapPath(_ManpowerFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var title = Labels.ManpowerReportTitle + " " + year;
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "ManpowerReport");
+
+            //
+            var rowTitle = sheet.GetRow(0);
+            var cellTitle = rowTitle.GetCell(1);
+            cellTitle.SetCellValue(title);
+
+            //// render body
+            var rowIndex = _RowStartBodyManpower;
+            var rowCopy = _RowStartBodyManpower;
+            var index = 1;
+            var height = sheet.GetRow(_RowStartBodyAttendance).Height;
+            var columnIndex = 0;
+
+            foreach (var item in manpowers)
+            {
+                columnIndex = 0;
+                rowCopy = _RowStartBodyManpower + (index % 2);
+
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
+
+                row.GetCell(columnIndex++).SetCellValue(index);
+                row.GetCell(columnIndex++).SetCellValue(item.GroupCode);
+
+                row.GetCell(columnIndex++).SetCellValue(item.ProbationResigned);
+                row.GetCell(columnIndex++).SetCellValue(item.ConfirmedResigned);
+                row.GetCell(columnIndex++).SetCellValue(item.NewHire);
+                row.GetCell(columnIndex++).SetCellValue(item.ActiveUser);
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJan, year, 1));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJan, year, 1));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJan, year, 1));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJan, year, 1));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedFeb, year, 2));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedFeb, year, 2));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireFeb, year, 2));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserFeb, year, 2));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedMar, year, 3));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedMar, year, 3));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireMar, year, 3));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserMar, year, 3));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedApr, year, 4));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedApr, year, 4));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireApr, year, 4));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserApr, year, 4));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedMay, year, 5));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedMay, year, 5));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireMay, year, 5));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserMay, year, 5));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJun, year, 6));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJun, year, 6));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJun, year, 6));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJun, year, 6));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJul, year, 7));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJul, year, 7));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJul, year, 7));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJul, year, 7));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedAug, year, 8));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedAug, year, 8));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireAug, year, 8));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserAug, year, 8));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedSep, year, 9));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedSep, year, 9));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireSep, year, 9));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserSep, year, 9));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedOct, year, 10));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedOct, year, 10));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireOct, year, 10));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserOct, year, 10));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedNov, year, 11));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedNov, year, 11));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireNov, year, 11));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserNov, year, 11));
+
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedDec, year, 12));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedDec, year, 12));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireDec, year, 12));
+                row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserDec, year, 12));
+
+                rowIndex++;
+                index++;
+            }
+
+            columnIndex = 2;
+            sheet.CopyRow(templateSheet, _RowStartBodyManpower + 2, rowIndex);
+            var totalrow = sheet.GetRow(rowIndex);
+            totalrow.Height = height;
+
+            totalrow.GetCell(columnIndex++).SetCellValue(manpowers.Sum(t => t.ProbationResigned));
+            totalrow.GetCell(columnIndex++).SetCellValue(manpowers.Sum(t => t.ConfirmedResigned));
+            totalrow.GetCell(columnIndex++).SetCellValue(manpowers.Sum(t => t.NewHire));
+            totalrow.GetCell(columnIndex++).SetCellValue(manpowers.Sum(t => t.ActiveUser));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedJan), year, 1));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedJan), year, 1));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireJan), year, 1));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserJan), year, 1));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedFeb), year, 2));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedFeb), year, 2));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireFeb), year, 2));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserFeb), year, 2));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedMar), year, 3));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedMar), year, 3));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireMar), year, 3));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserMar), year, 3));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedApr), year, 4));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedApr), year, 4));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireApr), year, 4));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserApr), year, 4));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedMay), year, 5));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedMay), year, 5));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireMay), year, 5));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserMay), year, 5));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedJun), year, 6));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedJun), year, 6));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireJun), year, 6));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserJun), year, 6));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedJul), year, 7));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedJul), year, 7));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireJul), year, 7));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserJul), year, 7));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedAug), year, 8));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedAug), year, 8));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireAug), year, 8));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserAug), year, 8));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedSep), year, 9));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedSep), year, 9));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireSep), year, 9));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserSep), year, 9));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedOct), year, 10));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedOct), year, 10));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireOct), year, 10));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserOct), year, 10));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedNov), year, 11));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedNov), year, 11));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireNov), year, 11));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserNov), year, 11));
+
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ProbationResignedDec), year, 12));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ConfirmedResignedDec), year, 12));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.NewHireDec), year, 12));
+            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(manpowers.Sum(t => t.ActiveUserDec), year, 12));
 
             //// remove sheet & row template
             hssfworkbook.RemoveSheetAt(0);
@@ -1847,6 +2032,25 @@ namespace Fanex.NexHR.Services
             }
 
             return detail;
+        }
+
+        private string GetValueForCellManpower(int value, int year, int month)
+        {
+            var display = "-";
+
+            if (DateTime.Now.Year > year)
+            {
+                display = value.ToString();
+            }
+            else if (DateTime.Now.Year == year)
+            {
+                if (DateTime.Now.Month >= month)
+                {
+                    display = value.ToString();
+                }
+            }
+
+            return display;
         }
     }
 }
