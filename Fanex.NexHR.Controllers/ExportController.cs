@@ -471,6 +471,22 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        public ActionResult ManpowerCategory(int year)
+        {
+            string fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+
+            var criteria = new GetManpowerCategoryCriteria()
+            {
+                Year = year
+            };
+
+            IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+
+            var hssfworkbook = _exportService.ExportManpowerCategory(manpowers, year);
+
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
         {
             MemoryStream output = new MemoryStream();

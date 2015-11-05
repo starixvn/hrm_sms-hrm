@@ -1116,4 +1116,19 @@
   <data name="ManpowerReportTitle" xml:space="preserve">
     <value>SMS Manpower Monthly Reports</value>
   </data>
+  <data name="Expat" xml:space="preserve">
+    <value>Expat</value>
+  </data>
+  <data name="JobCategory" xml:space="preserve">
+    <value>Job Category</value>
+  </data>
+  <data name="Local" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="ManpowerCategory" xml:space="preserve">
+    <value>Manpower and Job Category Report</value>
+  </data>
+  <data name="ManpowerCategoryReportTitle" xml:space="preserve">
+    <value>SMS TOTAL MANPOWER AND JOB CATEGORY REPORT</value>
+  </data>
 </root>

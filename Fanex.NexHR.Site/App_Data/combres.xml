@@ -153,6 +153,12 @@
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/report/report.manpower.js" />
     </resourceSet>
+
+    <resourceSet name="manpowercategoryreportjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/report/report.manpower.category.js" />
+    </resourceSet>
+    
     <resourceSet name="attendancereportcss" type="css">
       <resource reference="sitecss"/>
       <resource path="~/styles/report.attendance.css" />

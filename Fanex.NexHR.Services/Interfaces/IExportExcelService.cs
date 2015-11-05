@@ -57,5 +57,7 @@ namespace Fanex.NexHR.Services.Interfaces
         HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors);
 
         HSSFWorkbook ExportManpower(IList<ManpowerModel> manpowers, int year);
+
+        HSSFWorkbook ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year);
     }
 }

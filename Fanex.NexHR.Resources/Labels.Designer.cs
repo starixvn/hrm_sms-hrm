@@ -934,6 +934,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expat.
+        /// </summary>
+        public static string Expat {
+            get {
+                return ResourceManager.GetString("Expat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Feb.
         /// </summary>
         public static string Feb {
@@ -1213,6 +1222,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Job Category.
+        /// </summary>
+        public static string JobCategory {
+            get {
+                return ResourceManager.GetString("JobCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Job Title.
         /// </summary>
         public static string JobTitle {
@@ -1474,6 +1492,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local.
+        /// </summary>
+        public static string Local {
+            get {
+                return ResourceManager.GetString("Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Local leave.
         /// </summary>
         public static string LocalLeave {
@@ -1506,6 +1533,24 @@ namespace Fanex.NexHR.Resources {
         public static string ManagerView {
             get {
                 return ResourceManager.GetString("ManagerView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manpower and Job Category Report.
+        /// </summary>
+        public static string ManpowerCategory {
+            get {
+                return ResourceManager.GetString("ManpowerCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SMS TOTAL MANPOWER AND JOB CATEGORY REPORT.
+        /// </summary>
+        public static string ManpowerCategoryReportTitle {
+            get {
+                return ResourceManager.GetString("ManpowerCategoryReportTitle", resourceCulture);
             }
         }
         

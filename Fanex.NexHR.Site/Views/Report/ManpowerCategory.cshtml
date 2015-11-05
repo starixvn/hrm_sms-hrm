@@ -1,0 +1,148 @@
+﻿@using Fanex.NexHR.Core;
+@using Fanex.NexHR.ViewModels.Report;
+@using Fanex.NexHR.Models.Report;
+@model ManpowerCategoryViewModel
+@{
+    ViewBag.Title = @Labels.ManpowerCategory;
+}
+@section css{
+    @Url.CombresLink("manpowerreportcss")
+}
+@section js{
+    @Url.CombresLink("manpowercategoryreportjs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a> <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2>
+    @ViewBag.Title</h2>
+@using (Html.BeginGetForm())
+{
+    <div class="grid_1 gridlabel">
+        @Labels.Year
+    </div>
+    <div class="grid_2">
+        @Html.YearPicker("Year", 2010, Model.Year)
+    </div>
+    <div class="grid_6">
+        <input type="submit" value="@Labels.Submit" id="btnSubmit"/>
+        <input type="button" value="Excel" id="btnExcel" />
+    </div>
+}
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<table id="data" class="data persist-area">
+    <thead class="persist-header">
+        <tr>
+            <th rowspan="2">
+                #
+            </th>
+            <th rowspan="2">
+                @Labels.Team
+            </th>
+            <th colspan="3">
+                @Labels.TotalManpower
+            </th>
+            <th colspan="10">
+                @Labels.JobCategory
+            </th>
+        </tr>
+        <tr>
+           <th>
+                @Labels.Expat
+            </th>
+            <th>
+                @Labels.Local
+            </th>
+            <th>
+                @Labels.Total
+            </th>
+            <th colspan="2">
+                @Labels.Management
+            </th>
+            <th colspan="2">
+                @Labels.ExecutiveWithPosition
+            </th>
+            <th colspan="2">
+                @Labels.Executive
+            </th>
+            <th colspan="2">
+                @Labels.Staff
+            </th>
+            <th colspan="2">
+                @Labels.Worker
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Manpowers != null && Model.Manpowers.Any())
+        {
+            int index = 1;
+            foreach (ManpowerCategoryModel manpower in Model.Manpowers)
+            { 
+            <tr>
+                <td>@(index++)
+                </td>
+                <td class="tooltip" title="@manpower.GroupName">
+                    @manpower.GroupCode
+                </td>
+                <td class="right">
+                    @manpower.TotalExpat
+                </td>
+                <td class="right">
+                    @manpower.TotalLocal
+                </td>
+                <td class="right">
+                    @manpower.Total
+                </td>
+                <td class="right">
+                    @manpower.Management
+                </td>
+                <td class="right">@((manpower.Management * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                <td class="right">
+                    @manpower.ExecutiveWithPosition
+                </td>
+                <td class="right">@((manpower.ExecutiveWithPosition * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                <td class="right">
+                    @manpower.Executive
+                </td>
+                <td class="right">@((manpower.Executive * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                <td class="right">
+                    @manpower.Staff
+                </td>
+                <td class="right">@((manpower.Staff * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                <td class="right">
+                    @manpower.Worker
+                </td>
+                 <td class="right">@((manpower.Worker * 100.00 / manpower.Total).ToString("0.0"))%</td>
+            </tr>
+            }
+        }
+        else
+        { 
+            @RazorHelper.DisplayNoInformation(colspan: 42)
+        }
+    </tbody>
+    <tfoot>
+        <tr class="footer">
+            <td colspan="2">@Labels.Total
+            </td>
+            <td class="right">@Model.Manpowers.Sum(t => t.TotalExpat)</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.TotalLocal)</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.Total) </td>
+            <td class="right">@Model.Manpowers.Sum(t => t.Management)</td>
+            <td class="right">@((Model.Manpowers.Sum(t => t.Management) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.ExecutiveWithPosition)</td>
+            <td class="right">@((Model.Manpowers.Sum(t => t.ExecutiveWithPosition) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.Executive)</td>
+            <td class="right">@((Model.Manpowers.Sum(t => t.Executive) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.Staff)</td>
+            <td class="right">@((Model.Manpowers.Sum(t => t.Staff) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+            <td class="right">@Model.Manpowers.Sum(t => t.Worker)</td>
+            <td class="right">@((Model.Manpowers.Sum(t => t.Worker) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+        </tr>
+    </tfoot>
+</table>
