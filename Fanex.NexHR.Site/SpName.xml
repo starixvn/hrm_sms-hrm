@@ -282,7 +282,6 @@
           <Mapping DataField="ShiftID" ObjectProperty="Id"/>
         </Setting>
         <Setting Key="EmployeeCalendar_GetShiftByDate" SpName="EmployeeCalendar_GetShiftByDate" DbName="nexhrx" Plain="0"></Setting>
-        <Setting Key="EmployeeCalendar_Update" SpName="EmployeeCalendar_Update" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="Shift_Insert" SpName="Shift_Insert" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="Shift_Update" SpName="Shift_Update" DbName="nexhrx" Plain="0"></Setting>
       <Setting Key="Shift_Delete" SpName="Shift_Delete" DbName="nexhrx" Plain="0"></Setting>

@@ -381,21 +381,5 @@ namespace Fanex.NexHR.Controllers.Request
             request.CurrentUserId = CurrentUser.Id;
             request.Requests = requestList;
         }
-
-        private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
-        {
-            var getListSupervisor = new GetListSupervisorNameCriteria()
-            {
-                EmpId = id,
-                Role = null,
-                RequestType = (int)RequestType.ChangeShift,
-            };
-
-            IList<SupervisorNameModel> supervisors = _employeeService.GetListSupervisorName(getListSupervisor);
-            var verifierList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Verifier);
-            var approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver);
-            viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-        }
     }
 }

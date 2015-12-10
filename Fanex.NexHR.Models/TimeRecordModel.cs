@@ -23,12 +23,13 @@ namespace Fanex.NexHR.Models
 
         public DateTime RecordTime { get; set; }
 
-        public short InOutType { get; set; }
+        public byte? InOutType { get; set; }
 
         public string GetInOutName 
         { 
             get 
             {
+                var inOutLabel = Labels.None;
                 if (InOutType == 0)
                 {
                     return Labels.In;
@@ -38,7 +39,7 @@ namespace Fanex.NexHR.Models
                     return Labels.Out;
                 }
 
-                return string.Empty;
+                return inOutLabel;
             } 
         }
     }
