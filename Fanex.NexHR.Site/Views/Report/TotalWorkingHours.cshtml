@@ -146,7 +146,8 @@
             Employee = item.Employee.NickName + " (" + item.Employee.FullName + ")",
             TeamIds = string.Empty,
             StatusId = 0,
-            RequestType = 1
+            RequestType = (int)RequestFilter.Leave,
+            ViewType = RequestViewType.CompanySpace
         };
             <tr>
                     <td>@(index++)

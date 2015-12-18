@@ -5,3 +5,10 @@
 #Employee {
 	width:140px;
 }
+input.startDateOfWeek {
+	width: 80px;
+}
+
+input.endDateOfWeek {
+	width: 80px;
+}

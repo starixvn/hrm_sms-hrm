@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Models
     /// </summary>
     public class Employee : EntityBase<int>
     {
-        public int EmpId { get; set; }
+        public int EmpId1 { get; set; }
 
         public string DomainUsername { get; set; }
 

@@ -6,7 +6,6 @@
 @model RequestViewModel
 @{
     ViewBag.Title = Model.PageTitle;
-    var breadcrumbText = string.Empty;
 }
 @section css{
     @Url.CombresLink("employeerequestcss")
@@ -64,7 +63,8 @@
                     Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
                     TeamIds = Model.TeamIds,
                     StatusId = Model.StatusId,
-                    RequestType = request.RequestType.FilterRequest
+                    RequestType = request.RequestType.FilterRequest,
+                    ViewType = Model.ViewType
                 };
 
                 var requestDetail = new { requestid = @request.Id, type = @request.RequestType.FilterRequestHistory };

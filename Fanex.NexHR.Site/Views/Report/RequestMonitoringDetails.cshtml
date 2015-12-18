@@ -37,7 +37,6 @@
 
 	  foreach (RequestsMonitoring request in Model)
 	  {
-
 		  requestModel = new RequestViewModel
 		  {
 			  DateOption = 0,
@@ -46,7 +45,8 @@
 			  EmployeeId = request.Requester.Id,
 			  Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
 			  TeamIds = string.Empty,
-			  StatusId = (byte)CurrentRequestStatus.Approved
+			  StatusId = 0,
+              ViewType = (bool)ViewBag.isLeader ? RequestViewType.PersonalSpace : RequestViewType.HRSpace
 		  };
 
 			<tr>
@@ -61,7 +61,7 @@
 				<td class="@(request.TotalLeave > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalLeave > 0)
 	 {
-		 requestModel.RequestType = 4;
+         requestModel.RequestType = (int)RequestFilter.Leave;
 
 		 if ((bool)ViewBag.isLeader)
 		 {
@@ -76,7 +76,7 @@
 				<td class="@(request.TotalUnpaidLeave > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalUnpaidLeave > 0)
 	 {
-		 requestModel.RequestType = 4;
+         requestModel.RequestType = (int)RequestFilter.Leave;
 
 		 if ((bool)ViewBag.isLeader)
 		 {
@@ -91,7 +91,7 @@
 				<td class="@(request.TotalChangeShift > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalChangeShift > 0)
 	 {
-		 requestModel.RequestType = 3;
+         requestModel.RequestType = (int)RequestFilter.ChangeShift;
 
 		 if ((bool)ViewBag.isLeader)
 		 {
@@ -106,7 +106,7 @@
 				<td class="@(request.TotalLateIn > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalLateIn > 0)
 	 {
-		 requestModel.RequestType = 2;
+         requestModel.RequestType = (int)RequestFilter.LateInEarlyOut;
 
 		 if ((bool)ViewBag.isLeader)
 		 {
@@ -121,7 +121,7 @@
 				<td class="@(request.TotalEarlyOut > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalEarlyOut > 0)
 	 {
-		 requestModel.RequestType = 2;
+         requestModel.RequestType = (int)RequestFilter.LateInEarlyOut;
 
 		 if ((bool)ViewBag.isLeader)
 		 {
@@ -136,7 +136,7 @@
 				<td class="@(request.TotalCheckInOut > ViewBag.MaxRequest ? "overloadRequest" : string.Empty)">
 					@if (request.TotalCheckInOut > 0)
 	 {
-		 requestModel.RequestType = 1;
+         requestModel.RequestType = (int)RequestFilter.CheckInOut;
 
 		 if ((bool)ViewBag.isLeader)
 		 {

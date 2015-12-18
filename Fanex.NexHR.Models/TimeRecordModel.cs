@@ -29,17 +29,17 @@ namespace Fanex.NexHR.Models
         { 
             get 
             {
-                var inOutLabel = Labels.None;
+                var typeName = Labels.None;
                 if (InOutType == 0)
                 {
-                    return Labels.In;
+                    typeName = Labels.In;
                 }
                 else if (InOutType == 1)
                 {
-                    return Labels.Out;
+                    typeName = Labels.Out;
                 }
 
-                return inOutLabel;
+                return typeName;
             } 
         }
     }

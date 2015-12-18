@@ -43,7 +43,7 @@
         <div class="input">
             @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn" })
             :
-            @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MuniteTimeIn", MaxLength = "2", id = "MuniteTimeIn" })
+            @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MinuteTimeIn", MaxLength = "2", id = "MinuteTimeIn" })
             @Html.CheckBoxFor(model => model.IsInAfterDay)
             @Html.LabelFor(model => model.IsInAfterDay)
         </div>

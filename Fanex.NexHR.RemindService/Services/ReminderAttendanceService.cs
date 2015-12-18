@@ -46,7 +46,7 @@ namespace Fanex.NexHR.ReminderService.Services
 
         public void ExcuteJob()
         {
-            //RemindAttendance();
+            //// RemindAttendance();
             var date = DateTime.Now;
             var x = FormatTime(date);
             Console.WriteLine("I am working");

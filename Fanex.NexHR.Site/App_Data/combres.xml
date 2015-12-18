@@ -166,7 +166,7 @@
     <resourceSet name="attendancereportjs" type="js">
       <resource reference="sitejs"/>
 
-      <resource path="~/scripts/views/report.attendance.js" />
+      <resource path="~/scripts/views/report/report.attendance.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
@@ -181,7 +181,7 @@
       <resource reference="sitejs"/>
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/report.timesheet.js" />
+      <resource path="~/scripts/views/report/report.timesheet.js" />
     </resourceSet>
     <resourceSet name="checkinoutrequestcss" type="css">
       <resource reference="sitecss"/>
@@ -443,7 +443,7 @@
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
-      <resource path="~/scripts/views/report.totalworkinghours.js" />
+      <resource path="~/scripts/views/report/report.totalworkinghours.js" />
     </resourceSet>
 
 
@@ -454,7 +454,7 @@
 		<resourceSet name="staffrepresentativjs" type="js">
 			<resource reference="sitejs"/>
 			<resource path="~/scripts/views/employee.search.in.company.js" />
-			<resource path="~/scripts/views/report.staffrepresentative.js" />
+			<resource path="~/scripts/views/report/report.staffrepresentative.js" />
 		</resourceSet>
 
     <resourceSet name="totalworkinghourmonthlycss" type="css">
@@ -466,13 +466,13 @@
       <resource reference="sitejs"/>
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
-      <resource path="~/scripts/views/report.totalworkinghourmonthly.js" />
+      <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourdailyjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/employee.search.in.company.js" />
-      <resource path="~/scripts/views/report.totalworkinghourdaily.js" />
+      <resource path="~/scripts/views/report/report.totalworkinghourdaily.js" />
     </resourceSet>
 
 		<resourceSet name="totalworkinghourweeklycss" type="css">
@@ -482,7 +482,7 @@
 		<resourceSet name="totalworkinghourweeklyjs" type="js">
 			<resource reference="sitejs"/>
 			<resource path="~/scripts/views/employee.search.in.company.js" />
-			<resource path="~/scripts/views/report.totalworkinghourweekly.js" />
+			<resource path="~/scripts/views/report/report.totalworkinghourweekly.js" />
 		</resourceSet>
     
     <resourceSet name="employeerequestcss" type="css">
@@ -547,7 +547,7 @@
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs"/>
       <resource path="~/scripts/views/employee.search.in.company.js" />
-      <resource path="~/scripts/views/report.leavesumary.js" />
+      <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
 
     <resourceSet name="requestmonitoringcss" type="css">
@@ -560,7 +560,7 @@
       <resource path="~/scripts/libs/date.js" />
 			<resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/date.filter.js" />
-			<resource path="~/scripts/views/report.hrrequestmonitoring.js" />
+			<resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
     </resourceSet>
 
     <resourceSet name="jobtitlecss" type="css">
@@ -694,7 +694,7 @@
       <resource reference="sitejs"/>
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
-      <resource path="~/scripts/views/reportovertimerequest.js" />
+      <resource path="~/scripts/views/report/reportovertimerequest.js" />
     </resourceSet>
 
     <resourceSet name="timerecordcss" type="css">
