@@ -1072,7 +1072,7 @@
     <Content Include="Web.local.Release.config">
       <DependentUpon>Web.local.config</DependentUpon>
     </Content>
-    <None Include="Deployment.ignore" />
+    <Content Include="Deployment.ignore" />
     <Content Include="Views\Report\TotalWorkingHourDaily.cshtml" />
     <Content Include="Views\Calendar\EmployeeShift.cshtml" />
     <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
