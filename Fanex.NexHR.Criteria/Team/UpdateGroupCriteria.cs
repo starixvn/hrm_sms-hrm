@@ -23,6 +23,8 @@ namespace Fanex.NexHR.Criteria.Team
 
         public string Name { get; set; }
 
+        public int DepartmentId { get; set; }
+
         public string MailGroup { get; set; }
 
         public int LeaderId { get; set; }

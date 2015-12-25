@@ -744,5 +744,15 @@
 		<resource reference="sitejs"/>
 		<resource path="~/scripts/views/employee.message.js" />
 	</resourceSet>
+    
+  <resourceSet name="departmentjs" type="js">
+    <resource reference="sitejs"/>
+    <resource path="~/scripts/views/department/department.js" />
+  </resourceSet>
+    <resourceSet name="departmenteditjs" type="js">
+      <resource reference="sitejs"/>
+      <resource path="~/scripts/views/department/department.edit.js" />
+    </resourceSet>
+
   </resourceSets>
 </combres>

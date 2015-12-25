@@ -46,11 +46,11 @@ namespace Fanex.NexHR.ReminderService.Services
 
         public void ExcuteJob()
         {
-            //// RemindAttendance();
-            var date = DateTime.Now;
-            var x = FormatTime(date);
-            Console.WriteLine("I am working");
-            System.Threading.Thread.Sleep(2000);
+            RemindAttendance();
+            ////var date = DateTime.Now;
+            ////var x = FormatTime(date);
+            ////Console.WriteLine("I am working");
+            ////System.Threading.Thread.Sleep(2000);
         }
 
         public void RemindAttendance()
@@ -69,7 +69,7 @@ namespace Fanex.NexHR.ReminderService.Services
             IList<EmployeeMissingCheckInOutModel> employees = GetEmployeeMissingCheckInOut();
             foreach (EmployeeMissingCheckInOutModel employee in employees)
             {
-                if (employee.Type == 1)
+                if (employee.CheckInOutType == 1)
                 {
                     RemindForMissingCheckIn(employee);
                 }
@@ -103,7 +103,7 @@ namespace Fanex.NexHR.ReminderService.Services
             IList<EmployeeLateInEarlyOutModel> employees = GetEmployeeLateInEarlyOut();
             foreach (EmployeeLateInEarlyOutModel employee in employees)
             {
-                if (employee.Type == 3)
+                if (employee.LateInEarlyOutType == 3)
                 {
                     RemindForLateIn(employee);
                 }

@@ -9,9 +9,6 @@
 
 namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// MemberSchedule Model.
-    /// </summary>
     public class MemberOrderModel
     {
         public int EmployeeId { get; set; }

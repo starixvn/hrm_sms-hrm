@@ -71,7 +71,6 @@
     <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="HRLeaderDashboardModel.cs" />
     <Compile Include="MemberOrderModel.cs" />
-    <Compile Include="MemberScheduleOrderModel.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MySpaceModel.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />

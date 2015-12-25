@@ -53,7 +53,15 @@
             @Html.ValidationMessageFor(model => model.TeamName)
         </div>
     </div>
-    
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.DepartmentId, Labels.Department)
+        </div>
+        <div class="input">
+            @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"))
+            @Html.ValidationMessage("DepartmentId")
+        </div>
+    </div>
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.Leader, "Head")

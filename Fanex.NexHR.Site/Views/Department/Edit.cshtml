@@ -1,0 +1,98 @@
+﻿@using Fanex.NexHR.ViewModels.Department
+@model EditDepartmentViewModel
+
+@{
+    ViewBag.Title = @Labels.EditDivision;
+}
+
+@section css{
+    @Url.CombresLink("sitecss")
+}
+@section js{
+    @Url.CombresLink("departmenteditjs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.SASpace</a>
+    <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2>@Labels.Edit</h2>
+
+@using (Html.BeginForm())
+{
+<div class="bunhat">
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.DeprtamentId)
+    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+    {
+        <div class="success">@Messages.DepartmentUpdated</div>
+        @Html.Hidden("Successed", true)
+    }
+
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Code)
+        </div>
+        <div class="input">
+            @Html.TextBoxFor(model => model.Code, new { maxlength = "50" })
+            @Html.ValidationMessageFor(model => model.Code)
+        </div>
+    </div>
+    
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="input">
+            @Html.TextBoxFor(model => model.Name, new { maxlength = "200" })
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+    </div>
+    
+     <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.ParentId, "Parent")
+        </div>
+        <div class="input">
+            @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"))
+            @Html.ValidationMessage("ParentId")
+        </div>
+    </div>
+
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Manager)
+        </div>
+        <div class="input">
+            @Html.TextBox("Manager", Model.Manager, new { placeholder = Messages.SearchEmployeeWatermark })
+            
+            @Html.ValidationMessage("Manager")
+            
+            @Html.HiddenFor(model => model.Manager)
+            @Html.HiddenFor(model => model.ManagerId)
+        </div>
+    </div>
+
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.IsActive)
+        </div>
+        <div class="input">
+            @Html.CheckBoxFor(model => model.IsActive)
+        </div>
+    </div>
+    
+    <div class="formrow">
+        <div class="label">
+
+        </div>
+        <div class="input">
+            <input type="submit" value="@Labels.Update"/>
+            <a href="@Url.Action("index","department")" class="button">@Labels.Back</a>
+        </div>
+    </div>
+
+</div>
+}
+

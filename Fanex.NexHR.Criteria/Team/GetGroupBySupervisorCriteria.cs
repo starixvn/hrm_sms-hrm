@@ -20,7 +20,7 @@ namespace Fanex.NexHR.Criteria.Team
 
         public override string GetSettingKey()
         {
-            return "Group_Select";
+            return "Group_Get";
         }
 
         public override bool IsValid()

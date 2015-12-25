@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
 
     /// <summary>
     /// WorkingCalendar Service.
@@ -135,6 +136,18 @@ namespace Fanex.NexHR.Services
             }
 
             return workingCalendarList;
+        }
+
+        public IList<SupervisorModel> GetEmployeeByShiftManagement(GetEmployeeByShiftManagementCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<SupervisorModel> supervisors = null;
+            if (criteria.IsValid())
+            {
+                supervisors = this.GetData<SupervisorModel>(criteria).ToList();
+            }
+
+            return supervisors;
         }
     }
 }

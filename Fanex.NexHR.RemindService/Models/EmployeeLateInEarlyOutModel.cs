@@ -29,7 +29,7 @@ namespace Fanex.NexHR.ReminderService.Models
 
         public string Email { get; set; }
 
-        public byte Type { get; set; }
+        public byte LateInEarlyOutType { get; set; }
 
         public int? LateIn { get; set; }
 

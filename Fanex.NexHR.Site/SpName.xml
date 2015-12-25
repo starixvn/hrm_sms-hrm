@@ -235,8 +235,9 @@
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="EmployeeGroup_GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="0"></Setting>
-      <Setting Key="Group_Select" SpName="Group_Select" DbName="nexhrx" Plain="0">
+      <Setting Key="Group_Get" SpName="Group_Get" DbName="nexhrx" Plain="0">
         <Mapping DataField="groupId" ObjectProperty="Id"/>
+        <Mapping DataField="DepartmentId" ObjectProperty="Id"/>
         <Mapping DataField="leaderID" ObjectProperty="Id"/>
         <Mapping DataField="LeaderNickName" ObjectProperty="NickName"/>
         <Mapping DataField="LeaderFullName" ObjectProperty="FullName"/>
@@ -384,4 +385,29 @@
 		<Setting Key="Message_GetDetailByEmployee" SpName="Message_GetDetailByEmployee" DbName="nexhrx" Plain="0"></Setting>
 		<Setting Key="Message_GetUnreadMessageByEmployee" SpName="Message_GetUnreadMessageByEmployee" DbName="nexhrx" Plain="0"></Setting>
 	</Function>
+
+  <Function Name="Department">
+    <Setting Key="Department_Insert" SpName="Department_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Department_Update" SpName="Department_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Department_GetByParentId" SpName="Department_GetByParentId" DbName="nexhrx" Plain="0">
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" />
+      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Department_GetById" SpName="Department_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" />
+      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Department_GetParent" SpName="Department_GetParent" DbName="nexhrx" Plain="0">
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" />
+      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
+
+  <Function Name="Calendar">
+    <Setting Key="EmployeeSupervisor_GetEmployeeByShiftManagement" SpName="EmployeeSupervisor_GetEmployeeByShiftManagement" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
 </Functions>

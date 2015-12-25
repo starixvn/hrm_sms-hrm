@@ -13,10 +13,9 @@ namespace Fanex.NexHR.ViewModels.EmployeeGroup
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Resources;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Models;
 
-    /// <summary>
-    /// Team ViewModel.
-    /// </summary>
     public class TeamViewModel
     {
         public int Id { get; set; }
@@ -28,6 +27,9 @@ namespace Fanex.NexHR.ViewModels.EmployeeGroup
         [Required]
         [Display(Name = "Name", ResourceType = typeof(Labels))]
         public string TeamName { get; set; }
+
+        [Required]
+        public int DepartmentId { get; set; }
 
         [Email]
         public string MailGroup { get; set; }
@@ -52,5 +54,7 @@ namespace Fanex.NexHR.ViewModels.EmployeeGroup
         public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
+
+        public IList<Department> Departments { get; set; }
     }
 }

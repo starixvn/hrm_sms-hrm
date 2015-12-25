@@ -796,7 +796,7 @@
     <value>Void</value>
   </data>
   <data name="Department" xml:space="preserve">
-    <value>Department</value>
+    <value>Division</value>
   </data>
   <data name="ScheduleArrange" xml:space="preserve">
     <value>Schedule Arrange</value>
@@ -1130,5 +1130,20 @@
   </data>
   <data name="ManpowerCategoryReportTitle" xml:space="preserve">
     <value>SMS TOTAL MANPOWER AND JOB CATEGORY REPORT</value>
+  </data>
+  <data name="DepartmentManagement" xml:space="preserve">
+    <value>Division Management</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Parent" xml:space="preserve">
+    <value>Parent</value>
+  </data>
+  <data name="AddNewDivision" xml:space="preserve">
+    <value>Add New Division</value>
+  </data>
+  <data name="EditDivision" xml:space="preserve">
+    <value>Edit Division</value>
   </data>
 </root>

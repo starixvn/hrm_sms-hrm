@@ -276,10 +276,6 @@ namespace Fanex.NexHR.Controllers
             return Json(workingSchedule, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Workings the calendars.
-        /// </summary>
-        /// <returns>ActionResult return View Working Calendars.</returns>
         public ActionResult WorkingCalendars()
         {
             var currentDate = DateTime.Now;
@@ -347,18 +343,13 @@ namespace Fanex.NexHR.Controllers
             return PartialView(viewModel);
         }
 
-        /// <summary>
-        /// Action to order schedule member.
-        /// </summary>
-        /// <returns>Action Result.</returns>
         public ActionResult MemberScheduleInOrder()
         {
-            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            var criteria = new GetEmployeeByShiftManagementCriteria()
             {
                 EmpId = this.CurrentUser.Id,
-                Role = (int)RoleSystem.ShiftManager
             };
-            IList<SupervisorModel> shiftManagerModel = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
+            IList<SupervisorModel> shiftManagerModel = _workingCalendarService.GetEmployeeByShiftManagement(criteria);
 
             var model = new ShiftManagerViewModel
             {
@@ -370,42 +361,21 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action to order schedule member.
-        /// </summary>
-        /// <param name="employeeOrders">Employee Orders.</param>
-        /// <returns>Boolean to check.</returns>
         [HttpPost]
         public ActionResult MemberScheduleInOrder(string employeeOrders)
         {
-            var errorCode = 0;
-            var message = string.Empty;
             var employeeOrdersDetail = JsonConverter.FromJsonArray<MemberOrderModel>(employeeOrders);
-            var memberOrders = new MemberScheduleOrderModel
+
+            var criteria = new UpdateOrderShiftArrangeCriteria()
             {
-                SupervisorId = this.CurrentUser.Id,
                 MemberOrders = employeeOrdersDetail,
-                ModifiedBy = this.CurrentUser.Id
+                SupervisorId = this.CurrentUser.Id
             };
+            CommandResult result = _employeeService.UpdateOrderShiftArrange(criteria);
 
-            var updateOrderShiftArrangeCriteria = new UpdateOrderShiftArrangeCriteria()
-            {
-                EmployeeOrders = memberOrders.MemberOrderXML,
-                ModifiedBy = memberOrders.ModifiedBy,
-                SupervisorId = memberOrders.SupervisorId
-            };
-            _employeeService.UpdateOrderShiftArrange(updateOrderShiftArrangeCriteria);
-
-            return Json(new { errorCode, message }, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Function to convert WorkingCalendar To ScheduleModel.
-        /// </summary>
-        /// <param name="fromDate">From Date.</param>
-        /// <param name="toDate">The to date.</param>
-        /// <param name="workingCalendars">WorkingCalendarModel List.</param>
-        /// <returns>ScheduleModel List.</returns>
         [NonAction]
         private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
         {
@@ -449,12 +419,6 @@ namespace Fanex.NexHR.Controllers
             return scheduleModels;
         }
 
-        /// <summary>
-        /// Function to set Working Calendar For DayOfWeek.
-        /// </summary>
-        /// <param name="scheduleModel">Input Schedule Model.</param>
-        /// <param name="workingCalendar">WorkingCalendar Model.</param>
-        /// <returns>Schedule Model.</returns>
         [NonAction]
         private ScheduleArrangeViewModel SetWorkingCalendarForDayOfWeek(ScheduleArrangeViewModel scheduleModel, WorkingCalendarModel workingCalendar)
         {
@@ -504,13 +468,6 @@ namespace Fanex.NexHR.Controllers
             return GetStartOfWeek(currentDate).AddDays(6);
         }
 
-        /// <summary>
-        /// Method check User Change Shift or Half Day Off.
-        /// </summary>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="viewModel">Working Calendars ViewModel.</param>
-        /// <param name="userChangeShift">UserChangeShift model.</param>
-        /// <param name="halfDayOff">HalfDayOff model.</param>
         [NonAction]
         private void CheckChangeShiffAndHalfDayOff(
             DateTime fromDate, 

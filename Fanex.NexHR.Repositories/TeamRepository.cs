@@ -31,14 +31,15 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var team = db.QueryEntity<Team, Employee, Employee, Team>(
-                        (t, ld, asld) =>
+                var team = db.QueryEntity<Team, Department, Employee, Employee, Team>(
+                        (t, de, ld, asld) =>
                         {
+                            t.Department = de;
                             t.Leader = ld;
                             t.AssistantLeader = asld;
                             return t;
                         },
-                        splitOn: "leaderID, AssistantLeaderId",
+                        splitOn: "DepartmentId, leaderID, AssistantLeaderId",
                         parameters: criteria.GetSpParams());
 
                 return team;
@@ -54,14 +55,15 @@ namespace Fanex.NexHR.Repositories
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var teams = db.Query<Team, Employee, Employee, Team>(
-                        (t, ld, asld) =>
+                var teams = db.Query<Team, Department, Employee, Employee, Team>(
+                        (t, de, ld, asld) =>
                         {
+                            t.Department = de;
                             t.Leader = ld;
                             t.AssistantLeader = asld;
                             return t;
                         },
-                        splitOn: "leaderID, AssistantLeaderId",
+                        splitOn: "DepartmentId, leaderID, AssistantLeaderId",
                         parameterValues: criteria.GetSpParams()).ToList();
 
                 return teams;

@@ -169,6 +169,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Division.
+        /// </summary>
+        public static string AddNewDivision {
+            get {
+                return ResourceManager.GetString("AddNewDivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new shift.
         /// </summary>
         public static string AddNewShift {
@@ -709,11 +718,20 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Department.
+        ///   Looks up a localized string similar to Division.
         /// </summary>
         public static string Department {
             get {
                 return ResourceManager.GetString("Department", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Division Management.
+        /// </summary>
+        public static string DepartmentManagement {
+            get {
+                return ResourceManager.GetString("DepartmentManagement", resourceCulture);
             }
         }
         
@@ -786,6 +804,15 @@ namespace Fanex.NexHR.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Division.
+        /// </summary>
+        public static string EditDivision {
+            get {
+                return ResourceManager.GetString("EditDivision", resourceCulture);
             }
         }
         
@@ -1528,6 +1555,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manager.
+        /// </summary>
+        public static string Manager {
+            get {
+                return ResourceManager.GetString("Manager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manager&apos;s View.
         /// </summary>
         public static string ManagerView {
@@ -2046,6 +2082,15 @@ namespace Fanex.NexHR.Resources {
         public static string OvertimeReport {
             get {
                 return ResourceManager.GetString("OvertimeReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent.
+        /// </summary>
+        public static string Parent {
+            get {
+                return ResourceManager.GetString("Parent", resourceCulture);
             }
         }
         

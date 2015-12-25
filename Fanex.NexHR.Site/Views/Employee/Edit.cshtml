@@ -360,7 +360,7 @@
 			<div class="boxcontent">
 				<div class="line">
 					<div class="label">
-						@Html.Label("Unit")
+						@Html.Label("Cost center")
 					</div>
 					<div class="input">
 						@Html.EditorFor(model => model.Unit)
@@ -371,7 +371,7 @@
 				</div>
 				<div class="line">
 					<div class="label">
-						@Html.Label("Department/Team")
+						@Html.Label("Department/Section")
 					</div>
 					<div class="input">
 						@Html.DropDownListFor(model => model.Team.Id, new SelectList(ViewBag.Groups, "Id", "Name"), "--Select a Team--")

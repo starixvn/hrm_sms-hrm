@@ -33,7 +33,15 @@ namespace Fanex.NexHR.Repositories
                 var entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
-                            e.Team = new Team { Id = t.TeamID, Name = t.Team };
+                            e.Team = new Team
+                            {
+                                Id = t.TeamID,
+                                Name = t.Team,
+                                Department = new Department 
+                                {
+                                    Id = t.DepartmentId == null ? -1 : t.DepartmentId
+                                }
+                            };
                             return e;
                         },
                         splitOn: "TeamID",

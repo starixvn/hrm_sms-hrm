@@ -67,6 +67,7 @@
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
+    <Compile Include="Calendar\GetEmployeeByShiftManagementCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
@@ -74,6 +75,12 @@
     <Compile Include="Calendar\GetWorkingCalendarsForShiftArrangeCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Calendar\InsertOrUpdateWorkingCalendarsCriteria.cs" />
+    <Compile Include="Department\GetParentByDepartmentCriteria.cs" />
+    <Compile Include="Department\UpdateDepartmentCriteria.cs" />
+    <Compile Include="Department\InsertDepartmentCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
+    <Compile Include="Department\DeleteDepartmentCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
@@ -225,6 +232,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

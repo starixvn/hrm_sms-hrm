@@ -1,0 +1,108 @@
+﻿@using Fanex.NexHR.ViewModels.Department
+@model DepartmentViewModel
+@{
+    ViewBag.Title = @Labels.DepartmentManagement;
+}
+@section css{
+    @Url.CombresLink("sitecss")
+}
+@section js{
+    @Url.CombresLink("departmentjs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
+}
+<h2>@ViewBag.Title</h2>
+<div class="button-icon">
+    @using (Html.BeginForm())
+{
+        var gender = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Unknown", Value = ""}, 
+                        new SelectListItem() {Text = "Female", Value = "0"},
+                        new SelectListItem() {Text = "Male", Value = "1"}
+                    };
+						
+						@Html.DropDownListFor(model => model.IsActive, gender)
+}
+    <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")</div>
+
+    
+<div class="clear">
+</div>
+<div class="space">
+</div>
+<table class="data" style="width: auto; min-width: 500px;">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>@Labels.Code
+            </th>
+            <th>@Labels.Department
+            </th>
+            <th>@Labels.Manager
+            </th>
+            <th>@Labels.Parent
+            </th>
+            <th>
+                @Labels.Edit
+            </th>
+            <th>
+                @Labels.Delete
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Departments != null)
+        {
+            int index = 1;
+            foreach (Department department in Model.Departments)
+            {
+            <tr id="row@(department.Id)">
+                <td>@(index++)
+                </td>
+                <td>@department.Code
+                </td>
+                <td>@department.Name
+                </td>
+                @if (department.Manager != null)
+                {
+                    <td class="tooltip" title="@department.Manager.FullName">@department.Manager.NickName
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+                }
+
+                @if (department.Parent != null)
+                {
+                    <td>@department.Parent.Name
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    </td>
+                }
+                
+                <td class="cmd">
+                    <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
+                        <img src="~/Styles/Images/edit-icon.png" /></a>
+                </td>
+                <td>
+                    <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
+                   <img src="~/Styles/Images/delete-icon.png" /></a>
+                </td>
+            </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 7) 
+        }
+    </tbody>
+</table>

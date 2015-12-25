@@ -214,6 +214,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Division&apos;s updated!.
+        /// </summary>
+        public static string DepartmentUpdated {
+            get {
+                return ResourceManager.GetString("DepartmentUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User was disabled..
         /// </summary>
         public static string DisabledUser {

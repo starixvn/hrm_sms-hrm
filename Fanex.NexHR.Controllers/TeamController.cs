@@ -21,6 +21,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Supervisor;
+    using Fanex.NexHR.Criteria.Department;
 
     /// <summary>
     /// Team Controller.
@@ -29,15 +30,17 @@ namespace Fanex.NexHR.Controllers
     public class TeamController : BaseController
     {
         private readonly ITeamService _teamService;
+        private readonly IDepartmentService _departmentService;
 
         public TeamController()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public TeamController(ITeamService teamService)
+        public TeamController(ITeamService teamService, IDepartmentService departmentService)
         {
             _teamService = teamService ?? new TeamService();
+            _departmentService = departmentService ?? new DepartmentService();
         }
 
         [Authorize(Roles = "HR")]
@@ -55,7 +58,8 @@ namespace Fanex.NexHR.Controllers
             var model = new TeamViewModel
             {
                 CreatedDate = DateTime.Now,
-                CreatedBy = this.CurrentUser.Id
+                CreatedBy = this.CurrentUser.Id,
+                Departments = GetAllDepartment(isActive: true)
             };
             return View(model);
         }
@@ -69,12 +73,14 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Create(TeamViewModel model)
         {
+            model.Departments = GetAllDepartment(isActive: true);
             if (ModelState.IsValid)
             {
                 var criteria = new InsertNewGroupCriteria
                 {
                     Code = model.TeamCode,
                     Name = model.TeamName,
+                    DepartmentId = model.DepartmentId,
                     MailGroup = model.MailGroup,
                     LeaderId = model.LeaderId,
                     AssistantLeaderId = model.AssistantLeaderId,
@@ -132,7 +138,9 @@ namespace Fanex.NexHR.Controllers
                 AssistantLeader = team.AssistantLeader != null ? team.AssistantLeader.DisplayName : string.Empty,
                 AssistantLeaderId = team.AssistantLeader != null ? team.AssistantLeader.Id : 0,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = this.CurrentUser.Id
+                ModifiedBy = this.CurrentUser.Id,
+                DepartmentId = team.Department != null ? team.Department.Id : 0,
+                Departments = GetAllDepartment(isActive: true)
             };
             return View(model);
         }
@@ -146,6 +154,8 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult Edit(TeamViewModel model)
         {
+            model.Departments = GetAllDepartment(isActive: true);
+
             if (ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(model.AssistantLeader))
@@ -158,6 +168,7 @@ namespace Fanex.NexHR.Controllers
                     GroupId = model.Id,
                     Code = model.TeamCode,
                     Name = model.TeamName,
+                    DepartmentId = model.DepartmentId,
                     MailGroup = model.MailGroup,
                     LeaderId = model.LeaderId,
                     AssistantLeaderId = model.AssistantLeaderId,
@@ -273,6 +284,17 @@ namespace Fanex.NexHR.Controllers
             bool inserted = _teamService.InsertTeamShiftManager(criteria);
 
             return Json(new { result = inserted }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IList<Department> GetAllDepartment(bool? isActive)
+        {
+            var criteria = new GetDepartmentByParentIdCriteria()
+            {
+                IsActive = isActive
+            };
+            IList<Department> departments = _departmentService.GetDepartment(criteria);
+
+            return departments;
         }
     }
 }

@@ -168,6 +168,9 @@
   <data name="DeletedUser" xml:space="preserve">
     <value>User was deleted.</value>
   </data>
+  <data name="DepartmentUpdated" xml:space="preserve">
+    <value>Division's updated!</value>
+  </data>
   <data name="DisabledUser" xml:space="preserve">
     <value>User was disabled.</value>
   </data>

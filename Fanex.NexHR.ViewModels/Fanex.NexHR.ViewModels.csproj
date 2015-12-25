@@ -49,6 +49,9 @@
     <Compile Include="AnnualLeave\AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
     <Compile Include="Calendar\EmployeeShiftViewModel.cs" />
+    <Compile Include="Department\AddDepartmentViewModel.cs" />
+    <Compile Include="Department\DepartmentViewModel.cs" />
+    <Compile Include="Department\EditDepartmentViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />

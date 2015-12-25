@@ -13,6 +13,9 @@
         <thead>
             <tr>
                 <th>
+                    #
+                </th>
+                <th>
                     Order Code
                 </th>
                 <th rowspan="2" class="supervisor">
@@ -29,9 +32,12 @@
         <tbody>
             @if (Model != null && Model.ShiftManagerList != null)
             {
+                int index = 0;
 				foreach (SupervisorModel item in Model.ShiftManagerList)
                 {
+                    index++;
                 <tr>
+                    <td>@index</td>
                     <td>
                         <input type="text" class="ordercode" value="@item.OrderCode"/>
                     </td>

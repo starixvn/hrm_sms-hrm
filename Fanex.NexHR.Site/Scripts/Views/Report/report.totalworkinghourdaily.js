@@ -1,4 +1,5 @@
 ﻿'use strict';
+/*global _global*/
 
 $(document).ready(function () {
     $("#TeamId").multiselect();

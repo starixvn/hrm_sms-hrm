@@ -4,18 +4,19 @@
 // </copyright>
 // --------------------------------------------------------------------------
 // <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
+//   <change who="Quinn.Vo" date="2015.12.21">Created</change>
 // </history>
 
 namespace Fanex.NexHR.Models
 {
     using System;
 
-    /// <summary>
-    /// Department Class.
-    /// </summary>
     public class Department : EntityBase<int>
     {
         public Employee Manager { get; set; }
+
+        public Department Parent { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
