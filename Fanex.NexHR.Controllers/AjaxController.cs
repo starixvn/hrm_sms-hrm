@@ -105,6 +105,7 @@ namespace Fanex.NexHR.Controllers
         /// <returns>Command Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
             var criteria = new ProcessRequestCriteria()

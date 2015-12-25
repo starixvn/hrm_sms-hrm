@@ -38,6 +38,7 @@ namespace Fanex.NexHR.Controllers
     using NPOI.HSSF.UserModel;
 
     [Authorize]
+    [ValidateInput(false)]
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
