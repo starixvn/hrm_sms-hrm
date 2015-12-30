@@ -162,19 +162,18 @@ namespace Fanex.NexHR.Controllers
         }
 
         [HttpGet]
-        [HttpPost]
-        public IList<System.Web.Mvc.SelectListItem> GetGroupExtension(bool isInternal, int? groupId)
+        public ActionResult GetGroupExtension(bool isInternal, int? groupId)
         {
+            IList<SelectListItem> groups = null;
             if (isInternal)
             {
                 var getAllGroupCriteria = new GetAllGroupCriteria();
-                IList<Team> data = _teamService.GetAll(getAllGroupCriteria);
-                var selectList = data.Select(x => new System.Web.Mvc.SelectListItem
+                IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+                groups = teams.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList();
-                return selectList;
             }
             else
             {
@@ -183,14 +182,15 @@ namespace Fanex.NexHR.Controllers
                     IsInternal = isInternal,
                     GroupID = groupId
                 };
-                IEnumerable<ExtensionNoModel> data = _extensionNumberService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
-                var selectList = data.Select(x => new System.Web.Mvc.SelectListItem
+                IEnumerable<ExtensionNoModel> extensionGroups = _extensionNumberService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
+                groups = extensionGroups.Select(x => new SelectListItem
                 {
                     Text = x.TeamName,
                     Value = x.TeamId.ToString()
                 }).ToList();
-                return selectList;
             }
+
+            return Json(groups, JsonRequestBehavior.AllowGet);
         }
 
         private void CheckExternalEmployee(ExtensionNoModel model)

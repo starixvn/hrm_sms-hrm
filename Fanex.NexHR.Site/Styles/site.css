@@ -1043,3 +1043,8 @@ table.data tr td.weekend
      min-width: 0;
     max-width: none;
     }
+    
+#IsActive
+{
+    min-width: 50px;
+    }

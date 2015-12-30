@@ -16,9 +16,6 @@ namespace Fanex.NexHR.ViewModels.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
-    /// <summary>
-    /// LeaveRequest ViewModel.
-    /// </summary>
     public class LeaveRequestViewModel : IValidatableObject
     {
         public long RequestId { get; set; }
@@ -79,11 +76,6 @@ namespace Fanex.NexHR.ViewModels.Request
 
         public RequestStatus Status { get; set; }
 
-        /// <summary>
-        /// Method Validate.
-        /// </summary>
-        /// <param name="validationContext">Validation Context.</param>
-        /// <returns>List Validation results.</returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             IList<ValidationResult> result = new List<ValidationResult>();

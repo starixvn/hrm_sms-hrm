@@ -5,7 +5,7 @@ function bindingDataToDropdown() {
 	var dropdownTeam = $("#TeamId");
 	
 	if ($("#IsInternal").is(":checked")) {
-		$.getJSON(_global.root + 'api/report/GetGroupExtension', { isInternal: true, groupId: null },
+	    $.getJSON(_global.root + 'extensionnumber/GetGroupExtension', { isInternal: true, groupId: null },
 		function (data) {
 			if (data[0] != null) {
 				dropdownTeam.empty();
@@ -18,7 +18,7 @@ function bindingDataToDropdown() {
 		});
 	}
 	else {
-		$.getJSON(_global.root + 'api/report/GetGroupExtension', { isInternal: false, groupId: null },
+	    $.getJSON(_global.root + 'extensionnumber/GetGroupExtension', { isInternal: false, groupId: null },
 		function (data) {
 			console.log(data);
 			if (data[0] != null) {
@@ -112,7 +112,7 @@ $(document).ready(function () {
 
 	var successed = $("#successed").val();
 	if (successed === "true") {
-		document.location = _global.root + "report/extensionno/";
+	    document.location = _global.root + "extensionnumber/extensionno/";
 	}
 
 });

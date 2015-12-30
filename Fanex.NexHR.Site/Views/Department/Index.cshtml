@@ -13,19 +13,22 @@
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-<div class="button-icon">
-    @using (Html.BeginForm())
+
+@using (Html.BeginForm())
 {
-        var gender = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "Unknown", Value = ""}, 
-                        new SelectListItem() {Text = "Female", Value = "0"},
-                        new SelectListItem() {Text = "Male", Value = "1"}
-                    };
-						
-						@Html.DropDownListFor(model => model.IsActive, gender)
-}
+    var gender = new List<SelectListItem>
+    {
+        new SelectListItem() {Text = "All", Value = ""}, 
+        new SelectListItem() {Text = "Active", Value = "0"},
+        new SelectListItem() {Text = "Inactive", Value = "1"}
+    };
+    @Html.LabelFor(model=> model.IsActive, @Labels.Status)
+	@Html.DropDownListFor(model => model.IsActive, gender)
+    <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
+    <div class="button-icon">
     <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")</div>
+}
+
 
     
 <div class="clear">

@@ -10,7 +10,7 @@ $(document).ready(function () {
 			{ extId: id },
 			function (response) {
 				if (response) {
-					document.location = '/report/extensionno';
+				    document.location = '/extensionnumber/extensionno';
 				}
 				else {
 					alert(_messages.errorTryAgain);
@@ -28,7 +28,7 @@ $(document).ready(function () {
 			{ extId: id },
 			function (response) {
 				if (response) {
-					document.location = '/report/ManageExternalGroup';
+				    document.location = '/extensionnumber/ManageExternalGroup';
 				}
 				else {
 					alert(_messages.errorTryAgain);
@@ -77,7 +77,7 @@ $(function () {
 						{ groupName: name.val() },
 						function (response) {
 							if (response) {
-								document.location = '/report/ManageExternalGroup';
+							    document.location = '/extensionnumber/ManageExternalGroup';
 							}
 							else {
 								alert(_messages.errorTryAgain);
@@ -143,7 +143,7 @@ $(function () {
 						{ groupName: name.val(), extId: id },
 						function (response) {
 							if (response) {
-								document.location = '/report/ManageExternalGroup';
+							    document.location = '/extensionnumber/ManageExternalGroup';
 							}
 							else {
 								alert(_messages.errorTryAgain);

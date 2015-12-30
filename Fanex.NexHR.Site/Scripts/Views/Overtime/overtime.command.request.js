@@ -54,7 +54,7 @@ window.CommandOvertime = (function ($) {
 			});
 		},
 		notAcceptRequest: function (command, requestId, roleId) {
-			confirm('Are you sure you dont want to verify?', function () {
+			confirm('Are you sure you want to not verify?', function () {
 				CommandOvertime.commandProcessRequest(command, requestId, roleId);
 			});
 		},
