@@ -142,12 +142,9 @@ namespace Fanex.NexHR.Controllers
                 };
                 CommandResult commandResult = _extensionNumberService.UpdateExtensionNoMember(updateExtensionNoCriteria);
                 ViewBag.Updated = commandResult.Code == 0;
-                return RedirectToAction("ExtensionNo");
             }
-            else
-            {
-                return View();
-            }
+
+            return View(model);
         }
 
         public ActionResult ManageExternalGroup()

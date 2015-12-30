@@ -10,7 +10,7 @@ $(document).ready(function () {
 			{ extId: id },
 			function (response) {
 				if (response) {
-				    document.location = '/extensionnumber/extensionno';
+				    document.location = '/extensionnumber/index';
 				}
 				else {
 					alert(_messages.errorTryAgain);
