@@ -19,13 +19,13 @@
 
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
+@using (Html.BeginForm())
+{ 
     @Html.HiddenFor(model => model.EmployeeId)
     @Html.Hidden("RequestType", (int)RequestType.Leave)
     @Html.Hidden("RequestId", Model.RequestId)
     @Html.Hidden("IsView", (bool)ViewBag.IsView)
     @Html.ValidationSummary()
-    <div class="validation-summary-errors" id="errors-model-state">
-    </div>
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.RefNo, Labels.RefNo1)
@@ -164,7 +164,7 @@
     <div class="formrow">
         <div id="tbldetail"></div>
     </div>
-    @if (!(bool)ViewBag.IsView)
+    if (!(bool)ViewBag.IsView)
     { 
         <div class="formrow">
             <div class="label">
@@ -178,4 +178,5 @@
             </div>
         </div>
     }
+}
 </div>

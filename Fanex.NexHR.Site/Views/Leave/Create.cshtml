@@ -16,14 +16,14 @@
 }
 <h2>@Labels.Create</h2>
 <div class="bunhat">
+@using (Html.BeginForm())
+{ 
     @Html.HiddenFor(model => model.EmployeeId)
     @Html.Hidden("RequestType", (int)RequestType.Leave)
     @Html.Hidden("RequestId", -1)
     @Html.ValidationSummary()
-    <div class="validation-summary-errors" id="errors-model-state">
-    </div>
-        
-    @if (Model.TotalRequest > 0)
+
+    if (Model.TotalRequest > 0)
     { 
     <div class="ui-state-error ui-corner-all">
         <p>
@@ -190,4 +190,5 @@
         <div class="clear">
         </div>
     </div>
+}
 </div>

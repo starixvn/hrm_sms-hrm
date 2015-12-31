@@ -56,8 +56,7 @@ var LeaveRequest = (function ($) {
             $(".datepicker").datepicker().attr('readonly', 'readonly');
             // for edit
             LeaveRequest.enableControlForEdit();
-            //LeaveRequest.bindLeaveRequestDetailForEdit();
-            //
+
             LeaveRequest.halfDayOff.change(function () {
                 LeaveRequest.bindHalfDay();
             });
@@ -86,11 +85,21 @@ var LeaveRequest = (function ($) {
                 LeaveRequest.saveLeaveRequest();
             });
 
-            //LeaveRequest.eventAfterChangeEmployee();
             if (LeaveRequest.leaveTypeId.val() === LeaveRequest.generalLeaveType) {
-                LeaveRequest.showLeaveDetail(LeaveRequest.employeeId.val(), LeaveRequest.fromDate.val(), LeaveRequest.toDate.val(), LeaveRequest.leaveTypeId.val());
+                LeaveRequest.showLeaveDetail(
+                    LeaveRequest.employeeId.val(),
+                    LeaveRequest.fromDate.val(),
+                    LeaveRequest.toDate.val(),
+                    LeaveRequest.leaveTypeId.val());
             }
             LeaveRequest.disableControlForDetail();
+        },
+        employeeChange: function () {
+            LeaveRequest.getVerifier();
+            LeaveRequest.getApprover();
+            LeaveRequest.getLeaveBalance();
+            LeaveRequest.getDisableDate();
+            LeaveRequest.getLeaveDetail();
         },
         timeChange: function () {
             if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
@@ -111,11 +120,11 @@ var LeaveRequest = (function ($) {
             var leaveDetailContainer = $("#tbldetail");
             if (leaveDetailContainer.length > 0) {
                 $.get(_global.root + "Leave/LeaveRequestDetail",
-				{ "employeeId": employeeId, "fromDate": fromDate, "toDate": toDate, "requestId": requestId })
-				.done(function (content) {
-				    leaveDetailContainer.empty();
-				    leaveDetailContainer.html(content);
-				});
+                { "employeeId": employeeId, "fromDate": fromDate, "toDate": toDate, "requestId": requestId })
+                .done(function (content) {
+                    leaveDetailContainer.empty();
+                    leaveDetailContainer.html(content);
+                });
             }
         },
         saveLeaveRequest: function () {
@@ -235,185 +244,83 @@ var LeaveRequest = (function ($) {
             });
         },
         dateChange: function () {
-            var isHalfday = LeaveRequest.halfDayOff.attr("checked");
-            var leaveType = LeaveRequest.leaveTypeId.val();
-            var fromDate = LeaveRequest.fromDate.val();
-            var toDate = LeaveRequest.toDate.val();
-            var employeeId = LeaveRequest.employeeId.val();
-
-            if (leaveType === LeaveRequest.generalLeaveType) {
-                LeaveRequest.showLeaveDetail(employeeId, fromDate, toDate, LeaveRequest.requestId.val());
-            }
-            else {
-                var leaveDetailContainer = $("#tbldetail");
-                leaveDetailContainer.empty();
-
-                if (isHalfday) {
-                    LeaveRequest.bindHalfDay();
-                }
-                else {
-                    $.ajax({
-                        url: _global.root + 'api/employee/GetRangeDate',
-                        data: {
-                            leaveTypeId: LeaveRequest.leaveTypeId.val(),
-                            employeeId: LeaveRequest.employeeId.val(),
-                            fromDate: LeaveRequest.fromDate.val(),
-                            toDate: LeaveRequest.toDate.val()
-                        },
-                        async: false,
-                        success: function (response) {
-                            if (response != null) {
-                                LeaveRequest.totalDays.val(response);
-                            }
-                        }
-                    });
-                }
-            }
-
-            $.getJSON(_global.root + 'leave/GetLeaveBalance',
-				{
-				    employeeId: LeaveRequest.employeeId.val(),
-				    requestId: LeaveRequest.requestId.val(),
-				    toDate: LeaveRequest.toDate.val()
-				},
-				function (response) {
-				    if (response != null) {
-				        LeaveRequest.annualBalance.html(response.AnnualBalance);
-				        LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
-				        LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
-				    }
-				});
+            LeaveRequest.getLeaveDetail();
+            LeaveRequest.getLeaveBalance();
         },
         leaveTypeChange: function () {
-            var leaveType = LeaveRequest.leaveTypeId.val();
-            var maxDate = new Date(LeaveRequest.fromDate.attr("maxDate"));
-            var newMaxDate = maxDate;
-            var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
-            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
-
-            if (leaveType === LeaveRequest.generalLeaveType) {
-                $("#grbHalfDay").hide();
-                $("#grbTotalDay").hide();
-                $('.time').hide();
-                LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
-                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
-            }
-            else {
-                $("#grbHalfDay").show();
-                $("#grbTotalDay").show();
-
-                LeaveRequest.enableControlforHalfday();
-                var leaveDetailContainer = $("#tbldetail");
-                leaveDetailContainer.empty();
-
-                if (leaveType === LeaveRequest.maternityLeaveType) {
-                    tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
-                    LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-                    LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
-                }
-                else if (leaveType === LeaveRequest.publicHolidayLeaveType) {
-                    LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-                    LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
-                }
-                else {
-                    $.getJSON(_global.root + 'api/employee/GetUnavailableDates',
-					{
-					    employeeId: LeaveRequest.employeeId.val(),
-					    date: new Date().toDateString(),
-					    leaveTypeId: leaveType
-					},
-					function (response) {
-					    if (!$.isEmptyObject(response)) {
-					        LeaveRequest.fromDate.attr("disabledDate", response.join(","));
-					        LeaveRequest.toDate.attr("disabledDate", response.join(","));
-					    }
-					    else {
-					        LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
-					        LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
-					    }
-					});
-                }
-            }
-
-            LeaveRequest.dateChange();
-
-            newMaxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
-            LeaveRequest.fromDate.datepicker("option", "maxDate", newMaxDate);
-            LeaveRequest.toDate.datepicker("option", "maxDate", newMaxDate);
+            LeaveRequest.getDisableDate();
+            LeaveRequest.getLeaveDetail();
         },
         bindHalfDay: function () {
-            LeaveRequest.enableControlforHalfday();
             if (LeaveRequest.halfDayOff.prop('checked')) {
+                LeaveRequest.enableControlForHalfday();
                 LeaveRequest.totalDays.val(0.5);
-                //get shift information
-                LeaveRequest.fillTimeForHalfday();
+                LeaveRequest.getTimeByShift();
             }
             else {
+                LeaveRequest.disableControlForHalfDay();
                 LeaveRequest.totalDays.val(1);
             }
         },
-        enableControlforHalfday: function () {
-            if (LeaveRequest.halfDayOff.prop('checked')) {
-                LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
-                $('.time').show();
-                LeaveRequest.toDate.prop('readonly', true).datepicker('disable').prop('disabled', false);
-            }
-            else {
-                $('.time').hide();
-                LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
-            }
+        enableControlForHalfday: function () {
+            LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+            $('.time').show();
+            LeaveRequest.toDate.prop('readonly', true).datepicker('disable').prop('disabled', false);
         },
-        fillTimeForHalfday: function () {
+        disableControlForHalfDay: function () {
+            $('.time').hide();
+            LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
+        },
+        getTimeByShift: function () {
             $.getJSON(_global.root + 'api/shift/getshiftbydate',
-			{ employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
-			function (data) {
-			    if (data != null) {
-			        var arrTimeIn = data.BeginCheckInTime.split(":");
-			        var arrTimeOut = data.BeginCheckOutTime.split(":");
+            { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
+            function (data) {
+                if (data != null) {
+                    var arrTimeIn = data.BeginCheckInTime.split(":");
+                    var arrTimeOut = data.BeginCheckOutTime.split(":");
 
-			        var minuteFrom = parseInt(arrTimeIn[0]) * 60 + parseInt(arrTimeIn[1]);
-			        var minuteTo = parseInt(arrTimeOut[0]) * 60 + parseInt(arrTimeOut[1]);
-			        var isFromAfterday = data.IsInAfterDay;
-			        var isToAfterday = false;
-			        if (data.IsInAfterDay) {
-			            minuteFrom += 1440; //60*24
-			        }
+                    var minuteFrom = parseInt(arrTimeIn[0]) * 60 + parseInt(arrTimeIn[1]);
+                    var minuteTo = parseInt(arrTimeOut[0]) * 60 + parseInt(arrTimeOut[1]);
+                    var isFromAfterday = data.IsInAfterDay;
+                    var isToAfterday = false;
+                    if (data.IsInAfterDay) {
+                        minuteFrom += 1440; //60*24
+                    }
 
-			        if (data.IsOutAfterDay) {
-			            minuteTo += 1440;
-			        }
+                    if (data.IsOutAfterDay) {
+                        minuteTo += 1440;
+                    }
 
-			        var averageTime = (minuteFrom + minuteTo) / 2;
-			        if (averageTime >= 1440) {
-			            averageTime = averageTime - 1440;
-			            isToAfterday = true;
-			        }
+                    var averageTime = (minuteFrom + minuteTo) / 2;
+                    if (averageTime >= 1440) {
+                        averageTime = averageTime - 1440;
+                        isToAfterday = true;
+                    }
 
-			        var hour = Math.floor(averageTime / 60);
-			        var minute = Math.floor((averageTime % 60) / 30) * 30;
-			        minute = minute === 0 ? "00" : minute;
-			        if (hour < 10) {
+                    var hour = Math.floor(averageTime / 60);
+                    var minute = Math.floor((averageTime % 60) / 30) * 30;
+                    minute = minute === 0 ? "00" : minute;
+                    if (hour < 10) {
 
-			            hour = "0" + hour;
-			        }
+                        hour = "0" + hour;
+                    }
 
-			        var toTime = hour + ":" + minute;
-			        LeaveRequest.fromTime.val(data.BeginCheckInTime);
-			        LeaveRequest.toTime.val(toTime);
+                    var toTime = hour + ":" + minute;
+                    LeaveRequest.fromTime.val(data.BeginCheckInTime);
+                    LeaveRequest.toTime.val(toTime);
 
-			        $("#IsFromTimeAfterDay").attr("checked", isFromAfterday);
-			        $("#IsToTimeAfterDay").attr("checked", isToAfterday);
+                    $("#IsFromTimeAfterDay").attr("checked", isFromAfterday);
+                    $("#IsToTimeAfterDay").attr("checked", isToAfterday);
 
-			        if (isToAfterday) {
-			            var toDate = new Date(LeaveRequest.fromDate.val());
-			            toDate.setDate(toDate.getDate() + 1);
-			            LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
-			        }
-			    }
+                    if (isToAfterday) {
+                        var toDate = new Date(LeaveRequest.fromDate.val());
+                        toDate.setDate(toDate.getDate() + 1);
+                        LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
+                    }
+                }
 
-			    LeaveRequest.totalDays.val(0.5);
-			});
+                LeaveRequest.totalDays.val(0.5);
+            });
         },
         autocomplete: function () {
             var nickName;
@@ -442,7 +349,7 @@ var LeaveRequest = (function ($) {
                     nickName = ui.item.label;
                     LeaveRequest.employee.val(nickName);
                     LeaveRequest.employeeId.val(ui.item.value);
-                    LeaveRequest.eventAfterChangeEmployee();
+                    LeaveRequest.employeeChange();
                     RequestCommon.removeErrorMsg(true);
                 },
                 focus: function (event, ui) {
@@ -456,43 +363,7 @@ var LeaveRequest = (function ($) {
                 }
             });
         },
-        eventAfterChangeEmployee: function () {
-            $.getJSON(_global.root + 'Request/GetVerifiers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
-					function (response) {
-					    if (response != null) {
-					        var options = "";
-					        if (response.length > 1) {
-					            options = "<option value=''>--Select a Verifier--</option>";
-					        }
-					        for (var i = 0; i < response.length; i++) {
-					            options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
-					        }
 
-					        LeaveRequest.verifierId.empty();
-					        LeaveRequest.verifierId.html(options);
-					    }
-					});
-
-            $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
-					function (response) {
-					    if (response != null) {
-					        var options = "";
-					        if (response.length > 1) {
-					            options = "<option value=''>--Select a Verifier--</option>";
-					        }
-
-					        for (var i = 0; i < response.length; i++) {
-					            options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
-					        }
-
-					        LeaveRequest.approverId.empty();
-					        LeaveRequest.approverId.html(options);
-					    }
-					});
-
-
-            LeaveRequest.leaveTypeChange();
-        },
         enableControlForEdit: function () {
             $("#RefNo").attr("disabled", "disabled");
             if (LeaveRequest.leaveTypeId.val() === "0") {
@@ -583,11 +454,147 @@ var LeaveRequest = (function ($) {
                     }
                 });
             }
+        },
+        getVerifier: function () {
+            $.getJSON(_global.root + 'Request/GetVerifiers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+            function (response) {
+                if (response != null) {
+                    var options = "";
+                    if (response.length > 1) {
+                        options = "<option value=''>--Select a Verifier--</option>";
+                    }
+                    for (var i = 0; i < response.length; i++) {
+                        options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
+                    }
+
+                    LeaveRequest.verifierId.empty();
+                    LeaveRequest.verifierId.html(options);
+                }
+            });
+        },
+        getApprover: function () {
+            $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+            function (response) {
+                if (response != null) {
+                    var options = "";
+                    if (response.length > 1) {
+                        options = "<option value=''>--Select a Verifier--</option>";
+                    }
+
+                    for (var i = 0; i < response.length; i++) {
+                        options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
+                    }
+
+                    LeaveRequest.approverId.empty();
+                    LeaveRequest.approverId.html(options);
+                }
+            });
+        },
+        getLeaveBalance: function () {
+            $.getJSON(_global.root + 'leave/GetLeaveBalance',
+            {
+                employeeId: LeaveRequest.employeeId.val(),
+                requestId: LeaveRequest.requestId.val(),
+                toDate: LeaveRequest.toDate.val()
+            },
+            function (response) {
+                if (response != null) {
+                    LeaveRequest.annualBalance.html(response.AnnualBalance);
+                    LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
+                    LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
+                }
+            });
+        },
+        getDateRange: function () {
+            $.ajax({
+                url: _global.root + 'api/employee/GetRangeDate',
+                data: {
+                    leaveTypeId: LeaveRequest.leaveTypeId.val(),
+                    employeeId: LeaveRequest.employeeId.val(),
+                    fromDate: LeaveRequest.fromDate.val(),
+                    toDate: LeaveRequest.toDate.val()
+                },
+                async: false,
+                success: function (response) {
+                    if (response != null) {
+                        LeaveRequest.totalDays.val(response);
+                    }
+                }
+            });
+        },
+        getUnavailableDate: function () {
+            $.getJSON(_global.root + 'api/employee/GetUnavailableDates',
+                    {
+                        employeeId: LeaveRequest.employeeId.val(),
+                        date: new Date().toDateString(),
+                        leaveTypeId: LeaveRequest.leaveTypeId.val()
+                    },
+                    function (response) {
+                        if (!$.isEmptyObject(response)) {
+                            LeaveRequest.fromDate.attr("disabledDate", response.join(","));
+                            LeaveRequest.toDate.attr("disabledDate", response.join(","));
+                        }
+                        else {
+                            LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                            LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+                        }
+                    });
+        },
+        getDisableDate: function () {
+            var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
+            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
+            var leaveType = LeaveRequest.leaveTypeId.val();
+
+            if (leaveType === LeaveRequest.generalLeaveType) {
+                $("#grbHalfDay").hide();
+                $("#grbTotalDay").hide();
+                $('.time').hide();
+                LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
+                LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+            }
+            else {
+                $("#grbHalfDay").show();
+                $("#grbTotalDay").show();
+
+                if (leaveType === LeaveRequest.maternityLeaveType) {
+                    tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
+                    LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                    LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+                }
+                else if (leaveType === LeaveRequest.publicHolidayLeaveType) {
+                    LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
+                    LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
+                }
+                else {
+                    LeaveRequest.getUnavailableDate();
+                }
+            }
+
+            var maxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
+            LeaveRequest.fromDate.datepicker("option", "maxDate", maxDate);
+            LeaveRequest.toDate.datepicker("option", "maxDate", maxDate);
+        },
+        getLeaveDetail: function () {
+            if (LeaveRequest.leaveTypeId.val() === LeaveRequest.generalLeaveType) {
+                LeaveRequest.showLeaveDetail(LeaveRequest.employeeId.val(), LeaveRequest.fromDate.val(), LeaveRequest.toDate.val(), LeaveRequest.leaveTypeId.val());
+            }
+            else {
+                var leaveDetailContainer = $("#tbldetail");
+                leaveDetailContainer.empty();
+
+                if (LeaveRequest.halfDayOff.prop('checked')) {
+                    LeaveRequest.bindHalfDay();
+                }
+                else {
+                    LeaveRequest.getDateRange();
+                }
+            }
         }
     };
 } (jQuery));
 
 $(document).ready(function () {
-	LeaveRequest.init();
-	$('form').areYouSure();
+    LeaveRequest.init();
+    $('form').areYouSure();
 });

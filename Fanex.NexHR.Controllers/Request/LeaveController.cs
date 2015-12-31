@@ -75,12 +75,35 @@ namespace Fanex.NexHR.Controllers.Request
                 return RedirectToAction("AccessDenied", "Home");
             }
 
+            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
+            minDate = minDate > model.FromDate ? model.FromDate : minDate;
+            if (model.LeaveTypeId == Constants.MaternityLeave)
+            {
+                //// rule: user can make leave request (maternity leave) for 6 months.
+                maxDate = maxDate.AddMonths(2);
+            }
+
+            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = this.CurrentUser.Id,
+                FromDate = minDate,
+                ToDate = maxDate
+            };
+
+            IList<DateTime> listUnavailDates = model.LeaveTypeId == Constants.GeneralLeave
+                ? null
+                : EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            model.UnavailDates = listUnavailDates;
+
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
             model.VerifierList = GetVerifiers();
             model.ApproverList = GetApprovers();
 
             ViewBag.IsView = false;
+            ViewBag.MinDate = minDate;
+            ViewBag.MaxDate = maxDate;
             return View(model);
         }
 
@@ -394,7 +417,7 @@ namespace Fanex.NexHR.Controllers.Request
             var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
             {
                 EmpId = CurrentUser.Id,
-                RequestId = null,
+                RequestId = requestId,
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };
 
