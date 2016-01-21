@@ -252,7 +252,7 @@ $(document).ready(function () {
 					rangeTextBox(object, 0, normalLitmit);
 				}
 				else {
-					textbox.val(0);
+				    object.val(0);
 				}
 			}
 			else {

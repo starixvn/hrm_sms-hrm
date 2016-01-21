@@ -577,7 +577,11 @@ var LeaveRequest = (function ($) {
         },
         getLeaveDetail: function () {
             if (LeaveRequest.leaveTypeId.val() === LeaveRequest.generalLeaveType) {
-                LeaveRequest.showLeaveDetail(LeaveRequest.employeeId.val(), LeaveRequest.fromDate.val(), LeaveRequest.toDate.val(), LeaveRequest.leaveTypeId.val());
+                LeaveRequest.showLeaveDetail(
+                    LeaveRequest.employeeId.val(),
+                    LeaveRequest.fromDate.val(),
+                    LeaveRequest.toDate.val(), 
+                    LeaveRequest.leaveTypeId.val());
             }
             else {
                 var leaveDetailContainer = $("#tbldetail");
