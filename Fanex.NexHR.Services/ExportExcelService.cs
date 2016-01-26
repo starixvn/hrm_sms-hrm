@@ -905,6 +905,7 @@ namespace Fanex.NexHR.Services
             ICell cellToDate = null;
             ICell cellNo = null;
             ICell cellDate = null;
+            ICell cellEmployeeCode = null;
             ICell cellEmployee = null;
             ICell cellTeam = null;
             ICell cellShift = null;
@@ -936,6 +937,7 @@ namespace Fanex.NexHR.Services
                     rowIndex - 1,
                     ref cellNo,
                     ref cellDate,
+                    ref cellEmployeeCode,
                     ref cellEmployee,
                     ref cellTeam,
                     ref cellShift,
@@ -998,7 +1000,9 @@ namespace Fanex.NexHR.Services
             rowHeader.Height = height;
             var cellYear = rowHeader.GetCell(4);
             cellYear.SetCellValue("Overtime Summary In " + year + " (" + calendarType + ")");
-
+            sheet.RemoveRow(sheet.GetRow(5));
+            sheet.RemoveRow(sheet.GetRow(6));
+            sheet.RemoveRow(sheet.GetRow(7));
             foreach (var item in requestList)
             {
                 rowCopy = _RowStartBodyYearlyOvertimeReport + (index % 2);
@@ -1012,21 +1016,21 @@ namespace Fanex.NexHR.Services
                 row.GetCell(2).SetCellValue(item.FullName);
                 row.GetCell(3).SetCellValue(item.NickName);
 
-                row.GetCell(4).SetCellValue(item.Jan == 0 ? string.Empty : item.Jan.ToString());
-                row.GetCell(5).SetCellValue(item.Feb == 0 ? string.Empty : item.Feb.ToString());
-                row.GetCell(6).SetCellValue(item.Mar == 0 ? string.Empty : item.Mar.ToString());
-                row.GetCell(7).SetCellValue(item.Apr == 0 ? string.Empty : item.Apr.ToString());
-                row.GetCell(8).SetCellValue(item.May == 0 ? string.Empty : item.May.ToString());
-                row.GetCell(9).SetCellValue(item.Jun == 0 ? string.Empty : item.Jun.ToString());
-                row.GetCell(10).SetCellValue(item.Jul == 0 ? string.Empty : item.Jul.ToString());
-                row.GetCell(11).SetCellValue(item.Aug == 0 ? string.Empty : item.Aug.ToString());
-                row.GetCell(12).SetCellValue(item.Sep == 0 ? string.Empty : item.Sep.ToString());
-                row.GetCell(13).SetCellValue(item.Oct == 0 ? string.Empty : item.Oct.ToString());
-                row.GetCell(14).SetCellValue(item.Nov == 0 ? string.Empty : item.Nov.ToString());
-                row.GetCell(15).SetCellValue(item.Dec == 0 ? string.Empty : item.Dec.ToString());
+                SetNumberValue(row.GetCell(4), item.Jan);
+                SetNumberValue(row.GetCell(5), item.Feb);
+                SetNumberValue(row.GetCell(6), item.Mar);
+                SetNumberValue(row.GetCell(7), item.Apr);
+                SetNumberValue(row.GetCell(8), item.May);
+                SetNumberValue(row.GetCell(9), item.Jun);
+                SetNumberValue(row.GetCell(10), item.Jul);
+                SetNumberValue(row.GetCell(11), item.Aug);
+                SetNumberValue(row.GetCell(12), item.Sep);
+                SetNumberValue(row.GetCell(13), item.Oct);
+                SetNumberValue(row.GetCell(14), item.Nov);
+                SetNumberValue(row.GetCell(15), item.Dec);
 
-                totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jun + item.Aug + item.Sep
-                    + item.Oct + item.Oct + item.Nov + item.Dec;
+                totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jul + item.Aug + item.Sep
+                    + item.Oct + item.Nov + item.Dec;
 
                 row.GetCell(16).SetCellValue(totalHours);
                 totalYearlyOTHours += totalHours;
@@ -1046,11 +1050,6 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method ExportEmployeeBasicInfo.
-        /// </summary>
-        /// <param name="employees">List of Employee entity.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees)
         {
             HSSFWorkbook hssfworkbook;
@@ -1119,11 +1118,6 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method Export EmployeeDetailsInfo.
-        /// </summary>
-        /// <param name="employees">List of Employee info.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportEmployeeDetailsInfo(IList<Employee> employees)
         {
             HSSFWorkbook hssfworkbook;
@@ -1247,13 +1241,6 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method Export Employee's Working Calendar.
-        /// </summary>
-        /// <param name="workingCalendars">List WorkingCalendarsViewModel.</param>
-        /// <param name="fromDate">Export From Date.</param>
-        /// <param name="toDate">Export To Date.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
@@ -1347,12 +1334,14 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Function render footer for overtime report.
-        /// </summary>
-        /// <param name="requestList">Request List.</param>
-        /// <param name="totalYearlyOTHours">Total Yearly OTHours.</param>
-        /// <param name="rowFooter">Row Footer.</param>
+        private void SetNumberValue(ICell cell, float value)
+        {
+            if (value != 0)
+            {
+                cell.SetCellValue(value);
+            }
+        }
+
         private static void RenderFooterForOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, float totalYearlyOTHours, IRow rowFooter)
         {
             rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
@@ -1370,54 +1359,6 @@ namespace Fanex.NexHR.Services
             rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
         }
 
-        /// <summary>
-        /// Method RenderBodyEmployeeDetailsInfo.
-        /// </summary>
-        /// <param name="rowIndex">Row index.</param>
-        /// <param name="cellNo">Cell Number.</param>
-        /// <param name="cellEmployeeID">Cell Employee Id.</param>
-        /// <param name="cellDomainUserName">Cell Domain user name.</param>
-        /// <param name="cellFullName">Cell Full Name.</param>
-        /// <param name="cellNickName">Cell Nick Name.</param>
-        /// <param name="cellTeam">Cell Team.</param>
-        /// <param name="cellDOB">Cell Day of Birth.</param>
-        /// <param name="cellPlaceOfBirth">Cell Place of birth.</param>
-        /// <param name="cellEthnic">Cell Ethnic.</param>
-        /// <param name="cellNative">Cell Native.</param>
-        /// <param name="cellReligion">Cell Religion.</param>
-        /// <param name="cellGender">Cell Gender.</param>
-        /// <param name="cellMarriage">Cell Marriage.</param>
-        /// <param name="cellNationality">Cell Nationality.</param>
-        /// <param name="cellIDCardNo">Cell Id Card No.</param>
-        /// <param name="cellIDCardIssueDate">Cell ID Card Issued Date.</param>
-        /// <param name="cellIDCardPlaceIssue">Cell ID Card Place Of Issue.</param>
-        /// <param name="cellPassportNo">Cell Passport No.</param>
-        /// <param name="cellPassportExp">Cell Passport Expired.</param>
-        /// <param name="cellQualification">Cell Qualification.</param>
-        /// <param name="cellMajor">Cell major.</param>
-        /// <param name="cellCellPhone">Cell CellPhone.</param>
-        /// <param name="cellHomePhone">Cell Home Phone.</param>
-        /// <param name="cellEmail">Cell Email.</param>
-        /// <param name="cellPermanentAddress">Cell permanent address.</param>
-        /// <param name="cellCurrentAddress">Cell current address.</param>
-        /// <param name="cellSkype">Cell skype.</param>
-        /// <param name="cellUnit">Cell unit.</param>
-        /// <param name="cellJobTitle">Cell job title.</param>
-        /// <param name="cellGroupDate">Cell group date.</param>
-        /// <param name="cellCompanyDate">Cell company date.</param>
-        /// <param name="cellConfirmedDate">Cell confirmed Date.</param>
-        /// <param name="cellResignedDate">Cell Resigned Date.</param>
-        /// <param name="cellWorkingDays">Cell Working days per month.</param>
-        /// <param name="cellWorkingHours">Cell working hours per day.</param>
-        /// <param name="cellNumberOffdays">Cell Number of Off day.</param>
-        /// <param name="cellLeaveBalance">Cell Leave Balance.</param>
-        /// <param name="cellCategory">Cell Category.</param>
-        /// <param name="cellBankAccount">Cell Bank Account.</param>
-        /// <param name="cellTaxCode">Cell Tax Code.</param>
-        /// <param name="cellSocialInsuranceNo">Cell Social Insurance No.</param>
-        /// <param name="cellRegisteredHospital">Cell Registered Hospital.</param>
-        /// <param name="item">Employee entity.</param>
-        /// <param name="row">Row to render data.</param>
         private void RenderBodyEmployeeDetailsInfo(
             int rowIndex,
             ref ICell cellNo,
@@ -1579,28 +1520,6 @@ namespace Fanex.NexHR.Services
             cellRegisteredHospital.SetCellValue(item.RegisteredHospital);
         }
 
-        /// <summary>
-        /// Method RenderBodyEmployeeBasicInfo.
-        /// </summary>
-        /// <param name="rowIndex">Row index.</param>
-        /// <param name="cellNo">Cell number.</param>
-        /// <param name="cellEmployeeID">Cell Employee ID.</param>
-        /// <param name="cellFullName">Cell Full name.</param>
-        /// <param name="cellNickName">Cell Nick name.</param>
-        /// <param name="cellTeam">Cell Team / Department.</param>
-        /// <param name="cellGroupDate">Cell GroupDate.</param>
-        /// <param name="cellCompanyDate">Cell CompanyDate.</param>
-        /// <param name="cellConfirmedDate">Cell ConfirmedDate.</param>
-        /// <param name="cellResignedDate">Cell ResignedDate.</param>
-        /// <param name="cellDOB">Cell Day of birth.</param>
-        /// <param name="cellGender">Cell Gender.</param>
-        /// <param name="cellCellPhone">Cell CellPhone.</param>
-        /// <param name="cellEmail">Cell Email.</param>
-        /// <param name="cellCurrentAddress">Cell CurrentAddress.</param>
-        /// <param name="cellUnit">Cell Unit.</param>
-        /// <param name="cellCategory">Cell Category.</param>
-        /// <param name="item">Employee entity.</param>
-        /// <param name="row">Row to render data.</param>
         private void RenderBodyEmployeeBasicInfo(
             int rowIndex,
             ref ICell cellNo,
@@ -1678,29 +1597,11 @@ namespace Fanex.NexHR.Services
             cellCategory.SetCellValue(category);
         }
 
-        /// <summary>
-        /// Method RenderBodyOvertimeReport.
-        /// </summary>
-        /// <param name="rowIndex">The row Index.</param>
-        /// <param name="cellNo">The cell number.</param>
-        /// <param name="cellDate">The cellDate.</param>
-        /// <param name="cellEmployee">The cellEmployee.</param>
-        /// <param name="cellTeam">The cellTeam.</param>
-        /// <param name="cellShift">The cellShift.</param>
-        /// <param name="cellTimeIn">The cellTimeIn.</param>
-        /// <param name="cellTimeOut">The cellTimeOut.</param>
-        /// <param name="cellTotalHours">The cellTotalHours.</param>
-        /// <param name="cellNormalDay">The cellNormalDay.</param>
-        /// <param name="cellOffDay">The cellOffDay.</param>
-        /// <param name="cellPublicHoliday">The cellPublicHoliday.</param>
-        /// <param name="cellRemark">The cellRemark.</param>
-        /// <param name="cellStatus">The cellStatus.</param>
-        /// <param name="item">The OvertimeRequest entity.</param>
-        /// <param name="row">Row to render data.</param>
         private void RenderBodyOvertimeReport(
            int rowIndex,
            ref ICell cellNo,
            ref ICell cellDate,
+           ref ICell cellEmployeeCode,
            ref ICell cellEmployee,
            ref ICell cellTeam,
            ref ICell cellShift,
@@ -1717,22 +1618,24 @@ namespace Fanex.NexHR.Services
         {
             cellNo = row.GetCell(0);
             cellDate = row.GetCell(1);
-            cellEmployee = row.GetCell(2);
-            cellTeam = row.GetCell(3);
-            cellShift = row.GetCell(4);
-            cellTimeIn = row.GetCell(5);
-            cellTimeOut = row.GetCell(6);
-            cellTotalHours = row.GetCell(7);
-            cellNormalDay = row.GetCell(8);
-            cellOffDay = row.GetCell(9);
-            cellPublicHoliday = row.GetCell(10);
-            cellRemark = row.GetCell(11);
-            cellStatus = row.GetCell(12);
+            cellEmployeeCode = row.GetCell(2);
+            cellEmployee = row.GetCell(3);
+            cellTeam = row.GetCell(4);
+            cellShift = row.GetCell(5);
+            cellTimeIn = row.GetCell(6);
+            cellTimeOut = row.GetCell(7);
+            cellTotalHours = row.GetCell(8);
+            cellNormalDay = row.GetCell(9);
+            cellOffDay = row.GetCell(10);
+            cellPublicHoliday = row.GetCell(11);
+            cellRemark = row.GetCell(12);
+            cellStatus = row.GetCell(13);
 
             CurrentRequestStatus status = (CurrentRequestStatus)item.Status;
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellDate.SetCellValue(item.OvertimeDate.ToString("dd MMM, yyyy"));
+            cellEmployeeCode.SetCellValue(item.Code);
             cellEmployee.SetCellValue(item.FullName + " (" + item.NickName + ")");
             cellTeam.SetCellValue(item.Team);
             cellShift.SetCellValue(item.Schedule);

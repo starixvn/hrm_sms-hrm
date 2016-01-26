@@ -11,9 +11,6 @@ namespace Fanex.NexHR.Models.Overtime
 {
     using System;
 
-    /// <summary>
-    /// LateInEarlyOut Request.
-    /// </summary>
     public class OvertimeRequest
     {
         public int Id { get; set; }
@@ -51,6 +48,8 @@ namespace Fanex.NexHR.Models.Overtime
         public string TeamName { get; set; }
 
         public string Team { get; set; }
+
+        public string Code { get; set; }
 
         public string FullName { get; set; }
 

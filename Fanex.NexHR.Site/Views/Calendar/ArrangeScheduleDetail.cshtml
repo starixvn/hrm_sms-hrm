@@ -29,7 +29,12 @@
         isShowCheckBox = false;
         classOfInput = "leaveday";
 
-        if (workingCalendarModel.LeaveDay == (decimal)0.5)
+        if (workingCalendarModel.IsOffDay || workingCalendarModel.IsHoliday)
+        {
+            valueOfInput = "Off";
+            classOfInput = "offday";
+        }
+        else if (workingCalendarModel.LeaveDay == (decimal)0.5)
         {
             classOfInput += " shift";
 			valueOfInput = workingCalendarModel.LeaveType.Code + "&#189;";
