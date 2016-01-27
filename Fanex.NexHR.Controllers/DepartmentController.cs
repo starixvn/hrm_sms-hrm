@@ -110,7 +110,7 @@ namespace Fanex.NexHR.Controllers
                 IsActive = department.IsActive,
                 ManagerId = department.Manager.Id,
                 Manager = department.Manager.DisplayName,
-                ParentId = department.Parent.Id,
+                ParentId = department.Parent == null ? 0 : department.Parent.Id,
                 ParentDepartments = GetParentDepartment(departmentId)
             };
             return View(model);
@@ -129,7 +129,7 @@ namespace Fanex.NexHR.Controllers
                     Code = model.Code,
                     Name = model.Name,
                     IsActive = model.IsActive,
-                    ParentId = model.ParentId,
+                    ParentId = model.ParentId.HasValue ? model.ParentId.Value : 0,
                     ManagerId = model.ManagerId,
                     ModifiedBy = this.CurrentUser.Id,
                 };

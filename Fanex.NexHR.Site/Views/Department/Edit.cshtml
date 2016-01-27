@@ -56,7 +56,6 @@
         </div>
         <div class="input">
             @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"))
-            @Html.ValidationMessage("ParentId")
         </div>
     </div>
 

@@ -1859,23 +1859,30 @@ namespace Fanex.NexHR.Services
             return detail;
         }
 
-        private string GetValueForCellManpower(int value, int year, int month)
+        private void SetValueForCellManpower(ICell cell, int value, int year, int month)
         {
-            var display = "-";
+            var isShowValue = false;
 
             if (DateTime.Now.Year > year)
             {
-                display = value.ToString();
+                isShowValue = true;
             }
             else if (DateTime.Now.Year == year)
             {
                 if (DateTime.Now.Month >= month)
                 {
-                    display = value.ToString();
+                    isShowValue = true;
                 }
             }
 
-            return display;
+            if (isShowValue)
+            {
+                cell.SetCellValue(value);
+            }
+            else
+            {
+                cell.SetCellValue("-");
+            }
         }
 
         private void RenderBodyManpowerReport(IRow row, ManpowerModel item, int year, int index)
@@ -1891,76 +1898,76 @@ namespace Fanex.NexHR.Services
             row.GetCell(columnIndex++).SetCellValue(item.NewHire);
             row.GetCell(columnIndex++).SetCellValue(item.ActiveUser);
 
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJan, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJan, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJan, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJan, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedJan, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedJan, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireJan, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserJan, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedFeb, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedFeb, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireFeb, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserFeb, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedFeb, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedFeb, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireFeb, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserFeb, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedMar, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedMar, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireMar, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserMar, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedMar, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedMar, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireMar, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserMar, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedApr, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedApr, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireApr, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserApr, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedApr, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedApr, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireApr, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserApr, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedMay, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedMay, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireMay, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserMay, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedMay, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedMay, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireMay, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserMay, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJun, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJun, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJun, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJun, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedJun, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedJun, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireJun, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserJun, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedJul, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedJul, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireJul, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserJul, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedJul, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedJul, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireJul, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserJul, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedAug, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedAug, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireAug, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserAug, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedAug, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedAug, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireAug, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserAug, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedSep, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedSep, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireSep, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserSep, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedSep, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedSep, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireSep, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserSep, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedOct, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedOct, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireOct, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserOct, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedOct, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedOct, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireOct, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserOct, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedNov, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedNov, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireNov, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserNov, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedNov, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedNov, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireNov, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserNov, year, month);
 
             month++;
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ProbationResignedDec, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ConfirmedResignedDec, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.NewHireDec, year, month));
-            row.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(item.ActiveUserDec, year, month));
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ProbationResignedDec, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ConfirmedResignedDec, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.NewHireDec, year, month);
+            SetValueForCellManpower(row.GetCell(columnIndex++), item.ActiveUserDec, year, month);
         }
 
         private void RenderFooterManpowerReport(IRow totalrow, ManpowerModel totalManpower, int year)
@@ -1972,76 +1979,76 @@ namespace Fanex.NexHR.Services
             totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.NewHire);
             totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.ActiveUser);
 
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedJan, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedJan, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireJan, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserJan, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedJan, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedJan, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireJan, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserJan, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedFeb, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedFeb, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireFeb, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserFeb, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedFeb, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedFeb, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireFeb, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserFeb, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedMar, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedMar, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireMar, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserMar, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedMar, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedMar, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireMar, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserMar, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedApr, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedApr, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireApr, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserApr, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedApr, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedApr, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireApr, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserApr, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedMay, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedMay, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireMay, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserMay, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedMay, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedMay, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireMay, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserMay, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedJun, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedJun, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireJun, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserJun, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedJun, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedJun, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireJun, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserJun, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedJul, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedJul, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireJul, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserJul, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedJul, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedJul, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireJul, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserJul, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedAug, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedAug, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireAug, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserAug, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedAug, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedAug, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireAug, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserAug, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedSep, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedSep, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireSep, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserSep, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedSep, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedSep, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireSep, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserSep, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedOct, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedOct, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireOct, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserOct, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedOct, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedOct, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireOct, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserOct, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedNov, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedNov, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireNov, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserNov, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedNov, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedNov, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireNov, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserNov, year, month);
 
             month++;
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ProbationResignedDec, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ConfirmedResignedDec, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.NewHireDec, year, month));
-            totalrow.GetCell(columnIndex++).SetCellValue(GetValueForCellManpower(totalManpower.ActiveUserDec, year, month));
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ProbationResignedDec, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ConfirmedResignedDec, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.NewHireDec, year, month);
+            SetValueForCellManpower(totalrow.GetCell(columnIndex++), totalManpower.ActiveUserDec, year, month);
         }
 
         private void RenderBodyManpowerCategoryReport(IRow row, ManpowerCategoryModel item, int index)
