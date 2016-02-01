@@ -104,7 +104,7 @@
         </div>
         <div class="grid_4">
             @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark })
-            @Html.HiddenFor(model => model.EmpId)
+            @Html.Hidden("EmployeeId", Model.EmpId)
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
         @Html.HiddenFor(model => model.IsMember)

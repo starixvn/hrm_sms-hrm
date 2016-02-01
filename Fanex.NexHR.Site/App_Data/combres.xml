@@ -167,6 +167,7 @@
       <resource reference="sitejs"/>
 
       <resource path="~/scripts/views/report/report.attendance.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
@@ -414,17 +415,9 @@
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 
-    <resourceSet name="hrcheckinoutjs" type="js">
-      <resource reference="sitejs"/>
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
-      <resource path="~/scripts/libs/date.js" />
-      <resource path="~/scripts/views/date.filter.js" />
-    </resourceSet>
-
     <resourceSet name="annualbalancejs" type="js">
       <resource reference="sitejs"/>
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/annualbalanceadj.js" />
       <resource path="~/scripts/views/annualbalance.js" />
     </resourceSet>
@@ -495,7 +488,7 @@
       <resource path="~/scripts/views/criteria.js"/>
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/request/employeerequest.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
@@ -546,7 +539,7 @@
     
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs"/>
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
 

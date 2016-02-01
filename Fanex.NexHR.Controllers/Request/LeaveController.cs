@@ -41,8 +41,8 @@ namespace Fanex.NexHR.Controllers.Request
                 LeaveTypeList = GetAllLeaveType(),
                 TotalRequest = GetNumberRequestInMonth(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
-                VerifierList = GetVerifiers(),
-                ApproverList = GetApprovers()
+                VerifierList = GetVerifiers(CurrentUser.Id),
+                ApproverList = GetApprovers(CurrentUser.Id)
             };
 
             return View(model);
@@ -98,8 +98,8 @@ namespace Fanex.NexHR.Controllers.Request
 
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
-            model.VerifierList = GetVerifiers();
-            model.ApproverList = GetApprovers();
+            model.VerifierList = GetVerifiers(CurrentUser.Id);
+            model.ApproverList = GetApprovers(CurrentUser.Id);
 
             ViewBag.IsView = false;
             ViewBag.MinDate = minDate;
@@ -131,8 +131,8 @@ namespace Fanex.NexHR.Controllers.Request
             RequestEntity request = RequestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = GetAllLeaveType();
-            model.VerifierList = GetVerifiers();
-            model.ApproverList = GetApprovers();
+            model.VerifierList = GetVerifiers(request.Requester.Id);
+            model.ApproverList = GetApprovers(request.Requester.Id);
 
             ViewBag.IsView = true;
             return View(model);
@@ -360,15 +360,15 @@ namespace Fanex.NexHR.Controllers.Request
             return selectItems;
         }
 
-        private IList<SelectListItem> GetVerifiers()
+        private IList<SelectListItem> GetVerifiers(int empId)
         {
-            IList<SupervisorNameModel> verifiers = GetSupervisorByRequestType(CurrentUser.Id, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
+            IList<SupervisorNameModel> verifiers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
             return GetListItem(verifiers);
         }
 
-        private IList<SelectListItem> GetApprovers()
+        private IList<SelectListItem> GetApprovers(int empId)
         {
-            IList<SupervisorNameModel> approvers = GetSupervisorByRequestType(CurrentUser.Id, (byte)RoleSystem.Approver, (byte)RequestType.Leave);
+            IList<SupervisorNameModel> approvers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Approver, (byte)RequestType.Leave);
             return GetListItem(approvers);
         }
 

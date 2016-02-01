@@ -10,7 +10,7 @@
     @Url.CombresLink("annualbalancejs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 @if (Roles.IsUserInRole(RoleSystem.HR.ToString())

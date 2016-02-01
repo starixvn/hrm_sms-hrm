@@ -43,7 +43,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
         IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria);
 
-        IList<Employee> GetMembersByManager(GetEmployeeByManagerCriteria criteria);
+        IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria);
 
         IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 

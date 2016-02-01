@@ -588,10 +588,11 @@ namespace Fanex.NexHR.Controllers
             };
             IList<LeaveSummary> entityList = _reportService.GetUnpaidLeave(criteria);
 
-            IList<Team> teams = new List<Team>();
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            teams = _teamService.GetAll(getAllGroupCriteria);
-
+            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            {
+                SupervisorId = CurrentUser.Id
+            };
+            IList<Team> teams = _teamService.GetBySupervisor(getGroupCriteria);
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;
             ViewBag.EntityList = entityList;

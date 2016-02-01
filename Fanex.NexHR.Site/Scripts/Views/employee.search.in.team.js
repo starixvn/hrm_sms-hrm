@@ -7,22 +7,21 @@ $(document).ready(function () {
 	$("#Employee").autocomplete({
 		source: function (request, response) {
 			$.ajax({
-				url: _global.root + 'ajax/getmembersbymanager',
+				url: _global.root + 'ajax/getmemberbymanager',
 				data: {
-					keyword: request.term,
-					groupId: $('#TeamId').val()
+					keyword: request.term
 				},
 				success: function (data) {
 					response($.map(data, function (item) {
 						return {
 							label: item.NickName + ' (' + item.FullName + ')',
-							value: item.Id !== 0 ? item.Id : item.EmpId
+							value: item.Id
 						};
 					}));
 				}
 			});
 		},
-		minLength: 1,
+		minLength: 2,
 		select: function (event, ui) {
 			if (ui.item != null) {
 				nickName = ui.item.label;
@@ -48,7 +47,7 @@ $(document).ready(function () {
 		close: function () {
 			$('#Employee').val(nickName);
 		}
-	});
+});
 
 	// when user clear the textbox, we must set employeeId field to -1 for seaching all employees
 	$('form').submit(function () {

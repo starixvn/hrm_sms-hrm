@@ -10,7 +10,10 @@
 			<Mapping DataField="PermanentAddress" ObjectProperty="Address"/>
 			<Mapping DataField="DOB" ObjectProperty="DateOfBirth"/>
     </Setting>
-
+    <Setting Key="Employee_GetMemberByManager" SpName="Employee_GetMemberByManager" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id"/>
+    </Setting>
+    
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="0"></Setting>
     
     <Setting Key="Country_GetByCode" SpName="Country_GetByCode" DbName="nexhrx" Plain="0"></Setting>
@@ -184,8 +187,6 @@
     <Setting Key="WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_SetOffDayForAllEmployees" SpName="EmployeeCalendar_SetOffDayForAllEmployees" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Employee_GetMembesByManager" SpName="Employee_GetMembesByManager" DbName="nexhrx" Plain="0">
-    </Setting>
 
     <Setting Key="EmployeeCalendar_GetByDateRange" SpName="EmployeeCalendar_GetByDateRange" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id"/>

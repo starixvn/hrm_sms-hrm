@@ -36,7 +36,7 @@ function view() {
 
     //if no user is selected, clear the empId also
     if ($('#Employee').val() === '') {
-        $('#EmpId').val('');
+        $('#EmployeeId').val('');
     }
 
     $('#nodata').remove();
@@ -57,7 +57,7 @@ function view() {
         "SupervisorId": $("#SupervisorId").val(),
         "FromDate": $("#FromDate").val(),
         "ToDate": $("#ToDate").val(),
-        "EmpId": $("#EmpId").val(),
+        "EmpId": $("#EmployeeId").val(),
         "Employee": $("#Employee").val(),
         "GroupIds": groups,
         "AttendanceType": $("#AttendanceType").val(),
@@ -128,51 +128,51 @@ function view() {
 
 $(document).ready(function () {
     $("#GroupId").multiselect();
-    $("#Employee").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                dataType: 'json',
-                url: _global.root + 'api/employee/getemployees',
-                data: {
-                    query: request.term,
-                    $top: 10
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.Id
-                        };
-                    }));
-                }
-            });
-        },
-        minLength: 1,
-        select: function (event, ui) {
-            if (ui.item != null) {
-                nickName = ui.item.label;
-                $('#EmpId').val(ui.item.value);
-            }
-        },
-        focus: function (event, ui) {
-            if (ui.item != null) {
-                nickName = ui.item.label;
-                $('#Employee').val(nickName);
-                $('#EmpId').val(ui.item.value);
-            }
-            event.preventDefault();
-        },
-        change: function (event, ui) {
-            if (ui.item != null) {
-                nickName = ui.item.label;
-                $('#Employee').val(nickName);
-                $('#EmpId').val(ui.item.value);
-            }
-        },
-        close: function () {
-            $('#Employee').val(nickName);
-        }
-    });
+//    $("#Employee").autocomplete({
+//        source: function (request, response) {
+//            $.ajax({
+//                dataType: 'json',
+//                url: _global.root + 'ajax/getmembersbymanager',
+//                data: {
+//                    query: request.term,
+//                    $top: 10
+//                },
+//                success: function (data) {
+//                    response($.map(data, function (item) {
+//                        return {
+//                            label: item.NickName + ' (' + item.FullName + ')',
+//                            value: item.Id
+//                        };
+//                    }));
+//                }
+//            });
+//        },
+//        minLength: 1,
+//        select: function (event, ui) {
+//            if (ui.item != null) {
+//                nickName = ui.item.label;
+//                $('#EmpId').val(ui.item.value);
+//            }
+//        },
+//        focus: function (event, ui) {
+//            if (ui.item != null) {
+//                nickName = ui.item.label;
+//                $('#Employee').val(nickName);
+//                $('#EmpId').val(ui.item.value);
+//            }
+//            event.preventDefault();
+//        },
+//        change: function (event, ui) {
+//            if (ui.item != null) {
+//                nickName = ui.item.label;
+//                $('#Employee').val(nickName);
+//                $('#EmpId').val(ui.item.value);
+//            }
+//        },
+//        close: function () {
+//            $('#Employee').val(nickName);
+//        }
+//    });
 
     $('input[type=text]').keypress(function (evt) {
         if (evt.keyCode === 13) {
@@ -187,7 +187,7 @@ $(document).ready(function () {
         var groups;
         var isMember = $("#IsMember").val();
         if ($('#Employee').val() === '') {
-            $('#EmpId').val('');
+            $('#EmployeeId').val('');
         }
         if (isMember === "True") {
             groups = $("#EmployeeGroupId").val();
@@ -201,7 +201,7 @@ $(document).ready(function () {
             "SupervisorId=" + $("#SupervisorId").val() +
             "&FromDate=" + $("#FromDate").val() +
             "&ToDate=" + $("#ToDate").val() +
-            "&EmpId=" + $("#EmpId").val() +
+            "&EmpId=" + $("#EmployeeId").val() +
             "&Employee=" + $("#Employee").val() +
             "&GroupIds=" + groups +
             "&AttendanceType=" + $("#AttendanceType").val() +

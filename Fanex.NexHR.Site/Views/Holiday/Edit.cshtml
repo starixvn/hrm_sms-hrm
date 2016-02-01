@@ -11,7 +11,8 @@
 }
 
 @section Breadcrumb {
-    <a class="step">Company</a> 
+    <a class="step">@Labels.CompanySpace</a> 
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a> 
      <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
     <a class="step">Edit Holiday</a>
 }

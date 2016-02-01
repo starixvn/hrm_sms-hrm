@@ -104,13 +104,15 @@ namespace Fanex.NexHR.Controllers
                 GroupIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 Role = string.Empty,
-                SupervisorID = null
+                SupervisorID = CurrentUser.Id
             };
             IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
-
+            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            {
+                SupervisorId = CurrentUser.Id
+            };
             IList<Team> teams = new List<Team>();
-            var getAllTeamCriteria = new GetAllGroupCriteria();
-            teams = _teamService.GetAll(getAllTeamCriteria);
+            teams = _teamService.GetBySupervisor(getGroupCriteria);
 
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;

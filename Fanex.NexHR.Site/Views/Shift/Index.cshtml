@@ -11,7 +11,9 @@
     ViewBag.Title = Labels.ShiftInfo;
 }
 @section Breadcrumb {
-    <a class="step">Company</a> <span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.CompanySpace</a> 
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
+    <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())

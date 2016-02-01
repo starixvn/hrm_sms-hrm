@@ -134,7 +134,7 @@ namespace Fanex.NexHR.Services
             return employees;
         }
 
-        public IList<Employee> GetMembersByManager(GetEmployeeByManagerCriteria criteria)
+        public IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<Employee> employees = null;

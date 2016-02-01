@@ -95,14 +95,6 @@ namespace Fanex.NexHR.Controllers
             return result.Code == 0;
         }
 
-        /// <summary>
-        /// Function to process a request.
-        /// </summary>
-        /// <param name="command">Action process request.</param>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="roleId">The Role Id.</param>
-        /// <param name="remark">The remark.</param>
-        /// <returns>Command Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
@@ -122,13 +114,6 @@ namespace Fanex.NexHR.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Process single overtime request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="requestId">The request Id.</param>
-        /// <param name="roleId">The role Id.</param>
-        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         public JsonResult ProcessSingleOvertime(string command, long requestId, int roleId)
@@ -145,12 +130,6 @@ namespace Fanex.NexHR.Controllers
             return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
-        /// <summary>
-        /// Process multiple overtime request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="requestIds">The list request Id.</param>
-        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         public JsonResult ProcessMultipleOvertime(string command, string requestIds)
@@ -181,33 +160,19 @@ namespace Fanex.NexHR.Controllers
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Get Employees By Manager.
-        /// </summary>
-        /// <param name="keyword">Key words.</param>
-        /// <param name="groupId">Filter by groups.</param>
-        /// <returns>JSON Result.</returns>
-        [Authorize(Roles = "Verifier,Approver,HR")]
-        public JsonResult GetMembersByManager(string keyword, int? groupId = null)
+        public JsonResult GetMemberByManager(string keyword)
         {
-            var criteria = new GetEmployeeByManagerCriteria()
+            var criteria = new GetMemberByManagerCriteria()
             {
-                ManagerID = this.CurrentUser.Id,
-                Role = (int)RoleSystem.HR,
-                Keyword = keyword,
-                GroupID = groupId,
+                SupervisorId = this.CurrentUser.Id,
+                Query = keyword,
                 ExcludedManager = false
             };
-            IList<Employee> employees = _employeeService.GetMembersByManager(criteria);
+            IList<Employee> employees = _employeeService.GetMemberByManager(criteria);
 
             return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Adjust Annual Leaves.
-        /// </summary>
-        /// <param name="annualLeaveJson">AnnualLeaveBalanceMulti ViewModel in string Format.</param>
-        /// <returns>JSON Result AdjustAnnualLeaves.</returns>
         [HttpPost]
         public JsonResult AdjustAnnualLeaves(string annualLeaveJson)
         {
@@ -231,12 +196,6 @@ namespace Fanex.NexHR.Controllers
             return Json(true);
         }
 
-        /// <summary>
-        /// Reset Annual Leaves.
-        /// </summary>
-        /// <param name="minbalance">Min balance.</param>
-        /// <param name="descriptionReset">Description Reset.</param>
-        /// <returns>JSON Result ResetAnnualLeaves.</returns>
         [HttpPost]
         public JsonResult ResetAnnualLeaves(int minbalance, string descriptionReset)
         {

@@ -12,7 +12,9 @@
     @Url.CombresLink("holidayjs")
 }
 @section Breadcrumb {
-    <a class="step">Company</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.CompanySpace</a> 
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a> 
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
@@ -20,10 +22,10 @@
         <span style="padding-right: 5px;">Year</span>
         @Html.YearPicker("year", 2010, (int)ViewBag.year)
         <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
-        if (Roles.IsUserInRole("HR"))
-        { 
+    if (Roles.IsUserInRole("HR"))
+    { 
             <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
-        }
+    }
 }
 <table id="data" class="data persist-area">
     <thead>

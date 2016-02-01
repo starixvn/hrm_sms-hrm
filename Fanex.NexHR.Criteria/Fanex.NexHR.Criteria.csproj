@@ -81,6 +81,7 @@
     <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />

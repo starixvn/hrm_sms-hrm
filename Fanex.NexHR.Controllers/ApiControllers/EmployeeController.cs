@@ -24,9 +24,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Employee Controller API.
-    /// </summary>
     public class EmployeeController : ApiController
     {
         private readonly IEmployeeService _employeeService;
@@ -41,16 +38,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             _employeeService = employeeService ?? new EmployeeService();
         }
 
-        /// <summary>
-        /// Query All Employees.
-        /// </summary>
-        /// <param name="query">Query to DB.</param>
-        /// <param name="groupIds">Employee Group Id.</param>
-        /// <param name="enable">Is Enabled.</param>
-        /// <param name="isDelete">Id Deleted.</param>
-        /// <param name="titleId">Employee Job Title.</param>
-        /// <param name="isLocal">Expat Or Local.</param>
-        /// <returns>List Of Employee.</returns>
         public IQueryable<Employee> GetEmployees(
             string query,
             string groupIds = "", 
@@ -78,13 +65,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return entityList.AsQueryable();
         }
 
-        /// <summary>
-        /// Get Employee By Role.
-        /// </summary>
-        /// <param name="roleIds">Role of employee to get.</param>
-        /// <param name="query">A string to query data.</param>
-        /// <param name="excludeIds">A string of Excluded id.</param>
-        /// <returns>List of employees.</returns>
         public IList<Employee> GetSupervisors(string roleIds, string query, string excludeIds)
         {
             var criteria = new GetEmployeeByRoleCriteria
