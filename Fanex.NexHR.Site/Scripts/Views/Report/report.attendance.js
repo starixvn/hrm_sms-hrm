@@ -2,7 +2,7 @@
 /*global _global, actingButton, jsonToFullDateTime2, noInformation, reloadButtonText, _messages, dontBlock:true*/
 /*exported index*/
 
-var nickName;
+//var nickName;
 var rowIndex = 1;
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,

@@ -9,8 +9,8 @@
 
 namespace Fanex.NexHR.ViewModels.Department
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Models;
 
     public class EditDepartmentViewModel

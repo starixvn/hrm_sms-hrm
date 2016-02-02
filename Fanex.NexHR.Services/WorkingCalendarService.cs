@@ -16,11 +16,11 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
-    using Fanex.NexHR.Models.Supervisor;
 
     /// <summary>
     /// WorkingCalendar Service.

@@ -1342,7 +1342,7 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        private static void RenderFooterForOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, float totalYearlyOTHours, IRow rowFooter)
+        private void RenderFooterForOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, float totalYearlyOTHours, IRow rowFooter)
         {
             rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
             rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));

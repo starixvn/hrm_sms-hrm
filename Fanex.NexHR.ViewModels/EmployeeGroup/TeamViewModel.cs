@@ -10,11 +10,11 @@
 namespace Fanex.NexHR.ViewModels.EmployeeGroup
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Core.Attributes;
-    using Fanex.NexHR.Resources;
-    using System.Collections.Generic;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
 
     public class TeamViewModel
     {
