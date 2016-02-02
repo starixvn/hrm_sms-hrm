@@ -20,6 +20,8 @@ namespace Fanex.NexHR.ViewModels.Request
 
     public class RequestViewModel
     {
+        private bool isFilterByAffectedDate;
+
         public RequestViewModel()
         {
             this.StatusId = -2;
@@ -102,7 +104,16 @@ namespace Fanex.NexHR.ViewModels.Request
         {
             get
             {
-                return ViewType != RequestViewType.PersonalSpace;
+                if (StatusId == -2)
+                {
+                    isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
+                }
+
+                return isFilterByAffectedDate;
+            }
+            set
+            {
+                isFilterByAffectedDate = value;
             }
         }
 

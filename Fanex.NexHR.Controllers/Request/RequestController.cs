@@ -182,14 +182,15 @@ namespace Fanex.NexHR.Controllers.Request
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult Member(RequestViewModel request)
         {
+            request.ViewType = RequestViewType.PersonalSpace;
+
             if (request.StatusId == -2)
             {
                 request.StatusId = -1;
                 request.FromDate = DateTime.Now.AddDays(-60);
+                request.IsFilterByAffectedDate = false;
             }
-
-            request.StatusId = request.StatusId == -2 ? -1 : request.StatusId;
-            request.ViewType = RequestViewType.PersonalSpace;
+            
             GetRequests(request);
             return View("EmployeeRequest", request);
         }

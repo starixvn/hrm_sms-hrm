@@ -90,7 +90,7 @@ var LeaveRequest = (function ($) {
                     LeaveRequest.employeeId.val(),
                     LeaveRequest.fromDate.val(),
                     LeaveRequest.toDate.val(),
-                    LeaveRequest.leaveTypeId.val());
+                    LeaveRequest.requestId.val());
             }
             LeaveRequest.disableControlForDetail();
         },
