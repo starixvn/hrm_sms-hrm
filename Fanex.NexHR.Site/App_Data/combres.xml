@@ -44,127 +44,127 @@
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
-	  <resource path="~/scripts/views/home.js" />
+      <resource path="~/scripts/views/home.js" />
     </resourceSet>
 
     <resourceSet name="homecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/home.css" />
     </resourceSet>
     <resourceSet name="homejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
     </resourceSet>
 
     <resourceSet name="accountcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/account.css" />
       <resource path="~/styles/employee.detail.css" />
     </resourceSet>
     <resourceSet name="accountjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/account.js" />
     </resourceSet>
 
     <resourceSet name="employeecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
       <resource path="~/styles/jquery.dataTables.css" />
     </resourceSet>
     <resourceSet name="employeejs" type="js">
       <resource path="~/scripts/libs/date.js" />
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
     </resourceSet>
 
     <resourceSet name="contactlistcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="contactlistjs" type="js">
       <resource path="~/scripts/libs/date.js" />
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/contactlist.js" />
     </resourceSet>
 
     <resourceSet name="employeecreatecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employee.create.css" />
     </resourceSet>
 
     <resourceSet name="employeeeditcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employee.edit.css" />
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="employeeeditjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employee.edit.js" />
       <resource path="~/scripts/Libs/birthdaypicker.js" />
     </resourceSet>
 
     <resourceSet name="employeesupervisorcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
       <resource path="~/styles/employeesupervisor.css" />
     </resourceSet>
 
     <resourceSet name="employeeshiftmanagercss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
       <resource path="~/styles/emplyeeshiftmanager.css" />
     </resourceSet>
 
     <resourceSet name="employeesupervisorjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employeesupervisor.js" />
     </resourceSet>
 
     <resourceSet name="employeesshiftmanagerjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employeeshiftmanager.js" />
     </resourceSet>
 
     <resourceSet name="schedulearrangesortjs" type="js">
-      
+
       <resource path="~/scripts/views/Calendar/schedulearrange.sort.js" />
     </resourceSet>
 
     <resourceSet name="employeewscss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />
     </resourceSet>
     <resourceSet name="employeewsjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/employee.workingschedule.js" />
     </resourceSet>
-    
+
     <resourceSet name="manpowerreportcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report/report.manpower.css" />
     </resourceSet>
     <resourceSet name="manpowerreportjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/report/report.manpower.js" />
     </resourceSet>
 
     <resourceSet name="manpowercategoryreportjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/report/report.manpower.category.js" />
     </resourceSet>
-    
+
     <resourceSet name="attendancereportcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report.attendance.css" />
     </resourceSet>
     <resourceSet name="attendancereportjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/report/report.attendance.js" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
@@ -173,46 +173,45 @@
     </resourceSet>
 
     <resourceSet name="timesheetcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/report.timesheet.css" />
       <resource path="~/styles/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="timesheetjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/report/report.timesheet.js" />
     </resourceSet>
     <resourceSet name="checkinoutrequestcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/request.checkinout.css" />
     </resourceSet>
     <resourceSet name="checkinoutrequestjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Request/checkinout.request.js" />
       <resource path="~/scripts/views/search.request.js" />
-
     </resourceSet>
 
     <resourceSet name="lateinearlyoutcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/request.css" />
     </resourceSet>
     <resourceSet name="lateinearlyoutjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Request/lateinearlyout.request.js" />
       <resource path="~/scripts/views/search.request.js" />
     </resourceSet>
 
     <resourceSet name="leavecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/request.leave.css" />
     </resourceSet>
     <resourceSet name="leavejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Request/request.common.js" />
       <resource path="~/scripts/views/Request/leave.request.js" />
     </resourceSet>
@@ -221,78 +220,78 @@
     </resourceSet>
 
     <resourceSet name="keepinviewcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/keepinview.css" />
     </resourceSet>
 
     <resourceSet name="keepinviewcreatejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/search.request.js" />
       <resource path="~/scripts/views/Request/keepinview.create.js" />
     </resourceSet>
 
     <resourceSet name="keepinviewviewlistjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/keepinview.viewlist.js" />
     </resourceSet>
 
     <resourceSet name="overtimecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/request.overtime.css" />
     </resourceSet>
     <resourceSet name="overtimejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Overtime/overtime.request.js" />
       <resource path="~/scripts/views/search.request.js" />
     </resourceSet>
 
     <resourceSet name="changeshiftcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employeechangeshift.css" />
       <resource path="~/styles/request.changeshift.css" />
     </resourceSet>
     <resourceSet name="changeshiftjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Request/request.common.js" />
       <resource path="~/scripts/views/Request/changeshift.request.js" />
       <resource path="~/scripts/views/search.request.js" />
     </resourceSet>
 
     <resourceSet name="holidayjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/holiday.js" />
     </resourceSet>
 
     <resourceSet name="holidayeditcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="holidayeditjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/holiday.edit.js" />
     </resourceSet>
 
     <resourceSet name="memojs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/memo.js" />
     </resourceSet>
 
     <resourceSet name="memoedetailcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/memo.details.css" />
     </resourceSet>
 
     <resourceSet name="memoeditcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/memo.edit.css" />
     </resourceSet>
 
     <resourceSet name="memoeditjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/memo.js" />
       <resource path="~/scripts/Tiny_mce/tiny_mce_src.js" />
@@ -300,23 +299,23 @@
     </resourceSet>
 
     <resourceSet name="workingschedulecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/fullcalendar.css" />
     </resourceSet>
     <resourceSet name="workingschedulejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/fullcalendar.js" />
       <resource path="~/scripts/views/myworkingschedule.js" />
     </resourceSet>
 
     <resourceSet name="schedulearrangejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Calendar/schedulearrange.js" />
       <resource path="~/scripts/views/Calendar/schedulearrange.common.js" />
     </resourceSet>
     <resourceSet name="schedulearrangecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/Calendar/schedulearrange.css" />
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
@@ -325,11 +324,11 @@
     </resourceSet>
 
     <resourceSet name="shiftstatisticjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/Calendar/report.shiftstatistic.js" />
     </resourceSet>
     <resourceSet name="shiftstatisticcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/Calendar/schedulearrange.css" />
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
@@ -338,154 +337,152 @@
     </resourceSet>
 
     <resourceSet name="employeeshiftjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/Calendar/report.employeeshift.js" />
     </resourceSet>
     <resourceSet name="employeeshiftcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/Calendar/report.employeeshift.css" />
     </resourceSet>
-    
+
     <resourceSet name="myrequestcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
 
     <resourceSet name="workingcalendarscss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />
       <resource path="~/styles/workingcalendars.css" />
     </resourceSet>
     <resourceSet name="workingcalendarsjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
     </resourceSet>
 
-		<resourceSet name="workingcalendarsummaryjs" type="js">
-			<resource reference="sitejs"/>
-			<resource path="~/scripts/views/employee.workingcalendarsummary.js" />
-			<resource path="~/scripts/views/employee.search.in.company.js" />
-		</resourceSet>
+    <resourceSet name="workingcalendarsummaryjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.workingcalendarsummary.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+    </resourceSet>
 
     <resourceSet name="monthschedulecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/fullcalendar.css" />
       <resource path="~/styles/employee.monthschedule.css" />
     </resourceSet>
     <resourceSet name="monthschedulejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/libs/fullcalendar.js" />
       <resource path="~/scripts/views/employee.monthschedule.js" />
     </resourceSet>
 
     <resourceSet name="monthpickcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
 
       <resource path="~/styles/monPickr-0.0.3.css" />
-
     </resourceSet>
 
     <resourceSet name="empcheckinoutjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/checkinout.byemployee.js" />
     </resourceSet>
 
     <resourceSet name="empchangeshiftjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/changeshift.byemployee.js" />
     </resourceSet>
-    
+
     <resourceSet name="empleavejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/leave.byemployee.js" />
     </resourceSet>
 
     <resourceSet name="managercheckinoutjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
 
       <resource path="~/scripts/views/checkinout.bymanager.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="annualbalancejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/annualbalanceadj.js" />
       <resource path="~/scripts/views/annualbalance.js" />
     </resourceSet>
 
     <resourceSet name="annualbalancecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/annualbalance.css" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report.totalworkinghours.css" />
     </resourceSet>
     <resourceSet name="totalworkinghourjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.totalworkinghours.js" />
     </resourceSet>
 
-
-		<resourceSet name="staffrepresentativecss" type="css">
-			<resource reference="sitecss"/>
-			<resource path="~/styles/report.staffrepresentative.css" />
-		</resourceSet>
-		<resourceSet name="staffrepresentativjs" type="js">
-			<resource reference="sitejs"/>
-			<resource path="~/scripts/views/employee.search.in.company.js" />
-			<resource path="~/scripts/views/report/report.staffrepresentative.js" />
-		</resourceSet>
+    <resourceSet name="staffrepresentativecss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/report.staffrepresentative.css" />
+    </resourceSet>
+    <resourceSet name="staffrepresentativjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/report/report.staffrepresentative.js" />
+    </resourceSet>
 
     <resourceSet name="totalworkinghourmonthlycss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report.totalworkinghourmonthly.css" />
       <resource path="~/styles/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="totalworkinghourmonthlyjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourdailyjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourdaily.js" />
     </resourceSet>
 
-		<resourceSet name="totalworkinghourweeklycss" type="css">
-			<resource reference="sitecss"/>
-			<resource path="~/styles/report.totalworkinghourmonthly.css" />
-		</resourceSet>
-		<resourceSet name="totalworkinghourweeklyjs" type="js">
-			<resource reference="sitejs"/>
-			<resource path="~/scripts/views/employee.search.in.company.js" />
-			<resource path="~/scripts/views/report/report.totalworkinghourweekly.js" />
-		</resourceSet>
-    
+    <resourceSet name="totalworkinghourweeklycss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/report.totalworkinghourmonthly.css" />
+    </resourceSet>
+    <resourceSet name="totalworkinghourweeklyjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/report/report.totalworkinghourweekly.js" />
+    </resourceSet>
+
     <resourceSet name="employeerequestcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
     <resourceSet name="employeerequestjs" type="js">
-      <resource reference="sitejs"/>
-      <resource path="~/scripts/views/criteria.js"/>
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/criteria.js" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/request/employeerequest.js" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
@@ -494,75 +491,75 @@
     </resourceSet>
 
     <resourceSet name="employeerequestdetailhrspacecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employeerequestdetailhrspace.css" />
     </resourceSet>
-    
+
     <resourceSet name="employeerequestdetailhrspacejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/request/employeerequestdetail.hrspace.js" />
     </resourceSet>
 
     <resourceSet name="memberrequestdetailpersonalspacecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/memberrequestdetailpersonalspace.css" />
     </resourceSet>
 
     <resourceSet name="memberrequestdetailpersonalspacejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/request/memberrequestdetail.personalspace.js" />
     </resourceSet>
-    
+
     <resourceSet name="teammanagementjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/team.management.js" />
     </resourceSet>
 
     <resourceSet name="teamjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/team.js" />
       <resource path="~/scripts/views/team.edit.js" />
     </resourceSet>
 
     <resourceSet name="teameditjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/team.edit.js" />
     </resourceSet>
 
-		<resourceSet name="teamsupervisorcss" type="css">
-			<resource reference="sitecss"/>
-			<resource path="~/styles/team.supervisor.css" />
-		</resourceSet>
-		<resourceSet name="teamsupervisorjs" type="js">
-			<resource reference="sitejs"/>
-		</resourceSet>
-    
+    <resourceSet name="teamsupervisorcss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/team.supervisor.css" />
+    </resourceSet>
+    <resourceSet name="teamsupervisorjs" type="js">
+      <resource reference="sitejs" />
+    </resourceSet>
+
     <resourceSet name="leavesummaryjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
 
     <resourceSet name="requestmonitoringcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report.requestmonitoring.css" />
     </resourceSet>
 
     <resourceSet name="requestmonitoringjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/date.js" />
-			<resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/date.filter.js" />
-			<resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
+      <resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
     </resourceSet>
 
     <resourceSet name="jobtitlecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />
       <resource path="~/styles/jobtitle.css" />
     </resourceSet>
     <resourceSet name="jobtitle" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/jobtitle.js" />
     </resourceSet>
 
@@ -582,65 +579,65 @@
     </resourceSet>
 
     <resourceSet name="timesheetrecordcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="timesheetrecordjs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
       <resource path="~/scripts/views/timesheetrecord/timesheetrecord.js" />
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
     </resourceSet>
 
     <resourceSet name="myovertimecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/monPickr-0.0.3.css" />
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
     <resourceSet name="myovertimerequestjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/myovertimerequest.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="overtimereportcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/workingcalendardatatable.css" />
       <resource path="~/styles/fixtable.css" />
       <resource path="~/styles/monPickr-0.0.3.css" />
       <resource path="~/styles/overtimereport.css" />
     </resourceSet>
     <resourceSet name="overtimereportjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/overtimereport.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="overtimereportdetailsjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/overtimereportdetails.js" />
     </resourceSet>
 
     <resourceSet name="monthlyovertimehrreportjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
       <resource path="~/scripts/datatable/FixedColumns.js" />
       <resource path="~/scripts/views/Overtime/hrovertimereport.js" />
     </resourceSet>
 
     <resourceSet name="managerequestscss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
     <resourceSet name="monthlyovertimememberjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/overtime/monthlyovertime.member.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
     </resourceSet>
     <resourceSet name="memberovertimecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/monPickr-0.0.3.css" />
       <resource path="~/styles/memberovertime.css" />
     </resourceSet>
@@ -650,52 +647,52 @@
       <resource path="~/scripts/views/overtime/monthlyovertime.member.detail.js" />
     </resourceSet>
     <resourceSet name="dailyovertimememberjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Overtime/overtime.command.request.js" />
       <resource path="~/scripts/views/overtime/dailyovertime.member.js" />
     </resourceSet>
-    
+
     <resourceSet name="myspacecss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="myspacejs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/myspace.js" />
     </resourceSet>
 
     <resourceSet name="extensionnocss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="extensionnojs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/extensionno.js" />
     </resourceSet>
 
     <resourceSet name="addextensionnojs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/addextensionno.js" />
     </resourceSet>
 
     <resourceSet name="reportovertimerequestcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/report.overtimerequest.css" />
       <resource path="~/styles/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="reportovertimerequestjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/report/reportovertimerequest.js" />
     </resourceSet>
 
     <resourceSet name="timerecordcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/timerecord.css" />
     </resourceSet>
     <resourceSet name="timerecordjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/timerecord.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
@@ -707,45 +704,54 @@
     </resourceSet>
 
     <resourceSet name="shiftcss" type="css">
-      <resource reference="sitecss"/>
+      <resource reference="sitecss" />
       <resource path="~/styles/shift.css" />
     </resourceSet>
-    
+
     <resourceSet name="shiftjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/shift.js" />
     </resourceSet>
 
-	<resourceSet name="messagecss" type="css">
-		<resource reference="sitecss"/>
-		<resource path="~/styles/message.css" />
-		<resource path="~/scripts/chosen/chosen.css" />
-	</resourceSet>
+    <resourceSet name="messagecss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/message.css" />
+      <resource path="~/scripts/chosen/chosen.css" />
+    </resourceSet>
 
-	<resourceSet name="messagejs" type="js">
-		<resource reference="sitejs"/>
-		<resource path="~/scripts/views/message.js" />
-	</resourceSet>
+    <resourceSet name="messagejs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/message.js" />
+    </resourceSet>
 
-	<resourceSet name="messageeditjs" type="js">
-		<resource reference="sitejs"/>
-		<resource path="~/scripts/views/message.edit.js" />
-		<resource path="~/scripts/chosen/chosen.jquery.js" />
-	</resourceSet>
+    <resourceSet name="messageeditjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/message.edit.js" />
+      <resource path="~/scripts/chosen/chosen.jquery.js" />
+    </resourceSet>
 
-	<resourceSet name="employeemessagejs" type="js">
-		<resource reference="sitejs"/>
-		<resource path="~/scripts/views/employee.message.js" />
-	</resourceSet>
-    
-  <resourceSet name="departmentjs" type="js">
-    <resource reference="sitejs"/>
-    <resource path="~/scripts/views/department/department.js" />
-  </resourceSet>
+    <resourceSet name="employeemessagejs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.message.js" />
+    </resourceSet>
+
+    <resourceSet name="departmentjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/department/department.js" />
+    </resourceSet>
     <resourceSet name="departmenteditjs" type="js">
-      <resource reference="sitejs"/>
+      <resource reference="sitejs" />
       <resource path="~/scripts/views/department/department.edit.js" />
     </resourceSet>
 
+    <resourceSet name="disciplinecss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/discipline.css" />
+    </resourceSet>
+    <resourceSet name="disciplinejs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/scripts/views/discipline/discipline.summary.js" />
+    </resourceSet>
   </resourceSets>
 </combres>

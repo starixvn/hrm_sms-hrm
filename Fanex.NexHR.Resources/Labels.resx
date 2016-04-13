@@ -1146,4 +1146,40 @@
   <data name="EditDivision" xml:space="preserve">
     <value>Edit Division</value>
   </data>
+  <data name="DisciplineSummary" xml:space="preserve">
+    <value>Discipline Summary</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="SymbolCount" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Absent" xml:space="preserve">
+    <value>Absent</value>
+  </data>
+  <data name="AddOtherViolations" xml:space="preserve">
+    <value>Add Other Violations</value>
+  </data>
+  <data name="MinusScoringApprover" xml:space="preserve">
+    <value>Minus Scoring Approver</value>
+  </data>
+  <data name="MinusScoringSystem" xml:space="preserve">
+    <value>Minus Scoring System</value>
+  </data>
+  <data name="MissingCheckInOut" xml:space="preserve">
+    <value>Missing Check In/Out</value>
+  </data>
+  <data name="OtherViolations" xml:space="preserve">
+    <value>Other Violations</value>
+  </data>
+  <data name="UPL" xml:space="preserve">
+    <value>UPL</value>
+  </data>
+  <data name="UPLAbsent" xml:space="preserve">
+    <value>UPL Absent</value>
+  </data>
+  <data name="WorkingUnderTime" xml:space="preserve">
+    <value>Working Under Time</value>
+  </data>
 </root>

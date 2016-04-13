@@ -1,0 +1,70 @@
+﻿@model DisciplineSummaryViewModel
+@{
+    ViewBag.Title = "Discipline";
+}
+@section css{
+    @Url.CombresLink("disciplinecss")
+}
+@section js{
+    @Url.CombresLink("disciplinejs")
+}
+@section Breadcrumb {
+}
+<h2>@Labels.DisciplineSummary</h2>
+<form class="form-filter">
+    <div class="container_24 bunhat">
+        <div class="grid_2">
+            @Html.LabelFor(model => model.TeamId)
+        </div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
+        </div>
+        <div class="grid_2">@Labels.Category</div>
+        <div class="grid_4">
+            @{
+                var category = new List<SelectListItem>
+                {
+                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                    new SelectListItem() {Text = Labels.Expat, Value = "0"},
+                    new SelectListItem() {Text = Labels.Local, Value = "1"},
+                };
+            }
+            @Html.DropDownListFor(model => model.IsLocal, category, new {@class = "category"})
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="grid_7">
+            @Html.TextBoxFor(model => model.Employee, new {placeholder = Messages.SearchEmployeeWatermark})
+            @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.ReasonId)
+        </div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.FromDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.ToDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="prefix_2 grid_6">
+            <input type="button" id="submit" value="@Labels.Submit"/>
+            <input type="button" value="Excel" id="btnExcel"/>
+        </div>
+    </div>
+</form>
+<div id="discipline-summary"></div>
+<div id="add-discipline-dialog" title="Other Vioaltions"></div>

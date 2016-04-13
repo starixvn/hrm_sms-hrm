@@ -1,0 +1,55 @@
+﻿@model OtherViolationViewModel
+
+@using (Html.BeginForm())
+{
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="input">
+            @Html.EditorFor(model => model.Employee)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.WorkDate)
+        </div>
+        <div class="input">
+
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.OtherViolationTypeId)
+        </div>
+        <div class="input">
+
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Score)
+        </div>
+        <div class="input">
+
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Comment)
+        </div>
+        <div class="input">
+
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+}

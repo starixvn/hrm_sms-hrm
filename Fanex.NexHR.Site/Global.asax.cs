@@ -15,7 +15,6 @@ namespace Fanex.NexHR.Site
     using System.Web.Mvc;
     using System.Web.Routing;
     using Fanex.Data.Configuration;
-    using Fanex.Logging;
     using Fanex.NexHR.Web.Providers;
 
     /// <summary>
@@ -40,7 +39,7 @@ namespace Fanex.NexHR.Site
             routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = System.Web.Http.RouteParameter.Optional });
+                defaults: new { id = RouteParameter.Optional });
 
             routes.MapRoute(
                name: "ManageTeam",

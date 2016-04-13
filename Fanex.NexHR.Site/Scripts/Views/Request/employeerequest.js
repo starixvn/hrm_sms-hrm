@@ -185,7 +185,6 @@ $(document).ready(function () {
             var requestType = $("input[type='radio'][name='RequestType']:checked").val();
             var isLocal = $("#IsLocal").val();
             var isFilterByAffectedDate = $("#IsFilterByAffectedDate").val();
-            debugger;
             var url = _global.root + "request/" + action + "?DateOption=" + $("#Date").val() +
             "&TeamIds=" + teams + "&Employee=" + $("#Employee").val() +
             "&EmployeeId=" + $("#EmployeeId").val() +

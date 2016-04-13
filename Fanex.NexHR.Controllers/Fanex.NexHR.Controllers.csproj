@@ -97,6 +97,7 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="CalendarController.cs" />
     <Compile Include="DepartmentController.cs" />
+    <Compile Include="DisciplineController.cs" />
     <Compile Include="ErrorController.cs" />
     <Compile Include="EmployeeController.cs" />
     <Compile Include="ExportController.cs" />

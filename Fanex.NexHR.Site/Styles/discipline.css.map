@@ -1,0 +1,10 @@
+﻿{
+	"version": 3,
+	"file": "discipline.css",
+	"sources": [
+		"discipline.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AACI,IAAI,AAAA,YAAY,CAAC,MAAM,CAAhB;EACH,SAAS,EAAE,KAAM;EACjB,SAAS,EAAE,KAAM;CAFb;;AAIH,IAAI,AAAA,YAAY,CAAC,MAAM,AAAA,SAAS,CAAtB;EACP,SAAS,EAAE,KAAM;EACjB,SAAS,EAAE,KAAM;CAFT;;AAQhB,KAAK,AAAA,mBAAmB,CAAC,WAAW,CAAxB;EACR,UAAU,EAAE,IAAK;CADR",
+	"names": []
+}

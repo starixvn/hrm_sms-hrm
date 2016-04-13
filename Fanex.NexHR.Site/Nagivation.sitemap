@@ -13,6 +13,7 @@
       <siteMapNode title="My calendar" controller="calendar" action="myworkingschedule" icon="calendar" />
       <siteMapNode title="Members' request" controller="request" action="member" icon="user1" roles="Approver, Verifier"/>
       <siteMapNode title="Members' overtimes" controller="overtime" action="memberovertime" icon="user1" roles="Approver, Verifier"/>
+      <siteMapNode title="Discipline Summary" controller="Discipline" action="DisciplineSummary" icon="user1" roles="Approver"/>
       <siteMapNode title="Requests statistic" controller="report" action="LeaderRequestMonitoring" icon="search" roles="Approver, Verifier" id="1"/>
       <siteMapNode title="Schedule Arrange" controller="Calendar" action="ArrangeSchedule" icon="schedule1" roles="ShiftManager"/>
       <siteMapNode title="Shift Statistic" controller="Calendar" action="ShiftStatistic" icon="schedule" roles="ShiftManager, HR"/>

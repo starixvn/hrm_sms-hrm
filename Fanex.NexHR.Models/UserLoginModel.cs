@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Models
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Security;
     using Fanex.NexHR.Core.Enums;
 
     /// <summary>
@@ -54,14 +55,8 @@ namespace Fanex.NexHR.Models
                 }
 
                 var roles = Roles.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                var result = new List<short>();
 
-                foreach (var item in roles)
-                {
-                    result.Add(short.Parse(item));
-                }
-
-                return result;
+                return roles.Select(role => short.Parse(role)).ToList();
             }
         }
 
@@ -69,9 +64,7 @@ namespace Fanex.NexHR.Models
         {
             get
             {
-                return (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FullName))
-                ? string.Empty
-                : NickName + " (" + FullName + ")";
+                return (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FullName)) ? string.Empty : NickName + " (" + FullName + ")";
             }
         }
 

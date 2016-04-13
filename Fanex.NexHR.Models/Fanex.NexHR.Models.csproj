@@ -66,6 +66,8 @@
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
+    <Compile Include="Discipline\DisciplineSummaryModel.cs" />
+    <Compile Include="Discipline\OtherViolationModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
@@ -155,9 +157,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AnnualLeave\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

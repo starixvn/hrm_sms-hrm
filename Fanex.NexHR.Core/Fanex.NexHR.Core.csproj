@@ -82,6 +82,7 @@
     <Compile Include="Enums\MarriageStatus.cs" />
     <Compile Include="Enums\AttendanceFilter.cs" />
     <Compile Include="Enums\MessageCategory.cs" />
+    <Compile Include="Enums\OtherViolation.cs" />
     <Compile Include="Enums\OvertimeType.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />

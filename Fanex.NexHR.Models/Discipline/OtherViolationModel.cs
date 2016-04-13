@@ -1,0 +1,19 @@
+﻿namespace Fanex.NexHR.Models.Discipline
+{
+    using System;
+
+    public class OtherViolationModel
+    {
+        public DateTime WorkDate { get; set; }
+
+        public int EmployeeId { get; set; }
+
+        public string Employee { get; set; }
+
+        public float Score { get; set; }
+
+        public string Name { get; set; }
+
+        public string Comment { get; set; }
+    }
+}
