@@ -121,22 +121,22 @@ namespace Fanex.NexHR.Core
             destCell.SetCellType(sourceCell.CellType);
             switch (sourceCell.CellType)
             {
-                case CellType.BLANK:
+                case CellType.Blank:
                     destCell.SetCellValue(sourceCell.StringCellValue);
                     break;
-                case CellType.BOOLEAN:
+                case CellType.Boolean:
                     destCell.SetCellValue(sourceCell.BooleanCellValue);
                     break;
 
-                case CellType.ERROR:
+                case CellType.Error:
                     destCell.SetCellErrorValue(sourceCell.ErrorCellValue);
                     break;
 
-                case CellType.NUMERIC:
+                case CellType.Numeric:
                     destCell.SetCellValue(sourceCell.NumericCellValue);
                     break;
 
-                case CellType.STRING:
+                case CellType.String:
                     destCell.SetCellValue(sourceCell.RichStringCellValue);
                     break;
 

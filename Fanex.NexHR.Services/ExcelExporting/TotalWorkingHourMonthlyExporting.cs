@@ -96,7 +96,7 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var font = this._workbook.CreateFont();
             font.FontHeightInPoints = 14;
-            font.Boldweight = (short)FontBoldWeight.BOLD;
+            font.Boldweight = (short)FontBoldWeight.Bold;
             return font;
         }
 
@@ -163,17 +163,17 @@ namespace Fanex.NexHR.Services.ExcelExporting
         private ICellStyle CreateOddCellStyleWithLeftAlign()
         {
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.Alignment = HorizontalAlignment.LEFT;
-            cellStyle.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.Alignment = HorizontalAlignment.Left;
+            cellStyle.FillForegroundColor = HSSFColor.LightCornflowerBlue.Index;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillBackgroundColor = HSSFColor.LightCornflowerBlue.Index;
             return cellStyle;
         }
 
         private ICellStyle CreateEvenCellStyleWithLeftAlign()
         {
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.Alignment = HorizontalAlignment.LEFT;
+            cellStyle.Alignment = HorizontalAlignment.Left;
             return cellStyle;
         }
 
@@ -219,19 +219,19 @@ namespace Fanex.NexHR.Services.ExcelExporting
         private ICellStyle CreateOddCellStyleWithCenterAlign()
         {
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.Alignment = HorizontalAlignment.CENTER;
-            cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
-            cellStyle.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
+            cellStyle.FillForegroundColor = HSSFColor.LightCornflowerBlue.Index;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillBackgroundColor = HSSFColor.LightCornflowerBlue.Index;
             return cellStyle;
         }
 
         private ICellStyle CreateEvenCellStyleWithCenterAlign()
         {
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.Alignment = HorizontalAlignment.CENTER;
-            cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
             return cellStyle;
         }
 
@@ -289,8 +289,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerFont = _workbook.CreateFont();
             headerFont.FontHeightInPoints = 11;
-            headerFont.Boldweight = (short)FontBoldWeight.BOLD;
-            headerFont.Color = HSSFColor.WHITE.index;
+            headerFont.Boldweight = (short)FontBoldWeight.Bold;
+            headerFont.Color = HSSFColor.White.Index;
             return headerFont;
         }
 
@@ -298,8 +298,8 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerWorkingHourFont = _workbook.CreateFont();
             headerWorkingHourFont.FontHeightInPoints = 11;
-            headerWorkingHourFont.Boldweight = (short)FontBoldWeight.BOLD;
-            headerWorkingHourFont.Color = HSSFColor.BLACK.index;
+            headerWorkingHourFont.Boldweight = (short)FontBoldWeight.Bold;
+            headerWorkingHourFont.Color = HSSFColor.Black.Index;
             return headerWorkingHourFont;
         }
 
@@ -311,11 +311,11 @@ namespace Fanex.NexHR.Services.ExcelExporting
         {
             var headerWorkingHourFont = this.CreateHeaderWorkingHourFont();
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.FillForegroundColor = HSSFColor.GREY_40_PERCENT.index;
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = HSSFColor.GREY_40_PERCENT.index;
-            cellStyle.Alignment = HorizontalAlignment.CENTER;
-            cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
+            cellStyle.FillForegroundColor = HSSFColor.Grey40Percent.Index;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillBackgroundColor = HSSFColor.Grey40Percent.Index;
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
             cellStyle.WrapText = true;
             cellStyle.SetFont(headerWorkingHourFont);
             return cellStyle;
@@ -331,11 +331,11 @@ namespace Fanex.NexHR.Services.ExcelExporting
             var palette = _workbook.GetCustomPalette();
             var cellStyle = _workbook.CreateCellStyle();
             var headerColor = palette.FindSimilarColor(192, 80, 77);
-            cellStyle.FillForegroundColor = headerColor.GetIndex();
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = headerColor.GetIndex();
-            cellStyle.Alignment = HorizontalAlignment.CENTER;
-            cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
+            cellStyle.FillForegroundColor = headerColor.Indexed;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillBackgroundColor = headerColor.Indexed;
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
             cellStyle.WrapText = true;
             cellStyle.SetFont(headerFont);
             return cellStyle;

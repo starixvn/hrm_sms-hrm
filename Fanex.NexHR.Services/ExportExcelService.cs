@@ -91,7 +91,7 @@ namespace Fanex.NexHR.Services
 
             var font = workbook.CreateFont();
             font.FontHeightInPoints = 18;
-            font.Boldweight = (short)FontBoldWeight.BOLD;
+            font.Boldweight = (short)FontBoldWeight.Bold;
 
             var cell = rowTitle.CreateCell(1);
             cell.SetCellValue(titleString);
@@ -104,15 +104,15 @@ namespace Fanex.NexHR.Services
             var row = sheet.CreateRow(rowIndex);
             var font1 = workbook.CreateFont();
             font1.FontHeightInPoints = 11;
-            font1.Color = HSSFColor.GREY_80_PERCENT.WHITE.index;
-            font1.Boldweight = (short)FontBoldWeight.BOLD;
+            font1.Color = HSSFColor.Grey80Percent.White.Index;
+            font1.Boldweight = (short)FontBoldWeight.Bold;
 
             ICellStyle cellStyle = workbook.CreateCellStyle();
-            cellStyle.FillForegroundColor = HSSFColor.GREY_80_PERCENT.index;
-            cellStyle.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            cellStyle.FillBackgroundColor = HSSFColor.GREY_80_PERCENT.index;
-            cellStyle.Alignment = HorizontalAlignment.CENTER;
-            cellStyle.VerticalAlignment = VerticalAlignment.CENTER;
+            cellStyle.FillForegroundColor = HSSFColor.Grey80Percent.Index;
+            cellStyle.FillPattern = FillPattern.SolidForeground;
+            cellStyle.FillBackgroundColor = HSSFColor.Grey80Percent.Index;
+            cellStyle.Alignment = HorizontalAlignment.Center;
+            cellStyle.VerticalAlignment = VerticalAlignment.Center;
             cellStyle.SetFont(font1);
 
             var cell1 = row.CreateCell(0);
@@ -174,24 +174,24 @@ namespace Fanex.NexHR.Services
             ICellStyle bodyStyle = workbook.CreateCellStyle();
 
             ICellStyle bodyStyle1 = workbook.CreateCellStyle();
-            bodyStyle1.Alignment = HorizontalAlignment.CENTER;
-            bodyStyle1.VerticalAlignment = VerticalAlignment.CENTER;
+            bodyStyle1.Alignment = HorizontalAlignment.Center;
+            bodyStyle1.VerticalAlignment = VerticalAlignment.Center;
 
             ICellStyle bodyStyle2 = workbook.CreateCellStyle();
-            bodyStyle2.Alignment = HorizontalAlignment.CENTER;
-            bodyStyle2.VerticalAlignment = VerticalAlignment.CENTER;
-            bodyStyle2.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
-            bodyStyle2.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            bodyStyle2.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle2.Alignment = HorizontalAlignment.Center;
+            bodyStyle2.VerticalAlignment = VerticalAlignment.Center;
+            bodyStyle2.FillForegroundColor = HSSFColor.LightCornflowerBlue.Index;
+            bodyStyle2.FillPattern = FillPattern.SolidForeground;
+            bodyStyle2.FillBackgroundColor = HSSFColor.LightCornflowerBlue.Index;
 
             ICellStyle bodyStyle3 = workbook.CreateCellStyle();
-            bodyStyle3.Alignment = HorizontalAlignment.LEFT;
+            bodyStyle3.Alignment = HorizontalAlignment.Left;
 
             ICellStyle bodyStyle4 = workbook.CreateCellStyle();
-            bodyStyle4.Alignment = HorizontalAlignment.LEFT;
-            bodyStyle4.FillForegroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
-            bodyStyle4.FillPattern = FillPatternType.SOLID_FOREGROUND;
-            bodyStyle4.FillBackgroundColor = HSSFColor.LIGHT_CORNFLOWER_BLUE.index;
+            bodyStyle4.Alignment = HorizontalAlignment.Left;
+            bodyStyle4.FillForegroundColor = HSSFColor.LightCornflowerBlue.Index;
+            bodyStyle4.FillPattern = FillPattern.SolidForeground;
+            bodyStyle4.FillBackgroundColor = HSSFColor.LightCornflowerBlue.Index;
             ICell cellBody;
             //// Add data rows
             foreach (var totalWorkingHours in listTotalWorkingHours)
@@ -214,7 +214,7 @@ namespace Fanex.NexHR.Services
                 cellBody.CellStyle = bodyStyle;
                 cellBody.SetCellValue(totalWorkingHours.Employee.Code.Trim());
 
-                bodyStyle3.Alignment = HorizontalAlignment.LEFT;
+                bodyStyle3.Alignment = HorizontalAlignment.Left;
                 cellBody = row.CreateCell(2);
                 if (rowIndex % 2 == 0)
                 {
@@ -227,7 +227,7 @@ namespace Fanex.NexHR.Services
 
                 cellBody.SetCellValue(totalWorkingHours.Employee.FullName);
 
-                // bodyStyle.Alignment = HorizontalAlignment.CENTER;
+                // bodyStyle.Alignment = HorizontalAlignment.Center;
                 cellBody = row.CreateCell(3);
                 cellBody.CellStyle = bodyStyle;
                 cellBody.SetCellValue(totalWorkingHours.Employee.NickName);
@@ -1762,12 +1762,15 @@ namespace Fanex.NexHR.Services
                 case (int)RequestType.LateIn:
                     detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift, date);
                     break;
+
                 case (int)RequestType.EarlyOut:
                     detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift, date);
                     break;
+
                 case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
+
                 default:
                     break;
             }
@@ -1825,9 +1828,11 @@ namespace Fanex.NexHR.Services
                 case (int)RequestType.LateIn:
                     detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift.Name, date);
                     break;
+
                 case (int)RequestType.EarlyOut:
                     detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, date);
                     break;
+
                 case (int)RequestType.Overtime:
                     if (request.IsOvertimeHours)
                     {
@@ -1849,9 +1854,11 @@ namespace Fanex.NexHR.Services
                     }
 
                     break;
+
                 case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
+
                 default:
                     break;
             }

@@ -35,3 +35,4 @@ $tf*/
 /Fanex.NexHR.Site/Logs
 *.Publish.xml
 packages/
+*.orig
