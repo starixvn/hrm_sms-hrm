@@ -42,8 +42,8 @@ $(document).ready(function () {
         var arrFromTime = $("#FromTime").val().split(":");
         var arrToTime = $("#ToTime").val().split(":");
 
-        var fromTime = parseInt(arrFromTime[0] * 60) + parseInt(arrFromTime[1]);
-        var toTime = parseInt(arrToTime[0] * 60) + parseInt(arrToTime[1]);
+        var fromTime = (parseInt(arrFromTime[0]) * 60) + parseInt(arrFromTime[1]);
+        var toTime = (parseInt(arrToTime[0]) * 60) + parseInt(arrToTime[1]);
         var totalMunites = 0;
         if (isGrossDay) {
             totalMunites = 1440 + (toTime - fromTime); // 1440 = 24h * 60

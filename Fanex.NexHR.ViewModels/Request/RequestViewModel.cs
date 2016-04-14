@@ -77,12 +77,15 @@ namespace Fanex.NexHR.ViewModels.Request
                     case RequestViewType.PersonalSpace:
                         action = "Member";
                         break;
+
                     case RequestViewType.HRSpace:
                         action = "HRView";
                         break;
+
                     case RequestViewType.CompanySpace:
                         action = "DailyView";
                         break;
+
                     case RequestViewType.SASpace:
                         action = "VoidRequest";
                         break;
@@ -111,6 +114,7 @@ namespace Fanex.NexHR.ViewModels.Request
 
                 return isFilterByAffectedDate;
             }
+
             set
             {
                 isFilterByAffectedDate = value;
@@ -177,12 +181,15 @@ namespace Fanex.NexHR.ViewModels.Request
                     case RequestViewType.PersonalSpace:
                         pageTitle = Labels.MemberRequest;
                         break;
+
                     case RequestViewType.HRSpace:
                         pageTitle = Labels.EmployeeRequest;
                         break;
+
                     case RequestViewType.CompanySpace:
                         pageTitle = Labels.DailyRequests;
                         break;
+
                     case RequestViewType.SASpace:
                         pageTitle = Labels.VoidRequest;
                         break;

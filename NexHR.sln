@@ -58,6 +58,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6CA44E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.ReminderService", "Fanex.NexHR.RemindService\Fanex.NexHR.ReminderService.csproj", "{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}"
+EndProject
 Global
 	GlobalSection(JSLint) = preSolution
 		SolutionConfigurationLocation = JSLintOptions.xml
@@ -171,6 +173,16 @@ Global
 		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{405929F6-B1DC-49E5-B936-E342B36C87ED}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Debug|x86.ActiveCfg = Debug|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Debug|x86.Build.0 = Debug|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Release|Any CPU.ActiveCfg = Release|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Release|x86.ActiveCfg = Release|x86
+		{A1ADB2E2-DEA1-4253-8FCD-E184DA21183B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

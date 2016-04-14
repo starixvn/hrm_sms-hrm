@@ -62,7 +62,6 @@ var LeaveRequest = (function ($) {
             });
             LeaveRequest.fromDate.change(function () {
                 LeaveRequest.dateChange();
-
             });
             LeaveRequest.toDate.change(function () {
                 LeaveRequest.dateChange();
@@ -175,7 +174,6 @@ var LeaveRequest = (function ($) {
                             FromTime: fromTime,
                             ToTime: toTime
                         });
-
                     });
                 }
                 else if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
@@ -279,8 +277,8 @@ var LeaveRequest = (function ($) {
                     var arrTimeIn = data.BeginCheckInTime.split(":");
                     var arrTimeOut = data.BeginCheckOutTime.split(":");
 
-                    var minuteFrom = parseInt(arrTimeIn[0]) * 60 + parseInt(arrTimeIn[1]);
-                    var minuteTo = parseInt(arrTimeOut[0]) * 60 + parseInt(arrTimeOut[1]);
+                    var minuteFrom = (parseInt(arrTimeIn[0]) * 60) + parseInt(arrTimeIn[1]);
+                    var minuteTo = (parseInt(arrTimeOut[0]) * 60) + parseInt(arrTimeOut[1]);
                     var isFromAfterday = data.IsInAfterDay;
                     var isToAfterday = false;
                     if (data.IsInAfterDay) {
@@ -301,7 +299,6 @@ var LeaveRequest = (function ($) {
                     var minute = Math.floor((averageTime % 60) / 30) * 30;
                     minute = minute === 0 ? "00" : minute;
                     if (hour < 10) {
-
                         hour = "0" + hour;
                     }
 
@@ -580,7 +577,7 @@ var LeaveRequest = (function ($) {
                 LeaveRequest.showLeaveDetail(
                     LeaveRequest.employeeId.val(),
                     LeaveRequest.fromDate.val(),
-                    LeaveRequest.toDate.val(), 
+                    LeaveRequest.toDate.val(),
                     LeaveRequest.leaveTypeId.val());
             }
             else {
@@ -596,7 +593,7 @@ var LeaveRequest = (function ($) {
             }
         }
     };
-} (jQuery));
+}(jQuery));
 
 $(document).ready(function () {
     LeaveRequest.init();

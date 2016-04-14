@@ -91,7 +91,12 @@ namespace Fanex.NexHR.ReminderService.Services
 
         private void RemindForMissingCheckOut(EmployeeMissingCheckInOutModel employee)
         {
-            string emailSubject = string.Format(_SubjectMissingCheckOut, employee.NickName, FormatDate(employee.WorkDate), employee.ShiftCode, FormatTime(employee.CheckIn));
+            string emailSubject = string.Format(
+                _SubjectMissingCheckOut,
+                employee.NickName,
+                FormatDate(employee.WorkDate),
+                employee.ShiftCode,
+                FormatTime(employee.CheckIn));
             var bodyTemplate = EmailService.ReadTextFile(_TplEmailMissingCheckOut);
             var body = string.Format(bodyTemplate, employee.NickName, FormatDate(employee.WorkDate), employee.ShiftCode);
 

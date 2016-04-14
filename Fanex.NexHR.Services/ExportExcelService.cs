@@ -34,9 +34,6 @@ namespace Fanex.NexHR.Services
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-    /// <summary>
-    /// Export Excel Service.
-    /// </summary>
     [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelService : IExportExcelService
     {
@@ -74,13 +71,6 @@ namespace Fanex.NexHR.Services
         private const string _MsgOvertimeShift = "{0} ({1}) {2}";
         private const string _MsgKeepInView = "{0} ({1})";
 
-        /// <summary>
-        /// Export excel total working hours report.
-        /// </summary>
-        /// <param name="listTotalWorkingHours">List total working hours object.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">The to date.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportTotalWorkingHours(IList<TotalWorkingHours> listTotalWorkingHours, DateTime fromDate, DateTime toDate)
         {
             // Create a new workbook and a sheet named "User Accounts"
@@ -196,14 +186,7 @@ namespace Fanex.NexHR.Services
             //// Add data rows
             foreach (var totalWorkingHours in listTotalWorkingHours)
             {
-                if (rowIndex % 2 == 0)
-                {
-                    bodyStyle = bodyStyle2;
-                }
-                else
-                {
-                    bodyStyle = bodyStyle1;
-                }
+                bodyStyle = rowIndex % 2 == 0 ? bodyStyle2 : bodyStyle1;
 
                 row = sheet.CreateRow(rowIndex);
                 cellBody = row.CreateCell(0);
@@ -216,18 +199,9 @@ namespace Fanex.NexHR.Services
 
                 bodyStyle3.Alignment = HorizontalAlignment.Left;
                 cellBody = row.CreateCell(2);
-                if (rowIndex % 2 == 0)
-                {
-                    cellBody.CellStyle = bodyStyle4;
-                }
-                else
-                {
-                    cellBody.CellStyle = bodyStyle3;
-                }
-
+                cellBody.CellStyle = rowIndex % 2 == 0 ? bodyStyle4 : bodyStyle3;
                 cellBody.SetCellValue(totalWorkingHours.Employee.FullName);
 
-                // bodyStyle.Alignment = HorizontalAlignment.Center;
                 cellBody = row.CreateCell(3);
                 cellBody.CellStyle = bodyStyle;
                 cellBody.SetCellValue(totalWorkingHours.Employee.NickName);
@@ -282,12 +256,6 @@ namespace Fanex.NexHR.Services
             return workbook;
         }
 
-        /// <summary>
-        /// Exports the total working hour monthly.
-        /// </summary>
-        /// <param name="totalWorkingHourMonthly">All items of the total working hour monthly.</param>
-        /// <param name="firstRecord">The first record contains the header titles.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord)
         {
             var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourMonthly, firstRecord);
@@ -300,68 +268,43 @@ namespace Fanex.NexHR.Services
             return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourDaily();
         }
 
-        /// <summary>
-        /// Method Export Total Working Calendar Summary.
-        /// </summary>
-        /// <param name="calendars">List of Working Calendar Entity.</param>
-        /// <param name="fromDate">Export From Date.</param>
-        /// <param name="toDate">Export To Date.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
         {
-            HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();
-            hssfworkbook = exportExcel.ExportWorkingCalendarSummary(calendars, fromDate, toDate);
+            HSSFWorkbook hssfworkbook = exportExcel.ExportWorkingCalendarSummary(calendars, fromDate, toDate);
 
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method Export HR Request Statistic.
-        /// </summary>
-        /// <param name="requests">List of Request Monitoring Entity.</param>
-        /// <param name="fromDate">Export From Date.</param>
-        /// <param name="toDate">Export To Date.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
-            HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();
-            hssfworkbook = exportExcel.ExportHRRequestStatistic(requests, fromDate, toDate);
+            HSSFWorkbook hssfworkbook = exportExcel.ExportHRRequestStatistic(requests, fromDate, toDate);
 
             return hssfworkbook;
         }
 
         public HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
         {
-            HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();
-            hssfworkbook = exportExcel.ExportEmployeeSupervisor(supervisors);
+            HSSFWorkbook hssfworkbook = exportExcel.ExportEmployeeSupervisor(supervisors);
 
             return hssfworkbook;
         }
 
         public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
-            HSSFWorkbook hssfworkbook;
             var exportExcel = new ReportExporting();
-            hssfworkbook = exportExcel.ExportTeamSupervisor(supervisors);
+            HSSFWorkbook hssfworkbook = exportExcel.ExportTeamSupervisor(supervisors);
 
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Function to Export attendance report.
-        /// </summary>
-        /// <param name="attendanceList">List EmployeeAttendanceModel need export.</param>
-        /// <param name="fromDate">From Date which list object is filter from it.</param>
-        /// <param name="toDate">To Date which list object is filter from it.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportAttendance(IList<EmployeeAttendanceModel> attendanceList, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_AttendanceFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -371,14 +314,13 @@ namespace Fanex.NexHR.Services
 
             //// render body
             var rowIndex = _RowStartBodyAttendance;
-            var rowCopy = _RowStartBodyAttendance;
             var index = 1;
             var height = sheet.GetRow(_RowStartBodyAttendance).Height;
 
             foreach (var item in attendanceList)
             {
                 var requests = string.Empty;
-                rowCopy = _RowStartBodyAttendance + (index % 2);
+                var rowCopy = _RowStartBodyAttendance + (index % 2);
                 if (item.LateIn > 30 || item.EarlyOut > 30)
                 {
                     rowCopy = _RowStartBodyAttendance + 2;
@@ -405,8 +347,7 @@ namespace Fanex.NexHR.Services
                 row.GetCell(3).SetCellValue(item.NickName);
                 row.GetCell(4).SetCellValue(item.FullName);
                 row.GetCell(5).SetCellValue(item.TeamCode);
-                row.GetCell(6).SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ?
-                    string.Empty : item.ShiftCode);
+                row.GetCell(6).SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ? string.Empty : item.ShiftCode);
                 row.GetCell(7).SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToShortTime() : string.Empty);
                 row.GetCell(8).SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToShortTime() : string.Empty);
                 row.GetCell(9).SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
@@ -452,7 +393,7 @@ namespace Fanex.NexHR.Services
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_ManpowerFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -467,7 +408,6 @@ namespace Fanex.NexHR.Services
 
             //// render body
             var rowIndex = _RowStartBodyManpower;
-            var rowCopy = _RowStartBodyManpower;
             var index = 1;
             var height = sheet.GetRow(_RowStartBodyAttendance).Height;
 
@@ -475,7 +415,7 @@ namespace Fanex.NexHR.Services
 
             foreach (var item in manpowers)
             {
-                rowCopy = _RowStartBodyManpower + (index % 2);
+                var rowCopy = _RowStartBodyManpower + (index % 2);
 
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
@@ -503,7 +443,7 @@ namespace Fanex.NexHR.Services
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_ManpowerCategoryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -518,7 +458,6 @@ namespace Fanex.NexHR.Services
 
             //// render body
             var rowIndex = _RowStartBodyManpowerCategory;
-            var rowCopy = _RowStartBodyManpowerCategory;
             var index = 1;
             var height = sheet.GetRow(_RowStartBodyAttendance).Height;
 
@@ -526,8 +465,7 @@ namespace Fanex.NexHR.Services
 
             foreach (ManpowerCategoryModel item in manpowers)
             {
-                rowCopy = _RowStartBodyManpower + (index % 2);
-
+                var rowCopy = _RowStartBodyManpower + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -550,18 +488,12 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export Leave summary report.
-        /// </summary>
-        /// <param name="leaveSummaryList">Leave Summary List.</param>
-        /// <param name="year">Year which query report.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
         {
             HSSFWorkbook hssfworkbook;
 
             var templatePath = HttpContext.Current.Server.MapPath(_LeaveSummaryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -583,7 +515,6 @@ namespace Fanex.NexHR.Services
 
             //// render body
             var rowIndex = _RowStartBodyLeaveSummary;
-            var rowCopy = _RowStartBodyLeaveSummary;
             var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
             var index = 1;
 
@@ -592,7 +523,7 @@ namespace Fanex.NexHR.Services
                 if (item.Team != null && item.LeaveSummaryInTeam.Count > 0)
                 {
                     //// add row team
-                    rowCopy = _RowStartBodyLeaveSummary + 2;
+                    var rowCopy = _RowStartBodyLeaveSummary + 2;
                     sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                     var rowTeam = sheet.GetRow(rowIndex);
                     var cellTeam = rowTeam.GetCell(0);
@@ -641,21 +572,13 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export Employee Overtime Record.
-        /// </summary>
-        /// <param name="overtimes">List OvertimeExcelReport entity.</param>
-        /// <param name="calendar">Fiscal or Normal calendar.</param>
-        /// <param name="fromDate">Request from Date.</param>
-        /// <param name="toDate">Request To Date.</param>
-        /// <returns>HSSFWork book.</returns>
         public HSSFWorkbook ExportEmployeeOvertimeRecord(List<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
         {
             int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;
             HSSFWorkbook hssfworkbook;
 
             var templatePath = HttpContext.Current.Server.MapPath(_EmployeeOvertimeRecordFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -682,7 +605,7 @@ namespace Fanex.NexHR.Services
                 }
             }
 
-            if (overtimes != null && overtimes.Count() > 0)
+            if (overtimes != null && overtimes.Any())
             {
                 //// render Overtime type Header.
                 var rowHeaderOvertimeType = sheet.GetRow(2);
@@ -711,7 +634,6 @@ namespace Fanex.NexHR.Services
 
                 var index = 1;
                 var rowIndex = _RowStartBodyOvertimeRecord;
-                var rowCopy = _RowStartBodyOvertimeRecord;
                 var rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
                 var rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
                 var rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
@@ -735,7 +657,7 @@ namespace Fanex.NexHR.Services
                         numberStart = rowIndex + 1;
                         foreach (var item in overtime.ListOvertimeEntity)
                         {
-                            rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
+                            var rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
                             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                             var row = sheet.GetRow(rowIndex);
                             row.Height = rowHeight;
@@ -760,14 +682,7 @@ namespace Fanex.NexHR.Services
                                 if (i % 2 == 0)
                                 {
                                     var cellValue = data.TotalOvertimeType2;
-                                    if (string.IsNullOrEmpty(cellValue))
-                                    {
-                                        row.GetCell(i + 10).SetCellValue(defaultCellValue);
-                                    }
-                                    else
-                                    {
-                                        row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
-                                    }
+                                    row.GetCell(i + 10).SetCellValue(string.IsNullOrEmpty(cellValue) ? defaultCellValue : Convert.ToDouble(cellValue));
 
                                     indexCount++;
                                 }
@@ -775,14 +690,7 @@ namespace Fanex.NexHR.Services
                                 if (i % 2 == 1)
                                 {
                                     var cellValue = data.TotalOvertimeType1;
-                                    if (string.IsNullOrEmpty(cellValue))
-                                    {
-                                        row.GetCell(i + 10).SetCellValue(defaultCellValue);
-                                    }
-                                    else
-                                    {
-                                        row.GetCell(i + 10).SetCellValue(Convert.ToDouble(cellValue));
-                                    }
+                                    row.GetCell(i + 10).SetCellValue(string.IsNullOrEmpty(cellValue) ? defaultCellValue : Convert.ToDouble(cellValue));
                                 }
                             }
 
@@ -801,13 +709,13 @@ namespace Fanex.NexHR.Services
                         var cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
                         var cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
                         var cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
-                        string formulaNormal = "SUM(H{0}:H{1})";
-                        string formulaOff = "SUM(I{0}:I{1})";
-                        string formulaPH = "SUM(J{0}:J{1})";
-                        string formulaTax = "SUM(K{0}:K{1})";
+                        string formulaNormal = "SUM(H{0}:H{1})",
+                            formulaOff = "SUM(I{0}:I{1})",
+                            formulaPH = "SUM(J{0}:J{1})",
+                            formulaTax = "SUM(K{0}:K{1})";
 
-                        string data1 = Convert.ToString(numberStart);
-                        string data2 = Convert.ToString(rowIndex);
+                        string data1 = Convert.ToString(numberStart),
+                            data2 = Convert.ToString(rowIndex);
                         cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
                         cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
                         cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
@@ -822,16 +730,11 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export WorkingTime Request.
-        /// </summary>
-        /// <param name="requestList">Request List.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_WorkingTimeRequestFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -839,7 +742,6 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingTimeRequest");
             var rowIndex = _RowStartBodyWorkingTimeRequest;
-            var rowCopy = _RowStartBodyWorkingTimeRequest;
             var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
             ICell cellNo = null;
             ICell cellTeam = null;
@@ -853,7 +755,7 @@ namespace Fanex.NexHR.Services
 
             foreach (var item in requestList)
             {
-                rowCopy = _RowStartBodyWorkingTimeRequest + (rowIndex % 2);
+                var rowCopy = _RowStartBodyWorkingTimeRequest + (rowIndex % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -878,18 +780,11 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Export Overtime Report.
-        /// </summary>
-        /// <param name="requestList">OvertimeRequest List.</param>
-        /// <param name="fromDate">Report FromDate.</param>
-        /// <param name="toDate">Report ToDate.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_OvertimeReportFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -897,7 +792,6 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "OvertimeReport");
             var rowIndex = _RowStartBodyOvertimeReport;
-            var rowCopy = _RowStartBodyOvertimeReport;
             var rowCopyDate = _RowStartBodyOvertimeReport - 3;
 
             var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
@@ -929,7 +823,7 @@ namespace Fanex.NexHR.Services
 
             foreach (var item in requestList)
             {
-                rowCopy = _RowStartBodyOvertimeReport + (index % 2);
+                var rowCopy = _RowStartBodyOvertimeReport + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -960,18 +854,11 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method Export Yearly Overtime Report.
-        /// </summary>
-        /// <param name="requestList">OvertimeAnnualReport Entities.</param>
-        /// <param name="year">Year to export.</param>
-        /// <param name="calendar">Calendar type.</param>
-        /// <returns>HSSF Workbook.</returns>
         public HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_YearlyOvertimeReportFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -979,21 +866,13 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "YearlyOvertimeReport");
             var rowIndex = _RowStartBodyYearlyOvertimeReport;
-            var rowCopy = _RowStartBodyYearlyOvertimeReport;
 
             string calendarType = string.Empty;
             int index = 1;
             float totalYearlyOTHours = 0;
             var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
 
-            if (calendar == 1)
-            {
-                calendarType = "Fiscal Calendar";
-            }
-            else
-            {
-                calendarType = "Normal Calendar";
-            }
+            calendarType = calendar == 1 ? "Fiscal Calendar" : "Normal Calendar";
 
             // Header
             var rowHeader = sheet.GetRow(3);
@@ -1005,7 +884,7 @@ namespace Fanex.NexHR.Services
             sheet.RemoveRow(sheet.GetRow(7));
             foreach (var item in requestList)
             {
-                rowCopy = _RowStartBodyYearlyOvertimeReport + (index % 2);
+                var rowCopy = _RowStartBodyYearlyOvertimeReport + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -1054,7 +933,7 @@ namespace Fanex.NexHR.Services
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_EmployeeBasicInfoFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -1062,7 +941,6 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "EmployeeBasicInfo");
             var rowIndex = _RowStartBodyOvertimeReport;
-            var rowCopy = _RowStartBodyOvertimeReport;
 
             var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
             ICell cellNo = null;
@@ -1085,7 +963,7 @@ namespace Fanex.NexHR.Services
 
             foreach (var item in employees)
             {
-                rowCopy = _RowStartBodyOvertimeReport + (index % 2);
+                var rowCopy = _RowStartBodyOvertimeReport + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -1122,7 +1000,7 @@ namespace Fanex.NexHR.Services
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_EmployeeDetailsInfoFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -1130,7 +1008,6 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "EmployeeDetailsInfo");
             var rowIndex = _RowStartBodyOvertimeReport;
-            var rowCopy = _RowStartBodyOvertimeReport;
             var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
 
             ICell cellNo = null;
@@ -1182,7 +1059,7 @@ namespace Fanex.NexHR.Services
             var index = 1;
             foreach (var item in employees)
             {
-                rowCopy = _RowStartBodyOvertimeReport + (index % 2);
+                var rowCopy = _RowStartBodyOvertimeReport + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -1245,7 +1122,7 @@ namespace Fanex.NexHR.Services
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWorkingCalendarFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }
@@ -1253,26 +1130,10 @@ namespace Fanex.NexHR.Services
             var templateSheet = hssfworkbook.GetSheet("sheet1");
             var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendar");
             var rowIndex = _RowStartBodyWorkingCalendar;
-            var rowCopy = _RowStartBodyWorkingCalendar;
-
-            ICell cellFromDate = null;
-            ICell cellToDate = null;
-            ICell cellNo = null;
-            ICell cellEmployeeID = null;
-            ICell cellFullName = null;
-            ICell cellNickName = null;
-            ICell cellTeam = null;
-            ICell cellShift1 = null;
-            ICell cellShift2 = null;
-            ICell cellShift3 = null;
-            ICell cellShift4 = null;
-            ICell cellShift5 = null;
-            ICell cellShift6 = null;
-            ICell cellShift7 = null;
 
             var rowDate = sheet.GetRow(1);
-            cellFromDate = rowDate.GetCell(2);
-            cellToDate = rowDate.GetCell(4);
+            ICell cellFromDate = rowDate.GetCell(2);
+            ICell cellToDate = rowDate.GetCell(4);
             cellFromDate.SetCellValue(fromDate.ToString("dd MMM, yyyy"));
             cellToDate.SetCellValue(toDate.ToString("dd MMM, yyyy"));
 
@@ -1297,21 +1158,21 @@ namespace Fanex.NexHR.Services
             var index = 1;
             foreach (var item in workingCalendars)
             {
-                rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
-                cellNo = row.GetCell(0);
-                cellEmployeeID = row.GetCell(1);
-                cellFullName = row.GetCell(2);
-                cellNickName = row.GetCell(3);
-                cellTeam = row.GetCell(4);
-                cellShift1 = row.GetCell(5);
-                cellShift2 = row.GetCell(6);
-                cellShift3 = row.GetCell(7);
-                cellShift4 = row.GetCell(8);
-                cellShift5 = row.GetCell(9);
-                cellShift6 = row.GetCell(10);
-                cellShift7 = row.GetCell(11);
+                ICell cellNo = row.GetCell(0);
+                ICell cellEmployeeID = row.GetCell(1);
+                ICell cellFullName = row.GetCell(2);
+                ICell cellNickName = row.GetCell(3);
+                ICell cellTeam = row.GetCell(4);
+                ICell cellShift1 = row.GetCell(5);
+                ICell cellShift2 = row.GetCell(6);
+                ICell cellShift3 = row.GetCell(7);
+                ICell cellShift4 = row.GetCell(8);
+                ICell cellShift5 = row.GetCell(9);
+                ICell cellShift6 = row.GetCell(10);
+                ICell cellShift7 = row.GetCell(11);
 
                 cellNo.SetCellValue(rowIndex - _RowStartBodyWorkingCalendar + 1);
                 cellEmployeeID.SetCellValue(item.EmpCode);
@@ -1452,26 +1313,11 @@ namespace Fanex.NexHR.Services
             cellSocialInsuranceNo = row.GetCell(40);
             cellRegisteredHospital = row.GetCell(41);
 
-            string gender = string.Empty;
-            string category = string.Empty;
+            string gender = string.Empty,
+                category = string.Empty;
 
-            if (item.Gender == 0)
-            {
-                gender = "F";
-            }
-            else
-            {
-                gender = "M";
-            }
-
-            if (item.IsLocal)
-            {
-                category = "Local";
-            }
-            else
-            {
-                category = "Expat";
-            }
+            gender = item.Gender == 0 ? "F" : "M";
+            category = item.IsLocal ? "Local" : "Expat";
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellEmployeeID.SetCellValue(item.Code);
@@ -1558,26 +1404,11 @@ namespace Fanex.NexHR.Services
             cellUnit = row.GetCell(14);
             cellCategory = row.GetCell(15);
 
-            string gender = string.Empty;
-            string category = string.Empty;
+            string gender = string.Empty,
+                category = string.Empty;
 
-            if (item.Gender == 0)
-            {
-                gender = "F";
-            }
-            else
-            {
-                gender = "M";
-            }
-
-            if (item.IsLocal)
-            {
-                category = "Local";
-            }
-            else
-            {
-                category = "Expat";
-            }
+            gender = item.Gender == 0 ? "F" : "M";
+            category = item.IsLocal ? "Local" : "Expat";
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellEmployeeID.SetCellValue(item.Code);
@@ -1649,21 +1480,6 @@ namespace Fanex.NexHR.Services
             cellStatus.SetCellValue(status.ToString());
         }
 
-        /// <summary>
-        /// Render Body WorkingTime Request.
-        /// </summary>
-        /// <param name="rowIndex">Row Index to render data.</param>
-        /// <param name="cellNo">The cellNo.</param>
-        /// <param name="cellTeam">The cellTeam.</param>
-        /// <param name="cellNick">The cellNick.</param>
-        /// <param name="cellName">The cellName.</param>
-        /// <param name="cellRequest">The cellRequest.</param>
-        /// <param name="cellDetails">The cellDetails.</param>
-        /// <param name="cellRemarks">The cellRemarks.</param>
-        /// <param name="cellCreateDate">The cellCreateDate.</param>
-        /// <param name="cellStatus">The cellStatus.</param>
-        /// <param name="item">Item data.</param>
-        /// <param name="row">Row to render data.</param>
         private void RenderBodyWorkingTimeRequest(
             int rowIndex,
             ref ICell cellNo,
@@ -1692,14 +1508,7 @@ namespace Fanex.NexHR.Services
             cellTeam.SetCellValue(item.Requester.Team.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
-            if (item.RequestType.Id == (int)RequestType.Leave)
-            {
-                cellRequest.SetCellValue(item.LeaveType.Name);
-            }
-            else
-            {
-                cellRequest.SetCellValue(item.RequestType.Name);
-            }
+            cellRequest.SetCellValue(item.RequestType.Id == (int)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
 
             cellDetails.SetCellValue(this.GetRequestDetail(item));
             cellRemarks.SetCellValue(item.Remark);
@@ -1707,11 +1516,6 @@ namespace Fanex.NexHR.Services
             cellStatus.SetCellValue(item.Status.Name);
         }
 
-        /// <summary>
-        /// Get request details.
-        /// </summary>
-        /// <param name="request">Employee Attendance Request.</param>
-        /// <returns>Request details.</returns>
         private string GetRequestDetail(EmployeeAttendanceRequest request)
         {
             var detail = string.Empty;
@@ -1770,19 +1574,11 @@ namespace Fanex.NexHR.Services
                 case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
-
-                default:
-                    break;
             }
 
             return detail;
         }
 
-        /// <summary>
-        /// Get request details.
-        /// </summary>
-        /// <param name="request">Request Entity.</param>
-        /// <returns>Request details.</returns>
         private string GetRequestDetail(RequestEntity request)
         {
             var detail = string.Empty;
@@ -1857,9 +1653,6 @@ namespace Fanex.NexHR.Services
 
                 case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                default:
                     break;
             }
 
@@ -2164,6 +1957,7 @@ namespace Fanex.NexHR.Services
             totalManpower.ConfirmedResignedDec += manpower.ConfirmedResignedDec;
             totalManpower.NewHireDec += manpower.NewHireDec;
             totalManpower.ActiveUserDec += manpower.ActiveUserDec;
+
             return totalManpower;
         }
 
@@ -2177,6 +1971,7 @@ namespace Fanex.NexHR.Services
             totalManpower.Executive += manpower.Executive;
             totalManpower.Staff += manpower.Staff;
             totalManpower.Worker += manpower.Worker;
+
             return totalManpower;
         }
     }

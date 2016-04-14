@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xml:lang="en" lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,6 +8,7 @@
     @RenderSection("css", false)
     @RenderSection("js", false)
     @Html.Action("GlobalScript", "UI")
+    <meta name="description" content="The description of my page" />
 </head>
 <body class="locale_en production">
     <header>
@@ -46,8 +47,7 @@
             @RenderSection("Right", required: false)
         </div>
     </div>
-    <footer>
-    </footer>
+    <footer></footer>
     <div id="message">
     </div>
     <script type="text/javascript">
@@ -70,12 +70,11 @@
             }
         }
 
-        function updateLeftNavigationSetting(isShow)
-        {
+        function updateLeftNavigationSetting(isShow) {
             $.ajax({
-            type: "POST",
-            url: "@(Url.Action("ToogleLeftNavigation", "Employee"))",
-                data: {isShow: isShow}
+                type: "POST",
+                url: "@(Url.Action("ToogleLeftNavigation", "Employee"))",
+                data: { isShow: isShow }
             });
         }
 
@@ -99,9 +98,9 @@
                 }
 
                 $(".content_scroll").scroll(updateTableHeaders).trigger("scroll");
-	            $(window).resize(function() {
-		            updateTableHeaders();
-	            });
+                $(window).resize(function () {
+                    updateTableHeaders();
+                });
             });
         });
     </script>
