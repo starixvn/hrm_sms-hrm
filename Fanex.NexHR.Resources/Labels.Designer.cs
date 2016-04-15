@@ -3085,6 +3085,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verbal Warning.
+        /// </summary>
+        public static string VerbalWarning {
+            get {
+                return ResourceManager.GetString("VerbalWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verified.
         /// </summary>
         public static string Verified {
@@ -3225,6 +3234,15 @@ namespace Fanex.NexHR.Resources {
         public static string WorkType {
             get {
                 return ResourceManager.GetString("WorkType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Written Warning.
+        /// </summary>
+        public static string WrittenWarning {
+            get {
+                return ResourceManager.GetString("WrittenWarning", resourceCulture);
             }
         }
         

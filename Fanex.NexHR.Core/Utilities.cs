@@ -13,15 +13,13 @@ namespace Fanex.NexHR.Core
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// Utilities Class.
-    /// </summary>
     public static class Utilities
     {
         public static IList<SelectListItem> CheckInOutTypes
@@ -30,8 +28,8 @@ namespace Fanex.NexHR.Core
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
+                        new SelectListItem() { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
+                        new SelectListItem() { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
                     };
             }
         }
@@ -42,8 +40,8 @@ namespace Fanex.NexHR.Core
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
-                        new SelectListItem() { Text = Fanex.NexHR.Resources.Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
+                        new SelectListItem() { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
+                        new SelectListItem() { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
                     };
             }
         }
@@ -67,27 +65,27 @@ namespace Fanex.NexHR.Core
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem 
+                        new SelectListItem
                         {
                             Text = "--Select Marriage Status--",
                             Value = ((byte)MarriageStatus.Default).ToString()
                         },
-                        new SelectListItem 
+                        new SelectListItem
                         {
                             Text = MarriageStatus.Married.ToString(),
                             Value = ((byte)MarriageStatus.Married).ToString()
                         },
-                        new SelectListItem 
+                        new SelectListItem
                         {
                             Text = MarriageStatus.Divorced.ToString(),
                             Value = ((byte)MarriageStatus.Divorced).ToString()
                         },
-                        new SelectListItem 
+                        new SelectListItem
                         {
                             Text = MarriageStatus.Single.ToString(),
                             Value = ((byte)MarriageStatus.Single).ToString()
                         },
-                        new SelectListItem 
+                        new SelectListItem
                         {
                             Text = MarriageStatus.Widow.ToString(),
                             Value = ((byte)MarriageStatus.Widow).ToString()
@@ -119,32 +117,17 @@ namespace Fanex.NexHR.Core
             return ZeroPrefix(value.Hour) + ":" + ZeroPrefix(value.Minute);
         }
 
-        /// <summary>
-        /// Function to copy object.
-        /// </summary>
-        /// <param name="s">Source object.</param>
-        /// <param name="t">Destination object.</param>
         public static void CopyTo(this object s, object t)
         {
             foreach (var pS in s.GetType().GetProperties())
             {
-                foreach (var pT in t.GetType().GetProperties())
+                foreach (var pT in t.GetType().GetProperties().Where(pT => pT.Name == pS.Name))
                 {
-                    if (pT.Name != pS.Name)
-                    {
-                        continue;
-                    }
-
-                    pT.GetSetMethod().Invoke(t, new object[] { pS.GetGetMethod().Invoke(s, null) });
+                    pT.GetSetMethod().Invoke(t, new[] { pS.GetGetMethod().Invoke(s, null) });
                 }
             }
         }
 
-        /// <summary>
-        /// Function to read file text.
-        /// </summary>
-        /// <param name="filePath">Input path of file.</param>
-        /// <returns>Content of file.</returns>
         public static string ReadTextFile(string filePath)
         {
             using (var sr = new StreamReader(filePath))
@@ -153,11 +136,6 @@ namespace Fanex.NexHR.Core
             }
         }
 
-        /// <summary>
-        /// Function to random string.
-        /// </summary>
-        /// <param name="length">Input length of string.</param>
-        /// <returns>String value.</returns>
         public static string RandomString(int length)
         {
             // returns random string of length specified with characters including: 0-9, a-z, A-Z
@@ -180,7 +158,7 @@ namespace Fanex.NexHR.Core
                     }
                     else
                     {
-                        // get a new random int. 
+                        // get a new random int.
                         var single = new byte[1];
                         rng.GetBytes(single);
                         rand = single[0];
@@ -194,12 +172,6 @@ namespace Fanex.NexHR.Core
             return new string(ca).ToLower();
         }
 
-        /// <summary>
-        /// Function to get First Day Of Week.
-        /// </summary>
-        /// <param name="dayInWeek">Day In Week.</param>
-        /// <param name="cultureInfo">Input CultureInfo.</param>
-        /// <returns>First Day Of Week.</returns>
         public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo cultureInfo = null)
         {
             if (cultureInfo == null)
@@ -222,11 +194,6 @@ namespace Fanex.NexHR.Core
             return DateTime.Now.AddDays(6 - Convert.ToDouble(dayInWeek.DayOfWeek));
         }
 
-        /// <summary>
-        /// Function to get list minutes.
-        /// </summary>
-        /// <param name="step">Input step between two values.</param>
-        /// <returns>SelectListItem List.</returns>
         public static IList<SelectListItem> MinuteSteps(int step)
         {
             var list = new List<SelectListItem>();
@@ -244,11 +211,6 @@ namespace Fanex.NexHR.Core
             return list;
         }
 
-        /// <summary>
-        /// Function to get list time.
-        /// </summary>
-        /// <param name="minuteStep">Input minutes between two values.</param>
-        /// <returns>SelectListItem List.</returns>
         public static IList<SelectListItem> TimeSteps(int minuteStep)
         {
             var list = new List<SelectListItem>();
@@ -274,12 +236,6 @@ namespace Fanex.NexHR.Core
             return list;
         }
 
-        /// <summary>
-        /// Function to get list time.
-        /// </summary>
-        /// <param name="minuteStep">Input minutes between two values.</param>
-        /// <param name="selectedItem">Selected item.</param>
-        /// <returns>SelectListItem List.</returns>
         public static IList<SelectListItem> TimeSteps(int minuteStep, string selectedItem)
         {
             var list = new List<SelectListItem>();
@@ -306,11 +262,6 @@ namespace Fanex.NexHR.Core
             return list;
         }
 
-        /// <summary>
-        /// Function to get list time.
-        /// </summary>
-        /// <param name="minuteStep">Input minutes between two values.</param>
-        /// <returns>SelectListItem List.</returns>
         public static IList<SelectListItem> LateInOutTimeSteps(int minuteStep)
         {
             var list = new List<SelectListItem>();
@@ -345,11 +296,6 @@ namespace Fanex.NexHR.Core
             return int.Parse(value) < 10 ? "0" + value : value;
         }
 
-        /// <summary>
-        /// Function to get string array to string.
-        /// </summary>
-        /// <param name="array">Input array.</param>
-        /// <returns>String value.</returns>
         public static string StringArrayToString(string[] array)
         {
             if (array == null || array.Length == 0)
@@ -380,18 +326,14 @@ namespace Fanex.NexHR.Core
 
         public static string TotalHoursToTime(float value)
         {
-            int hour = (int)value;
-            int minute = (int)Math.Round((value - hour) * 60);
+            int hour = (int)value,
+                minute = (int)Math.Round((value - hour) * 60);
+
             return hour > 0
                 ? ZeroPrefix(hour) + "h" + ZeroPrefix(minute) + "'"
                 : ZeroPrefix(minute) + "'";
         }
 
-        /// <summary>
-        /// Function to convert minutes to time.
-        /// </summary>
-        /// <param name="value">Input minutes.</param>
-        /// <returns>Time value.</returns>
         public static string MinuteToTime(int value)
         {
             if (value == 0)
@@ -399,8 +341,8 @@ namespace Fanex.NexHR.Core
                 return string.Empty;
             }
 
-            int hour = value / 60;
-            int minute = value - (hour * 60);
+            int hour = value / 60,
+                minute = value - (hour * 60);
 
             return hour > 0
                 ? ZeroPrefix(hour) + "h" + ZeroPrefix(minute) + "'"
@@ -409,28 +351,12 @@ namespace Fanex.NexHR.Core
 
         public static string FormatString(string input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
-
-            return input;
+            return string.IsNullOrEmpty(input) ? string.Empty : input;
         }
 
-        /// <summary>
-        /// Checks the user can edit request.
-        /// </summary>
-        /// <param name="currentUserId">The current user identifier.</param>
-        /// <param name="employeeId">The employee identifier.</param>
-        /// <returns>This validation is passed or not.</returns>
         public static bool CheckUserCanEditRequest(int currentUserId, int employeeId)
         {
-            if (currentUserId == employeeId)
-            {
-                return true;
-            }
-
-            return false;
+            return currentUserId == employeeId;
         }
     }
 }

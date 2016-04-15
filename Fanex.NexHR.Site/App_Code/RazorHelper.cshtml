@@ -6,7 +6,7 @@
 @using Fanex.NexHR.Resources;
 
 @helper FormatDate(DateTime? date)
-    {
+{
     <span>
         @if (date.HasValue)
         {
@@ -15,7 +15,7 @@
     </span>
 }
 @helper YearDropDownList(int year)
-    {
+{
     <span style="font-size:12px">Year</span>
     <select id="year" name="year">
         @for (int i = DateTime.Now.Year; i >= 2010; i--)
@@ -27,7 +27,7 @@
 }
 
 @helper CategoryDropDownList(string id, string classHTML = "", string selectedId = "")
-    {
+{
     <select id="@id" class="@classHTML">
         <option selected=@(string.IsNullOrWhiteSpace(selectedId)) value="@string.Empty">-- All --</option>
         <option selected=@(selectedId == "0") value="0">Expat</option>
@@ -36,30 +36,28 @@
 }
 
 @helper DisplayNoInformation(int colspan)
-    {
+{
     <tr>
-        
-        <td colspan="@colspan">
-           
-        </td>
+
+        <td colspan="@colspan"></td>
     </tr>
     <tr>
-        
+
         <td colspan="@colspan" rowspan="2">
             @Fanex.NexHR.Resources.Messages.NoInformation
         </td>
     </tr>
 }
 @helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, bool isShowPendingAndVerified = true, string controlName = "status")
-    {
+{
     <select name="@controlName" id="@controlName">
         @if (isShowAll)
-        { 
+        {
             <option selected="@(status == 0)" value="0">All</option>
         }
-        
+
         @if (isShowPendingAndVerified)
-        { 
+        {
             <option selected="@(status == -1)" value="-1">Pending & Verified</option>
         }
         <option selected="@(status == (byte)CurrentRequestStatus.Pending)" value="@Convert.ToByte(CurrentRequestStatus.Pending)">@Labels.Pending</option>
@@ -70,65 +68,65 @@
         <option selected="@(status == (byte)CurrentRequestStatus.Processed)" value="@Convert.ToByte(CurrentRequestStatus.Processed)">@Labels.Processed</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Void)" value="@Convert.ToByte(CurrentRequestStatus.Void)">@Labels.Void</option>
     </select>
-        
+
 }
 @helper BooleanDropDownList(bool? selectedValue, IList<System.Web.Mvc.SelectListItem> items, string controlName)
-    {
+{
     <select name="@controlName" id="@controlName">
-    @foreach(var item in items)
-    {
-        <option selected="@(selectedValue.HasValue && item.Value.Equals(selectedValue.ToString(), StringComparison.OrdinalIgnoreCase) || (string.IsNullOrEmpty(item.Value) && !selectedValue.HasValue))" value="@item.Value">@item.Text</option>
-    }
-    </select> 
+        @foreach (var item in items)
+        {
+            <option selected="@(selectedValue.HasValue && item.Value.Equals(selectedValue.ToString(), StringComparison.OrdinalIgnoreCase) || (string.IsNullOrEmpty(item.Value) && !selectedValue.HasValue))" value="@item.Value">@item.Text</option>
+        }
+    </select>
 }
 @helper StatusDisplayByHR(long statusId, Fanex.NexHR.Models.Request.RequestStatus status)
+{
+    if (status.Id != (byte)CurrentRequestStatus.Rejected)
     {
-        if (status.Id != (byte)CurrentRequestStatus.Rejected)
-        { 
-    <td>
-        <a requestid="@statusId" href="javascript:;" class="@status.Name tooltip">@status.Name</a>
+        <td>
+            <a requestid="@statusId" href="javascript:;" class="@status.Name tooltip">@status.Name</a>
+        </td>
+    }
+    else
+    {
+        <td>
+            @status.Name
     </td>
-        }
-        else
-        {
-    <td>@status.Name
-    </td> 
-        }
+    }
 }
-
 
 @helper ModifierDisplay(string nickName, string fullName, DateTime? modifiedDate, long requestId)
+{
+    if (!string.IsNullOrWhiteSpace(nickName))
     {
-        if (!string.IsNullOrWhiteSpace(nickName))
+        if (modifiedDate > new DateTime(2010, 1, 1))
         {
-            if (modifiedDate > new DateTime(2010, 1, 1))
-            {
-                <td id="pb@(requestId)">@nickName, @modifiedDate.ToShortFormatedDate()</td>
-            }
-            else
-            {
-                <td id="pb@(requestId)">@nickName</td>
-            }
+            <td id="pb@(requestId)">@nickName, @modifiedDate.ToShortFormatedDate()</td>
         }
         else
-        { 
-           <td id="pb@(requestId)">N/A</td>
-        }    
+        {
+            <td id="pb@(requestId)">@nickName</td>
+        }
+    }
+    else
+    {
+        <td id="pb@(requestId)">N/A</td>
+    }
 }
 @helper TeamDropDownList(List<Fanex.NexHR.Models.Team> teamList, string controlName = "team")
-    {
+{
     <select name="@controlName" id="@controlName">
         @if (teamList != null && teamList.Count > 0)
         {
             foreach (Fanex.NexHR.Models.Team team in teamList)
             {
-            <option value="@team.Name" >@team.Name</option>
+                <option value="@team.Name">@team.Name</option>
             }
         }
-    </select>    
+    </select>
 }
 @helper EmployeeDropDownList(List<string> EmployeeList)
-    {
+{
     <select id="employee">
         @foreach (string emp in EmployeeList)
         {
@@ -137,9 +135,8 @@
     </select>
 }
 @helper ShiftInfoTable(dynamic shiftInfoList)
-    {
-   
-    
+{
+
     <div id="shifts">
         <table class="shift_table">
             <thead>
@@ -162,153 +159,178 @@
                 @foreach (Fanex.NexHR.Models.Shift item in shiftInfoList)
                 {
                     <tr>
-                        <td class="left">@item.Name
-                        </td>
-                        <td>@item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                        </td>
-                        <td>
-                            @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                        </td>
-                        <td>@((item.BreakTimeMins == 0) ? string.Empty : (item.BeginBreakTime + "' - " + item.EndBreakTime + "'"))
-                        </td>
-                    </tr> 
+                        <td class="left">
+                            @item.Name
+                    </td>
+                    <td>
+                        @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
+                    </td>
+                    <td>
+                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
+                    </td>
+                    <td>
+                        @((item.BreakTimeMins == 0) ? string.Empty : (item.BeginBreakTime + "' - " + item.EndBreakTime + "'"))
+                </td>
+            </tr>
                 }
             </tbody>
         </table>
     </div>
-    
 
 }
 @helper LateInEarlyOutTimeFormat(int mins, short type)
+{
+    if (type == (byte)RequestType.LateIn)
     {
-        if (type == (byte)RequestType.LateIn)
-        {
-    <span>+@mins'</span>
-        }
-        else
-        {
-    <span>-@mins'</span>
-        }
+        <span>+@mins'</span>
+    }
+    else
+    {
+        <span>-@mins'</span>
+    }
 }
 @helper VerifierAndApproverMenu()
-    {
+{
     <ul id="verifierMenu" class="hide">
-        <li class="accepted"><a command="Accept" href="javascript:;">@Labels.Verified</a>
+        <li class="accepted">
+            <a command="Accept" href="javascript:;">@Labels.Verified</a>
         </li>
-        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
+        <li class="notaccepted">
+            <a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
         </li>
     </ul>
     <ul id="approverMenu" class="hide">
-        <li class="approved"><a command="Approve" href="javascript:;">@Labels.Approve</a>
+        <li class="approved">
+            <a command="Approve" href="javascript:;">@Labels.Approve</a>
         </li>
-         <li class="rejected"><a command="Reject" href="javascript:;">@Labels.Reject</a>
+        <li class="rejected">
+            <a command="Reject" href="javascript:;">@Labels.Reject</a>
         </li>
     </ul>
 }
 @helper ResetMenu()
-    {
+{
     <ul id="resetMenu" class="hide">
-        <li class="reset"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reset">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
     </ul>
 }
 
 @helper VoidMenu()
-    {
+{
     <ul id="voidMenu" class="hide">
-        <li class="void"><a command="VoidBySA" href="javascript:;">@Labels.Void</a>
+        <li class="void">
+            <a command="VoidBySA" href="javascript:;">@Labels.Void</a>
         </li>
     </ul>
 }
 
 @helper VerifierAndApproverOvertimeMenu()
-    {
+{
     <ul id="verifierPendingMenu" class="hide">
-        <li class="accepted"><a command="Accept" href="javascript:;">@Labels.Verified</a>
+        <li class="accepted">
+            <a command="Accept" href="javascript:;">@Labels.Verified</a>
         </li>
-        <li class="notaccepted"><a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
+        <li class="notaccepted">
+            <a command="NotAccept" href="javascript:;">@Labels.NotVerified</a>
         </li>
     </ul>
     <ul id="acceptedMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="notaccepted"><a command="NotAccepted" href="javascript:;">@Labels.NotAccepted</a>
-        </li>*@
+            </li>*@
     </ul>
     <ul id="notAcceptedMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="accepted"><a command="Accepted" href="javascript:;">@Labels.Accepted</a>
-        </li>*@
+            </li>*@
     </ul>
     <ul id="approverPendingMenu" class="hide">
-        <li class="approved"><a command="Approve" href="javascript:;">@Labels.Approved</a>
+        <li class="approved">
+            <a command="Approve" href="javascript:;">@Labels.Approved</a>
         </li>
-         <li class="rejected"><a command="Reject" href="javascript:;">@Labels.Rejected</a>
+        <li class="rejected">
+            <a command="Reject" href="javascript:;">@Labels.Rejected</a>
         </li>
     </ul>
     <ul id="approvedMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="rejected"><a command="Rejected" href="javascript:;">@Labels.Rejected</a>
-        </li>*@
+            </li>*@
     </ul>
     <ul id="rejectedMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="approved"><a command="Approved" href="javascript:;">@Labels.Approved</a>
-        </li>*@
+            </li>*@
     </ul>
-    }
+}
 @helper HrOvertimeMenu()
 {
     <ul id="hrPendingMenu" class="hide">
-        <li class="processed"><a command="Process" href="javascript:;">@Labels.Processed</a>
+        <li class="processed">
+            <a command="Process" href="javascript:;">@Labels.Processed</a>
         </li>
-        <li class="void"><a command="Void" href="javascript:;">@Labels.Void</a>
+        <li class="void">
+            <a command="Void" href="javascript:;">@Labels.Void</a>
         </li>
     </ul>
     <ul id="processedMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="void"><a command="Void" href="javascript:;">@Labels.Void</a>
-        </li>*@
+            </li>*@
     </ul>
     <ul id="voidMenu" class="hide">
-        <li class="reseted"><a command="Reset" href="javascript:;">@Labels.Reset</a>
+        <li class="reseted">
+            <a command="Reset" href="javascript:;">@Labels.Reset</a>
         </li>
         @*<li class="processed"><a command="Processed" href="javascript:;">@Labels.Processed</a>
-        </li>*@
+            </li>*@
     </ul>
 }
 @helper HrMenu()
-    {
+{
     <ul id="hrMenu" class="hide">
-        <li class="processed"><a command="Process" href="javascript:;">@Labels.Process</a>
+        <li class="processed">
+            <a command="Process" href="javascript:;">@Labels.Process</a>
         </li>
-        <li class="void"><a command="Void" href="javascript:;">@Labels.Void</a>
+        <li class="void">
+            <a command="Void" href="javascript:;">@Labels.Void</a>
         </li>
     </ul>
 }
 @helper EmployeeProcessMenu()
-    {
+{
     <ul id="pendingMenu" class="hide">
-        <li class="edit"><a command="Edit" href="javascript:;">@Fanex.NexHR.Resources.Labels.Edit</a>
+        <li class="edit">
+            <a command="Edit" href="javascript:;">@Fanex.NexHR.Resources.Labels.Edit</a>
         </li>
-        <li class="rejected"><a command="Cancel" href="javascript:;">@Fanex.NexHR.Resources.Labels.Cancel</a>
+        <li class="rejected">
+            <a command="Cancel" href="javascript:;">@Fanex.NexHR.Resources.Labels.Cancel</a>
         </li>
     </ul>
 }
 @helper EmployeeReeditMenu()
-    {
+{
     <ul id="reeditMenu" class="hide">
-        <li class="edit"><a command="Reedit" href="javascript:;">@Labels.Reedit</a>
+        <li class="edit">
+            <a command="Reedit" href="javascript:;">@Labels.Reedit</a>
         </li>
     </ul>
 }
 
 @helper MinuteDropDownList(string name, int step)
-    {
+{
     <select id="@name" name="@name">
         @{
             var index = 60;
@@ -321,7 +343,7 @@
     </select>
 }
 @helper MaxRequestDropDownList(int maxRequest, string name = "MaxRequest")
-    {
+{
     <select id="@name" name="@name" class="minWidthDropdown">
         @for (int i = 1; i <= 10; i++)
         {
@@ -331,7 +353,7 @@
 }
 
 @helper ShiftDropDownList(string name, int? currentValue, IList<System.Web.Mvc.SelectListItem> listItem)
-    {
+{
     <select id="@name" name="@name">
         <option value="">@Labels.Off</option>
         @{
@@ -345,7 +367,7 @@
 }
 
 @helper OvertimeTypeDropDownList(int type)
-    {
+{
     <select id="OvertimeType" name="OvertimeType">
         <option @(type == 0 ? "selected" : "") value="0">@Labels.NormalDay</option>
         <option @(type == 1 ? "selected" : "") value="1">@Labels.OffDay</option>
@@ -354,33 +376,30 @@
 }
 
 @helper SupervisorRolesDropDownList(short action, string controlName = "", string classObject = "")
-    {
+{
     <select id="@controlName">
-		<option selected="@(action == 0)" value="">@Labels.All</option>
+        <option selected="@(action == 0)" value="">@Labels.All</option>
         <option selected="@(action == (short)RoleSystem.Verifier)" value="@((short)RoleSystem.Verifier)">@Labels.Verifier</option>
         <option selected="@(action == (short)RoleSystem.Approver)" value="@((short)RoleSystem.Approver)">@Labels.Approver</option>
         <option selected="@(action == (short)RoleSystem.ShiftManager)" value="@((short)RoleSystem.ShiftManager)">@Labels.ShiftManager</option>
         <option selected="@(action == (short)RoleSystem.ActingSupervisor)" value="@((short)RoleSystem.ActingSupervisor)">@Labels.ActingSupervisor</option>
     </select>
-        
 }
 
 @helper MessageCategoryDropDownList(short action = 0, string controlName = "", string classObject = "")
-    {
+{
     <select id="@controlName">
         <option @(action == 0 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Notification)">@Labels.Notification</option>
         <option @(action == 1 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Warning)">@Labels.Warning</option>
         <option @(action == 2 ? "selected" : "") value="@Convert.ToByte(@MessageCategory.Violation)">@Labels.Violation</option>
     </select>
-        
 }
 
 @helper MessageStatusDropDownList(short action = -1, string controlName = "", string classObject = "")
-    {
+{
     <select id="@controlName">
-		<option @(action == -1 ? "selected" : "") value="">-- All --</option>
-		<option @(action == 0 ? "selected" : "") value="0">Active</option>
-		<option @(action == 1 ? "selected" : "") value="1">Disabled</option>
+        <option @(action == -1 ? "selected" : "") value="">-- All --</option>
+        <option @(action == 0 ? "selected" : "") value="0">Active</option>
+        <option @(action == 1 ? "selected" : "") value="1">Disabled</option>
     </select>
-        
 }

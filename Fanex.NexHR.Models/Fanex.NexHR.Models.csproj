@@ -68,6 +68,7 @@
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />
+    <Compile Include="Discipline\DisciplineTypeModel.cs" />
     <Compile Include="Discipline\OtherViolationModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />

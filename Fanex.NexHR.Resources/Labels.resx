@@ -1182,4 +1182,10 @@
   <data name="WorkingUnderTime" xml:space="preserve">
     <value>Working Under Time</value>
   </data>
+  <data name="VerbalWarning" xml:space="preserve">
+    <value>Verbal Warning</value>
+  </data>
+  <data name="WrittenWarning" xml:space="preserve">
+    <value>Written Warning</value>
+  </data>
 </root>

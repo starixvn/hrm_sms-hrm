@@ -1,13 +1,15 @@
-﻿@model OtherViolationViewModel
+﻿@model AddOtherViolationViewModel
 
-@using (Html.BeginForm())
-{
+<form id="frmAddOtherViolation">
+    @Html.ValidationSummary()
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="input">
             @Html.EditorFor(model => model.Employee)
+            @Html.HiddenFor(model => model.EmployeeId)
+            @Html.ValidationMessageFor(model => model.EmployeeId)
         </div>
         <div class="clear">
         </div>
@@ -17,7 +19,8 @@
             @Html.LabelFor(model => model.WorkDate)
         </div>
         <div class="input">
-
+            @Html.DatePickerFor(model => model.WorkDate, minDate: new DateTime(2010, 1, 1))
+            @Html.ValidationMessageFor(model => model.WorkDate)
         </div>
         <div class="clear">
         </div>
@@ -27,17 +30,24 @@
             @Html.LabelFor(model => model.OtherViolationTypeId)
         </div>
         <div class="input">
-
+            <select id="OtherViolationTypeId" name="OtherViolationTypeId">
+                <option value="0" data-score="0">-- Select Violation Type --</option>
+                @foreach (DisciplineTypeModel otherViolationType in @Model.OtherViolationTypes)
+                {
+                    <option value="@otherViolationType.DisciplineTypeId" data-score="@otherViolationType.Score">@otherViolationType.Name</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.OtherViolationTypeId)
         </div>
         <div class="clear">
         </div>
     </div>
     <div class="formrow">
         <div class="label">
-            @Html.LabelFor(model => model.Score)
+            @Html.LabelFor(model => model.MinusScore)
         </div>
         <div class="input">
-
+            @Html.TextBoxFor(model => model.MinusScore, new {@readonly = "readonly"})
         </div>
         <div class="clear">
         </div>
@@ -47,9 +57,9 @@
             @Html.LabelFor(model => model.Comment)
         </div>
         <div class="input">
-
+            @Html.TextAreaFor(model => model.Comment)
         </div>
         <div class="clear">
         </div>
     </div>
-}
+</form>

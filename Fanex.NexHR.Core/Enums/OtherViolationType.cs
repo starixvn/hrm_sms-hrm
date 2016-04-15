@@ -2,7 +2,7 @@
 {
     using System.ComponentModel;
 
-    public enum OtherViolation : int
+    public enum OtherViolationType : int
     {
         [Description("None")]
         None = 0,

@@ -34,6 +34,7 @@
       <resource path="~/scripts/libs/jquery.blockUI.js" />
       <resource path="~/scripts/libs/common.js" />
       <resource path="~/scripts/libs/jquery.highlight.js" />
+      <resource path="~/scripts/libs/jquery.unobtrusive-ajax.js" />
       <resource path="~/scripts/libs/jquery.validate.js" />
       <resource path="~/scripts/libs/jquery.validate.unobtrusive.js" />
       <resource path="~/scripts/libs/jquery.tmpl.js" />

@@ -15,3 +15,16 @@ table.discipline-summary {
         text-align: left;
     }
 }
+
+.search-employee-autocomplete {
+    max-height: 510px;
+    overflow-y: scroll;
+}
+
+input#MinusScore {
+    max-width: 60px;
+}
+
+.field-validation-error {
+    display: block;
+}

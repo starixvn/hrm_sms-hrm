@@ -144,7 +144,9 @@
     <Compile Include="ExcelExporting\ITotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="ExcelExporting\ReportExporting.cs" />
     <Compile Include="ExcelExporting\TotalWorkingHourMonthlyExporting.cs" />
+    <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
+    <Compile Include="Interfaces\IDisciplineService.cs" />
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />

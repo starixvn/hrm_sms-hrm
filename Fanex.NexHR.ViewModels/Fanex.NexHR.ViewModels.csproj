@@ -53,7 +53,7 @@
     <Compile Include="Department\DepartmentViewModel.cs" />
     <Compile Include="Department\EditDepartmentViewModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryViewModel.cs" />
-    <Compile Include="Discipline\OtherViolationViewModel.cs" />
+    <Compile Include="Discipline\AddOtherViolationViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
