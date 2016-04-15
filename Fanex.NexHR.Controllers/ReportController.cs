@@ -156,40 +156,26 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "HR")]
         public ActionResult HRRequestMonitoring()
         {
-            var authorize = false;
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             string viewRole = ((int)RoleSystem.HR).ToString();
-            var model = new RequestsMonitoringViewModel();
-            var listRole = CurrentUser.RoleList;
-
-            if (listRole != null)
+            var model = new RequestsMonitoringViewModel
             {
-                authorize = listRole.Any(x => x == (int)RoleSystem.HR);
-            }
+                FromDate = new DateTime(year, month, 1),
+                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                MaxRequest = 2,
+                DateOption = 0
+            };
 
-            if (authorize)
-            {
-                model = new RequestsMonitoringViewModel
-                {
-                    FromDate = new DateTime(year, month, 1),
-                    ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    MaxRequest = 2,
-                    DateOption = 0
-                };
-
-                var getAllGroupCriteria = new GetAllGroupCriteria();
-                ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
-                ViewBag.CurrentUserId = this.CurrentUser.Id;
-                ViewBag.ViewRole = viewRole;
-            }
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.ViewRole = viewRole;
 
             return View("RequestMonitoring", model);
         }
 
         [Authorize(Roles = "HR,Verifier,Approver")]
         public ActionResult HRRequestMonitoringDetails(
-            int currentUserId,
             DateTime fromDate,
             DateTime toDate,
             int maxRequest,
@@ -206,7 +192,7 @@ namespace Fanex.NexHR.Controllers
                 MaxRequest = maxRequest,
                 Role = viewRole,
                 EmployeeId = empId,
-                LoginUserId = currentUserId,
+                LoginUserId = CurrentUser.Id,
                 GroupIds = group,
                 IsLocal = isLocal
             };
@@ -250,7 +236,6 @@ namespace Fanex.NexHR.Controllers
             ViewBag.FromDate = model.FromDate;
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
             ViewBag.ViewRole = viewRole;
 
             var getAllGroupCriteria = new GetAllGroupCriteria();

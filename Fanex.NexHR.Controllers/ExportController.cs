@@ -162,6 +162,33 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
+        public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
+        {
+            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            byte? isLocal = null;
+            if (model.Category != null)
+            {
+                isLocal = (byte)model.Category;
+            }
+
+            var criteria = new GetUnpaidLeaveCriteria()
+            {
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = isLocal,
+                SupervisorId = null
+            };
+            IList<LeaveSummary> leaveSummary = _reportService.GetUnpaidLeave(criteria);
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(leaveSummary, teams);
+
+            var hssfworkbook = _exportService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
+
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
         public ActionResult OvertimeReport(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
         {
             string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -466,7 +493,6 @@ namespace Fanex.NexHR.Controllers
             MemoryStream output = new MemoryStream();
             hssfworkbook.Write(output);
 
-            // Return the result to the end user
             return File(output.ToArray(), "application/vnd.ms-excel", fileName);
         }
     }

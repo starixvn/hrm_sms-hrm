@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="LeaveController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -131,8 +122,8 @@ namespace Fanex.NexHR.Controllers.Request
             RequestEntity request = RequestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = GetAllLeaveType();
-            model.VerifierList = GetVerifiers(request.Requester.Id);
-            model.ApproverList = GetApprovers(request.Requester.Id);
+            model.VerifierList = GetVerifiers(request.Requester.Id, request);
+            model.ApproverList = GetApprovers(request.Requester.Id, request);
             ViewBag.IsView = true;
 
             return View(model);
@@ -356,15 +347,46 @@ namespace Fanex.NexHR.Controllers.Request
             return selectItems;
         }
 
-        private IList<SelectListItem> GetVerifiers(int empId)
+        private IList<SelectListItem> GetVerifiers(int empId, RequestEntity request = null)
         {
+            
             IList<SupervisorNameModel> verifiers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
+            if (request != null && request.VerifiedBy != null)
+            {
+                var verifier = new SupervisorNameModel()
+                {
+                    OwnerId = request.VerifiedBy.Id,
+                    NickName = request.VerifiedBy.NickName,
+                    FullName = request.VerifiedBy.FullName
+                };
+
+                if (!verifiers.Where(t => t.OwnerId == verifier.OwnerId).Any())
+                {
+                    verifiers.Add(verifier);
+                }
+            }
             return GetListItem(verifiers);
         }
 
-        private IList<SelectListItem> GetApprovers(int empId)
+        private IList<SelectListItem> GetApprovers(int empId, RequestEntity request = null)
         {
             IList<SupervisorNameModel> approvers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Approver, (byte)RequestType.Leave);
+
+            if (request != null && request.ApprovedBy != null)
+            {
+                var approver = new SupervisorNameModel()
+                {
+                    OwnerId = request.ApprovedBy.Id,
+                    NickName = request.ApprovedBy.NickName,
+                    FullName = request.ApprovedBy.FullName
+                };
+
+                if (!approvers.Where(t => t.OwnerId == approver.OwnerId).Any())
+                {
+                    approvers.Add(approver);
+                }
+            }
+
             return GetListItem(approvers);
         }
 

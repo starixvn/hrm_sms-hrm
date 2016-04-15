@@ -18,7 +18,6 @@ function queryDataHrRequestMonitoring(isExcel) {
 
 	var group = $("#group").val() != null ? $("#group").val().join() : "";
 	var maxRequest = $("#MaxRequest").val();
-	var currentUserId = $("#CurrentUserId").val();
 	var viewRole = $("#ViewRole").val();
 
 	var from = new Date($("#FromDate").val());
@@ -33,15 +32,13 @@ function queryDataHrRequestMonitoring(isExcel) {
 		var template = $("#HrRequestMonitoringTemplate");
 
 		if (isExcel) {
-			var url = _global.root + "report/HRRequestMonitoringDetails?currentUserId=" + currentUserId +
-			"&fromDate=" + fromDate + "&toDate=" + toDate + "&maxRequest=" + maxRequest + "&empId=" + employeeId +
+			var url = _global.root + "report/HRRequestMonitoringDetails?fromDate=" + fromDate + "&toDate=" + toDate + "&maxRequest=" + maxRequest + "&empId=" + employeeId +
 			"&group=" + group + "&isLocal=" + isLocal + "&isExcel=" + isExcel + "&viewRole=" + viewRole;
 			location.href = url;
 		}
 		else {
 
 			var params = {
-				currentUserId: currentUserId,
 				fromDate: fromDate,
 				toDate: toDate,
 				maxRequest: maxRequest,

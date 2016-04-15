@@ -96,7 +96,7 @@ namespace Fanex.NexHR.Controllers.Request
                 FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                 ToTime = model.CrossDay 
                 ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 CreatedBy = this.CurrentUser.Id,

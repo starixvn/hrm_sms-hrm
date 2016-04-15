@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $("#btnExcel").click(function () {
         var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var url = _global.root + "export/leavesummary?year=" + $("#Year").val() +
+        var url = _global.root + "export/UnpaidLeaveSummary?year=" + $("#Year").val() +
 		"&TeamIds=" + teams + "&Employee=" + $("#Employee").val() + 
 		"&EmployeeId=" + $("#EmployeeId").val() + "&category=" + $("#Category").val();
         location.href = url;

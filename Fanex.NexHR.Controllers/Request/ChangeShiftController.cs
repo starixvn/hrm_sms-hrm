@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ChangeShiftController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -24,8 +15,8 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.Request;
+    using Fanex.NexHR.Models.Supervisor;
 
-    [Authorize]
     public class ChangeShiftController : RequestController
     {
         [HttpGet]
@@ -191,7 +182,7 @@ namespace Fanex.NexHR.Controllers.Request
                 };
             }
 
-            GetVerifierApproverList(employee.Id, model);
+            GetVerifierApproverList(employee.Id, model, request);
             var shifts = ShiftService.GetAll(isShowOff: true);
             ViewBag.Shift = shifts;
             ViewBag.IsView = true;
@@ -251,12 +242,45 @@ namespace Fanex.NexHR.Controllers.Request
             return schedule;
         }
 
-        private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
+        private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel, RequestEntity request = null)
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.ChangeShift);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.ChangeShift);
-            viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            var verifiers = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.ChangeShift);
+            var approvers = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.ChangeShift);
+            if (request != null)
+            {
+                if (request.VerifiedBy != null)
+                {
+                    var verifier = new SupervisorNameModel()
+                    {
+                        OwnerId = request.VerifiedBy.Id,
+                        NickName = request.VerifiedBy.NickName,
+                        FullName = request.VerifiedBy.FullName
+                    };
+
+                    if (!verifiers.Where(t => t.OwnerId == verifier.OwnerId).Any())
+                    {
+                        verifiers.Add(verifier);
+                    }
+                }
+
+                if (request.ApprovedBy != null)
+                {
+                    var approver = new SupervisorNameModel()
+                    {
+                        OwnerId = request.ApprovedBy.Id,
+                        NickName = request.ApprovedBy.NickName,
+                        FullName = request.ApprovedBy.FullName
+                    };
+
+                    if (!approvers.Where(t => t.OwnerId == approver.OwnerId).Any())
+                    {
+                        approvers.Add(approver);
+                    }
+                }
+            }
+
+            viewModel.Verifier = verifiers.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            viewModel.Approver = approvers.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
 
         private IEnumerable<DateTime> GetUnavailableDate(int id)

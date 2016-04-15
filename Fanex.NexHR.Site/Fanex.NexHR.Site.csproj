@@ -1100,6 +1100,7 @@
     <Content Include="Views\Department\Index.cshtml" />
     <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="Styles\discipline.css" />

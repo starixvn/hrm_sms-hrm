@@ -17,7 +17,6 @@
 @using (Html.BeginForm())
 {
 	@Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
-	@Html.Hidden("CurrentUserId", (int)ViewBag.CurrentUserId)
 	@Html.Hidden("ViewRole", (string)ViewBag.ViewRole)
 	<div class="container_24 bunhat">
 		<div class="grid_23">

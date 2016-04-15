@@ -29,7 +29,12 @@
         isShowCheckBox = false;
         classOfInput = "leaveday";
 
-        if (workingCalendarModel.IsOffDay || workingCalendarModel.IsHoliday)
+        if (workingCalendarModel.IsHoliday)
+        {
+            valueOfInput = "PH";
+            classOfInput = "holiday";
+        }
+        else if (workingCalendarModel.IsOffDay)
         {
             valueOfInput = "Off";
             classOfInput = "offday";
@@ -37,17 +42,17 @@
         else if (workingCalendarModel.LeaveDay == (decimal)0.5)
         {
             classOfInput += " shift";
-			valueOfInput = workingCalendarModel.LeaveType.Code + "&#189;";
-			isShowAddShiftInLeaveHalfday = true;
+            valueOfInput = workingCalendarModel.LeaveType.Code + "&#189;";
+            isShowAddShiftInLeaveHalfday = true;
 
-			if (workingCalendarModel.Shift != null)
-			{
-				shiftCodeForHalfday = workingCalendarModel.Shift.Code;
-			}
+            if (workingCalendarModel.Shift != null)
+            {
+                shiftCodeForHalfday = workingCalendarModel.Shift.Code;
+            }
         }
-		else
-		{
-			if (workingCalendarModel.LeaveType2 == null)
+        else
+        {
+            if (workingCalendarModel.LeaveType2 == null)
             {
                 valueOfInput = workingCalendarModel.LeaveType.Code;
             }
@@ -56,7 +61,7 @@
                 classOfInput += " leavehalfday2";
                 valueOfInput = workingCalendarModel.LeaveType.Code + " / " + workingCalendarModel.LeaveType2.Code;
             }
-		}
+        }
     }
     else if (workingCalendarModel.IsHoliday)
     {

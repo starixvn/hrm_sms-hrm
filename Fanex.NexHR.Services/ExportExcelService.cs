@@ -39,6 +39,7 @@ namespace Fanex.NexHR.Services
     {
         private const int _RowStartBodyAttendance = 3;
         private const int _RowStartBodyLeaveSummary = 4;
+        private const int _RowStartBodyWorkingTimeRequest = 3;
         private const int _RowStartBodyOvertimeReport = 4;
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
@@ -48,6 +49,8 @@ namespace Fanex.NexHR.Services
 
         private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
+        private const string _UnpaidLeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\UnpaidLeaveSummaryTemplate.xls";
+        private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _OvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\OvertimeReportTemplate.xls";
         private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
         private const string _EmployeeBasicInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeBasicInfoTemplate.xls";
@@ -570,6 +573,85 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
+        public HSSFWorkbook ExportUnpaidLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
+        {
+            HSSFWorkbook hssfworkbook;
+
+            var templatePath = HttpContext.Current.Server.MapPath(_UnpaidLeaveSummaryFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "UnpaidLeaveSummary");
+
+            //// render hearder
+            var rowTakeLeave = sheet.GetRow(2);
+            var cellTakeLeave = rowTakeLeave.GetCell(3);
+            cellTakeLeave.SetCellValue("Unpaid Leave's Report " + year);
+
+            var rowAnnualBalance = sheet.GetRow(2);
+            var cellAnnualBalance = rowAnnualBalance.GetCell(15);
+            cellAnnualBalance.SetCellValue("Total Of UPL " + year);
+
+            //// render body
+            var rowIndex = _RowStartBodyLeaveSummary;
+            var rowCopy = _RowStartBodyLeaveSummary;
+            var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
+            var index = 1;
+
+            foreach (var item in leaveSummaryList)
+            {
+                if (item.Team != null && item.LeaveSummaryInTeam.Count > 0)
+                {
+                    //// add row team
+                    rowCopy = _RowStartBodyLeaveSummary + 2;
+                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                    var rowTeam = sheet.GetRow(rowIndex);
+                    var cellTeam = rowTeam.GetCell(0);
+                    cellTeam.SetCellValue(item.Team.Name.ToUpper());
+                    sheet.MergeCells(rowIndex, 0, rowIndex, 15);
+                    rowTeam.Height = height;
+
+                    rowIndex++;
+                    foreach (var leaveSummary in item.LeaveSummaryInTeam)
+                    {
+                        rowCopy = _RowStartBodyLeaveSummary + (index % 2);
+                        sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                        var row = sheet.GetRow(rowIndex);
+                        row.Height = height;
+
+                        row.GetCell(0).SetCellValue(index);
+                        row.GetCell(1).SetCellValue(leaveSummary.Employee.NickName);
+                        row.GetCell(2).SetCellValue(leaveSummary.Employee.FullName);
+                        row.GetCell(3).SetCellValue(leaveSummary.Jan);
+                        row.GetCell(4).SetCellValue(leaveSummary.Feb);
+                        row.GetCell(5).SetCellValue(leaveSummary.Mar);
+                        row.GetCell(6).SetCellValue(leaveSummary.Apr);
+                        row.GetCell(7).SetCellValue(leaveSummary.May);
+                        row.GetCell(8).SetCellValue(leaveSummary.Jun);
+                        row.GetCell(9).SetCellValue(leaveSummary.Jul);
+                        row.GetCell(10).SetCellValue(leaveSummary.Aug);
+                        row.GetCell(11).SetCellValue(leaveSummary.Sep);
+                        row.GetCell(12).SetCellValue(leaveSummary.Oct);
+                        row.GetCell(13).SetCellValue(leaveSummary.Nov);
+                        row.GetCell(14).SetCellValue(leaveSummary.Dec);
+                        row.GetCell(15).SetCellValue(leaveSummary.LeaveBalance);
+
+                        index++;
+                        rowIndex++;
+                    }
+                }
+            }
+            //// end render body
+
+            //// remove sheet & row template
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
         public HSSFWorkbook ExportEmployeeOvertimeRecord(List<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
         {
             int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;
@@ -721,6 +803,56 @@ namespace Fanex.NexHR.Services
                         numberCount = 1;
                     }
                 }
+            }
+
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
+
+        public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList)
+        {
+            HSSFWorkbook hssfworkbook;
+            var templatePath = HttpContext.Current.Server.MapPath(_WorkingTimeRequestFilePathExcelTemplate);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet("sheet1");
+            var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingTimeRequest");
+            var rowIndex = _RowStartBodyWorkingTimeRequest;
+            var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
+            ICell cellNo = null;
+            ICell cellTeam = null;
+            ICell cellNick = null;
+            ICell cellName = null;
+            ICell cellRequest = null;
+            ICell cellDetails = null;
+            ICell cellRemarks = null;
+            ICell cellCreateDate = null;
+            ICell cellStatus = null;
+
+            foreach (var item in requestList)
+            {
+                var rowCopy = _RowStartBodyWorkingTimeRequest + (rowIndex % 2);
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
+                RenderBodyWorkingTimeRequest(
+                    rowIndex,
+                    ref cellNo,
+                    ref cellTeam,
+                    ref cellNick,
+                    ref cellName,
+                    ref cellRequest,
+                    ref cellDetails,
+                    ref cellRemarks,
+                    ref cellCreateDate,
+                    ref cellStatus,
+                    item,
+                    row);
+                rowIndex++;
             }
 
             hssfworkbook.RemoveSheetAt(0);
@@ -1143,56 +1275,6 @@ namespace Fanex.NexHR.Services
             return hssfworkbook;
         }
 
-        public void ExportWorkingTimeRequest(IList<RequestEntity> requestList, string templatePath)
-        {
-            string reportName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
-            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WorkingTimeRequestReportSheet);
-
-            writer.CopyRows(0, 3);
-
-            FillContentRowWorkingTimeRequest(requestList, ref writer);
-            writer.SyncColumnsWidth(9);
-
-            writer.Render();
-        }
-
-        private void FillContentRowWorkingTimeRequest(IList<RequestEntity> requestList, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (RequestEntity requestItem in requestList)
-            {
-                FillRowWorkingTimeRequest(requestItem, ref writer, ref rowIndex);
-            }
-        }
-
-        private void FillRowWorkingTimeRequest(RequestEntity requestItem, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = CreateRecordWorkingTimeRequest(requestItem, ref rowIndex);
-
-            writer.WriteRow((rowIndex - 1) % 2 == 0 ? 4 : 3, record);
-        }
-
-        private object CreateRecordWorkingTimeRequest(RequestEntity requestItem, ref int rowIndex)
-        {
-            var record = new
-            {
-                No = rowIndex,
-                Team = requestItem.Requester.Team.Code,
-                NickName = requestItem.Requester.NickName,
-                FullName = requestItem.Requester.FullName,
-                Request = requestItem.RequestType.Id == (int)RequestType.Leave ? requestItem.LeaveType.Name : requestItem.RequestType.Name,
-                Details = GetRequestDetail(requestItem),
-                Remarks = requestItem.Remark,
-                CreateDate = requestItem.CreatedDate.ToShortFormatedDate(),
-                Status = requestItem.Status.Name
-            };
-            rowIndex++;
-
-            return record;
-        }
-
         private void SetNumberValue(ICell cell, float value)
         {
             if (value != 0)
@@ -1476,6 +1558,42 @@ namespace Fanex.NexHR.Services
             cellPublicHoliday.SetCellValue(item.PublicHours);
             cellRemark.SetCellValue(item.Remark);
             cellStatus.SetCellValue(status.ToString());
+        }
+
+        private void RenderBodyWorkingTimeRequest(
+            int rowIndex,
+            ref ICell cellNo,
+            ref ICell cellTeam,
+            ref ICell cellNick,
+            ref ICell cellName,
+            ref ICell cellRequest,
+            ref ICell cellDetails,
+            ref ICell cellRemarks,
+            ref ICell cellCreateDate,
+            ref ICell cellStatus,
+            RequestEntity item,
+            IRow row)
+        {
+            cellNo = row.GetCell(0);
+            cellTeam = row.GetCell(1);
+            cellNick = row.GetCell(2);
+            cellName = row.GetCell(3);
+            cellRequest = row.GetCell(4);
+            cellDetails = row.GetCell(5);
+            cellRemarks = row.GetCell(6);
+            cellCreateDate = row.GetCell(7);
+            cellStatus = row.GetCell(8);
+
+            cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
+            cellTeam.SetCellValue(item.Requester.Team.Code);
+            cellNick.SetCellValue(item.Requester.NickName);
+            cellName.SetCellValue(item.Requester.FullName);
+            cellRequest.SetCellValue(item.RequestType.Id == (int)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
+
+            cellDetails.SetCellValue(this.GetRequestDetail(item));
+            cellRemarks.SetCellValue(item.Remark);
+            cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
+            cellStatus.SetCellValue(item.Status.Name);
         }
 
         private string GetRequestDetail(EmployeeAttendanceRequest request)
