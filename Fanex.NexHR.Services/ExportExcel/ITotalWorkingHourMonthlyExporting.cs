@@ -7,7 +7,7 @@
 //   <change who="Paul.Nguyen" date="2014.1.15">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Services.ExcelExporting
+namespace Fanex.NexHR.Services.ExportExcel
 {
     using NPOI.HSSF.UserModel;
 

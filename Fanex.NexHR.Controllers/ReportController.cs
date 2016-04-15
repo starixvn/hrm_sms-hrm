@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ReportController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -30,6 +22,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Calendar;
@@ -37,7 +30,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
-    [Authorize]
     [ValidateInput(false)]
     public class ReportController : BaseController
     {
@@ -46,6 +38,7 @@ namespace Fanex.NexHR.Controllers
         private readonly IExportExcelService _exportExcelService;
         private readonly IEmployeeService _employeeService;
         private readonly ILookupDataService _lookupDataService;
+        private IExportService exportService;
 
         public ReportController(
             IReportService reportSevice = null,
@@ -355,7 +348,9 @@ namespace Fanex.NexHR.Controllers
             if (model.IsExportExcel)
             {
                 string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportTotalWorkingHourMonthly(totalWorkingHourMonthly, firstRecord);
+                exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHourMonthly);
+                HSSFWorkbook hssfworkbook = exportService.Export();
+
                 return ExcelFile(hssfworkbook, fileName);
             }
 
@@ -396,10 +391,11 @@ namespace Fanex.NexHR.Controllers
                     WorkDate = model.WorkDate
                 };
                 var totalWorkingHourDaily = _reportService.GetTotalWorkingHourDaily(criteria);
-                var firstRecord = totalWorkingHourDaily != null && totalWorkingHourDaily.Any() ? totalWorkingHourDaily[0] : null;
-
                 string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportTotalWorkingHourDaily(totalWorkingHourDaily, firstRecord);
+
+                exportService = new TotalWorkingHourDailyExportService(totalWorkingHourDaily);
+                HSSFWorkbook hssfworkbook = exportService.Export();
+
                 return ExcelFile(hssfworkbook, fileName);
             }
             else
@@ -460,7 +456,8 @@ namespace Fanex.NexHR.Controllers
                 if (isExcel)
                 {
                     string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                    var hssfworkbook = _exportExcelService.ExportTotalWorkingHourMonthly(totalWorkingHourWeekly, firstRecord);
+                    exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHourWeekly);
+                    HSSFWorkbook hssfworkbook = exportService.Export();
                     return ExcelFile(hssfworkbook, fileName);
                 }
             }

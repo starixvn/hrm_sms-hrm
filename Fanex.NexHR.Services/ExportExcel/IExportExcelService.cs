@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IExportExcelService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.9.20">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.ExportExcel
 {
     using System;
     using System.Collections.Generic;
@@ -24,8 +15,6 @@ namespace Fanex.NexHR.Services.Interfaces
 
     public interface IExportExcelService
     {
-        HSSFWorkbook ExportTotalWorkingHours(IList<TotalWorkingHours> listTotalWorkingHours, DateTime fromDate, DateTime toDate);
-
         HSSFWorkbook ExportAttendance(IList<EmployeeAttendanceModel> attendanceList, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year);
@@ -37,10 +26,6 @@ namespace Fanex.NexHR.Services.Interfaces
         HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar);
-
-        HSSFWorkbook ExportTotalWorkingHourMonthly(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord);
-
-        HSSFWorkbook ExportTotalWorkingHourDaily(IList<TotalWorkingHourMonthly> totalWorkingHourDaily, TotalWorkingHourMonthly firstRecord);
 
         HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees);
 

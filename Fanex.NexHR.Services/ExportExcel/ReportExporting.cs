@@ -7,7 +7,7 @@
 //   <change who="Bradley.Mac" date="2014.7.16">Created</change>
 // </history>
 
-namespace Fanex.NexHR.Services.ExcelExporting
+namespace Fanex.NexHR.Services.ExportExcel
 {
     using System;
     using System.Collections.Generic;

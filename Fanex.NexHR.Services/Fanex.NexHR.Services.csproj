@@ -140,10 +140,14 @@
   <ItemGroup>
     <Compile Include="BaseService.cs" />
     <Compile Include="DepartmentService.cs" />
+    <Compile Include="ExportExcel\IExportService.cs" />
+    <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
+    <Compile Include="ExportExcel\TotalWorkingHourDailyExportService.cs" />
+    <Compile Include="ExportExcel\TotalWorkingHourMonthlyExportService.cs" />
     <Compile Include="ExtensionNumberService.cs" />
-    <Compile Include="ExcelExporting\ITotalWorkingHourMonthlyExporting.cs" />
-    <Compile Include="ExcelExporting\ReportExporting.cs" />
-    <Compile Include="ExcelExporting\TotalWorkingHourMonthlyExporting.cs" />
+    <Compile Include="ExportExcel\ITotalWorkingHourMonthlyExporting.cs" />
+    <Compile Include="ExportExcel\ReportExporting.cs" />
+    <Compile Include="ExportExcel\TotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
@@ -155,11 +159,11 @@
     <Compile Include="KeepInViewRequestService.cs" />
     <Compile Include="ChangeShiftRequestService.cs" />
     <Compile Include="CheckInOutRequestService.cs" />
-    <Compile Include="ExportExcelService.cs" />
+    <Compile Include="ExportExcel\ExportExcelService.cs" />
     <Compile Include="Interfaces\IKeepInViewRequestService.cs" />
     <Compile Include="Interfaces\IChangeShiftRequestService.cs" />
     <Compile Include="Interfaces\ICheckInOutRequestService.cs" />
-    <Compile Include="Interfaces\IExportExcelService.cs" />
+    <Compile Include="ExportExcel\IExportExcelService.cs" />
     <Compile Include="Interfaces\ILateInEarlyOutRequestService.cs" />
     <Compile Include="Interfaces\ILeaveRequestService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
@@ -246,6 +250,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

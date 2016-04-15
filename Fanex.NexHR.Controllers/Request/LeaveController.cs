@@ -349,7 +349,6 @@
 
         private IList<SelectListItem> GetVerifiers(int empId, RequestEntity request = null)
         {
-            
             IList<SupervisorNameModel> verifiers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
             if (request != null && request.VerifiedBy != null)
             {
@@ -365,6 +364,7 @@
                     verifiers.Add(verifier);
                 }
             }
+
             return GetListItem(verifiers);
         }
 

@@ -32,6 +32,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Implement;
+    using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Discipline;
@@ -54,6 +55,8 @@ namespace Fanex.NexHR.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly IWorkingCalendarService _workingCalendarService;
         private readonly IDisciplineService _disciplineService;
+
+        private IExportService service;
 
         public ExportController(
             IReportService reportService = null,
@@ -105,10 +108,10 @@ namespace Fanex.NexHR.Controllers
                 IsLocal = model.IsLocal
             };
 
-            IList<TotalWorkingHours> listTotalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
+            IList<TotalWorkingHours> totalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
-            var hssfworkbook = _exportService.ExportTotalWorkingHours(listTotalWorkingHours, model.FromDate, model.ToDate);
-
+            service = new TotalWorkingHourExportService(totalWorkingHours, model.FromDate, model.ToDate);
+            HSSFWorkbook hssfworkbook = service.Export();
             return ExcelFile(hssfworkbook, fileName);
         }
 
