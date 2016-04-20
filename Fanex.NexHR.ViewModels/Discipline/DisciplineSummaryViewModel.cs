@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Discipline;
 
     public class DisciplineSummaryViewModel
     {
@@ -16,6 +17,8 @@
         [Display(Name = "Team")]
         public int? TeamId { get; set; }
 
+        public string TeamName { get; set; }
+
         public bool? IsLocal { get; set; }
 
         public string Employee { get; set; }
@@ -24,6 +27,8 @@
 
         [Display(Name = "Reason")]
         public int? ReasonId { get; set; }
+
+        public IList<DisciplineTypeModel> DisciplineTypes { get; set; }
 
         public bool ShowAll { get; set; }
     }

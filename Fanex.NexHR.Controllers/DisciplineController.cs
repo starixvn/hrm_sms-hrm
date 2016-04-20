@@ -50,6 +50,7 @@
                 }
 
                 model.Teams = GetAllTeam();
+                model.DisciplineTypes = GetDisciplineType();
             }
 
             return View(model);
@@ -64,6 +65,7 @@
                 GroupId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
+                ReasonId = model.ReasonId,
                 ApproverId = CurrentUser.Id
             };
 
@@ -124,6 +126,13 @@
             IList<Team> teamList = _teamService.GetAll(new GetAllGroupCriteria());
 
             return teamList;
+        }
+
+        private IList<DisciplineTypeModel> GetDisciplineType()
+        {
+            IList<DisciplineTypeModel> disciplineTypes = _disciplineService.GetDisciplineType(new GetDisciplineTypeCriteria());
+
+            return disciplineTypes;
         }
     }
 }

@@ -95,6 +95,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\Command.cs" />
+    <Compile Include="Enums\DisciplineType.cs" />
     <Compile Include="Enums\JobTitleCategory.cs" />
     <Compile Include="Enums\LocalLeave.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
@@ -115,9 +116,15 @@
     <Compile Include="Enums\RequestType.cs" />
     <Compile Include="Enums\RoleSystem.cs" />
     <Compile Include="Enums\WorkType.cs" />
+    <Compile Include="ExcelTemplateWriter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HSSFSheetExtensions.cs" />
     <Compile Include="JsonConverter.cs" />
+    <Compile Include="NPOIExtensions\HSSFCellExtensions.cs" />
+    <Compile Include="NPOIExtensions\HSSFCellRangeAddressExtensions.cs" />
+    <Compile Include="NPOIExtensions\HSSFRowExtensions.cs" />
+    <Compile Include="NPOIExtensions\HSSFSheetExtensions.cs" />
+    <Compile Include="NPOIExtensions\HSSFWorkbookExtensions.cs" />
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Random.cs" />
     <Compile Include="UserSession.cs" />

@@ -34,6 +34,8 @@ namespace Fanex.NexHR.Core
 
         public const string PassWordAdmin = "@dm!nhrms";
 
+        public const string DateFormat = "dd MMM, yyyy";
+
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.
         /// </summary>

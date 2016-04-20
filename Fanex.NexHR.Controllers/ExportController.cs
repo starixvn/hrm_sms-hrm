@@ -19,28 +19,31 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
-    /// <summary>
-    /// Export Controller.
-    /// </summary>
     public class ExportController : RequestController
     {
+        private const string _DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
+
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
         private readonly IRequestService _requestService;
@@ -48,6 +51,7 @@ namespace Fanex.NexHR.Controllers
         private readonly IOvertimeRequestService _overtimeService;
         private readonly IEmployeeService _employeeService;
         private readonly IWorkingCalendarService _workingCalendarService;
+        private readonly IDisciplineService _disciplineService;
 
         public ExportController(
             IReportService reportService = null,
@@ -56,15 +60,17 @@ namespace Fanex.NexHR.Controllers
             ITeamService teamService = null,
             IOvertimeRequestService overtimeService = null,
             IEmployeeService employeeService = null,
-            IWorkingCalendarService workingCalendarService = null)
+            IWorkingCalendarService workingCalendarService = null,
+            IDisciplineService disciplineService = null)
         {
-            this._reportService = reportService ?? new ReportService();
-            this._exportService = exportService ?? new ExportExcelService();
-            this._requestService = requestService ?? new RequestService();
-            this._teamService = teamService ?? new TeamService();
-            this._overtimeService = overtimeService ?? new OvertimeRequestService();
-            this._employeeService = employeeService ?? new EmployeeService();
-            this._workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            _reportService = reportService ?? new ReportService();
+            _exportService = exportService ?? new ExportExcelService();
+            _requestService = requestService ?? new RequestService();
+            _teamService = teamService ?? new TeamService();
+            _overtimeService = overtimeService ?? new OvertimeRequestService();
+            _employeeService = employeeService ?? new EmployeeService();
+            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            _disciplineService = disciplineService ?? new DisciplineService();
         }
 
         public ExportController()
@@ -72,11 +78,6 @@ namespace Fanex.NexHR.Controllers
         {
         }
 
-        /// <summary>
-        /// Export excel Total Working Hours.
-        /// </summary>
-        /// <param name="model">TotalWorkingHours ViewModel.</param>
-        /// <returns>ActionResult Total Working Hours.</returns>
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
         {
             var year = DateTime.Now.Year;
@@ -108,11 +109,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Export excel Attendance report.
-        /// </summary>
-        /// <param name="model">EmployeeAttendanceViewModel object.</param>
-        /// <returns>ActionResult Attendance report.</returns>
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
         {
             string fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -135,11 +131,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// ActionResult LeaveSummary.
-        /// </summary>
-        /// <param name="model">LeaveSummary ViewModel.</param>
-        /// <returns>View LeaveSummary.</returns>
         public ActionResult LeaveSummary(LeaveSummaryViewModel model)
         {
             string fileName = "LeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -168,15 +159,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Get overtime report.
-        /// </summary>
-        /// <param name="fromDate">The from date.</param>
-        /// <param name="toDate">The to date.</param>
-        /// <param name="empId">The employee Id.</param>
-        /// <param name="jobTitle">The job title.</param>
-        /// <param name="groups">The groups.</param>
-        /// <returns>The file excel.</returns>
         public ActionResult OvertimeReport(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
         {
             string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -186,7 +168,7 @@ namespace Fanex.NexHR.Controllers
                 ToDate = toDate,
                 EmployeeID = empId,
                 JobTitleId = jobTitle,
-                GroupIds  = groups
+                GroupIds = groups
             };
             IList<OvertimeRequest> entity = _overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
             var hssfworkbook = _exportService.ExportOvertimeReport(entity, fromDate, toDate);
@@ -194,14 +176,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Method Export yearly overtime report.
-        /// </summary>
-        /// <param name="year">Year to export.</param>
-        /// <param name="team">Team filter.</param>
-        /// <param name="empId">Employee filter.</param>
-        /// <param name="calendar">Calendar type.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult YearlyOvertimeReport(int year, string team, int? empId, int? calendar)
         {
             string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -238,16 +212,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Export Excel Employee Basic Info.
-        /// </summary>
-        /// <param name="query">Query to DB.</param>
-        /// <param name="groupIds">Query group Id.</param>
-        /// <param name="enable">User enable or not.</param>
-        /// <param name="isDelete">User is deleted.</param>
-        /// <param name="titleId">Job title.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -267,16 +231,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Export Excel Employee Detailed Info.
-        /// </summary>
-        /// <param name="query">Query to DB.</param>
-        /// <param name="groupIds">Query group Id.</param>
-        /// <param name="enable">User enable or not.</param>
-        /// <param name="isDelete">User is deleted.</param>
-        /// <param name="titleId">Job title.</param>
-        /// <param name="isLocal">Expat or Local.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult EmployeeDetailsInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
         {
             string fileName = "EmployeeDetailsInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -295,14 +249,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Export Employee Working Calendar.
-        /// </summary>
-        /// <param name="fromDate">Export from date.</param>
-        /// <param name="toDate">Export to date.</param>
-        /// <param name="group">Filter by group.</param>
-        /// <param name="title">Filter by title.</param>
-        /// <returns>Excel file.</returns>
         public ActionResult EmployeeWorkingCalendar(DateTime fromDate, DateTime toDate, string group, string title)
         {
             string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -321,14 +267,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// Employee Overtime Record.
-        /// </summary>
-        /// <param name="year">Requested year.</param>
-        /// <param name="month">Requested month.</param>
-        /// <param name="calendar">Fiscal or Normal calendar.</param>
-        /// <param name="empId">Employee id.</param>
-        /// <returns>View EmployeeOvertimeRecord.</returns>
         public ActionResult EmployeeOvertimeRecord(int? year, int? month, int? calendar, int? empId)
         {
             var requestDate = new DateTime(year.Value, month.Value, 1);
@@ -362,11 +300,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// ActionResult MemberWorkingTimeRequest.
-        /// </summary>
-        /// <param name="model">Request ViewModel.</param>
-        /// <returns>View Member working time request.</returns>
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
@@ -394,11 +327,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        ///  ActionResult Human Resource ViewWorkingTimeRequest.
-        /// </summary>
-        /// <param name="model">Request ViewModel.</param>
-        /// <returns>View Working Time Request.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
@@ -425,11 +353,6 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// <summary>
-        /// ActionResult DailyViewWorkingTimeRequest.
-        /// </summary>
-        /// <param name="model">Request ViewModel.</param>
-        /// <returns>View Daily Working Time Request.</returns>
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)
         {
             string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -485,6 +408,32 @@ namespace Fanex.NexHR.Controllers
             var hssfworkbook = _exportService.ExportManpowerCategory(manpowers, year);
 
             return ExcelFile(hssfworkbook, fileName);
+        }
+
+        public ActionResult ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
+        {
+            var criteria = new GetDisciplineSummaryCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                ReasonId = model.ReasonId,
+                ApproverId = CurrentUser.Id,
+                EmployeeName = model.Employee,
+                GroupName = model.TeamName
+            };
+
+            IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
+
+            if (disciplines != null && disciplines.Any())
+            {
+                string templatePath = Server.MapPath(_DisciplineSummaryTemplatePath);
+                _disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
+            }
+
+            return new EmptyResult();
         }
 
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)

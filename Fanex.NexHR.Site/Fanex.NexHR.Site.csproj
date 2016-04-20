@@ -1113,6 +1113,7 @@
     <Content Include="Styles\discipline.css.map">
       <DependentUpon>discipline.css</DependentUpon>
     </Content>
+    <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <None Include="Styles\discipline.scss" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherViolation.cshtml" />

@@ -41,7 +41,7 @@
                     <td>@index</td>
                     <td>@item.Group.Name</td>
                     <td>@item.Employee.Code</td>
-                    <td>@item.Employee.NickName</td>
+                    <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.MissingCheckInOut</td>
                     <td>@item.WorkingUnderTime</td>
                     <td>@item.LateIn</td>
@@ -53,7 +53,9 @@
                     <td>
                         @if (item.OtherViolationsScore > 0)
                         {
-                            <a class="other-violations" onclick="viewOtherViolation(@item.Employee.Id, '@item.Employee.NickName')">@item.OtherViolationsScore</a>
+                            <a class="other-violations viewOtherViolation" onclick="viewOtherViolation(@item.Employee.Id, '@item.Employee.NickName')">
+                                @item.OtherViolationsScore
+                            </a>
                         }
                         else
                         {

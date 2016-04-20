@@ -11,8 +11,12 @@
 
         IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria);
 
+        IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
+
         IList<DisciplineTypeModel> GetOtherViolationType(GetOtherViolationTypeCriteria criteria);
 
         CommandResult InsertOtherViolation(InsertOtherViolationCriteria criteria);
+
+        void ExportDisciplineSummaryReport(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> attendanceEmployees, string templatePath);
     }
 }

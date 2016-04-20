@@ -18,6 +18,7 @@
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
+            @Html.HiddenFor(model => model.TeamName)
         </div>
         <div class="grid_2">@Labels.Category</div>
         <div class="grid_4">
@@ -25,8 +26,8 @@
                 var category = new List<SelectListItem>
                 {
                     new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Expat, Value = "0"},
-                    new SelectListItem() {Text = Labels.Local, Value = "1"},
+                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                    new SelectListItem() {Text = Labels.Local, Value = "true"},
                 };
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
@@ -44,7 +45,7 @@
             @Html.LabelFor(model => model.ReasonId)
         </div>
         <div class="grid_6">
-            @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
+            @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All)
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.FromDate)

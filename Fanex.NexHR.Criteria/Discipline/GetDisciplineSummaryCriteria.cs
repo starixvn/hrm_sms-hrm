@@ -15,7 +15,15 @@
 
         public bool? IsLocal { get; set; }
 
+        public int? ReasonId { get; set; }
+
         public int ApproverId { get; set; }
+
+        [SpParam(Ignored = true)]
+        public string EmployeeName { get; set; }
+
+        [SpParam(Ignored = true)]
+        public string GroupName { get; set; }
 
         public override bool IsValid()
         {

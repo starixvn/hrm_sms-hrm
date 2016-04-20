@@ -808,6 +808,42 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline Summary Report.
+        /// </summary>
+        public static string DisciplineSummaryReportName {
+            get {
+                return ResourceManager.GetString("DisciplineSummaryReportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discipline_Summary_Report.
+        /// </summary>
+        public static string DisciplineSummaryReportSheet {
+            get {
+                return ResourceManager.GetString("DisciplineSummaryReportSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - Discipline Summary Report from {1}  to {2}.
+        /// </summary>
+        public static string DisciplineSummaryReportTitle {
+            get {
+                return ResourceManager.GetString("DisciplineSummaryReportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discipline Summary Report from {0}  to {1}.
+        /// </summary>
+        public static string DisciplineSummaryReportTitleNoPrefix {
+            get {
+                return ResourceManager.GetString("DisciplineSummaryReportTitleNoPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DoB.
         /// </summary>
         public static string DoB {

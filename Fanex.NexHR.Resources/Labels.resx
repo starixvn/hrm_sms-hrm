@@ -1200,4 +1200,16 @@
   <data name="ViolationType" xml:space="preserve">
     <value>Violation Type</value>
   </data>
+  <data name="DisciplineSummaryReportName" xml:space="preserve">
+    <value>Discipline Summary Report</value>
+  </data>
+  <data name="DisciplineSummaryReportSheet" xml:space="preserve">
+    <value>Discipline_Summary_Report</value>
+  </data>
+  <data name="DisciplineSummaryReportTitle" xml:space="preserve">
+    <value>{0} - Discipline Summary Report from {1}  to {2}</value>
+  </data>
+  <data name="DisciplineSummaryReportTitleNoPrefix" xml:space="preserve">
+    <value>Discipline Summary Report from {0}  to {1}</value>
+  </data>
 </root>
