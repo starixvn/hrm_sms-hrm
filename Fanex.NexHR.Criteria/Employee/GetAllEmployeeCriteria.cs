@@ -9,7 +9,6 @@
 
 namespace Fanex.NexHR.Criteria.Employee
 {
-    using System;
     using Fanex.Data.Repository;
 
     /// <summary>
@@ -21,65 +20,44 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public string GroupIds { get; set; }
 
-        public int? Enable 
+        public int? Enable
         {
             get
             {
                 int? disableUsers = null;
                 if (EnableUser.HasValue)
                 {
-                    if (EnableUser.Value)
-                    {
-                        disableUsers = 0;
-                    }
-                    else
-                    {
-                        disableUsers = 1;
-                    }
+                    disableUsers = EnableUser.Value ? 0 : 1;
                 }
-                
+
                 return disableUsers;
             }
         }
 
-        public int? IsDelete 
+        public int? IsDelete
         {
             get
             {
                 int? deleteUsers = null;
                 if (IsDeleteUser.HasValue)
                 {
-                    if (IsDeleteUser.Value)
-                    {
-                        deleteUsers = 1;
-                    }
-                    else
-                    {
-                        deleteUsers = 0;
-                    }
+                    deleteUsers = IsDeleteUser.Value ? 1 : 0;
                 }
 
                 return deleteUsers;
             }
         }
 
-        public int? IsLocal 
+        public int? IsLocal
         {
             get
             {
                 int? localUser = null;
                 if (IsLocalUser.HasValue)
                 {
-                    if (IsLocalUser.Value)
-                    {
-                        localUser = 1;
-                    }
-                    else
-                    {
-                        localUser = 0;
-                    }
+                    localUser = IsLocalUser.Value ? 1 : 0;
                 }
- 
+
                 return localUser;
             }
         }

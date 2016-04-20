@@ -1,0 +1,11 @@
+﻿namespace Fanex.NexHR.Repositories.Interfaces
+{
+    using System.Collections.Generic;
+    using Fanex.Data.Repository;
+    using Fanex.NexHR.Models.Discipline;
+
+    public interface IDisciplineRepository
+    {
+        IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria);
+    }
+}

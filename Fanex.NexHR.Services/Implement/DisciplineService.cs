@@ -5,10 +5,37 @@
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
+    using Fanex.NexHR.Repositories.Implement;
+    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
 
     public class DisciplineService : BaseService, IDisciplineService
     {
+        private readonly IDisciplineRepository _disciplineRepository;
+
+        public DisciplineService()
+            : this(null)
+        {
+        }
+
+        public DisciplineService(IDisciplineRepository disciplineRepository)
+        {
+            _disciplineRepository = disciplineRepository ?? new DisciplineRepository();
+        }
+
+        public IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria)
+        {
+            IList<DisciplineSummaryModel> disciplines = new List<DisciplineSummaryModel>();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                disciplines = _disciplineRepository.GetDisciplineSummary(criteria);
+                disciplines = disciplines.OrderByDescending(x => x.Permission).ToList();
+            }
+
+            return disciplines;
+        }
+
         public IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria)
         {
             IList<OtherViolationModel> violations = new List<OtherViolationModel>();

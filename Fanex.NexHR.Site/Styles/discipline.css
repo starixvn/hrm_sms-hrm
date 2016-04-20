@@ -12,6 +12,14 @@ table.discipline-summary .align-left {
   text-align: left;
 }
 
+table.discipline-summary a.other-violations {
+  text-decoration: none;
+}
+
+table.discipline-summary a.other-violations:hover {
+  cursor: pointer;
+}
+
 .search-employee-autocomplete {
   max-height: 510px;
   overflow-y: scroll;
@@ -23,6 +31,14 @@ input#MinusScore {
 
 .field-validation-error {
   display: block;
+}
+
+.icon.view {
+  background: url("/Images/sprite_ico_2012-05-15.png") no-repeat -4px -100px;
+  display: inline-block;
+  zoom: 1;
+  width: 16px;
+  height: 16px;
 }
 
 /*# sourceMappingURL=discipline.css.map */

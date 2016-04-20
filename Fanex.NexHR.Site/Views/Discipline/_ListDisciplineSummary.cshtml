@@ -1,15 +1,19 @@
 ﻿@model IList<DisciplineSummaryModel>
 <table class="data discipline-summary">
     <thead>
-        <tr>
-            <th colspan="16" class="align-left">
-                <a class="button" id="btnAddOtherViolation">
-                    @Labels.AddOtherViolations
-                </a>
-            </th>
-        </tr>
+        @if (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString()))
+        {
+            <tr>
+                <th colspan="16" class="align-left">
+                    <a class="button" id="btnAddOtherViolation">
+                        @Labels.AddOtherViolations
+                    </a>
+                </th>
+            </tr>
+        }
         <tr>
             <th>@Labels.SymbolCount</th>
+            <th>@Labels.Section</th>
             <th>@Labels.Code</th>
             <th>@Labels.Nick</th>
             <th>@Labels.MissingCheckInOut</th>
@@ -35,21 +39,40 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>@item.Group.Name</td>
+                    <td>@item.Employee.Code</td>
+                    <td>@item.Employee.NickName</td>
+                    <td>@item.MissingCheckInOut</td>
+                    <td>@item.WorkingUnderTime</td>
+                    <td>@item.LateIn</td>
+                    <td>@item.EarlyOut</td>
+                    <td>@item.Absent</td>
+                    <td>@item.UnpaidLeave</td>
+                    <td>@item.UnpaidLeaveAbsent</td>
+                    <td>@item.ChangeShift</td>
+                    <td>
+                        @if (item.OtherViolationsScore > 0)
+                        {
+                            <a class="other-violations" onclick="viewOtherViolation(@item.Employee.Id, '@item.Employee.NickName')">@item.OtherViolationsScore</a>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>@item.SystemSubtractScore</td>
+                    <td>@item.ApproverSubtractScore</td>
+                    <td>
+                        @switch (item.Permission)
+                        {
+                            case (int)Permision.Host:
+                                <a href="#"><img src="/Styles/Images/edit-icon.png"></a>
+                                break;
+                            default:
+                            <a href="#" class="icon view"></a>
+                                break;
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

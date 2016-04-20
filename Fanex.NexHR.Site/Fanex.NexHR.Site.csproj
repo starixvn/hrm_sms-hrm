@@ -1116,7 +1116,7 @@
     <None Include="Styles\discipline.scss" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherViolation.cshtml" />
-    <Content Include="Views\Discipline\_ListOtherViolation.cshtml" />
+    <Content Include="Views\Discipline\_ViewOtherViolation.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -12,6 +12,7 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Discipline;
 
+    [Authorize]
     public class DisciplineController : BaseController
     {
         private readonly ITeamService _teamService;
@@ -35,10 +36,20 @@
             if (model != null)
             {
                 var today = DateTime.Today;
+                int month = DateTime.Today.Month;
+
+                if (month >= 1 && month <= 6)
+                {
+                    model.FromDate = new DateTime(today.Year, 1, 1);
+                    model.ToDate = new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6));
+                }
+                else
+                {
+                    model.FromDate = new DateTime(today.Year, 6, 1);
+                    model.ToDate = new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
+                }
 
                 model.Teams = GetAllTeam();
-                model.FromDate = today;
-                model.ToDate = today;
             }
 
             return View(model);
@@ -46,12 +57,22 @@
 
         public ActionResult ListDisciplineSummary(DisciplineSummaryViewModel model)
         {
-            IList<DisciplineSummaryModel> disciplines = new List<DisciplineSummaryModel>();
+            var criteria = new GetDisciplineSummaryCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                ApproverId = CurrentUser.Id
+            };
+
+            IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
 
             return PartialView("_ListDisciplineSummary", disciplines);
         }
 
-        public IList<OtherViolationModel> GetOtherViolation(int employeeId, DateTime fromDate, DateTime toDate)
+        public ActionResult PartialViewOtherViolation(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetOtherViolationOfEmployeeCriteria()
             {
@@ -62,7 +83,7 @@
 
             IList<OtherViolationModel> violations = _disciplineService.GetOtherViolation(criteria);
 
-            return violations;
+            return PartialView("_ViewOtherViolation", violations);
         }
 
         public ActionResult PartialAddOtherViolation(string employee, int? employeeId = null)

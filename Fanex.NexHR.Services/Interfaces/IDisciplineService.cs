@@ -7,6 +7,8 @@
 
     public interface IDisciplineService
     {
+        IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria);
+
         IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria);
 
         IList<DisciplineTypeModel> GetOtherViolationType(GetOtherViolationTypeCriteria criteria);

@@ -1188,4 +1188,16 @@
   <data name="WrittenWarning" xml:space="preserve">
     <value>Written Warning</value>
   </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="MinusScore" xml:space="preserve">
+    <value>Minus Score</value>
+  </data>
+  <data name="ViolationDate" xml:space="preserve">
+    <value>Violation Date</value>
+  </data>
+  <data name="ViolationType" xml:space="preserve">
+    <value>Violation Type</value>
+  </data>
 </root>

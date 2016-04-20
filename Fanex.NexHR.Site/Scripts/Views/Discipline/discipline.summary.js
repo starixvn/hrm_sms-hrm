@@ -1,7 +1,41 @@
-﻿(function () {
-    'use strict';
-    /*global _global*/
+﻿'use strict';
+/*global _global*/
+/*export viewOtherViolation*/
 
+function viewOtherViolation(employeeId, nickName) {
+    $.ajax({
+        type: 'GET',
+        url: _global.root + 'discipline/PartialViewOtherViolation',
+        dataType: 'html',
+        data: {
+            employeeId: employeeId,
+            fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
+            toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
+        },
+        success: function (data) {
+            $('#dialogViewOtherViolation').html(data);
+            $('#dialogViewOtherViolation').dialog({
+                modal: true,
+                title: 'Other Violations - ' + nickName,
+                show: {
+                    effect: 'fade',
+                    duration: 300
+                },
+                hide: {
+                    effect: 'fade',
+                    duration: 200
+                },
+                minWidth: 500,
+                dialogClass: 'modal-shadow'
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
+}
+
+(function () {
     function showSuccessMsg(msg) {
         $('#dialogAddOtherViolation .validation-summary-valid')
             .show()
@@ -29,7 +63,7 @@
         var isValid = true,
             errorString = '',
             empId = $('#dialogAddOtherViolation #EmployeeId').val(),
-            workDate = $('##dialogAddOtherViolation #WorkDate').datepicker('getDate'),
+            workDate = $('#dialogAddOtherViolation #WorkDate').datepicker('getDate'),
             violationTypeId = $('#dialogAddOtherViolation #OtherViolationTypeId').val();
 
         if (empId && parseInt(empId) <= 0) {
@@ -59,6 +93,8 @@
                     url: _global.root + 'api/employee/getemployees',
                     data: {
                         query: request.term,
+                        enable: false,
+                        isDelete: true,
                         $top: 10
                     },
                     success: function (data) {
@@ -109,7 +145,7 @@
     }
 
     function initEventForOtherViolationDropdown() {
-        $('#dialogAddOtherViolation select#OtherViolationTypeId').on('change', function() {
+        $('#dialogAddOtherViolation select#OtherViolationTypeId').on('change', function () {
             var score = $('option:selected', this).data('score');
             $('#dialogAddOtherViolation #MinusScore').val(score);
         });
@@ -133,7 +169,7 @@
                                 type: 'POST',
                                 url: _global.root + 'discipline/addotherviolation',
                                 data: $('#frmAddOtherViolation').serialize(),
-                                success: function(data) {
+                                success: function (data) {
                                     if (data.Code === 0) {
                                         showSuccessMsg('Add other violation successful!');
                                     } else {

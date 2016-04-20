@@ -102,6 +102,7 @@
     <Compile Include="Enums\MessageCategory.cs" />
     <Compile Include="Enums\OtherViolationType.cs" />
     <Compile Include="Enums\OvertimeType.cs" />
+    <Compile Include="Enums\Permision.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
     <Compile Include="Enums\SettingsSendMail.cs" />

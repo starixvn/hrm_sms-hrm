@@ -547,6 +547,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Space.
         /// </summary>
         public static string CompanySpace {
@@ -1695,6 +1704,15 @@ namespace Fanex.NexHR.Resources {
         public static string MinBalance {
             get {
                 return ResourceManager.GetString("MinBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minus Score.
+        /// </summary>
+        public static string MinusScore {
+            get {
+                return ResourceManager.GetString("MinusScore", resourceCulture);
             }
         }
         
@@ -3153,6 +3171,24 @@ namespace Fanex.NexHR.Resources {
         public static string Violation {
             get {
                 return ResourceManager.GetString("Violation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Violation Date.
+        /// </summary>
+        public static string ViolationDate {
+            get {
+                return ResourceManager.GetString("ViolationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Violation Type.
+        /// </summary>
+        public static string ViolationType {
+            get {
+                return ResourceManager.GetString("ViolationType", resourceCulture);
             }
         }
         
