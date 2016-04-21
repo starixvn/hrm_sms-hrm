@@ -749,10 +749,15 @@
       <resource reference="sitecss" />
       <resource path="~/styles/discipline.css" />
     </resourceSet>
-    <resourceSet name="disciplinejs" type="js">
+    <resourceSet name="disciplinesummaryjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/discipline/discipline.summary.js" />
+    </resourceSet>
+    <resourceSet name="disciplinedetailjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/scripts/views/discipline/discipline.detail.js" />
     </resourceSet>
   </resourceSets>
 </combres>

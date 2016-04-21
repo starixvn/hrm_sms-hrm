@@ -1,39 +1,5 @@
 ﻿'use strict';
 /*global _global*/
-/*export viewOtherViolation*/
-
-function viewOtherViolation(employeeId, nickName) {
-    $.ajax({
-        type: 'GET',
-        url: _global.root + 'discipline/PartialViewOtherViolation',
-        dataType: 'html',
-        data: {
-            employeeId: employeeId,
-            fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
-            toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
-        },
-        success: function (data) {
-            $('#dialogViewOtherViolation').html(data);
-            $('#dialogViewOtherViolation').dialog({
-                modal: true,
-                title: 'Other Violations - ' + nickName,
-                show: {
-                    effect: 'fade',
-                    duration: 300
-                },
-                hide: {
-                    effect: 'fade',
-                    duration: 200
-                },
-                minWidth: 500,
-                dialogClass: 'modal-shadow'
-            });
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
-}
 
 (function () {
     function showSuccessMsg(msg) {
@@ -204,12 +170,54 @@ function viewOtherViolation(employeeId, nickName) {
         });
     }
 
+    function initEventViewOtherViolation() {
+        $('table a.viewOtherViolation').on('click', function() {
+            var empId = parseInt( $(this).data('empid')),
+                nickname = $(this).data('nickname');
+
+            if (empId > 0) {
+                $.ajax({
+                    type: 'GET',
+                    url: _global.root + 'discipline/PartialViewOtherViolation',
+                    dataType: 'html',
+                    data: {
+                        employeeId: empId,
+                        fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
+                        toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
+                    },
+                    success: function (data) {
+                        $('#dialogViewOtherViolation').html(data);
+
+                        $('#dialogViewOtherViolation').dialog({
+                            modal: true,
+                            title: 'Other Violations - ' + nickname,
+                            show: {
+                                effect: 'fade',
+                                duration: 300
+                            },
+                            hide: {
+                                effect: 'fade',
+                                duration: 200
+                            },
+                            minWidth: 500,
+                            dialogClass: 'modal-shadow'
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
+                    }
+                });
+            }
+        });
+    }
+
     function query() {
         $.ajax({
             url: _global.root + 'discipline/listdisciplinesummary',
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#discipline-summary').html(data);
+                initEventViewOtherViolation();
 
                 $('#btnAddOtherViolation').on('click', function (event) {
                     event.preventDefault();

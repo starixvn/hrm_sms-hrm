@@ -74,6 +74,53 @@
             return PartialView("_ListDisciplineSummary", disciplines);
         }
 
+        public ActionResult DisciplineDetail(DisciplineSummaryViewModel model)
+        {
+            if (model != null)
+            {
+                if (model.FromDate == default(DateTime))
+                {
+                    var today = DateTime.Today;
+                    int month = DateTime.Today.Month;
+
+                    if (month >= 1 && month <= 6)
+                    {
+                        model.FromDate = new DateTime(today.Year, 1, 1);
+                        model.ToDate = new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6));
+                    }
+                    else
+                    {
+                        model.FromDate = new DateTime(today.Year, 6, 1);
+                        model.ToDate = new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
+                    }
+                }
+
+                model.Teams = GetAllTeam();
+                model.DisciplineTypes = GetDisciplineType();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult ListDisciplineDetail(DisciplineSummaryViewModel model)
+        {
+            var criteria = new GetDisciplineDetailCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                ReasonId = model.ReasonId,
+                HasIgnored = model.HasIgnored,
+                ApproverId = CurrentUser.Id
+            };
+
+            IList<DisciplineDetailModel> disciplines = _disciplineService.GetDisciplineDetail(criteria);
+
+            return PartialView("_ListDisciplineDetail", disciplines);
+        }
+
         public ActionResult PartialViewOtherViolation(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetOtherViolationOfEmployeeCriteria()

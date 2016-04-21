@@ -2,9 +2,7 @@
 {
     public class DisciplineSummaryModel
     {
-        public Employee Employee { get; set; }
-
-        public Team Group { get; set; }
+        public EmployeeInfoModel Employee { get; set; }
 
         public int MissingCheckInOut { get; set; }
 

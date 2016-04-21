@@ -799,6 +799,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline Detail.
+        /// </summary>
+        public static string DisciplineDetail {
+            get {
+                return ResourceManager.GetString("DisciplineDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discipline Summary.
         /// </summary>
         public static string DisciplineSummary {
@@ -1263,6 +1272,15 @@ namespace Fanex.NexHR.Resources {
         public static string HRViewLeaveRequest {
             get {
                 return ResourceManager.GetString("HRViewLeaveRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignored.
+        /// </summary>
+        public static string Ignored {
+            get {
+                return ResourceManager.GetString("Ignored", resourceCulture);
             }
         }
         
@@ -2091,6 +2109,15 @@ namespace Fanex.NexHR.Resources {
         public static string Notification {
             get {
                 return ResourceManager.GetString("Notification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Ignored.
+        /// </summary>
+        public static string NotIgnored {
+            get {
+                return ResourceManager.GetString("NotIgnored", resourceCulture);
             }
         }
         

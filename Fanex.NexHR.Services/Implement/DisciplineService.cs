@@ -38,6 +38,18 @@
             return disciplines;
         }
 
+        public IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria)
+        {
+            IList<DisciplineDetailModel> disciplines = new List<DisciplineDetailModel>();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                disciplines = _disciplineRepository.GetDisciplineDetail(criteria);
+            }
+
+            return disciplines;
+        }
+
         public IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria)
         {
             IList<OtherViolationModel> violations = new List<OtherViolationModel>();
@@ -94,7 +106,7 @@
             if (criteria != null)
             {
                 string reportName = Labels.DisciplineSummaryReportName,
-                    reportTitle = string.Empty,
+                    reportTitle,
                     startDate = criteria.FromDate.ToString(Constants.DateFormat),
                     endDate = criteria.ToDate.ToString(Constants.DateFormat);
 
@@ -152,7 +164,7 @@
             var record = new
             {
                 Count = rowIndex,
-                Section = discipline.Group != null ? discipline.Group.Name : string.Empty,
+                Section = discipline.Employee.GroupName,
                 Code = discipline.Employee.Code,
                 Nick = discipline.Employee.NickName,
                 FullName = discipline.Employee.FullName,

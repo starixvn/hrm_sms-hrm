@@ -30,6 +30,7 @@
 
         public IList<DisciplineTypeModel> DisciplineTypes { get; set; }
 
-        public bool ShowAll { get; set; }
+        [Display(Name = "Ignored Status")]
+        public bool? HasIgnored { get; set; }
     }
 }

@@ -388,13 +388,9 @@
   <Function Name="Discipline">
     <Setting Key="Discipline_GetOtherViolation" SpName="Discipline_GetOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Discipline_AddOtherViolation" SpName="Discipline_AddOtherViolation" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetOtherViolationType" SpName="Discipline_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetDisciplineType" SpName="Discipline_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetSummary" SpName="Discipline_GetSummary" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="GroupName" ObjectProperty="Name" />
-      <Mapping DataField="GroupCode" ObjectProperty="Code" />
-    </Setting>
+    <Setting Key="Discipline_GetOtherViolationType" SpName="DisciplineType_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Discipline_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Discipline_GetSummary" SpName="Discipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Discipline_GetDetail" SpName="Discipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

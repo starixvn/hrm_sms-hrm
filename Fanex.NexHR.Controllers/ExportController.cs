@@ -102,6 +102,7 @@ namespace Fanex.NexHR.Controllers
                 GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal
             };
+
             IList<TotalWorkingHours> listTotalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             var hssfworkbook = _exportService.ExportTotalWorkingHours(listTotalWorkingHours, model.FromDate, model.ToDate);
@@ -427,11 +428,8 @@ namespace Fanex.NexHR.Controllers
 
             IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
 
-            if (disciplines != null && disciplines.Any())
-            {
-                string templatePath = Server.MapPath(_DisciplineSummaryTemplatePath);
-                _disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
-            }
+            string templatePath = Server.MapPath(_DisciplineSummaryTemplatePath);
+            _disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
 
             return new EmptyResult();
         }

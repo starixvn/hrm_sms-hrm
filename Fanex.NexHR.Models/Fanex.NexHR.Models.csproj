@@ -67,9 +67,12 @@
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
     <Compile Include="CommandResult.cs" />
+    <Compile Include="Discipline\DisciplineDetailModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />
     <Compile Include="Discipline\DisciplineTypeModel.cs" />
+    <Compile Include="Discipline\EmployeeInfoModel.cs" />
     <Compile Include="Discipline\OtherViolationModel.cs" />
+    <Compile Include="Discipline\ViolationModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />

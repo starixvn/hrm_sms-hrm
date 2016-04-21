@@ -30,7 +30,7 @@
             <th>@Labels.Action</th>
         </tr>
     </thead>
-    @if (Model.Any())
+    @if (Model != null && Model.Any())
     {
         int index = 0;
         <tbody>
@@ -39,7 +39,7 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td>@item.Group.Name</td>
+                    <td>@item.Employee.GroupName</td>
                     <td>@item.Employee.Code</td>
                     <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.MissingCheckInOut</td>
@@ -53,7 +53,7 @@
                     <td>
                         @if (item.OtherViolationsScore > 0)
                         {
-                            <a class="other-violations viewOtherViolation" onclick="viewOtherViolation(@item.Employee.Id, '@item.Employee.NickName')">
+                            <a class="other-violations viewOtherViolation" data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
                                 @item.OtherViolationsScore
                             </a>
                         }

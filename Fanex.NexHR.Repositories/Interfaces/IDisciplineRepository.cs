@@ -7,5 +7,7 @@
     public interface IDisciplineRepository
     {
         IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria);
+
+        IList<DisciplineDetailModel> GetDisciplineDetail(ICriteria criteria);
     }
 }

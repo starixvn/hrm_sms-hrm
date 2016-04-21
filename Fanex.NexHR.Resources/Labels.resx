@@ -1212,4 +1212,13 @@
   <data name="DisciplineSummaryReportTitleNoPrefix" xml:space="preserve">
     <value>Discipline Summary Report from {0}  to {1}</value>
   </data>
+  <data name="DisciplineDetail" xml:space="preserve">
+    <value>Discipline Detail</value>
+  </data>
+  <data name="Ignored" xml:space="preserve">
+    <value>Ignored</value>
+  </data>
+  <data name="NotIgnored" xml:space="preserve">
+    <value>Not Ignored</value>
+  </data>
 </root>

@@ -1,0 +1,145 @@
+﻿@model IList<DisciplineDetailModel>
+<table class="data discipline-detail">
+    <thead>
+        <tr>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Date</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.CheckIn</th>
+            <th>@Labels.CheckOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.MissingCheckInOut</th>
+            <th>@Labels.WorkingUnderTime</th>
+            <th>@Labels.LateIn</th>
+            <th>@Labels.EarlyOut</th>
+            <th>@Labels.Absent</th>
+            <th>@Labels.UPL</th>
+            <th>@Labels.UPLAbsent</th>
+            <th>@Labels.ChangeShift</th>
+            <th>@Labels.MinusScoringSystem</th>
+            <th>@Labels.MinusScoringApprover</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        <tbody>
+            @foreach (DisciplineDetailModel item in Model)
+            {
+                <tr>
+                    <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
+                    <td>@item.Employee.GroupName</td>
+                    <td>@item.WorkDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.ShiftName</td>
+                    <td>
+                        @if (item.CheckIn.HasValue)
+                        {
+                            <span>@item.CheckIn.ToDateMonthYearFormatedDate()</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.CheckOut.HasValue)
+                        {
+                            <span>@item.CheckOut.ToDateMonthYearFormatedDate()</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.TotalHours.Value.HasValue)
+                        {
+                            <span>@item.TotalHours.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.MissingCheckInOut.Value.HasValue && item.MissingCheckInOut.Value > 0)
+                        {
+                            <span>@item.MissingCheckInOut.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td></td>
+                    <td>
+                        @if (item.LateIn.Value.HasValue && item.LateIn.Value > 0)
+                        {
+                            <span>@item.LateIn.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.EarlyOut.Value.HasValue && item.EarlyOut.Value > 0)
+                        {
+                            <span>@item.EarlyOut.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Absent.Value.HasValue && item.Absent.Value > 0)
+                        {
+                            <span>@item.Absent.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.UnpaidLeave.Value.HasValue && item.UnpaidLeave.Value > 0)
+                        {
+                            <span>@item.UnpaidLeave.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.UnpaidLeaveAbsent.Value.HasValue && item.UnpaidLeaveAbsent.Value > 0)
+                        {
+                            <span>@item.UnpaidLeaveAbsent.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.ChangeShift.Value.HasValue && item.ChangeShift.Value > 0)
+                        {
+                            <span>@item.ChangeShift.Value</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>@item.SystemSubtractScore</td>
+                    <td>@item.ApproverSubtractScore</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 18);
+    }
+</table>

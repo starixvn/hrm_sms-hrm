@@ -9,6 +9,8 @@
     {
         IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria);
 
+        IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria);
+
         IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria);
 
         IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);

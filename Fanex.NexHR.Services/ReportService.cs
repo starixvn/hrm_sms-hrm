@@ -27,9 +27,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
 
-    /// <summary>
-    /// Report Service.
-    /// </summary>
     public class ReportService : BaseService, IReportService
     {
         private readonly IReportRepository _reportRepository;
@@ -147,19 +144,16 @@ namespace Fanex.NexHR.Services
                     LeaveSummaryInTeam = new List<LeaveSummary>()
                 };
 
-                foreach (LeaveSummary leavesumary in leaveSummaryList)
+                foreach (LeaveSummary leavesumary in leaveSummaryList.Where(x => x.Employee.Team.Name == team.Name))
                 {
-                    if (leavesumary.Employee.Team.Name == team.Name)
+                    /*Check if team is mamagement team, add leave summary for them*/
+                    if ((team.Id == 11 && teams.Count > 1) || (teams.Count == 1 && teams[0].Id == 11))
                     {
-                        /*Check if team is mamagement team, add leave summary for them*/
-                        if ((team.Id == 11 && teams.Count > 1) || (teams.Count == 1 && teams[0].Id == 11))
-                        {
-                            leaveSummaryByTeamList[0].LeaveSummaryInTeam.Add(leavesumary);
-                        }
-                        else
-                        {
-                            entity.LeaveSummaryInTeam.Add(leavesumary);
-                        }
+                        leaveSummaryByTeamList[0].LeaveSummaryInTeam.Add(leavesumary);
+                    }
+                    else
+                    {
+                        entity.LeaveSummaryInTeam.Add(leavesumary);
                     }
                 }
 
