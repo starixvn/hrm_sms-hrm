@@ -65,13 +65,19 @@
                     <td>@item.SystemSubtractScore</td>
                     <td>@item.ApproverSubtractScore</td>
                     <td>
+                        @{
+                        var empId = item.Employee.EmployeeId;
+                        var employee = item.Employee.NickName + " (" + item.Employee.FullName + ")";
+                        }
                         @switch (item.Permission)
                         {
                             case (int)Permision.Host:
-                                <a href="#"><img src="/Styles/Images/edit-icon.png"></a>
+                                <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
+                                    <img src="/Styles/Images/edit-icon.png">
+                                </a>
                                 break;
                             default:
-                            <a href="#" class="icon view"></a>
+                            <a href="javascript:;" class="icon view viewDisciplineDetail" data-empid="@empId" data-employee="@employee"></a>
                                 break;
                         }
                     </td>

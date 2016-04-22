@@ -799,6 +799,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline.
+        /// </summary>
+        public static string Discipline {
+            get {
+                return ResourceManager.GetString("Discipline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discipline Detail.
         /// </summary>
         public static string DisciplineDetail {

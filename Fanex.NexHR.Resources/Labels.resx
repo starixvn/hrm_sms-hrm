@@ -1221,4 +1221,7 @@
   <data name="NotIgnored" xml:space="preserve">
     <value>Not Ignored</value>
   </data>
+  <data name="Discipline" xml:space="preserve">
+    <value>Discipline</value>
+  </data>
 </root>

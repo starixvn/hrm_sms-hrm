@@ -1,6 +1,6 @@
 ﻿@model DisciplineSummaryViewModel
 @{
-    ViewBag.Title = "Discipline";
+    ViewBag.Title = Labels.DisciplineSummary;
 }
 @section css{
     @Url.CombresLink("disciplinecss")
@@ -9,6 +9,7 @@
     @Url.CombresLink("disciplinesummaryjs")
 }
 @section Breadcrumb {
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@Labels.DisciplineSummary</h2>
 <form class="form-filter">

@@ -1,6 +1,6 @@
 ﻿@model DisciplineSummaryViewModel
 @{
-    ViewBag.Title = "Discipline";
+    ViewBag.Title = Labels.DisciplineDetail;
 }
 @section css{
     @Url.CombresLink("disciplinecss")
@@ -9,6 +9,8 @@
     @Url.CombresLink("disciplinedetailjs")
 }
 @section Breadcrumb {
+    <a class="step" href="@Url.Action("disciplinesummary", "discipline")">@Labels.DisciplineSummary</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@Labels.DisciplineDetail</h2>
 <form class="form-filter">
@@ -30,13 +32,13 @@
                     new SelectListItem() {Text = Labels.Local, Value = "true"},
                 };
             }
-            @Html.DropDownListFor(model => model.IsLocal, category, new {@class = "category"})
+            @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_7">
-            @Html.TextBoxFor(model => model.Employee, new {placeholder = Messages.SearchEmployeeWatermark})
+            @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
         <div class="clear"></div>
@@ -76,8 +78,8 @@
             @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus)
         </div>
         <div class="prefix_2 grid_6">
-            <input type="button" id="submit" value="@Labels.Submit"/>
-            <input type="button" value="Excel" id="btnExcel"/>
+            <input type="button" id="submit" value="@Labels.Submit" />
+            <input type="button" value="Excel" id="btnExcel" />
         </div>
     </div>
 </form>

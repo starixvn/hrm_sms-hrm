@@ -8,7 +8,7 @@
 
         public decimal? Score { get; set; }
 
-        public int? Value { get; set; }
+        public string Value { get; set; }
 
         public bool HasViolated { get; set; }
 

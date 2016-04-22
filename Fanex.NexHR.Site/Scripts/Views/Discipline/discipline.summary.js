@@ -171,8 +171,8 @@
     }
 
     function initEventViewOtherViolation() {
-        $('table a.viewOtherViolation').on('click', function() {
-            var empId = parseInt( $(this).data('empid')),
+        $('table a.viewOtherViolation').on('click', function () {
+            var empId = parseInt($(this).data('empid')),
                 nickname = $(this).data('nickname');
 
             if (empId > 0) {
@@ -211,13 +211,30 @@
         });
     }
 
+    function initEventForViewDisciplineDetail() {
+        $('table a.viewDisciplineDetail').on('click', function () {
+            var empId = $(this).data('empid'),
+                employee = $(this).data('employee'),
+                teamId = $('form.form-filter #TeamId').val(),
+                isLocal = $('form.form-filter #IsLocal').val(),
+                reasonId = $('form.form-filter #ReasonId').val(),
+                fromDate = $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
+                toDate = $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val();
+
+            window.location.href = _global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
+                + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
+                + '&isLocal=' + isLocal + '&reasonId=' + reasonId;
+        });
+    }
+
     function query() {
         $.ajax({
-            url: _global.root + 'discipline/listdisciplinesummary',
+            url: _global.root + 'discipline/ListDisciplineSummary',
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#discipline-summary').html(data);
                 initEventViewOtherViolation();
+                initEventForViewDisciplineDetail();
 
                 $('#btnAddOtherViolation').on('click', function (event) {
                     event.preventDefault();

@@ -34,7 +34,7 @@
                     <td>
                         @if (item.CheckIn.HasValue)
                         {
-                            <span>@item.CheckIn.ToDateMonthYearFormatedDate()</span>
+                            <span>@item.CheckIn.Value.ToString("HH:mm")</span>
                         }
                         else
                         {
@@ -44,7 +44,7 @@
                     <td>
                         @if (item.CheckOut.HasValue)
                         {
-                            <span>@item.CheckOut.ToDateMonthYearFormatedDate()</span>
+                            <span>@item.CheckOut.Value.ToString("HH:mm")</span>
                         }
                         else
                         {
@@ -52,9 +52,9 @@
                         }
                     </td>
                     <td>
-                        @if (item.TotalHours.Value.HasValue)
+                        @if (!string.IsNullOrEmpty(item.TotalHours.Value))
                         {
-                            <span>@item.TotalHours.Value</span>
+                            @RazorHelper.ConvertNumberToTime(double.Parse(item.TotalHours.Value) * 60)
                         }
                         else
                         {
@@ -62,7 +62,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.MissingCheckInOut.Value.HasValue && item.MissingCheckInOut.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.MissingCheckInOut.Value) && !item.MissingCheckInOut.Value.Equals("0"))
                         {
                             <span>@item.MissingCheckInOut.Value</span>
                         }
@@ -73,9 +73,9 @@
                     </td>
                     <td></td>
                     <td>
-                        @if (item.LateIn.Value.HasValue && item.LateIn.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.LateIn.Value) && !item.LateIn.Value.Equals("0"))
                         {
-                            <span>@item.LateIn.Value</span>
+                            @RazorHelper.ConvertNumberToTime(double.Parse(item.LateIn.Value))
                         }
                         else
                         {
@@ -83,9 +83,9 @@
                         }
                     </td>
                     <td>
-                        @if (item.EarlyOut.Value.HasValue && item.EarlyOut.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.EarlyOut.Value) && !item.EarlyOut.Value.Equals("0"))
                         {
-                            <span>@item.EarlyOut.Value</span>
+                            @RazorHelper.ConvertNumberToTime(double.Parse(item.EarlyOut.Value))
                         }
                         else
                         {
@@ -93,7 +93,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.Absent.Value.HasValue && item.Absent.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.Absent.Value) && !item.Absent.Value.Equals("0"))
                         {
                             <span>@item.Absent.Value</span>
                         }
@@ -103,7 +103,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.UnpaidLeave.Value.HasValue && item.UnpaidLeave.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.UnpaidLeave.Value) && !item.UnpaidLeave.Value.Equals("0"))
                         {
                             <span>@item.UnpaidLeave.Value</span>
                         }
@@ -113,7 +113,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.UnpaidLeaveAbsent.Value.HasValue && item.UnpaidLeaveAbsent.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.UnpaidLeaveAbsent.Value) && !item.UnpaidLeaveAbsent.Value.Equals("0"))
                         {
                             <span>@item.UnpaidLeaveAbsent.Value</span>
                         }
@@ -123,7 +123,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.ChangeShift.Value.HasValue && item.ChangeShift.Value > 0)
+                        @if (!string.IsNullOrEmpty(item.ChangeShift.Value) && !item.ChangeShift.Value.Equals("0"))
                         {
                             <span>@item.ChangeShift.Value</span>
                         }

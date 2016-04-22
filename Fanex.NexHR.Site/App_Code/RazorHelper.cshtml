@@ -403,3 +403,11 @@
         <option @(action == 1 ? "selected" : "") value="1">Disabled</option>
     </select>
 }
+
+@helper ConvertNumberToTime(double number)
+{
+    double numberMinutes = Math.Round(number);
+    var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
+
+    <span>@timeSpan.ToString(@"hh\:mm")</span>
+}

@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Fanex.NexHR.Repositories.Implement
+﻿namespace Fanex.NexHR.Repositories.Implement
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
