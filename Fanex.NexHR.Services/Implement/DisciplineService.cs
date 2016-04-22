@@ -154,15 +154,15 @@
 
                 if (criteria.EmployeeId != null)
                 {
-                    reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.EmployeeName, startDate, endDate);
+                    reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.EmployeeName, startDate, endDate);
                 }
                 else if (criteria.GroupId != null)
                 {
-                    reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.GroupName, startDate, endDate);
+                    reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.GroupName, startDate, endDate);
                 }
                 else
                 {
-                    reportTitle = string.Format(Labels.DisciplineSummaryReportTitleNoPrefix, startDate, endDate);
+                    reportTitle = string.Format(Labels.DisciplineDetailReportTitleNoPrefix, startDate, endDate);
                 }
 
                 var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineDetailReportSheet);

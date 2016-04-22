@@ -30,16 +30,13 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// RequestService Class.
-    /// </summary>
     public class RequestService : BaseService, IRequestService
     {
         #region constant
+
         private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
         private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
         private const string _MsgLeaveOneDay = "<span class='req leave'>{0}</span> 1 day";
-        private const string _MsgGeneralLeaveHalfDay = "<span class='req leave'>{0}</span> 0.5 day";
         private const string _MsgLeavePublicHoliday = "<span class='req leave'>{0}</span>";
         private const string _MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         private const string _MsgChangeShift = "<span class='req changeshift'>{0}</span>";
@@ -53,9 +50,6 @@ namespace Fanex.NexHR.Services
         private const string _MailContentLeaveOneDay = "{0}";
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
 
-        private const int _MaxMunites = 210;
-
-        private const string _EmailTemplatePathForRequester = "~/app_data/emails/RequestApproval.cshtml";
         private const string _EmailTemplatePathForCheckInOut = "~/app_data/emails/CheckInOutApproval.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOut = "~/app_data/emails/LateInEarlyOutApproval.cshtml";
         private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
@@ -67,9 +61,8 @@ namespace Fanex.NexHR.Services
         private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
         private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
 
-        private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
+        #endregion constant
 
-        #endregion
         private IEmployeeRepository _employeeRepository;
         private IEmailService _emailService;
         private IRequestRepository _requestRepository;
@@ -115,11 +108,6 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Get info detail for request.
-        /// </summary>
-        /// <param name="request">RequestEntity Object.</param>
-        /// <returns>Detail request.</returns>
         public static string ToRequestMessage(RequestEntity request)
         {
             StringBuilder msg = new StringBuilder();
@@ -131,52 +119,49 @@ namespace Fanex.NexHR.Services
                     message = GetMessageForLeave(request);
                     msg.Append(message);
                     break;
+
                 case (int)RequestType.ChangeShift:
                     message = GetMessageForChangeShift(request);
                     msg.Append(message);
                     break;
+
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
                     var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
                     msg.AppendFormat(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
+
                 case (int)RequestType.LateIn:
                     var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
                     break;
+
                 case (int)RequestType.EarlyOut:
                     var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
                     break;
+
                 case (int)RequestType.KeepInView:
                     if ((double)request.TotalDays == 0.5)
                     {
                         msg.AppendFormat(
-                            _MsgKeepInViewHalfday, 
-                            request.FromDate.ToDateMonthYearFormatedDate(), 
-                            request.FromTime.ToShortTime(), 
-                            request.ToTime.ToShortTime(), 
+                            _MsgKeepInViewHalfday,
+                            request.FromDate.ToDateMonthYearFormatedDate(),
+                            request.FromTime.ToShortTime(),
+                            request.ToTime.ToShortTime(),
                             request.FromShift.Name);
                     }
                     else
                     {
                         msg.AppendFormat(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
                     }
-                    
-                    break;
-                default:
+
                     break;
             }
 
             return msg.ToString();
         }
 
-        /// <summary>
-        /// Get data date detail for leave request.
-        /// </summary>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <returns>Date detail.</returns>
         public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
         {
             string result = string.Empty;
@@ -206,11 +191,6 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        /// <summary>
-        /// Function to process a request.
-        /// </summary>
-        /// <param name="criteria">ProcessRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Process(ProcessRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -227,7 +207,7 @@ namespace Fanex.NexHR.Services
                     RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
                     var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
 
-                    var sendMailTask = new Task(() 
+                    var sendMailTask = new Task(()
                         => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRelated));
                     sendMailTask.Start();
                 }
@@ -237,19 +217,13 @@ namespace Fanex.NexHR.Services
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Approve, disapprove or reject a request,
-        /// notification email will be sent also.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>Return boolean.</returns>
         public CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -263,12 +237,6 @@ namespace Fanex.NexHR.Services
             return commandResult;
         }
 
-        /// <summary>
-        /// Approve, disapprove or reject a request,
-        /// notification email will be sent also.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>Return boolean.</returns>
         public CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -282,11 +250,6 @@ namespace Fanex.NexHR.Services
             return commandResult;
         }
 
-        /// <summary>
-        /// Function to delete a request.
-        /// </summary>
-        /// <param name="criteria">DeleteRequest Criteria.</param>
-        /// <returns>Result of deleted.</returns>
         public CommandResult Delete(DeleteRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -313,7 +276,7 @@ namespace Fanex.NexHR.Services
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
@@ -356,11 +319,6 @@ namespace Fanex.NexHR.Services
             return number;
         }
 
-        /// <summary>
-        /// Function to get Change shift request history.
-        /// </summary>
-        /// <param name="criteria">GetHistoryRequest Criteria.</param>
-        /// <returns>RequestEntity List.</returns>
         public IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -373,18 +331,12 @@ namespace Fanex.NexHR.Services
             return histories;
         }
 
-        /// <summary>
-        /// Function to get mail to and mail cc of request.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="action">Action setting send mail.</param>
-        /// <returns>Email Model.</returns>
         public EmailModel GetMailToAndMailCC(
-            long requestId, 
+            long requestId,
             int action)
         {
             var emailModel = new EmailModel();
-            var criteria = new GetRequestRelatedPeopleCriteria() 
+            var criteria = new GetRequestRelatedPeopleCriteria()
             {
                 RequestId = requestId,
                 Action = action
@@ -433,14 +385,6 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get string date for leave request.
-        /// </summary>
-        /// <param name="requestedDate">The requested date.</param>
-        /// <param name="fromDate">The From date.</param>
-        /// <param name="toDate">The To date.</param>
-        /// <param name="totalDays">Total days.</param>
-        /// <returns>String detail date.</returns>
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             var forDate = string.Empty;
@@ -463,11 +407,6 @@ namespace Fanex.NexHR.Services
             return forDate;
         }
 
-        /// <summary>
-        /// Function to get message for leave request.
-        /// </summary>
-        /// <param name="request">Request Entity.</param>
-        /// <returns>Return detail of leave request.</returns>
         private static string GetMessageForLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
@@ -494,11 +433,6 @@ namespace Fanex.NexHR.Services
             return messageDetail;
         }
 
-        /// <summary>
-        /// Function to get message for change shift request.
-        /// </summary>
-        /// <param name="request">Request Entity.</param>
-        /// <returns>Return detail of change shift request.</returns>
         private static string GetMessageForChangeShift(RequestEntity request)
         {
             var messageDetail = string.Empty;
@@ -519,13 +453,6 @@ namespace Fanex.NexHR.Services
             return messageDetail;
         }
 
-        /// <summary>
-        /// Sends the mail process.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="request">The request.</param>
-        /// <param name="processBy">The process user.</param>
-        /// <param name="templateEmailPathForRelated">The template email path for send to related people.</param>
         private void SendMailProcess(
             string command,
             RequestEntity request,
@@ -547,12 +474,6 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function ro get action setting send mail for process request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="command">Process of request.</param>
-        /// <returns>Action setting send mail.</returns>
         private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;
@@ -588,28 +509,27 @@ namespace Fanex.NexHR.Services
 
             if (command == Command.Reset.ToString())
             {
-                if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
+                switch (request.Status.Id)
                 {
-                    action = (int)SettingsSendMail.Reset1;
-                }
-                else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Status.Id == (byte)CurrentRequestStatus.Rejected)
-                {
-                    action = (int)SettingsSendMail.Reset2;
-                }
-                else 
-                {
-                    action = (int)SettingsSendMail.Reset3;
+                    case (byte)CurrentRequestStatus.Verified:
+                    case (byte)CurrentRequestStatus.NotVerified:
+                        action = (int)SettingsSendMail.Reset1;
+                        break;
+
+                    case (byte)CurrentRequestStatus.Approved:
+                    case (byte)CurrentRequestStatus.Rejected:
+                        action = (int)SettingsSendMail.Reset2;
+                        break;
+
+                    default:
+                        action = (int)SettingsSendMail.Reset3;
+                        break;
                 }
             }
 
             return action;
         }
 
-        /// <summary>
-        /// Function to get email template path when cancel a request.
-        /// </summary>
-        /// <param name="requestType">Request type.</param>
-        /// <returns>Email template.</returns>
         private string GetEmailTemplatePathForCancelRequest(short requestType)
         {
             string templateEmailPath;
@@ -619,20 +539,25 @@ namespace Fanex.NexHR.Services
                 case (short)RequestType.Leave:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
                     break;
+
                 case (short)RequestType.ChangeShift:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
                     break;
+
                 case (short)RequestType.LateIn:
                 case (short)RequestType.EarlyOut:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOutCancelation);
                     break;
+
                 case (short)RequestType.CheckIn:
                 case (short)RequestType.CheckOut:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOutCancelation);
                     break;
+
                 case (short)RequestType.KeepInView:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInViewCancelation);
                     break;
+
                 default:
                     templateEmailPath = string.Empty;
                     break;
@@ -641,11 +566,6 @@ namespace Fanex.NexHR.Services
             return templateEmailPath;
         }
 
-        /// <summary>
-        /// Function to send mail when a request has been canceled.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="templateEmailPath">Path of email template.</param>
         private void SendMailForCancelRequest(RequestEntity request, string templateEmailPath)
         {
             var actionSendMail = (request.RequestType.Id == (short)RequestType.Leave && request.ReworkCount > 0)
@@ -660,17 +580,21 @@ namespace Fanex.NexHR.Services
                     case (short)RequestType.Leave:
                         this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
+
                     case (short)RequestType.ChangeShift:
                         this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
+
                     case (short)RequestType.LateIn:
                     case (short)RequestType.EarlyOut:
                         this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
+
                     case (short)RequestType.CheckIn:
                     case (short)RequestType.CheckOut:
                         this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
+
                     case (short)RequestType.KeepInView:
                         this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
                         break;
@@ -678,14 +602,6 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to send mail when cancel a leave request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelLeaveRequest(
             RequestEntity request,
             string mailTo,
@@ -701,7 +617,7 @@ namespace Fanex.NexHR.Services
             var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
-            
+
             this._emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
@@ -710,14 +626,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail when cancel a change shift request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelChangeShiftRequest(
             RequestEntity request,
             string mailTo,
@@ -739,14 +647,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail when cancel a(an) late in, early out request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelLateInEarlyOutRequest(
             RequestEntity request,
             string mailTo,
@@ -757,11 +657,11 @@ namespace Fanex.NexHR.Services
             var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestType.Name, request.Requester.NickName);
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(
-                body, 
+                body,
                 sendToNickName,
                 string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.RequestType.Name, 
-                request.FromDate.ToDateMonthYearFormatedDate(), 
+                request.RequestType.Name,
+                request.FromDate.ToDateMonthYearFormatedDate(),
                 request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
 
@@ -773,14 +673,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail when cancel a check in/out request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelCheckInOutRequest(
             RequestEntity request,
             string mailTo,
@@ -794,7 +686,7 @@ namespace Fanex.NexHR.Services
                 body,
                 sendToNickName,
                 string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.RequestType.Name.ToLower(), 
+                request.RequestType.Name.ToLower(),
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 request.FromShift.Name,
                 request.RequestedDate.ToShortTime(),
@@ -808,14 +700,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail when cancel a keep in view request.
-        /// </summary>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="sendToNickName">Nick name which this request will be sent.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendMailForCancelKeepInViewRequest(
             RequestEntity request,
             string mailTo,
@@ -841,11 +725,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Gets the passive name of command.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The string of the passive name.</returns>
         private string GetPassiveNameOfCommand(string command)
         {
             if (command == Command.Accept.ToString())
@@ -898,12 +777,6 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get mail of verifier.
-        /// </summary>
-        /// <param name="relatedPeople">Request Related People Model.</param>
-        /// <param name="emailModel">In Email Model.</param>
-        /// <returns>Out Email Model.</returns>
         private EmailModel GetMailVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Verifier != null)
@@ -922,17 +795,11 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get all emails of HR.
-        /// </summary>
-        /// <param name="relatedPeople">Request Related People Model.</param>
-        /// <param name="emailModel">In Email Model.</param>
-        /// <returns>Out Email Model.</returns>
         private EmailModel GetMailHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
             {
-                var mailHRs = string.Join(";", relatedPeople.ListHR.Select(x => x.Email != null ? x.Email : string.Empty));
+                var mailHRs = string.Join(";", relatedPeople.ListHR.Select(x => x.Email ?? string.Empty));
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
                     emailModel.SendTo = mailHRs;
@@ -947,12 +814,6 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get email of Owner request.
-        /// </summary>
-        /// <param name="relatedPeople">Request Related People Model.</param>
-        /// <param name="emailModel">In Email Model.</param>
-        /// <returns>Email Model.</returns>
         private EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Requester != null)
@@ -975,12 +836,6 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get email group.
-        /// </summary>
-        /// <param name="relatedPeople">Request Related People Model.</param>
-        /// <param name="emailModel">In Email Model.</param>
-        /// <returns>Email Model.</returns>
         private EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Requester != null)
@@ -1003,11 +858,6 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        /// <summary>
-        /// Function to get path of email template.
-        /// </summary>
-        /// <param name="requestType">Request type.</param>
-        /// <returns>Path of email template.</returns>
         private string GetEmailTemplatePath(short requestType)
         {
             var path = string.Empty;
@@ -1016,21 +866,27 @@ namespace Fanex.NexHR.Services
                 case (short)RequestType.CheckIn:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
+
                 case (short)RequestType.CheckOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
+
                 case (short)RequestType.LateIn:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;
+
                 case (short)RequestType.EarlyOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;
+
                 case (short)RequestType.ChangeShift:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShift);
                     break;
+
                 case (short)RequestType.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
                     break;
+
                 case (short)RequestType.KeepInView:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);
                     break;
@@ -1039,17 +895,6 @@ namespace Fanex.NexHR.Services
             return path;
         }
 
-        /// <summary>
-        /// Function to send mail to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCc">The mail cc.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void SendToRelatedPeople(
             string command,
             Employee processUser,
@@ -1066,26 +911,32 @@ namespace Fanex.NexHR.Services
                     var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
                     CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
+
                 case (short)RequestType.CheckOut:
                     var subjectCheckOut = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
                     CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
+
                 case (short)RequestType.LateIn:
                     var subjectLateIn = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
                     LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, sendToNickName, mailTo, mailCc, true, templateEmailPath);
                     break;
+
                 case (short)RequestType.EarlyOut:
                     var subjectEarlyOut = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
                     LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, sendToNickName, mailTo, mailCc, false, templateEmailPath);
                     break;
+
                 case (short)RequestType.ChangeShift:
                     var subjectChangeShift = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
                     ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
+
                 case (short)RequestType.Leave:
                     var subjectLeave = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
                     LeaveRelatedMail(command, employee, processUser, request, subjectLeave, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
+
                 case (short)RequestType.KeepInView:
                     var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
                     KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, sendToNickName, mailTo, mailCc, templateEmailPath);
@@ -1093,18 +944,6 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to send mail check in out request to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCc">Email CC List.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void CheckInOutRelatedMail(
             string command,
             Employee employee,
@@ -1143,19 +982,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail late in, early out request to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCc">Email CC List.</param>
-        /// <param name="isLateIn">Is late in or early out.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void LateInEarlyOutRelatedMail(
             string command,
             Employee employee,
@@ -1187,18 +1013,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail change shift request to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCc">Email CC List.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void ChangeShiftRelatedMail(
             string command,
             Employee employee,
@@ -1230,18 +1044,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail leave request to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="sendCc">Email CC List.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void LeaveRelatedMail(
             string command,
             Employee employee,
@@ -1258,14 +1060,14 @@ namespace Fanex.NexHR.Services
                 ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
                 : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
             body = string.Format(
-                body, 
-                sendToNickName, 
+                body,
+                sendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
-                command, 
+                command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
-                request.RequestType.Name, 
-                forDate, 
-                request.LeaveType.Name, 
+                request.RequestType.Name,
+                forDate,
+                request.LeaveType.Name,
                 request.Remark);
 
             this._emailService.SendEmail(
@@ -1276,18 +1078,6 @@ namespace Fanex.NexHR.Services
                 body);
         }
 
-        /// <summary>
-        /// Function to send mail keep in view request to other staff which related group.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="employee">Employee which made request.</param>
-        /// <param name="processUser">Employee which changed status request.</param>
-        /// <param name="request">WorkingTime Request.</param>
-        /// <param name="subject">Subject of email.</param>
-        /// <param name="sendToNickName">Nick name which mail send to.</param>
-        /// <param name="mailTo">The mail to.</param>
-        /// <param name="mailCc">Email CC List.</param>
-        /// <param name="templateEmailPath">Path of Email template.</param>
         private void KeepInViewRelatedMail(
             string command,
             Employee employee,

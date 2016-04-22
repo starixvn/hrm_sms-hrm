@@ -3382,6 +3382,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Working_Time_Request.
+        /// </summary>
+        public static string WorkingTimeRequestReportSheet {
+            get {
+                return ResourceManager.GetString("WorkingTimeRequestReportSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Working Under Time.
         /// </summary>
         public static string WorkingUnderTime {

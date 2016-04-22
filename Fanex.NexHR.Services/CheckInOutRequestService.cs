@@ -20,28 +20,20 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Check In Out Request Service.
-    /// </summary>
     public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
     {
-        private const string _CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
+        private const string CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
 
-        /// <summary>
-        /// Function to insert check in/out request.
-        /// </summary>
-        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Insert(InsertCheckInOutRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = Repository.Insert(criteria, hasGetOutputParams: true);
+                result = Repository.Insert(criteria, true);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
                     var taskSendMail = new Task(() => this.SendMailForInsertCheckInOutSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
@@ -51,18 +43,13 @@ namespace Fanex.NexHR.Services
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Function to update check in/out request.
-        /// </summary>
-        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Update(UpdateCheckInOutRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -72,7 +59,7 @@ namespace Fanex.NexHR.Services
                 result = Repository.Update(criteria);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_CheckInOutTmp);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
                     var taskSendMail = new Task(() => this.SendMailForUpdateCheckInOutSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
@@ -82,18 +69,13 @@ namespace Fanex.NexHR.Services
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Function to send mail for inserted success for check in out request.
-        /// </summary>
-        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
         private void SendMailForInsertCheckInOutSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
@@ -106,13 +88,13 @@ namespace Fanex.NexHR.Services
             email.Subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
-                email.Body, 
+                email.Body,
                 email.SendToNickName,
-                employee.NickName, 
+                employee.NickName,
                 criteria.RequestType == (short)RequestType.CheckIn ? RequestType.CheckIn.ToString() : RequestType.CheckOut.ToString(),
                     criteria.OnDate.ToDateMonthYearFormatedDate(),
                     criteria.Shift,
-                    criteria.CheckTime.ToShortTime(), 
+                    criteria.CheckTime.ToShortTime(),
                     criteria.Remark);
 
             this.EmailService.SendEmail(
@@ -123,11 +105,6 @@ namespace Fanex.NexHR.Services
                 email.Body);
         }
 
-        /// <summary>
-        /// Function to send mail for updated success for check in out request.
-        /// </summary>
-        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
         private void SendMailForUpdateCheckInOutSuccessfully(UpdateCheckInOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);

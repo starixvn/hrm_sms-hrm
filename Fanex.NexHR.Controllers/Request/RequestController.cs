@@ -11,7 +11,6 @@ namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -29,6 +28,7 @@ namespace Fanex.NexHR.Controllers.Request
     public class RequestController : BaseController
     {
         #region protected services
+
         private readonly IEmployeeService _employeeService;
         private readonly IShiftService _shiftService;
         private readonly ILeaveTypeService _leaveTypeService;
@@ -41,9 +41,11 @@ namespace Fanex.NexHR.Controllers.Request
         private readonly ILeaveRequestService _leaveRequestService;
         private readonly IOvertimeRequestService _overtimeService;
         private readonly IWorkingCalendarService _workingCalendarService;
-        #endregion
+
+        #endregion protected services
 
         #region Ctor
+
         public RequestController()
             : this(null, null, null, null, null, null, null, null, null, null, null, null)
         {
@@ -76,7 +78,8 @@ namespace Fanex.NexHR.Controllers.Request
             _overtimeService = overtimeService ?? new OvertimeRequestService();
             _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
         }
-        #endregion
+
+        #endregion Ctor
 
         public IEmployeeService EmployeeService
         {
@@ -190,7 +193,7 @@ namespace Fanex.NexHR.Controllers.Request
                 request.FromDate = DateTime.Now.AddDays(-60);
                 request.IsFilterByAffectedDate = false;
             }
-            
+
             GetRequests(request);
             return View("EmployeeRequest", request);
         }
@@ -350,8 +353,8 @@ namespace Fanex.NexHR.Controllers.Request
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
-            var getGroupCriteria = new GetGroupBySupervisorCriteria() 
-            { 
+            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            {
                 SupervisorId = CurrentUser.Id
             };
 

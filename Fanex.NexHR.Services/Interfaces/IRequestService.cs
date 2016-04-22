@@ -6,6 +6,7 @@
 // <history>
 //   <change who="Anders.Le" date="2012.5.18">Created</change>
 // </history>
+
 namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;

@@ -28,44 +28,34 @@ namespace Fanex.NexHR.Services
     /// </summary>
     public class ChangeShiftRequestService : RequestService, IChangeShiftRequestService
     {
-        private const string _ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
+        private const string ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
 
-        /// <summary>
-        /// Function to insert change shift request.
-        /// </summary>
-        /// <param name="criteria">InsertChangeShiftRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Insert(InsertChangeShiftRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = Repository.Insert(criteria, hasGetOutputParams: true);
+                result = Repository.Insert(criteria, true);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
                     var taskSendMail = new Task(() => this.SendMailForInsertChangeShiftSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
             }
             else
             {
-                result = new CommandResult() 
+                result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Function to update change shift request.
-        /// </summary>
-        /// <param name="criteria">UpdateChangeShiftRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Update(UpdateChangeShiftRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -75,7 +65,7 @@ namespace Fanex.NexHR.Services
                 result = Repository.Update(criteria);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_ChangeShiftTmp);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
                     var taskSendMail = new Task(() => this.SendMailForUpdateChangeShiftSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
@@ -85,7 +75,7 @@ namespace Fanex.NexHR.Services
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
@@ -104,18 +94,13 @@ namespace Fanex.NexHR.Services
             return detail;
         }
 
-        /// <summary>
-        /// Function to send mail for inserted success for change shift request.
-        /// </summary>
-        /// <param name="criteria">InsertChangeShiftRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
         private void SendMailForInsertChangeShiftSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() 
-            { 
-                Empid = criteria.EmpId 
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            {
+                Empid = criteria.EmpId
             };
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
@@ -130,11 +115,6 @@ namespace Fanex.NexHR.Services
                 email.Body);
         }
 
-        /// <summary>
-        /// Function to send mail for updated success for change shift request.
-        /// </summary>
-        /// <param name="criteria">UpdateChangeShiftRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
         private void SendMailForUpdateChangeShiftSuccessfully(UpdateChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);

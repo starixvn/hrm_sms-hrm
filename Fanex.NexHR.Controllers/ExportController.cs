@@ -44,6 +44,7 @@ namespace Fanex.NexHR.Controllers
     {
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
+        private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -305,10 +306,8 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "Verifier, Approver")]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
@@ -319,26 +318,26 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.PersonalSpace),
-                SupervisorId = this.CurrentUser.Id,
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
+                SupervisorId = CurrentUser.Id,
+                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
 
-            var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
-            return ExcelFile(hssfworkbook, fileName);
+            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
+            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+
+            return new EmptyResult();
         }
 
         [Authorize(Roles = "HR")]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
-                SupervisorId = this.CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -347,20 +346,21 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.HRSpace),
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
+                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
-            return ExcelFile(hssfworkbook, fileName);
+
+            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
+            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+
+            return new EmptyResult();
         }
 
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)
         {
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
 
-            bool? isLocal = null;
             var criteria = new GetRequestCriteria()
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
@@ -371,13 +371,16 @@ namespace Fanex.NexHR.Controllers
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
-                SupervisorId = this.CurrentUser.Id,
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : isLocal
+                SupervisorId = CurrentUser.Id,
+                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            var hssfworkbook = _exportService.ExportWorkingTimeRequest(requestList);
-            return ExcelFile(hssfworkbook, fileName);
+
+            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
+            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+
+            return new EmptyResult();
         }
 
         public ActionResult Manpower(int year)

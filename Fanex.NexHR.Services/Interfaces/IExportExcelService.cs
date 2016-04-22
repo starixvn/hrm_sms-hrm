@@ -30,8 +30,6 @@ namespace Fanex.NexHR.Services.Interfaces
 
         HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year);
 
-        HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList);
-
         HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar);
@@ -59,5 +57,7 @@ namespace Fanex.NexHR.Services.Interfaces
         HSSFWorkbook ExportManpower(IList<ManpowerModel> manpowers, int year);
 
         HSSFWorkbook ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year);
+
+        void ExportWorkingTimeRequest(IList<RequestEntity> requestList, string templatePath);
     }
 }

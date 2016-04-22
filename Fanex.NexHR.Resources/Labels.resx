@@ -1242,4 +1242,7 @@
   <data name="EmployeeComment" xml:space="preserve">
     <value>Employee's Comment</value>
   </data>
+  <data name="WorkingTimeRequestReportSheet" xml:space="preserve">
+    <value>Working_Time_Request</value>
+  </data>
 </root>
