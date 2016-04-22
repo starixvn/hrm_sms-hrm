@@ -42,7 +42,8 @@ namespace Fanex.NexHR.Controllers
 
     public class ExportController : RequestController
     {
-        private const string _DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
+        private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
+        private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -428,8 +429,31 @@ namespace Fanex.NexHR.Controllers
 
             IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
 
-            string templatePath = Server.MapPath(_DisciplineSummaryTemplatePath);
+            string templatePath = Server.MapPath(DisciplineSummaryTemplatePath);
             _disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
+
+            return new EmptyResult();
+        }
+
+        public ActionResult ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
+        {
+            var criteria = new GetDisciplineDetailCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                ReasonId = model.ReasonId,
+                ApproverId = CurrentUser.Id,
+                EmployeeName = model.Employee,
+                GroupName = model.TeamName
+            };
+
+            IList<DisciplineDetailModel> disciplines = _disciplineService.GetDisciplineDetail(criteria);
+
+            string templatePath = Server.MapPath(DisciplineDetailTemplatePath);
+            _disciplineService.ExportDisciplineDetailReport(criteria, disciplines, templatePath);
 
             return new EmptyResult();
         }

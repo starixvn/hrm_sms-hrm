@@ -19,6 +19,8 @@
 
         CommandResult InsertOtherViolation(InsertOtherViolationCriteria criteria);
 
-        void ExportDisciplineSummaryReport(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> attendanceEmployees, string templatePath);
+        void ExportDisciplineSummaryReport(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines, string templatePath);
+
+        void ExportDisciplineDetailReport(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplineDetails, string templatePath);
     }
 }

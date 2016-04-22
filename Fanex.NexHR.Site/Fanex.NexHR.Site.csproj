@@ -1115,6 +1115,7 @@
     </Content>
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
+    <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <None Include="Styles\discipline.scss" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherViolation.cshtml" />

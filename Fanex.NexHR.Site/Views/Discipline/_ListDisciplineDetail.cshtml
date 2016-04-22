@@ -19,6 +19,8 @@
             <th>@Labels.ChangeShift</th>
             <th>@Labels.MinusScoringSystem</th>
             <th>@Labels.MinusScoringApprover</th>
+            <th>@Labels.ApproverComment</th>
+            <th>@Labels.EmployeeComment</th>
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -71,7 +73,16 @@
                             <span>-</span>
                         }
                     </td>
-                    <td></td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.TotalHours.Value) && !item.TotalHours.Value.Equals("0") && item.TotalHours.HasViolated)
+                        {
+                            <span>1</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
                     <td>
                         @if (!string.IsNullOrEmpty(item.LateIn.Value) && !item.LateIn.Value.Equals("0"))
                         {
@@ -132,14 +143,34 @@
                             <span>-</span>
                         }
                     </td>
-                    <td>@item.SystemSubtractScore</td>
-                    <td>@item.ApproverSubtractScore</td>
+                    <td>
+                        @if (item.SystemSubtractScore > 0)
+                        {
+                            <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                        }
+                        else
+                        {
+                            <span>@item.SystemSubtractScore.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.ApproverSubtractScore > 0 && item.ApproverSubtractScore > item.SystemSubtractScore)
+                        {
+                            <span style="color: red">@item.ApproverSubtractScore.ToString("0.0")</span>
+                        }
+                        else
+                        {
+                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>@item.ApproverComment</td>
+                    <td>@item.EmployeeComment</td>
                 </tr>
             }
         </tbody>
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 18);
+        @RazorHelper.DisplayNoInformation(colspan: 19);
     }
 </table>

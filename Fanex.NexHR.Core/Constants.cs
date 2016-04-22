@@ -9,9 +9,6 @@
 
 namespace Fanex.NexHR.Core
 {
-    /// <summary>
-    /// Constants Value.
-    /// </summary>
     public static class Constants
     {
         public const string JobTitle = "JT";
@@ -35,6 +32,8 @@ namespace Fanex.NexHR.Core
         public const string PassWordAdmin = "@dm!nhrms";
 
         public const string DateFormat = "dd MMM, yyyy";
+
+        public const string TimeFormat = "HH:mm";
 
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.

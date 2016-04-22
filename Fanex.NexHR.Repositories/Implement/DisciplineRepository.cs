@@ -28,14 +28,11 @@
 
         public IList<DisciplineDetailModel> GetDisciplineDetail(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (GridReader multi = db.QueryMultiple(criteria))
-                {
-                    IList<dynamic> disciplines = multi.Read<dynamic>().ToList();
+                IList<dynamic> disciplines = db.Query<dynamic>(criteria.GetSpParams()).ToList();
 
-                    return MappingObjectForDisciplineDetail(disciplines);
-                }
+                return MappingObjectForDisciplineDetail(disciplines);
             }
         }
 

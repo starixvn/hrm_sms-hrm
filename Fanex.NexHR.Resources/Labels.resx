@@ -1224,4 +1224,22 @@
   <data name="Discipline" xml:space="preserve">
     <value>Discipline</value>
   </data>
+  <data name="DisciplineDetailReportName" xml:space="preserve">
+    <value>Discipline Detail Report</value>
+  </data>
+  <data name="DisciplineDetailReportSheet" xml:space="preserve">
+    <value>Discipline_Detail_Report</value>
+  </data>
+  <data name="DisciplineDetailReportTitle" xml:space="preserve">
+    <value>{0} - Discipline Detail Report from {1}  to {2}</value>
+  </data>
+  <data name="DisciplineDetailReportTitleNoPrefix" xml:space="preserve">
+    <value>Discipline Detail Report from {0}  to {1}</value>
+  </data>
+  <data name="ApproverComment" xml:space="preserve">
+    <value>Approver's Comment</value>
+  </data>
+  <data name="EmployeeComment" xml:space="preserve">
+    <value>Employee's Comment</value>
+  </data>
 </root>
