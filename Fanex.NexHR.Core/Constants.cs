@@ -35,6 +35,8 @@ namespace Fanex.NexHR.Core
 
         public const string TimeFormat = "HH:mm";
 
+        public const decimal MaxScoreSubtractDate = (decimal)3.5;
+
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.
         /// </summary>

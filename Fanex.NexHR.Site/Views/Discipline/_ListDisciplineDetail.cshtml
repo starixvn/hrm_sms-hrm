@@ -154,9 +154,16 @@
                         }
                     </td>
                     <td>
-                        @if (item.ApproverSubtractScore > 0 && item.ApproverSubtractScore > item.SystemSubtractScore)
+                        @if (item.ApproverSubtractScore > 0)
                         {
-                            <span style="color: red">@item.ApproverSubtractScore.ToString("0.0")</span>
+                            if (item.ApproverSubtractScore <= item.SystemSubtractScore)
+                            {
+                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
+                            }
+                            else
+                            {
+                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                            }
                         }
                         else
                         {

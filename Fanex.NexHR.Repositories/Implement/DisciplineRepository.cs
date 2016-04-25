@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NexHR.Repositories.Implement
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Repositories.Interfaces;
 
@@ -32,11 +32,13 @@
             {
                 IList<dynamic> disciplines = db.Query<dynamic>(criteria.GetSpParams()).ToList();
 
-                return MappingObjectForDisciplineDetail(disciplines);
+                IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
+                CalculateScore(disciplineDetails);
+
+                return disciplineDetails;
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private static IList<DisciplineDetailModel> MappingObjectForDisciplineDetail(IList<dynamic> disciplines)
         {
             return disciplines.Select(discipline => new DisciplineDetailModel
@@ -56,79 +58,155 @@
                     GroupName = discipline.GroupName,
                     GroupCode = discipline.GroupCode
                 },
-                ChangeShift = new ViolationModel
-                {
-                    ViolationId = discipline.ChangeShiftId,
-                    Value = discipline.ChangeShiftValue,
-                    Score = discipline.ChangeShiftScore,
-                    HasViolated = discipline.ChangeShiftHasViolated,
-                    HasIgnored = discipline.ChangeShiftHasIgnored,
-                    HasApprovedBy = discipline.ChangeShiftHasApprovedBy
-                },
-                MissingCheckInOut = new ViolationModel
-                {
-                    ViolationId = discipline.MissingCheckInOutId,
-                    Value = discipline.MissingCheckInOutValue,
-                    Score = discipline.MissingCheckInOutScore,
-                    HasViolated = discipline.MissingCheckInOutHasViolated,
-                    HasIgnored = discipline.MissingCheckInOutHasIgnored,
-                    HasApprovedBy = discipline.MissingCheckInOutHasApprovedBy
-                },
-                LateIn = new ViolationModel
-                {
-                    ViolationId = discipline.LateInId,
-                    Value = discipline.LateInValue,
-                    Score = discipline.LateInScore,
-                    HasViolated = discipline.LateInHasViolated,
-                    HasIgnored = discipline.LateInHasIgnored,
-                    HasApprovedBy = discipline.LateInHasApprovedBy
-                },
-                EarlyOut = new ViolationModel
-                {
-                    ViolationId = discipline.EarlyOutId,
-                    Value = discipline.EarlyOutValue,
-                    Score = discipline.EarlyOutScore,
-                    HasViolated = discipline.EarlyOutHasViolated,
-                    HasIgnored = discipline.EarlyOutHasIgnored,
-                    HasApprovedBy = discipline.EarlyOutHasApprovedBy
-                },
-                Absent = new ViolationModel
-                {
-                    ViolationId = discipline.AbsentId,
-                    Value = discipline.AbsentValue,
-                    Score = discipline.AbsentScore,
-                    HasViolated = discipline.AbsentHasViolated,
-                    HasIgnored = discipline.AbsentHasIgnored,
-                    HasApprovedBy = discipline.AbsentHasApprovedBy
-                },
-                UnpaidLeave = new ViolationModel
-                {
-                    ViolationId = discipline.UnpaidLeaveId,
-                    Value = discipline.UnpaidLeaveValue,
-                    Score = discipline.UnpaidLeaveScore,
-                    HasViolated = discipline.UnpaidLeaveHasViolated,
-                    HasIgnored = discipline.UnpaidLeaveHasIgnored,
-                    HasApprovedBy = discipline.UnpaidLeaveHasApprovedBy
-                },
-                TotalHours = new ViolationModel
-                {
-                    ViolationId = discipline.TotalHoursId,
-                    Value = discipline.TotalHoursValue,
-                    Score = discipline.TotalHoursScore,
-                    HasViolated = discipline.TotalHoursHasViolated,
-                    HasIgnored = discipline.TotalHoursHasIgnored,
-                    HasApprovedBy = discipline.TotalHoursHasApprovedBy
-                },
-                UnpaidLeaveAbsent = new ViolationModel
-                {
-                    ViolationId = discipline.UnpaidLeaveAbsentId,
-                    Value = discipline.UnpaidLeaveAbsentValue,
-                    Score = discipline.UnpaidLeaveAbsentScore,
-                    HasViolated = discipline.UnpaidLeaveAbsentHasViolated,
-                    HasIgnored = discipline.UnpaidLeaveAbsentHasIgnored,
-                    HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy
-                }
+                ChangeShift = GetChangeShift(discipline),
+                MissingCheckInOut = GetMissingCheckInOut(discipline),
+                LateIn = GetLateIn(discipline),
+                EarlyOut = GetEarlyOut(discipline),
+                Absent = GetAbsent(discipline),
+                UnpaidLeave = GetUnpaidLeave(discipline),
+                TotalHours = GetTotalHours(discipline),
+                UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
+                EmployeeComment = discipline.EmployeeComment,
+                ApproverComment = discipline.ApproverComment
             }).ToList();
+        }
+
+        private static ViolationModel GetChangeShift(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.ChangeShiftId,
+                Value = discipline.ChangeShiftValue,
+                Score = discipline.ChangeShiftScore,
+                HasViolated = discipline.ChangeShiftHasViolated,
+                HasIgnored = discipline.ChangeShiftHasIgnored,
+                HasApprovedBy = discipline.ChangeShiftHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetMissingCheckInOut(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.MissingCheckInOutId,
+                Value = discipline.MissingCheckInOutValue,
+                Score = discipline.MissingCheckInOutScore,
+                HasViolated = discipline.MissingCheckInOutHasViolated,
+                HasIgnored = discipline.MissingCheckInOutHasIgnored,
+                HasApprovedBy = discipline.MissingCheckInOutHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetLateIn(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.LateInId,
+                Value = discipline.LateInValue,
+                Score = discipline.LateInScore,
+                HasViolated = discipline.LateInHasViolated,
+                HasIgnored = discipline.LateInHasIgnored,
+                HasApprovedBy = discipline.LateInHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetEarlyOut(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.EarlyOutId,
+                Value = discipline.EarlyOutValue,
+                Score = discipline.EarlyOutScore,
+                HasViolated = discipline.EarlyOutHasViolated,
+                HasIgnored = discipline.EarlyOutHasIgnored,
+                HasApprovedBy = discipline.EarlyOutHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetAbsent(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.AbsentId,
+                Value = discipline.AbsentValue,
+                Score = discipline.AbsentScore,
+                HasViolated = discipline.AbsentHasViolated,
+                HasIgnored = discipline.AbsentHasIgnored,
+                HasApprovedBy = discipline.AbsentHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetUnpaidLeave(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.UnpaidLeaveId,
+                Value = discipline.UnpaidLeaveValue,
+                Score = discipline.UnpaidLeaveScore,
+                HasViolated = discipline.UnpaidLeaveHasViolated,
+                HasIgnored = discipline.UnpaidLeaveHasIgnored,
+                HasApprovedBy = discipline.UnpaidLeaveHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetTotalHours(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.TotalHoursId,
+                Value = discipline.TotalHoursValue,
+                Score = discipline.TotalHoursScore,
+                HasViolated = discipline.TotalHoursHasViolated,
+                HasIgnored = discipline.TotalHoursHasIgnored,
+                HasApprovedBy = discipline.TotalHoursHasApprovedBy
+            };
+        }
+
+        private static ViolationModel GetUnpaidLeaveAbsent(dynamic discipline)
+        {
+            return new ViolationModel
+            {
+                ViolationId = discipline.UnpaidLeaveAbsentId,
+                Value = discipline.UnpaidLeaveAbsentValue,
+                Score = discipline.UnpaidLeaveAbsentScore,
+                HasViolated = discipline.UnpaidLeaveAbsentHasViolated,
+                HasIgnored = discipline.UnpaidLeaveAbsentHasIgnored,
+                HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy
+            };
+        }
+
+        private static void CalculateScore(IList<DisciplineDetailModel> disciplineDetails)
+        {
+            foreach (DisciplineDetailModel disciplineDetail in disciplineDetails)
+            {
+                CalculateSubtractScore(disciplineDetail);
+            }
+        }
+
+        private static void CalculateSubtractScore(DisciplineDetailModel disciplineDetail)
+        {
+            var violations = new List<ViolationModel>
+            {
+                disciplineDetail.MissingCheckInOut,
+                disciplineDetail.LateIn,
+                disciplineDetail.EarlyOut,
+                disciplineDetail.TotalHours,
+                disciplineDetail.Absent,
+                disciplineDetail.UnpaidLeave,
+                disciplineDetail.UnpaidLeaveAbsent,
+                disciplineDetail.ChangeShift
+            };
+
+            foreach (ViolationModel violation in violations.Where(violation => violation != null && violation.HasViolated))
+            {
+                disciplineDetail.SystemSubtractScore += violation.Score;
+                disciplineDetail.ApproverSubtractScore += !violation.HasIgnored ? violation.Score : 0;
+            }
+
+            if (disciplineDetail.SystemSubtractScore > Constants.MaxScoreSubtractDate)
+            {
+                disciplineDetail.SystemSubtractScore = Constants.MaxScoreSubtractDate;
+            }
         }
     }
 }
