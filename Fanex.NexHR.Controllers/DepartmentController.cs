@@ -36,7 +36,7 @@ namespace Fanex.NexHR.Controllers
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Index(bool? isActive)
         {
-            var model = new DepartmentViewModel() 
+            var model = new DepartmentViewModel()
             {
                 IsActive = isActive
             };
@@ -198,7 +198,7 @@ namespace Fanex.NexHR.Controllers
 
         private IList<Department> GetParentDepartment(int departmentId)
         {
-            var criteria = new GetParentByDepartmentCriteria() 
+            var criteria = new GetParentByDepartmentCriteria()
             {
                 DepartmentId = departmentId
             };

@@ -14,18 +14,26 @@
     {
         int index = 0;
         <tbody>
-        @foreach (OtherViolationModel item in Model)
-        {
-            index++;
-            <tr>
-                <td>@index</td>
-                <td>@item.WorkDate.ToDateMonthYearFormatedDate()</td>
-                <td>@item.Name</td>
-                <td>@item.Score</td>
-                <td>@item.Comment</td>
-                <td></td>
-            </tr>
-        }
+            @foreach (OtherViolationModel item in Model)
+            {
+                index++;
+                <tr id="row_@index">
+                    <td>@index</td>
+                    <td>@item.WorkDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.Name</td>
+                    <td>@item.Score</td>
+                    <td>@item.Comment</td>
+                    <td>
+                        @if (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString()))
+                        {
+                            <a href="javascript:;" class="deleteOtherViolation" data-row-index="@index" data-empid="@item.EmployeeId"
+                               data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">
+                                <img src="~/Styles/Images/delete-icon.png" />
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     }
     else

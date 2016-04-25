@@ -388,6 +388,7 @@
   <Function Name="Discipline">
     <Setting Key="Discipline_GetOtherViolation" SpName="Discipline_GetOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Discipline_AddOtherViolation" SpName="Discipline_AddOtherViolation" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Discipline_DeleteOtherViolation" SpName="Discipline_DeleteOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Discipline_GetOtherViolationType" SpName="DisciplineType_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Discipline_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Discipline_GetSummary" SpName="Discipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>

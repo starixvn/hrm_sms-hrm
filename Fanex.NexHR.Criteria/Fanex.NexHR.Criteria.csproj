@@ -85,6 +85,7 @@
     <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="Discipline\DeleteOtherViolationCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineSummaryCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineTypeCriteria.cs" />

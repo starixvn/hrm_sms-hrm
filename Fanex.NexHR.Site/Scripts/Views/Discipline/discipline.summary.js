@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, autoIndex, noInformation*/
 
 (function () {
     function showSuccessMsg(msg) {
@@ -147,6 +147,9 @@
                     }
                 }
             ],
+            close: function() {
+                query();
+            },
             show: {
                 effect: 'fade',
                 duration: 300
@@ -187,7 +190,7 @@
                     },
                     success: function (data) {
                         $('#dialogViewOtherViolation').html(data);
-
+                        initEventForDeleteOtherViolation();
                         $('#dialogViewOtherViolation').dialog({
                             modal: true,
                             title: 'Other Violations - ' + nickname,
@@ -224,6 +227,34 @@
             window.location.href = _global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
                 + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
                 + '&isLocal=' + isLocal + '&reasonId=' + reasonId;
+        });
+    }
+
+    function initEventForDeleteOtherViolation() {
+        $('table a.deleteOtherViolation').on('click', function () {
+            var empId = $(this).data('empid'),
+                workdate = $(this).data('workdate'),
+                disciplineTypeId = $(this).data('disciplinetype'),
+                rowIndex = $(this).data('row-index');
+
+            confirm('Are you sure you want to delete this other violation?', function () {
+                $.post(_global.root + 'discipline/DeleteOtherViolation', {
+                    employeeId: empId,
+                    workDate: workdate,
+                    disciplineTypeId: disciplineTypeId
+                }, function (error) {
+                    if (error.length > 0) {
+                        alert(error);
+                        return;
+                    }
+                    $('#row_' + rowIndex).remove();
+                    autoIndex();
+
+                    if ($('#dialogViewOtherViolation table.data tbody > tr').length === 0) {
+                        $(noInformation(6)).appendTo('#dialogViewOtherViolation table.data');
+                    }
+                });
+            });
         });
     }
 

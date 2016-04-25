@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -108,6 +109,7 @@ namespace Fanex.NexHR.Services
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         public static string ToRequestMessage(RequestEntity request)
         {
             StringBuilder msg = new StringBuilder();
@@ -474,6 +476,7 @@ namespace Fanex.NexHR.Services
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;

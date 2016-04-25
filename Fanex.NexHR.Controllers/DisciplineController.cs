@@ -152,6 +152,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = "SystemAdmin")]
         public JsonResult AddOtherViolation(AddOtherViolationViewModel model)
         {
             var criteria = new InsertOtherViolationCriteria
@@ -166,6 +167,24 @@
             CommandResult commandResult = _disciplineService.InsertOtherViolation(criteria);
 
             return Json(commandResult);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "SystemAdmin")]
+        public string DeleteOtherViolation(DeleteOtherViolationCriteria criteria)
+        {
+            if (criteria != null)
+            {
+                criteria.ModifiedBy = CurrentUser.Id;
+                CommandResult commandResult = _disciplineService.DeleteOtherViolation(criteria);
+
+                if (commandResult.Code > 0)
+                {
+                    return commandResult.Message;
+                }
+            }
+
+            return string.Empty;
         }
 
         private IList<Team> GetAllTeam()

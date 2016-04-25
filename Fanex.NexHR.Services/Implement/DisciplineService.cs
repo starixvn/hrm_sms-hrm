@@ -99,6 +99,18 @@
             return commandResult;
         }
 
+        public CommandResult DeleteOtherViolation(DeleteOtherViolationCriteria criteria)
+        {
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                commandResult = Repository.Delete(criteria);
+            }
+
+            return commandResult;
+        }
+
         public void ExportDisciplineSummaryReport(
             GetDisciplineSummaryCriteria criteria,
             IList<DisciplineSummaryModel> disciplines,
