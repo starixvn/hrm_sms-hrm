@@ -1245,4 +1245,7 @@
   <data name="WorkingTimeRequestReportSheet" xml:space="preserve">
     <value>Working_Time_Request</value>
   </data>
+  <data name="ChangeTo" xml:space="preserve">
+    <value>Change To</value>
+  </data>
 </root>

@@ -25,9 +25,6 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.Request;
 
-    /// <summary>
-    /// ChangeShift Controller.
-    /// </summary>
     [Authorize]
     public class ChangeShiftController : RequestController
     {
@@ -37,11 +34,6 @@ namespace Fanex.NexHR.Controllers.Request
             return EmployeeView(DateTime.Now.Year);
         }
 
-        /// <summary>
-        /// ActionResult EmployeeView.
-        /// </summary>
-        /// <param name="year">Input year.</param>
-        /// <returns>View Employee according to year.</returns>
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
@@ -63,10 +55,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(entityList);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <returns>View Create.</returns>
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
@@ -95,16 +83,10 @@ namespace Fanex.NexHR.Controllers.Request
             ViewBag.Shift = shifts;
             ViewBag.TotalRequest = numberRequests;
             ViewBag.UnavailDates = listUnavailDates;
-            
+
             return View(model);
         }
 
-        /// <summary>
-        /// Create a new change shift.
-        /// </summary>
-        /// <param name="shiftJson">The shift data.</param>
-        /// <param name="shiftDetailJson">The shift detail data.</param>
-        /// <returns>Result to check success.</returns>
         [HttpPost]
         public JsonResult Create(string shiftJson, string shiftDetailJson)
         {
@@ -117,11 +99,6 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// ActionResult Update.
-        /// </summary>
-        /// <param name="id">Working time request's id.</param>
-        /// <returns>View update.</returns>
         public ActionResult Update(int id)
         {
             var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
@@ -183,11 +160,6 @@ namespace Fanex.NexHR.Controllers.Request
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Action to view detail change shift request.
-        /// </summary>
-        /// <param name="id">Request Id.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult Detail(int id)
         {
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
@@ -199,7 +171,7 @@ namespace Fanex.NexHR.Controllers.Request
             {
                 RequestId = id
             };
-            var changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+            IList<ChangeShiftDetailModel> changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var model = new ChangeShiftViewModel();
@@ -226,13 +198,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(model);
         }
 
-        /// <summary>
-        /// Changes the shift details.
-        /// </summary>
-        /// <param name="employeeId">The employee identifier.</param>
-        /// <param name="fromDate">From date.</param>
-        /// <param name="toDate">Change Shift To date.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult ChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var model = GetChangeShiftDetail(employeeId, fromDate, toDate);
@@ -241,13 +206,6 @@ namespace Fanex.NexHR.Controllers.Request
             return PartialView("ChangeShiftDetail", model);
         }
 
-        /// <summary>
-        /// Function to get change shift detail.
-        /// </summary>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="fromDate">The From Date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <returns>List ChangeShiftDetail.</returns>
         private List<ChangeShiftDetailViewModel> GetChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var changeShiftDetail = new List<ChangeShiftDetailViewModel>();
@@ -274,11 +232,6 @@ namespace Fanex.NexHR.Controllers.Request
             return changeShiftDetail;
         }
 
-        /// <summary>
-        /// Function to get schedule status.
-        /// </summary>
-        /// <param name="model">WorkingCalendar Model.</param>
-        /// <returns>Schedule status.</returns>
         private string GetScheduleStatus(WorkingCalendarModel model)
         {
             var schedule = string.Empty;
@@ -298,11 +251,6 @@ namespace Fanex.NexHR.Controllers.Request
             return schedule;
         }
 
-        /// <summary>
-        /// Gets the verifier approver list.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel)
         {
             var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.ChangeShift);
@@ -311,11 +259,6 @@ namespace Fanex.NexHR.Controllers.Request
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
 
-        /// <summary>
-        /// Get Unavailable dates.
-        /// </summary>
-        /// <param name="id">Employee Id.</param>
-        /// <returns>List of unavailable dates.</returns>
         private IEnumerable<DateTime> GetUnavailableDate(int id)
         {
             var previousMonth = DateTime.Now.AddMonths(-1).Date;
@@ -332,29 +275,15 @@ namespace Fanex.NexHR.Controllers.Request
             return listUnavailDates;
         }
 
-        /// <summary>
-        /// Function to convert model to view model.
-        /// </summary>
-        /// <param name="model">ChangeShiftDetail Model.</param>
-        /// <returns>ChangeShiftDetail ViewModel.</returns>
         private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
         {
-            var results = new List<ChangeShiftDetailViewModel>();
-            foreach (ChangeShiftDetailModel item in model)
+            return model.Select(item => new ChangeShiftDetailViewModel()
             {
-                var changeShiftDetailViewModel = new ChangeShiftDetailViewModel()
-                {
-                    OnDate = item.OnDate,
-                    ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
-                    FromShiftId = item.FromShiftId,
-                    ToShiftId = item.ToShiftId,
-                    Remark = item.Remark
-                };
-
-                results.Add(changeShiftDetailViewModel);
-            }
-
-            return results;
+                OnDate = item.OnDate,
+                ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
+                FromShiftId = item.FromShiftId,
+                ToShiftId = item.ToShiftId, Remark = item.Remark
+            }).ToList();
         }
     }
 }

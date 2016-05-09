@@ -22,7 +22,7 @@ var ConstantRequest = (function () {
             ConstantRequest.CONSTANT_VOIDBYSA = "VoidBySA";
         }
     };
-} (jQuery));
+}(jQuery));
 
 $(document).ready(function () {
     ConstantRequest.init();

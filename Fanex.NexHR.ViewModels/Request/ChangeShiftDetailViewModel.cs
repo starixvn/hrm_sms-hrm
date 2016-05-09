@@ -11,9 +11,6 @@ namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
 
-    /// <summary>
-    /// Shift Details ViewModel.
-    /// </summary>
     public class ChangeShiftDetailViewModel
     {
         public DateTime OnDate { get; set; }

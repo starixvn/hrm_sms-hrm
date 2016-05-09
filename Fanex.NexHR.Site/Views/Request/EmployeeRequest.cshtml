@@ -1,8 +1,4 @@
 ﻿@using Fanex.NexHR.Services
-@using Fanex.NexHR.Models.Request
-@using Fanex.NexHR.ViewModels.Request
-@using Fanex.NexHR.Models.Request
-@using Fanex.Common
 @model RequestViewModel
 @{
     ViewBag.Title = Model.PageTitle;
@@ -23,29 +19,16 @@
 <table class="data persist-area">
     <thead>
         <tr class="persist-header">
-            <th>
-                #
-            </th>
-            <th>@Labels.Employee
-            </th>
-            <th>@Labels.Team
-            </th>
-            <th>
-                @Labels.Request
-            </th>
-            <th>
-                @Labels.Details
-            </th>
-            <th>@Labels.Remark
-            </th>
-            <th>@Labels.CreatedDate
-            </th>
-            <th>@Labels.Status
-            </th>
-            <th>@Labels.History
-            </th>
-            <th>
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Employee</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Request</th>
+            <th>@Labels.Details</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.History</th>
+            <th></th>
         </tr>
     </thead>
     @if (Model.Requests != null && Model.Requests.Any())
@@ -68,23 +51,22 @@
                 };
 
                 var requestDetail = new { requestid = @request.Id, type = @request.RequestType.FilterRequestHistory };
-                
+
                 <tr id="row@(request.Id)">
-                    <td>@(index++)
-                    </td>
+                    <td>@(index++)</td>
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName.ToString()
                     </td>
-                    <td  class="tooltip" title="@request.Requester.Team.Name">
+                    <td class="tooltip" title="@request.Requester.Team.Name">
                         @request.Requester.Team.Code
                     </td>
                     <td class="highlight">
                         @if (request.RequestType.Id == (int)RequestType.Leave)
-                        { 
+                        {
                             <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
                         }
                         else if (request.RequestType.Id == (int)RequestType.ChangeShift)
-                        { 
+                        {
                             <a href="~/ChangeShift/Detail?id=@request.Id">@request.RequestType.Name</a>
                         }
                         else
@@ -96,16 +78,14 @@
                         @Html.Raw(RequestService.ToRequestMessage(request))
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    { 
+                    {
                         <td class="tooltip" title="@request.Remark">
                             <span class="icon remark" />
                         </td>
                     }
                     else
                     {
-                        <td>
-                            -
-                        </td>
+                        <td>-</td>
                     }
                     <td class="ddMMyyyyhhmm">
                         @request.CreatedDate.ToShortFormatedDate()
@@ -113,12 +93,13 @@
                     @RenderStatus(Model, request)
                     <td>
                         <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                            @Labels.View </a>
+                            @Labels.View
+                        </a>
                     </td>
                     <td class="td-warning">
                         @if (request.IsWarning)
                         {
-                            <span class="icon-warning tooltip" title="@Labels.RequestWarning"/>
+                            <span class="icon-warning tooltip" title="@Labels.RequestWarning" />
                         }
                     </td>
                 </tr>
@@ -126,7 +107,7 @@
         </tbody>
     }
     else
-    { 
+    {
         @RazorHelper.DisplayNoInformation(colspan: 10);
     }
 </table>
@@ -135,9 +116,10 @@
 @Html.Partial("ConfirmedProcessRequest")
 <div id="dialoghistorycontent">
 </div>
+<div id="dialogProcessRequest"></div>
 
 @helper RenderContextMenu(RequestViewModel model)
-    {
+{
     if (model.ViewType == RequestViewType.PersonalSpace)
     {
         @RazorHelper.VerifierAndApproverMenu()
@@ -152,213 +134,269 @@
         @RazorHelper.HrMenu()
         @RazorHelper.ResetMenu()
     }
-    
+
 }
 @helper RenderStatus(RequestViewModel model, RequestEntity request)
+{
+    if (model.ViewType == RequestViewType.PersonalSpace)
     {
-        if (model.ViewType == RequestViewType.PersonalSpace)
-        {
-            @RenderStatusPersonalSpace(model, request);
-        }
-        else if (model.ViewType == RequestViewType.SASpace)
-        {
+        @RenderStatusPersonalSpace(model, request);
+    }
+    else if (model.ViewType == RequestViewType.SASpace)
+    {
         @RenderStatusSASpace(model, request);
-        }
-        else
-        {
+    }
+    else
+    {
         @RenderStatusHRSpace(model, request);
-        }
+    }
 }
 
 @helper RenderStatusHRSpace(RequestViewModel model, RequestEntity request)
+{
+    switch (request.Status.Id)
     {
-        if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
-        {
-    <td>
-        <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</span>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Verified || request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
-        {
-    <td>
-        <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td>   
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Approved || request.Status.Id == (byte)CurrentRequestStatus.Rejected)
-        {
+        case (byte)CurrentRequestStatus.Pending:
+            <td>
+                <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                    @request.Status.ToString()
+                </span>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+        case (byte)CurrentRequestStatus.NotVerified:
+        <td>
+            <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        case (byte)CurrentRequestStatus.Rejected:
             if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
             {
-    <td>
-        <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-    </td>
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="hr-actions tooltip"
+                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
             }
             else
             {
-    <td>
-        <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td>
+                <td>
+                    <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </span>
+                </td>
             }
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Processed || request.Status.Id == (byte)CurrentRequestStatus.Void)
-        {
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+        case (byte)CurrentRequestStatus.Void:
             if (Model.IsAllowChangeStatus)
             {
-    <td>
-        <a roleid="@Convert.ToInt32(Fanex.NexHR.Core.Enums.RoleSystem.HR)" requestid="@request.Id" href="javascript:void(0);" class="hr-actions-reset tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-    </td>   
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="hr-actions-reset tooltip"
+                       title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
             }
             else
             {
-    <td>
-        <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td> 
+                <td>
+                    <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </span>
+                </td>
             }
-        }
-        else
-        {
-    <td>
-        <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
-    </td>   
-        }
+            break;
+        default:
+        <td>
+            <span class="tooltip">@request.Status.ToString()</span>
+        </td>
+            break;
+    }
 }
 
 @helper RenderStatusPersonalSpace(RequestViewModel model, RequestEntity request)
+{
+    switch (request.Status.Id)
     {
-        switch (request.Status.Id)
-        {
-            case (byte)CurrentRequestStatus.Pending:
-                if (request.ApprovedBy.Id == Model.CurrentUserId)
-                {
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
-            </td>
-                }
-                else if (request.VerifiedBy.Id == Model.CurrentUserId)
-                {
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
-            </td>
-                }
-                else
-                {
-            <td>
-                <span>@request.Status.ToString()</span>
-            </td>  
-                }
-                break;
-            case (byte)CurrentRequestStatus.Verified:
-
-                if (request.ApprovedBy.Id == Model.CurrentUserId)
-                {
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>
-                }
-                else if (request.VerifiedBy.Id == Model.CurrentUserId)
-                { 
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>
-                }
-                else
-                {
-            <td>
-                <span>@request.Status.ToString()</span>
-            </td>
-                }
-                break;
-            case (byte)CurrentRequestStatus.NotVerified:
-                if (request.VerifiedBy.Id == Model.CurrentUserId)
-                {
+        case (byte)CurrentRequestStatus.Pending:
+            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            {
                 <td>
-                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" href="javascript:void(0);" class="verifier-actions-reset tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="approver-actions tooltip"
+                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                        @request.Status.ToString()
+                    </a>
                 </td>
-                }
-                else
-                { 
-            <td>
-                <span>@request.Status.ToString()</span>
-            </td>
-                }
-
-                break;
-            case (byte)CurrentRequestStatus.Approved:
-            case (byte)CurrentRequestStatus.Rejected:
-                if (request.ApprovedBy.Id == Model.CurrentUserId)
-                {
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-actions-reset tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>   
-                }
-                else
-                {
-            <td>
-                <span>@request.Status.ToString()</span>
-            </td> 
-                }
-                break;
-            case (byte)CurrentRequestStatus.Processed:
-            case (byte)CurrentRequestStatus.Void:
+            }
+            else if (request.VerifiedBy.Id == Model.CurrentUserId)
+            {
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="verifier-actions tooltip"
+                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                        @request.Status.ToString()
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <span>@request.Status.ToString()</span>
+                </td>
+            }
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            {
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="approver-actions tooltip"
+                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
+            }
+            else if (request.VerifiedBy.Id == Model.CurrentUserId)
+            {
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
+                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <span>@request.Status.ToString()</span>
+                </td>
+            }
+            break;
+        case (byte)CurrentRequestStatus.NotVerified:
+            if (request.VerifiedBy.Id == Model.CurrentUserId)
+            {
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
+                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <span>@request.Status.ToString()</span>
+                </td>
+            }
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        case (byte)CurrentRequestStatus.Rejected:
+            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            {
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                       href="javascript:void(0);" class="approver-actions-reset tooltip"
+                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                        @request.Status.ToString()
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <span>@request.Status.ToString()</span>
+                </td>
+            }
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+        case (byte)CurrentRequestStatus.Void:
         <td>
             <span>@request.Status.ToString()</span>
-        </td> 
-             break;
-            default:
-     <td>
-        <span>@request.Status.ToString()</span>
-    </td>   
-         break;
-        }
+        </td>
+            break;
+        default:
+        <td>
+            <span>@request.Status.ToString()</span>
+        </td>
+            break;
+    }
 }
 
 @helper RenderStatusSASpace(RequestViewModel model, RequestEntity request)
+{
+    switch (request.Status.Id)
     {
-        if (request.Status.Id == (byte)CurrentRequestStatus.Pending)
-        {
-    <td>
-        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" class="sa-void tooltip" href="javascript:void(0);" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">@request.Status.ToString()</a>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Verified)
-        {
-    <td>
-        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" class="sa-void tooltip" href="javascript:void(0);" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.NotVerified)
-        {
-    <td>
-        <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Approved)
-        {
-    <td>
-        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" class="sa-void tooltip" href="javascript:void(0);" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Rejected)
-        {
-    <td>
-        <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td>
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Processed)
-        {
-    <td>
-        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" class="sa-void tooltip" href="javascript:void(0);" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-    </td> 
-        }
-        else if (request.Status.Id == (byte)CurrentRequestStatus.Void)
-        {
-    <td>
-        <span href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</span>
-    </td> 
-        }
-        else
-        {
-     <td>
-        <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
-    </td>   
-        }
+        case (byte)CurrentRequestStatus.Pending:
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                   class="sa-void tooltip" href="javascript:void(0);"
+                   title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                    @request.Status.ToString()
+                </a>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+        <td>
+            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+               class="sa-void tooltip" href="javascript:void(0);"
+               title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.NotVerified:
+        <td>
+            <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        <td>
+            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+               class="sa-void tooltip" href="javascript:void(0);"
+               title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Rejected:
+        <td>
+            <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+        <td>
+            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid ="@request.Requester.Id"
+               class="sa-void tooltip" href="javascript:void(0);"
+               title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Void:
+        <td>
+            <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        </td>
+            break;
+        default:
+        <td>
+            <span class="tooltip">@request.Status.ToString()</span>
+        </td>
+            break;
+    }
 }

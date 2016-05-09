@@ -484,6 +484,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change To.
+        /// </summary>
+        public static string ChangeTo {
+            get {
+                return ResourceManager.GetString("ChangeTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change working day for whole company.
         /// </summary>
         public static string ChangeWorkingDayForWholeCompany {

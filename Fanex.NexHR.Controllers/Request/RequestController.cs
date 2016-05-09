@@ -10,16 +10,20 @@
 namespace Fanex.NexHR.Controllers.Request
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
@@ -203,7 +207,6 @@ namespace Fanex.NexHR.Controllers.Request
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
-
             GetRequests(request);
 
             return View("EmployeeRequest", request);
@@ -212,9 +215,7 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult DailyView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
-
             request.ViewType = RequestViewType.CompanySpace;
-
             GetRequests(request);
 
             return View("EmployeeRequest", request);
@@ -230,6 +231,7 @@ namespace Fanex.NexHR.Controllers.Request
             IList<RequestEntity> requests = RequestService.GetHistoryRequest(criteria);
             ViewBag.EntityList = requests;
             ViewBag.requestType = type;
+
             return View();
         }
 
@@ -237,7 +239,6 @@ namespace Fanex.NexHR.Controllers.Request
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
-
             request.ViewType = RequestViewType.SASpace;
             GetRequests(request);
 
@@ -260,27 +261,27 @@ namespace Fanex.NexHR.Controllers.Request
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = CurrentUser.Id,
                 Role = (byte)role,
                 RequestType = null,
                 Query = query.Trim(),
                 IncludeLoginUser = true
             };
-
             IList<SupervisorNameModel> supervisors = EmployeeService.GetSupervisorByQuery(criteria);
+
             return Json(supervisors, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetVerifiers(int employeeId, byte requestType)
         {
-            IList<SupervisorNameModel> verifierList = this.GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
+            IList<SupervisorNameModel> verifierList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
 
             return Json(verifierList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetApprovers(int employeeId, byte requestType)
         {
-            IList<SupervisorNameModel> approverList = this.GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Approver, requestType);
+            IList<SupervisorNameModel> approverList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Approver, requestType);
 
             return Json(approverList, JsonRequestBehavior.AllowGet);
         }
@@ -295,36 +296,86 @@ namespace Fanex.NexHR.Controllers.Request
                 RequestType = requestType
             };
             IList<SupervisorNameModel> supervisors = _employeeService.GetSupervisorByRequestType(criteria);
+
             return supervisors;
+        }
+
+        public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
+        {
+            if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))
+            {
+                var requestType = new RequestTypeModel
+                {
+                    Id = (short)model.RequestTypeId
+                };
+
+                switch (model.RequestTypeId)
+                {
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
+                        var checkInOutDetailCriteria = new GetHistoryRequestCriteria()
+                        {
+                            RequestId = model.RequestId,
+                            RequestType = requestType.FilterRequestHistory
+                        };
+                        model.CheckInOutDetails = _requestService.GetHistoryRequest(checkInOutDetailCriteria);
+                        break;
+
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
+                        var lateInEarlyOutDetailCriteria = new GetHistoryRequestCriteria()
+                        {
+                            RequestId = model.RequestId,
+                            RequestType = requestType.FilterRequestHistory
+                        };
+                        model.LateInEarlyOutDetails = _requestService.GetHistoryRequest(lateInEarlyOutDetailCriteria);
+                        break;
+
+                    case (int)RequestType.ChangeShift:
+                        var getRequestByIdcriteria = new GetRequestByIdCriteria()
+                        {
+                            RequestId = model.RequestId
+                        };
+                        RequestEntity request = _requestService.GetRequestById(getRequestByIdcriteria);
+                        var changeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+                        {
+                            RequestId = model.RequestId
+                        };
+                        ViewBag.Shifts = _shiftService.GetAll(isShowOff: true);
+                        IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftRequestDetailById(changeShiftDetailCriteria);
+                        model.ChangeShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetails);
+                        ViewBag.EmployeeId = request.Requester.Id;
+                        break;
+
+                    case (int)RequestType.Leave:
+                        break;
+                }
+            }
+
+            return PartialView("_ProcessRequest", model);
         }
 
         protected bool Editable(byte status, int employeeId, int creatorId)
         {
-            if (status != (byte)CurrentRequestStatus.Pending ||
-                (employeeId != this.CurrentUser.Id && creatorId != this.CurrentUser.Id))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return status == (byte)CurrentRequestStatus.Pending && (employeeId == CurrentUser.Id || creatorId == CurrentUser.Id);
         }
 
         protected string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
         {
-            var role = string.Empty;
-            if (requestViewType == RequestViewType.PersonalSpace)
+            string role;
+            switch (requestViewType)
             {
-                role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
-            }
-            else if (requestViewType == RequestViewType.HRSpace)
-            {
-                role = ((int)RoleSystem.HR).ToString();
-            }
-            else
-            {
-                role = ((int)RoleSystem.Member).ToString();
+                case RequestViewType.PersonalSpace:
+                    role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
+                    break;
+
+                case RequestViewType.HRSpace:
+                    role = ((int)RoleSystem.HR).ToString();
+                    break;
+
+                default:
+                    role = ((int)RoleSystem.Member).ToString();
+                    break;
             }
 
             return role;
@@ -333,18 +384,20 @@ namespace Fanex.NexHR.Controllers.Request
         protected string GetStatus(int statusId)
         {
             string statusIds;
-            if (statusId == -1)
+            switch (statusId)
             {
-                // status = -1 --> pending and verified (1,2)
-                statusIds = "1,2";
-            }
-            else if (statusId == 0)
-            {
-                statusIds = string.Empty;
-            }
-            else
-            {
-                statusIds = statusId.ToString();
+                case -1:
+                    // status = -1 --> pending and verified (1,2)
+                    statusIds = "1,2";
+                    break;
+
+                case 0:
+                    statusIds = string.Empty;
+                    break;
+
+                default:
+                    statusIds = statusId.ToString();
+                    break;
             }
 
             return statusIds;
@@ -384,6 +437,18 @@ namespace Fanex.NexHR.Controllers.Request
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
             request.CurrentUserId = CurrentUser.Id;
             request.Requests = requestList;
+        }
+
+        private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
+        {
+            return model.Select(item => new ChangeShiftDetailViewModel()
+            {
+                OnDate = item.OnDate,
+                ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
+                FromShiftId = item.FromShiftId,
+                ToShiftId = item.ToShiftId,
+                Remark = item.Remark
+            }).ToList();
         }
     }
 }

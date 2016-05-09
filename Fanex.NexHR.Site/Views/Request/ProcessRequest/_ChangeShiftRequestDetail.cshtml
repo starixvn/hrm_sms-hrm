@@ -1,0 +1,59 @@
+﻿@model IList<ChangeShiftDetailViewModel>
+
+<table class="tabledata">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.ScheduleStatus</th>
+            <th>@Labels.ChangeTo</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.Ignored</th>
+        </tr>
+    </thead>
+
+    @if (Model != null && Model.Any())
+    {
+        <tbody>
+            @foreach (ChangeShiftDetailViewModel item in Model)
+            {
+                <tr class='left'>
+                    <td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
+                    <td>@item.ScheduleStatus</td>
+                    @if (item.ScheduleStatus == null || item.ScheduleStatus.Equals(Labels.NA))
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId), new {@disabled = false})
+                        </td>
+                        if (!string.IsNullOrWhiteSpace(item.Remark))
+                        {
+                            <td class="tooltip" title="@item.Remark">
+                                <span class="icon remark" alt="remark"></span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    }
+                    <td class="ignoredDiscipline">
+                        @{
+                            var disciplineTypeId = (int)DisciplineType.ChangeShift;
+                        }
+                        <input type="checkbox" data-workdate="@item.OnDate.ToDateMonthYearFormatedDate()"
+                               data-disciplineTypeId="@disciplineTypeId" />
+                    </td>
+                    @Html.HiddenFor(model => item.FromShiftId)
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 5);
+    }
+</table>

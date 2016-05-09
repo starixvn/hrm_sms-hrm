@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Request
-@model LeaveRequestViewModel
+﻿@model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.LeaveRequestDetail;
 }
@@ -10,8 +9,8 @@
     @Url.CombresLink("leavejs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> 
-     <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
+    <a class="step">Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
 
@@ -37,7 +36,7 @@
         </div>
         <div class="input">
             @if (Roles.IsUserInRole("ActingSupervisor"))
-            { 
+            {
                 @Html.EditorFor(model => model.Employee)
             }
             else

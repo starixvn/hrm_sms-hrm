@@ -133,8 +133,8 @@ namespace Fanex.NexHR.Controllers.Request
             model.LeaveTypeList = GetAllLeaveType();
             model.VerifierList = GetVerifiers(request.Requester.Id);
             model.ApproverList = GetApprovers(request.Requester.Id);
-
             ViewBag.IsView = true;
+
             return View(model);
         }
 
@@ -238,21 +238,17 @@ namespace Fanex.NexHR.Controllers.Request
             if (fromDate <= toDate)
             {
                 var numberDays = (toDate - fromDate).Days + 1;
-                var tempDate = DateTime.Now.Date;
-                IEnumerable<WorkingCalendarModel> tempWokingCalendars = null;
-                IEnumerable<LeaveDetailModel> tempLeaveDetailModels = null;
-                WorkingCalendarModel tempWokingCalendar = null;
+                DateTime tempDate;
 
                 for (int i = 0; i < numberDays; i++)
                 {
-                    tempLeaveDetailModels = null;
                     tempDate = fromDate.AddDays(i);
-                    tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.LeaveDate == tempDate));
-                    tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
+                    IEnumerable<LeaveDetailModel> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.LeaveDate == tempDate));
+                    IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
 
                     if (tempWokingCalendars != null && tempWokingCalendars.Any())
                     {
-                        tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
+                        WorkingCalendarModel tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
                         AddLeaveRequestExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempWokingCalendar);
                     }
                     else

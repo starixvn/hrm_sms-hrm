@@ -1,12 +1,18 @@
 ﻿<div id="confirmedDialog">
-    <div class="confirm">
-        <div class="labelRemark">
+    <div class="formrow">
+        <div class="label">
             @Labels.Remark
         </div>
-        <div class="inputRemark">
+        <div class="input">
             @Html.TextArea("reasonToProcess")
         </div>
-        <div class="clear">
+    </div>
+    <div class="formrow ignored" style="display: none">
+        <div class="label">
+            @Labels.Ignored
+        </div>
+        <div class="input">
+            @Html.CheckBox("ignoredDiscipline")
         </div>
     </div>
 </div>

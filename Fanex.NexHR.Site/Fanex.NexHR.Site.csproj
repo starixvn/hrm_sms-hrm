@@ -1122,6 +1122,11 @@
     <Content Include="Views\Discipline\_ViewOtherViolation.cshtml" />
     <Content Include="Views\Discipline\DisciplineDetail.cshtml" />
     <Content Include="Views\Discipline\_ListDisciplineDetail.cshtml" />
+    <Content Include="Views\Request\_ProcessRequest.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_LeaveRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_CheckInOutRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_LateInEarlyOutRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

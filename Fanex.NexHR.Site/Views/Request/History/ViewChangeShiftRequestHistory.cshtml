@@ -1,28 +1,17 @@
-﻿@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
+﻿@model IList<RequestEntity>
 
 <table class="data">
     <thead>
         <tr>
-            <th>
-                #
-            </th>
-            <th>@Labels.Team
-            </th>
-            <th>@Labels.Employee
-            </th>
-            <th>@Labels.FromDate
-            </th>
-            <th>@Labels.ToDate
-            </th>
-            <th>@Labels.CreatedDate
-            </th>
-            <th>@Labels.Remark
-            </th>
-            <th>@Labels.Status
-            </th>
-            <th>@Labels.PerformedBy
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Employee</th>
+            <th>@Labels.FromDate</th>
+            <th>@Labels.ToDate</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.PerformedBy</th>
         </tr>
     </thead>
     @if (ViewBag.EntityList.Count > 0)
@@ -30,25 +19,28 @@
         <tbody>
             @{int index = 1;}
             @foreach (RequestEntity request in Model)
-            { 
+            {
                 <tr id="row@(request.Id)">
-                    <td>@(index++)
-                    </td>
-                    <td class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code
+                    <td>@(index++)</td>
+                    <td class="tooltip" title="@request.Requester.Team.Name">
+                        @request.Requester.Team.Code
                     </td>
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName.ToString()
                     </td>
-                    <td class="highlight">@request.FromDate.ToDateMonthYearFormatedDate()
+                    <td class="highlight">
+                        @request.FromDate.ToDateMonthYearFormatedDate()
                     </td>
-                    <td class="highlight">@request.ToDate.ToDateMonthYearFormatedDate()
+                    <td class="highlight">
+                        @request.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
+                    <td class="ddMMyyyyhhmm">
+                        @request.CreatedDate.ToShortFormatedDate()
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    { 
+                    {
                         <td class="tooltip" title="@request.Remark">
-                            <span class="icon remark" alt="remark" />
+                            <span class="icon remark" alt="remark"></span>
                         </td>
                     }
                     else
@@ -59,12 +51,12 @@
                     }
                     <td>@request.Status.ToString()</td>
                     @Html.Partial("History/SharedPeformedBy", request)
-                </tr>  
+                </tr>
             }
         </tbody>
     }
     else
-    { 
+    {
         @RazorHelper.DisplayNoInformation(colspan: 11);
     }
 </table>

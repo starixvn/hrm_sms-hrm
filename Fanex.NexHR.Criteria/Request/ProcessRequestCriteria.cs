@@ -31,10 +31,6 @@ namespace Fanex.NexHR.Criteria.Request
         [SpParam(Ignored = true)]
         public string Action { get; set; }
 
-        /// <summary>
-        /// Function to get setting key.
-        /// </summary>
-        /// <returns>Setting key.</returns>
         public override string GetSettingKey()
         {
             var key = string.Empty;
