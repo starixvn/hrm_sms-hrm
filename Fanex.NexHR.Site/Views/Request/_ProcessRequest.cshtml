@@ -10,11 +10,11 @@
         {
             case (int) RequestType.CheckIn:
             case (int) RequestType.CheckOut:
-                Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetails);
+                Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetail);
                 break;
             case (int) RequestType.LateIn:
             case (int) RequestType.EarlyOut:
-                Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetails);
+                Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail);
                 break;
             case (int) RequestType.ChangeShift:
                 Html.RenderPartial("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails);

@@ -1,1 +1,109 @@
 ﻿@model IList<LeaveDetailModel>
+
+<table class="tabledata">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.ScheduleStatus</th>
+            <th>@Labels.WorkType</th>
+            <th>@Labels.LeaveTypeName</th>
+            <th>@Labels.HalfDay</th>
+            <th>@Labels.LeaveCount</th>
+            <th>@Labels.FromTime</th>
+            <th>@Labels.ToTime</th>
+            <th class="tdhalfday"></th>
+            <th>@Labels.Ignored</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        <tbody>
+            @foreach (LeaveDetailModel item in Model)
+            {
+                <tr>
+                    <td class="tdleavedate">
+                        @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
+                    </td>
+                    <td class="tdschedulestatus">
+                        @item.ScheduleStatus
+                    </td>
+                    @if (!item.IsOffOrHoliday)
+                    {
+                        var leaveSelected = string.Empty;
+                        var offSelected = string.Empty;
+                        var workSelected = string.Empty;
+                        if (item.WorkType == (int)WorkType.Leave)
+                        {
+                            leaveSelected = "selected";
+                        }
+                        else if (item.WorkType == (int)WorkType.Off)
+                        {
+                            offSelected = "selected";
+                        }
+                        else
+                        {
+                            workSelected = "selected";
+                        }
+                        <td>
+                            <select class="ddlWorkType">
+                                <option value="2" @leaveSelected>Leave</option>
+                                <option value="3" @workSelected>On Duty</option>
+                                @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
+                                {
+                                    <option value="1" @offSelected>Off</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            @{
+                        IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
+                            }
+                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(leaveTypes.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @disabled = false })
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday", @disabled = "disabled" })
+                        </td>
+                        <td>
+                            <span class="tdnumberleaves">
+                                @(item.IsHalfDay ? "0.5" : "1")
+                            </span>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @class = "ddlfromtime" })
+                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @class = "ddltotime" })
+                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
+                        <td class="ignoredDiscipline">
+                            <input type="checkbox" data-workdate=""/>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="tdhalfday">-</td>
+                        <td>-</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 9);
+    }
+</table>

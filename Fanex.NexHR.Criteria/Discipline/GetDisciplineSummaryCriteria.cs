@@ -32,7 +32,7 @@
 
         public override string GetSettingKey()
         {
-            return "Discipline_GetSummary";
+            return "EmployeeDiscipline_GetSummary";
         }
     }
 }

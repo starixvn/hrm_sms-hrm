@@ -32,5 +32,7 @@ namespace Fanex.NexHR.Services.Interfaces
         CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria);
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
+
+        CommandResult ApproveRequest(ApproveRequestCriteria criteria);
     }
 }

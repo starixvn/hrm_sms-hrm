@@ -2,39 +2,55 @@
 /*global _global, fadeOutMessage, showMessage*/
 
 (function () {
-    function processRequest(command, eventElement, remark) {
-        var requestId = $(eventElement).attr('requestId'),
-            roleId = $(eventElement).attr('roleId');
-        showMessage('Processing');
-        $.post(_global.root + 'ajax/processrequest',
-        { command: command, requestId: requestId, roleId: roleId, remark: remark },
-            function (response) {
-                fadeOutMessage();
+    function processRequest(requestId, roleId, command, comment, ignoredDetails) {
+        var model = {
+            RequestId: requestId,
+            RoleId: roleId,
+            Command: command,
+            Comment: comment,
+            IgnoredDisciplineDetails: JSON.stringify(ignoredDetails)
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: _global.root + 'request/ProcessRequest',
+            data: model,
+            dataType: 'json',
+            beforeSend: function () {
+                showMessage('Processing');
+            },
+            success: function (response) {
                 if (response.Code !== 0) {
                     alert(response.Message);
                     return;
                 } else {
                     window.location.reload();
                 }
-            });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            },
+            complete: function () {
+                fadeOutMessage();
+            }
+        });
     }
 
-    function initDialogProcessRequest() {
+    function initDialogProcessRequest(requestId, roleId, employeeId, command, title) {
         $('#dialogProcessRequest').dialog({
+            title: title,
             height: 'auto',
             width: 'auto',
             modal: true,
             buttons: {
                 'OK': function () {
-                    var requestDetails = [],
-                        requestId = $(this).find('input#RequestId').val(),
-                        employeeId = $(this).find('input#EmployeeId').val(),
-                        action = $(this).find('input#Action').val();
+                    var ignoredDisciplines = [],
+                        comment = $(this).find('textarea#Comment').val();
 
-                    $(".tabledata tbody tr").each(function () {
+                    $(this).find(".tabledata tbody tr").each(function () {
                         var checkbox = $('td.ignoredDiscipline input:checkbox');
 
-                        requestDetails.push({
+                        ignoredDisciplines.push({
                             WorkDate: checkbox.data('workdate'),
                             EmployeeId: employeeId,
                             DisciplineTypeId: checkbox.data('disciplinetypeid'),
@@ -42,18 +58,16 @@
                         });
                     });
 
-                    console.log(requestDetails);
+                    processRequest(requestId, roleId, command, comment, ignoredDisciplines);
                 },
                 'Cancel': function () {
                     $(this).dialog('close');
                 }
             }
         });
-
-        $('#dialogProcessRequest').dialog('option', 'title', 'Are you sure you want to approve?');
     }
 
-    function renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command) {
+    function renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title) {
         var model = {
             RequestId: requestId,
             RoleId: roleId,
@@ -69,7 +83,7 @@
             dataType: 'html',
             success: function (data) {
                 $('#dialogProcessRequest').html(data);
-                initDialogProcessRequest();
+                initDialogProcessRequest(requestId, roleId, employeeId, command, title);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);
@@ -82,110 +96,41 @@
             menu: menu
         },
         function (command, eventElement) {
-            var ConfirmedDialog = $('#confirmedDialog'),
-                height = 'auto',
-                width = 430;
-
-            var requestTypeId = parseInt($(eventElement).attr('requestTypeId')),
+            var title,
+                requestTypeId = parseInt($(eventElement).attr('requestTypeId')),
                 requestId = parseInt($(eventElement).attr('requestId')),
                 roleId = parseInt($(eventElement).attr('roleId')),
                 employeeId = parseInt($(eventElement).attr('employeeId'));
 
             switch (command) {
                 case 'Accept':
-                    ConfirmedDialog.dialog({
-                        height: height,
-                        width: width,
-                        modal: true,
-                        buttons: {
-                            'OK': function () {
-                                var remark = $('#reasonToProcess').val();
-                                processRequest(command, eventElement, remark);
-                            },
-                            'Cancel': function () {
-                                $(this).dialog('close');
-                            }
-                        }
-                    });
-                    ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to verify?');
+                    title = 'Are you sure you want to verify?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'NotAccept':
-                    ConfirmedDialog.dialog({
-                        height: height,
-                        width: width,
-                        modal: true,
-                        buttons: {
-                            'OK': function () {
-                                var remark = $('#reasonToProcess').val();
-                                processRequest(command, eventElement, remark);
-                            },
-                            'Cancel': function () {
-                                $(this).dialog('close');
-                            }
-                        }
-                    });
-                    ConfirmedDialog.dialog('option', 'title', 'Are you sure you dont want to verify?');
+                    title = 'Are you sure you dont want to verify?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Approve':
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command);
+                    title = 'Are you sure you want to approve?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Reject':
-                    ConfirmedDialog.dialog({
-                        height: height,
-                        width: width,
-                        modal: true,
-                        buttons: {
-                            'OK': function () {
-                                var remark = $('#reasonToProcess').val();
-                                processRequest(command, eventElement, remark);
-                            },
-                            'Cancel': function () {
-                                $(this).dialog('close');
-                            }
-                        }
-                    });
-                    ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to reject?');
+                    title = 'Are you sure you want to reject?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Process':
-                    ConfirmedDialog.dialog({
-                        height: height,
-                        width: width,
-                        autoOpen: true,
-                        modal: true,
-                        buttons: {
-                            'OK': function () {
-                                var remark = $('#reasonToProcess').val();
-                                processRequest(command, eventElement, remark);
-                            },
-                            'Cancel': function () {
-                                $(this).dialog('close');
-                            }
-                        }
-                    });
-                    ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to process?');
+                    title = 'Are you sure you want to process?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Void':
                 case 'VoidBySA':
-                    ConfirmedDialog.dialog({
-                        height: height,
-                        width: width,
-                        autoOpen: true,
-                        modal: true,
-                        buttons: {
-                            'OK': function () {
-                                var remark = $('#reasonToProcess').val();
-                                processRequest(command, eventElement, remark);
-                            },
-                            'Cancel': function () {
-                                $(this).dialog('close');
-                            }
-                        }
-                    });
-                    ConfirmedDialog.dialog('option', 'title', 'Are you sure you want to void?');
+                    title = 'Are you sure you want to void?';
+                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Reset':
                     confirm('Are you sure you want to reset?', function () {
-                        processRequest(command, eventElement);
+                        processRequest(requestId, roleId, command);
                     });
                     break;
             }

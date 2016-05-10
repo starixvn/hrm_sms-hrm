@@ -11,7 +11,7 @@
 
         public override string GetSettingKey()
         {
-            return "Discipline_GetDisciplineType";
+            return "DisciplineType_GetDisciplineType";
         }
     }
 }

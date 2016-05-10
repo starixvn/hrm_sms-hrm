@@ -71,6 +71,7 @@
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />
     <Compile Include="Discipline\DisciplineTypeModel.cs" />
     <Compile Include="Discipline\EmployeeInfoModel.cs" />
+    <Compile Include="Discipline\IgnoredDisciplineModel.cs" />
     <Compile Include="Discipline\OtherViolationModel.cs" />
     <Compile Include="Discipline\ViolationModel.cs" />
     <Compile Include="EmailModel.cs" />

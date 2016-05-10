@@ -44,10 +44,8 @@
                         @{
                             var disciplineTypeId = (int)DisciplineType.ChangeShift;
                         }
-                        <input type="checkbox" data-workdate="@item.OnDate.ToDateMonthYearFormatedDate()"
-                               data-disciplineTypeId="@disciplineTypeId" />
+                        <input type="checkbox" data-workdate="@item.OnDate" data-disciplineTypeId="@disciplineTypeId" />
                     </td>
-                    @Html.HiddenFor(model => item.FromShiftId)
                 </tr>
             }
         </tbody>

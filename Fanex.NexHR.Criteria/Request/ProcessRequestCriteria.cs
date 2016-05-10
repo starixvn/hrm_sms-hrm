@@ -9,22 +9,16 @@
 
 namespace Fanex.NexHR.Criteria.Request
 {
-    using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// ProcessRequest Criteria.
-    /// </summary>
     public class ProcessRequestCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
 
         public int ProcessedBy { get; set; }
 
-        public DateTime ProcessedDate { get; set; }
-
-        public int RoleID { get; set; }
+        public int RoleId { get; set; }
 
         public string Comment { get; set; }
 
@@ -34,13 +28,7 @@ namespace Fanex.NexHR.Criteria.Request
         public override string GetSettingKey()
         {
             var key = string.Empty;
-            if (Action == Command.Accept.ToString()
-                || Action == Command.Approve.ToString()
-                || Action == Command.Process.ToString())
-            {
-                key = "WorkingTimeRequest_ApproveRequest";
-            }
-            else if (Action == Command.NotAccept.ToString()
+            if (Action == Command.NotAccept.ToString()
                 || Action == Command.Reject.ToString()
                 || Action == Command.Void.ToString())
             {

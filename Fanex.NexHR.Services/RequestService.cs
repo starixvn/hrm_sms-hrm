@@ -226,6 +226,40 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
+        public CommandResult ApproveRequest(ApproveRequestCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            CommandResult result = null;
+            if (criteria.IsValid())
+            {
+                result = Repository.Update(criteria);
+                if (result != null && result.Code == 0)
+                {
+                    var getRequestByIdCriteria = new GetRequestByIdCriteria()
+                    {
+                        RequestId = criteria.RequestId
+                    };
+
+                    RequestEntity request = _requestRepository.GetRequestById(getRequestByIdCriteria);
+                    var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
+
+                    var sendMailTask = new Task(()
+                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRelated));
+                    sendMailTask.Start();
+                }
+            }
+            else
+            {
+                result = new CommandResult()
+                {
+                    Code = 1,
+                    Message = Messages.InvalidInputData
+                };
+            }
+
+            return result;
+        }
+
         public CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");

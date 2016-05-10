@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Models.Request;
 
     public class ProcessRequestViewModel
@@ -19,12 +21,22 @@
         [Display(Name = "Remark")]
         public string Comment { get; set; }
 
-        public IList<RequestEntity> CheckInOutDetails { get; set; }
+        public RequestEntity CheckInOutDetail { get; set; }
 
-        public IList<RequestEntity> LateInEarlyOutDetails { get; set; }
+        public RequestEntity LateInEarlyOutDetail { get; set; }
 
         public IList<ChangeShiftDetailViewModel> ChangeShiftDetails { get; set; }
 
         public IList<LeaveDetailModel> LeaveDetails { get; set; }
+
+        public string IgnoredDisciplineDetails { get; set; }
+
+        public IList<IgnoredDisciplineModel> IgnoredDisciplines
+        {
+            get
+            {
+                return JsonConverter.FromJsonArray<IgnoredDisciplineModel>(IgnoredDisciplineDetails);
+            }
+        }
     }
 }

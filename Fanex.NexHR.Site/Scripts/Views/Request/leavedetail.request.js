@@ -129,7 +129,7 @@ var LeaveRequestDetail = (function ($) {
         fillTimeForHalfday: function (trObject) {
             $.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
                 function (data) {
-                    if (data != null) {
+                    if (data !== null) {
                         var arrTimeIn = data.BeginCheckInTime.split(":");
                         var arrTimeOut = data.BeginCheckOutTime.split(":");
 

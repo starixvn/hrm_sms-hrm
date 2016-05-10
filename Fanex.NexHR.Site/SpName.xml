@@ -387,11 +387,11 @@
   </Function>
   <Function Name="Discipline">
     <Setting Key="Discipline_GetOtherViolation" SpName="Discipline_GetOtherViolation" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_AddOtherViolation" SpName="Discipline_AddOtherViolation" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_DeleteOtherViolation" SpName="Discipline_DeleteOtherViolation" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetOtherViolationType" SpName="DisciplineType_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetSummary" SpName="Discipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Discipline_GetDetail" SpName="Discipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_AddOtherViolation" SpName="EmployeeDiscipline_AddOtherViolation" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_DeleteOtherViolation" SpName="EmployeeDiscipline_DeleteOtherViolation" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="DisciplineType_GetOtherViolationType" SpName="DisciplineType_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="DisciplineType_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_GetSummary" SpName="EmployeeDiscipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_GetDetail" SpName="EmployeeDiscipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

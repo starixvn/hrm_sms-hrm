@@ -15,7 +15,6 @@ namespace Fanex.NexHR.Controllers
     using System.Text;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.ExtensionNumber;
@@ -104,10 +103,9 @@ namespace Fanex.NexHR.Controllers
             {
                 Action = command,
                 RequestId = requestId,
-                RoleID = roleId,
+                RoleId = roleId,
                 Comment = remark,
-                ProcessedBy = this.CurrentUser.Id,
-                ProcessedDate = DateTime.Now
+                ProcessedBy = CurrentUser.Id
             };
             CommandResult result = _requestService.Process(criteria);
 

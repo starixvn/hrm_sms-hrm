@@ -1,6 +1,6 @@
-﻿@model IList<RequestEntity>
+﻿@model RequestEntity
 
-<table class="data">
+<table class="tabledata">
     <thead>
         <tr>
             <th>@Labels.RequestTime</th>
@@ -11,43 +11,40 @@
             <th>@Labels.Ignored</th>
         </tr>
     </thead>
-    @if (Model != null && Model.Any())
+    @if (Model != null)
     {
         <tbody>
-            @foreach (RequestEntity request in Model)
-            {
-                <tr id="row@(request.Id)">
-                    <td class="ddMMyyyyhhmm highlight">
-                        @request.RequestedDate.ToShortFormatedDate()
+            <tr id="row@(Model.Id)">
+                <td class="ddMMyyyyhhmm highlight">
+                    @Model.RequestedDate.ToShortFormatedDate()
+                </td>
+                <td class="highlight">
+                    @Model.FromShift.Name
+                </td>
+                <td class="highlight">
+                    @Model.RequestType.ToString()
+                </td>
+                <td class="ddMMyyyyhhmm">
+                    @Model.CreatedDate.ToShortFormatedDate()
+                </td>
+                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                {
+                    <td class="tooltip" title="@Model.Remark">
+                        <span class="icon remark" alt="remark"></span>
                     </td>
-                    <td class="highlight">
-                        @request.FromShift.Name
-                    </td>
-                    <td class="highlight">
-                        @request.RequestType.ToString()
-                    </td>
-                    <td class="ddMMyyyyhhmm">
-                        @request.CreatedDate.ToShortFormatedDate()
-                    </td>
-                    @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    {
-                        <td class="tooltip" title="@request.Remark">
-                            <span class="icon remark" alt="remark"></span>
-                        </td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td class="ignoredDiscipline">
+                    @{
+                        var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
                     }
-                    else
-                    {
-                        <td>-</td>
-                    }
-                    <td>
-                        @{
-                            var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
-                        }
-                        <input type="checkbox" data-workdate="@request.RequestedDate.ToDateMonthYearFormatedDate()"
-                               data-disciplineTypeId="@disciplineTypeId"/>
-                    </td>
-                </tr>
-            }
+                    <input type="checkbox" data-workdate="@Model.RequestedDate" data-disciplinetypeid="@disciplineTypeId" />
+                </td>
+
+            </tr>
         </tbody>
     }
     else

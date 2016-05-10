@@ -16,13 +16,10 @@ namespace Fanex.NexHR.Criteria.Request.Leave
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models.Request;
 
-    /// <summary>
-    /// InsertLeaveRequest Criteria.
-    /// </summary>
     public class InsertLeaveRequestCriteria : CriteriaBase
     {
-        private const string _LeaveRequestDetailTpl = 
-            "<LeaveRequestDetail RequestId='{0}' EmpId='{1}' OnDate='{2}' " 
+        private const string LeaveRequestDetailTpl =
+            "<LeaveRequestDetail RequestId='{0}' EmpId='{1}' OnDate='{2}' "
             + "LeaveType='{3}' IsHalfDay='{4}' WorkType='{5}' FromTime='{6}' ToTime='{7}'></LeaveRequestDetail>";
 
         [Output]
@@ -73,14 +70,14 @@ namespace Fanex.NexHR.Criteria.Request.Leave
                     foreach (var detail in RequestDetail)
                     {
                         value.AppendFormat(
-                            _LeaveRequestDetailTpl, 
+                            LeaveRequestDetailTpl,
                             0,
-                            EmployeeId, 
+                            EmployeeId,
                             detail.LeaveDate,
-                            detail.WorkType == 2 ? detail.LeaveTypeId.ToString() : string.Empty, 
-                            detail.IsHalfDay, 
-                            detail.WorkType, 
-                            detail.FromTime, 
+                            detail.WorkType == 2 ? detail.LeaveTypeId.ToString() : string.Empty,
+                            detail.IsHalfDay,
+                            detail.WorkType,
+                            detail.FromTime,
                             detail.ToTime);
                     }
                 }

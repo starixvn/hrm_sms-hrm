@@ -34,7 +34,7 @@
 
         public override string GetSettingKey()
         {
-            return "Discipline_GetDetail";
+            return "EmployeeDiscipline_GetDetail";
         }
     }
 }

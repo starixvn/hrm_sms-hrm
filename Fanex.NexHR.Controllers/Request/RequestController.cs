@@ -16,11 +16,15 @@ namespace Fanex.NexHR.Controllers.Request
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
@@ -313,46 +317,67 @@ namespace Fanex.NexHR.Controllers.Request
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        var checkInOutDetailCriteria = new GetHistoryRequestCriteria()
+                        var checkInOutDetailCriteria = new GetRequestByIdCriteria()
                         {
-                            RequestId = model.RequestId,
-                            RequestType = requestType.FilterRequestHistory
+                            RequestId = model.RequestId
                         };
-                        model.CheckInOutDetails = _requestService.GetHistoryRequest(checkInOutDetailCriteria);
+                        model.CheckInOutDetail = _requestService.GetRequestById(checkInOutDetailCriteria);
                         break;
 
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        var lateInEarlyOutDetailCriteria = new GetHistoryRequestCriteria()
+                        var lateInEarlyOutDetailCriteria = new GetRequestByIdCriteria()
                         {
-                            RequestId = model.RequestId,
-                            RequestType = requestType.FilterRequestHistory
+                            RequestId = model.RequestId
                         };
-                        model.LateInEarlyOutDetails = _requestService.GetHistoryRequest(lateInEarlyOutDetailCriteria);
+                        model.LateInEarlyOutDetail = _requestService.GetRequestById(lateInEarlyOutDetailCriteria);
                         break;
 
                     case (int)RequestType.ChangeShift:
-                        var getRequestByIdcriteria = new GetRequestByIdCriteria()
-                        {
-                            RequestId = model.RequestId
-                        };
-                        RequestEntity request = _requestService.GetRequestById(getRequestByIdcriteria);
-                        var changeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
-                        {
-                            RequestId = model.RequestId
-                        };
                         ViewBag.Shifts = _shiftService.GetAll(isShowOff: true);
-                        IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftRequestDetailById(changeShiftDetailCriteria);
-                        model.ChangeShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetails);
-                        ViewBag.EmployeeId = request.Requester.Id;
+                        model.ChangeShiftDetails = GetChangeShiftDetail(model.RequestId);
                         break;
 
                     case (int)RequestType.Leave:
+                        var criteria = new GetLeaveTypeCriteria()
+                        {
+                            ExcludeNotShown = true
+                        };
+                        ViewBag.LeaveTypes = _leaveTypeService.GetAll(criteria);
+                        model.LeaveDetails = GetLeaveRequestDetail(model.RequestId);
                         break;
                 }
             }
 
             return PartialView("_ProcessRequest", model);
+        }
+
+        [Authorize(Roles = "Verifier,Approver,HR")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public JsonResult ProcessRequest(ProcessRequestViewModel model)
+        {
+            CommandResult result;
+            if (model.Command == Command.Accept.ToString()
+                || model.Command == Command.Approve.ToString()
+                || model.Command == Command.Process.ToString())
+            {
+                result = ApproveRequest(model);
+            }
+            else
+            {
+                var criteria = new ProcessRequestCriteria()
+                {
+                    Action = model.Command,
+                    RequestId = model.RequestId,
+                    RoleId = model.RoleId,
+                    Comment = model.Comment,
+                    ProcessedBy = CurrentUser.Id
+                };
+                result = _requestService.Process(criteria);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         protected bool Editable(byte status, int employeeId, int creatorId)
@@ -439,6 +464,17 @@ namespace Fanex.NexHR.Controllers.Request
             request.Requests = requestList;
         }
 
+        private IList<ChangeShiftDetailViewModel> GetChangeShiftDetail(long requestId)
+        {
+            var changeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftRequestDetailById(changeShiftDetailCriteria);
+
+            return ConvertChangeShiftDetailToViewModel(changeShiftDetails);
+        }
+
         private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
         {
             return model.Select(item => new ChangeShiftDetailViewModel()
@@ -449,6 +485,166 @@ namespace Fanex.NexHR.Controllers.Request
                 ToShiftId = item.ToShiftId,
                 Remark = item.Remark
             }).ToList();
+        }
+
+        private IList<LeaveDetailModel> GetLeaveRequestDetail(long requestId)
+        {
+            var requestCriteria = new GetRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            RequestEntity request = RequestService.GetRequestById(requestCriteria);
+
+            var workingCalendarCriteria = new GetWorkingCalendarByDateRangeCriteria()
+            {
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                GroupIds = string.Empty,
+                EmpId = request.Requester.Id
+            };
+            IList<WorkingCalendarModel> calendars = _workingCalendarService.GetWorkingCalendarByDateRange(workingCalendarCriteria);
+
+            var leaveDetailCriteria = new GetLeaveRequestDetailByIdCriteria()
+            {
+                RequestId = requestId
+            };
+
+            IList<LeaveDetailModel> leaveRequestDetail = _leaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
+
+            leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, request.FromDate, request.ToDate);
+
+            return leaveRequestDetail;
+        }
+
+        private List<LeaveDetailModel> ConvertToLeaveRequestDetail(
+            IList<WorkingCalendarModel> workingCalendars,
+            IList<LeaveDetailModel> leaveRequestDetailInput,
+            DateTime fromDate,
+            DateTime toDate)
+        {
+            var leaveRequestDetailOutput = new List<LeaveDetailModel>();
+            if (fromDate <= toDate)
+            {
+                var numberDays = (toDate - fromDate).Days + 1;
+
+                for (int i = 0; i < numberDays; i++)
+                {
+                    DateTime tempDate = fromDate.AddDays(i);
+                    IEnumerable<LeaveDetailModel> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.LeaveDate == tempDate));
+                    IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
+
+                    if (tempWokingCalendars != null && tempWokingCalendars.Any())
+                    {
+                        WorkingCalendarModel tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
+                        AddLeaveRequestExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempWokingCalendar);
+                    }
+                    else
+                    {
+                        AddLeaveRequestNotExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempDate);
+                    }
+                }
+            }
+
+            return leaveRequestDetailOutput.OrderBy(t => t.LeaveDate).ThenBy(t => t.FromTime).ToList();
+        }
+
+        private void AddLeaveRequestExistCalendar(
+           List<LeaveDetailModel> leaveRequestDetailOutput,
+           IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
+           WorkingCalendarModel tempWokingCalendar)
+        {
+            string tempScheduleStatus = string.Empty;
+            LeaveDetailModel tempLeaveDetailModel = null;
+            var isOffOrHoliday = tempWokingCalendar.IsOffDay || tempWokingCalendar.IsHoliday;
+
+            if (tempWokingCalendar.IsOffDay)
+            {
+                tempScheduleStatus = Labels.OffDay;
+            }
+            else if (tempWokingCalendar.IsHoliday)
+            {
+                tempScheduleStatus = Labels.Holiday;
+            }
+            else if (tempWokingCalendar.Shift != null)
+            {
+                tempScheduleStatus = tempWokingCalendar.Shift.Name;
+            }
+            else if (!tempWokingCalendar.IsLeaveDay)
+            {
+                tempScheduleStatus = Labels.NA;
+            }
+
+            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            {
+                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveDetailModel
+                {
+                    LeaveDate = tempWokingCalendar.WorkDate,
+                    ScheduleStatus = tempScheduleStatus,
+                    IsOffOrHoliday = isOffOrHoliday,
+                    LeaveTypeId = Constants.AnnualLeave,
+                    WorkType = 2
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
+
+        private void AddLeaveRequestNotExistCalendar(
+            List<LeaveDetailModel> leaveRequestDetailOutput,
+            IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
+            DateTime workDate)
+        {
+            string tempScheduleStatus = Labels.NA;
+            LeaveDetailModel tempLeaveDetailModel = null;
+
+            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            {
+                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveDetailModel
+                {
+                    LeaveDate = workDate,
+                    ScheduleStatus = Labels.NA,
+                    LeaveTypeId = Constants.AnnualLeave,
+                    WorkType = 2
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
+
+        private CommandResult ApproveRequest(ProcessRequestViewModel model)
+        {
+            var criteria = new ApproveRequestCriteria()
+            {
+                RequestId = model.RequestId,
+                RoleId = model.RoleId,
+                Comment = model.Comment,
+                IgnoredDisciplines = model.IgnoredDisciplines,
+                ProcessedBy = CurrentUser.Id
+            };
+            CommandResult result = _requestService.ApproveRequest(criteria);
+
+            return result;
         }
     }
 }

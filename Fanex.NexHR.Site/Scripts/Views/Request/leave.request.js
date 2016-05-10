@@ -273,7 +273,7 @@ var LeaveRequest = (function ($) {
             $.getJSON(_global.root + 'api/shift/getshiftbydate',
             { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
             function (data) {
-                if (data != null) {
+                if (data !== null) {
                     var arrTimeIn = data.BeginCheckInTime.split(":");
                     var arrTimeOut = data.BeginCheckOutTime.split(":");
 
@@ -455,7 +455,7 @@ var LeaveRequest = (function ($) {
         getVerifier: function () {
             $.getJSON(_global.root + 'Request/GetVerifiers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
             function (response) {
-                if (response != null) {
+                if (response !== null) {
                     var options = "";
                     if (response.length > 1) {
                         options = "<option value=''>--Select a Verifier--</option>";
@@ -472,7 +472,7 @@ var LeaveRequest = (function ($) {
         getApprover: function () {
             $.getJSON(_global.root + 'Request/GetApprovers', { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
             function (response) {
-                if (response != null) {
+                if (response !== null) {
                     var options = "";
                     if (response.length > 1) {
                         options = "<option value=''>--Select a Verifier--</option>";
@@ -495,7 +495,7 @@ var LeaveRequest = (function ($) {
                 toDate: LeaveRequest.toDate.val()
             },
             function (response) {
-                if (response != null) {
+                if (response !== null) {
                     LeaveRequest.annualBalance.html(response.AnnualBalance);
                     LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
                     LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
@@ -513,7 +513,7 @@ var LeaveRequest = (function ($) {
                 },
                 async: false,
                 success: function (response) {
-                    if (response != null) {
+                    if (response !== null) {
                         LeaveRequest.totalDays.val(response);
                     }
                 }

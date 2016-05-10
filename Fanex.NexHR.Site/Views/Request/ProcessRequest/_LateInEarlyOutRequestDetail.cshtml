@@ -1,6 +1,6 @@
-﻿@model IList<RequestEntity>
+﻿@model RequestEntity
 
-<table class="data">
+<table class="tabledata">
     <thead>
         <tr>
             <th>@Labels.Date</th>
@@ -13,36 +13,33 @@
         </tr>
     </thead>
 
-    @if (Model != null && Model.Any())
+    @if (Model != null)
     {
         <tbody>
-            @foreach (RequestEntity request in Model)
-            {
-                <tr id="row@(request.Id)">
-                    <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@request.FromShift.Name</td>
-                    <td class="highlight">@request.RequestType.ToString()</td>
-                    <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, request.RequestType.Id)</td>
-                    <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()</td>
-                    @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    {
-                        <td class="tooltip" title="@request.Remark">
-                            <span class="icon remark" alt="remark"></span>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                    }
-                    <td>
-                        @{
-                            var disciplineTypeId = request.RequestType.Id == (int) RequestType.LateIn ? (int) DisciplineType.LateIn : (int) DisciplineType.EarlyOut;
-                        }
-                        <input type="checkbox" data-workdate="@request.FromDate.ToDateMonthYearFormatedDate()"
-                               data-disciplineTypeId="@disciplineTypeId"/>
+            <tr id="row@(Model.Id)">
+                <td class="ddMMyyyy highlight">@Model.FromDate.ToDateMonthYearFormatedDate()</td>
+                <td>@Model.FromShift.Name</td>
+                <td class="highlight">@Model.RequestType.ToString()</td>
+                <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
+                <td class="ddMMyyyyhhmm">@Model.CreatedDate.ToShortFormatedDate()</td>
+                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                {
+                    <td class="tooltip" title="@Model.Remark">
+                        <span class="icon remark" alt="remark"></span>
                     </td>
-                </tr>
-            }
+                }
+                else
+                {
+                    <td>-</td>
+                }
+                <td class="ignoredDiscipline">
+                    @{
+                        var disciplineTypeId = Model.RequestType.Id == (int)RequestType.LateIn ? (int)DisciplineType.LateIn : (int)DisciplineType.EarlyOut;
+                    }
+                    <input type="checkbox" data-workdate="@Model.FromDate" data-disciplinetypeid="@disciplineTypeId" />
+                </td>
+
+            </tr>
         </tbody>
     }
     else
