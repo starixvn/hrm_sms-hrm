@@ -1,18 +1,16 @@
 ﻿@model IList<ChangeShiftDetailViewModel>
-
-<table class="tabledata">
-    <thead>
-        <tr>
-            <th>@Labels.Date</th>
-            <th>@Labels.ScheduleStatus</th>
-            <th>@Labels.ChangeTo</th>
-            <th>@Labels.Remark</th>
-            <th>@Labels.Ignored</th>
-        </tr>
-    </thead>
-
-    @if (Model != null && Model.Any())
-    {
+@if (Model != null && Model.Any())
+{
+    <table class="tabledata">
+        <thead>
+            <tr>
+                <th>@Labels.Date</th>
+                <th>@Labels.ScheduleStatus</th>
+                <th>@Labels.ChangeTo</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Ignored</th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (ChangeShiftDetailViewModel item in Model)
             {
@@ -27,7 +25,7 @@
                     else
                     {
                         <td>
-                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId), new {@disabled = false})
+                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId), new { @disabled = false })
                         </td>
                         if (!string.IsNullOrWhiteSpace(item.Remark))
                         {
@@ -44,14 +42,10 @@
                         @{
                             var disciplineTypeId = (int)DisciplineType.ChangeShift;
                         }
-                        <input type="checkbox" data-workdate="@item.OnDate" data-disciplineTypeId="@disciplineTypeId" />
+                        <input type="checkbox" data-workdate="@item.OnDate" data-disciplinetypeid="@disciplineTypeId" />
                     </td>
                 </tr>
             }
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 5);
-    }
-</table>
+    </table>
+}

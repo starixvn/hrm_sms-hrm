@@ -64,9 +64,9 @@ namespace Fanex.NexHR.Services
 
         #endregion constant
 
-        private IEmployeeRepository _employeeRepository;
-        private IEmailService _emailService;
-        private IRequestRepository _requestRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmailService _emailService;
+        private readonly IRequestRepository _requestRepository;
 
         public RequestService()
         {
@@ -419,6 +419,18 @@ namespace Fanex.NexHR.Services
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             return emailModel;
+        }
+
+        public IList<LeaveDetailModel> GetLeaveRequestDetail(GetLeaveRequestDetailCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            IList<LeaveDetailModel> leaveDetails = null;
+            if (criteria.IsValid())
+            {
+                leaveDetails = GetData<LeaveDetailModel>(criteria).ToList();
+            }
+
+            return leaveDetails;
         }
 
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)

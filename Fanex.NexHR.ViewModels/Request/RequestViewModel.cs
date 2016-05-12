@@ -6,6 +6,7 @@
 // <history>
 //   <change who="Anders.Le" date="2012.5.18">Created</change>
 // </history>
+
 namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
@@ -20,17 +21,17 @@ namespace Fanex.NexHR.ViewModels.Request
 
     public class RequestViewModel
     {
-        private bool isFilterByAffectedDate;
+        private bool _isFilterByAffectedDate;
 
         public RequestViewModel()
         {
-            this.StatusId = -2;
-            this.FromDate = DateTime.Now.Date;
-            this.ToDate = DateTime.Now.Date;
-            this.DateOption = 0;
-            this.TeamIds = null;
-            this.EmployeeId = -1;
-            this.RequestType = (int)RequestFilter.All;
+            StatusId = -2;
+            FromDate = DateTime.Now.Date;
+            ToDate = DateTime.Now.Date;
+            DateOption = 0;
+            TeamIds = null;
+            EmployeeId = -1;
+            RequestType = (int)RequestFilter.All;
         }
 
         public int DateOption { get; set; }
@@ -109,15 +110,15 @@ namespace Fanex.NexHR.ViewModels.Request
             {
                 if (StatusId == -2)
                 {
-                    isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
+                    _isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
                 }
 
-                return isFilterByAffectedDate;
+                return _isFilterByAffectedDate;
             }
 
             set
             {
-                isFilterByAffectedDate = value;
+                _isFilterByAffectedDate = value;
             }
         }
 
@@ -129,17 +130,16 @@ namespace Fanex.NexHR.ViewModels.Request
             {
                 IList<SelectListItem> selecListItemTeam = new List<SelectListItem>();
 
-                if (this.TeamCollection == null)
+                if (TeamCollection == null)
                 {
-                    this.TeamCollection = new List<Team>();
+                    TeamCollection = new List<Team>();
                 }
 
-                var teamIds = this.TeamIds != null ? this.TeamIds.Split(',') : null;
-                var isSelected = false;
+                var teamIds = TeamIds != null ? TeamIds.Split(',') : null;
 
-                foreach (Team team in this.TeamCollection)
+                foreach (Team team in TeamCollection)
                 {
-                    isSelected = false;
+                    var isSelected = false;
                     if (teamIds != null)
                     {
                         int pos = Array.IndexOf(teamIds, team.Id.ToString());

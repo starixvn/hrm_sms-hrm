@@ -326,6 +326,7 @@
   <Function Name="Request">
     <Setting Key="GetCheckInOutByYear" SpName="WorkingTimeRequest_GetRequestByEmp_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetLateInOutByYear" SpName="WorkingTimeRequest_GetRequestByEmp_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="WorkingTimeRequest_GetLeaveRequestDetail" SpName="WorkingTimeRequest_GetLeaveRequestDetail" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="ExtensionNumber">
     <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="nexhrx" Plain="0"></Setting>
@@ -386,7 +387,7 @@
     <Setting Key="EmployeeSupervisor_GetEmployeeByShiftManagement" SpName="EmployeeSupervisor_GetEmployeeByShiftManagement" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Discipline">
-    <Setting Key="Discipline_GetOtherViolation" SpName="Discipline_GetOtherViolation" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_GetOtherViolation" SpName="EmployeeDiscipline_GetOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_AddOtherViolation" SpName="EmployeeDiscipline_AddOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_DeleteOtherViolation" SpName="EmployeeDiscipline_DeleteOtherViolation" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="DisciplineType_GetOtherViolationType" SpName="DisciplineType_GetOtherViolationType" DbName="nexhrx" Plain="0"></Setting>

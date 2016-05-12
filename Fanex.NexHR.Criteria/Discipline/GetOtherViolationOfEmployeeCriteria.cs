@@ -19,7 +19,7 @@
 
         public override string GetSettingKey()
         {
-            return "Discipline_GetOtherViolation";
+            return "EmployeeDiscipline_GetOtherViolation";
         }
     }
 }

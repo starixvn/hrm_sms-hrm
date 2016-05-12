@@ -1,18 +1,17 @@
 ﻿@model RequestEntity
-
-<table class="tabledata">
-    <thead>
-        <tr>
-            <th>@Labels.RequestTime</th>
-            <th>@Labels.Shift</th>
-            <th>@Labels.Request</th>
-            <th>@Labels.CreatedDate</th>
-            <th>@Labels.Remark</th>
-            <th>@Labels.Ignored</th>
-        </tr>
-    </thead>
-    @if (Model != null)
-    {
+@if (Model != null)
+{
+    <table class="tabledata">
+        <thead>
+            <tr>
+                <th>@Labels.RequestTime</th>
+                <th>@Labels.Shift</th>
+                <th>@Labels.Request</th>
+                <th>@Labels.CreatedDate</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Ignored</th>
+            </tr>
+        </thead>
         <tbody>
             <tr id="row@(Model.Id)">
                 <td class="ddMMyyyyhhmm highlight">
@@ -43,12 +42,7 @@
                     }
                     <input type="checkbox" data-workdate="@Model.RequestedDate" data-disciplinetypeid="@disciplineTypeId" />
                 </td>
-
             </tr>
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 6);
-    }
-</table>
+    </table>
+}

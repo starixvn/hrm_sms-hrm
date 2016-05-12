@@ -34,5 +34,7 @@ namespace Fanex.NexHR.Services.Interfaces
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
         CommandResult ApproveRequest(ApproveRequestCriteria criteria);
+
+        IList<LeaveDetailModel> GetLeaveRequestDetail(GetLeaveRequestDetailCriteria criteria);
     }
 }

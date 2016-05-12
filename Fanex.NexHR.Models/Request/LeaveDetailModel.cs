@@ -11,9 +11,6 @@ namespace Fanex.NexHR.Models.Request
 {
     using System;
 
-    /// <summary>
-    /// LeaveDetail Model.
-    /// </summary>
     public class LeaveDetailModel
     {
         public DateTime LeaveDate { get; set; }
@@ -35,5 +32,9 @@ namespace Fanex.NexHR.Models.Request
         public bool IsFromAfterday { get; set; }
 
         public bool IsToAfterday { get; set; }
+
+        public bool IsUnpaidLeaveAbsent { get; set; }
+
+        public bool IsAbsent { get; set; }
     }
 }

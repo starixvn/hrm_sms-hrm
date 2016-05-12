@@ -218,8 +218,8 @@ namespace Fanex.NexHR.Controllers.Request
 
         public ActionResult SendReasonReeditToSupervisor(long requestId, string reason)
         {
-            var criteria = new ResetLeaveRequestCriteria() 
-            { 
+            var criteria = new ResetLeaveRequestCriteria()
+            {
                 RequestId = requestId,
                 EmpId = CurrentUser.Id,
                 Reason = reason

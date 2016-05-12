@@ -8,6 +8,14 @@
 
     public class ProcessRequestViewModel
     {
+        public ProcessRequestViewModel()
+        {
+            CheckInOutDetail = new RequestEntity();
+            LateInEarlyOutDetail = new RequestEntity();
+            ChangeShiftDetails = new List<ChangeShiftDetailViewModel>();
+            LeaveDetails = new List<LeaveDetailModel>();
+        }
+
         public long RequestId { get; set; }
 
         public int RoleId { get; set; }
