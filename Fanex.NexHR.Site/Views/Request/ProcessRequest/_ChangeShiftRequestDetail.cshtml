@@ -42,7 +42,7 @@
                         @{
                             var disciplineTypeId = (int)DisciplineType.ChangeShift;
                         }
-                        <input type="checkbox" data-workdate="@item.OnDate" data-disciplinetypeid="@disciplineTypeId" />
+                        <input type="checkbox" data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                     </td>
                 </tr>
             }

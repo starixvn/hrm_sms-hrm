@@ -35,7 +35,7 @@
                     @{
                         var disciplineTypeId = Model.RequestType.Id == (int)RequestType.LateIn ? (int)DisciplineType.LateIn : (int)DisciplineType.EarlyOut;
                     }
-                    <input type="checkbox" data-workdate="@Model.FromDate" data-disciplinetypeid="@disciplineTypeId" />
+                    <input type="checkbox" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                 </td>
             </tr>
         </tbody>

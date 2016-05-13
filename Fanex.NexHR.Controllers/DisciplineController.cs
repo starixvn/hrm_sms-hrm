@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -185,6 +187,24 @@
             }
 
             return string.Empty;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Approver")]
+        public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
+        {
+            int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.Approver);
+
+            var criteria = new UpdateIgnoredDisciplineCriteria
+            {
+                IgnoredDisciplines = ignoredDisciplineDetails,
+                ModifiedBy = CurrentUser.Id,
+                RoleId = roleId
+            };
+
+            CommandResult commandResult = _disciplineService.UpdateIgnoredDiscipline(criteria);
+
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         private IList<Team> GetAllTeam()

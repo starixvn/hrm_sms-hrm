@@ -268,12 +268,6 @@
     <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
-    <Content Include="Styles\discipline.css">
-      <DependentUpon>discipline.scss</DependentUpon>
-    </Content>
-    <Content Include="Styles\discipline.min.css">
-      <DependentUpon>discipline.css</DependentUpon>
-    </Content>
     <Content Include="Styles\Report\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
@@ -1110,13 +1104,10 @@
     <Content Include="Views\Department\Edit.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />
     <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
-    <Content Include="Styles\discipline.css.map">
-      <DependentUpon>discipline.css</DependentUpon>
-    </Content>
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
-    <None Include="Styles\discipline.scss" />
+    <Content Include="Styles\discipline.css" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherViolation.cshtml" />
     <Content Include="Views\Discipline\_ViewOtherViolation.cshtml" />

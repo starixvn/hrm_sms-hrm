@@ -70,6 +70,9 @@
                                 value: item.Id
                             };
                         }));
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
                     }
                 });
             },
@@ -135,12 +138,15 @@
                                 type: 'POST',
                                 url: _global.root + 'discipline/addotherviolation',
                                 data: $('#frmAddOtherViolation').serialize(),
-                                success: function (data) {
-                                    if (data.Code === 0) {
+                                success: function (result) {
+                                    if (result.Code === 0) {
                                         showSuccessMsg('Add other violation successful!');
                                     } else {
-                                        showErrorMsg('<li>' + data.Message + '</li>');
+                                        showErrorMsg('<li>' + result.Message + '</li>');
                                     }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(textStatus + ': ' + errorThrown);
                                 }
                             });
                         }

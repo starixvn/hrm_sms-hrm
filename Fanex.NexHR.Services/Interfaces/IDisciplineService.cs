@@ -21,6 +21,8 @@
 
         CommandResult DeleteOtherViolation(DeleteOtherViolationCriteria criteria);
 
+        CommandResult UpdateIgnoredDiscipline(UpdateIgnoredDisciplineCriteria criteria);
+
         void ExportDisciplineSummaryReport(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines, string templatePath);
 
         void ExportDisciplineDetailReport(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplineDetails, string templatePath);

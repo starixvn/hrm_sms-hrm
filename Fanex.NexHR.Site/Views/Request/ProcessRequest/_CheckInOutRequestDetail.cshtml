@@ -40,7 +40,7 @@
                     @{
                         var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
                     }
-                    <input type="checkbox" data-workdate="@Model.RequestedDate" data-disciplinetypeid="@disciplineTypeId" />
+                    <input type="checkbox" data-workdate="@Model.RequestedDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                 </td>
             </tr>
         </tbody>

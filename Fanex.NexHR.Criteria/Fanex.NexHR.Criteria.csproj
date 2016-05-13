@@ -92,6 +92,7 @@
     <Compile Include="Discipline\GetOtherViolationOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\GetOtherViolationTypeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherViolationCriteria.cs" />
+    <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />

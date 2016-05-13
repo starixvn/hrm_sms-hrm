@@ -394,5 +394,6 @@
     <Setting Key="DisciplineType_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_GetSummary" SpName="EmployeeDiscipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_GetDetail" SpName="EmployeeDiscipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_UpdateIgnored" SpName="EmployeeDiscipline_UpdateIgnored" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

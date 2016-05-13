@@ -111,6 +111,18 @@
             return commandResult;
         }
 
+        public CommandResult UpdateIgnoredDiscipline(UpdateIgnoredDisciplineCriteria criteria)
+        {
+            CommandResult commandResult = new CommandResult();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                commandResult = Repository.Update(criteria);
+            }
+
+            return commandResult;
+        }
+
         public void ExportDisciplineSummaryReport(
             GetDisciplineSummaryCriteria criteria,
             IList<DisciplineSummaryModel> disciplines,

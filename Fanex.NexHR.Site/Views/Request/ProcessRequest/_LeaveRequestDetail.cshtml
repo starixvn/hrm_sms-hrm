@@ -95,7 +95,7 @@
                             else if (item.LeaveTypeId == 25)//unpaid leave
                             {
                                 var disciplinetypeId = (int) DisciplineType.UnpaidLeave;
-                                <input type="checkbox" data-workdate="@item.LeaveDate" data-disciplinetypeid="@disciplinetypeId"/>
+                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId"/>
                             }
                             else
                             {

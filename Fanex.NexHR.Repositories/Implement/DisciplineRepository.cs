@@ -66,8 +66,8 @@
                 UnpaidLeave = GetUnpaidLeave(discipline),
                 TotalHours = GetTotalHours(discipline),
                 UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
-                EmployeeComment = discipline.EmployeeComment,
-                ApproverComment = discipline.ApproverComment
+                EmployeeComment = GetRequestComment(discipline.EmployeeComment),
+                ApproverComment = GetRequestComment(discipline.ApproverComment)
             }).ToList();
         }
 
@@ -207,6 +207,28 @@
             {
                 disciplineDetail.SystemSubtractScore = Constants.MaxScoreSubtractDate;
             }
+        }
+
+        private static string GetRequestComment(string comment)
+        {
+            string approverComment = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(comment))
+            {
+                string[] comments = comment.Split('&');
+
+                foreach (string commentItem in comments)
+                {
+                    string[] commentItems = commentItem.Split('_');
+
+                    if (commentItems.Count() > 1 && !string.IsNullOrWhiteSpace(commentItems[0]) && !string.IsNullOrWhiteSpace(commentItems[1]))
+                    {
+                        approverComment += commentItems[0] + ':' + commentItems[1];
+                    }
+                }
+            }
+
+            return approverComment;
         }
     }
 }
