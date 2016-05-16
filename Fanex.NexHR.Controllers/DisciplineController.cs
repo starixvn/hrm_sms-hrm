@@ -58,7 +58,7 @@
             return View(model);
         }
 
-        public ActionResult ListDisciplineSummary(DisciplineSummaryViewModel model)
+        public ActionResult PartialListDisciplineSummary(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineSummaryCriteria
             {
@@ -104,7 +104,7 @@
             return View(model);
         }
 
-        public ActionResult ListDisciplineDetail(DisciplineSummaryViewModel model)
+        public ActionResult PartialListDisciplineDetail(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineDetailCriteria
             {

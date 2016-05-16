@@ -491,26 +491,6 @@
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
 
-    <resourceSet name="employeerequestdetailhrspacecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/employeerequestdetailhrspace.css" />
-    </resourceSet>
-
-    <resourceSet name="employeerequestdetailhrspacejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/request/employeerequestdetail.hrspace.js" />
-    </resourceSet>
-
-    <resourceSet name="memberrequestdetailpersonalspacecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/memberrequestdetailpersonalspace.css" />
-    </resourceSet>
-
-    <resourceSet name="memberrequestdetailpersonalspacejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/request/memberrequestdetail.personalspace.js" />
-    </resourceSet>
-
     <resourceSet name="teammanagementjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/team.management.js" />

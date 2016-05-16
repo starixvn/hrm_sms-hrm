@@ -27,7 +27,7 @@
                     <td>@(index++)</td>
                     <td class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code</td>
                     <td class="tooltip" title="@request.Requester.FullName">
-                        @request.Requester.NickName.ToString()
+                        @request.Requester.NickName
                     </td>
                     <td>
                         @(request.FromShift != null ? request.FromShift.Name : string.Empty)
@@ -46,9 +46,7 @@
                     }
                     else
                     {
-                        <td>
-                            -
-                        </td>
+                        <td>-</td>
                     }
                     <td>@request.Status.ToString()</td>
                     @Html.Partial("History/SharedPeformedBy", request)

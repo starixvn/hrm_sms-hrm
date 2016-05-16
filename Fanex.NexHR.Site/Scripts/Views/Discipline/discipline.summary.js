@@ -266,10 +266,11 @@
 
     function query() {
         $.ajax({
-            url: _global.root + 'discipline/ListDisciplineSummary',
+            url: _global.root + 'discipline/PartialListDisciplineSummary',
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#discipline-summary').html(data);
+
                 initEventViewOtherViolation();
                 initEventForViewDisciplineDetail();
 
@@ -303,7 +304,6 @@
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-
             window.location.href = _global.root + 'Export/ExportDisciplineSummaryReport?' + $('form.form-filter').serialize();
         });
 

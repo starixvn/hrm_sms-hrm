@@ -26,7 +26,7 @@
                         @request.Requester.Team.Code
                     </td>
                     <td class="tooltip" title="@request.Requester.FullName">
-                        @request.Requester.NickName.ToString()
+                        @request.Requester.NickName
                     </td>
                     <td class="highlight">
                         @request.FromDate.ToDateMonthYearFormatedDate()
@@ -45,9 +45,7 @@
                     }
                     else
                     {
-                        <td>
-                            -
-                        </td>
+                        <td>-</td>
                     }
                     <td>@request.Status.ToString()</td>
                     @Html.Partial("History/SharedPeformedBy", request)

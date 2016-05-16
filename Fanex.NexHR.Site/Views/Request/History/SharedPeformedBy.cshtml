@@ -1,37 +1,34 @@
-﻿@using Fanex.NexHR.Models.Request
-@model RequestEntity
+﻿@model RequestEntity
 
 @{
-var request = (RequestEntity)Model;
-switch (request.Status.Id)
-{
-    case (byte)CurrentRequestStatus.Pending:
+    switch (Model.Status.Id)
+    {
+        case (byte)CurrentRequestStatus.Pending:
             <td>
-                @request.Requester.NickName
+                @Model.Requester.NickName
             </td>
-        break;
-    case (byte)CurrentRequestStatus.Verified:
-    case (byte)CurrentRequestStatus.NotVerified:
-            <td>
-                @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())
-            </td>
-        break;
-    case (byte)CurrentRequestStatus.Approved:
-    case (byte)CurrentRequestStatus.Rejected:
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+        case (byte)CurrentRequestStatus.NotVerified:
         <td>
-            @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())
-        </td>   
-        break;
+            @Model.VerifiedBy.NickName (@Model.VerifiedDate.ToShortFormatedDate())
+        </td>
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        case (byte)CurrentRequestStatus.Rejected:
+        <td>
+            @Model.ApprovedBy.NickName (@Model.ApprovedDate.ToShortFormatedDate())
+        </td>
+            break;
 
-    case (byte)CurrentRequestStatus.Processed:
-    case (byte)CurrentRequestStatus.Void:
+        case (byte)CurrentRequestStatus.Processed:
+        case (byte)CurrentRequestStatus.Void:
         <td>
-            @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())
-        </td> 
-        break;
-    default:
-     <td>
-    </td>
-        break;
-}
+            @Model.ProcessedBy.NickName (@Model.ProcessedDate.ToShortFormatedDate())
+        </td>
+            break;
+        default:
+        <td></td>
+            break;
+    }
 }

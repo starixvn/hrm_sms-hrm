@@ -159,7 +159,6 @@
 
     $(document).ready(function () {
         $('#TeamId').multiselect();
-        $('#confirmedDialog').hide();
 
         bindMenu('.hr-actions', 'hrMenu');
         bindMenu('.verifier-actions', 'verifierMenu');

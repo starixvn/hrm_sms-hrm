@@ -87,7 +87,7 @@
 
     function query() {
         $.ajax({
-            url: _global.root + 'discipline/ListDisciplineDetail',
+            url: _global.root + 'discipline/PartialListDisciplineDetail',
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#discipline-detail').html(data);
@@ -110,7 +110,6 @@
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-
             window.location.href = _global.root + 'Export/ExportDisciplineDetailReport?' + $('form.form-filter').serialize();
         });
 

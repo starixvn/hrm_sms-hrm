@@ -1,6 +1,4 @@
-﻿@model Fanex.NexHR.ViewModels.Request.RequestViewModel
-@using Fanex.NexHR.Core;
-@using Fanex.NexHR.Resources;
+﻿@model RequestViewModel
 @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
 @Html.HiddenFor(model => model.ActionName)
 @using (Html.BeginGetForm())

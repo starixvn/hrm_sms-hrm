@@ -49,29 +49,26 @@
                     RequestType = request.RequestType.FilterRequest,
                     ViewType = Model.ViewType
                 };
-
-                var requestDetail = new { requestid = @request.Id, type = @request.RequestType.FilterRequestHistory };
-
                 <tr id="row@(request.Id)">
                     <td>@(index++)</td>
                     <td class="tooltip" title="@request.Requester.FullName">
-                        @request.Requester.NickName.ToString()
+                        @request.Requester.NickName
                     </td>
                     <td class="tooltip" title="@request.Requester.Team.Name">
                         @request.Requester.Team.Code
                     </td>
                     <td class="highlight">
-                        @if (request.RequestType.Id == (int)RequestType.Leave)
+                        @switch (request.RequestType.Id)
                         {
-                            <a href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
-                        }
-                        else if (request.RequestType.Id == (int)RequestType.ChangeShift)
-                        {
-                            <a href="~/ChangeShift/Detail?id=@request.Id">@request.RequestType.Name</a>
-                        }
-                        else
-                        {
+                            case (int)RequestType.Leave:
+                                <a href="@Url.Action("Detail", "Leave", new { requestId = request.Id })">@request.LeaveType.Name</a>
+                                break;
+                            case (int)RequestType.ChangeShift:
+                            <a href="@Url.Action("Detail", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                break;
+                            default:
                             <a href="@Url.Action(Model.ActionName, "request", requestModel)">@request.RequestType.Name</a>
+                                break;
                         }
                     </td>
                     <td class="left">
@@ -80,7 +77,7 @@
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
                     {
                         <td class="tooltip" title="@request.Remark">
-                            <span class="icon remark" />
+                            <span class="icon remark"></span>
                         </td>
                     }
                     else
@@ -99,7 +96,7 @@
                     <td class="td-warning">
                         @if (request.IsWarning)
                         {
-                            <span class="icon-warning tooltip" title="@Labels.RequestWarning" />
+                            <span class="icon-warning tooltip" title="@Labels.RequestWarning"></span>
                         }
                     </td>
                 </tr>
@@ -113,42 +110,39 @@
 </table>
 
 @RenderContextMenu(Model)
-@Html.Partial("ConfirmedProcessRequest")
-<div id="dialoghistorycontent">
-</div>
+<div id="dialoghistorycontent"></div>
 <div id="dialogProcessRequest"></div>
 
 @helper RenderContextMenu(RequestViewModel model)
 {
-    if (model.ViewType == RequestViewType.PersonalSpace)
+    switch (model.ViewType)
     {
-        @RazorHelper.VerifierAndApproverMenu()
-        @RazorHelper.ResetMenu()
+        case RequestViewType.PersonalSpace:
+            @RazorHelper.VerifierAndApproverMenu()
+            @RazorHelper.ResetMenu()
+            break;
+        case RequestViewType.SASpace:
+            @RazorHelper.VoidMenu();
+            break;
+        case RequestViewType.HRSpace:
+            @RazorHelper.HrMenu()
+            @RazorHelper.ResetMenu()
+            break;
     }
-    else if (model.ViewType == RequestViewType.SASpace)
-    {
-        @RazorHelper.VoidMenu();
-    }
-    else if (model.ViewType == RequestViewType.HRSpace)
-    {
-        @RazorHelper.HrMenu()
-        @RazorHelper.ResetMenu()
-    }
-
 }
 @helper RenderStatus(RequestViewModel model, RequestEntity request)
 {
-    if (model.ViewType == RequestViewType.PersonalSpace)
+    switch (model.ViewType)
     {
-        @RenderStatusPersonalSpace(model, request);
-    }
-    else if (model.ViewType == RequestViewType.SASpace)
-    {
-        @RenderStatusSASpace(model, request);
-    }
-    else
-    {
-        @RenderStatusHRSpace(model, request);
+        case RequestViewType.PersonalSpace:
+            @RenderStatusPersonalSpace(model, request);
+            break;
+        case RequestViewType.SASpace:
+            @RenderStatusSASpace(model, request);
+            break;
+        default:
+            @RenderStatusHRSpace(model, request);
+            break;
     }
 }
 
@@ -165,11 +159,11 @@
             break;
         case (byte)CurrentRequestStatus.Verified:
         case (byte)CurrentRequestStatus.NotVerified:
-        <td>
-            <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </span>
-        </td>
+            <td>
+                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </span>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Approved:
         case (byte)CurrentRequestStatus.Rejected:
@@ -214,9 +208,9 @@
             }
             break;
         default:
-        <td>
-            <span class="tooltip">@request.Status.ToString()</span>
-        </td>
+            <td>
+                <span class="tooltip">@request.Status.ToString()</span>
+            </td>
             break;
     }
 }
@@ -320,14 +314,14 @@
             break;
         case (byte)CurrentRequestStatus.Processed:
         case (byte)CurrentRequestStatus.Void:
-        <td>
-            <span>@request.Status.ToString()</span>
-        </td>
+            <td>
+                <span>@request.Status.ToString()</span>
+            </td>
             break;
         default:
-        <td>
-            <span>@request.Status.ToString()</span>
-        </td>
+            <td>
+                <span>@request.Status.ToString()</span>
+            </td>
             break;
     }
 }
@@ -346,57 +340,57 @@
             </td>
             break;
         case (byte)CurrentRequestStatus.Verified:
-        <td>
-            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-               class="sa-void tooltip" href="javascript:void(0);"
-               title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-        </td>
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                   class="sa-void tooltip" href="javascript:void(0);"
+                   title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+            </td>
             break;
         case (byte)CurrentRequestStatus.NotVerified:
-        <td>
-            <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </span>
-        </td>
+            <td>
+                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </span>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Approved:
-        <td>
-            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-               class="sa-void tooltip" href="javascript:void(0);"
-               title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-        </td>
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                   class="sa-void tooltip" href="javascript:void(0);"
+                   title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Rejected:
-        <td>
-            <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </span>
-        </td>
+            <td>
+                <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </span>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Processed:
-        <td>
-            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid ="@request.Requester.Id"
-               class="sa-void tooltip" href="javascript:void(0);"
-               title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-        </td>
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                   class="sa-void tooltip" href="javascript:void(0);"
+                   title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Void:
-        <td>
-            <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </span>
-        </td>
+            <td>
+                <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </span>
+            </td>
             break;
         default:
-        <td>
-            <span class="tooltip">@request.Status.ToString()</span>
-        </td>
+            <td>
+                <span class="tooltip">@request.Status.ToString()</span>
+            </td>
             break;
     }
 }

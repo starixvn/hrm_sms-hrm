@@ -300,8 +300,6 @@
     <Content Include="Scripts\Views\annualbalance.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourmonthly.js" />
     <Content Include="Scripts\Views\extensionno.js" />
-    <Content Include="Scripts\Views\Request\memberrequestdetail.personalspace.js" />
-    <Content Include="Scripts\Views\Request\employeerequestdetail.hrspace.js" />
     <Content Include="Scripts\Views\myspace.js" />
     <Content Include="Scripts\Views\Overtime\overtime.command.request.js" />
     <Content Include="Scripts\Views\Overtime\hrovertimereport.js" />
@@ -340,8 +338,6 @@
     <Content Include="Styles\message.css" />
     <Content Include="Styles\report.staffrepresentative.css" />
     <Content Include="Styles\report.totalworkinghourmonthly.css" />
-    <Content Include="Styles\memberrequestdetailpersonalspace.css" />
-    <Content Include="Styles\employeerequestdetailhrspace.css" />
     <Content Include="Styles\memberovertime.css" />
     <Content Include="Styles\overtimereport.css" />
     <Content Include="Styles\report.overtimerequest.css" />
@@ -1056,7 +1052,6 @@
     <Content Include="Views\Report\OvertimeReport.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Report\TimeRecordDetail.cshtml" />
-    <Content Include="Views\Request\ConfirmedProcessRequest.cshtml" />
     <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
