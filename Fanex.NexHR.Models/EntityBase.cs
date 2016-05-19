@@ -9,12 +9,6 @@
 
 namespace Fanex.NexHR.Models
 {
-    using System;
-
-    /// <summary>
-    /// Entity Base.
-    /// </summary>
-    /// <typeparam name="TId">Type of Object.</typeparam>
     public class EntityBase<TId> : IEntity<TId>
     {
         public TId Id { get; set; }

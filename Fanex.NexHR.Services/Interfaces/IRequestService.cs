@@ -35,6 +35,6 @@ namespace Fanex.NexHR.Services.Interfaces
 
         CommandResult ApproveRequest(ApproveRequestCriteria criteria);
 
-        IList<LeaveDetailModel> GetLeaveRequestDetail(GetLeaveRequestDetailCriteria criteria);
+        IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
     }
 }

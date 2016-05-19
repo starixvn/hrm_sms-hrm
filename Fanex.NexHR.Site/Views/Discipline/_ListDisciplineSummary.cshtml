@@ -54,7 +54,7 @@
                         @if (item.OtherViolationsScore > 0)
                         {
                             <a class="other-violations viewOtherViolation" data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
-                                @item.OtherViolationsScore
+                                -@item.OtherViolationsScore
                             </a>
                         }
                         else
@@ -73,7 +73,7 @@
                         {
                             case (int)Permision.Host:
                                 <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
-                                    <img src="/Styles/Images/edit-icon.png">
+                                    <img src="/Styles/Images/edit-icon.png" />
                                 </a>
                                 break;
                             default:

@@ -421,7 +421,7 @@ namespace Fanex.NexHR.Services
             return emailModel;
         }
 
-        public IList<LeaveDetailModel> GetLeaveRequestDetail(GetLeaveRequestDetailCriteria criteria)
+        public IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<LeaveDetailModel> leaveDetails = null;

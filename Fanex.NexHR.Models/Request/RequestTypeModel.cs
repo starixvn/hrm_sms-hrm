@@ -12,9 +12,6 @@ namespace Fanex.NexHR.Models.Request
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// Request Type.
-    /// </summary>
     public class RequestTypeModel : EntityBase<short>
     {
         public new string Name

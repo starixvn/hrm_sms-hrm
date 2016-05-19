@@ -1248,4 +1248,7 @@
   <data name="ChangeTo" xml:space="preserve">
     <value>Change To</value>
   </data>
+  <data name="OnDuty" xml:space="preserve">
+    <value>On Duty</value>
+  </data>
 </root>

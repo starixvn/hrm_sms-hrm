@@ -15,14 +15,30 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Repositories.Implement;
+    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 
     public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
     {
         private const string CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
+
+        private readonly ICheckInOutRequestRepository _checkInOutRequestRepository;
+
+        public CheckInOutRequestService()
+            : this(null)
+        {
+        }
+
+        public CheckInOutRequestService(ICheckInOutRequestRepository checkInOutRequestRepository)
+        {
+            _checkInOutRequestRepository = checkInOutRequestRepository ?? new CheckInOutRequestRepository();
+        }
 
         public CommandResult Insert(InsertCheckInOutRequestCriteria criteria)
         {
@@ -74,6 +90,19 @@ namespace Fanex.NexHR.Services
             }
 
             return result;
+        }
+
+        public RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            RequestEntity request = null;
+
+            if (criteria.IsValid())
+            {
+                request = _checkInOutRequestRepository.GetCheckInOutRequestToIgnoreById(criteria);
+            }
+
+            return request;
         }
 
         private void SendMailForInsertCheckInOutSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)

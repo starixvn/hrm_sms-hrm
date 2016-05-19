@@ -79,7 +79,8 @@
                             if (item.MissingCheckInOut.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.MissingCheckInOut;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.MissingCheckInOut.HasIgnored" disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.MissingCheckInOut.HasIgnored"
+                                       disabled="@(item.MissingCheckInOut.HasApprovedBy.Equals(false) || item.MissingCheckInOut.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
                                        data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
@@ -97,7 +98,8 @@
                             if (item.TotalHours.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.TotalHours.HasIgnored" disabled="@item.TotalHours.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.TotalHours.HasIgnored"
+                                       disabled="@(item.TotalHours.HasApprovedBy.Equals(false) || item.TotalHours.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.TotalHours.Score"
                                        data-has-ignored="@item.TotalHours.HasIgnored" data-changed="false" />
@@ -115,7 +117,8 @@
                             if (item.LateIn.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.LateIn;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.LateIn.HasIgnored" disabled="@item.LateIn.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.LateIn.HasIgnored"
+                                       disabled="@(item.LateIn.HasApprovedBy.Equals(false) || item.LateIn.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
                                        data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
@@ -133,7 +136,8 @@
                             if (item.EarlyOut.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.EarlyOut;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.EarlyOut.HasIgnored" disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.EarlyOut.HasIgnored"
+                                       disabled="@(item.EarlyOut.HasApprovedBy.Equals(false) || item.EarlyOut.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
                                        data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
@@ -151,7 +155,8 @@
                             if (item.Absent.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.Absent;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.Absent.HasIgnored" disabled="@item.Absent.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.Absent.HasIgnored"
+                                       disabled="@(item.Absent.HasApprovedBy.Equals(false) || item.Absent.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
                                        data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
@@ -169,7 +174,8 @@
                             if (item.UnpaidLeave.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeave;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeave.HasIgnored" disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeave.HasIgnored"
+                                       disabled="@(item.UnpaidLeave.HasApprovedBy.Equals(false) || item.UnpaidLeave.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employeeid="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
                                        data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
@@ -187,7 +193,8 @@
                             if (item.UnpaidLeaveAbsent.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeaveAbsent.HasIgnored" disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeaveAbsent.HasIgnored"
+                                       disabled="@(item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false) || item.UnpaidLeaveAbsent.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
                                        data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
@@ -205,7 +212,8 @@
                             if (item.ChangeShift.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.ChangeShift;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.ChangeShift.HasIgnored" disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.ChangeShift.HasIgnored"
+                                       disabled="@(item.ChangeShift.HasApprovedBy.Equals(false) || item.ChangeShift.Disabled)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
                                        data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />

@@ -31,13 +31,13 @@
                             @switch (item.WorkType)
                             {
                                 case (int)WorkType.Leave:
-                                    <span>Leave</span>
+                                    <span>@Labels.Leave</span>
                                     break;
                                 case (int)WorkType.Off:
-                                    <span>Off</span>
+                                    <span>@Labels.Off</span>
                                     break;
                                 default:
-                                    <span>On Duty</span>
+                                    <span>@Labels.OnDuty</span>
                                     break;
                             }
                         </td>

@@ -80,7 +80,8 @@
                 Score = discipline.ChangeShiftScore,
                 HasViolated = discipline.ChangeShiftHasViolated,
                 HasIgnored = discipline.ChangeShiftHasIgnored,
-                HasApprovedBy = discipline.ChangeShiftHasApprovedBy
+                HasApprovedBy = discipline.ChangeShiftHasApprovedBy,
+                Disabled = discipline.ChangeShiftDisabled
             };
         }
 
@@ -93,7 +94,8 @@
                 Score = discipline.MissingCheckInOutScore,
                 HasViolated = discipline.MissingCheckInOutHasViolated,
                 HasIgnored = discipline.MissingCheckInOutHasIgnored,
-                HasApprovedBy = discipline.MissingCheckInOutHasApprovedBy
+                HasApprovedBy = discipline.MissingCheckInOutHasApprovedBy,
+                Disabled = discipline.MissingCheckInOutDisabled
             };
         }
 
@@ -106,7 +108,8 @@
                 Score = discipline.LateInScore,
                 HasViolated = discipline.LateInHasViolated,
                 HasIgnored = discipline.LateInHasIgnored,
-                HasApprovedBy = discipline.LateInHasApprovedBy
+                HasApprovedBy = discipline.LateInHasApprovedBy,
+                Disabled = discipline.LateInDisabled
             };
         }
 
@@ -119,7 +122,8 @@
                 Score = discipline.EarlyOutScore,
                 HasViolated = discipline.EarlyOutHasViolated,
                 HasIgnored = discipline.EarlyOutHasIgnored,
-                HasApprovedBy = discipline.EarlyOutHasApprovedBy
+                HasApprovedBy = discipline.EarlyOutHasApprovedBy,
+                Disabled = discipline.EarlyOutDisabled
             };
         }
 
@@ -132,7 +136,8 @@
                 Score = discipline.AbsentScore,
                 HasViolated = discipline.AbsentHasViolated,
                 HasIgnored = discipline.AbsentHasIgnored,
-                HasApprovedBy = discipline.AbsentHasApprovedBy
+                HasApprovedBy = discipline.AbsentHasApprovedBy,
+                Disabled = discipline.AbsentDisabled
             };
         }
 
@@ -145,7 +150,8 @@
                 Score = discipline.UnpaidLeaveScore,
                 HasViolated = discipline.UnpaidLeaveHasViolated,
                 HasIgnored = discipline.UnpaidLeaveHasIgnored,
-                HasApprovedBy = discipline.UnpaidLeaveHasApprovedBy
+                HasApprovedBy = discipline.UnpaidLeaveHasApprovedBy,
+                Disabled = discipline.UnpaidLeaveDisabled
             };
         }
 
@@ -158,7 +164,8 @@
                 Score = discipline.TotalHoursScore,
                 HasViolated = discipline.TotalHoursHasViolated,
                 HasIgnored = discipline.TotalHoursHasIgnored,
-                HasApprovedBy = discipline.TotalHoursHasApprovedBy
+                HasApprovedBy = discipline.TotalHoursHasApprovedBy,
+                Disabled = discipline.TotalHoursDisabled
             };
         }
 
@@ -171,7 +178,8 @@
                 Score = discipline.UnpaidLeaveAbsentScore,
                 HasViolated = discipline.UnpaidLeaveAbsentHasViolated,
                 HasIgnored = discipline.UnpaidLeaveAbsentHasIgnored,
-                HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy
+                HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy,
+                Disabled = discipline.UnpaidLeaveAbsentDisabled
             };
         }
 
@@ -200,7 +208,7 @@
             foreach (ViolationModel violation in violations.Where(violation => violation != null && violation.HasViolated))
             {
                 disciplineDetail.SystemSubtractScore += violation.Score;
-                disciplineDetail.ApproverSubtractScore += !violation.HasIgnored ? violation.Score : 0;
+                disciplineDetail.ApproverSubtractScore += (!violation.HasIgnored && !violation.Disabled) ? violation.Score : 0;
             }
 
             if (disciplineDetail.SystemSubtractScore > Constants.MaxScoreSubtractDate)

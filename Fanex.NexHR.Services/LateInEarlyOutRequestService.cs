@@ -10,29 +10,35 @@
 namespace Fanex.NexHR.Services
 {
     using System.Threading.Tasks;
-using System.Web;
-using Fanex.Common.Helper;
-using Fanex.NexHR.Core;
-using Fanex.NexHR.Core.Enums;
-using Fanex.NexHR.Criteria.Employee;
-using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-using Fanex.NexHR.Models;
-using Fanex.NexHR.Models.Request;
-using Fanex.NexHR.Resources;
-using Fanex.NexHR.Services.Interfaces;
+    using System.Web;
+    using Fanex.Common.Helper;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Repositories.Implement;
+    using Fanex.NexHR.Repositories.Interfaces;
+    using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// LateInEarlyOutRequest Service.
-    /// </summary>
     public class LateInEarlyOutRequestService : RequestService, ILateInEarlyOutRequestService
     {
-        private const string _LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
+        private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
 
-        /// <summary>
-        /// Function to insert late in, early out request.
-        /// </summary>
-        /// <param name="criteria">InsertLateInEarlyOutRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
+        private readonly ILateInEarlyOutRequestRepository _lateInEarlyOutRequestRepository;
+
+        public LateInEarlyOutRequestService()
+            : this(null)
+        {
+        }
+
+        public LateInEarlyOutRequestService(ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository)
+        {
+            _lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository ?? new LateInEarlyOutRequestRepository();
+        }
+
         public CommandResult Insert(InsertLateInEarlyOutRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -42,7 +48,7 @@ using Fanex.NexHR.Services.Interfaces;
                 result = Repository.Insert(criteria, hasGetOutputParams: true);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
                     var taskSendMail = new Task(() => this.SendMailForInsertLateInEarlyOutSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
@@ -52,18 +58,13 @@ using Fanex.NexHR.Services.Interfaces;
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Function to update check in/out request.
-        /// </summary>
-        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult Update(UpdateLateInEarlyOutRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -73,7 +74,7 @@ using Fanex.NexHR.Services.Interfaces;
                 result = Repository.Update(criteria);
                 if (result != null && result.Code == 0)
                 {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LateInEarlyOutEmailTpl);
+                    var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
                     var taskSendMail = new Task(() => this.SendMailForUpdateLateInEarlyOutSuccessfully(criteria, templateEmailPath));
                     taskSendMail.Start();
                 }
@@ -83,7 +84,7 @@ using Fanex.NexHR.Services.Interfaces;
                 result = new CommandResult()
                 {
                     Code = 1,
-                    Message = Resources.Messages.InvalidInputData
+                    Message = Messages.InvalidInputData
                 };
             }
 
@@ -102,11 +103,19 @@ using Fanex.NexHR.Services.Interfaces;
             return lateInEarlyOut;
         }
 
-        /// <summary>
-        /// Function to send mail for inserted success for check in out request.
-        /// </summary>
-        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
+        public RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            RequestEntity request = null;
+
+            if (criteria.IsValid())
+            {
+                request = _lateInEarlyOutRequestRepository.GetLateInEarlyOutRequestToIgnoreById(criteria);
+            }
+
+            return request;
+        }
+
         private void SendMailForInsertLateInEarlyOutSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
@@ -118,7 +127,7 @@ using Fanex.NexHR.Services.Interfaces;
             var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
                 + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-   
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
@@ -137,11 +146,6 @@ using Fanex.NexHR.Services.Interfaces;
                 email.Body);
         }
 
-        /// <summary>
-        /// Function to send mail for updated success for check in out request.
-        /// </summary>
-        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
         private void SendMailForUpdateLateInEarlyOutSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);

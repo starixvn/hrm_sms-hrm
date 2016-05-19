@@ -22,16 +22,8 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    /// <summary>
-    /// Request Repository.
-    /// </summary>
     public class RequestRepository : IRequestRepository
     {
-        /// <summary>
-        /// Function to get request by requestId.
-        /// </summary>
-        /// <param name="criteria">The Criteria.</param>
-        /// <returns>Request Entity.</returns>
         public RequestEntity GetRequestById(ICriteria criteria)
         {
             IList<RequestEntity> entityList = null;
@@ -49,11 +41,6 @@ namespace Fanex.NexHR.Repositories
             return entityList.FirstOrDefault();
         }
 
-        /// <summary>
-        /// Function to get History request.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List Request Entity.</returns>
         public IList<RequestEntity> GetHistoryRequest(ICriteria criteria)
         {
             IList<RequestEntity> entityList = null;
@@ -71,11 +58,6 @@ namespace Fanex.NexHR.Repositories
             return entityList;
         }
 
-        /// <summary>
-        /// Method Get all request.
-        /// </summary>
-        /// <param name="criteria">GetRequest Criteria.</param>
-        /// <returns>List of RequestEntity.</returns>
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
@@ -93,11 +75,6 @@ namespace Fanex.NexHR.Repositories
             return entityList;
         }
 
-        /// <summary>
-        /// Function to get related people of a request.
-        /// </summary>
-        /// <param name="criteria">GetRequestRelatedPeople Criteria.</param>
-        /// <returns>RequestRelatedPeople Model.</returns>
         public RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
         {
             RequestRelatedPeopleModel relatedPeople = null;
@@ -117,11 +94,6 @@ namespace Fanex.NexHR.Repositories
             return relatedPeople;
         }
 
-        /// <summary>
-        /// Method get number request in month.
-        /// </summary>
-        /// <param name="criteria">GetNumberRequestInMonth Criteria.</param>
-        /// <returns>Number days.</returns>
         public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
         {
             decimal numberDay = 0;
@@ -145,11 +117,6 @@ namespace Fanex.NexHR.Repositories
             return entityList;
         }
 
-        /// <summary>
-        /// Function to fill data for a request.
-        /// </summary>
-        /// <param name="reader">IData Reader.</param>
-        /// <returns>Request Entity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private RequestEntity FillDataEntity(IDataReader reader)
         {
@@ -181,7 +148,7 @@ namespace Fanex.NexHR.Repositories
                     Id = reader.ToInt("RequesterId"),
                     NickName = reader.ToString("RequesterNickName"),
                     FullName = reader.ToString("RequesterFullName"),
-                    Team = new Team 
+                    Team = new Team
                     {
                         Id = reader.ToInt("GroupId"),
                         Code = reader.ToString("GroupCode"),

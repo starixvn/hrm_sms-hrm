@@ -19,6 +19,7 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -311,20 +312,20 @@ namespace Fanex.NexHR.Controllers.Request
                     {
                         case (int)RequestType.CheckIn:
                         case (int)RequestType.CheckOut:
-                            var checkInOutDetailCriteria = new GetRequestByIdCriteria()
+                            var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria()
                             {
                                 RequestId = model.RequestId
                             };
-                            model.CheckInOutDetail = _requestService.GetRequestById(checkInOutDetailCriteria);
+                            model.CheckInOutDetail = _checkInOutRequestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
                             break;
 
                         case (int)RequestType.LateIn:
                         case (int)RequestType.EarlyOut:
-                            var lateInEarlyOutDetailCriteria = new GetRequestByIdCriteria()
+                            var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria()
                             {
                                 RequestId = model.RequestId
                             };
-                            model.LateInEarlyOutDetail = _requestService.GetRequestById(lateInEarlyOutDetailCriteria);
+                            model.LateInEarlyOutDetail = _lateInEarlyOutRequestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
                             break;
 
                         case (int)RequestType.ChangeShift:
@@ -338,7 +339,7 @@ namespace Fanex.NexHR.Controllers.Request
                                 ExcludeNotShown = true
                             };
                             ViewBag.LeaveTypes = _leaveTypeService.GetAll(criteria);
-                            model.LeaveDetails = GetLeaveRequestDetail(model.RequestId);
+                            model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                             break;
                     }
                 }
@@ -482,14 +483,14 @@ namespace Fanex.NexHR.Controllers.Request
             }).ToList();
         }
 
-        private IList<LeaveDetailModel> GetLeaveRequestDetail(long requestId)
+        private IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)
         {
-            var leaveDetailCriteria = new GetLeaveRequestDetailCriteria()
+            var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria()
             {
                 RequestId = requestId
             };
 
-            IList<LeaveDetailModel> leaveRequestDetail = _requestService.GetLeaveRequestDetail(leaveDetailCriteria);
+            IList<LeaveDetailModel> leaveRequestDetail = _requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
 
             return leaveRequestDetail;
         }

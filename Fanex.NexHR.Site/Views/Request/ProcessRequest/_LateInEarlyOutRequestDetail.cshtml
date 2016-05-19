@@ -17,7 +17,12 @@
         <tbody>
             <tr id="row@(Model.Id)">
                 <td class="ddMMyyyy highlight">@Model.FromDate.ToDateMonthYearFormatedDate()</td>
-                <td>@Model.FromShift.Name</td>
+                <td>
+                    @if (Model.FromShift != null)
+                    {
+                        @Model.FromShift.Name
+                    }
+                </td>
                 <td class="highlight">@Model.RequestType.ToString()</td>
                 <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
                 <td class="ddMMyyyyhhmm">@Model.CreatedDate.ToShortFormatedDate()</td>

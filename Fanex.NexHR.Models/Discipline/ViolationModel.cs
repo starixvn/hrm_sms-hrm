@@ -15,5 +15,7 @@
         public bool HasIgnored { get; set; }
 
         public bool HasApprovedBy { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }

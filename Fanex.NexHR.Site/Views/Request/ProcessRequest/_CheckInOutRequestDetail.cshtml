@@ -18,7 +18,10 @@
                     @Model.RequestedDate.ToShortFormatedDate()
                 </td>
                 <td class="highlight">
-                    @Model.FromShift.Name
+                    @if (Model.FromShift != null)
+                    {
+                        @Model.FromShift.Name
+                    }
                 </td>
                 <td class="highlight">
                     @Model.RequestType.ToString()

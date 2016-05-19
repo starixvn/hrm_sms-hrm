@@ -2257,6 +2257,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On Duty.
+        /// </summary>
+        public static string OnDuty {
+            get {
+                return ResourceManager.GetString("OnDuty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other Violations.
         /// </summary>
         public static string OtherViolations {

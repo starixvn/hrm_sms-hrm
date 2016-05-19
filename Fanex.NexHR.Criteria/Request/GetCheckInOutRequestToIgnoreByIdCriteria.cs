@@ -2,13 +2,13 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetLeaveRequestDetailCriteria : CriteriaBase
+    public class GetCheckInOutRequestToIgnoreByIdCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_GetLeaveRequestDetail";
+            return "WorkingTimeRequest_GetCheckInOutRequestToIgnoreById";
         }
 
         public override bool IsValid()
