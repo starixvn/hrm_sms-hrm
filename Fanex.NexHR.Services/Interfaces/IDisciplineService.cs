@@ -11,15 +11,15 @@
 
         IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria);
 
-        IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria);
+        IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria);
 
         IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
 
-        IList<DisciplineTypeModel> GetOtherViolationType(GetOtherViolationTypeCriteria criteria);
+        IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);
 
-        CommandResult InsertOtherViolation(InsertOtherViolationCriteria criteria);
+        CommandResult InsertOtherDiscipline(InsertOtherDisciplineCriteria criteria);
 
-        CommandResult DeleteOtherViolation(DeleteOtherViolationCriteria criteria);
+        CommandResult DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria);
 
         CommandResult UpdateIgnoredDiscipline(UpdateIgnoredDisciplineCriteria criteria);
 

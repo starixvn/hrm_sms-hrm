@@ -1,10 +1,10 @@
-﻿@model IList<OtherViolationModel>
+﻿@model IList<OtherDisciplineModel>
 <table class="data">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.ViolationDate</th>
-            <th>@Labels.ViolationType</th>
+            <th>@Labels.DisciplineDate</th>
+            <th>@Labels.DisciplineType</th>
             <th>@Labels.MinusScore</th>
             <th>@Labels.Comment</th>
             <th>@Labels.Delete</th>
@@ -14,7 +14,7 @@
     {
         int index = 0;
         <tbody>
-            @foreach (OtherViolationModel item in Model)
+            @foreach (OtherDisciplineModel item in Model)
             {
                 index++;
                 <tr id="row_@index">
@@ -26,7 +26,7 @@
                     <td>
                         @if (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString()))
                         {
-                            <a href="javascript:;" class="deleteOtherViolation" data-row-index="@index" data-empid="@item.EmployeeId"
+                            <a href="javascript:;" class="deleteOtherDiscipline" data-row-index="@index" data-empid="@item.EmployeeId"
                                data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">
                                 <img src="~/Styles/Images/delete-icon.png" />
                             </a>

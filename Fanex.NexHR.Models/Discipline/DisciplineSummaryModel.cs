@@ -20,7 +20,7 @@
 
         public int ChangeShift { get; set; }
 
-        public float OtherViolationsScore { get; set; }
+        public float OtherDisciplineScore { get; set; }
 
         public float SystemSubtractScore { get; set; }
 

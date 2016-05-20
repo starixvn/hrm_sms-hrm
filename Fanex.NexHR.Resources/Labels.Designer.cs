@@ -196,11 +196,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Other Violations.
+        ///   Looks up a localized string similar to Add Other Discipline.
         /// </summary>
-        public static string AddOtherViolations {
+        public static string AddOtherDiscipline {
             get {
-                return ResourceManager.GetString("AddOtherViolations", resourceCulture);
+                return ResourceManager.GetString("AddOtherDiscipline", resourceCulture);
             }
         }
         
@@ -826,6 +826,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline Date.
+        /// </summary>
+        public static string DisciplineDate {
+            get {
+                return ResourceManager.GetString("DisciplineDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discipline Detail.
         /// </summary>
         public static string DisciplineDetail {
@@ -912,6 +921,15 @@ namespace Fanex.NexHR.Resources {
         public static string DisciplineSummaryReportTitleNoPrefix {
             get {
                 return ResourceManager.GetString("DisciplineSummaryReportTitleNoPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discipline Type.
+        /// </summary>
+        public static string DisciplineType {
+            get {
+                return ResourceManager.GetString("DisciplineType", resourceCulture);
             }
         }
         
@@ -2266,11 +2284,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Other Violations.
+        ///   Looks up a localized string similar to Other Discipline.
         /// </summary>
-        public static string OtherViolations {
+        public static string OtherDiscipline {
             get {
-                return ResourceManager.GetString("OtherViolations", resourceCulture);
+                return ResourceManager.GetString("OtherDiscipline", resourceCulture);
             }
         }
         
@@ -3310,29 +3328,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Violation.
+        ///   Looks up a localized string similar to Discipline.
         /// </summary>
         public static string Violation {
             get {
                 return ResourceManager.GetString("Violation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Violation Date.
-        /// </summary>
-        public static string ViolationDate {
-            get {
-                return ResourceManager.GetString("ViolationDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Violation Type.
-        /// </summary>
-        public static string ViolationType {
-            get {
-                return ResourceManager.GetString("ViolationType", resourceCulture);
             }
         }
         

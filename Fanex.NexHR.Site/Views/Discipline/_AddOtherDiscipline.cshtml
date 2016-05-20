@@ -1,6 +1,6 @@
-﻿@model AddOtherViolationViewModel
+﻿@model AddOtherDisciplineViewModel
 
-<form id="frmAddOtherViolation">
+<form id="frmAddOtherDiscipline">
     @Html.ValidationSummary()
     <div class="formrow">
         <div class="label">
@@ -27,17 +27,17 @@
     </div>
     <div class="formrow">
         <div class="label">
-            @Html.LabelFor(model => model.OtherViolationTypeId)
+            @Html.LabelFor(model => model.DisciplineTypeId)
         </div>
         <div class="input">
-            <select id="OtherViolationTypeId" name="OtherViolationTypeId">
-                <option value="0" data-score="0">-- Select Violation Type --</option>
-                @foreach (DisciplineTypeModel otherViolationType in @Model.OtherViolationTypes)
+            <select id="DisciplineTypeId" name="DisciplineTypeId">
+                <option value="0" data-score="0">-- Select Other Discipline Type --</option>
+                @foreach (DisciplineTypeModel otherDisciplineType in @Model.OtherDisciplineTypes)
                 {
-                    <option value="@otherViolationType.DisciplineTypeId" data-score="@otherViolationType.Score">@otherViolationType.Name</option>
+                    <option value="@otherDisciplineType.DisciplineTypeId" data-score="@otherDisciplineType.Score">@otherDisciplineType.Name</option>
                 }
             </select>
-            @Html.ValidationMessageFor(model => model.OtherViolationTypeId)
+            @Html.ValidationMessageFor(model => model.DisciplineTypeId)
         </div>
         <div class="clear">
         </div>
@@ -47,7 +47,7 @@
             @Html.LabelFor(model => model.MinusScore)
         </div>
         <div class="input">
-            @Html.TextBoxFor(model => model.MinusScore, new {@readonly = "readonly"})
+            @Html.TextBoxFor(model => model.MinusScore, new { @readonly = "readonly" })
         </div>
         <div class="clear">
         </div>

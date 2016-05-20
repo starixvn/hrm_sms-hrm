@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetOtherViolationTypeCriteria : CriteriaBase
+    public class GetOtherDisciplineTypeCriteria : CriteriaBase
     {
         public override bool IsValid()
         {
@@ -11,7 +11,7 @@
 
         public override string GetSettingKey()
         {
-            return "DisciplineType_GetOtherViolationType";
+            return "DisciplineType_GetOtherDisciplineType";
         }
     }
 }

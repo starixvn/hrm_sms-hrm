@@ -14,21 +14,21 @@
 
         public EmployeeInfoModel Employee { get; set; }
 
-        public ViolationModel MissingCheckInOut { get; set; }
+        public DisciplineModel MissingCheckInOut { get; set; }
 
-        public ViolationModel TotalHours { get; set; }
+        public DisciplineModel TotalHours { get; set; }
 
-        public ViolationModel LateIn { get; set; }
+        public DisciplineModel LateIn { get; set; }
 
-        public ViolationModel EarlyOut { get; set; }
+        public DisciplineModel EarlyOut { get; set; }
 
-        public ViolationModel Absent { get; set; }
+        public DisciplineModel Absent { get; set; }
 
-        public ViolationModel UnpaidLeaveAbsent { get; set; }
+        public DisciplineModel UnpaidLeaveAbsent { get; set; }
 
-        public ViolationModel UnpaidLeave { get; set; }
+        public DisciplineModel UnpaidLeave { get; set; }
 
-        public ViolationModel ChangeShift { get; set; }
+        public DisciplineModel ChangeShift { get; set; }
 
         public decimal SystemSubtractScore { get; set; }
 

@@ -3,7 +3,7 @@
 
 (function () {
     function showSuccessMsg(msg) {
-        $('#dialogAddOtherViolation .validation-summary-valid')
+        $('#dialogAddOtherDiscipline .validation-summary-valid')
             .show()
             .addClass('success')
             .find('ul:first')
@@ -11,37 +11,37 @@
     }
 
     function showErrorMsg(msg) {
-        $('#dialogAddOtherViolation .validation-summary-valid')
+        $('#dialogAddOtherDiscipline .validation-summary-valid')
             .show()
             .addClass('validation-summary-errors')
             .find('ul:first').append(msg);
     }
 
     function removeMsg() {
-        $('#dialogAddOtherViolation .validation-summary-valid')
+        $('#dialogAddOtherDiscipline .validation-summary-valid')
             .hide()
             .removeClass('success')
             .removeClass('validation-summary-errors')
             .find('ul:first').html("");
     }
 
-    function validateAddOtherViolation() {
+    function validateAddOtherDiscipline() {
         var isValid = true,
             errorString = '',
-            empId = $('#dialogAddOtherViolation #EmployeeId').val(),
-            workDate = $('#dialogAddOtherViolation #WorkDate').datepicker('getDate'),
-            violationTypeId = $('#dialogAddOtherViolation #OtherViolationTypeId').val();
+            empId = $('#dialogAddOtherDiscipline #EmployeeId').val(),
+            workDate = $('#dialogAddOtherDiscipline #WorkDate').datepicker('getDate'),
+            disciplineTypeId = $('#dialogAddOtherDiscipline #OtherDisciplineTypeId').val();
 
         if (empId && parseInt(empId) <= 0) {
             errorString += '<li>The Employee field is required.</li>';
         }
 
         if (workDate === null || workDate === '') {
-            errorString += '<li>Violation Date field is required.</li>';
+            errorString += '<li>Discipline Date field is required.</li>';
         }
 
-        if (violationTypeId && parseInt(violationTypeId) === 0) {
-            errorString += '<li>Violation Type field is required.</li>';
+        if (disciplineTypeId && parseInt(disciplineTypeId) === 0) {
+            errorString += '<li>Discipline Type field is required.</li>';
         }
 
         if (errorString.length > 0) {
@@ -53,7 +53,7 @@
     }
 
     function initAutocomplete() {
-        $('#dialogAddOtherViolation #Employee').autocomplete({
+        $('#dialogAddOtherDiscipline #Employee').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: _global.root + 'api/employee/getemployees',
@@ -79,26 +79,26 @@
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherViolation #Employee').val(ui.item.label);
-                $('#dialogAddOtherViolation #EmployeeId').val(ui.item.value);
+                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
+                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherViolation #Employee').val(ui.item.label);
-                $('#dialogAddOtherViolation #EmployeeId').val(ui.item.value);
+                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
+                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
             },
             change: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherViolation #Employee').val(ui.item.label);
-                $('#dialogAddOtherViolation #EmployeeId').val(ui.item.value);
+                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
+                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
             }
         }).autocomplete('widget').addClass('search-employee-autocomplete');
     }
 
     function initDatePicker() {
-        var mindate = $('#dialogAddOtherViolation .datepicker').attr('mindate');
+        var mindate = $('#dialogAddOtherDiscipline .datepicker').attr('mindate');
 
-        $('#dialogAddOtherViolation .datepicker').datepicker({
+        $('#dialogAddOtherDiscipline .datepicker').datepicker({
             dateFormat: 'dd M, yy',
             showOn: 'button',
             buttonImageOnly: true,
@@ -109,38 +109,38 @@
 
         if (mindate !== 'null') {
             mindate = mindate.split('/');
-            $('#dialogAddOtherViolation .datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+            $('#dialogAddOtherDiscipline .datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
         }
     }
 
-    function initEventForOtherViolationDropdown() {
-        $('#dialogAddOtherViolation select#OtherViolationTypeId').on('change', function () {
+    function initEventForOtherDisciplineDropdown() {
+        $('#dialogAddOtherDiscipline select#DisciplineTypeId').on('change', function () {
             var score = $('option:selected', this).data('score');
-            $('#dialogAddOtherViolation #MinusScore').val(score);
+            $('#dialogAddOtherDiscipline #MinusScore').val(score);
         });
     }
 
-    function initAddOtherViolationDialog() {
+    function initAddOtherDisciplineDialog() {
         initAutocomplete();
         initDatePicker();
-        initEventForOtherViolationDropdown();
-        $('#dialogAddOtherViolation select#OtherViolationTypeId').change();
+        initEventForOtherDisciplineDropdown();
+        $('#dialogAddOtherDiscipline select#DisciplineTypeId').change();
 
-        $('#dialogAddOtherViolation').dialog({
+        $('#dialogAddOtherDiscipline').dialog({
             modal: true,
             buttons: [
                 {
                     text: 'Submit',
                     click: function () {
                         removeMsg();
-                        if (validateAddOtherViolation()) {
+                        if (validateAddOtherDiscipline()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'discipline/addotherviolation',
-                                data: $('#frmAddOtherViolation').serialize(),
+                                url: _global.root + 'discipline/AddOtherDiscipline',
+                                data: $('#frmAddOtherDiscipline').serialize(),
                                 success: function (result) {
                                     if (result.Code === 0) {
-                                        showSuccessMsg('Add other violation successful!');
+                                        showSuccessMsg('Add other discipline successful!');
                                     } else {
                                         showErrorMsg('<li>' + result.Message + '</li>');
                                     }
@@ -179,15 +179,15 @@
         });
     }
 
-    function initEventViewOtherViolation() {
-        $('table a.viewOtherViolation').on('click', function () {
+    function initEventViewOtherDiscipline() {
+        $('table a.viewOtherDiscipline').on('click', function () {
             var empId = parseInt($(this).data('empid')),
                 nickname = $(this).data('nickname');
 
             if (empId > 0) {
                 $.ajax({
                     type: 'GET',
-                    url: _global.root + 'discipline/PartialViewOtherViolation',
+                    url: _global.root + 'discipline/PartialViewOtherDiscipline',
                     dataType: 'html',
                     data: {
                         employeeId: empId,
@@ -195,11 +195,11 @@
                         toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
                     },
                     success: function (data) {
-                        $('#dialogViewOtherViolation').html(data);
-                        initEventForDeleteOtherViolation();
-                        $('#dialogViewOtherViolation').dialog({
+                        $('#dialogViewOtherDiscipline').html(data);
+                        initEventForDeleteOtherDiscipline();
+                        $('#dialogViewOtherDiscipline').dialog({
                             modal: true,
-                            title: 'Other Violations - ' + nickname,
+                            title: 'Other Discipline - ' + nickname,
                             show: {
                                 effect: 'fade',
                                 duration: 300
@@ -236,15 +236,15 @@
         });
     }
 
-    function initEventForDeleteOtherViolation() {
-        $('table a.deleteOtherViolation').on('click', function () {
+    function initEventForDeleteOtherDiscipline() {
+        $('table a.deleteOtherDiscipline').on('click', function () {
             var empId = $(this).data('empid'),
                 workdate = $(this).data('workdate'),
                 disciplineTypeId = $(this).data('disciplinetype'),
                 rowIndex = $(this).data('row-index');
 
-            confirm('Are you sure you want to delete this other violation?', function () {
-                $.post(_global.root + 'discipline/DeleteOtherViolation', {
+            confirm('Are you sure you want to delete this other discipline?', function () {
+                $.post(_global.root + 'discipline/DeleteOtherDiscipline', {
                     employeeId: empId,
                     workDate: workdate,
                     disciplineTypeId: disciplineTypeId
@@ -256,8 +256,8 @@
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
-                    if ($('#dialogViewOtherViolation table.data tbody > tr').length === 0) {
-                        $(noInformation(6)).appendTo('#dialogViewOtherViolation table.data');
+                    if ($('#dialogViewOtherDiscipline table.data tbody > tr').length === 0) {
+                        $(noInformation(6)).appendTo('#dialogViewOtherDiscipline table.data');
                     }
                 });
             });
@@ -271,19 +271,19 @@
             success: function (data) {
                 $('#discipline-summary').html(data);
 
-                initEventViewOtherViolation();
+                initEventViewOtherDiscipline();
                 initEventForViewDisciplineDetail();
 
-                $('#btnAddOtherViolation').on('click', function (event) {
+                $('#btnAddOtherDiscipline').on('click', function (event) {
                     event.preventDefault();
 
                     $.ajax({
                         type: 'GET',
-                        url: _global.root + 'discipline/PartialAddOtherViolation',
+                        url: _global.root + 'discipline/PartialAddOtherDiscipline',
                         dataType: 'html',
                         success: function (data) {
-                            $('#dialogAddOtherViolation').html(data);
-                            initAddOtherViolationDialog();
+                            $('#dialogAddOtherDiscipline').html(data);
+                            initAddOtherDisciplineDialog();
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert(textStatus + ': ' + errorThrown);

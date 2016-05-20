@@ -12,12 +12,12 @@ table.discipline-summary .align-left {
     text-align: left;
 }
 
-table.discipline-summary a.other-violations {
+table.discipline-summary a.other-discipline {
     text-decoration: none;
     color: red;
 }
 
-    table.discipline-summary a.other-violations:hover {
+    table.discipline-summary a.other-discipline:hover {
         cursor: pointer;
     }
 

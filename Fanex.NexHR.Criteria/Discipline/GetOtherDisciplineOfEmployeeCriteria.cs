@@ -3,7 +3,7 @@
     using System;
     using Fanex.Data.Repository;
 
-    public class GetOtherViolationOfEmployeeCriteria : CriteriaBase
+    public class GetOtherDisciplineOfEmployeeCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "EmpId")]
         public int EmployeeId { get; set; }
@@ -19,7 +19,7 @@
 
         public override string GetSettingKey()
         {
-            return "EmployeeDiscipline_GetOtherViolation";
+            return "EmployeeDiscipline_GetOtherDiscipline";
         }
     }
 }

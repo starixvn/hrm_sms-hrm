@@ -1104,8 +1104,8 @@
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
-    <Content Include="Views\Discipline\_AddOtherViolation.cshtml" />
-    <Content Include="Views\Discipline\_ViewOtherViolation.cshtml" />
+    <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
+    <Content Include="Views\Discipline\_ViewOtherDiscipline.cshtml" />
     <Content Include="Views\Discipline\DisciplineDetail.cshtml" />
     <Content Include="Views\Discipline\_ListDisciplineDetail.cshtml" />
     <Content Include="Views\Request\_ProcessRequest.cshtml" />

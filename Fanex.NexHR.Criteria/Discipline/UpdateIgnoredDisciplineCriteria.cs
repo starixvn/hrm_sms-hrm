@@ -39,21 +39,21 @@
 
         private string ConvertIgnoredDisciplineToXml()
         {
-            var violationXmlBuilder = new StringBuilder();
+            var disciplineXmlBuilder = new StringBuilder();
 
             if (IgnoredDisciplines != null && IgnoredDisciplines.Any())
             {
-                violationXmlBuilder.Append(BeginRootTag);
+                disciplineXmlBuilder.Append(BeginRootTag);
 
                 foreach (IgnoredDisciplineModel item in IgnoredDisciplines)
                 {
-                    violationXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.Ignored);
+                    disciplineXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.Ignored);
                 }
 
-                violationXmlBuilder.Append(EndRootTag);
+                disciplineXmlBuilder.Append(EndRootTag);
             }
 
-            return violationXmlBuilder.ToString();
+            return disciplineXmlBuilder.ToString();
         }
     }
 }

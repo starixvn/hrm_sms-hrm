@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NexHR.Models.Discipline
 {
-    public class ViolationModel
+    public class DisciplineModel
     {
-        public int ViolationId { get; set; }
+        public int DisciplineId { get; set; }
 
         public string Name { get; set; }
 
@@ -15,7 +15,5 @@
         public bool HasIgnored { get; set; }
 
         public bool HasApprovedBy { get; set; }
-
-        public bool Disabled { get; set; }
     }
 }

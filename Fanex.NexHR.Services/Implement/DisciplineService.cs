@@ -51,16 +51,16 @@
             return disciplines;
         }
 
-        public IList<OtherViolationModel> GetOtherViolation(GetOtherViolationOfEmployeeCriteria criteria)
+        public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)
         {
-            IList<OtherViolationModel> violations = new List<OtherViolationModel>();
+            IList<OtherDisciplineModel> otherDisciplines = new List<OtherDisciplineModel>();
 
             if (criteria != null && criteria.IsValid())
             {
-                violations = GetData<OtherViolationModel>(criteria).ToList();
+                otherDisciplines = GetData<OtherDisciplineModel>(criteria).ToList();
             }
 
-            return violations;
+            return otherDisciplines;
         }
 
         public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)
@@ -75,19 +75,19 @@
             return disciplineTypes;
         }
 
-        public IList<DisciplineTypeModel> GetOtherViolationType(GetOtherViolationTypeCriteria criteria)
+        public IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria)
         {
-            IList<DisciplineTypeModel> otherViolationTypes = new List<DisciplineTypeModel>();
+            IList<DisciplineTypeModel> otherDisciplineTypes = new List<DisciplineTypeModel>();
 
             if (criteria != null && criteria.IsValid())
             {
-                otherViolationTypes = GetData<DisciplineTypeModel>(criteria).ToList();
+                otherDisciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
             }
 
-            return otherViolationTypes;
+            return otherDisciplineTypes;
         }
 
-        public CommandResult InsertOtherViolation(InsertOtherViolationCriteria criteria)
+        public CommandResult InsertOtherDiscipline(InsertOtherDisciplineCriteria criteria)
         {
             CommandResult commandResult = new CommandResult();
 
@@ -99,7 +99,7 @@
             return commandResult;
         }
 
-        public CommandResult DeleteOtherViolation(DeleteOtherViolationCriteria criteria)
+        public CommandResult DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             CommandResult commandResult = new CommandResult();
 
@@ -223,7 +223,7 @@
 
         private object CreateRecordDisciplineSummaryReport(DisciplineSummaryModel discipline, ref int rowIndex)
         {
-            float otherViolations = discipline.OtherViolationsScore > 0 ? -discipline.OtherViolationsScore : 0,
+            float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0,
                 systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0,
                 approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
@@ -243,7 +243,7 @@
                 UnpaidLeave = discipline.UnpaidLeave,
                 UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent,
                 ChangeShift = discipline.ChangeShift,
-                OtherViolation = (decimal)otherViolations,
+                OtherDiscipline = (decimal)otherDisciplines,
                 SystemSubtractScore = (decimal)systemSubtractScore,
                 ApproverSubtractScore = (decimal)approverSubtractScore
             };

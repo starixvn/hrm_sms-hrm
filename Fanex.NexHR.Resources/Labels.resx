@@ -1012,7 +1012,7 @@
     <value>Personal</value>
   </data>
   <data name="Violation" xml:space="preserve">
-    <value>Violation</value>
+    <value>Discipline</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
@@ -1158,8 +1158,8 @@
   <data name="Absent" xml:space="preserve">
     <value>Absent</value>
   </data>
-  <data name="AddOtherViolations" xml:space="preserve">
-    <value>Add Other Violations</value>
+  <data name="AddOtherDiscipline" xml:space="preserve">
+    <value>Add Other Discipline</value>
   </data>
   <data name="MinusScoringApprover" xml:space="preserve">
     <value>Minus Scoring Approver</value>
@@ -1170,8 +1170,8 @@
   <data name="MissingCheckInOut" xml:space="preserve">
     <value>Missing Check In/Out</value>
   </data>
-  <data name="OtherViolations" xml:space="preserve">
-    <value>Other Violations</value>
+  <data name="OtherDiscipline" xml:space="preserve">
+    <value>Other Discipline</value>
   </data>
   <data name="UPL" xml:space="preserve">
     <value>UPL</value>
@@ -1194,11 +1194,11 @@
   <data name="MinusScore" xml:space="preserve">
     <value>Minus Score</value>
   </data>
-  <data name="ViolationDate" xml:space="preserve">
-    <value>Violation Date</value>
+  <data name="DisciplineDate" xml:space="preserve">
+    <value>Discipline Date</value>
   </data>
-  <data name="ViolationType" xml:space="preserve">
-    <value>Violation Type</value>
+  <data name="DisciplineType" xml:space="preserve">
+    <value>Discipline Type</value>
   </data>
   <data name="DisciplineSummaryReportName" xml:space="preserve">
     <value>Discipline Summary Report</value>

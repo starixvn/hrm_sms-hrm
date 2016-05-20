@@ -5,8 +5,8 @@
         {
             <tr>
                 <th colspan="16" class="align-left">
-                    <a class="button" id="btnAddOtherViolation">
-                        @Labels.AddOtherViolations
+                    <a class="button" id="btnAddOtherDiscipline">
+                        @Labels.AddOtherDiscipline
                     </a>
                 </th>
             </tr>
@@ -24,7 +24,7 @@
             <th>@Labels.UPL</th>
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
-            <th>@Labels.OtherViolations</th>
+            <th>@Labels.OtherDiscipline</th>
             <th>@Labels.MinusScoringSystem</th>
             <th>@Labels.MinusScoringApprover</th>
             <th>@Labels.Action</th>
@@ -51,10 +51,10 @@
                     <td>@item.UnpaidLeaveAbsent</td>
                     <td>@item.ChangeShift</td>
                     <td>
-                        @if (item.OtherViolationsScore > 0)
+                        @if (item.OtherDisciplineScore > 0)
                         {
-                            <a class="other-violations viewOtherViolation" data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
-                                -@item.OtherViolationsScore
+                            <a class="other-discipline viewOtherDiscipline" data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
+                                -@item.OtherDisciplineScore
                             </a>
                         }
                         else

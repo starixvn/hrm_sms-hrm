@@ -123,62 +123,62 @@
             return PartialView("_ListDisciplineDetail", disciplines);
         }
 
-        public ActionResult PartialViewOtherViolation(int employeeId, DateTime fromDate, DateTime toDate)
+        public ActionResult PartialViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
         {
-            var criteria = new GetOtherViolationOfEmployeeCriteria()
+            var criteria = new GetOtherDisciplineOfEmployeeCriteria()
             {
                 EmployeeId = employeeId,
                 FromDate = fromDate,
                 ToDate = toDate
             };
 
-            IList<OtherViolationModel> violations = _disciplineService.GetOtherViolation(criteria);
+            IList<OtherDisciplineModel> otherDisciplines = _disciplineService.GetOtherDiscipline(criteria);
 
-            return PartialView("_ViewOtherViolation", violations);
+            return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
 
-        public ActionResult PartialAddOtherViolation(string employee, int? employeeId = null)
+        public ActionResult PartialAddOtherDiscipline(string employee, int? employeeId = null)
         {
-            var criteria = new GetOtherViolationTypeCriteria();
-            IList<DisciplineTypeModel> otherViolationTypes = _disciplineService.GetOtherViolationType(criteria);
+            var criteria = new GetOtherDisciplineTypeCriteria();
+            IList<DisciplineTypeModel> otherDisciplineTypes = _disciplineService.GetOtherDisciplineType(criteria);
 
-            var model = new AddOtherViolationViewModel
+            var model = new AddOtherDisciplineViewModel
             {
                 EmployeeId = employeeId ?? -1,
                 Employee = employee,
                 WorkDate = DateTime.Now,
-                OtherViolationTypes = otherViolationTypes
+                OtherDisciplineTypes = otherDisciplineTypes
             };
 
-            return PartialView("_AddOtherViolation", model);
+            return PartialView("_AddOtherDiscipline", model);
         }
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
-        public JsonResult AddOtherViolation(AddOtherViolationViewModel model)
+        public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
-            var criteria = new InsertOtherViolationCriteria
+            var criteria = new InsertOtherDisciplineCriteria
             {
                 EmployeeId = model.EmployeeId,
                 WorkDate = model.WorkDate,
-                DisciplineTypeId = model.OtherViolationTypeId,
+                DisciplineTypeId = model.DisciplineTypeId,
                 Comment = model.Comment,
                 CreatedBy = CurrentUser.Id
             };
 
-            CommandResult commandResult = _disciplineService.InsertOtherViolation(criteria);
+            CommandResult commandResult = _disciplineService.InsertOtherDiscipline(criteria);
 
             return Json(commandResult);
         }
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
-        public string DeleteOtherViolation(DeleteOtherViolationCriteria criteria)
+        public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
             {
                 criteria.ModifiedBy = CurrentUser.Id;
-                CommandResult commandResult = _disciplineService.DeleteOtherViolation(criteria);
+                CommandResult commandResult = _disciplineService.DeleteOtherDiscipline(criteria);
 
                 if (commandResult.Code > 0)
                 {

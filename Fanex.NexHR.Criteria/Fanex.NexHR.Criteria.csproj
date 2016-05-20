@@ -85,13 +85,13 @@
     <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
-    <Compile Include="Discipline\DeleteOtherViolationCriteria.cs" />
+    <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineSummaryCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineTypeCriteria.cs" />
-    <Compile Include="Discipline\GetOtherViolationOfEmployeeCriteria.cs" />
-    <Compile Include="Discipline\GetOtherViolationTypeCriteria.cs" />
-    <Compile Include="Discipline\InsertOtherViolationCriteria.cs" />
+    <Compile Include="Discipline\GetOtherDisciplineOfEmployeeCriteria.cs" />
+    <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
+    <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />

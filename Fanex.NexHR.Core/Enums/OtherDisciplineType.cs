@@ -4,7 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
 
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
-    public enum OtherViolationType : int
+    public enum OtherDisciplineType : int
     {
         [Description("Verbal Warning")]
         VerbalWarning = -1,

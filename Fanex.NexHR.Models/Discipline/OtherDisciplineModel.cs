@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class OtherViolationModel
+    public class OtherDisciplineModel
     {
         public DateTime WorkDate { get; set; }
 

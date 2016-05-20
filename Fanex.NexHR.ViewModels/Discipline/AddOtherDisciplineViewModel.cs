@@ -5,28 +5,28 @@
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Models.Discipline;
 
-    public class AddOtherViolationViewModel
+    public class AddOtherDisciplineViewModel
     {
         [Required(ErrorMessage = "Employee is required.")]
         public int EmployeeId { get; set; }
 
         public string Employee { get; set; }
 
-        [Required(ErrorMessage = "Violation Date is required.")]
-        [Display(Name = "Violation Date")]
+        [Required(ErrorMessage = "Discipline Date is required.")]
+        [Display(Name = "Discipline Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime WorkDate { get; set; }
 
-        [Required(ErrorMessage = "Other violation type is required.")]
-        [Display(Name = "Violation Type")]
-        public int OtherViolationTypeId { get; set; }
+        [Required(ErrorMessage = "Other discipline type is required.")]
+        [Display(Name = "Discipline Type")]
+        public int DisciplineTypeId { get; set; }
 
         [Display(Name = "Minus Score")]
         public float MinusScore { get; set; }
 
         public string Comment { get; set; }
 
-        public IList<DisciplineTypeModel> OtherViolationTypes { get; set; }
+        public IList<DisciplineTypeModel> OtherDisciplineTypes { get; set; }
     }
 }

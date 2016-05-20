@@ -34,8 +34,8 @@ namespace Fanex.NexHR.Repositories
                 objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
                     (attendance, t) =>
                     {
-                        if (currentAttendance == null 
-                            || currentAttendance.EmpId != attendance.EmpId 
+                        if (currentAttendance == null
+                            || currentAttendance.EmpId != attendance.EmpId
                             || currentAttendance.AttendanceDate.Value.Date != attendance.AttendanceDate.Value.Date)
                         {
                             listAttendance.Add(attendance);
@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Repositories
                         {
                             e.Team = t;
                             w.Employee = e;
-                            
+
                             return w;
                         },
                         splitOn: "EmpId,GroupId",
