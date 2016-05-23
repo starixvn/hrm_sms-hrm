@@ -68,27 +68,31 @@
     function initEventForSaveChange() {
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
             var ignoredDisciplines = getDataChanged();
-            ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });
 
-            console.log(ignoredDisciplines);
+            if (ignoredDisciplines.length > 0) {
+                ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });
 
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: _global.root + 'discipline/UpdateIgnoredDiscipline',
-                data: ignoredDisciplines,
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {
-                    if (result.Code === 0) {
-                        query();
-                    } else {
-                        alert(result.Message);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ': ' + errorThrown);
-                }
-            });
+                confirm('Are you sure you want to save?',
+                    function() {
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            url: _global.root + 'discipline/UpdateIgnoredDiscipline',
+                            data: ignoredDisciplines,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(result) {
+                                if (result.Code === 0) {
+                                    query();
+                                } else {
+                                    alert(result.Message);
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert(textStatus + ': ' + errorThrown);
+                            }
+                        });
+                    });
+            }
         });
     }
 
