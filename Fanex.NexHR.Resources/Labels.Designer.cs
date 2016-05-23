@@ -1186,6 +1186,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From Shift.
+        /// </summary>
+        public static string FromShift {
+            get {
+                return ResourceManager.GetString("FromShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From time.
         /// </summary>
         public static string FromTime {
@@ -3063,6 +3072,15 @@ namespace Fanex.NexHR.Resources {
         public static string ToDay {
             get {
                 return ResourceManager.GetString("ToDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To Shift.
+        /// </summary>
+        public static string ToShift {
+            get {
+                return ResourceManager.GetString("ToShift", resourceCulture);
             }
         }
         

@@ -14,9 +14,6 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
-    /// <summary>
-    /// Interface Change Shift Request Service.
-    /// </summary>
     public interface IChangeShiftRequestService
     {
         CommandResult Insert(InsertChangeShiftRequestCriteria criteria);
@@ -24,5 +21,7 @@ namespace Fanex.NexHR.Services.Interfaces
         CommandResult Update(UpdateChangeShiftRequestCriteria criteria);
 
         IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
+
+        IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
     }
 }

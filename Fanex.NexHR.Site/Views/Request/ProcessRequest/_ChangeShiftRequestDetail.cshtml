@@ -1,4 +1,4 @@
-﻿@model IList<ChangeShiftDetailViewModel>
+﻿@model IList<ChangeShiftDetailModel>
 @if (Model != null && Model.Any())
 {
     <table class="tabledata">
@@ -12,12 +12,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ChangeShiftDetailViewModel item in Model)
+            @foreach (ChangeShiftDetailModel item in Model)
             {
+                var scheduleStatus = item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift;
+                var disciplineTypeId = (int)DisciplineType.ChangeShift;
                 <tr class='left'>
                     <td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
-                    <td>@item.ScheduleStatus</td>
-                    @if (item.ScheduleStatus == null || item.ScheduleStatus.Equals(Labels.NA))
+                    <td>@scheduleStatus</td>
+                    @if (scheduleStatus == null || scheduleStatus.Equals(Labels.NA))
                     {
                         <td>-</td>
                         <td>-</td>
@@ -25,7 +27,7 @@
                     else
                     {
                         <td>
-                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId), new { @disabled = false })
+                            @(item.ToShiftId.Equals(-1) ? Labels.Off : item.ToShift)
                         </td>
                         if (!string.IsNullOrWhiteSpace(item.Remark))
                         {
@@ -39,9 +41,6 @@
                         }
                     }
                     <td class="ignoredDiscipline">
-                        @{
-                            var disciplineTypeId = (int)DisciplineType.ChangeShift;
-                        }
                         <input type="checkbox" data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                     </td>
                 </tr>

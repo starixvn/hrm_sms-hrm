@@ -12,7 +12,6 @@ namespace Fanex.NexHR.Controllers.Request
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -25,7 +24,6 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
@@ -330,7 +328,7 @@ namespace Fanex.NexHR.Controllers.Request
 
                         case (int)RequestType.ChangeShift:
                             ViewBag.Shifts = _shiftService.GetAll(isShowOff: true);
-                            model.ChangeShiftDetails = GetChangeShiftDetail(model.RequestId);
+                            model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
                             break;
 
                         case (int)RequestType.Leave:
@@ -460,27 +458,15 @@ namespace Fanex.NexHR.Controllers.Request
             request.Requests = requestList;
         }
 
-        private IList<ChangeShiftDetailViewModel> GetChangeShiftDetail(long requestId)
+        private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
         {
-            var changeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+            var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria()
             {
                 RequestId = requestId
             };
-            IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftRequestDetailById(changeShiftDetailCriteria);
+            IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftDetailToIgnoreById(criteria);
 
-            return ConvertChangeShiftDetailToViewModel(changeShiftDetails);
-        }
-
-        private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
-        {
-            return model.Select(item => new ChangeShiftDetailViewModel()
-            {
-                OnDate = item.OnDate,
-                ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
-                FromShiftId = item.FromShiftId,
-                ToShiftId = item.ToShiftId,
-                Remark = item.Remark
-            }).ToList();
+            return changeShiftDetails;
         }
 
         private IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)

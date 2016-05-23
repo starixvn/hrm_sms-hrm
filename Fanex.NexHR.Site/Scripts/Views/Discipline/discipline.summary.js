@@ -53,7 +53,9 @@
     }
 
     function initAutocomplete() {
-        $('#dialogAddOtherDiscipline #Employee').autocomplete({
+        var selectorName = '#dialogAddOtherDiscipline #Employee',
+            selectorId = '#dialogAddOtherDiscipline #EmployeeId';
+        $(selectorName).autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: _global.root + 'api/employee/getemployees',
@@ -79,18 +81,26 @@
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
-                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
+                $(selectorName).val(ui.item.label);
+                $(selectorId).val(ui.item.value);
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
-                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
+                $(selectorName).val(ui.item.label);
+                $(selectorId).val(ui.item.value);
             },
             change: function (event, ui) {
                 event.preventDefault();
-                $('#dialogAddOtherDiscipline #Employee').val(ui.item.label);
-                $('#dialogAddOtherDiscipline #EmployeeId').val(ui.item.value);
+                if (ui && ui.item) {
+                    $(selectorName).val(ui.item.label);
+                    $(selectorId).val(ui.item.value);
+                } else {
+                    if ($(selectorName).val() === '') {
+                        $(selectorId).val('');
+                    } else {
+                        $(selectorId).val('0');
+                    }
+                }
             }
         }).autocomplete('widget').addClass('search-employee-autocomplete');
     }
@@ -153,7 +163,7 @@
                     }
                 }
             ],
-            close: function() {
+            close: function () {
                 query();
             },
             show: {
@@ -200,6 +210,9 @@
                         $('#dialogViewOtherDiscipline').dialog({
                             modal: true,
                             title: 'Other Discipline - ' + nickname,
+                            close: function () {
+                                query();
+                            },
                             show: {
                                 effect: 'fade',
                                 duration: 300

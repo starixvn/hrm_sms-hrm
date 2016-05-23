@@ -23,9 +23,6 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Change Shift Request Service.
-    /// </summary>
     public class ChangeShiftRequestService : RequestService, IChangeShiftRequestService
     {
         private const string ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
@@ -92,6 +89,19 @@ namespace Fanex.NexHR.Services
             }
 
             return detail;
+        }
+
+        public IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
+        {
+            Check.Argument.IsNotNull(criteria, "criteria");
+            List<ChangeShiftDetailModel> details = new List<ChangeShiftDetailModel>();
+
+            if (criteria.IsValid())
+            {
+                details = GetData<ChangeShiftDetailModel>(criteria).ToList();
+            }
+
+            return details;
         }
 
         private void SendMailForInsertChangeShiftSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)

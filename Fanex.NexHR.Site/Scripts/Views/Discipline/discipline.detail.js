@@ -44,17 +44,22 @@
     function getDataChanged() {
         var ignoredDisciplines = [];
 
-        $('#discipline-detail table.discipline-detail').find('td input.ignoredDiscipline').each(function () {
-            if ($(this).data('changed')) {
-                var ignoredDiscipline = {
-                    WorkDate: $(this).data('workdate'),
-                    EmployeeId: $(this).data('employee-id'),
-                    DisciplineTypeId: $(this).data('discipline-type-id'),
-                    Ignored: $(this).prop('checked')
-                };
+        $('#discipline-detail table.discipline-detail').find('tr').each(function () {
+            var approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text());
 
-                ignoredDisciplines.push(ignoredDiscipline);
-            }
+            $(this).find('td input.ignoredDiscipline').each(function () {
+                if ($(this).data('changed')) {
+                    var ignoredDiscipline = {
+                        WorkDate: $(this).data('workdate'),
+                        EmployeeId: $(this).data('employee-id'),
+                        DisciplineTypeId: $(this).data('discipline-type-id'),
+                        ApproverSubtractScore: Math.abs(approverSubstractScore),
+                        Ignored: $(this).prop('checked')
+                    };
+
+                    ignoredDisciplines.push(ignoredDiscipline);
+                }
+            });
         });
 
         return ignoredDisciplines;
@@ -64,6 +69,8 @@
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
             var ignoredDisciplines = getDataChanged();
             ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });
+
+            console.log(ignoredDisciplines);
 
             $.ajax({
                 type: 'POST',

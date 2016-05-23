@@ -10,6 +10,8 @@
 
         public int DisciplineTypeId { get; set; }
 
+        public float ApproverSubtractScore { get; set; }
+
         public bool Ignored { get; set; }
     }
 }

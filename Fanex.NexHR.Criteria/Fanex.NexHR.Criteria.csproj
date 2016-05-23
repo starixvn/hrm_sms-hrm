@@ -102,6 +102,7 @@
     <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
     <Compile Include="Report\GetTotalWorkingHourDailyCriteria.cs" />
     <Compile Include="Request\ApproveRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\GetCheckInOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />

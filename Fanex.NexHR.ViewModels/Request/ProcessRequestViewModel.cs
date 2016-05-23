@@ -12,7 +12,7 @@
         {
             CheckInOutDetail = new RequestEntity();
             LateInEarlyOutDetail = new RequestEntity();
-            ChangeShiftDetails = new List<ChangeShiftDetailViewModel>();
+            ChangeShiftDetails = new List<ChangeShiftDetailModel>();
             LeaveDetails = new List<LeaveDetailModel>();
         }
 
@@ -33,7 +33,7 @@
 
         public RequestEntity LateInEarlyOutDetail { get; set; }
 
-        public IList<ChangeShiftDetailViewModel> ChangeShiftDetails { get; set; }
+        public IList<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
 
         public IList<LeaveDetailModel> LeaveDetails { get; set; }
 

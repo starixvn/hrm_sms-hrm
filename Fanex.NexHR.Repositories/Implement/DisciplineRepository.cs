@@ -32,6 +32,7 @@
                 IList<dynamic> disciplines = db.Query<dynamic>(criteria.GetSpParams()).ToList();
 
                 IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
+                CalculateScore(disciplineDetails);
 
                 return disciplineDetails;
             }
@@ -171,6 +172,35 @@
                 HasIgnored = discipline.UnpaidLeaveAbsentHasIgnored,
                 HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy
             };
+        }
+
+        private static void CalculateScore(IList<DisciplineDetailModel> disciplineDetails)
+        {
+            foreach (DisciplineDetailModel disciplineDetail in disciplineDetails)
+            {
+                CalculateSubtractScore(disciplineDetail);
+            }
+        }
+
+        private static void CalculateSubtractScore(DisciplineDetailModel disciplineDetail)
+        {
+            var violations = new List<DisciplineModel>
+            {
+                disciplineDetail.MissingCheckInOut,
+                disciplineDetail.LateIn,
+                disciplineDetail.EarlyOut,
+                disciplineDetail.TotalHours,
+                disciplineDetail.Absent,
+                disciplineDetail.UnpaidLeave,
+                disciplineDetail.UnpaidLeaveAbsent,
+                disciplineDetail.ChangeShift
+            };
+
+            foreach (DisciplineModel violation in violations.Where(violation => violation != null && violation.HasViolated))
+            {
+                disciplineDetail.SystemSubtractScore += violation.Score;
+                disciplineDetail.ApproverSubtractScore += !violation.HasIgnored ? violation.Score : 0;
+            }
         }
 
         private static string GetRequestComment(string comment)

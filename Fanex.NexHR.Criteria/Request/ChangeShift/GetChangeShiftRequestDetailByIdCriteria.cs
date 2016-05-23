@@ -11,9 +11,6 @@ namespace Fanex.NexHR.Criteria.Request.ChangeShift
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// GetChangeShiftDetailRequestById Criteria.
-    /// </summary>
     public class GetChangeShiftRequestDetailByIdCriteria : CriteriaBase
     {
         public long RequestId { get; set; }

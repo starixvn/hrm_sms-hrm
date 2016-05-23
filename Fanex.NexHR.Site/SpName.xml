@@ -337,6 +337,7 @@
       <Mapping DataField="RequesterId" ObjectProperty="Id" />
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="WorkingTimeRequest_GetChangeShiftDetailToIgnoreById" SpName="WorkingTimeRequest_GetChangeShiftDetailToIgnoreById" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="ExtensionNumber">
     <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="nexhrx" Plain="0"></Setting>

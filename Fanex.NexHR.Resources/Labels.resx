@@ -1251,4 +1251,10 @@
   <data name="OnDuty" xml:space="preserve">
     <value>On Duty</value>
   </data>
+  <data name="FromShift" xml:space="preserve">
+    <value>From Shift</value>
+  </data>
+  <data name="ToShift" xml:space="preserve">
+    <value>To Shift</value>
+  </data>
 </root>

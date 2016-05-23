@@ -53,7 +53,8 @@
                     <td>
                         @if (item.OtherDisciplineScore > 0)
                         {
-                            <a class="other-discipline viewOtherDiscipline" data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
+                            <a class="other-discipline viewOtherDiscipline" style="color: red"
+                               data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
                                 -@item.OtherDisciplineScore
                             </a>
                         }
@@ -62,8 +63,26 @@
                             <span>-</span>
                         }
                     </td>
-                    <td>@item.SystemSubtractScore</td>
-                    <td>@item.ApproverSubtractScore</td>
+                    <td>
+                        @if (item.SystemSubtractScore > 0)
+                        {
+                            <span style="color: red">-@item.SystemSubtractScore</span>
+                        }
+                        else
+                        {
+                            @item.SystemSubtractScore
+                        }
+                    </td>
+                    <td>
+                        @if (item.ApproverSubtractScore > 0)
+                        {
+                            <span style="color: red">-@item.ApproverSubtractScore</span>
+                        }
+                        else
+                        {
+                            @item.ApproverSubtractScore
+                        }
+                    </td>
                     <td>
                         @{
                         var empId = item.Employee.EmployeeId;
