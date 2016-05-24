@@ -48,14 +48,16 @@
                         comment = $(this).find('textarea#Comment').val();
 
                     $(this).find(".tabledata tbody tr").each(function () {
-                        var checkbox = $('td.ignoredDiscipline input:checkbox');
+                        var checkbox = $(this).find('td.ignoredDiscipline input:checkbox');
 
-                        ignoredDisciplines.push({
-                            WorkDate: checkbox.data('workdate'),
-                            EmployeeId: employeeId,
-                            DisciplineTypeId: checkbox.data('disciplinetypeid'),
-                            Ignored: checkbox.prop('checked')
-                        });
+                        if (checkbox.length > 0) {
+                            ignoredDisciplines.push({
+                                WorkDate: checkbox.data('workdate'),
+                                EmployeeId: employeeId,
+                                DisciplineTypeId: checkbox.data('disciplinetypeid'),
+                                Ignored: checkbox.prop('checked')
+                            });
+                        }
                     });
 
                     processRequest(requestId, roleId, command, comment, ignoredDisciplines);
