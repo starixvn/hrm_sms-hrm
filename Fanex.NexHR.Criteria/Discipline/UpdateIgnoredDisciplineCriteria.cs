@@ -8,7 +8,9 @@
 
     public class UpdateIgnoredDisciplineCriteria : CriteriaBase
     {
-        private const string DisciplineTemp = "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' ApproverSubtractScore='{3}' Ignored='{4}'></Discipline>";
+        private const string DisciplineTemp = 
+            "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' ApproverSubtractScore='{3}' Ignored='{4}'></Discipline>";
+
         private const string BeginRootTag = "<ROOT>";
         private const string EndRootTag = "</ROOT>";
 

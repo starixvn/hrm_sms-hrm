@@ -9,11 +9,6 @@
 
 namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -31,8 +26,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Discipline;
@@ -40,6 +35,11 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class ExportController : RequestController
     {
