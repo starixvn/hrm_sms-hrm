@@ -12,6 +12,7 @@ namespace Fanex.NexHR.ViewModels.Report
     using System;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Core;
 
     /// <summary>
     /// EmployeeAttendanceRequest Model.
@@ -28,6 +29,14 @@ namespace Fanex.NexHR.ViewModels.Report
         public DateTime? ToDate { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+
+        public string CreatedDateTime
+        {
+            get
+            {
+                return CreatedDate.HasValue ? CreatedDate.Value.ToShortFormatedDate() : string.Empty;
+            }
+        }
 
         public decimal? TotalDays { get; set; }
 

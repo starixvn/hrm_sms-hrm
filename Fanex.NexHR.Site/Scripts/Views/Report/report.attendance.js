@@ -95,7 +95,7 @@ function view() {
                     "<td class='col1'>Details</td>" +
                     "<td class='col2'>" + result +
                     "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
-                    jsonToFullDateTime2(object.attr('data-createddate')) +
+                    object.attr('data-createddate') +
                     "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
                     object.attr('data-remark') + "</td></tr></table></div>";
                 }

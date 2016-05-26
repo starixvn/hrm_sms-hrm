@@ -123,7 +123,6 @@
     <Compile Include="Supervisor\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
-    <Compile Include="LeaveType\GetLeaveTypeByIdCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
     <Compile Include="Lookup\GetJobTitleCriteria.cs" />
     <Compile Include="Lookup\InsertLookupDataCriteria.cs" />
@@ -162,12 +161,10 @@
     <Compile Include="Country\GetAllCountryCriteria.cs" />
     <Compile Include="Employee\DeleteEmployeeCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByCodeCriteria.cs" />
-    <Compile Include="Employee\GetEmployeeByManagerCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByRoleCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetListSupervisorNameCriteria.cs" />
     <Compile Include="Employee\GetNewEmployeeCodeCriteria.cs" />
-    <Compile Include="Employee\GetUserLoginByCodeCriteria.cs" />
     <Compile Include="Employee\GetUserLoginByDomainUserNameCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByIdCriteria.cs" />
     <Compile Include="Employee\InsertEmployeeCriteria.cs" />

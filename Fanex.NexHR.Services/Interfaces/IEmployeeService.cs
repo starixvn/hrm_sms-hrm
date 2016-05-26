@@ -33,7 +33,7 @@ namespace Fanex.NexHR.Services.Interfaces
 
         UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria);
 
-        UserLoginModel GetUserLoginByCode(GetUserLoginByCodeCriteria criteria);
+        UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria);
 
         UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria);
 

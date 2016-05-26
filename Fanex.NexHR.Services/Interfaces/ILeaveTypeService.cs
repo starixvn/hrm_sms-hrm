@@ -16,7 +16,5 @@ namespace Fanex.NexHR.Services.Interfaces
     public interface ILeaveTypeService
     {
         IList<LeaveType> GetAll(GetLeaveTypeCriteria criteria);
-
-        LeaveType GetLeaveTypeById(GetLeaveTypeByIdCriteria criteria);
     }
 }

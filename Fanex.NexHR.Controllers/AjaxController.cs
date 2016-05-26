@@ -270,11 +270,11 @@ namespace Fanex.NexHR.Controllers
             {
                 Code = model.TeamCode,
                 Name = model.TeamName,
+                DepartmentId = model.DepartmentId,
                 MailGroup = model.MailGroup,
                 LeaderId = model.LeaderId,
                 AssistantLeaderId = (int)model.AssistantLeaderId,
-                CreatedDate = DateTime.Now,
-                CreatedBy = this.CurrentUser.Id
+                CreatedBy = CurrentUser.Id
             };
             CommandResult commandResult = _teamService.AddNewTeam(criteria);
             return commandResult.Code;

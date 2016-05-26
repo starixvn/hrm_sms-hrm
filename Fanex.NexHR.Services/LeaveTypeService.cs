@@ -40,22 +40,5 @@ namespace Fanex.NexHR.Services
 
             return leaveTypes;
         }
-
-        /// <summary>
-        /// Function to get leave type by id.
-        /// </summary>
-        /// <param name="criteria">GetLeaveTypeById Criteria.</param>
-        /// <returns>Leave Type.</returns>
-        public LeaveType GetLeaveTypeById(GetLeaveTypeByIdCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            LeaveType leaveType = null;
-            if (criteria.IsValid())
-            {
-                leaveType = GetDataEntity<LeaveType>(criteria);
-            }
-
-            return leaveType;
-        }
     }
 }

@@ -121,55 +121,10 @@ var ScheduleArrangeDetail = (function ($) {
             });
 
             $(".shift").change(function () {
-                var object = $(this);
-                var isOffDay = false;
-                var isShiftOrOffDay = false;
-                var shiftId = "";
-                var shiftCode = "";
-
-                for (var i = 0; i < ScheduleArrangeDetail.allShifts.length; i++) {
-                    if (ScheduleArrangeDetail.allShifts[i].Code.toLowerCase() === $.trim(object.val().toLowerCase())) {
-                        shiftId = ScheduleArrangeDetail.allShifts[i].Id;
-                        shiftCode = ScheduleArrangeDetail.allShifts[i].Code;
-                        if (ScheduleArrangeDetail.allShifts[i].Id === -1) {
-                            isOffDay = true;
-                        }
-
-                        isShiftOrOffDay = true;
-                        break;
-                    }
-                }
-
-                if (isShiftOrOffDay) {
-                    if (isOffDay) {
-                        if (!object.hasClass("holiday")) {
-                            object.addClass("offday");
-                            object.removeAttr("data-shiftid");
-                            object.val(shiftCode);
-                        }
-                        else {
-                            object.removeClass("offday");
-                            object.removeAttr("data-shiftid");
-                            object.val("");
-                        }
-                    }
-                    else {
-                        object.removeClass("offday");
-                        object.attr("data-shiftid", shiftId);
-                    }
-                }
-                else {
-                    object.removeClass("offday");
-                    object.removeAttr("data-shiftid");
-                    object.val("");
-                }
-
-                // for warning
-                var trObject = object.parent().parent();
-                ScheduleArrangeDetail.checkWarningRow(trObject);
-
+                ScheduleArrangeDetail.shiftChange($(this));
                 return false;
             });
+
 
             $(".lnkDepartment").on("click", function (event) {
                 event.preventDefault();
@@ -385,6 +340,52 @@ var ScheduleArrangeDetail = (function ($) {
             ScheduleArrangeDetail.changeWeekDay();
             ScheduleArrangeDetail.getAllShift();
             ScheduleArrangeDetail.checkWarningAllRow();
+        },
+        shiftChange: function (object) {
+            var isOffDay = false;
+            var isShiftOrOffDay = false;
+            var shiftId = "";
+            var shiftCode = "";
+            for (var i = 0; i < ScheduleArrangeDetail.allShifts.length; i++) {
+                if (ScheduleArrangeDetail.allShifts[i].Code.toLowerCase() === $.trim(object.val().toLowerCase())) {
+                    shiftId = ScheduleArrangeDetail.allShifts[i].Id;
+                    shiftCode = ScheduleArrangeDetail.allShifts[i].Code;
+                    if (ScheduleArrangeDetail.allShifts[i].Id === -1) {
+                        isOffDay = true;
+                    }
+
+                    isShiftOrOffDay = true;
+                    break;
+                }
+            }
+
+            if (isShiftOrOffDay) {
+                if (isOffDay) {
+                    if (!object.hasClass("holiday")) {
+                        object.addClass("offday");
+                        object.removeAttr("data-shiftid");
+                        object.val(shiftCode);
+                    }
+                    else {
+                        object.removeClass("offday");
+                        object.removeAttr("data-shiftid");
+                        object.val("");
+                    }
+                }
+                else {
+                    object.removeClass("offday");
+                    object.attr("data-shiftid", shiftId);
+                }
+            }
+            else {
+                object.removeClass("offday");
+                object.removeAttr("data-shiftid");
+                object.val("");
+            }
+
+            // for warning
+            var trObject = object.parent().parent();
+            ScheduleArrangeDetail.checkWarningRow(trObject);
         },
         saveOrderOfMember: function () {
             var employeeOrders = [];
@@ -707,7 +708,7 @@ var ScheduleArrangeDetail = (function ($) {
                     $(this).val(shiftCode);
                     $(this).attr("data-shiftid", ui.item.value);
                     ScheduleArrangeCommon.hasChangeValue = true;
-
+                    ScheduleArrangeDetail.shiftChange($(this));
                     return false;
                 },
                 focus: function (event, ui) {

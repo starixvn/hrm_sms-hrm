@@ -16,7 +16,6 @@
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetByCode" SpName="Country_GetByCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="GetEmployeeByDomainUserName" SpName="Employee_GetEmployeeByDomain" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetNewEmployeecode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_Insert" SpName="Employee_Information_Insert" DbName="nexhrx" Plain="0"></Setting>
@@ -25,8 +24,6 @@
     <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Update" SpName="Employee_Shift_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetWeekWorking" SpName="EmployeeCalendar_GetWeekWorking" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_UpdateWeekWorking" SpName="EmployeeCalendar_UpdateWeekWorking" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
@@ -62,7 +59,6 @@
     <Setting Key="Report_EmployeeCalendarByMonth" SpName="Report_EmployeeCalendarByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1"></Setting>
-    <Setting Key="Report_DateOfEmployeeForgotAndLateEarlyIO" SpName="Report_DateOfEmployeeForgotAndLateEarlyIO" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByMonth" SpName="Report_EmployeeTotalWorkingHourByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByDay" SpName="Report_EmployeeTotalWorkingHourByDay" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByWeek" SpName="Report_EmployeeTotalWorkingHourByWeek" DbName="nexhrx" Plain="0"></Setting>
@@ -174,7 +170,6 @@
     <Setting Key="EmployeeGroup_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetHalfDayOff" SpName="EmployeeCalendar_GetHalfDayOff" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_SetOffDayForAllEmployees" SpName="EmployeeCalendar_SetOffDayForAllEmployees" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetByDateRange" SpName="EmployeeCalendar_GetByDateRange" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
@@ -219,7 +214,6 @@
   <Function Name="Group">
     <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeGroup_GetGroups" SpName="EmployeeGroup_GetGroups" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Group_Get" SpName="Group_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="groupId" ObjectProperty="Id" />
       <Mapping DataField="DepartmentId" ObjectProperty="Id" />
@@ -321,7 +315,6 @@
     <Setting Key="LeaveType_GetAll" SpName="LeaveType_GetAll" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="LeaveType_GetById" SpName="LeaveType_GetById" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Request">
     <Setting Key="GetCheckInOutByYear" SpName="WorkingTimeRequest_GetRequestByEmp_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>

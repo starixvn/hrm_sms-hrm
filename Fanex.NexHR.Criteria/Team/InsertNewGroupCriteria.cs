@@ -29,8 +29,6 @@ namespace Fanex.NexHR.Criteria.Team
 
         public int? AssistantLeaderId { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
         public int CreatedBy { get; set; }
 
         public override string GetSettingKey()

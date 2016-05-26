@@ -83,8 +83,7 @@ namespace Fanex.NexHR.Controllers
                     MailGroup = model.MailGroup,
                     LeaderId = model.LeaderId,
                     AssistantLeaderId = model.AssistantLeaderId,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = this.CurrentUser.Id
+                    CreatedBy = CurrentUser.Id
                 };
                 CommandResult commandResult = _teamService.AddNewTeam(criteria);
 
@@ -171,8 +170,7 @@ namespace Fanex.NexHR.Controllers
                     MailGroup = model.MailGroup,
                     LeaderId = model.LeaderId,
                     AssistantLeaderId = model.AssistantLeaderId,
-                    ModifiedBy = this.CurrentUser.Id,
-                    ModifiedDate = DateTime.Now
+                    ModifiedBy = this.CurrentUser.Id
                 };
 
                 CommandResult result = _teamService.UpdateTeam(criteria);

@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Services
             return user;
         }
 
-        public UserLoginModel GetUserLoginByCode(GetUserLoginByCodeCriteria criteria)
+        public UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             UserLoginModel userLogin = null;

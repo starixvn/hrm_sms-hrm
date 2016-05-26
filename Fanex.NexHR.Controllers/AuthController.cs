@@ -54,7 +54,7 @@ namespace Fanex.NexHR.Controllers
                 switch (retCode)
                 {
                     case 0: // OK
-                        var criteria = new GetUserLoginByCodeCriteria() { Code = model.UserName };
+                        var criteria = new GetEmployeeByCodeCriteria() { Code = model.UserName };
                         UserLoginModel user = _employeeService.GetUserLoginByCode(criteria);
                         user.IsShowLeftNavigation = true;
                         HttpContext.Session["CurrentUser"] = user;

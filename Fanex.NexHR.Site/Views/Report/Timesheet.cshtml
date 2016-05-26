@@ -156,20 +156,20 @@
         <td>
             {{if RequestList != null > 0}}
                 {{each RequestList}}
-                    <a href='#' class="tooltip-request req" 
-                            data-requesttype="${RequestType.Id}"
-                            data-fromdate="${FromDate}"
-                            data-todate="${ToDate}" 
-                            data-createddate="${CreatedDate}" 
-                            data-fromshift="${FromShift}"
-                            data-toshift="${ToShift}"
-                            data-fromtime="${FromTime}"
-                            data-totime="${ToTime}"
-                            data-totaldays="${TotalDays}"
-                            data-totalmins="${TotalMins}"
-                            data-remark='${Remark}'>
-                            ${RequestType.Name}
-                        </a> 
+            <a href='#' class="tooltip-request req"
+               data-requesttype="${RequestType.Id}"
+               data-fromdate="${FromDate}"
+               data-todate="${ToDate}"
+               data-createddate="${CreatedDateTime}"
+               data-fromshift="${FromShift}"
+               data-toshift="${ToShift}"
+               data-fromtime="${FromTime}"
+               data-totime="${ToTime}"
+               data-totaldays="${TotalDays}"
+               data-totalmins="${TotalMins}"
+               data-remark='${Remark}'>
+                ${RequestType.Name}
+            </a> 
                 {{/each}}
                
             {{/if}}
