@@ -353,9 +353,7 @@ namespace Fanex.NexHR.Controllers
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-
-            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
-            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+            _exportService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
@@ -380,9 +378,7 @@ namespace Fanex.NexHR.Controllers
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-
-            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
-            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+            _exportService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
@@ -406,9 +402,7 @@ namespace Fanex.NexHR.Controllers
             };
 
             IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-
-            string templatePath = Server.MapPath(WorkingTimeRequestTemplatePath);
-            _exportService.ExportWorkingTimeRequest(requestList, templatePath);
+            _exportService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
