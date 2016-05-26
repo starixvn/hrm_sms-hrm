@@ -50,7 +50,7 @@
                     $(this).find(".tabledata tbody tr").each(function () {
                         var checkbox = $(this).find('td.ignoredDiscipline input:checkbox');
 
-                        if (checkbox.length > 0) {
+                        if (checkbox.length === 1 && checkbox.prop('checked')) {
                             ignoredDisciplines.push({
                                 WorkDate: checkbox.data('workdate'),
                                 EmployeeId: employeeId,

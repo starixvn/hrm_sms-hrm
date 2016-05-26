@@ -51,6 +51,18 @@
             return disciplines;
         }
 
+        public IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
+        {
+            IList<Employee> employees = new List<Employee>();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                employees = GetData<Employee>(criteria).ToList();
+            }
+
+            return employees;
+        }
+
         public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)
         {
             IList<OtherDisciplineModel> otherDisciplines = new List<OtherDisciplineModel>();

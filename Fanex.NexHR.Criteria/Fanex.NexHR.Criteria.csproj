@@ -89,6 +89,7 @@
     <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineSummaryCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineTypeCriteria.cs" />
+    <Compile Include="Discipline\GetMemberToAddOtherDiscipineBySupervisorIdCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />

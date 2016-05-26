@@ -58,12 +58,9 @@
         $(selectorName).autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'api/employee/getemployees',
+                    url: _global.root + 'discipline/GetMemberToAddOtherDiscipline',
                     data: {
-                        query: request.term,
-                        enable: false,
-                        isDelete: true,
-                        $top: 10
+                        keyword: request.term
                     },
                     success: function (data) {
                         response($.map(data, function (item) {

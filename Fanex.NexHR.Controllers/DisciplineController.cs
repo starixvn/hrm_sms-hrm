@@ -207,6 +207,19 @@
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetMemberToAddOtherDiscipline(string keyword)
+        {
+            var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
+            {
+                SupervisorId = CurrentUser.Id,
+                Query = keyword
+            };
+
+            IList<Employee> employees = _disciplineService.GetMemberToAddOtherDiscipline(criteria);
+
+            return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
         private IList<Team> GetAllTeam()
         {
             IList<Team> teamList = _teamService.GetAll(new GetAllGroupCriteria());
