@@ -32,5 +32,7 @@
 
         [Display(Name = "Ignored Status")]
         public bool? HasIgnored { get; set; }
+
+        public bool FromSummaryPage { get; set; }
     }
 }

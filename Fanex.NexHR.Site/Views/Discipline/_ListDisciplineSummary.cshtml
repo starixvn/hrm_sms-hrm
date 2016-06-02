@@ -1,9 +1,11 @@
 ﻿@model IList<DisciplineSummaryModel>
 <table class="data discipline-summary">
     <thead>
-        @if (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString())
+        @if (Model != null
+            && Model.Any()
+            && (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString())
             || Roles.IsUserInRole(RoleSystem.HR.ToString())
-            || Roles.IsUserInRole(RoleSystem.Approver.ToString()))
+            || Roles.IsUserInRole(RoleSystem.Approver.ToString())))
         {
             <tr>
                 <th colspan="16" class="align-left">

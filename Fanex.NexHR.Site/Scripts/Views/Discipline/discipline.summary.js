@@ -242,7 +242,7 @@
 
             window.location.href = _global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
                 + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
-                + '&isLocal=' + isLocal + '&reasonId=' + reasonId;
+                + '&isLocal=' + isLocal + '&reasonId=' + reasonId + '&fromSummaryPage=true';
         });
     }
 

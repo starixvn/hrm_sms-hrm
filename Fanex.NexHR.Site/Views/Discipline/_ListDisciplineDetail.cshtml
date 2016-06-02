@@ -1,7 +1,11 @@
 ﻿@model IList<DisciplineDetailModel>
+
+@{
+    var isApprover = Roles.IsUserInRole(RoleSystem.Approver.ToString());
+}
 <table class="data discipline-detail">
     <thead>
-        @if (Model != null & Model.Any())
+        @if (Model != null & Model.Any() && isApprover)
         {
             <tr>
                 <th colspan="19" style="text-align: left;">
@@ -17,18 +21,18 @@
             <th>@Labels.CheckIn</th>
             <th>@Labels.CheckOut</th>
             <th>@Labels.TotalHours</th>
-            <th>@Labels.MissingCheckInOut</th>
-            <th>@Labels.WorkingUnderTime</th>
+            <th class="width-80">@Labels.MissingCheckInOut</th>
+            <th class="width-80">@Labels.WorkingUnderTime</th>
             <th>@Labels.LateIn</th>
             <th>@Labels.EarlyOut</th>
             <th>@Labels.Absent</th>
             <th>@Labels.UPL</th>
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
-            <th>@Labels.MinusScoringSystem</th>
-            <th>@Labels.MinusScoringApprover</th>
-            <th>@Labels.ApproverComment</th>
-            <th>@Labels.EmployeeComment</th>
+            <th class="width-80">@Labels.MinusScoringSystem</th>
+            <th class="width-80">@Labels.MinusScoringApprover</th>
+            <th class="width-80">@Labels.ApproverComment</th>
+            <th class="width-80">@Labels.EmployeeComment</th>
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -45,7 +49,7 @@
                     <td>
                         @if (item.CheckIn.HasValue)
                         {
-                            <span>@item.CheckIn.Value.ToString("HH:mm")</span>
+                            @item.CheckIn.Value.ToString("HH:mm")
                         }
                         else
                         {
@@ -55,7 +59,7 @@
                     <td>
                         @if (item.CheckOut.HasValue)
                         {
-                            <span>@item.CheckOut.Value.ToString("HH:mm")</span>
+                            @item.CheckOut.Value.ToString("HH:mm")
                         }
                         else
                         {
@@ -63,9 +67,9 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.TotalHours.Value))
+                        @if (!string.IsNullOrEmpty(item.TotalHours))
                         {
-                            @RazorHelper.ConvertNumberToTime(double.Parse(item.TotalHours.Value) * 60)
+                            @item.TotalHours
                         }
                         else
                         {
@@ -73,7 +77,7 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.MissingCheckInOut.Value) && !item.MissingCheckInOut.Value.Equals("0"))
+                        @if (item.MissingCheckInOut.Value > 0)
                         {
                             <span class="float-left">@item.MissingCheckInOut.Value</span>
                             if (item.MissingCheckInOut.HasViolated)
@@ -92,17 +96,17 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.TotalHours.Value) && !item.TotalHours.Value.Equals("0"))
+                        @if (item.WorkingUnderTime.Value > 0)
                         {
                             <span class="float-left">1</span>
-                            if (item.TotalHours.HasViolated)
+                            if (item.WorkingUnderTime.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.TotalHours.HasIgnored"
-                                       disabled="@item.TotalHours.HasApprovedBy.Equals(false)"
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.WorkingUnderTime.HasIgnored"
+                                       disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.TotalHours.Score"
-                                       data-has-ignored="@item.TotalHours.HasIgnored" data-changed="false" />
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
+                                       data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
                             }
                         }
                         else
@@ -111,9 +115,9 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.LateIn.Value) && !item.LateIn.Value.Equals("0"))
+                        @if (item.LateIn.Value > 0)
                         {
-                            <div class="float-left">@RazorHelper.ConvertNumberToTime(double.Parse(item.LateIn.Value))</div>
+                            <div class="float-left">@item.MinutesLateIn</div>
                             if (item.LateIn.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.LateIn;
@@ -130,9 +134,9 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.EarlyOut.Value) && !item.EarlyOut.Value.Equals("0"))
+                        @if (item.EarlyOut.Value > 0)
                         {
-                            <div class="float-left">@RazorHelper.ConvertNumberToTime(double.Parse(item.EarlyOut.Value))</div>
+                            <div class="float-left">@item.MinutesEarlyOut</div>
                             if (item.EarlyOut.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.EarlyOut;
@@ -149,7 +153,7 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.Absent.Value) && !item.Absent.Value.Equals("0"))
+                        @if (item.Absent.Value > 0)
                         {
                             <span class="float-left">@item.Absent.Value</span>
                             if (item.Absent.HasViolated)
@@ -168,7 +172,7 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.UnpaidLeave.Value) && !item.UnpaidLeave.Value.Equals("0"))
+                        @if (item.UnpaidLeave.Value > 0)
                         {
                             <span class="float-left">@item.UnpaidLeave.Value</span>
                             if (item.UnpaidLeave.HasViolated)
@@ -176,7 +180,7 @@
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeave;
                                 <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeave.HasIgnored"
                                        disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employeeid="@item.Employee.EmployeeId"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
                                        data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
                             }
@@ -187,7 +191,7 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.UnpaidLeaveAbsent.Value) && !item.UnpaidLeaveAbsent.Value.Equals("0"))
+                        @if (item.UnpaidLeaveAbsent.Value > 0)
                         {
                             <span class="float-left">@item.UnpaidLeaveAbsent.Value</span>
                             if (item.UnpaidLeaveAbsent.HasViolated)
@@ -206,7 +210,7 @@
                         }
                     </td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.ChangeShift.Value) && !item.ChangeShift.Value.Equals("0"))
+                        @if (item.ChangeShift.Value > 0)
                         {
                             <span class="float-left">@item.ChangeShift.Value</span>
                             if (item.ChangeShift.HasViolated)

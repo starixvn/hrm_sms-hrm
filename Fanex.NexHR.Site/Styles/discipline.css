@@ -21,6 +21,10 @@ table.discipline-summary a.other-discipline {
         cursor: pointer;
     }
 
+table.discipline-detail .width-80 {
+    max-width: 80px;
+}
+
 table.discipline-detail tbody tr td .float-left {
     float: left;
 }

@@ -268,12 +268,7 @@
     <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
-    <Content Include="Styles\discipline.css">
-      <DependentUpon>discipline.scss</DependentUpon>
-    </Content>
-    <Content Include="Styles\discipline.min.css">
-      <DependentUpon>discipline.css</DependentUpon>
-    </Content>
+    <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Report\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
@@ -1109,7 +1104,6 @@
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
-    <Content Include="Styles\discipline.css" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />

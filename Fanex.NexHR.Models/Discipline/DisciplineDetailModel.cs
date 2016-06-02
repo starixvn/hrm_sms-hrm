@@ -12,11 +12,17 @@
 
         public DateTime? CheckOut { get; set; }
 
+        public string TotalHours { get; set; }
+
+        public string MinutesLateIn { get; set; }
+
+        public string MinutesEarlyOut { get; set; }
+
         public EmployeeInfoModel Employee { get; set; }
 
-        public DisciplineModel MissingCheckInOut { get; set; }
+        public DisciplineModel ChangeShift { get; set; }
 
-        public DisciplineModel TotalHours { get; set; }
+        public DisciplineModel MissingCheckInOut { get; set; }
 
         public DisciplineModel LateIn { get; set; }
 
@@ -24,11 +30,11 @@
 
         public DisciplineModel Absent { get; set; }
 
-        public DisciplineModel UnpaidLeaveAbsent { get; set; }
-
         public DisciplineModel UnpaidLeave { get; set; }
 
-        public DisciplineModel ChangeShift { get; set; }
+        public DisciplineModel WorkingUnderTime { get; set; }
+
+        public DisciplineModel UnpaidLeaveAbsent { get; set; }
 
         public decimal SystemSubtractScore { get; set; }
 

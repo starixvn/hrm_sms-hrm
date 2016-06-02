@@ -1,7 +1,4 @@
-﻿@using System.Web.Mvc;
-@using System.Web.WebPages;
-@using System.Web.Mvc.Html5;
-@using Fanex.NexHR.Core.Enums;
+﻿@using Fanex.NexHR.Core.Enums;
 @using Fanex.NexHR.Core;
 @using Fanex.NexHR.Resources;
 
@@ -44,7 +41,7 @@
     <tr>
 
         <td colspan="@colspan" rowspan="2">
-            @Fanex.NexHR.Resources.Messages.NoInformation
+            @Messages.NoInformation
         </td>
     </tr>
 }
@@ -91,7 +88,7 @@
     {
         <td>
             @status.Name
-    </td>
+        </td>
     }
 }
 
@@ -136,7 +133,6 @@
 }
 @helper ShiftInfoTable(dynamic shiftInfoList)
 {
-
     <div id="shifts">
         <table class="shift_table">
             <thead>
@@ -161,17 +157,17 @@
                     <tr>
                         <td class="left">
                             @item.Name
-                    </td>
-                    <td>
-                        @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                    </td>
-                    <td>
-                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                    </td>
-                    <td>
-                        @((item.BreakTimeMins == 0) ? string.Empty : (item.BeginBreakTime + "' - " + item.EndBreakTime + "'"))
-                </td>
-            </tr>
+                        </td>
+                        <td>
+                            @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
+                        </td>
+                        <td>
+                            @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
+                        </td>
+                        <td>
+                            @((item.BreakTimeMins == 0) ? string.Empty : (item.BeginBreakTime + "' - " + item.EndBreakTime + "'"))
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -402,12 +398,4 @@
         <option @(action == 0 ? "selected" : "") value="0">Active</option>
         <option @(action == 1 ? "selected" : "") value="1">Disabled</option>
     </select>
-}
-
-@helper ConvertNumberToTime(double number)
-{
-    double numberMinutes = Math.Round(number);
-    var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
-
-    <span>@timeSpan.ToString(@"hh\:mm")</span>
 }

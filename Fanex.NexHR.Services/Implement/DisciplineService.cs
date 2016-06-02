@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.NexHR.Core;
@@ -284,17 +283,6 @@
         {
             decimal systemSubtractScore = disciplineDetail.SystemSubtractScore > 0 ? -disciplineDetail.SystemSubtractScore : 0,
                 approverSubtractScore = disciplineDetail.ApproverSubtractScore > 0 ? -disciplineDetail.ApproverSubtractScore : 0;
-            float totalHours = !string.IsNullOrEmpty(disciplineDetail.TotalHours.Value) ? float.Parse(disciplineDetail.TotalHours.Value) * 60 : 0;
-            string checkIn = disciplineDetail.CheckIn.HasValue ? disciplineDetail.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty,
-                checkOut = disciplineDetail.CheckOut.HasValue ? disciplineDetail.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty,
-                missingCheckInOut = disciplineDetail.MissingCheckInOut.Value,
-                workingUnderTime = disciplineDetail.TotalHours.Value,
-                lateIn = disciplineDetail.LateIn.Value,
-                earlyOut = disciplineDetail.EarlyOut.Value,
-                absent = disciplineDetail.Absent.Value,
-                unpaidLeave = disciplineDetail.UnpaidLeave.Value,
-                unpaidLeaveAbsent = disciplineDetail.UnpaidLeaveAbsent.Value,
-                changeShift = disciplineDetail.ChangeShift.Value;
 
             var record = new
             {
@@ -305,17 +293,17 @@
                 Section = disciplineDetail.Employee.GroupName,
                 Date = disciplineDetail.WorkDate,
                 Code = disciplineDetail.ShiftName,
-                CheckIn = checkIn,
-                CheckOut = checkOut,
-                TotalHours = totalHours > 0 ? ConvertNumberToTime(totalHours) : string.Empty,
-                MissingCheckInOut = !string.IsNullOrEmpty(missingCheckInOut) && !missingCheckInOut.Equals("0") ? missingCheckInOut : string.Empty,
-                WorkingUnderTime = !string.IsNullOrEmpty(workingUnderTime) && !workingUnderTime.Equals("0") && disciplineDetail.TotalHours.HasViolated ? "1" : string.Empty,
-                LateIn = !string.IsNullOrEmpty(lateIn) && !lateIn.Equals("0") ? ConvertNumberToTime(double.Parse(lateIn)) : string.Empty,
-                EarlyOut = !string.IsNullOrEmpty(earlyOut) && !earlyOut.Equals("0") ? ConvertNumberToTime(double.Parse(earlyOut)) : string.Empty,
-                Absent = !string.IsNullOrEmpty(absent) && !absent.Equals("0") ? absent : string.Empty,
-                UnpaidLeave = !string.IsNullOrEmpty(unpaidLeave) && !unpaidLeave.Equals("0") ? unpaidLeave : string.Empty,
-                UnpaidLeaveAbsent = !string.IsNullOrEmpty(unpaidLeaveAbsent) && !unpaidLeaveAbsent.Equals("0") ? unpaidLeaveAbsent : string.Empty,
-                ChangeShift = !string.IsNullOrEmpty(changeShift) && !changeShift.Equals("0") ? changeShift : string.Empty,
+                CheckIn = disciplineDetail.CheckIn.HasValue ? disciplineDetail.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty,
+                CheckOut = disciplineDetail.CheckOut.HasValue ? disciplineDetail.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty,
+                TotalHours = !string.IsNullOrEmpty(disciplineDetail.TotalHours) ? disciplineDetail.TotalHours : string.Empty,
+                MissingCheckInOut = disciplineDetail.MissingCheckInOut.Value > 0 ? disciplineDetail.MissingCheckInOut.Value.ToString() : string.Empty,
+                WorkingUnderTime = disciplineDetail.WorkingUnderTime.Value > 0 ? "1" : string.Empty,
+                LateIn = !string.IsNullOrEmpty(disciplineDetail.MinutesLateIn) ? disciplineDetail.MinutesLateIn : string.Empty,
+                EarlyOut = !string.IsNullOrEmpty(disciplineDetail.MinutesEarlyOut) ? disciplineDetail.MinutesEarlyOut : string.Empty,
+                Absent = disciplineDetail.Absent.Value > 0 ? disciplineDetail.Absent.Value.ToString() : string.Empty,
+                UnpaidLeave = disciplineDetail.UnpaidLeave.Value > 0 ? disciplineDetail.UnpaidLeave.Value.ToString() : string.Empty,
+                UnpaidLeaveAbsent = disciplineDetail.UnpaidLeaveAbsent.Value > 0 ? disciplineDetail.UnpaidLeaveAbsent.Value.ToString() : string.Empty,
+                ChangeShift = disciplineDetail.ChangeShift.Value > 0 ? disciplineDetail.ChangeShift.Value.ToString() : string.Empty,
                 SystemSubtractScore = systemSubtractScore,
                 ApproverSubtractScore = approverSubtractScore,
                 ApproverComment = disciplineDetail.ApproverComment,
@@ -324,16 +312,6 @@
             rowIndex++;
 
             return record;
-        }
-
-        private string ConvertNumberToTime(double number)
-        {
-            double numberMinutes = Math.Round(number);
-
-            var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
-            string time = timeSpan.ToString(@"hh\:mm");
-
-            return time;
         }
     }
 }

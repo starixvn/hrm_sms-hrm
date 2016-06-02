@@ -4,11 +4,9 @@
     {
         public int DisciplineId { get; set; }
 
-        public string Name { get; set; }
-
         public decimal Score { get; set; }
 
-        public string Value { get; set; }
+        public int Value { get; set; }
 
         public bool HasViolated { get; set; }
 

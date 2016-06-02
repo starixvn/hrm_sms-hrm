@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Repositories.Implement
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.Data;
@@ -40,33 +41,45 @@
 
         private static IList<DisciplineDetailModel> MappingObjectForDisciplineDetail(IList<dynamic> disciplines)
         {
-            return disciplines.Select(discipline => new DisciplineDetailModel
+            return disciplines.Select(discipline =>
             {
-                WorkDate = discipline.WorkDate,
-                ShiftName = discipline.ShiftName,
-                CheckIn = discipline.CheckIn,
-                CheckOut = discipline.CheckOut,
-                Employee = new EmployeeInfoModel
+                double? totalHours = discipline.TotalHours;
+                int? lateIn = discipline.LateIn,
+                    earlyOut = discipline.EarlyOut;
+                DateTime? checkIn = discipline.CheckIn,
+                    checkOut = discipline.CheckOut;
+
+                return new DisciplineDetailModel
                 {
-                    EmployeeId = discipline.EmployeeId,
-                    NickName = discipline.NickName,
-                    FullName = discipline.FullName,
-                    Code = discipline.Code,
-                    IsLocal = discipline.IsLocal,
-                    GroupId = discipline.GroupId,
-                    GroupName = discipline.GroupName,
-                    GroupCode = discipline.GroupCode
-                },
-                ChangeShift = GetChangeShift(discipline),
-                MissingCheckInOut = GetMissingCheckInOut(discipline),
-                LateIn = GetLateIn(discipline),
-                EarlyOut = GetEarlyOut(discipline),
-                Absent = GetAbsent(discipline),
-                UnpaidLeave = GetUnpaidLeave(discipline),
-                TotalHours = GetTotalHours(discipline),
-                UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
-                EmployeeComment = discipline.EmployeeComment,
-                ApproverComment = discipline.ApproverComment
+                    WorkDate = discipline.WorkDate,
+                    ShiftName = discipline.ShiftName,
+                    CheckIn = (checkIn.HasValue && checkIn.Value != default(DateTime)) ? checkIn.Value : (DateTime?)null,
+                    CheckOut = (checkOut.HasValue && checkOut.Value != default(DateTime)) ? checkOut.Value : (DateTime?)null,
+                    TotalHours = totalHours.HasValue ? ConvertNumberToTime(totalHours.Value * 60) : string.Empty,
+                    MinutesLateIn = lateIn.HasValue ? ConvertNumberToTime(lateIn.Value) : string.Empty,
+                    MinutesEarlyOut = earlyOut.HasValue ? ConvertNumberToTime(earlyOut.Value) : string.Empty,
+                    Employee = new EmployeeInfoModel
+                    {
+                        EmployeeId = discipline.EmployeeId,
+                        NickName = discipline.NickName,
+                        FullName = discipline.FullName,
+                        Code = discipline.Code,
+                        IsLocal = discipline.IsLocal,
+                        GroupId = discipline.GroupId,
+                        GroupName = discipline.GroupName,
+                        GroupCode = discipline.GroupCode
+                    },
+                    ChangeShift = GetChangeShift(discipline),
+                    MissingCheckInOut = GetMissingCheckInOut(discipline),
+                    LateIn = GetLateIn(discipline),
+                    EarlyOut = GetEarlyOut(discipline),
+                    Absent = GetAbsent(discipline),
+                    UnpaidLeave = GetUnpaidLeave(discipline),
+                    WorkingUnderTime = GetWorkingUnderTime(discipline),
+                    UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
+                    EmployeeComment = discipline.EmployeeComment,
+                    ApproverComment = discipline.ApproverComment
+                };
             }).ToList();
         }
 
@@ -148,16 +161,16 @@
             };
         }
 
-        private static DisciplineModel GetTotalHours(dynamic discipline)
+        private static DisciplineModel GetWorkingUnderTime(dynamic discipline)
         {
             return new DisciplineModel
             {
-                DisciplineId = discipline.TotalHoursId,
-                Value = discipline.TotalHoursValue,
-                Score = discipline.TotalHoursScore,
-                HasViolated = discipline.TotalHoursHasViolated,
-                HasIgnored = discipline.TotalHoursHasIgnored,
-                HasApprovedBy = discipline.TotalHoursHasApprovedBy
+                DisciplineId = discipline.WorkingUnderTimeId,
+                Value = discipline.WorkingUnderTimeValue,
+                Score = discipline.WorkingUnderTimeScore,
+                HasViolated = discipline.WorkingUnderTimeHasViolated,
+                HasIgnored = discipline.WorkingUnderTimeHasIgnored,
+                HasApprovedBy = discipline.WorkingUnderTimeHasApprovedBy
             };
         }
 
@@ -189,7 +202,7 @@
                 disciplineDetail.MissingCheckInOut,
                 disciplineDetail.LateIn,
                 disciplineDetail.EarlyOut,
-                disciplineDetail.TotalHours,
+                disciplineDetail.WorkingUnderTime,
                 disciplineDetail.Absent,
                 disciplineDetail.UnpaidLeave,
                 disciplineDetail.UnpaidLeaveAbsent,
@@ -201,6 +214,16 @@
                 disciplineDetail.SystemSubtractScore += violation.Score;
                 disciplineDetail.ApproverSubtractScore += !violation.HasIgnored ? violation.Score : 0;
             }
+        }
+
+        private static string ConvertNumberToTime(double number)
+        {
+            double numberMinutes = Math.Round(number);
+
+            var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
+            string time = timeSpan.ToString(@"hh\:mm");
+
+            return time;
         }
     }
 }

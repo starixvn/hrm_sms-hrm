@@ -9,7 +9,10 @@
     @Url.CombresLink("disciplinedetailjs")
 }
 @section Breadcrumb {
-    <a class="step" href="@Url.Action("disciplinesummary", "discipline")">@Labels.DisciplineSummary</a>
+    @if (Model.FromSummaryPage)
+    {
+        <a class="step" href="@Url.Action("disciplinesummary", "discipline")">@Labels.DisciplineSummary</a>
+    }
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@Labels.DisciplineDetail</h2>
