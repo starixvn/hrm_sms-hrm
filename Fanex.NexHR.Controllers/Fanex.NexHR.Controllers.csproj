@@ -42,6 +42,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>FanexRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -114,7 +115,6 @@
     <Compile Include="AnnualLeaveBalanceController.cs" />
     <Compile Include="ApiControllers\EmployeeController.cs" />
     <Compile Include="ApiControllers\HolidayController.cs" />
-    <Compile Include="ApiControllers\JobTitleController.cs" />
     <Compile Include="ApiControllers\ReportController.cs" />
     <Compile Include="ApiControllers\ShiftController.cs" />
     <Compile Include="AuthController.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="ErrorController.cs" />
     <Compile Include="EmployeeController.cs" />
     <Compile Include="ExportController.cs" />
-    <Compile Include="ExtensionNumberController.cs" />
+    <Compile Include="ExtensionNoController.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="HolidayController.cs" />
     <Compile Include="HomeController.cs" />

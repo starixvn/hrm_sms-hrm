@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ShiftViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.6.30">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Shifts
+﻿namespace Fanex.NexHR.ViewModels.Shifts
 {
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// Shift ViewModel.
-    /// </summary>
     public class ShiftViewModel
     {
         public int ShiftId { get; set; }
@@ -50,5 +38,21 @@ namespace Fanex.NexHR.ViewModels.Shifts
         public bool IsDisabled { get; set; }
 
         public bool IsUsed { get; set; }
+
+        public string TimeIn
+        {
+            get
+            {
+                return HourTimeIn.ToString().PadLeft(2, '0') + ":" + MinuteTimeIn.ToString().PadLeft(2, '0');
+            }
+        }
+
+        public string TimeOut
+        {
+            get
+            {
+                return HourTimeOut.ToString().PadLeft(2, '0') + ":" + MinuteTimeOut.ToString().PadLeft(2, '0');
+            }
+        }
     }
 }

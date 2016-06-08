@@ -1,28 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="AjaxController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.ExtensionNumber;
-    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -30,43 +13,40 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
-    using Fanex.NexHR.ViewModels.EmployeeGroup;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Web.Mvc;
 
-    [Authorize]
     public class AjaxController : BaseController
     {
-        private readonly IRequestService _requestService;
-        private readonly IHolidayService _holidayService;
-        private readonly IMemoService _memoService;
-        private readonly ITeamService _teamService;
-        private readonly IEmployeeService _employeeService;
-        private readonly ILookupDataService _lookupDataService;
-        private readonly IReportService _reportService;
-        private readonly IExtensionNumberService _extensionNumberService;
+        private readonly IRequestService requestService;
+        private readonly IHolidayService holidayService;
+        private readonly IEmployeeService employeeService;
+        private readonly ILookupDataService lookupDataService;
+        private readonly IReportService reportService;
+        private readonly ICommandService commandService;
 
         public AjaxController()
-            : this(null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
         public AjaxController(
             IRequestService requestService,
             IHolidayService holidayService,
-            IMemoService memoService,
-            ITeamService teamService,
             IEmployeeService employeeService,
             ILookupDataService lookupDataService,
             IReportService reportService,
-            IExtensionNumberService extensionNumberService)
+            ICommandService commandService)
         {
-            _requestService = requestService ?? new RequestService();
-            _holidayService = holidayService ?? new HolidayService();
-            _memoService = memoService ?? new MemoService();
-            _employeeService = employeeService ?? new EmployeeService();
-            _teamService = teamService ?? new TeamService();
-            _lookupDataService = lookupDataService ?? new LookupDataService();
-            _reportService = reportService ?? new ReportService();
-            _extensionNumberService = extensionNumberService ?? new ExtensionNumberService();
+            this.requestService = requestService ?? new RequestService();
+            this.holidayService = holidayService ?? new HolidayService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.lookupDataService = lookupDataService ?? new LookupDataService();
+            this.reportService = reportService ?? new ReportService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         [HttpPost]
@@ -89,7 +69,7 @@ namespace Fanex.NexHR.Controllers
                 EmpId = id,
                 ResignedDate = resignedDate
             };
-            CommandResult result = _employeeService.Delete(deleteEmployeeCriteria);
+            CommandResult result = employeeService.Delete(deleteEmployeeCriteria);
 
             return result.Code == 0;
         }
@@ -107,7 +87,7 @@ namespace Fanex.NexHR.Controllers
                 Comment = remark,
                 ProcessedBy = CurrentUser.Id
             };
-            CommandResult result = _requestService.Process(criteria);
+            CommandResult result = requestService.Process(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -124,7 +104,7 @@ namespace Fanex.NexHR.Controllers
                 ProcessedBy = this.CurrentUser.Id,
                 ProcessedDate = DateTime.Now
             };
-            CommandResult commandResult = _requestService.ProcessOvertime(processOvertimeCriteria);
+            CommandResult commandResult = requestService.ProcessOvertime(processOvertimeCriteria);
             return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
@@ -140,7 +120,7 @@ namespace Fanex.NexHR.Controllers
                 ProcessedDate = DateTime.Now
             };
             criteria.RoleID = criteria.GetRoleIdForProcessOvertime(command);
-            CommandResult commandResult = _requestService.ProcessOvertime(criteria);
+            CommandResult commandResult = requestService.ProcessOvertime(criteria);
             return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
@@ -150,11 +130,11 @@ namespace Fanex.NexHR.Controllers
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = this.CurrentUser.Id;
+                criteria.ModifiedBy = CurrentUser.Id;
                 criteria.ModifiedDate = DateTime.Now;
             }
 
-            CommandResult commandResult = _reportService.ProcessInOut(criteria);
+            CommandResult commandResult = commandService.Update(criteria);
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
@@ -166,7 +146,7 @@ namespace Fanex.NexHR.Controllers
                 Query = keyword,
                 ExcludedManager = false
             };
-            IList<Employee> employees = _employeeService.GetMemberByManager(criteria);
+            IList<Employee> employees = employeeService.GetMemberByManager(criteria);
 
             return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
         }
@@ -185,7 +165,7 @@ namespace Fanex.NexHR.Controllers
                 DeductDays = model.DeductDays,
                 FromDate = model.AffectedFrom
             };
-            CommandResult result = _employeeService.AdjustAnnualLeaves(adjustAnnualLeaveCriteria);
+            CommandResult result = employeeService.AdjustAnnualLeaves(adjustAnnualLeaveCriteria);
             if (result.Code != 0)
             {
                 return Json(new { success = false, errors = result.Message });
@@ -211,7 +191,7 @@ namespace Fanex.NexHR.Controllers
                     Role = string.Empty,
                     SupervisorID = null
                 };
-                IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
+                IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
 
                 entityList = entityList.Where(m => m.LeaveBalance > minbalance).ToList();
 
@@ -234,7 +214,7 @@ namespace Fanex.NexHR.Controllers
                     FromDate = date,
                     ResetDays = minbalance
                 };
-                CommandResult result = _employeeService.ResetAnnualLeaves(resetAnnualLeaveCriteria);
+                CommandResult result = employeeService.ResetAnnualLeaves(resetAnnualLeaveCriteria);
 
                 return Json(result.Code == 0);
             }
@@ -248,153 +228,15 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         public bool DeleteHoliday(int id)
         {
-            return _holidayService.Delete(id, this.CurrentUser.Id);
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool DeleteMemo(int id)
-        {
-            var criteria = new DeleteMemoCriteria
-            {
-                Id = id
-            };
-            return _memoService.Delete(criteria);
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public int AddNewTeam(TeamViewModel model)
-        {
-            var criteria = new InsertNewGroupCriteria
-            {
-                Code = model.TeamCode,
-                Name = model.TeamName,
-                DepartmentId = model.DepartmentId,
-                MailGroup = model.MailGroup,
-                LeaderId = model.LeaderId,
-                AssistantLeaderId = (int)model.AssistantLeaderId,
-                CreatedBy = CurrentUser.Id
-            };
-            CommandResult commandResult = _teamService.AddNewTeam(criteria);
-            return commandResult.Code;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public string DeleteTeam(int id)
-        {
-            var criteria = new DeleteGroupCriteria
-            {
-                GroupID = id,
-                ModifiedBy = this.CurrentUser.Id,
-                ModifiedDate = DateTime.Now
-            };
-            CommandResult commandResult = _teamService.DeleteTeam(criteria);
-
-            if (commandResult.Code != 0)
-            {
-                return commandResult.Message;
-            }
-
-            return string.Empty;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool DeleteJobTitle(int id)
-        {
-            var criteria = new DeleteLookupDataCriteria
-            {
-                Id = id
-            };
-            CommandResult commandResult = _lookupDataService.Delete(criteria);
-            return commandResult.Code == 0;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool InsertJobTitle(string name, int categoryId)
-        {
-            var criteria = new InsertLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle,
-                Name = name,
-                CategoryId = categoryId.ToString()
-            };
-            CommandResult commandResult = _lookupDataService.Insert(criteria);
-            return commandResult.Code == 0;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool UpdatetJobTitle(int id, string name, int categoryId)
-        {
-            var criteria = new UpdateLookupDataCriteria
-            {
-                Id = id,
-                Name = name,
-                CategoryId = categoryId.ToString()
-            };
-            CommandResult commandResult = _lookupDataService.Update(criteria);
-            return commandResult.Code == 0;
+            return holidayService.Delete(id, this.CurrentUser.Id);
         }
 
         [Authorize(Roles = "HR")]
         [HttpPost]
         public int ResetPassword(int id)
         {
-            CommandResult result = _employeeService.ResetPassword(id, "123456", this.CurrentUser.Id);
+            CommandResult result = employeeService.ResetPassword(id, "123456", CurrentUser.Id);
             return result.Code;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool DeleteExtensionNumber(int extId)
-        {
-            var criteria = new DeleteExtensionNumberMemberCriteria
-            {
-                ExtensionNumberId = extId
-            };
-            CommandResult commandResult = _extensionNumberService.DeleteExtensionNumber(criteria);
-            return commandResult.Code == 0;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool AddNewExternalGroup(string groupName)
-        {
-            var criteria = new InsertExternalGroupCriteria
-            {
-                FullName = groupName
-            };
-            CommandResult commandResult = _extensionNumberService.AddNewExternalGroup(criteria);
-            return commandResult.Code == 0;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool DeleteExternalGroup(int extId)
-        {
-            var criteria = new DeleteExternalGroupCriteria
-            {
-                ExternalId = extId
-            };
-            CommandResult commandResult = _extensionNumberService.DeleteExternalGroup(criteria);
-            return commandResult.Code == 0;
-        }
-
-        [Authorize(Roles = "HR")]
-        [HttpPost]
-        public bool EditExternalGroup(int extId, string groupName)
-        {
-            var criteria = new UpdateExternalNumberCriteria
-            {
-                ExternalId = extId,
-                FullName = groupName
-            };
-            CommandResult commandResult = _extensionNumberService.EditExternalGroup(criteria);
-            return commandResult.Code == 0;
         }
 
         public int UpdatePasswordResetStatus(bool status)
@@ -404,7 +246,7 @@ namespace Fanex.NexHR.Controllers
                 EmpId = this.CurrentUser.Id,
                 PasswordReset = status
             };
-            CommandResult result = _employeeService.UpdatePasswordResetStatus(criteria);
+            CommandResult result = employeeService.UpdatePasswordResetStatus(criteria);
 
             return result.Code;
         }

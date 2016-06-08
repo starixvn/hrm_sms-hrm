@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>FanexRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -170,7 +171,7 @@
     <Compile Include="Employee\InsertEmployeeCriteria.cs" />
     <Compile Include="Employee\UpdateEmployeeCriteria.cs" />
     <Compile Include="Employee\UpdateEmployeePersonalInformationCriteria.cs" />
-    <Compile Include="Message\DeleteMessageByCreatorCriteria.cs" />
+    <Compile Include="Message\DeleteMessageCriteria.cs" />
     <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
     <Compile Include="Message\GetMessageByCreatorCriteria.cs" />
     <Compile Include="Message\GetMessageByEmployeeCriteria.cs" />
@@ -178,7 +179,7 @@
     <Compile Include="Message\GetMessageOfEmployeeByIdCriteria.cs" />
     <Compile Include="Message\GetUnreadMessageOfEmployeeCriteria.cs" />
     <Compile Include="Message\InsertMessageCriteria.cs" />
-    <Compile Include="Message\UpdateMessageByCreatorCriteria.cs" />
+    <Compile Include="Message\UpdateMessageCriteria.cs" />
     <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />

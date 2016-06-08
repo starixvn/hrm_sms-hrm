@@ -41,6 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>FanexRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -318,7 +319,7 @@
     <Content Include="Scripts\Views\Overtime\overtimereport.js" />
     <Content Include="Scripts\Views\employeeshiftmanager.js" />
     <Content Include="Scripts\Views\employeesupervisor.js" />
-    <Content Include="Scripts\Views\jobtitle.js" />
+    <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
     <Content Include="Scripts\Views\Overtime\overtime.request.js" />
@@ -330,7 +331,6 @@
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\team.edit.js" />
     <Content Include="Scripts\Views\team.js" />
-    <Content Include="Scripts\Views\team.management.js" />
     <Content Include="Scripts\Views\employee.search.in.company.js" />
     <Content Include="Scripts\Views\timesheetrecord\timesheetrecord.js" />
     <Content Include="Styles\account.css" />

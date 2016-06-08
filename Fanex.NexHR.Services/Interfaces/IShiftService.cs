@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IShiftService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public interface IShiftService
     {
@@ -25,11 +16,5 @@ namespace Fanex.NexHR.Services.Interfaces
         Shift GetByDate(GetEmployeeShiftByDateCriteria criteria);
 
         Shift GetById(GetShiftByIdCriteria criteria);
-
-        CommandResult Insert(InsertShiftCriteria criteria);
-
-        CommandResult Update(UpdateShiftCriteria criteria);
-
-        CommandResult Delete(DeleteShiftCriteria criteria);
     }
 }

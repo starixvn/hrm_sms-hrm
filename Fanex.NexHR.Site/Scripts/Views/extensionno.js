@@ -6,14 +6,14 @@ $(document).ready(function () {
     $("#deleteExt").live("click", function () {
         var id = $(this).closest('tr').attr('id');
         confirm('Are you sure you want to delete?', function () {
-            $.post(_global.root + 'ajax/DeleteExtensionNumber',
+            $.post(_global.root + 'ExtensionNumber/DeleteExtensionNumber',
 { extId: id },
 function (response) {
-    if (response) {
+    if (response.IsSuccessful) {
         document.location = '/extensionnumber/index';
     }
     else {
-        alert(_messages.errorTryAgain);
+        alert(response.Message);
     }
 }).error(function () {
     alert(_messages.errorTryAgain);
@@ -24,14 +24,14 @@ function (response) {
     $("#deleteExternal").live("click", function () {
         var id = $(this).closest('tr').attr('id');
         confirm('Are you sure you want to delete?', function () {
-            $.post(_global.root + 'ajax/DeleteExternalGroup',
+            $.post(_global.root + 'ExtensionNumber/DeleteExternalGroup',
 { extId: id },
 function (response) {
-    if (response) {
+    if (response.IsSuccessful) {
         document.location = '/extensionnumber/ManageExternalGroup';
     }
     else {
-        alert(_messages.errorTryAgain);
+        alert(response.Message);
     }
 }).error(function () {
     alert(_messages.errorTryAgain);
@@ -73,14 +73,14 @@ min + " and " + max + ".");
                 bValid = bValid && checkLength(name, "job title", 3, 100);
 
                 if (bValid) {
-                    $.post(_global.root + 'ajax/AddNewExternalGroup',
+                    $.post(_global.root + 'ExtensionNumber/AddNewExternalGroup',
 { groupName: name.val() },
 function (response) {
-    if (response) {
+    if (response.IsSuccessful) {
         document.location = '/extensionnumber/ManageExternalGroup';
     }
     else {
-        alert(_messages.errorTryAgain);
+        alert(response.Message);
     }
 }).error(function () {
     alert(_messages.errorTryAgain);
@@ -139,14 +139,14 @@ min + " and " + max + ".");
                     bValid = bValid && checkLength(name, "job title", 3, 100);
 
                     if (bValid) {
-                        $.post(_global.root + 'ajax/EditExternalGroup',
+                        $.post(_global.root + 'ExtensionNumber/EditExternalGroup',
 { groupName: name.val(), extId: id },
 function (response) {
-    if (response) {
+    if (response.IsSuccessful) {
         document.location = '/extensionnumber/ManageExternalGroup';
     }
     else {
-        alert(_messages.errorTryAgain);
+        alert(response.Message);
     }
 }).error(function () {
     alert(_messages.errorTryAgain);

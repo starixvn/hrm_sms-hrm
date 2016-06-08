@@ -1,22 +1,25 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="InsertMessageCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.15">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Message
+﻿namespace Fanex.NexHR.Criteria.Message
 {
-    using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Models;
+    using System;
 
-    /// <summary>
-    /// Insert message criteria.
-    /// </summary>
     public class InsertMessageCriteria : CriteriaBase
     {
+        public InsertMessageCriteria(Message message)
+        {
+            if (message != null)
+            {
+                Subject = message.Subject;
+                Contents = message.Contents;
+                Category = message.Category;
+                FromDate = message.FromDate;
+                ToDate = message.ToDate;
+                EmployeeIds = message.EmployeeIds;
+                GroupIds = message.GroupIds;
+            }
+        }
+
         public string Subject { get; set; }
 
         public string Contents { get; set; }
@@ -32,14 +35,6 @@ namespace Fanex.NexHR.Criteria.Message
         public string GroupIds { get; set; }
 
         public int CreatedBy { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        [SpParam(Ignored = true)]
-        public string SendToEmail { get; set; }
-
-        [SpParam(Ignored = true)]
-        public bool HasSendEmail { get; set; }
 
         public override string GetSettingKey()
         {

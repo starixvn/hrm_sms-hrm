@@ -1,80 +1,99 @@
 ﻿@using Fanex.NexHR.Models.Supervisor
 @model List<TeamSupervisorModel>
 @{
-	ViewBag.Title = "Section Supervisor";
+    ViewBag.Title = "Section Supervisor";
 }
 @section css{
-	@Url.CombresLink("teamsupervisorcss")
+    @Url.CombresLink("teamsupervisorcss")
 }
 @section js{
-	@Url.CombresLink("teamsupervisorjs")
+    @Url.CombresLink("teamsupervisorjs")
 }
 @section Breadcrumb {
-	<a class="step">@Labels.HRSpace</a>
-	<a href="~/team/index" class="step">@Labels.SectionManagement</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.HRSpace</a>
+    <a href="~/team/index" class="step">@Labels.SectionManagement</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 <table class="data" style="width: auto; min-width: 800px;">
-	<thead>
-		<tr>
-			<th class="supervisor-team">@Labels.Section
-			</th>
-			<th>
-				@Labels.Roles
-			</th>
-			<th>
-				@Labels.Nick
-			</th>
-			<th class="supervisor-action">
-				@Labels.Edit
-			</th>
-		</tr>
-	</thead>
-	@if (Model != null)
- {
-	 int rowCount = 0;
-		<tbody>
-			<tr>
-				@foreach (TeamSupervisorModel item in Model)
-	{
-		
-		if (rowCount == 0)
-		{
-					<td rowspan="4">
-						@item.Code
-					</td>
-					<td>
-						@item.ActionName
-					</td>
-					<td class="supervisor-name">
-						@item.Supervisors
-					</td>
-					<td>
-						<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
-							<img src="~/Styles/Images/edit-icon.png" /></a>
-					</td>
-			rowCount++;
-		}
-		else
-		{
-			<tr>
-						<td>
-							@item.ActionName
-						</td>
-						<td class="supervisor-name">
-							@item.Supervisors
-						</td>
-						<td>
-							<a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
-								<img src="~/Styles/Images/edit-icon.png" /></a>
-						</td>
-					</tr>
-		}
+    <thead>
+        <tr>
+            <th class="supervisor-team">
+                @Labels.Section
+            </th>
+            <th>
+                @Labels.Roles
+            </th>
+            <th>
+                @Labels.Nick
+            </th>
+            <th class="supervisor-action">
+                @Labels.Edit
+            </th>
+        </tr>
+    </thead>
+    @if (Model != null)
+    {
+        int rowCount = 0;
+        <tbody>
 
-	}
-			</tr>
-			@Html.Hidden("TeamId", (int)ViewBag.TeamId)
-		</tbody>
- }
+            @foreach (TeamSupervisorModel item in Model)
+            {
+
+                if (rowCount == 0)
+                {
+                    <tr>
+                        <td rowspan="4">
+                            @item.Code
+                        </td>
+                        <td>
+                            @item.ActionName
+                        </td>
+                        <td class="supervisor-name">
+                            @item.Supervisors
+                        </td>
+                        <td>
+                            @if (item.ActionType == (short)RoleSystem.ShiftManager)
+                            {
+
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("ShiftManager", "Team", new { TeamId = ViewBag.TeamId })">
+                                    <img src="~/Styles/Images/edit-icon.png" />
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                            rowCount++;
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @item.ActionName
+                        </td>
+                        <td class="supervisor-name">
+                            @item.Supervisors
+                        </td>
+                        <td>
+                            @if (item.ActionType == (short)RoleSystem.ShiftManager)
+                            {
+
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+                                    <img src="~/Styles/Images/edit-icon.png" />
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+
+            @Html.Hidden("TeamId", (int)ViewBag.TeamId)
+        </tbody>
+    }
 </table>

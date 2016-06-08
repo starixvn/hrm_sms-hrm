@@ -1,52 +1,42 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TeamController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Supervisor;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// Team Controller.
-    /// </summary>
-    [Authorize]
     public class TeamController : BaseController
     {
-        private readonly ITeamService _teamService;
-        private readonly IDepartmentService _departmentService;
+        private readonly ITeamService teamService;
+        private readonly IDepartmentService departmentService;
+        private readonly ICommandService commandService;
 
         public TeamController()
-            : this(null, null)
+            : this(null, null, null)
         {
         }
 
-        public TeamController(ITeamService teamService, IDepartmentService departmentService)
+        public TeamController(ITeamService teamService, IDepartmentService departmentService, ICommandService commandService)
         {
-            _teamService = teamService ?? new TeamService();
-            _departmentService = departmentService ?? new DepartmentService();
+            this.teamService = teamService ?? new TeamService();
+            this.departmentService = departmentService ?? new DepartmentService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         [Authorize(Roles = "HR")]
         public ActionResult Index()
         {
             var criteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(criteria);
+            IList<Team> teams = teamService.GetAll(criteria);
 
             return View(teams);
         }
@@ -56,24 +46,17 @@ namespace Fanex.NexHR.Controllers
         {
             var model = new TeamViewModel
             {
-                CreatedDate = DateTime.Now,
-                CreatedBy = this.CurrentUser.Id,
                 Departments = GetAllDepartment(isActive: true)
             };
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">Team ViewModel.</param>
-        /// <returns>View Create.</returns>
         [HttpPost]
         [Authorize(Roles = "HR")]
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
-            if (ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertNewGroupCriteria
                 {
@@ -85,37 +68,25 @@ namespace Fanex.NexHR.Controllers
                     AssistantLeaderId = model.AssistantLeaderId,
                     CreatedBy = CurrentUser.Id
                 };
-                CommandResult commandResult = _teamService.AddNewTeam(criteria);
+                CommandResult result = commandService.Insert(criteria);
 
-                if (commandResult.Code != 0)
+                if (result.IsSuccessful)
                 {
-                    if (commandResult.Code == 100)
-                    {
-                        ModelState.AddModelError(string.Empty, Resources.Messages.DuplicateTeamCode);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, commandResult.Message);
-                    }
+                    ViewBag.Inserted = true;
                 }
                 else
                 {
-                    ViewBag.Inserted = true;
+                    ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
             else
             {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="id">Team's id.</param>
-        /// <returns>View Edit.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
@@ -124,7 +95,7 @@ namespace Fanex.NexHR.Controllers
                 GroupId = id
             };
 
-            Team team = _teamService.GetById(criteria);
+            Team team = teamService.GetById(criteria);
 
             var model = new TeamViewModel
             {
@@ -143,106 +114,117 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="model">Team ViewModel.</param>
-        /// <returns>View Edit.</returns>
         [HttpPost]
         [Authorize(Roles = "HR")]
         public ActionResult Edit(TeamViewModel model)
         {
-            model.Departments = GetAllDepartment(isActive: true);
-
-            if (ModelState.IsValid)
+            if (model != null)
             {
-                if (string.IsNullOrEmpty(model.AssistantLeader))
+                model.Departments = GetAllDepartment(isActive: true);
+
+                if (ModelState.IsValid)
                 {
-                    model.AssistantLeaderId = null;
+                    var criteria = new UpdateGroupCriteria
+                    {
+                        GroupId = model.Id,
+                        Code = model.TeamCode,
+                        Name = model.TeamName,
+                        DepartmentId = model.DepartmentId,
+                        MailGroup = model.MailGroup,
+                        LeaderId = model.LeaderId,
+                        AssistantLeaderId = string.IsNullOrEmpty(model.AssistantLeader) ? (int?)null : int.Parse(model.AssistantLeader),
+                        ModifiedBy = CurrentUser.Id
+                    };
+                    CommandResult result = commandService.Update(criteria);
+
+                    if (result.IsSuccessful)
+                    {
+                        ViewBag.Updated = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
-
-                var criteria = new UpdateGroupCriteria
+                else
                 {
-                    GroupId = model.Id,
-                    Code = model.TeamCode,
-                    Name = model.TeamName,
-                    DepartmentId = model.DepartmentId,
-                    MailGroup = model.MailGroup,
-                    LeaderId = model.LeaderId,
-                    AssistantLeaderId = model.AssistantLeaderId,
-                    ModifiedBy = this.CurrentUser.Id
-                };
-
-                CommandResult result = _teamService.UpdateTeam(criteria);
-
-                ViewBag.Updated = result.Code == 0;
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                    ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+                }
             }
 
             return View(model);
+        }
+
+        [Authorize(Roles = "HR")]
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            var criteria = new DeleteGroupCriteria
+            {
+                GroupID = id,
+                ModifiedBy = CurrentUser.Id
+            };
+            CommandResult result = commandService.Delete(criteria);
+            return Json(result);
         }
 
         [Authorize(Roles = "HR")]
         public ActionResult TeamSupervisor(int id)
         {
-            var criteria = new GetSupervisorByTeamIdCriteria() { GroupId = id };
-            var model = _teamService.GetSupervisorByTeamId(criteria);
+            var criteria = new GetSupervisorByTeamIdCriteria() 
+            { 
+                GroupId = id 
+            };
+            var model = teamService.GetSupervisorByTeamId(criteria);
             ViewBag.TeamId = id;
 
             return View(model);
         }
 
-        /// <summary>
-        /// Get Supervisors of Team.
-        /// </summary>
-        /// <param name="teamId">Id of team.</param>
-        /// <param name="supervisorRole">Supervisor Role.</param>
-        /// <returns>Action Result.</returns>
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
             var criteria = new GetTeamSupervisorCriteria()
             {
                 GroupId = teamId,
                 Role = supervisorRole
             };
-            var supervisorModel = _teamService.GetTeamSupervisor(criteria);
+            var supervisorModel = teamService.GetTeamSupervisor(criteria);
 
-            if (supervisorRole == (short)RoleSystem.ShiftManager)
+            var model = new SupervisorViewModel
             {
-                var model = new ShiftManagerViewModel
-                {
-                    ShiftManagerList = supervisorModel,
-                    TeamId = teamId,
-                    SupervisorRole = supervisorRole,
-                    ForView = "Team"
-                };
+                SupervisorList = supervisorModel,
+                TeamId = teamId,
+                SupervisorRole = supervisorRole,
+                ForView = "Team"
+            };
 
-                return View("~/Views/Employee/ShiftManager.cshtml", model);
-            }
-            else
-            {
-                var model = new SupervisorViewModel
-                {
-                    SupervisorList = supervisorModel,
-                    TeamId = teamId,
-                    SupervisorRole = supervisorRole,
-                    ForView = "Team"
-                };
-                
-                return View("~/Views/Employee/Supervisor.cshtml", model);
-            }
+            return View("~/Views/Employee/Supervisor.cshtml", model);
         }
 
-        /// <summary>
-        /// Method Insert Or Update Team Supervisor.
-        /// </summary>
-        /// <param name="model">Supervisor ViewModel.</param>
-        /// <returns>Action Result.</returns>
+        public ActionResult ShiftManager(int teamId)
+        {
+            var getAllGroupCriteria = new GetAllGroupCriteria();
+            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            var criteria = new GetTeamSupervisorCriteria()
+            {
+                GroupId = teamId,
+                Role = (short)RoleSystem.ShiftManager
+            };
+            var supervisorModel = teamService.GetTeamSupervisor(criteria);
+
+            var model = new ShiftManagerViewModel
+            {
+                ShiftManagerList = supervisorModel,
+                TeamId = teamId,
+                SupervisorRole = (short)RoleSystem.ShiftManager,
+                ForView = "Team"
+            };
+
+            return View("~/Views/Employee/ShiftManager.cshtml", model);
+        }
+
         [HttpPost]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
@@ -255,19 +237,14 @@ namespace Fanex.NexHR.Controllers
                 EmpIdLeaves = model.RoleLeaves,
                 EmpIdOvertimes = model.RoleOvertimes,
                 GroupId = model.TeamId,
-                ModifiedBy = this.CurrentUser.Id,
+                ModifiedBy = CurrentUser.Id,
                 Role = model.SupervisorRole
             };
-            var result = _teamService.UpdateSupervisor(criteria);
+            CommandResult result = commandService.Update(criteria);
 
-            return Json(new { result = result }, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Insert Or Update Shift Manger.
-        /// </summary>
-        /// <param name="model">Shift Manager ViewModel.</param>
-        /// <returns>Action Result.</returns>
         [HttpPost]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
@@ -275,12 +252,12 @@ namespace Fanex.NexHR.Controllers
             {
                 GroupId = model.TeamId,
                 ShiftArrangers = model.RoleShiftArrange,
-                ModifiedBy = this.CurrentUser.Id
+                ModifiedBy = CurrentUser.Id
             };
 
-            bool inserted = _teamService.InsertTeamShiftManager(criteria);
+            CommandResult result = commandService.Update(criteria);
 
-            return Json(new { result = inserted }, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private IList<Department> GetAllDepartment(bool? isActive)
@@ -289,7 +266,7 @@ namespace Fanex.NexHR.Controllers
             {
                 IsActive = isActive
             };
-            IList<Department> departments = _departmentService.GetDepartment(criteria);
+            IList<Department> departments = departmentService.GetDepartment(criteria);
 
             return departments;
         }

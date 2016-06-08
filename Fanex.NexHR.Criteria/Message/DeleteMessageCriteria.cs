@@ -1,0 +1,22 @@
+﻿namespace Fanex.NexHR.Criteria.Message
+{
+    using System;
+    using Fanex.Data.Repository;
+
+    public class DeleteMessageCriteria : CriteriaBase
+    {
+        public int MessageId { get; set; }
+
+        public int ModifiedBy { get; set; }
+
+        public override string GetSettingKey()
+        {
+            return "Message_Delete";
+        }
+
+        public override bool IsValid()
+        {
+            return MessageId > 0;
+        }
+    }
+}

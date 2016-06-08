@@ -167,7 +167,7 @@
     <Setting Key="EmployeeCalendar_GetChangedShift" SpName="EmployeeCalendar_GetChangedShift" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeGroup_Insert" SpName="Group_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeGroup_Update" SpName="Group_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeGroup_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Group_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetHalfDayOff" SpName="EmployeeCalendar_GetHalfDayOff" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>

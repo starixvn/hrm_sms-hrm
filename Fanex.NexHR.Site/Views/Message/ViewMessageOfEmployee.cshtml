@@ -1,8 +1,6 @@
 ﻿@model Fanex.NexHR.Criteria.Message.GetMessageByEmployeeCriteria
-@using Fanex.NexHR.Resources;
-
 @{
-	ViewBag.Title = @Labels.MyMessage;
+    ViewBag.Title = @Labels.MyMessage;
 }
 @section css{
     @Url.CombresLink("messagecss")
@@ -11,104 +9,115 @@
     @Url.CombresLink("employeemessagejs")
 }
 @section Breadcrumb {
-	<a class="step">@Labels.Personal</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a>
+    <a class="step">@ViewBag.Title</a>
 }
 @{
-	IList<Message> messages = ViewBag.Messages as IList<Message>;
+    IList<Message> messages = ViewBag.Messages as IList<Message>;
 }
 
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
-	<div class="container_24 bunhat" style="width: 878px;">
-		@Html.HiddenFor(model => model.IsDisabled)
-		<div class="grid_3 formrow message-label">
-			@Html.LabelFor(model => model.EffectedDate)
-		</div>
-		<div class="grid_4">
-			@Html.DatePickerFor(model => model.EffectedDate)
-		</div>
-		<div class="grid_2 formrow message-label">
-			<label>@Labels.Status</label>
-		</div>
-		<div class="grid_3">
-			@RazorHelper.MessageStatusDropDownList(controlName: "status")
-		</div>
-		<div class="grid_7">
-			<input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
-		</div>
-	</div>
-	<div class="clear">
-	</div>
-	<table id="messageTable" class="data persist-area" style="width: 900px;">
-		<thead>
-			<tr>
-				<th>#
-				</th>
-				<th>@Labels.Subject
-				</th>
-				<th>@Labels.Category
-				</th>
-				<th>@Labels.FromDate
-				</th>
-				<th>@Labels.ToDate
-				</th>
-				<th>@Labels.IsRead
-				</th>
-				<th>@Labels.Delete
-				</th>
-			</tr>
-		</thead>
-		@if (messages != null && messages.Count > 0)
-		{
-			<tbody>
-				@{int index = 1;}
-				@foreach (Message message in messages)
-				{
-					<tr id="row_@message.MessageId">
-						<td>@(index++)
-						</td>
-						<td class="left">
-							@if (message.IsRead)
-							{
-								<a href="/message/DetailByEmployee/@message.MessageId">
-									<span style="color:rgb(66, 127, 204);">@message.Subject</span>
-								</a>
-							}
-							else
-							{
-								<a href="javascript:;" onclick="detailMessage(@message.MessageId)">
-									@message.Subject
-								</a>
-							}
-						</td>
-						<td>@message.CategoryName
-						</td>
-						<td>@message.FromDate.ToDateMonthYearFormatedDate()
-						</td>
-						<td>@message.ToDate.ToDateMonthYearFormatedDate()
-						</td>
-						<td>
-						@{
-							if (message.IsRead)
-							{
-								<img src="~/Styles/Images/tick-icon.png" title="Read"></img>
-							}
-						}
-						</td>
-						<td class="cmd" title="Delete">
-							<a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
-								<img src="~/Styles/Images/delete-icon.png" alt="Delete" />
-							</a>
-						</td>
-					</tr>
-				}
-			</tbody>
-		}
-  else
-  {
-					@RazorHelper.DisplayNoInformation(7)
-  }
-	</table>
+    <div class="container_24 bunhat" style="width: 878px;">
+        @Html.HiddenFor(model => model.IsDisabled)
+        <div class="grid_3 formrow message-label">
+            @Html.LabelFor(model => model.EffectedDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.EffectedDate)
+        </div>
+        <div class="grid_2 formrow message-label">
+            <label>@Labels.Status</label>
+        </div>
+        <div class="grid_3">
+            @RazorHelper.MessageStatusDropDownList(controlName: "status")
+        </div>
+        <div class="grid_7">
+            <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <table id="messageTable" class="data persist-area" style="width: 900px;">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    @Labels.Subject
+            </th>
+            <th>
+                @Labels.Category
+        </th>
+        <th>
+            @Labels.FromDate
+    </th>
+    <th>
+        @Labels.ToDate
+</th>
+<th>
+    @Labels.IsRead
+</th>
+<th>
+    @Labels.Delete
+</th>
+</tr>
+</thead>
+@if (messages != null && messages.Count > 0)
+{
+    <tbody>
+        @{int index = 1;}
+        @foreach (Message message in messages)
+        {
+            <tr id="row_@message.MessageId">
+                <td>
+                    @(index++)
+            </td>
+            <td class="left">
+                @if (message.IsRead)
+                {
+                    <a href="/message/DetailByEmployee/@message.MessageId">
+                        <span style="color:rgb(66, 127, 204);">@message.Subject</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="detailMessage(@message.MessageId)">
+                        @message.Subject
+                    </a>
+                }
+            </td>
+            <td>
+                @message.CategoryName
+        </td>
+        <td>
+            @message.FromDate.ToDateMonthYearFormatedDate()
+    </td>
+    <td>
+        @message.ToDate.ToDateMonthYearFormatedDate()
+</td>
+<td>
+    @{
+            if (message.IsRead)
+            {
+                <img src="~/Styles/Images/tick-icon.png" title="Read"></img>
+            }
+    }
+</td>
+<td class="cmd" title="Delete">
+    <a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
+        <img src="~/Styles/Images/delete-icon.png" alt="Delete" />
+    </a>
+</td>
+</tr>
+        }
+    </tbody>
+}
+else
+{
+    @RazorHelper.DisplayNoInformation(7)
+}
+</table>
 }

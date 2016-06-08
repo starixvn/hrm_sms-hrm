@@ -13,34 +13,34 @@
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-@if ((bool)ViewBag.Authorize)
+@if (Roles.IsUserInRole("HR"))
 {
     <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("New Extension Number", "AddNewMember")</div>
+        <span class="icon plus"></span>@Html.ActionLink("New Extension Number", "Create")</div>
     <div class="button">@Html.ActionLink("Manage External Group", "ManageExternalGroup")</div>
 }
 <table class="data" id="data">
     <thead>
         <tr>
             <th>
-                No
+                @Labels.No
             </th>
             <th>
-                Full Name
+                @Labels.Nick
             </th>
             <th>
-                Nick Name
+                @Labels.FullName
             </th>
             <th>
                 Extension Number
             </th>
-            @if ((bool)ViewBag.Authorize)
+            @if (Roles.IsUserInRole("HR"))
             {
                 <th>
-                    Edit
+                    @Labels.Edit
                 </th>
                 <th>
-                    Delete
+                    @Labels.Delete
                 </th>
             }
         </tr>
@@ -51,7 +51,7 @@
             int index = 1;
             foreach (ExtensionNumberViewModel item in Model)
             {
-                if (item.ListExt.Count > 0)
+                if (item.Extensions.Count > 0)
                 {
             <tr>
                 <td class="rowdivider highlight left" colspan="19">
@@ -59,9 +59,9 @@
                 </td>
             </tr>
                 }
-                foreach (ExtensionNoModel ext in item.ListExt)
+                foreach (ExtensionNoModel ext in item.Extensions)
                 {
-            <tr id="@ext.EmpExtID">
+            <tr id="@ext.ExtensionNoId">
                 <td>
                     @(index++)
                 </td>
@@ -74,10 +74,10 @@
                 <td style="color: #0789D1;">
                     @ext.ExtensionNo
                 </td>
-                @if ((bool)ViewBag.Authorize)
+                @if (Roles.IsUserInRole("HR"))
                 {
                     <td>
-                        <a href="@Url.Action("Edit", "ExtensionNumber", new { isInternal = ext.IsInternal, empExtID = ext.EmpExtID })">
+                        <a href="@Url.Action("Edit", "ExtensionNo", new { isInternal = ext.IsInternal, ExtensionNoId = ext.ExtensionNoId })">
                             <img src="~/Styles/Images/edit-icon.png" alt="Delete" /></a>
                     </td>
                     <td>

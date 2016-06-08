@@ -1,22 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="BaseController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
+    using Fanex.NexHR.Models;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Fanex.NexHR.Models;
 
-    /// <summary>
-    /// Base Controller.
-    /// </summary>
     [Authorize]
     public class BaseController : Controller
     {
@@ -28,14 +17,10 @@ namespace Fanex.NexHR.Controllers
             }
         }
 
-        /// <summary>
-        /// On Action Executing.
-        /// </summary>
-        /// <param name="filterContext">Filter Context.</param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            ////authorize user login
+
             if (HttpContext.Session["CurrentUser"] == null ||
                     !HttpContext.User.Identity.IsAuthenticated)
             {
@@ -64,10 +49,6 @@ namespace Fanex.NexHR.Controllers
             }
         }
 
-        /// <summary>
-        /// On Authorization.
-        /// </summary>
-        /// <param name="filterContext">Filter Context.</param>
         protected override void OnAuthorization(AuthorizationContext filterContext)
         {
             UserLoginModel currentUser = this.CurrentUser;

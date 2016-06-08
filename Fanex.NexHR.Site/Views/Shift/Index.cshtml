@@ -21,7 +21,7 @@
     <span style="padding-right: 5px;">@Labels.Status</span>
     @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
     <input type="submit" id="submit" value="@Labels.Submit"/>
-    if (Roles.IsUserInRole("HR"))
+    if (Roles.IsUserInRole("SystemAdmin"))
     { 
         <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
     }

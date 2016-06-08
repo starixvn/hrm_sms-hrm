@@ -1,42 +1,21 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="IMessageService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.15">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.ViewModels.Message;
+    using System.Collections.Generic;
 
-    /// <summary>
-    /// The interface of Message service.
-    /// </summary>
     public interface IMessageService
     {
-        IList<MessageViewModel> GetMessageByCreator(GetMessageByCreatorCriteria criteria);
-
-        CommandResult InsertMessageByCreator(InsertMessageCriteria criteria);
-
-        CommandResult UpdateMessageByCreator(UpdateMessageByCreatorCriteria criteria);
+        IList<Message> GetMessageByCreator(GetMessageByCreatorCriteria criteria);
 
         Message GetMessageById(GetMessageByIdCriteria criteria);
 
-        CommandResult DeleteMessageByCreator(DeleteMessageByCreatorCriteria criteria);
-
-        IEnumerable<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria);
-
-        CommandResult DeleteMessageByEmployee(DeleteMessageByEmployeeCriteria criteria);
-
-        CommandResult UpdateReadStatusOfMessage(UpdateReadStatusMessageCriteria criteria);
+        IList<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria);
 
         Message GetDetailMessageByEmployee(GetMessageOfEmployeeByIdCriteria criteria);
 
-        IEnumerable<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria);
+        IList<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria);
+
+        void SendMailToStaff(Message model);
     }
 }

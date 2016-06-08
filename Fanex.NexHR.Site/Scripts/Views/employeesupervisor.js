@@ -237,12 +237,12 @@ $(document).ready(function () {
 					RoleKeepInViews: keepinviews
 				},
 				success: function (data) {
-					if (data) {
-						alert("Success!");
-					}
-					else {
-						alert("An error occurred!");
-					}
+				    if (data.IsSuccessful) {
+				        alert("Success!");
+				    }
+				    else {
+				        alert(data.Message);
+				    }
 				}
 			});
 		}
@@ -261,11 +261,11 @@ $(document).ready(function () {
 					RoleKeepInViews: keepinviews
 				},
 				success: function (data) {
-					if (data) {
+				    if (data.IsSuccessful) {
 						alert("Success!");
 					}
 					else {
-						alert("An error occurred!");
+				        alert(data.Message);
 					}
 				}
 			});

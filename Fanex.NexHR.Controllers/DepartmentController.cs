@@ -1,36 +1,27 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="DepartmentController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.12.22">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Department;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
-    [Authorize]
     public class DepartmentController : BaseController
     {
-        private readonly IDepartmentService _departmentService;
+        private readonly IDepartmentService departmentService;
+        private readonly ICommandService commandService;
 
         public DepartmentController()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public DepartmentController(IDepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService, ICommandService commandService)
         {
-            _departmentService = departmentService ?? new DepartmentService();
+            this.departmentService = departmentService ?? new DepartmentService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         [Authorize(Roles = "SystemAdmin")]
@@ -67,7 +58,7 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create(AddDepartmentViewModel model)
         {
             model.ParentDepartments = GetAllDepartment(isActive: true);
-            if (ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertDepartmentCriteria
                 {
@@ -76,11 +67,11 @@ namespace Fanex.NexHR.Controllers
                     IsActive = model.IsActive,
                     ParentId = model.ParentId,
                     ManagerId = model.ManagerId,
-                    CreatedBy = this.CurrentUser.Id
+                    CreatedBy = CurrentUser.Id
                 };
-                CommandResult result = _departmentService.Add(criteria);
+                CommandResult result = commandService.Insert(criteria);
 
-                if (result.Code == 0)
+                if (result.IsSuccessful)
                 {
                     ViewBag.Inserted = true;
                 }
@@ -88,10 +79,6 @@ namespace Fanex.NexHR.Controllers
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);
@@ -131,13 +118,12 @@ namespace Fanex.NexHR.Controllers
                     IsActive = model.IsActive,
                     ParentId = model.ParentId.HasValue ? model.ParentId.Value : 0,
                     ManagerId = model.ManagerId,
-                    ModifiedBy = this.CurrentUser.Id,
+                    ModifiedBy = CurrentUser.Id,
                 };
 
-                CommandResult result = _departmentService.Edit(criteria);
+                CommandResult result = commandService.Update(criteria);
 
-                ViewBag.Updated = result.Code == 0;
-                if (result.Code == 0)
+                if (result.IsSuccessful)
                 {
                     ViewBag.Updated = true;
                 }
@@ -146,31 +132,21 @@ namespace Fanex.NexHR.Controllers
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
-            }
 
             return View(model);
         }
 
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        public string Delete(int departmentId)
+        public JsonResult Delete(int departmentId)
         {
             var criteria = new DeleteDepartmentCriteria
             {
                 DepartmentId = departmentId,
-                ModifiedBy = this.CurrentUser.Id,
+                ModifiedBy = CurrentUser.Id,
             };
-            CommandResult commandResult = _departmentService.Delete(criteria);
-
-            if (commandResult.Code != 0)
-            {
-                return commandResult.Message;
-            }
-
-            return string.Empty;
+            CommandResult result = commandService.Delete(criteria);
+            return Json(result);
         }
 
         private IList<Department> GetAllDepartment(bool? isActive)
@@ -179,7 +155,7 @@ namespace Fanex.NexHR.Controllers
             {
                 IsActive = isActive
             };
-            IList<Department> departments = _departmentService.GetDepartment(criteria);
+            IList<Department> departments = departmentService.GetDepartment(criteria);
 
             return departments;
         }
@@ -191,7 +167,7 @@ namespace Fanex.NexHR.Controllers
                 DepartmentId = departmentId
             };
 
-            Department department = _departmentService.GetById(criteria);
+            Department department = departmentService.GetById(criteria);
 
             return department;
         }
@@ -203,7 +179,7 @@ namespace Fanex.NexHR.Controllers
                 DepartmentId = departmentId
             };
 
-            IList<Department> departments = _departmentService.GetParentDepartment(criteria);
+            IList<Department> departments = departmentService.GetParentDepartment(criteria);
 
             return departments;
         }

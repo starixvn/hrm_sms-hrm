@@ -1,39 +1,28 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ShiftController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Shifts;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// Shift Controller.
-    /// </summary>
-    [Authorize]
     public class ShiftController : BaseController
     {
-        private readonly IShiftService _shiftService;
+        private readonly IShiftService shiftService;
+        private readonly ICommandService commandService;
 
         public ShiftController()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public ShiftController(IShiftService shiftService = null)
+        public ShiftController(ICommandService commandService, IShiftService shiftService)
         {
-            _shiftService = shiftService ?? new ShiftService();
+            this.commandService = commandService ?? new CommandService();
+            this.shiftService = shiftService ?? new ShiftService();
         }
 
         public ActionResult Index(int? statusId = 1)
@@ -42,7 +31,7 @@ namespace Fanex.NexHR.Controllers
             {
                 StatusId = statusId.Value
             };
-            var shifts = _shiftService.GetAll(statusId.Value);
+            IList<Shift> shifts = shiftService.GetAll(statusId.Value);
             model.Shifts = shifts;
             return View(model);
         }
@@ -55,50 +44,37 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action Create.
-        /// </summary>
-        /// <param name="model">Shift ViewModel.</param>
-        /// <returns>View Add new.</returns>
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         public ActionResult Create(ShiftViewModel model)
         {
-            var result = new CommandResult();
-            if (ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertShiftCriteria() 
                 { 
                     Name = model.Name,
-                    CheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeIn.ToString().PadLeft(2, '0'),
-                    CheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeOut.ToString().PadLeft(2, '0'),
+                    CheckInTime = model.TimeIn,
+                    CheckOutTime = model.TimeOut,
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
-                    CreatedBy = this.CurrentUser.Id,
+                    CreatedBy = CurrentUser.Id,
                     CreatedDate = DateTime.Now
                 };
 
-                result = _shiftService.Insert(criteria);
-
-                if (result.Code != 0)
+                CommandResult result = commandService.Insert(criteria);
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Successed = true;
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
-            }
 
-            ViewBag.Successed = result.Code == 0;
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="shiftId">The Shift Id.</param>
-        /// <returns>View Edit.</returns>
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Edit(int shiftId)
         {
@@ -106,7 +82,7 @@ namespace Fanex.NexHR.Controllers
             {
                 ShiftId = shiftId
             };
-            var shift = _shiftService.GetById(criteria);
+            var shift = shiftService.GetById(criteria);
             var model = new ShiftViewModel 
             {
                 Name = shift.Name,
@@ -125,24 +101,18 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="model">Team ViewModel.</param>
-        /// <returns>View Edit.</returns>
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Edit(ShiftViewModel model)
         {
-            var result = new CommandResult();
-            if (ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
                 var criteria = new UpdateShiftCriteria()
                 {
                     ShiftId = model.ShiftId,
                     Name = model.Name,
-                    CheckInTime = model.HourTimeIn.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeIn.ToString().PadLeft(2, '0'),
-                    CheckOutTime = model.HourTimeOut.ToString().PadLeft(2, '0') + ":" + model.MinuteTimeOut.ToString().PadLeft(2, '0'),
+                    CheckInTime = model.TimeIn,
+                    CheckOutTime = model.TimeOut,
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
                     ModifiedBy = this.CurrentUser.Id,
@@ -150,19 +120,17 @@ namespace Fanex.NexHR.Controllers
                     IsDisabled = model.IsDisabled
                 };
 
-                result = _shiftService.Update(criteria);
-
-                if (result.Code != 0)
+                CommandResult result = commandService.Update(criteria);
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Successed = true;
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
-            }
 
-            ViewBag.Successed = result.Code == 0;
             return View(model);
         }
 
@@ -174,15 +142,10 @@ namespace Fanex.NexHR.Controllers
             {
                 ShiftId = shiftId
             };
-            CommandResult result = _shiftService.Delete(criteria);
-            return result.Code == 0;
+            CommandResult result = commandService.Delete(criteria);
+            return result.IsSuccessful;
         }
 
-        /// <summary>
-        /// Function to get hour of a text.
-        /// </summary>
-        /// <param name="time">The time (HH:mm).</param>
-        /// <returns>Hour of time.</returns>
         private int GetHour(string time)
         {
             var hour = 0;
@@ -198,11 +161,6 @@ namespace Fanex.NexHR.Controllers
             return hour;
         }
 
-        /// <summary>
-        /// Function to get minute of a text.
-        /// </summary>
-        /// <param name="time">The time (HH:mm).</param>
-        /// <returns>Minute of time.</returns>
         private int GetMinute(string time)
         {
             var minute = 0;

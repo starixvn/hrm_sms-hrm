@@ -1,113 +1,124 @@
-﻿@using Fanex.NexHR.ViewModels.Message
-@model Fanex.NexHR.Criteria.Message.GetMessageByCreatorCriteria
-@{
-	ViewBag.Title = @Labels.Message;
-}
-@section css{
-    @Url.CombresLink("messagecss")
-}
-@section js{
-    @Url.CombresLink("messagejs")
-}
-@section Breadcrumb {
-    <a class="step">@Labels.Message</a> <span class="step">@ViewBag.Title</span>
-}
+﻿@using Fanex.NexHR.Criteria.Message
+    @model GetMessageByCreatorCriteria
+    @{
+        ViewBag.Title = @Labels.Message;
+    }
+    @section css{
+        @Url.CombresLink("messagecss")
+    }
+    @section js{
+        @Url.CombresLink("messagejs")
+    }
+    @section Breadcrumb {
+        <a class="step">@Labels.Message</a> <span class="step">@ViewBag.Title</span>
+    }
 
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
+    <h2>@ViewBag.Title</h2>
+    @using (Html.BeginForm())
+    {
+        <div class="container_24 bunhat" style="width: 920px;">
+            @Html.HiddenFor(model => model.IsDisabled)
+            <div class="grid_2 formrow message-label">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.FromDate)
+            </div>
+            <div class="grid_2 formrow message-label">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.ToDate)
+            </div>
+            <div class="grid_2 formrow message-label">
+                <label>@Labels.Status</label>
+            </div>
+            <div class="grid_3">
+                @RazorHelper.MessageStatusDropDownList(controlName: "status")
+            </div>
+            <div class="grid_6">
+                <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
+                @if (Roles.IsUserInRole("HR"))
+                {
+                    <div class="button-icon">
+                        <span class="icon plus"></span>@Html.ActionLink("Create Message", "Create")
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+        <table id="messageTable" class="data persist-area" style="width: 942px;">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        @Labels.Subject
+                </th>
+                <th>
+                    @Labels.Category
+            </th>
+            <th style="width:200px;">
+                @Labels.SendTo
+        </th>
+        <th>
+            @Labels.CreatedDate
+    </th>
+    @if (Roles.IsUserInRole("HR"))
+    {
+        <th>
+            @Labels.Edit
+    </th>
+        <th>
+            @Labels.Delete
+    </th>
+    }
+</tr>
+</thead>
+@if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
 {
-	<div class="container_24 bunhat" style="width: 920px;">
-		@Html.HiddenFor(model => model.IsDisabled)
-		<div class="grid_2 formrow message-label">
-			@Html.LabelFor(model => model.FromDate)
-		</div>
-		<div class="grid_4">
-		    @Html.DatePickerFor(model => model.FromDate)
-		</div>
-		<div class="grid_2 formrow message-label">
-			@Html.LabelFor(model => model.ToDate)
-		</div>
-		<div class="grid_4">
-			@Html.DatePickerFor(model => model.ToDate)
-		</div>
-		<div class="grid_2 formrow message-label">
-			<label>@Labels.Status</label>
-		</div>
-		<div class="grid_3">
-			@RazorHelper.MessageStatusDropDownList(controlName: "status")
-		</div>
-		<div class="grid_6">
-			<input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
-			@if (Roles.IsUserInRole("HR"))
-			{
-				<div class="button-icon">
-					<span class="icon plus"></span>@Html.ActionLink("Create Message", "Create")
-				</div>
-			}
-		</div>
-	</div>
-	<div class="clear">
-	</div>
-	<table id="messageTable" class="data persist-area" style="width: 942px;">
-		<thead>
-			<tr>
-				<th>#
-				</th>
-				<th>@Labels.Subject
-				</th>
-				<th>@Labels.Category
-				</th>
-				<th style="width:200px;">@Labels.SendTo
-				</th>
-				<th>@Labels.CreatedDate
-				</th>
-				@if (Roles.IsUserInRole("HR"))
-	{
-					<th>@Labels.Edit
-					</th>
-					<th>@Labels.Delete
-					</th>
-	}
-			</tr>
-		</thead>
-		@if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
-  {
-			<tbody>
-				@{int index = 1;}
-				@foreach (MessageViewModel message in ViewBag.Messages)
-	{
-					<tr id="row_@message.MessageId">
-						<td>@(index++)
-						</td>
-						<td class="left">
-							<a href="/message/detail/@message.MessageId">@message.Subject</a>
-						</td>
-						<td>@message.CategoryName
-						</td>
-						<td class="send-to">@message.SendTo
-						</td>
-						<td>@message.CreatedDate.ToDateMonthYearFormatedDate()
-						</td>
-						@if (Roles.IsUserInRole("HR"))
-	  { 
-						<td class="cmd" title="Edit">
-							<a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">
-								<img src="~/Styles/Images/edit-icon.png" alt="Edit" />
-							</a>
-						</td>
-						<td class="cmd" title="Delete">
-							<a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
-								<img src="~/Styles/Images/delete-icon.png" alt="Delete" />
-							</a>
-						</td>
-	  }
-					</tr>
-	}
-			</tbody>
-  }
-  else
-  {
-			@RazorHelper.DisplayNoInformation(7)
-  }
-	</table>
+    <tbody>
+        @{int index = 1;}
+        @foreach (Message message in ViewBag.Messages)
+        {
+            <tr id="row_@message.MessageId">
+                <td>
+                    @(index++)
+            </td>
+            <td class="left">
+                <a href="/message/detail/@message.MessageId">@message.Subject</a>
+            </td>
+            <td>
+                @message.CategoryName
+        </td>
+        <td class="send-to">
+            @message.SendToEmail
+                    </td>
+                    <td>
+                        @message.CreatedDate.ToDateMonthYearFormatedDate()
+                </td>
+                @if (Roles.IsUserInRole("HR"))
+                {
+                    <td class="cmd" title="Edit">
+                        <a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">
+                            <img src="~/Styles/Images/edit-icon.png" alt="Edit" />
+                        </a>
+                    </td>
+                    <td class="cmd" title="Delete">
+                        <a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
+                            <img src="~/Styles/Images/delete-icon.png" alt="Delete" />
+                        </a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
 }
+else
+{
+    @RazorHelper.DisplayNoInformation(7)
+}
+</table>
+    }

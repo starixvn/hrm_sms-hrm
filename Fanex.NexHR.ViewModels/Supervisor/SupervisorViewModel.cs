@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="SupervisorViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.10.22">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Supervisor
+﻿namespace Fanex.NexHR.ViewModels.Supervisor
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Supervisor;
 
-    /// <summary>
-    /// Supervisor ViewModel.
-    /// </summary>
     public class SupervisorViewModel
     {
         public int EmployeeId { get; set; }

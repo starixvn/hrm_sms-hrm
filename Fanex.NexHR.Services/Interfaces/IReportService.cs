@@ -48,8 +48,6 @@ namespace Fanex.NexHR.Services.Interfaces
         IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
         IList<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria);
-        
-        CommandResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria);
 
         IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria);
 

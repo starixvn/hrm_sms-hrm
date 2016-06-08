@@ -236,6 +236,17 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "HR")]
+        [HttpPost]
+        public bool DeleteMemo(int id)
+        {
+            var criteria = new DeleteMemoCriteria
+            {
+                Id = id
+            };
+            return _memoService.Delete(criteria);
+        }
+
         public ActionResult Detail(int id)
         {
             var criteria = new GetMemoByIdCriteria

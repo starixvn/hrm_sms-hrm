@@ -1,45 +1,37 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="MessageController.cs" company="Nexcel Solution Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.15">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using System;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// The message controller.
-    /// </summary>
     public class MessageController : BaseController
     {
-        private readonly IMessageService _messageService;
-        private readonly ITeamService _teamService;
-        private readonly IEmployeeService _employeeService;
+        private readonly IMessageService messageService;
+        private readonly ITeamService teamService;
+        private readonly IEmployeeService employeeService;
+        private readonly ICommandService commandService;
 
         public MessageController()
-            : this(null, null, null)
+            : this(null, null, null, null)
         {
         }
 
         public MessageController(
             IMessageService messageService,
             ITeamService teamService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService,
+            ICommandService commandService)
         {
-            _messageService = messageService ?? new MessageService();
-            _teamService = teamService ?? new TeamService();
-            _employeeService = employeeService ?? new EmployeeService();
+            this.messageService = messageService ?? new MessageService();
+            this.teamService = teamService ?? new TeamService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         public ActionResult Index()
@@ -60,17 +52,13 @@ namespace Fanex.NexHR.Controllers
         {
             if (criteria != null)
             {
-                criteria.CreatedBy = this.CurrentUser.Id;
+                criteria.CreatedBy = CurrentUser.Id;
             }
 
-            ViewBag.Messages = _messageService.GetMessageByCreator(criteria);
+            ViewBag.Messages = messageService.GetMessageByCreator(criteria);
             return View(criteria);
         }
 
-        /// <summary>
-        /// Create Message.
-        /// </summary>
-        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
@@ -83,10 +71,10 @@ namespace Fanex.NexHR.Controllers
                 TitleId = null,
                 IsLocalUser = null
             };
-            ViewBag.Employees = _employeeService.GetEmployees(getEmployeeCriteria);
+            ViewBag.Employees = employeeService.GetEmployees(getEmployeeCriteria);
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
 
             return View();
         }
@@ -94,23 +82,30 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [Authorize(Roles = "HR")]
-        public JsonResult Create(InsertMessageCriteria model)
+        public JsonResult Create(Message model)
         {
-            if (model != null)
+            CommandResult result = new CommandResult();
+
+            if (model != null && ModelState.IsValid)
             {
-                model.CreatedBy = this.CurrentUser.Id;
-                model.CreatedDate = DateTime.Now;
+                InsertMessageCriteria criteria = new InsertMessageCriteria(model);
+                criteria.CreatedBy = CurrentUser.Id;
+
+                result = commandService.Insert(criteria);
+                if (model.HasSendEmail && result.IsSuccessful)
+                {
+                    messageService.SendMailToStaff(model);
+                }
+            }
+            else
+            {
+                result.Code = 1;
+                result.Message = Messages.InvalidInputData;
             }
 
-            CommandResult commandResult = _messageService.InsertMessageByCreator(model);
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Edit Message.
-        /// </summary>
-        /// <param name="id">The Message Id.</param>
-        /// <returns>The Action Result.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
@@ -119,7 +114,7 @@ namespace Fanex.NexHR.Controllers
                 MessageId = id
             };
 
-            ViewBag.Message = _messageService.GetMessageById(getMessageByIdCriteria);
+            ViewBag.Message = messageService.GetMessageById(getMessageByIdCriteria);
             var getEmployeeCriteria = new GetAllEmployeeCriteria()
             {
                 Query = null,
@@ -130,10 +125,10 @@ namespace Fanex.NexHR.Controllers
                 IsLocalUser = null
             };
 
-            ViewBag.Employees = _employeeService.GetEmployees(getEmployeeCriteria);
+            ViewBag.Employees = employeeService.GetEmployees(getEmployeeCriteria);
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
 
             return View();
         }
@@ -141,36 +136,42 @@ namespace Fanex.NexHR.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [Authorize(Roles = "HR")]
-        public JsonResult Edit(UpdateMessageByCreatorCriteria model)
+        public JsonResult Edit(Message model)
         {
-            if (model != null)
+            CommandResult result = new CommandResult();
+
+            if (model != null && ModelState.IsValid)
             {
-                model.ModifiedBy = this.CurrentUser.Id;
-                model.ModifiedDate = DateTime.Now;
+                UpdateMessageCriteria criteria = new UpdateMessageCriteria(model);
+                criteria.ModifiedBy = CurrentUser.Id;
+
+                result = commandService.Update(criteria);
+                if (model.HasSendEmail && result.IsSuccessful)
+                {
+                    messageService.SendMailToStaff(model);
+                }
+            }
+            else
+            {
+                result.Code = 1;
+                result.Message = Messages.InvalidInputData;
             }
 
-            CommandResult commandResult = _messageService.UpdateMessageByCreator(model);
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Delete Message.
-        /// </summary>
-        /// <param name="id">The Message Id.</param>
-        /// <returns>The Command Result.</returns>
         [HttpPost]
         [Authorize(Roles = "HR")]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteMessageByCreatorCriteria
+            var criteria = new DeleteMessageCriteria
             {
                 MessageId = id,
-                ModifiedBy = this.CurrentUser.Id,
-                ModifiedDate = DateTime.Now
+                ModifiedBy = CurrentUser.Id,
             };
 
-            CommandResult commandResult = _messageService.DeleteMessageByCreator(criteria);
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Delete(criteria);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewMessageOfEmployee()
@@ -192,7 +193,7 @@ namespace Fanex.NexHR.Controllers
                 criteria.EmployeeId = this.CurrentUser.Id;
             }
 
-            ViewBag.Messages = _messageService.GetMessageByEmployee(criteria);
+            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
             return View(criteria);
         }
 
@@ -202,11 +203,11 @@ namespace Fanex.NexHR.Controllers
             var criteria = new DeleteMessageByEmployeeCriteria
             {
                 MessageId = id,
-                EmployeeId = this.CurrentUser.Id
+                EmployeeId = CurrentUser.Id
             };
 
-            CommandResult commandResult = _messageService.DeleteMessageByEmployee(criteria);
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Delete(criteria);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [Authorize(Roles = "HR")]
@@ -217,7 +218,7 @@ namespace Fanex.NexHR.Controllers
                 MessageId = id
             };
 
-            Message message = _messageService.GetMessageById(getMessageByIdCriteria);
+            Message message = messageService.GetMessageById(getMessageByIdCriteria);
             return View(message);
         }
 
@@ -228,7 +229,7 @@ namespace Fanex.NexHR.Controllers
                 MessageId = id
             };
 
-            Message message = _messageService.GetDetailMessageByEmployee(getMessageByIdCriteria);
+            Message message = messageService.GetDetailMessageByEmployee(getMessageByIdCriteria);
             return View(message);
         }
 
@@ -237,11 +238,11 @@ namespace Fanex.NexHR.Controllers
             var criteria = new UpdateReadStatusMessageCriteria
             {
                 MessageId = id,
-                EmployeeId = this.CurrentUser.Id
+                EmployeeId = CurrentUser.Id
             };
 
-            CommandResult commandResult = _messageService.UpdateReadStatusOfMessage(criteria);
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Update(criteria);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

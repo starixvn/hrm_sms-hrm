@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ExtensionNoModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// Extension Number Model.
-    /// </summary>
     public class ExtensionNoModel
     {
-        public int EmpExtID { get; set; }
+        public int ExtensionNoId { get; set; }
 
         [Required]
         public int TeamId { get; set; }

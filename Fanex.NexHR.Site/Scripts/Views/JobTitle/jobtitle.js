@@ -3,7 +3,6 @@
 /*exported deleteJobTitle, index, editJobTile, canNotUpdate*/
 "use strict";
 
-
 var rowIndex = 1;
 function canNotUpdate(id) {
     $('#txtJobTile_' + id).val($('#spanJobTitle_' + id).text());
@@ -18,10 +17,9 @@ function query() {
     actingButton('#query', true);
 
     $.getJSON(
-        _global.root + 'api/jobtitle/getjobtitle',
+        _global.root + 'jobtitle/getjobtitle',
         { query: value },
         function (data) {
-            //console.log(data);
             if (data.length > 0) {
                 rowIndex = 1;
 
@@ -41,14 +39,14 @@ function query() {
 
 function deleteJobTitle(id) {
     confirm('Are you sure you want to delete?', function () {
-        $.post(_global.root + 'ajax/DeleteJobTitle',
+        $.post(_global.root + 'JobTitle/Delete',
         { id: id },
         function (response) {
-            if (response) {
+            if (response.IsSuccessful) {
                 document.location = '/jobtitle/jobtitlemanagement';
             }
             else {
-                alert(_messages.errorTryAgain);
+                alert(response.Message);
             }
         }).error(function () {
             alert(_messages.errorTryAgain);
@@ -89,28 +87,28 @@ $(function () {
 
                 if (bValid) {
                     if ($("#isUpdate").val() === "1") {
-                        $.post(_global.root + 'ajax/UpdatetJobTitle',
+                        $.post(_global.root + 'JobTitle/Update',
         { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
         function (response) {
-            if (response) {
+            if (response.IsSuccessful) {
                 document.location = '/jobtitle/jobtitlemanagement';
             }
             else {
-                alert(_messages.errorTryAgain);
+                alert(response.Message);
             }
         }).error(function () {
             alert(_messages.errorTryAgain);
         });
                     }
                     else {
-                        $.post(_global.root + 'ajax/InsertJobTitle',
+                        $.post(_global.root + 'JobTitle/Insert',
         { name: $("#name").val(), categoryId: $("#category").val() },
         function (response) {
-            if (response) {
+            if (response.IsSuccessful) {
                 document.location = '/jobtitle/jobtitlemanagement';
             }
             else {
-                alert(_messages.errorTryAgain);
+                alert(response.Message);
             }
         }).error(function () {
             alert(_messages.errorTryAgain);

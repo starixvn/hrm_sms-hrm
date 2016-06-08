@@ -38,7 +38,7 @@
       <siteMapNode title="Attendance report" controller="report" action="attendance" icon="calendar1" />
       <siteMapNode title="Annual leave balance" controller="annualleavebalance" action="index" icon="calendar6"/>
       <siteMapNode title="Unpaid leave" controller="report" action="UnpaidLeaveSummary" icon="calendar7"/>
-      <siteMapNode title="Extension numbers" controller="ExtensionNumber" action="Index" icon="mobile" />
+      <siteMapNode title="Extension numbers" controller="ExtensionNo" action="Index" icon="mobile" />
       <siteMapNode title="Company memo" controller="memo" action="index" icon="memo" />
     </siteMapNode>
     <siteMapNode title="SA space" roles="SystemAdmin">

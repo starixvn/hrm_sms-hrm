@@ -117,19 +117,19 @@ $(document).ready(function () {
 			var approver = $("#lstApprover").text();
 			if (verifier == null || verifier === "") {
 				if (approver == null || approver === "") {
-					confirm("This user don't have any Verifier or Approver! Continue?", function () {
+					confirm("This user does not have any Verifier or Approver! Continue?", function () {
 						$("#formEditUser")[0].submit();
 					});
 				}
 				else {
-					confirm("This user don't have any Verifier! Continue?", function () {
+				    confirm("This user does not have any Verifier! Continue?", function () {
 						$("#formEditUser")[0].submit();
 					});
 				}
 			}
 			else {
 				if (approver == null || approver === "") {
-					confirm("This user don't have any Approver! Continue?", function () {
+				    confirm("This user does not have any Approver! Continue?", function () {
 						$("#formEditUser")[0].submit();
 					});
 				}

@@ -214,18 +214,6 @@ namespace Fanex.NexHR.Services
 
             return supervisors;
         }
-        
-        public CommandResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            var commandResult = new CommandResult();
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
 
         public IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria)
         {

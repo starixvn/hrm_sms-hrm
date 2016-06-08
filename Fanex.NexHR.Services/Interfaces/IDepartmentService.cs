@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IDepartmentService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.12.21">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Department;
@@ -20,11 +11,5 @@ namespace Fanex.NexHR.Services.Interfaces
         IList<Department> GetDepartment(GetDepartmentByParentIdCriteria criteria);
 
         IList<Department> GetParentDepartment(GetParentByDepartmentCriteria criteria);
-
-        CommandResult Add(InsertDepartmentCriteria criteria);
-
-        CommandResult Edit(UpdateDepartmentCriteria criteria);
-
-        CommandResult Delete(DeleteDepartmentCriteria criteria);
     }
 }

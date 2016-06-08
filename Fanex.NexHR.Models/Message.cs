@@ -1,19 +1,8 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Message.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.15">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
+    using Fanex.NexHR.Core.Enums;
     using System;
 
-    /// <summary>
-    /// The message model.
-    /// </summary>
     public class Message
     {
         public int MessageId { get; set; }
@@ -24,20 +13,45 @@ namespace Fanex.NexHR.Models
 
         public int Category { get; set; }
 
-        public string CategoryName { get; set; }
-
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public string SendTo { get; set; }
+        public string SendToEmail { get; set; }
+
+        public bool HasSendEmail { get; set; }
 
         public string EmployeeIds { get; set; }
 
         public string GroupIds { get; set; }
 
         public bool IsRead { get; set; }
+
+        public string CategoryName
+        {
+            get
+            {
+                string category = string.Empty;
+
+                switch (Category)
+                {
+                    case (int)MessageCategory.Notification:
+                        category = MessageCategory.Notification.ToString();
+                        break;
+
+                    case (int)MessageCategory.Warning:
+                        category = MessageCategory.Warning.ToString();
+                        break;
+
+                    case (int)MessageCategory.Violation:
+                        category = MessageCategory.Violation.ToString();
+                        break;
+                }
+
+                return category;
+            }
+        }
     }
 }

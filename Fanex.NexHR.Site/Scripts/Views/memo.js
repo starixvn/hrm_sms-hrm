@@ -27,18 +27,24 @@ function deleteMemoFile(fileName) {
 }
 
 function deleteMemo(id, allFiles, type) {
-
 	confirm('Are you sure you want to delete this memo?', function () {
-		$.post(_global.root + 'ajax/deletememo', { id: id }, function () {
-			$('#row_' + id).remove();
-			autoIndex();
-			if (type === 1) {
-				var attachFiles = allFiles.split(";");
+	    $.post(_global.root + 'Memo/deletememo', { id: id }, function (response) {
+	        if (response.IsSuccessful)
+	        {
+	            $('#row_' + id).remove();
+	            autoIndex();
+	            if (type === 1) {
+	                var attachFiles = allFiles.split(";");
 
-				for (var i = 0; i < attachFiles.length; i++) {
-					deleteMemoFile(attachFiles[i]);
-				}
-			}
+	                for (var i = 0; i < attachFiles.length; i++) {
+	                    deleteMemoFile(attachFiles[i]);
+	                }
+	            }
+	        }
+	        else
+	        {
+	            alert(response.Message);
+	        }
 		});
 
 	});
