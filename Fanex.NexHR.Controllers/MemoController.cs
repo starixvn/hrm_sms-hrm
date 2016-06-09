@@ -1,38 +1,24 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="MemoController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Memo;
+    using System;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// Memo Controller.
-    /// </summary>
-    [Authorize]
-    public class MemoController : Controller
+    public class MemoController : BaseController
     {
-        private readonly IMemoService _memoService;
-        private readonly ILookupDataService _lookupDataService;
+        private readonly IMemoService memoService;
+        private readonly ILookupDataService lookupDataService;
 
         public MemoController(IMemoService memoService = null, ILookupDataService lookupDataService = null)
         {
-            _memoService = memoService ?? new MemoService();
-            _lookupDataService = lookupDataService ?? new LookupDataService();
+            this.memoService = memoService ?? new MemoService();
+            this.lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
         public MemoController()
@@ -40,17 +26,13 @@ namespace Fanex.NexHR.Controllers
         { 
         }
 
-        /// <summary>
-        /// ActionResult Index.
-        /// </summary>
-        /// <returns>View Index.</returns>
         public ActionResult Index()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             MemoViewModel model = new MemoViewModel
             {
                 Content = string.Empty,
@@ -61,11 +43,6 @@ namespace Fanex.NexHR.Controllers
             return Index(model);
         }
 
-        /// <summary>
-        /// Get all memo.
-        /// </summary>
-        /// <param name="model">The Memo model.</param>
-        /// <returns>The view index.</returns>
         [HttpPost]
         public ActionResult Index(MemoViewModel model)
         {
@@ -73,22 +50,17 @@ namespace Fanex.NexHR.Controllers
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetAllMemoCriteria
             {
                 Content = model.Content,
                 Year = model.Year,
                 Category = model.Category
             };
-            ViewBag.EntityList = _memoService.GetAll(criteria);
+            ViewBag.EntityList = memoService.GetAll(criteria);
             return View(model);
         }
 
-        /// <summary>
-        /// Edit memo.
-        /// </summary>
-        /// <param name="id">The memo Id.</param>
-        /// <returns>The Action Result.</returns>
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -96,22 +68,17 @@ namespace Fanex.NexHR.Controllers
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             var criteria = new GetMemoByIdCriteria
             {
                 Id = id
             };
-            var memo = _memoService.GetById(criteria);
+            var memo = memoService.GetById(criteria);
             ViewBag.Updated = false;
 
             return View(memo);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="model">Memo model.</param>
-        /// <returns>View Edit.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
@@ -121,7 +88,7 @@ namespace Fanex.NexHR.Controllers
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1 && string.IsNullOrEmpty(model.AttachFile))
             {
                 return View(model);
@@ -148,7 +115,13 @@ namespace Fanex.NexHR.Controllers
                     Category = model.Category,
                     MemoType = model.MemoType
                 };
-                ViewBag.Updated = _memoService.Update(criteria);
+                CommandResult result = null;
+                result = memoService.Update(criteria);
+                ViewBag.Updated = result.IsSuccessful;
+                if (!result.IsSuccessful)
+                {
+                    ModelState.AddModelError(string.Empty, "Edit memo failed!");
+                }
             }
             else
             {
@@ -158,10 +131,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <returns>View Create.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Create()
         {
@@ -169,7 +138,7 @@ namespace Fanex.NexHR.Controllers
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             ViewBag.Updated = false;
 
             return View(new Memo
@@ -183,11 +152,6 @@ namespace Fanex.NexHR.Controllers
             });
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">Memo model.</param>
-        /// <returns>View Create.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
@@ -197,7 +161,7 @@ namespace Fanex.NexHR.Controllers
             {
                 LookupCode = Constants.MemoCategory
             };
-            ViewBag.MemoCategories = _lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == 1)
             {
                 model.Contents = model.AttachFile;
@@ -219,11 +183,11 @@ namespace Fanex.NexHR.Controllers
                     MemoType = model.MemoType,
                     SendMail = model.SendMail
                 };
-                int memoId = _memoService.Insert(insertMemoCriteria);
+                CommandResult result = memoService.Insert(insertMemoCriteria);
 
-                ViewBag.Updated = memoId != -1 ? true : false;
+                ViewBag.Updated = result.IsSuccessful;
 
-                if (memoId == -1)
+                if (!result.IsSuccessful)
                 {
                     ModelState.AddModelError(string.Empty, "Duplicate memo");
                 }
@@ -238,13 +202,16 @@ namespace Fanex.NexHR.Controllers
 
         [Authorize(Roles = "HR")]
         [HttpPost]
-        public bool DeleteMemo(int id)
+        public JsonResult DeleteMemo(int id)
         {
             var criteria = new DeleteMemoCriteria
             {
                 Id = id
             };
-            return _memoService.Delete(criteria);
+
+            CommandResult result = null;
+            result = memoService.Delete(criteria);
+            return Json(result);
         }
 
         public ActionResult Detail(int id)
@@ -253,7 +220,7 @@ namespace Fanex.NexHR.Controllers
             {
                 Id = id
             };
-            return View(_memoService.GetById(criteria));
+            return View(memoService.GetById(criteria));
         }
     }
 }

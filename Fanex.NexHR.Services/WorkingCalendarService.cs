@@ -1,16 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="WorkingCalendarService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.18">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
@@ -21,53 +10,48 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    /// <summary>
-    /// WorkingCalendar Service.
-    /// </summary>
     public class WorkingCalendarService : BaseService, IWorkingCalendarService
     {
-        private readonly IWorkingCalendarRepository _workingCalendarRepository;
+        private readonly ICommandService commandService;
+        private readonly IWorkingCalendarRepository workingCalendarRepository;
 
-        public WorkingCalendarService()
+        public WorkingCalendarService() : this (null, null)
         {
-            this._workingCalendarRepository = new WorkingCalendarRepository();
+        }
+
+        public WorkingCalendarService(ICommandService commandService, IWorkingCalendarRepository workingCalendarRepository)
+        {
+            this.workingCalendarRepository = workingCalendarRepository ?? new WorkingCalendarRepository();
+            this.commandService = commandService ?? new CommandService();
         }
 
         public WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository)
         {
-            this._workingCalendarRepository = workingCalendarRepository;
+            this.workingCalendarRepository = workingCalendarRepository;
         }
 
-        /// <summary>
-        /// Function to get WorkingCalendars By Date Range, groups and employee.
-        /// </summary>
-        /// <param name="criteria">GetWorkingCalendarByDateRange Criteria.</param>
-        /// <returns>List WorkingCalendarModel.</returns>
         public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingCalendarModel> calendars = null;
             if (criteria.IsValid())
             {
-                calendars = this._workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
+                calendars = this.workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
             }
 
             return calendars;
         }
 
-        /// <summary>
-        /// Function to get WorkingCalendars By Date Range, groups and employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List WorkingCalendarModel.</returns>
         public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingCalendarModel> workingCalendarModels = null;
             if (criteria.IsValid())
             {
-                workingCalendarModels = _workingCalendarRepository.GetWorkingCalendarsForShiftArrange(criteria);
+                workingCalendarModels = workingCalendarRepository.GetWorkingCalendarsForShiftArrange(criteria);
             }
 
             return workingCalendarModels;
@@ -79,17 +63,12 @@ namespace Fanex.NexHR.Services
             CommandResult result = null;
             if (criteria.IsValid())
             {
-                result = Repository.Insert(criteria);
+                result = commandService.Insert(criteria);
             }
             
             return result;
         }
 
-        /// <summary>
-        /// Get Shift Statistic.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Shift Statistic Models.</returns>
         public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -108,7 +87,7 @@ namespace Fanex.NexHR.Services
             IList<EmployeeShiftModel> employeeShifts = null;
             if (criteria.IsValid())
             {
-                employeeShifts = _workingCalendarRepository.GetEmployeeShift(criteria);
+                employeeShifts = workingCalendarRepository.GetEmployeeShift(criteria);
             }
 
             return employeeShifts;
@@ -120,7 +99,7 @@ namespace Fanex.NexHR.Services
             IList<WorkingScheduleViewModel> workingSchedule = null;
             if (criteria.IsValid())
             {
-                workingSchedule = this._workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
+                workingSchedule = this.workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
             }
 
             return workingSchedule;
@@ -132,7 +111,7 @@ namespace Fanex.NexHR.Services
             IList<WorkingCalendarsViewModel> workingCalendarList = null;
             if (criteria.IsValid())
             {
-                workingCalendarList = this._workingCalendarRepository.GetWorkingCalendars(criteria);
+                workingCalendarList = this.workingCalendarRepository.GetWorkingCalendars(criteria);
             }
 
             return workingCalendarList;
