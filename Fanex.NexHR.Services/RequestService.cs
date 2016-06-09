@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
@@ -64,15 +55,15 @@ namespace Fanex.NexHR.Services
 
         #endregion constant
 
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IEmailService _emailService;
-        private readonly IRequestRepository _requestRepository;
+        private readonly IEmployeeRepository employeeRepository;
+        private readonly IEmailService emailService;
+        private readonly IRequestRepository requestRepository;
 
         public RequestService()
         {
-            this._employeeRepository = new EmployeeRepository();
-            this._requestRepository = new RequestRepository();
-            this._emailService = new EmailService();
+            this.employeeRepository = new EmployeeRepository();
+            this.requestRepository = new RequestRepository();
+            this.emailService = new EmailService();
         }
 
         public RequestService(
@@ -80,16 +71,16 @@ namespace Fanex.NexHR.Services
             IEmailService emailService,
             IRequestRepository requestRepository)
         {
-            this._employeeRepository = employeeRepository;
-            this._emailService = emailService;
-            this._requestRepository = requestRepository;
+            this.employeeRepository = employeeRepository;
+            this.emailService = emailService;
+            this.requestRepository = requestRepository;
         }
 
         public IEmployeeRepository EmployeeRepository
         {
             get
             {
-                return this._employeeRepository;
+                return this.employeeRepository;
             }
         }
 
@@ -97,7 +88,7 @@ namespace Fanex.NexHR.Services
         {
             get
             {
-                return this._emailService;
+                return this.emailService;
             }
         }
 
@@ -105,7 +96,7 @@ namespace Fanex.NexHR.Services
         {
             get
             {
-                return this._requestRepository;
+                return this.requestRepository;
             }
         }
 
@@ -240,7 +231,7 @@ namespace Fanex.NexHR.Services
                         RequestId = criteria.RequestId
                     };
 
-                    RequestEntity request = _requestRepository.GetRequestById(getRequestByIdCriteria);
+                    RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
                     var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
 
                     var sendMailTask = new Task(()
@@ -509,8 +500,8 @@ namespace Fanex.NexHR.Services
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
             var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { Empid = processBy };
-            var employee = this._employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var processUser = this._employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
+            var employee = this.employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var processUser = this.employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
             command = this.GetPassiveNameOfCommand(command);
 
@@ -667,7 +658,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -688,7 +679,7 @@ namespace Fanex.NexHR.Services
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -714,7 +705,7 @@ namespace Fanex.NexHR.Services
                 request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -741,7 +732,7 @@ namespace Fanex.NexHR.Services
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -766,7 +757,7 @@ namespace Fanex.NexHR.Services
                 request.FromShift.Name,
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -1023,7 +1014,7 @@ namespace Fanex.NexHR.Services
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1054,7 +1045,7 @@ namespace Fanex.NexHR.Services
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1085,7 +1076,7 @@ namespace Fanex.NexHR.Services
                 forDate,
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,
@@ -1119,7 +1110,7 @@ namespace Fanex.NexHR.Services
                 request.LeaveType.Name,
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 sendCc,
@@ -1156,7 +1147,7 @@ namespace Fanex.NexHR.Services
                 shift != null ? shift.Name : string.Empty,
                 request.Remark);
 
-            this._emailService.SendEmail(
+            this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,

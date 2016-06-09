@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="HolidayController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -15,17 +6,13 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Holiday Controller.
-    /// </summary>
-    [Authorize]
     public class HolidayController : BaseController
     {
-        private readonly IHolidayService _holidayService;
+        private readonly IHolidayService holidayService;
 
-        public HolidayController(IHolidayService holidayService = null)
+        public HolidayController(IHolidayService holidayService)
         {
-            _holidayService = holidayService ?? new HolidayService();
+            this.holidayService = holidayService ?? new HolidayService();
         }
 
         public HolidayController()
@@ -35,20 +22,20 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult Index()
         {
-            return View(_holidayService.GetByYear(DateTime.Now.Year));
+            return View(holidayService.GetByYear(DateTime.Now.Year));
         }
 
         [HttpGet]
         public ActionResult Index(int? year)
         {
             ViewBag.year = year ?? DateTime.Now.Year;
-            return View(_holidayService.GetByYear(ViewBag.year));
+            return View(holidayService.GetByYear(ViewBag.year));
         }
 
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
-            return View(_holidayService.GetById(id));
+            return View(holidayService.GetById(id));
         }
 
         /// <summary>
@@ -64,7 +51,7 @@ namespace Fanex.NexHR.Controllers
             {
                 model.ModifiedDate = DateTime.Now;
                 model.ModifiedBy = this.CurrentUser.Id;
-                ViewBag.Updated = _holidayService.Update(model);
+                ViewBag.Updated = holidayService.Update(model);
             }
             else
             {
@@ -100,7 +87,7 @@ namespace Fanex.NexHR.Controllers
             {
                 model.ModifiedDate = DateTime.Now;
                 model.ModifiedBy = this.CurrentUser.Id;
-                var id = _holidayService.Insert(model);
+                var id = holidayService.Insert(model);
                 if (id == -1)
                 {
                     ViewBag.Updated = false;

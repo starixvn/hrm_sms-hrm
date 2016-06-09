@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="HolidayRepository.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -17,16 +8,8 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    /// <summary>
-    /// Holiday Repository.
-    /// </summary>
     public class HolidayRepository : IHolidayRepository
     {
-        /// <summary>
-        /// Method insert Holiday.
-        /// </summary>
-        /// <param name="model">Holiday model.</param>
-        /// <returns>Inserted holiday's id.</returns>
         public int Insert(Holiday model)
         {
             using (var db = new ObjectDb("Holiday_Insert"))
@@ -51,12 +34,7 @@ namespace Fanex.NexHR.Repositories
                 return db.ExecuteNonQuery() != 0;
             }
         }
-
-        /// <summary>
-        /// Method update Holiday.
-        /// </summary>
-        /// <param name="model">Holiday model.</param>
-        /// <returns>Id of updated holiday.</returns>
+        
         public bool Update(Holiday model)
         {
             using (ObjectDb db = new ObjectDb("Holiday_Update"))

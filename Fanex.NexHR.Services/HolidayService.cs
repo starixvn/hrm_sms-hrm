@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="HolidayService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
@@ -15,16 +6,13 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Holiday Service.
-    /// </summary>
-    public class HolidayService : IHolidayService
+    public class HolidayService : BaseService, IHolidayService
     {
-        private readonly IHolidayRepository _holidayRepository;
+        private readonly IHolidayRepository holidayRepository;
 
         public HolidayService(IHolidayRepository holidayRepository = null)
         {
-            this._holidayRepository = holidayRepository ?? new HolidayRepository();
+            this.holidayRepository = holidayRepository ?? new HolidayRepository();
         }
 
         public int Insert(Holiday holiday)
@@ -32,7 +20,7 @@ namespace Fanex.NexHR.Services
             int result = 0;
             if (holiday != null)
             {
-                result = this._holidayRepository.Insert(holiday);
+                result = this.holidayRepository.Insert(holiday);
             }
 
             return result;
@@ -43,7 +31,7 @@ namespace Fanex.NexHR.Services
             bool result = false;
             if (holidayId > 0)
             {
-                result = this._holidayRepository.Delete(holidayId, modifiedBy);
+                result = this.holidayRepository.Delete(holidayId, modifiedBy);
             }
 
             return result;
@@ -54,7 +42,7 @@ namespace Fanex.NexHR.Services
             bool result = false;
             if (holiday != null)
             {
-                result = this._holidayRepository.Update(holiday);
+                result = this.holidayRepository.Update(holiday);
             }
 
             return result;
@@ -62,14 +50,14 @@ namespace Fanex.NexHR.Services
 
         public IList<Holiday> GetByYear(int year)
         {
-            return this._holidayRepository.GetByYear(year);
+            return this.holidayRepository.GetByYear(year);
         }
 
         public Holiday GetById(int holidayId)
         {
             if (holidayId > 0)
             {
-                return this._holidayRepository.GetById(holidayId);
+                return this.holidayRepository.GetById(holidayId);
             }
 
             return new Holiday();

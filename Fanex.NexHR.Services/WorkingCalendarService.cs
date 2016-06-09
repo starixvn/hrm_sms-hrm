@@ -18,7 +18,7 @@
         private readonly ICommandService commandService;
         private readonly IWorkingCalendarRepository workingCalendarRepository;
 
-        public WorkingCalendarService() : this (null, null)
+        public WorkingCalendarService() : this(null, null)
         {
         }
 
