@@ -251,7 +251,7 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.KeepInView,
                 IsQueryByCreatedDate = false,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                RequestViewType = RequestViewType.CompanySpace,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = null
             };

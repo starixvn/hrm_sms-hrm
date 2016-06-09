@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections;
@@ -28,7 +19,6 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
 
-    [Authorize]
     public class RequestController : BaseController
     {
         #region protected services
@@ -246,7 +236,7 @@ namespace Fanex.NexHR.Controllers.Request
         }
 
         [HttpPost]
-        public bool DeleteWorkingTimeRequest(int id)
+        public JsonResult Delete(int id)
         {
             var criteria = new DeleteRequestCriteria()
             {
@@ -254,7 +244,7 @@ namespace Fanex.NexHR.Controllers.Request
             };
 
             CommandResult result = _requestService.Delete(criteria);
-            return result.Code == 0;
+            return Json(result);
         }
 
         public JsonResult GetEmployeesByActingUser(int role, string query)
@@ -298,6 +288,19 @@ namespace Fanex.NexHR.Controllers.Request
             IList<SupervisorNameModel> supervisors = _employeeService.GetSupervisorByRequestType(criteria);
 
             return supervisors;
+        }
+
+        [NonAction]
+        public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, byte requestType)
+        {
+            var criteria = new GetVerifierAndApproverCriteria
+            {
+                EmpId = employeeId,
+                RequestType = requestType
+            };
+            VerifierAndApproverForRequest supervisor = _requestService.GetVerifierAndApprover(criteria);
+
+            return supervisor;
         }
 
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
@@ -448,7 +451,7 @@ namespace Fanex.NexHR.Controllers.Request
                 Status = GetStatus(request.StatusId),
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
-                Role = CheckRoleAccordingToRequestType(request.ViewType),
+                RequestViewType = request.ViewType,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };

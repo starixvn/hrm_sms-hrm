@@ -1,18 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestRepository.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.9.9">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -21,6 +8,10 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     public class RequestRepository : IRequestRepository
     {
@@ -103,6 +94,22 @@ namespace Fanex.NexHR.Repositories
             }
 
             return numberDay;
+        }
+
+        public VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria)
+        {
+            VerifierAndApproverForRequest supervisor = null;
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    supervisor = new VerifierAndApproverForRequest();
+                    supervisor.Verifiers = multi.Read<SupervisorNameModel>().ToList();
+                    supervisor.Approvers = multi.Read<SupervisorNameModel>().ToList();
+                }
+            }
+
+            return supervisor;
         }
 
         private IList<RequestEntity> FillData(IDataReader reader)

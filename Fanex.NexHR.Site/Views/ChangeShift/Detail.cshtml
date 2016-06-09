@@ -37,8 +37,7 @@
             <div class="input">
                 @Html.DatePickerFor(model => model.FromDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
-             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
         <div class="formrow">
@@ -48,8 +47,7 @@
             <div class="input">
                 @Html.DatePickerFor(model => model.ToDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
-             unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
          <div class="formrow">
@@ -97,7 +95,7 @@
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.RequestId)
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
-                @Html.Hidden("IsView", (bool)ViewBag.IsView)
+                @Html.Hidden("IsView", true)
             </div>
             <div class="input">
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>

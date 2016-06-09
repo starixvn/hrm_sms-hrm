@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -15,10 +11,44 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
-    public class ChangeShiftController : RequestController
+    public class ChangeShiftController : BaseController
     {
+        private readonly IChangeShiftRequestService changeShiftRequestService;
+        private readonly IRequestService requestService;
+        private readonly ICommandService commandService;
+        private readonly IShiftService shiftService;
+        private readonly IEmployeeService employeeService;
+        private readonly IWorkingCalendarService workingCalendarService;
+
+        public ChangeShiftController()
+            : this(null, null, null, null, null, null)
+        {
+        }
+
+        public ChangeShiftController(
+            IChangeShiftRequestService changeShiftRequestService, 
+            IRequestService requestService, 
+            ICommandService commandService,
+            IEmployeeService employeeService,
+            IShiftService shiftService,
+            IWorkingCalendarService workingCalendarService)
+        {
+            this.changeShiftRequestService = changeShiftRequestService ?? new ChangeShiftRequestService();
+            this.requestService = requestService ?? new RequestService();
+            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.shiftService = shiftService ?? new ShiftService();
+            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+        }
+
         [HttpGet]
         public ActionResult EmployeeView()
         {
@@ -36,12 +66,12 @@
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.ChangeShift,
                 IsQueryByCreatedDate = false,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                RequestViewType = RequestViewType.CompanySpace,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
 
             return View(entityList);
         }
@@ -49,32 +79,30 @@
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
-            IEnumerable<DateTime> listUnavailDates = GetUnavailableDate(this.CurrentUser.Id);
-            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(this.CurrentUser.Id, currentDate, currentDate);
-            var model = new ChangeShiftViewModel
-            {
-                Employee = this.CurrentUser.NickName,
-                EmployeeId = this.CurrentUser.Id,
-                FromDate = currentDate,
-                ToDate = currentDate,
-                ShiftDetails = shiftDetails
-            };
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
+            
             var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
             {
-                EmployeeId = this.CurrentUser.Id,
+                EmployeeId = CurrentUser.Id,
                 RequestType = (int)RequestType.ChangeShift,
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
-            GetVerifierApproverList(this.CurrentUser.Id, model);
-            var shifts = ShiftService.GetAll(isShowOff: true);
-            ViewBag.Shift = shifts;
-            ViewBag.TotalRequest = numberRequests;
-            ViewBag.UnavailDates = listUnavailDates;
+            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(CurrentUser.Id, currentDate, currentDate);
 
+            var model = new ChangeShiftViewModel
+            {
+                Employee = CurrentUser.NickName,
+                EmployeeId = CurrentUser.Id,
+                FromDate = currentDate,
+                ToDate = currentDate,
+                ShiftDetails = shiftDetails,
+                TotalRequestInMonth = requestService.GetNumberRequestInMonth(requestInMonthCriteria),
+                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+            };
+
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
         }
 
@@ -83,60 +111,52 @@
         {
             var criteria = JsonConverter.FromJson<InsertChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.CreatedBy = this.CurrentUser.Id;
-            criteria.CreatedDate = DateTime.Now;
+            criteria.CreatedBy = CurrentUser.Id;
 
-            CommandResult result = ChangeShiftRequestService.Insert(criteria);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Insert(criteria);
+            if (result.IsSuccessful)
+            {
+                changeShiftRequestService.SendMailForInsertSuccessfully(criteria);
+            }
+
+            return Json(result);
         }
 
         public ActionResult Update(int id)
         {
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            ViewBag.UnavailDates = listUnavailDates;
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = RequestService.GetRequestById(getRequestByIdcriteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
+            RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
-
-            var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+            else
             {
-                RequestId = id
-            };
-            var changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-            var model = new ChangeShiftViewModel();
-            if (request != null && changeShiftDetail != null)
-            {
-                model = new ChangeShiftViewModel
+                var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+                {
+                    RequestId = id
+                };
+                var changeShiftDetail = changeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+                var model = new ChangeShiftViewModel
                 {
                     RequestId = request.Id,
-                    Employee = this.CurrentUser.NickName,
-                    EmployeeId = this.CurrentUser.Id,
+                    Employee = CurrentUser.NickName,
+                    EmployeeId = CurrentUser.Id,
                     FromDate = request.FromDate.Date,
                     ToDate = request.ToDate.Date,
                     VerifierId = request.VerifiedBy.Id,
                     ApproverId = request.ApprovedBy.Id,
                     Remark = request.Remark,
-                    ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail)
+                    ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
+                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
                 };
-            }
 
-            GetVerifierApproverList(this.CurrentUser.Id, model);
-            var shifts = ShiftService.GetAll(isShowOff: true);
-            ViewBag.Shift = shifts;
-            ViewBag.IsView = false;
-            return View(model);
+                ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+                return View(model);
+            }
         }
 
         [HttpPost]
@@ -144,30 +164,36 @@
         {
             var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.ModifiedBy = this.CurrentUser.Id;
-            criteria.ModifiedDate = DateTime.Now;
+            criteria.ModifiedBy = CurrentUser.Id;
 
-            var result = ChangeShiftRequestService.Update(criteria);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Update(criteria);
+            if (result.IsSuccessful)
+            {
+                changeShiftRequestService.SendMailForUpdateSuccessfully(criteria);
+            }
+
+            return Json(result);
         }
 
         public ActionResult Detail(int id)
         {
+            var model = new ChangeShiftViewModel();
+
             var getRequestByIdcriteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = RequestService.GetRequestById(getRequestByIdcriteria);
+            RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
             var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
             {
                 RequestId = id
             };
-            IList<ChangeShiftDetailModel> changeShiftDetail = ChangeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var model = new ChangeShiftViewModel();
+            IList<ChangeShiftDetailModel> changeShiftDetail = changeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+            
             if (request != null && changeShiftDetail != null)
             {
+                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
+                Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
                 model = new ChangeShiftViewModel
                 {
                     Employee = employee.NickName,
@@ -178,22 +204,20 @@
                     ApproverId = request.ApprovedBy.Id,
                     Remark = request.Remark,
                     ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
-                    Status = request.Status
+                    Status = request.Status,
+                    VerifierAndApprover = GetVerifierApprover(employee.Id, request)
                 };
             }
 
-            GetVerifierApproverList(employee.Id, model, request);
-            var shifts = ShiftService.GetAll(isShowOff: true);
-            ViewBag.Shift = shifts;
-            ViewBag.IsView = true;
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
         }
 
         public ActionResult ChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
         {
-            var model = GetChangeShiftDetail(employeeId, fromDate, toDate);
-            var shifts = ShiftService.GetAll(isShowOff: true);
-            ViewBag.Shift = shifts;
+            IList<ChangeShiftDetailViewModel> model = GetChangeShiftDetail(employeeId, fromDate, toDate);
+            IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
+            ViewBag.Shifts = shifts;
             return PartialView("ChangeShiftDetail", model);
         }
 
@@ -207,7 +231,7 @@
                 GroupIds = string.Empty,
                 EmpId = employeeId
             };
-            IList<WorkingCalendarModel> calendars = WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
+            IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
             foreach (WorkingCalendarModel item in calendars)
             {
                 var shiftDetail = new ChangeShiftDetailViewModel
@@ -242,13 +266,18 @@
             return schedule;
         }
 
-        private void GetVerifierApproverList(int id, ChangeShiftViewModel viewModel, RequestEntity request = null)
+        private VerifierAndApproverForRequest GetVerifierApprover(int id, RequestEntity request = null)
         {
-            var verifiers = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.ChangeShift);
-            var approvers = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.ChangeShift);
+            var criteria = new GetVerifierAndApproverCriteria
+            {
+                EmpId = id,
+                RequestType = (byte)RequestType.ChangeShift
+            };
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
+
             if (request != null)
             {
-                if (request.VerifiedBy != null)
+                if (request.VerifiedBy != null && !supervisor.Verifiers.Where(t => t.OwnerId == request.VerifiedBy.Id).Any())
                 {
                     var verifier = new SupervisorNameModel()
                     {
@@ -256,14 +285,10 @@
                         NickName = request.VerifiedBy.NickName,
                         FullName = request.VerifiedBy.FullName
                     };
-
-                    if (!verifiers.Where(t => t.OwnerId == verifier.OwnerId).Any())
-                    {
-                        verifiers.Add(verifier);
-                    }
+                    supervisor.Verifiers.Add(verifier);
                 }
 
-                if (request.ApprovedBy != null)
+                if (request.ApprovedBy != null && !supervisor.Approvers.Where(t => t.OwnerId == request.ApprovedBy.Id).Any())
                 {
                     var approver = new SupervisorNameModel()
                     {
@@ -271,43 +296,29 @@
                         NickName = request.ApprovedBy.NickName,
                         FullName = request.ApprovedBy.FullName
                     };
-
-                    if (!approvers.Where(t => t.OwnerId == approver.OwnerId).Any())
-                    {
-                        approvers.Add(approver);
-                    }
+                    supervisor.Approvers.Add(approver);
                 }
             }
 
-            viewModel.Verifier = verifiers.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            viewModel.Approver = approvers.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-        }
-
-        private IEnumerable<DateTime> GetUnavailableDate(int id)
-        {
-            var previousMonth = DateTime.Now.AddMonths(-1).Date;
-            var nextMonth = DateTime.Now.AddMonths(1).Date;
-            var unvailableFromDate = new DateTime(previousMonth.Year, previousMonth.Month, 1);
-            var unavailableToDate = new DateTime(nextMonth.Year, nextMonth.Month, DateTime.DaysInMonth(nextMonth.Year, nextMonth.Month));
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = id,
-                FromDate = unvailableFromDate,
-                ToDate = unavailableToDate
-            };
-            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            return listUnavailDates;
+            return supervisor;
         }
 
         private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
         {
-            return model.Select(item => new ChangeShiftDetailViewModel()
+            IList<ChangeShiftDetailViewModel> changeShiftDetails = null;
+            if (model != null)
             {
-                OnDate = item.OnDate,
-                ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
-                FromShiftId = item.FromShiftId,
-                ToShiftId = item.ToShiftId, Remark = item.Remark
-            }).ToList();
+                changeShiftDetails = model.Select(item => new ChangeShiftDetailViewModel()
+                {
+                    OnDate = item.OnDate,
+                    ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
+                    FromShiftId = item.FromShiftId,
+                    ToShiftId = item.ToShiftId,
+                    Remark = item.Remark
+                }).ToList();
+            }
+
+            return changeShiftDetails ?? new List<ChangeShiftDetailViewModel>();
         }
     }
 }

@@ -9,10 +9,10 @@
 
 namespace Fanex.NexHR.Repositories.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
+    using System.Collections.Generic;
 
     public interface IRequestRepository
     {
@@ -25,5 +25,7 @@ namespace Fanex.NexHR.Repositories.Interfaces
         RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
+
+        VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria);
     }
 }

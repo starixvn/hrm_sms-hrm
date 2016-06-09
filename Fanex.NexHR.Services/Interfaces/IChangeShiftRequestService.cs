@@ -1,27 +1,17 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IChangeShiftRequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2013.11.14">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using System.Collections.Generic;
 
     public interface IChangeShiftRequestService
     {
-        CommandResult Insert(InsertChangeShiftRequestCriteria criteria);
-
-        CommandResult Update(UpdateChangeShiftRequestCriteria criteria);
-
         IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
 
         IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
+
+        void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria);
+
+        void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria);
     }
 }

@@ -153,7 +153,7 @@
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.Leave,
                 IsQueryByCreatedDate = false,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                RequestViewType = RequestViewType.CompanySpace,
                 IsLocal = null
             };
 

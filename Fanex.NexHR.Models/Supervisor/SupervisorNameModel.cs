@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="SupervisorNameModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Supervisor
+﻿namespace Fanex.NexHR.Models.Supervisor
 {
-    /// <summary>
-    /// Supervisor Name Model.
-    /// </summary>
     public class SupervisorNameModel
     {
         public int OwnerId { get; set; }
@@ -25,5 +13,13 @@ namespace Fanex.NexHR.Models.Supervisor
         public string MailGroup { get; set; }
 
         public int ActionType { get; set; }
+
+        public string DisplayName
+        {
+            get
+            {
+                return NickName + " (" + FullName + ")";
+            }
+        }
     }
 }

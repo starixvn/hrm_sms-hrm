@@ -21,11 +21,11 @@
         <div class="validation-summary-errors" id="errors-model-state">
         </div>
 
-        if (ViewBag.TotalRequest >= 1)
+        if (Model.TotalRequestInMonth >= 1)
         {
         <div class="ui-state-error ui-corner-all model-state">
             <p>
-                <a href="@Url.Action("EmployeeView")">You've already requested for Change shift <b>@ViewBag.TotalRequest</b>
+                <a href="@Url.Action("EmployeeView")">You've already requested for Change shift <b>@Model.TotalRequestInMonth</b>
                     times since @DateTime.Now.ToString("MMM yyyy")</a>
             </p>
         </div>
@@ -66,16 +66,16 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Verifier)*
+                @Html.LabelFor(model => model.VerifierAndApprover.Verifiers)*
             </div>
             <div class="input">
-                @if (Model.Verifier.Count() > 1)
+                @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, "--Select a Verifier--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), "--Select a Verifier--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
 
                 @Html.ValidationMessageFor(model => model.VerifierId)
@@ -87,13 +87,13 @@
                 @Html.LabelFor(model => model.Approver)*
             </div>
             <div class="input">
-                @if (Model.Approver.Count() > 1)
+                @if (Model.VerifierAndApprover.Approvers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, "--Select an Approver--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), "--Select an Approver--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
                 @Html.ValidationMessageFor(model => model.ApproverId)
             </div>
@@ -117,7 +117,7 @@
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
             </div>
             <div class="input">
-                <input type="button" name="submit" value="@Fanex.NexHR.Resources.Labels.Request" class="button-primary button"/>
+                <input type="button" name="submit" value="@Labels.Request" class="button-primary button"/>
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

@@ -1,20 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.31">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request
+﻿namespace Fanex.NexHR.Criteria.Request
 {
-    using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Enums;
+    using System;
 
-    /// <summary>
-    /// GetRequest Criteria.
-    /// </summary>
     public class GetRequestCriteria : CriteriaBase
     {
         public int? SupervisorId { get; set; }
@@ -29,7 +18,29 @@ namespace Fanex.NexHR.Criteria.Request
 
         public string Status { get; set; }
 
-        public string Role { get; set; }
+        public string Role
+        {
+            get
+            {
+                string role;
+                switch (RequestViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                        role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
+                        break;
+
+                    case RequestViewType.HRSpace:
+                        role = ((int)RoleSystem.HR).ToString();
+                        break;
+
+                    default:
+                        role = ((int)RoleSystem.Member).ToString();
+                        break;
+                }
+
+                return role;
+            }
+        }
 
         public bool? IsLocal { get; set; }
 
@@ -37,6 +48,9 @@ namespace Fanex.NexHR.Criteria.Request
 
         [SpParam(Ignored = true)]
         public bool IsQueryByCreatedDate { get; set; }
+
+        [SpParam(Ignored = true)]
+        public RequestViewType RequestViewType { get; set; }
 
         public override string GetSettingKey()
         {

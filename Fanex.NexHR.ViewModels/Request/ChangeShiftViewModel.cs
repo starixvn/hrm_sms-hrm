@@ -1,23 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ChangeShiftViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
+    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models.Request;
 
-    /// <summary>
-    /// ChangeShift ViewModel.
-    /// </summary>
     public class ChangeShiftViewModel
     {
         public long RequestId { get; set; }
@@ -54,5 +42,9 @@ namespace Fanex.NexHR.ViewModels.Request
         public int RequestType { get; set; }
 
         public RequestStatus Status { get; set; }
+
+        public decimal TotalRequestInMonth { get; set; }
+
+        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
     }
 }

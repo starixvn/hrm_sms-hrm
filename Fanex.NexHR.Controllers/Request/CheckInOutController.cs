@@ -1,18 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="CheckInOutController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Apply StyleCop</change>
-// </history>
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -23,11 +10,12 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// CheckInOut Controller.
-    /// </summary>
-    [Authorize]
     public class CheckInOutController : RequestController
     {
         [HttpGet]
@@ -36,11 +24,6 @@ namespace Fanex.NexHR.Controllers.Request
             return EmployeeView(DateTime.Now.Year);
         }
 
-        /// <summary>
-        /// Get check in/out request of a specific employee in a year.
-        /// </summary>
-        /// <param name="year">Current Year.</param>
-        /// <returns>View Employee.</returns>
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
@@ -52,7 +35,7 @@ namespace Fanex.NexHR.Controllers.Request
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.CheckInOut,
                 IsQueryByCreatedDate = false,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                RequestViewType = RequestViewType.CompanySpace,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = null
             };
@@ -61,14 +44,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(entityList);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="suggestedDate">The suggested date.</param>
-        /// <param name="isMissingCheckIn">The is missing check in.</param>
-        /// <returns>
-        /// View Create.
-        /// </returns>
         public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
         {
             var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
@@ -117,11 +92,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(viewModel);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">CheckInOutRequest ViewModel.</param>
-        /// <returns>View Create.</returns>
         [HttpPost]
         public ActionResult Create(CheckInOutRequestViewModel model)
         {
@@ -160,11 +130,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Update.
-        /// </summary>
-        /// <param name="id">WorkingTimeRequest id.</param>
-        /// <returns>View Update.</returns>
         public ActionResult Update(int id)
         {
             var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
@@ -213,11 +178,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(viewModel);
         }
 
-        /// <summary>
-        /// Updates the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <returns>Return to view.</returns>
         [HttpPost]
         public ActionResult Update(CheckInOutRequestViewModel model)
         {
@@ -255,11 +215,6 @@ namespace Fanex.NexHR.Controllers.Request
             return View(model);
         }
 
-        /// <summary>
-        /// Gets the verifier approver list.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="viewModel">The view model.</param>
         private void GetVerifierApproverList(int id, CheckInOutRequestViewModel viewModel)
         {
             var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.CheckIn);
@@ -268,11 +223,6 @@ namespace Fanex.NexHR.Controllers.Request
             viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
         }
 
-        /// <summary>
-        /// Checks the shift from to format.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="shift">The shift.</param>
         private void CheckShiftFromToFormat(CheckInOutRequestViewModel viewModel, Shift shift)
         {
             var checkContainColon = shift.BeginCheckInTime.Contains(":");
@@ -289,10 +239,6 @@ namespace Fanex.NexHR.Controllers.Request
             }
         }
 
-        /// <summary>
-        /// Check request is come from TopManager.
-        /// </summary>
-        /// <param name="model">CheckInOutRequest ViewModel.</param>
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };

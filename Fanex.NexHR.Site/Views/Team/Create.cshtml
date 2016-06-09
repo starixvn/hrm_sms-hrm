@@ -80,8 +80,6 @@
         <div class="input">
             @Html.TextBox("AssistantLeader", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
 
-            @*@Html.ValidationMessage("AssistantLeader")*@
-
             @Html.HiddenFor(model => model.AssistantLeader)
             @Html.HiddenFor(model => model.AssistantLeaderId)
         </div>

@@ -105,8 +105,10 @@
     <Compile Include="Report\GetTotalWorkingHourDailyCriteria.cs" />
     <Compile Include="Request\ApproveRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftDetailToIgnoreByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\ChangeShiftCommand.cs" />
     <Compile Include="Request\GetCheckInOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
+    <Compile Include="Request\GetVerifierAndApproverCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />

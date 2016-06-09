@@ -78,9 +78,15 @@ var LeaveRequestView = (function ($) {
         },
         cancelRequest: function (id) {
             confirm('Are you sure you want to cancel this request?', function () {
-                $.post(_global.root + 'request/deleteworkingtimerequest' + "/" + id, function () {
-                    $('#row' + id).remove();
-                    autoIndex();
+                $.post(_global.root + 'request/delete' + "/" + id, function () {
+                    if (response.IsSuccessful) {
+                        $('#row' + id).remove();
+                        autoIndex();
+                    }
+                    else {
+                        alert(response.Message);
+                        return;
+                    }
                 });
             });
         },

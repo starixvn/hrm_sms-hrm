@@ -39,7 +39,10 @@
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Index(DepartmentViewModel model)
         {
-            model.Departments = GetAllDepartment(model.IsActive);
+            if (model != null)
+            {
+                model.Departments = GetAllDepartment(model.IsActive);
+            }
 
             return View(model);
         }
@@ -57,27 +60,31 @@
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Create(AddDepartmentViewModel model)
         {
-            model.ParentDepartments = GetAllDepartment(isActive: true);
-            if (model != null && ModelState.IsValid)
+            if (model != null)
             {
-                var criteria = new InsertDepartmentCriteria
-                {
-                    Code = model.Code,
-                    Name = model.Name,
-                    IsActive = model.IsActive,
-                    ParentId = model.ParentId,
-                    ManagerId = model.ManagerId,
-                    CreatedBy = CurrentUser.Id
-                };
-                CommandResult result = commandService.Insert(criteria);
+                model.ParentDepartments = GetAllDepartment(isActive: true);
 
-                if (result.IsSuccessful)
+                if (ModelState.IsValid)
                 {
-                    ViewBag.Inserted = true;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new InsertDepartmentCriteria
+                    {
+                        Code = model.Code,
+                        Name = model.Name,
+                        IsActive = model.IsActive,
+                        ParentId = model.ParentId,
+                        ManagerId = model.ManagerId,
+                        CreatedBy = CurrentUser.Id
+                    };
+                    CommandResult result = commandService.Insert(criteria);
+
+                    if (result.IsSuccessful)
+                    {
+                        ViewBag.Inserted = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
 
@@ -107,29 +114,32 @@
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Edit(EditDepartmentViewModel model)
         {
-            model.ParentDepartments = GetParentDepartment(model.DeprtamentId);
-            if (ModelState.IsValid)
+            if (model != null)
             {
-                var criteria = new UpdateDepartmentCriteria
+                model.ParentDepartments = GetParentDepartment(model.DeprtamentId);
+                if (ModelState.IsValid)
                 {
-                    DepartmentId = model.DeprtamentId,
-                    Code = model.Code,
-                    Name = model.Name,
-                    IsActive = model.IsActive,
-                    ParentId = model.ParentId.HasValue ? model.ParentId.Value : 0,
-                    ManagerId = model.ManagerId,
-                    ModifiedBy = CurrentUser.Id,
-                };
+                    var criteria = new UpdateDepartmentCriteria
+                    {
+                        DepartmentId = model.DeprtamentId,
+                        Code = model.Code,
+                        Name = model.Name,
+                        IsActive = model.IsActive,
+                        ParentId = model.ParentId.HasValue ? model.ParentId.Value : 0,
+                        ManagerId = model.ManagerId,
+                        ModifiedBy = CurrentUser.Id,
+                    };
 
-                CommandResult result = commandService.Update(criteria);
+                    CommandResult result = commandService.Update(criteria);
 
-                if (result.IsSuccessful)
-                {
-                    ViewBag.Updated = true;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    if (result.IsSuccessful)
+                    {
+                        ViewBag.Updated = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
 

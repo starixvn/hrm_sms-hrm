@@ -347,7 +347,6 @@ namespace Fanex.NexHR.Controllers
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.PersonalSpace),
                 SupervisorId = CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
@@ -373,7 +372,7 @@ namespace Fanex.NexHR.Controllers
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.HRSpace),
+                RequestViewType = RequestViewType.HRSpace,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
@@ -396,7 +395,7 @@ namespace Fanex.NexHR.Controllers
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                Role = CheckRoleAccordingToRequestType(RequestViewType.CompanySpace),
+                RequestViewType = RequestViewType.CompanySpace,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };

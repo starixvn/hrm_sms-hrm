@@ -1,13 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -21,6 +13,14 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Web;
 
     public class RequestService : BaseService, IRequestService
     {
@@ -422,6 +422,39 @@
             }
 
             return leaveDetails;
+        }
+
+        public string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
+        {
+            string role;
+            switch (requestViewType)
+            {
+                case RequestViewType.PersonalSpace:
+                    role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
+                    break;
+
+                case RequestViewType.HRSpace:
+                    role = ((int)RoleSystem.HR).ToString();
+                    break;
+
+                default:
+                    role = ((int)RoleSystem.Member).ToString();
+                    break;
+            }
+
+            return role;
+        }
+
+        public VerifierAndApproverForRequest GetVerifierAndApprover(GetVerifierAndApproverCriteria criteria)
+        {
+            VerifierAndApproverForRequest supervisor = new VerifierAndApproverForRequest();
+
+            if (criteria != null && criteria.IsValid())
+            {
+                supervisor = RequestRepository.GetVerifierAndApprover(criteria);
+            }
+
+            return supervisor;
         }
 
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
