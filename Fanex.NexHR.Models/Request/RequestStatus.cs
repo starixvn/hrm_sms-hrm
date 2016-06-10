@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestStatus.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Request
+﻿namespace Fanex.NexHR.Models.Request
 {
     using Fanex.NexHR.Core.Enums;
     using Resources;
 
-    /// <summary>
-    /// Request Status.
-    /// </summary>
     public class RequestStatus : EntityBase<byte>
     {
         public new string Name

@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertLateInEarlyOutRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
+﻿namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
 {
     using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
 
-    /// <summary>
-    /// InsertLateInEarlyOutRequest Criteria.
-    /// </summary>
     public class InsertLateInEarlyOutRequestCriteria : CriteriaBase
     {
         [Output]
@@ -32,8 +20,6 @@ namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
         public int LateInMins { get; set; }
 
         public int EarlyOutMins { get; set; }
-
-        public DateTime CreatedDate { get; set; }
 
         public int CreatedBy { get; set; }
 

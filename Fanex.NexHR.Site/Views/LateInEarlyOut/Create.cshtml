@@ -22,26 +22,28 @@
 
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Messages.RequestCreated</div>
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
+            <div class="success">@Messages.RequestCreated</div>
+            <input type="hidden" id="successed" value="true" />
+            <input type="hidden" id="year" value="@ViewBag.Year" />
         }
-        
+
         <div id="model-state-error" class="ui-state-error ui-corner-all">
             @Labels.CannotCreateRequest
         </div>
 
-        if (ViewBag.TotalRequest >= 1)
+        if (Model.TotalRequestInMonth >= 1)
         {
 
-        <div class="ui-state-error ui-corner-all">
-            <p>
-                <a href="@Url.Action("EmployeeView")">You've already requested for Late in/early out
-                    @ViewBag.TotalRequest times since @DateTime.Now.ToString("MMM yyyy")</a>
-            </p>
-        </div>
+            <div class="ui-state-error ui-corner-all">
+                <p>
+                    <a href="@Url.Action("EmployeeView")">
+                        You've already requested for Late in/early out
+                        @Model.TotalRequestInMonth times since @DateTime.Now.ToString("MMM yyyy")
+                    </a>
+                </p>
+            </div>
         }
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.RequestType)
@@ -52,7 +54,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)*
@@ -61,7 +63,7 @@
                 @Html.EditorFor(model => model.Employee)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Date)
@@ -70,13 +72,13 @@
                 @Html.DatePickerFor(model => model.Date,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(4).AddDays(-1),
-                unavailDates: (IEnumerable<DateTime>)ViewBag.UnavailDates)
+                unavailDates: Model.UnavailDates)
                 <span id="lateIn"> ※ Actual Late In: <span id="lateInHours">N/A</span></span>
                 <span id="earlyOut"> ※ Actual Early Out: <span id="earlyOutHours">N/A</span></span>
             </div>
-            
+
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Minute)
@@ -85,39 +87,39 @@
                 @Html.TextBoxFor(model => model.Minute)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Verifier)*
+                @Html.LabelFor(model => model.VerifierId)*
             </div>
             <div class="input">
-                @if (Model.Verifier.Count() > 1)
+                @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, "--Select a Verifier--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), "--Select a Verifier--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Approver)*
+                @Html.LabelFor(model => model.ApproverId)*
             </div>
             <div class="input">
-                @if (Model.Approver.Count() > 1)
+                @if (Model.VerifierAndApprover.Approvers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, "--Select an Approver--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), "--Select an Approver--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Remark)
@@ -128,7 +130,7 @@
             <div class="clear">
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.HiddenFor(model => model.Employee)
@@ -136,9 +138,9 @@
                 @Html.Hidden("RequestType", (int)RequestType.LateIn)
             </div>
             <div class="input">
-                <input type="submit" value="@Labels.Request"/>
-				<a href="javascript:;"
-                    class="button" id="backPrevious">@Labels.Back</a>
+                <input type="submit" value="@Labels.Request" />
+                <a href="javascript:;"
+                   class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     }

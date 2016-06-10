@@ -97,7 +97,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
                 model.TotalRequestInMonth = GetTotalRequestInMonth();
 
                 if (ModelState.IsValid)

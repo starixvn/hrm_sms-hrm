@@ -1,22 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="LateInEarlyOutRequestViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
+    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    /// <summary>
-    /// LateInEarlyOutRequest ViewModel.
-    /// </summary>
     public class LateInEarlyOutRequestViewModel
     {
         public long RequestId { get; set; }
@@ -46,15 +35,17 @@ namespace Fanex.NexHR.ViewModels.Request
         public short RequestType { get; set; }
 
         [Display(Name = "Verified by")]
-        public List<SelectListItem> Verifier { get; set; }
-
-        [Display(Name = "Approved by")]
-        public List<SelectListItem> Approver { get; set; }
-
         [Required(ErrorMessage = "The Verifier field is required.")]
         public int? VerifierId { get; set; }
 
+        [Display(Name = "Approved by")]
         [Required(ErrorMessage = "The Approver field is required.")]
         public int? ApproverId { get; set; }
+
+        public decimal TotalRequestInMonth { get; set; }
+
+        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
+
+        public IList<DateTime> UnavailDates { get; set; }
     }
 }

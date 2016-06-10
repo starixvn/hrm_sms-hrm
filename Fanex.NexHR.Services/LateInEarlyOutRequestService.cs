@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
@@ -18,7 +17,7 @@
     {
         private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
 
-        private readonly ILateInEarlyOutRequestRepository _lateInEarlyOutRequestRepository;
+        private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
 
         public LateInEarlyOutRequestService()
             : this(null)
@@ -27,87 +26,42 @@
 
         public LateInEarlyOutRequestService(ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository)
         {
-            _lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository ?? new LateInEarlyOutRequestRepository();
-        }
-
-        public CommandResult Insert(InsertLateInEarlyOutRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Insert(criteria, hasGetOutputParams: true);
-                if (result != null && result.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForInsertLateInEarlyOutSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Messages.InvalidInputData
-                };
-            }
-
-            return result;
-        }
-
-        public CommandResult Update(UpdateLateInEarlyOutRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-                if (result != null && result.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForUpdateLateInEarlyOutSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Messages.InvalidInputData
-                };
-            }
-
-            return result;
+            this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository ?? new LateInEarlyOutRequestRepository();
         }
 
         public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            EmployeeLateInEarlyOutModel lateInEarlyOut = null;
-            if (criteria.IsValid())
-            {
-                lateInEarlyOut = GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
-            }
-
+            EmployeeLateInEarlyOutModel lateInEarlyOut = GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
             return lateInEarlyOut;
         }
 
         public RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             RequestEntity request = null;
 
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                request = _lateInEarlyOutRequestRepository.GetLateInEarlyOutRequestToIgnoreById(criteria);
+                request = lateInEarlyOutRequestRepository.GetLateInEarlyOutRequestToIgnoreById(criteria);
             }
 
             return request;
         }
 
-        private void SendMailForInsertLateInEarlyOutSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
+        {
+            var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
+            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
+        }
+
+        public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria)
+        {
+            var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
+            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
+        }
+
+        private void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -115,7 +69,7 @@
             {
                 Empid = criteria.EmpId
             };
-            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
                 + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
 
@@ -129,7 +83,7 @@
                 criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
                 criteria.Remark);
 
-            this.EmailService.SendEmail(
+            EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -137,7 +91,7 @@
                 email.Body);
         }
 
-        private void SendMailForUpdateLateInEarlyOutSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
+        private void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
@@ -145,7 +99,7 @@
             {
                 Empid = criteria.EmpId
             };
-            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedLateInEarlyOutEmailSubject + " " + employee.NickName
                 + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
 
@@ -159,7 +113,7 @@
                 criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
                 criteria.Remark);
 
-            this.EmailService.SendEmail(
+            EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,

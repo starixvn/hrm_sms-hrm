@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateLateInEarlyOutRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
+﻿namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// UpdateLateInEarlyOutRequest Criteria.
-    /// </summary>
     public class UpdateLateInEarlyOutRequestCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
@@ -30,8 +18,6 @@ namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
         public int LateInMins { get; set; }
 
         public int EarlyOutMins { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
 
