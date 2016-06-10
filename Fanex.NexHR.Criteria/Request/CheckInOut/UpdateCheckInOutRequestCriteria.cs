@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateCheckInOutRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.1">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.CheckInOut
+﻿namespace Fanex.NexHR.Criteria.Request.CheckInOut
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// UpdateCheckInOutRequest Criteria.
-    /// </summary>
     public class UpdateCheckInOutRequestCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
@@ -32,8 +20,6 @@ namespace Fanex.NexHR.Criteria.Request.CheckInOut
         public int? VerifierId { get; set; }
 
         public int? ApproverId { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
 

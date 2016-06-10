@@ -32,14 +32,14 @@
         public void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            var taskSendMail = new Task(() => this.SendMailForInsertSuccessfully(criteria, templateEmailPath));
+            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
             taskSendMail.Start();
         }
 
         public void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            var taskSendMail = new Task(() => this.SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
             taskSendMail.Start();
         }
 

@@ -24,9 +24,9 @@
 
         if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
-        <div class="success">@Fanex.NexHR.Resources.Messages.RequestUpdated</div> 
+        <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
+        <input type="hidden" id="year" value="@Model.ForDate.Year" />
         }
         <div id="model-state-error" class="ui-state-error ui-corner-all">
             @Labels.CannotCreateRequest
@@ -34,7 +34,7 @@
     
         <div class="formrow">
             <div class="label">
-                @Fanex.NexHR.Resources.Labels.RequestCode
+                @Html.LabelFor(model => model.RefNO, Labels.RequestCode)
             </div>
             <div class="input">
                 @Html.TextBoxFor(model => model.RefNO)
@@ -63,7 +63,7 @@
         
         <div class="formrow">
             <div class="label">
-                Attendant date
+                @Html.LabelFor(model => model.AttendantDate, "Attendant date")
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
@@ -72,7 +72,7 @@
 
         <div class="formrow">
             <div class="label">
-                @Fanex.NexHR.Resources.Labels.RequestTime
+                @Labels.RequestTime
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
@@ -93,19 +93,19 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Verifier)*
+                @Html.LabelFor(model => model.VerifierAndApprover.Verifiers)*
             </div>
             <div class="input">
-                @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+                @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
             </div>
         </div>
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Approver)*
+                @Html.LabelFor(model => model.VerifierAndApprover.Approvers)*
             </div>
             <div class="input">
-                @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+                @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
             </div>
         </div>
         <div class="formrow">

@@ -30,13 +30,9 @@
         public IList<ChangeShiftDetailViewModel> ShiftDetails { get; set; }
 
         [Display(Name = "Verified by")]
-        public List<SelectListItem> Verifier { get; set; }
-
-        [Display(Name = "Approved by")]
-        public List<SelectListItem> Approver { get; set; }
-
         public int? VerifierId { get; set; }
 
+        [Display(Name = "Approved by")]
         public int? ApproverId { get; set; }
 
         public int RequestType { get; set; }

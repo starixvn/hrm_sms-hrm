@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertCheckInOutRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.1">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.CheckInOut
+﻿namespace Fanex.NexHR.Criteria.Request.CheckInOut
 {
     using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
 
-    /// <summary>
-    /// InsertCheckInOutRequest Criteria.
-    /// </summary>
     public class InsertCheckInOutRequestCriteria : CriteriaBase
     {
         [Output]
@@ -30,8 +18,6 @@ namespace Fanex.NexHR.Criteria.Request.CheckInOut
         public DateTime OnDate { get; set; }
 
         public DateTime CheckTime { get; set; }
-
-        public DateTime CreatedDate { get; set; }
 
         public int CreatedBy { get; set; }
 

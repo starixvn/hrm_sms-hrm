@@ -1,19 +1,19 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
-    using Fanex.NexHR.Repositories.Implement;
+    using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class DisciplineService : BaseService, IDisciplineService
     {
-        private readonly IDisciplineRepository _disciplineRepository;
+        private readonly IDisciplineRepository disciplineRepository;
 
         public DisciplineService()
             : this(null)
@@ -22,7 +22,7 @@
 
         public DisciplineService(IDisciplineRepository disciplineRepository)
         {
-            _disciplineRepository = disciplineRepository ?? new DisciplineRepository();
+            this.disciplineRepository = disciplineRepository ?? new DisciplineRepository();
         }
 
         public IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria)
@@ -31,7 +31,7 @@
 
             if (criteria != null && criteria.IsValid())
             {
-                disciplines = _disciplineRepository.GetDisciplineSummary(criteria);
+                disciplines = disciplineRepository.GetDisciplineSummary(criteria);
                 disciplines = disciplines.OrderByDescending(x => x.Permission).ToList();
             }
 
@@ -44,7 +44,7 @@
 
             if (criteria != null && criteria.IsValid())
             {
-                disciplines = _disciplineRepository.GetDisciplineDetail(criteria);
+                disciplines = disciplineRepository.GetDisciplineDetail(criteria);
             }
 
             return disciplines;
@@ -52,86 +52,26 @@
 
         public IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
         {
-            IList<Employee> employees = new List<Employee>();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                employees = GetData<Employee>(criteria).ToList();
-            }
-
+            IList<Employee> employees = GetData<Employee>(criteria).ToList();
             return employees;
         }
 
         public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)
         {
-            IList<OtherDisciplineModel> otherDisciplines = new List<OtherDisciplineModel>();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                otherDisciplines = GetData<OtherDisciplineModel>(criteria).ToList();
-            }
-
+            IList<OtherDisciplineModel> otherDisciplines = GetData<OtherDisciplineModel>(criteria).ToList();
             return otherDisciplines;
         }
 
         public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)
         {
-            IList<DisciplineTypeModel> disciplineTypes = new List<DisciplineTypeModel>();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                disciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
-            }
-
+            IList<DisciplineTypeModel> disciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
             return disciplineTypes;
         }
 
         public IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria)
         {
-            IList<DisciplineTypeModel> otherDisciplineTypes = new List<DisciplineTypeModel>();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                otherDisciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
-            }
-
+            IList<DisciplineTypeModel> otherDisciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
             return otherDisciplineTypes;
-        }
-
-        public CommandResult InsertOtherDiscipline(InsertOtherDisciplineCriteria criteria)
-        {
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                commandResult = Repository.Insert(criteria);
-            }
-
-            return commandResult;
-        }
-
-        public CommandResult DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
-        {
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                commandResult = Repository.Delete(criteria);
-            }
-
-            return commandResult;
-        }
-
-        public CommandResult UpdateIgnoredDiscipline(UpdateIgnoredDisciplineCriteria criteria)
-        {
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
         }
 
         public void ExportDisciplineSummaryReport(

@@ -14,23 +14,25 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Discipline;
 
-    [Authorize]
     public class DisciplineController : BaseController
     {
-        private readonly ITeamService _teamService;
-        private readonly IDisciplineService _disciplineService;
+        private readonly ITeamService teamService;
+        private readonly IDisciplineService disciplineService;
+        private readonly ICommandService commandService;
 
         public DisciplineController()
-            : this(null, null)
+            : this(null, null, null)
         {
         }
 
         public DisciplineController(
             ITeamService teamService,
-            IDisciplineService disciplineService)
+            IDisciplineService disciplineService,
+            ICommandService commandService)
         {
-            _teamService = teamService ?? new TeamService();
-            _disciplineService = disciplineService ?? new DisciplineService();
+            this.teamService = teamService ?? new TeamService();
+            this.disciplineService = disciplineService ?? new DisciplineService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         public ActionResult DisciplineSummary(DisciplineSummaryViewModel model)
@@ -71,7 +73,7 @@
                 ApproverId = CurrentUser.Id
             };
 
-            IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
+            IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
             return PartialView("_ListDisciplineSummary", disciplines);
         }
@@ -118,7 +120,7 @@
                 ApproverId = CurrentUser.Id
             };
 
-            IList<DisciplineDetailModel> disciplines = _disciplineService.GetDisciplineDetail(criteria);
+            IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
 
             return PartialView("_ListDisciplineDetail", disciplines);
         }
@@ -132,7 +134,7 @@
                 ToDate = toDate
             };
 
-            IList<OtherDisciplineModel> otherDisciplines = _disciplineService.GetOtherDiscipline(criteria);
+            IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
@@ -140,7 +142,7 @@
         public ActionResult PartialAddOtherDiscipline(string employee, int? employeeId = null)
         {
             var criteria = new GetOtherDisciplineTypeCriteria();
-            IList<DisciplineTypeModel> otherDisciplineTypes = _disciplineService.GetOtherDisciplineType(criteria);
+            IList<DisciplineTypeModel> otherDisciplineTypes = disciplineService.GetOtherDisciplineType(criteria);
 
             var model = new AddOtherDisciplineViewModel
             {
@@ -166,7 +168,7 @@
                 CreatedBy = CurrentUser.Id
             };
 
-            CommandResult commandResult = _disciplineService.InsertOtherDiscipline(criteria);
+            CommandResult commandResult = commandService.Insert(criteria);
 
             return Json(commandResult);
         }
@@ -178,7 +180,7 @@
             if (criteria != null)
             {
                 criteria.ModifiedBy = CurrentUser.Id;
-                CommandResult commandResult = _disciplineService.DeleteOtherDiscipline(criteria);
+                CommandResult commandResult = commandService.Delete(criteria);
 
                 if (commandResult.Code > 0)
                 {
@@ -202,7 +204,7 @@
                 RoleId = roleId
             };
 
-            CommandResult commandResult = _disciplineService.UpdateIgnoredDiscipline(criteria);
+            CommandResult commandResult = commandService.Update(criteria);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
@@ -215,21 +217,21 @@
                 Query = keyword
             };
 
-            IList<Employee> employees = _disciplineService.GetMemberToAddOtherDiscipline(criteria);
+            IList<Employee> employees = disciplineService.GetMemberToAddOtherDiscipline(criteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
         private IList<Team> GetAllTeam()
         {
-            IList<Team> teamList = _teamService.GetAll(new GetAllGroupCriteria());
+            IList<Team> teamList = teamService.GetAll(new GetAllGroupCriteria());
 
             return teamList;
         }
 
         private IList<DisciplineTypeModel> GetDisciplineType()
         {
-            IList<DisciplineTypeModel> disciplineTypes = _disciplineService.GetDisciplineType(new GetDisciplineTypeCriteria());
+            IList<DisciplineTypeModel> disciplineTypes = disciplineService.GetDisciplineType(new GetDisciplineTypeCriteria());
 
             return disciplineTypes;
         }

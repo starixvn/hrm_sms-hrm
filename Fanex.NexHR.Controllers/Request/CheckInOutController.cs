@@ -2,22 +2,47 @@
 {
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
 
-    public class CheckInOutController : RequestController
+    public class CheckInOutController : BaseController
     {
+        private readonly ICheckInOutRequestService checkInOutRequestService;
+        private readonly IRequestService requestService;
+        private readonly ICommandService commandService;
+        private readonly IShiftService shiftService;
+        private readonly IEmployeeService employeeService;
+
+        public CheckInOutController()
+            : this(null, null, null, null, null)
+        {
+        }
+
+        public CheckInOutController(
+            ICheckInOutRequestService checkInOutRequestService, 
+            IRequestService requestService, 
+            ICommandService commandService,
+            IEmployeeService employeeService,
+            IShiftService shiftService)
+        {
+            this.checkInOutRequestService = checkInOutRequestService ?? new CheckInOutRequestService();
+            this.requestService = requestService ?? new RequestService();
+            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.shiftService = shiftService ?? new ShiftService();
+        }
+
         [HttpGet]
         public ActionResult EmployeeView()
         {
@@ -40,90 +65,68 @@
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
             return View(entityList);
         }
 
         public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
         {
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var listUnavailDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
             var viewModel = new CheckInOutRequestViewModel
             {
-                Employee = this.CurrentUser.NickName,
-                EmployeeId = this.CurrentUser.Id,
+                Employee = CurrentUser.NickName,
+                EmployeeId = CurrentUser.Id,
                 ForDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 RequestType = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
+                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
+                TotalRequestInMonth = GetTotalRequestInMonth()
             };
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
-            {
-                EmployeeId = this.CurrentUser.Id,
-                Date = DateTime.Now
-            };
-            var shift = ShiftService.GetByDate(getShiftByDateCriteria);
-            if (shift != null)
-            {
-                CheckShiftFromToFormat(viewModel, shift);
-            }
 
+            Shift shift = GetShiftByDate(DateTime.Now);
+            CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = (shift == null) ? string.Empty : shift.Name;
-            var currentDate = DateTime.Now.Date;
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
-            {
-                EmployeeId = this.CurrentUser.Id,
-                RequestType = (int)RequestType.CheckIn,
-                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
-                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
-            };
-            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
-            ViewBag.Shifts = ShiftService.GetAll();
-            ViewBag.UnavailDates = listUnavailDates;
-            ViewBag.TotalRequest = numberRequests;
 
-            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
             return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult Create(CheckInOutRequestViewModel model)
         {
-            CheckIsTopManager(model);
-            GetVerifierApproverList(model.EmployeeId, model);
-            ViewBag.Shifts = ShiftService.GetAll();
-            ViewBag.Year = model.ForDate.Year;
-
-            var criteria = new InsertCheckInOutRequestCriteria()
+            if (model != null)
             {
-                EmpId = model.EmployeeId,
-                OnDate = model.AttendantDate,
-                CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                RequestType = model.RequestType,
-                RefNo = model.RefNO,
-                Remark = model.Remark,
-                CreatedBy = this.CurrentUser.Id,
-                CreatedDate = DateTime.Now,
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                Shift = model.Shift
-            };
+                CheckIsTopManager(model);
+                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+                model.TotalRequestInMonth = GetTotalRequestInMonth();
 
-            var result = new CommandResult();
-            if (ModelState.IsValid)
-            {
-                result = CheckInOutRequestService.Insert(criteria);
-                ViewBag.Requested = result.Code == 0;
-
-                if (result.Code != 0)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new InsertCheckInOutRequestCriteria()
+                    {
+                        EmpId = model.EmployeeId,
+                        OnDate = model.AttendantDate,
+                        CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                        RequestType = model.RequestType,
+                        RefNo = model.RefNO,
+                        Remark = model.Remark,
+                        CreatedBy = CurrentUser.Id,
+                        VerifierId = model.VerifierId,
+                        ApproverId = model.ApproverId,
+                        Shift = model.Shift
+                    };
+
+                    CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+
+                    if (result.IsSuccessful)
+                    {
+                        checkInOutRequestService.SendMailForInsertSuccessfully(criteria);
+                        ViewBag.Requested = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
 
@@ -132,117 +135,141 @@
 
         public ActionResult Update(int id)
         {
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var listUnavailableDates = EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = RequestService.GetRequestById(getRequestByIdcriteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
+            RequestEntity request = requestService.GetRequestById(criteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
+            else
+            {
+                Shift shift = GetShiftByDate(request.RequestedDate);
+                var viewModel = new CheckInOutRequestViewModel()
+                {
+                    RequestId = request.Id,
+                    RequestType = request.RequestType.Id,
+                    Employee = CurrentUser.NickName,
+                    EmployeeId = CurrentUser.Id,
+                    ForDate = request.RequestedDate.Date,
+                    Hour = request.RequestedDate.Hour,
+                    Minute = request.RequestedDate.Minute,
+                    Shift = (shift == null) ? string.Empty : shift.Name,
+                    ApproverId = request.ApprovedBy.Id,
+                    VerifierId = request.VerifiedBy.Id,
+                    RefNO = request.RefNO,
+                    AttendantDate = request.FromDate,
+                    Remark = request.Remark,
+                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                };
 
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
-            {
-                EmployeeId = this.CurrentUser.Id,
-                Date = DateTime.Now
-            };
-            var shift = ShiftService.GetByDate(getShiftByDateCriteria);
-            var viewModel = new CheckInOutRequestViewModel()
-            {
-                RequestId = request.Id,
-                RequestType = request.RequestType.Id,
-                Employee = this.CurrentUser.NickName,
-                EmployeeId = this.CurrentUser.Id,
-                ForDate = request.RequestedDate.Date,
-                Hour = request.RequestedDate.Hour,
-                Minute = request.RequestedDate.Minute,
-                Shift = (shift == null) ? string.Empty : shift.Name,
-                ApproverId = request.ApprovedBy.Id,
-                VerifierId = request.VerifiedBy.Id,
-                RefNO = request.RefNO,
-                AttendantDate = request.FromDate,
-                Remark = request.Remark
-            };
-            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
-            ViewBag.UnavailDates = listUnavailableDates;
-            ViewBag.Shifts = ShiftService.GetAll();
-            return View(viewModel);
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
         public ActionResult Update(CheckInOutRequestViewModel model)
         {
-            CheckIsTopManager(model);
-            ViewBag.Shifts = ShiftService.GetAll();
-            ViewBag.Year = model.ForDate.Year;
-            GetVerifierApproverList(model.EmployeeId, model);
-            var criteria = new UpdateCheckInOutRequestCriteria()
+            if (model != null)
             {
-                RequestId = model.RequestId,
-                EmpId = model.EmployeeId,
-                OnDate = model.AttendantDate,
-                CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                RequestType = model.RequestType,
-                RefNo = model.RefNO,
-                Remark = model.Remark,
-                ModifiedBy = this.CurrentUser.Id,
-                ModifiedDate = DateTime.Now,
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                Shift = model.Shift
-            };
+                CheckIsTopManager(model);
+                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
 
-            if (ModelState.IsValid)
-            {
-                CommandResult result = CheckInOutRequestService.Update(criteria);
-                ViewBag.Updated = result.Code == 0;
-
-                if (result.Code != 0)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new UpdateCheckInOutRequestCriteria()
+                    {
+                        RequestId = model.RequestId,
+                        EmpId = model.EmployeeId,
+                        OnDate = model.AttendantDate,
+                        CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                        RequestType = model.RequestType,
+                        RefNo = model.RefNO,
+                        Remark = model.Remark,
+                        ModifiedBy = CurrentUser.Id,
+                        VerifierId = model.VerifierId,
+                        ApproverId = model.ApproverId,
+                        Shift = model.Shift
+                    };
+
+                    CommandResult result = commandService.Update(criteria);
+                    if (result.IsSuccessful)
+                    {
+                        checkInOutRequestService.SendMailForUpdateSuccessfully(criteria);
+                        ViewBag.Updated = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
 
             return View(model);
         }
 
-        private void GetVerifierApproverList(int id, CheckInOutRequestViewModel viewModel)
+        private decimal GetTotalRequestInMonth()
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.CheckIn);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.CheckIn);
-            viewModel.Verifier = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            viewModel.Approver = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            var currentDate = DateTime.Now.Date;
+            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            {
+                EmployeeId = CurrentUser.Id,
+                RequestType = (int)RequestType.CheckIn,
+                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
+                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
+            };
+            decimal numberRequests = requestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            return numberRequests;
+        }
+
+        private VerifierAndApproverForRequest GetVerifierApprover(int id)
+        {
+            var criteria = new GetVerifierAndApproverCriteria
+            {
+                EmpId = id,
+                RequestType = (byte)RequestType.ChangeShift
+            };
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
+            return supervisor;
+        }
+
+        private Shift GetShiftByDate(DateTime date)
+        {
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = CurrentUser.Id,
+                Date = date
+            };
+            Shift shift = shiftService.GetByDate(getShiftByDateCriteria);
+
+            return shift;
         }
 
         private void CheckShiftFromToFormat(CheckInOutRequestViewModel viewModel, Shift shift)
         {
-            var checkContainColon = shift.BeginCheckInTime.Contains(":");
-            if (checkContainColon)
+            if (shift != null)
             {
-                var time = shift.BeginCheckInTime.Split(new[] { ':' });
-                viewModel.Hour = int.Parse(time[0]);
-                viewModel.Minute = int.Parse(time[1]);
-            }
-            else
-            {
-                viewModel.Hour = 0;
-                viewModel.Minute = 0;
+                var checkContainColon = shift.BeginCheckInTime.Contains(":");
+                if (checkContainColon)
+                {
+                    var time = shift.BeginCheckInTime.Split(new[] { ':' });
+                    viewModel.Hour = int.Parse(time[0]);
+                    viewModel.Minute = int.Parse(time[1]);
+                }
+                else
+                {
+                    viewModel.Hour = 0;
+                    viewModel.Minute = 0;
+                }
             }
         }
 
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
-            var employee = EmployeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var criteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var employee = employeeService.GetEmployeeById(criteria);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

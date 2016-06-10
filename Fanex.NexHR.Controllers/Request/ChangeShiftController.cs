@@ -113,7 +113,7 @@
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
             criteria.CreatedBy = CurrentUser.Id;
 
-            CommandResult result = commandService.Insert(criteria);
+            CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
             {
                 changeShiftRequestService.SendMailForInsertSuccessfully(criteria);

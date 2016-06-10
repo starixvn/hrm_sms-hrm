@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Repositories.Implement
+﻿namespace Fanex.NexHR.Repositories
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

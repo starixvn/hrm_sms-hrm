@@ -77,9 +77,9 @@
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
-    <Compile Include="Implement\CheckInOutRequestRepository.cs" />
-    <Compile Include="Implement\DisciplineRepository.cs" />
-    <Compile Include="Implement\LateInEarlyOutRequestRepository.cs" />
+    <Compile Include="CheckInOutRequestRepository.cs" />
+    <Compile Include="DisciplineRepository.cs" />
+    <Compile Include="LateInEarlyOutRequestRepository.cs" />
     <Compile Include="Interfaces\ICheckInOutRequestRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
     <Compile Include="Interfaces\IBaseRepository.cs" />
@@ -132,6 +132,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implement\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

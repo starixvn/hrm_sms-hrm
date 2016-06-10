@@ -25,20 +25,20 @@
         {
         <div class="success">@Messages.RequestCreated</div>
         <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
+        <input type="hidden" id="year" value="@Model.ForDate.Year" />
         }
         
         <div id="model-state-error" class="ui-state-error ui-corner-all">
             @Labels.CannotCreateRequest
         </div>
 
-        if (ViewBag.TotalRequest >= 1)
+        if (Model.TotalRequestInMonth >= 1)
         {
 
         <div class="ui-state-error ui-corner-all">
             <p>
                 <a href="@Url.Action("EmployeeView")">You've already requested for Check in/out
-                    @ViewBag.TotalRequest times since @DateTime.Now.ToString("MMM yyyy")</a>
+                    @Model.TotalRequestInMonth times since @DateTime.Now.ToString("MMM yyyy")</a>
             </p>
         </div>
         }      
@@ -75,7 +75,7 @@
         
         <div class="formrow">
             <div class="label">
-                Attendant date
+                @Html.LabelFor(model => model.AttendantDate, "Attendant date")
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-6), DateTime.Now)
@@ -87,7 +87,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Fanex.NexHR.Resources.Labels.RequestTime
+                @Labels.RequestTime
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-6), DateTime.Now)
@@ -106,9 +106,7 @@
                 @Labels.Shift
             </div>
             <div class="input">
-                <span id="shiftname">@Model.Shift</span> @*<a id="shiftinfo" href="javascript:;" title="@Fanex.NexHR.Resources.Labels.ShiftInfo">
-                    <span class="icon shiftinfo"> </span>
-                </a>*@
+                <span id="shiftname">@Model.Shift</span>
             </div>
             <div class="clear">
             </div>
@@ -117,32 +115,32 @@
 
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Verifier)*
+                @Html.LabelFor(model => model.VerifierId)*
             </div>
             <div class="input">
-                @if (Model.Verifier.Count() > 1)
+                @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, "--Select a Verifier--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), "--Select a Verifier--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, Model.Verifier, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
             </div>
         </div>
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Approver)*
+                @Html.LabelFor(model => model.ApproverId)*
             </div>
             <div class="input">
-                @if (Model.Approver.Count() > 1)
+                @if (Model.VerifierAndApprover.Approvers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, "--Select an Approver--", new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), "--Select an Approver--", new { @class = "dropdown" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, Model.Approver, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
                 }
             </div>
         </div>
@@ -172,12 +170,8 @@
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Request"/>
-               @* <a href="~/checkinout/employeeview" class="button">@Labels.Back</a>*@
                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     }
-</div>
-<div class="hide">
-    @RazorHelper.ShiftInfoTable(ViewBag.Shifts)
 </div>
