@@ -26,6 +26,7 @@
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.css" />
       <resource path="~/Scripts/MultiSelect/style.css" />
       <resource path="~/Scripts/MultiSelect/prettify.css" />
+      <resource path="~/Libs/FontAwesome/css/font-awesome.min.css" />
     </resourceSet>
     <resourceSet name="sitejs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
@@ -103,7 +104,7 @@
     <resourceSet name="employeeeditjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employee.edit.js" />
+      <resource path="~/scripts/views/employee/employee.edit.js" />
       <resource path="~/scripts/Libs/birthdaypicker.js" />
     </resourceSet>
 

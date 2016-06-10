@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Employee.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +9,6 @@ namespace Fanex.NexHR.Models
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// Employee Class.
-    /// </summary>
     public class Employee : EntityBase<int>
     {
         public string DomainUsername { get; set; }
@@ -181,9 +170,10 @@ namespace Fanex.NexHR.Models
 
         public bool IsExpatUseHoliday { get; set; }
 
-        public bool PasswordReset { get; set; } 
+        public bool PasswordReset { get; set; }
 
         #region Contract
+
         public string BankAccount { get; set; }
 
         public string TaxCode { get; set; }
@@ -194,7 +184,7 @@ namespace Fanex.NexHR.Models
 
         public string ExtensionNo { get; set; }
 
-        #endregion
+        #endregion Contract
 
         public IList<short> RoleList
         {
@@ -278,23 +268,32 @@ namespace Fanex.NexHR.Models
                     {
                         switch (item)
                         {
-                            case 2:
+                            case (short)RoleSystem.Verifier:
                                 roles += ", Verifier";
                                 break;
-                            case 3:
+
+                            case (short)RoleSystem.Approver:
                                 roles += ", Approver";
                                 break;
-                            case 4:
+
+                            case (short)RoleSystem.ShiftManager:
                                 roles += ", SM";
                                 break;
-                            case 5:
+
+                            case (short)RoleSystem.ActingSupervisor:
                                 roles += ", AS";
                                 break;
-                            case 6:
+
+                            case (short)RoleSystem.HR:
                                 roles += ", HR";
                                 break;
-                            case 7:
+
+                            case (short)RoleSystem.SystemAdmin:
                                 roles += ", SA";
+                                break;
+
+                            case (short)RoleSystem.EditDiscipline:
+                                roles += ", Edit Discipline";
                                 break;
                         }
                     }
@@ -306,11 +305,6 @@ namespace Fanex.NexHR.Models
             }
         }
 
-        /// <summary>
-        /// Check user is in specific roles.
-        /// </summary>
-        /// <param name="roles">Role of user.</param>
-        /// <returns>Return Boolean.</returns>
         public bool IsInRoles(params RoleSystem[] roles)
         {
             if (RoleList == null)
@@ -322,11 +316,6 @@ namespace Fanex.NexHR.Models
             return roles.Any(role => userRoles.Contains(role.ToString()));
         }
 
-        /// <summary>
-        /// Check user is in specific roles.
-        /// </summary>
-        /// <param name="roles">Role of user.</param>
-        /// <returns>Return Boolean.</returns>
         public bool IsInRoles(IList<string> roles)
         {
             if (roles == null || roles.Count == 0)
@@ -338,10 +327,6 @@ namespace Fanex.NexHR.Models
             return roles.Any(role => userRoles.Contains(role));
         }
 
-        /// <summary>
-        /// Display role for Employee.
-        /// </summary>
-        /// <returns>String role of member.</returns>
         public string MemberRole()
         {
             string roles = string.Empty;
@@ -358,18 +343,23 @@ namespace Fanex.NexHR.Models
                         case 2:
                             roles += ", Verifier";
                             break;
+
                         case 3:
                             roles += ", Approver";
                             break;
+
                         case 4:
                             roles += ", Shift Manager";
                             break;
+
                         case 5:
                             roles += ", Acting Supervisor";
                             break;
+
                         case 6:
                             roles += ", Human Resource";
                             break;
+
                         case 7:
                             roles += ", System Admin";
                             break;

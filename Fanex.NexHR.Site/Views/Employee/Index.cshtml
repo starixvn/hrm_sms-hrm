@@ -22,7 +22,7 @@
                 var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
             }
@@ -40,7 +40,7 @@
         <div class="grid_6">
             <select id="group" multiple="multiple" class="team-select">
                 @foreach (Team item in ViewBag.Groups)
-                { 
+                {
                     <option value="@item.Id">@item.Name</option>
                 }
             </select>
@@ -59,35 +59,20 @@
 <table id="data" class="data persist-area">
     <thead>
         <tr class="persist-header">
-            <th>
-                #
-            </th>
-            <th>@Labels.Code
-            </th>
-            <th>@Labels.Nick
-            </th>
-            <th>@Labels.Name
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>@Labels.JobTitle
-            </th>
-            <th>@Labels.Skype
-            </th>
-            <th>@Labels.Email
-            </th>
-            <th>@Labels.Phone
-            </th>
-            <th>
-                Ext No
-            </th>
-            <th style="width: 80px">@Labels.GroupDate
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Name</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.JobTitle</th>
+            <th>@Labels.Skype</th>
+            <th>@Labels.Email</th>
+            <th>@Labels.Phone</th>
+            <th>Ext No</th>
+            <th style="width: 80px">@Labels.GroupDate</th>
         </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
     <tr id="row${Id}">
@@ -99,27 +84,24 @@
             <a href="/employee/detail/${Id}">${NickName}</a>
         </td>
         <td class="left" style="width:110px">${FullName}</td>
-        <td title="${Team["Name"]}" class="tooltip left">${Team["Code"]}</td>
+        <td title="${Team[" name"]}" class="tooltip left">${Team["Code"]}</td>
         <td class="left">${JobTitle}</td>
         <td class="left"><a href="skype:${Skype}?chat">${Skype}</a></td>
         <td class="left"><a href="mailto:${Email}">${Email}</a></td>
         <td title="${Phone}">
             {{if Phone != null && Phone.indexOf(",") > 0}}
-                ${Phone.substring(0,Phone.indexOf(","))}
+            ${Phone.substring(0,Phone.indexOf(","))}
             {{else}}
-                ${Phone}
+            ${Phone}
             {{/if}}
         </td>
         <td class="left">${ExtensionNo}</td>
         <td style="width:80px">
             {{if JoinedDate}}
-                ${jsonToShortDate(JoinedDate)}
-                    
+            ${jsonToShortDate(JoinedDate)}
             {{/if}}
-        </td>      
-            
-    </tr>    
+        </td>
+    </tr>
 </script>
 <script id="mytemplate" type="text/html">
-
 </script>

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.7.3">Created</change>
-//   <change who="Anders.Le" date="2012.7.3">Modify avatar function</change>
-// </history>
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -35,9 +26,6 @@ namespace Fanex.NexHR.Controllers
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
 
-    /// <summary>
-    /// Employee Controller.
-    /// </summary>
     [Authorize]
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class EmployeeController : BaseController
@@ -71,12 +59,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// ActionResult UserManagement.
-        /// </summary>
-        /// <param name="jobTitleId">Job Title Id.</param>
-        /// <param name="groupIds">Group Identify.</param>
-        /// <returns>View User Management.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult UserManagement(string jobTitleId = "", string groupIds = "")
         {
@@ -100,11 +82,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// ActionResult Detail.
-        /// </summary>
-        /// <param name="id">Employee's id.</param>
-        /// <returns>View Details.</returns>
         public ActionResult Detail(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -136,10 +113,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <returns>View Create.</returns>
         [Authorize(Roles = "SystemAdmin")]
         public ActionResult Create()
         {
@@ -151,11 +124,6 @@ namespace Fanex.NexHR.Controllers
             return View(new CreateEmployeeViewModel());
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">CreateEmployee ViewModel.</param>
-        /// <returns>View Create.</returns>
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         public ActionResult Create(CreateEmployeeViewModel model)
@@ -196,11 +164,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="id">Employee's id.</param>
-        /// <returns>View Edit.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult Edit(int id)
         {
@@ -225,11 +188,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="model">Employee model.</param>
-        /// <returns>View Edit.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -274,11 +232,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult View Default Schedule.
-        /// </summary>
-        /// <param name="id">Employee's id.</param>
-        /// <returns>View according to schedule.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult DefaultSchedule(int id)
         {
@@ -300,11 +253,6 @@ namespace Fanex.NexHR.Controllers
             }
         }
 
-        /// <summary>
-        /// ActionResult DefaultSchedule.
-        /// </summary>
-        /// <param name="model">EmployeeShift model.</param>
-        /// <returns>View DefaultSchedule.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         public ActionResult DefaultSchedule(EmployeeShift model)
@@ -350,11 +298,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// FileResult Avatar.
-        /// </summary>
-        /// <param name="id">Image name and format.</param>
-        /// <returns>File name.</returns>
         [AllowAnonymous]
         public FileResult Avatar(string id)
         {
@@ -375,12 +318,6 @@ namespace Fanex.NexHR.Controllers
             return File("/avatars/avatar.jpg", "image/jpeg");
         }
 
-        /// <summary>
-        /// Action UploadAvatar.
-        /// </summary>
-        /// <param name="code">File name.</param>
-        /// <param name="file">Http Posted File Base.</param>
-        /// <returns>Type of format.</returns>
         [Authorize(Roles = "HR")]
         [HttpPost]
         public JsonResult UploadAvatar(string code, HttpPostedFileBase file)
@@ -404,10 +341,6 @@ namespace Fanex.NexHR.Controllers
             return Json(null);
         }
 
-        /// <summary>
-        /// Get My Space.
-        /// </summary>
-        /// <returns>Action Result.</returns>
         public ActionResult MySpace()
         {
             var employeeId = this.CurrentUser.Id;
@@ -421,10 +354,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Management Dashboard.
-        /// </summary>
-        /// <returns>Action Result.</returns>
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
@@ -452,11 +381,6 @@ namespace Fanex.NexHR.Controllers
             return View(teams);
         }
 
-        /// <summary>
-        /// ActionResult AddTeam.
-        /// </summary>
-        /// <param name="teamId">Id of new team.</param>
-        /// <returns>View AddTeam.</returns>
         [Authorize(Roles = "HR")]
         public ActionResult AddTeam(int teamId = -1)
         {
@@ -507,11 +431,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// ActionResult Change Password.
-        /// </summary>
-        /// <param name="model">ChangePassword ViewModel.</param>
-        /// <returns>View Change Password.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePwd(ChangePasswordViewModel model)
@@ -548,12 +467,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action to update supervisor for employee.
-        /// </summary>
-        /// <param name="role">Role of supervisor.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <returns>Action Result.</returns>
         [HttpGet]
         public ActionResult Supervisor(short role, int employeeId)
         {
@@ -577,11 +490,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action Result Supervisor.
-        /// </summary>
-        /// <param name="model">Supervisor View Model.</param>
-        /// <returns>Action Result.</returns>
         [HttpPost]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
@@ -603,12 +511,6 @@ namespace Fanex.NexHR.Controllers
             return Json(new { result = updated }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Action Update Shift Manger.
-        /// </summary>
-        /// <param name="role">Role of supervisor.</param>
-        /// <param name="employeeId">Employee's Id.</param>
-        /// <returns>ShiftManager ViewModel.</returns>
         [HttpGet]
         public ActionResult ShiftManager(short role, int employeeId)
         {
@@ -633,11 +535,6 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Action insert Shift Manager.
-        /// </summary>
-        /// <param name="model">ShiftManager View Model.</param>
-        /// <returns>Boolean to check.</returns>
         [HttpPost]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
@@ -658,10 +555,6 @@ namespace Fanex.NexHR.Controllers
             return Json(new { result = success }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Store the show/hide setting of left navigation to session.
-        /// </summary>
-        /// <param name="isShow">Indicate the left navigation is showed or not.</param>
         [HttpPost]
         public void ToogleLeftNavigation(bool isShow)
         {
@@ -670,18 +563,16 @@ namespace Fanex.NexHR.Controllers
             HttpContext.Session["CurrentUser"] = currentUser;
         }
 
-        /// <summary>
-        /// Method check Role User.
-        /// </summary>
-        /// <param name="model">Employee Model.</param>
         private void CheckRoleUser(Employee model)
         {
-            if (model.RoleList != null && model.RoleList.Count == 1)
+            if (model.RoleList != null && model.RoleList.Any())
             {
-                if (int.Parse(model.Roles) == (int)RoleSystem.SystemAdmin)
+                if (model.RoleList.Any(x => x == (int)RoleSystem.SystemAdmin))
                 {
-                    var roleList = Enum.GetValues(typeof(RoleSystem)).Cast<RoleSystem>().Select(x => (int)x).ToList();
-                    roleList.RemoveAt(0);
+                    var roleList = Enum.GetValues(typeof(RoleSystem)).Cast<RoleSystem>()
+                        .Where(x => (int)x != (int)RoleSystem.Member && (int)x != (int)RoleSystem.EditDiscipline)
+                        .Select(x => (int)x).ToList();
+                    roleList.AddRange(model.RoleList.Where(x => x != (int)RoleSystem.SystemAdmin).Select(x => (int)x));
                     model.Roles = string.Join(",", roleList);
                 }
             }
@@ -693,14 +584,6 @@ namespace Fanex.NexHR.Controllers
             }
         }
 
-        /// <summary>
-        /// Method get list supervisor name.
-        /// </summary>
-        /// <param name="id">Employee's id.</param>
-        /// <param name="verifier">List nickname of verifier.</param>
-        /// <param name="approver">List nickname of approver.</param>
-        /// <param name="shiftManager">List nickname of shift Manager.</param>
-        /// <param name="actingSupervisor">List nickname of Acting Supervisor.</param>
         private void GetListSupervisorName(int id, out string verifier, out string approver, out string shiftManager, out string actingSupervisor)
         {
             List<string> listVerifierName = null, listApproverName = null, listShiftName = null, listActingName = null;
@@ -753,11 +636,6 @@ namespace Fanex.NexHR.Controllers
             actingSupervisor = string.Join(", ", listActingName);
         }
 
-        /// <summary>
-        /// Function to convert User login to Employee.
-        /// </summary>
-        /// <param name="userLogin">UserLogin Model.</param>
-        /// <returns>Employee Object.</returns>
         private Employee ConvertUserToEmployee(UserLoginModel userLogin)
         {
             var employee = new Employee
@@ -772,9 +650,6 @@ namespace Fanex.NexHR.Controllers
             return employee;
         }
 
-        /// <summary>
-        /// Check User have role admin or not.
-        /// </summary>
         private void CheckAdminUserRole()
         {
             var authorize = false;
@@ -806,9 +681,6 @@ namespace Fanex.NexHR.Controllers
             return currentDate.AddDays(-1 * diff).Date;
         }
 
-        /// <summary>
-        /// Composes the view bags for edit employee.
-        /// </summary>
         private void ComposeViewBagsForEditEmployee()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -822,11 +694,6 @@ namespace Fanex.NexHR.Controllers
             ViewBag.Marriages = Utilities.Marriages;
         }
 
-        /// <summary>
-        /// Set Data To UpdateEmployeeCriteria.
-        /// </summary>
-        /// <param name="model">Employee model.</param>
-        /// <returns>UpdateEmployee Criteria.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)
         {

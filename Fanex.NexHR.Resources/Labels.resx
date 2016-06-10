@@ -1257,4 +1257,82 @@
   <data name="ToShift" xml:space="preserve">
     <value>To Shift</value>
   </data>
+  <data name="AllowClaimOT" xml:space="preserve">
+    <value>Allow Claim OT</value>
+  </data>
+  <data name="ApplicableDefaultShift" xml:space="preserve">
+    <value>Applicable Default Shift</value>
+  </data>
+  <data name="Avatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Cellphone" xml:space="preserve">
+    <value>Cellphone</value>
+  </data>
+  <data name="CompanyDate" xml:space="preserve">
+    <value>Company Date</value>
+  </data>
+  <data name="CostCenter" xml:space="preserve">
+    <value>Cost center</value>
+  </data>
+  <data name="DefaultShift" xml:space="preserve">
+    <value>Default Shift</value>
+  </data>
+  <data name="DepartmentSection" xml:space="preserve">
+    <value>Department/Section</value>
+  </data>
+  <data name="EmployeeID" xml:space="preserve">
+    <value>Employee ID</value>
+  </data>
+  <data name="EnabledUser" xml:space="preserve">
+    <value>Enabled User</value>
+  </data>
+  <data name="ExpatApplicableHoliday" xml:space="preserve">
+    <value>Expat Applicable Holiday</value>
+  </data>
+  <data name="HomePhone" xml:space="preserve">
+    <value>Home Phone</value>
+  </data>
+  <data name="IDCardIssueDate" xml:space="preserve">
+    <value>ID Card Issue Date</value>
+  </data>
+  <data name="IDCardNo" xml:space="preserve">
+    <value>ID Card No</value>
+  </data>
+  <data name="IDCardPlaceOfIssue" xml:space="preserve">
+    <value>ID Card Place Of Issue</value>
+  </data>
+  <data name="KIVBalance" xml:space="preserve">
+    <value>KIV Balance</value>
+  </data>
+  <data name="LeaveBalance" xml:space="preserve">
+    <value>Leave Balance</value>
+  </data>
+  <data name="Marriage" xml:space="preserve">
+    <value>Marriage</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="NumberOfOffday" xml:space="preserve">
+    <value>Number of Offday</value>
+  </data>
+  <data name="OnBehalfRequest" xml:space="preserve">
+    <value>On behalf Request</value>
+  </data>
+  <data name="ShiftArrangement" xml:space="preserve">
+    <value>Shift Arrangement</value>
+  </data>
+  <data name="WorkEmail" xml:space="preserve">
+    <value>Work Email</value>
+  </data>
+  <data name="WorkingDaysPerMonth" xml:space="preserve">
+    <value>Working days per Month</value>
+  </data>
+  <data name="WorkingHoursPerDay" xml:space="preserve">
+    <value>Working hours per day</value>
+  </data>
+  <data name="ResignedDate" xml:space="preserve">
+    <value>Resigned Date</value>
+  </data>
 </root>
