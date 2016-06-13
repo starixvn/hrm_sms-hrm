@@ -48,9 +48,9 @@
                 Date = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Minute = 60,
                 RequestType = (!isLateIn.HasValue || (isLateIn.HasValue && isLateIn.Value)) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
-                UnavailDates = GetUnavailDate(),
+                UnavailDates = GetUnavailDate(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth()
+                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id)
             };
 
             return View(viewModel);
@@ -63,7 +63,8 @@
             {
                 CheckIsTopManager(model);
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                //// model.TotalRequestInMonth = GetTotalRequestInMonth();
+                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
+                model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -123,7 +124,7 @@
                 Remark = request.Remark,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
-                UnavailDates = GetUnavailDate(),
+                UnavailDates = GetUnavailDate(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
 
@@ -136,7 +137,9 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
+                model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -212,39 +215,38 @@
             return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut }, JsonRequestBehavior.AllowGet);
         }
 
-        private IList<DateTime> GetUnavailDate()
+        private IList<DateTime> GetUnavailDate(int employeeId)
         {
-            var currentDate = DateTime.Now.Date;
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+            var criteria = new GetUnavailableRequestDateCriteria()
             {
-                EmpId = CurrentUser.Id,
+                EmpId = employeeId,
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now.AddMonths(1)
             };
-            var unavailDates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            var unavailDates = employeeService.GetUnavailableDates(criteria);
             return unavailDates;
         }
 
-        private decimal GetTotalRequestInMonth()
+        private decimal GetTotalRequestInMonth(int employeeId)
         {
             var currentDate = DateTime.Now.Date;
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria()
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = employeeId,
                 RequestType = (int)RequestType.LateIn,
                 FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
                 ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
             };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
             return numberRequests;
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int id)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
         {
             var criteria = new GetVerifierAndApproverCriteria
             {
-                EmpId = id,
-                RequestType = (byte)RequestType.ChangeShift
+                EmpId = employeeId,
+                RequestType = (byte)RequestType.LateIn
             };
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
             return supervisor;

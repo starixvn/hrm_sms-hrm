@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetRequestMonitoringCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.31">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request
+﻿namespace Fanex.NexHR.Criteria.Request
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Request Monitoring Criteria.
-    /// </summary>
     public class GetRequestMonitoringCriteria : CriteriaBase
     {
         public DateTime FromDate { get; set; }

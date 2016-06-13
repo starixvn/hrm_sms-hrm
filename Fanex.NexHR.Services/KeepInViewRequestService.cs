@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="KeepInViewRequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2013.11.14">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
-    using System.Threading.Tasks;
-    using System.Web;
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
@@ -19,82 +7,28 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Threading.Tasks;
+    using System.Web;
 
-    /// <summary>
-    /// RequestService Class.
-    /// </summary>
     public class KeepInViewRequestService : RequestService, IKeepInViewRequestService
     {
         private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
 
-        /// <summary>
-        /// Function to insert keep in view request.
-        /// </summary>
-        /// <param name="criteria">InsertKeepInViewRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult Insert(InsertKeepInViewRequestCriteria criteria)
+        public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Insert(criteria, hasGetOutputParams: true);
-                if (result != null && result.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForInsertKeepInViewSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Resources.Messages.InvalidInputData
-                };
-            }
-
-            return result;
+            var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
+            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
         }
 
-        /// <summary>
-        /// Function to update keep in view request.
-        /// </summary>
-        /// <param name="criteria">UpdateKeepInViewRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult Update(UpdateKeepInViewRequestCriteria criteria)
+        public void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-                if (result != null && result.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForUpdateKeepInViewSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Resources.Messages.InvalidInputData
-                };
-            }
-
-            return result;
+            var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
+            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
         }
 
-        /// <summary>
-        /// Function to send mail for inserted success for check in out request.
-        /// </summary>
-        /// <param name="criteria">InsertCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
-        private void SendMailForInsertKeepInViewSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
+        private void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -102,7 +36,7 @@ namespace Fanex.NexHR.Services
             {
                 Empid = criteria.EmpId
             };
-            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.InsertedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
@@ -114,7 +48,7 @@ namespace Fanex.NexHR.Services
                 criteria.ShiftName,
                 criteria.Remark);
 
-            this.EmailService.SendEmail(
+            EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -122,12 +56,7 @@ namespace Fanex.NexHR.Services
                 email.Body);
         }
 
-        /// <summary>
-        /// Function to send mail for updated success for check in out request.
-        /// </summary>
-        /// <param name="criteria">UpdateCheckInOutRequest Criteria.</param>
-        /// <param name="templateEmailPath">Template Email Path.</param>
-        private void SendMailForUpdateKeepInViewSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
+        private void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
@@ -135,7 +64,7 @@ namespace Fanex.NexHR.Services
             {
                 Empid = criteria.EmpId
             };
-            var employee = this.EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
             
             email.Body = Utilities.ReadTextFile(templateEmailPath);
@@ -147,7 +76,7 @@ namespace Fanex.NexHR.Services
                 criteria.ShiftName,
                 criteria.Remark);
 
-            this.EmailService.SendEmail(
+            EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,

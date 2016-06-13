@@ -1,22 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="KeepInViewRequestViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2013.11.12">Initialize</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
+    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    /// <summary>
-    /// LeaveRequest ViewModel.
-    /// </summary>
     public class KeepInViewRequestViewModel
     {
         public long RequestId { get; set; }
@@ -50,12 +39,14 @@ namespace Fanex.NexHR.ViewModels.Request
         [Required]
         public int ShiftId { get; set; }
 
+        [Display(Name = "Verified by")]
         public int? VerifierId { get; set; }
 
+        [Display(Name = "Approved by")]
         public int? ApproverId { get; set; }
 
-        public IList<SelectListItem> VerifierList { get; set; }
+        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 
-        public IList<SelectListItem> ApproverList { get; set; }
+        public IList<DateTime> UnavailDates { get; set; }
     }
 }

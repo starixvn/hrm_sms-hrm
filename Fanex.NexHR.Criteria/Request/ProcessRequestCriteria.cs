@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ProcessRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request
+﻿namespace Fanex.NexHR.Criteria.Request
 {
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;

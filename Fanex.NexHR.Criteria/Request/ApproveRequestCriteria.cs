@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
+    using Fanex.Data.Repository;
+    using Fanex.NexHR.Models.Discipline;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models.Discipline;
 
     public class ApproveRequestCriteria : CriteriaBase
     {

@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateKeepInViewRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.KeepInView
+﻿namespace Fanex.NexHR.Criteria.Request.KeepInView
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// UpdateKeepInViewRequest Criteria.
-    /// </summary>
     public class UpdateKeepInViewRequestCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
@@ -37,8 +25,6 @@ namespace Fanex.NexHR.Criteria.Request.KeepInView
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
 

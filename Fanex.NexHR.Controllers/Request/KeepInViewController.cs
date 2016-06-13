@@ -1,18 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="KeepInViewController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2013.11.11">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
@@ -20,211 +7,188 @@ namespace Fanex.NexHR.Controllers.Request
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// KeepInView Controller.
-    /// </summary>
-    [Authorize]
-    public class KeepInViewController : RequestController
+    public class KeepInViewController : BaseController
     {
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <returns>View Create.</returns>
+        private readonly IKeepInViewRequestService keepInViewRequestService;
+        private readonly IRequestService requestService;
+        private readonly ICommandService commandService;
+        private readonly IShiftService shiftService;
+        private readonly IEmployeeService employeeService;
+
+        public KeepInViewController()
+            : this(null, null, null, null, null)
+        {
+        }
+
+        public KeepInViewController(
+            IKeepInViewRequestService keepInViewRequestService, 
+            IRequestService requestService, 
+            ICommandService commandService,
+            IShiftService shiftService,
+            IEmployeeService employeeService)
+        {
+            this.keepInViewRequestService = keepInViewRequestService ?? new KeepInViewRequestService();
+            this.requestService = requestService ?? new RequestService();
+            this.commandService = commandService ?? new CommandService();
+            this.shiftService = shiftService ?? new ShiftService();
+            this.employeeService = employeeService ?? new EmployeeService();
+        }
+
         public ActionResult Create()
         {
-            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-
-            var criteria = new GetOffDateAndHolidayDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(criteria);
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
             {
-                EmployeeId = this.CurrentUser.Id,
+                EmployeeId = CurrentUser.Id,
                 Date = DateTime.Now
             };
-            var shift = ShiftService.GetByDate(getShiftByDateCriteria);
+            Shift shift = shiftService.GetByDate(getShiftByDateCriteria);
 
             var model = new KeepInViewRequestViewModel
             {
-                Employee = this.CurrentUser.NickName,
-                EmployeeId = this.CurrentUser.Id,
+                Employee = CurrentUser.NickName,
+                EmployeeId = CurrentUser.Id,
                 Date = DateTime.Now.Date,
                 Shift = (shift == null) ? string.Empty : shift.Name,
-                ShiftId = (shift == null) ? 0 : shift.Id
+                ShiftId = (shift == null) ? 0 : shift.Id,
+                UnavailDates = GetUnavailDate(CurrentUser.Id),
+                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
 
-            GetVerifierApproverList(this.CurrentUser.Id, model);
-            ViewBag.UnavailableDates = unavailableDates;
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">KeepInViewRequest ViewModel.</param>
-        /// <returns>View Create.</returns>
         [HttpPost]
         public ActionResult Create(KeepInViewRequestViewModel model)
         {
-            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var getOffAndHolidaycriteria = new GetOffDateAndHolidayDateCriteria()
+            if (model != null)
             {
-                EmpId = this.CurrentUser.Id,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(getOffAndHolidaycriteria);
-            var criteria = new InsertKeepInViewRequestCriteria()
-            {
-                EmpId = model.EmployeeId,
-                OnDate = model.Date,
-                RequestType = (int)RequestType.KeepInView,
-                RefNo = model.RefNo,
-                Remark = model.Remark,
-                IsHalfDay = model.HalfDay,
-                ShiftId = model.ShiftId,
-                ShiftName = model.Shift,
-                FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
-                ToTime = model.CrossDay 
-                ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                CreatedBy = this.CurrentUser.Id,
-                CreatedDate = DateTime.Now
-            };
+                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
-            var result = new CommandResult();
-            if (ModelState.IsValid)
-            {
-                result = KeepInViewRequestService.Insert(criteria);
-                ViewBag.Requested = result.Code == 0;
-
-                if (result.Code != 0)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new InsertKeepInViewRequestCriteria()
+                    {
+                        EmpId = model.EmployeeId,
+                        OnDate = model.Date,
+                        RequestType = (int)RequestType.KeepInView,
+                        RefNo = model.RefNo,
+                        Remark = model.Remark,
+                        IsHalfDay = model.HalfDay,
+                        ShiftId = model.ShiftId,
+                        ShiftName = model.Shift,
+                        FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                        ToTime = model.CrossDay
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                        VerifierId = model.VerifierId,
+                        ApproverId = model.ApproverId,
+                        CreatedBy = CurrentUser.Id
+                    };
+
+                    CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+                    if (result.IsSuccessful)
+                    {
+                        keepInViewRequestService.SendMailForInsertSuccessfully(criteria);
+                        ViewBag.Requested = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
-
-            GetVerifierApproverList(this.CurrentUser.Id, model);
-            ViewBag.Year = model.Date.Year;
-            ViewBag.UnavailableDates = unavailableDates;
+            
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Update.
-        /// </summary>
-        /// <param name="id">KeepInViewRequest id.</param>
-        /// <returns>View Update.</returns>
         public ActionResult Update(long id)
         {
-            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-
-            var criteria = new GetOffDateAndHolidayDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(criteria);
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria()
             {
                 RequestId = id
             };
-            var request = RequestService.GetRequestById(getRequestByIdcriteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(this.CurrentUser.Id, request.Requester.Id))
+            RequestEntity request = requestService.GetRequestById(criteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
-
-            var viewModel = new KeepInViewRequestViewModel()
+            else
             {
-                RequestId = id,
-                RefNo = request.RefNO,
-                HalfDay = request.IsHalfDay,
-                Employee = this.CurrentUser.NickName,
-                EmployeeId = this.CurrentUser.Id,
-                Date = request.RequestedDate,
-                Shift = request.FromShift.Name,
-                ShiftId = request.FromShift.Id,
-                ApproverId = request.ApprovedBy.Id,
-                VerifierId = request.VerifiedBy.Id,
-                Remark = request.Remark,
-                CrossDay = request.CrossDay,
-                FromTime = request.FromTime.ToString("HH:mm"),
-                ToTime = request.ToTime.ToString("HH:mm")
-            };
+                var viewModel = new KeepInViewRequestViewModel()
+                {
+                    RequestId = id,
+                    RefNo = request.RefNO,
+                    HalfDay = request.IsHalfDay,
+                    Employee = CurrentUser.NickName,
+                    EmployeeId = CurrentUser.Id,
+                    Date = request.RequestedDate,
+                    Shift = request.FromShift.Name,
+                    ShiftId = request.FromShift.Id,
+                    ApproverId = request.ApprovedBy.Id,
+                    VerifierId = request.VerifiedBy.Id,
+                    Remark = request.Remark,
+                    CrossDay = request.CrossDay,
+                    FromTime = request.FromTime.ToString("HH:mm"),
+                    ToTime = request.ToTime.ToString("HH:mm"),
+                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
+                    UnavailDates = GetUnavailDate(CurrentUser.Id)
+                };
 
-            GetVerifierApproverList(this.CurrentUser.Id, viewModel);
-            ViewBag.UnavailableDates = unavailableDates;
-            return View(viewModel);
+                return View(viewModel);
+            }
         }
 
-        /// <summary>
-        /// Updates the specified keep in view request view model.
-        /// </summary>
-        /// <param name="model">The keep in view request view model.</param>
-        /// <returns>Return the update result to client.</returns>
         [HttpPost]
         public ActionResult Update(KeepInViewRequestViewModel model)
         {
-            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-
-            var getOffAndHolidaycriteria = new GetOffDateAndHolidayDateCriteria()
+            if (model != null)
             {
-                EmpId = this.CurrentUser.Id,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var unavailableDates = EmployeeService.GetNotOffOrHolidayDate(getOffAndHolidaycriteria);
+                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
-            var criteria = new UpdateKeepInViewRequestCriteria()
-            {
-                RequestId = model.RequestId,
-                EmpId = model.EmployeeId,
-                OnDate = model.Date,
-                RequestType = (int)RequestType.KeepInView,
-                RefNo = model.RefNo,
-                Remark = model.Remark,
-                IsHalfDay = model.HalfDay,
-                ShiftId = model.ShiftId,
-                ShiftName = model.Shift,
-                FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
-                ToTime = model.CrossDay
-                ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                ModifiedBy = this.CurrentUser.Id,
-                ModifiedDate = DateTime.Now
-            };
-
-            if (ModelState.IsValid)
-            {
-                CommandResult result = KeepInViewRequestService.Update(criteria);
-                ViewBag.Updated = result.Code == 0;
-
-                if (result.Code != 0)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new UpdateKeepInViewRequestCriteria()
+                    {
+                        RequestId = model.RequestId,
+                        EmpId = model.EmployeeId,
+                        OnDate = model.Date,
+                        RequestType = (int)RequestType.KeepInView,
+                        RefNo = model.RefNo,
+                        Remark = model.Remark,
+                        IsHalfDay = model.HalfDay,
+                        ShiftId = model.ShiftId,
+                        ShiftName = model.Shift,
+                        FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                        ToTime = model.CrossDay
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                        VerifierId = model.VerifierId,
+                        ApproverId = model.ApproverId,
+                        ModifiedBy = CurrentUser.Id,
+                    };
+
+                    CommandResult result = commandService.Update(criteria);
+                    if (result.IsSuccessful)
+                    {
+                        keepInViewRequestService.SendMailForUpdateSuccessfully(criteria);
+                        ViewBag.Updated = true;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
             }
-
-            GetVerifierApproverList(this.CurrentUser.Id, model);
-            ViewBag.Year = model.Date.Year;
-            ViewBag.UnavailableDates = unavailableDates;
+            
             return View(model);
         }
 
@@ -234,11 +198,6 @@ namespace Fanex.NexHR.Controllers.Request
             return EmployeeView(DateTime.Now.Year);
         }
 
-        /// <summary>
-        /// Employees the view.
-        /// </summary>
-        /// <param name="year">The year is used for filtering.</param>
-        /// <returns>The view with filtered by the year.</returns>
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
@@ -256,30 +215,35 @@ namespace Fanex.NexHR.Controllers.Request
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
 
             return View(entityList);
         }
 
-        [NonAction]
-        private void GetVerifierApproverList(int id, KeepInViewRequestViewModel viewModel)
+        private IList<DateTime> GetUnavailDate(int employeeId)
         {
-            var verifierList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Verifier, (byte)RequestType.KeepInView);
-            var approverList = this.GetSupervisorByRequestType(id, (byte)RoleSystem.Approver, (byte)RequestType.KeepInView);
-            viewModel.VerifierList = verifierList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
-            viewModel.ApproverList = approverList.Select(x => new SelectListItem { Text = x.NickName + " (" + x.FullName + ")", Value = x.OwnerId.ToString() }).ToList();
+            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
+            var criteria = new GetOffDateAndHolidayDateCriteria()
+            {
+                EmpId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            IList<DateTime> unavailableDates = employeeService.GetNotOffOrHolidayDate(criteria);
+
+            return unavailableDates;
         }
 
-        [NonAction]
-        private IList<SelectListItem> GetListItem(IList<SupervisorNameModel> supervisors)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
         {
-            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem
+            var criteria = new GetVerifierAndApproverCriteria
             {
-                Text = x.NickName + " (" + x.FullName + ")",
-                Value = x.OwnerId.ToString()
-            }).ToList();
-
-            return selectItems;
+                EmpId = employeeId,
+                RequestType = (byte)RequestType.KeepInView
+            };
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
+            return supervisor;
         }
     }
 }

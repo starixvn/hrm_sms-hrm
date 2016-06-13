@@ -79,16 +79,6 @@
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
-            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
-            {
-                EmployeeId = CurrentUser.Id,
-                RequestType = (int)RequestType.ChangeShift,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
             List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(CurrentUser.Id, currentDate, currentDate);
 
             var model = new ChangeShiftViewModel
@@ -98,7 +88,7 @@
                 FromDate = currentDate,
                 ToDate = currentDate,
                 ShiftDetails = shiftDetails,
-                TotalRequestInMonth = requestService.GetNumberRequestInMonth(requestInMonthCriteria),
+                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
 
@@ -266,11 +256,11 @@
             return schedule;
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int id, RequestEntity request = null)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, RequestEntity request = null)
         {
             var criteria = new GetVerifierAndApproverCriteria
             {
-                EmpId = id,
+                EmpId = employeeId,
                 RequestType = (byte)RequestType.ChangeShift
             };
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
@@ -301,6 +291,20 @@
             }
 
             return supervisor;
+        }
+
+        private decimal GetTotalRequestInMonth(int employeeId)
+        {
+            var currentDate = DateTime.Now.Date;
+            var criteria = new GetNumberRequestInMonthCriteria()
+            {
+                EmployeeId = employeeId,
+                RequestType = (int)RequestType.ChangeShift,
+                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
+                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
+            };
+            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
+            return numberRequests;
         }
 
         private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)

@@ -81,7 +81,7 @@
                 Minute = DateTime.Now.Minute,
                 RequestType = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth()
+                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id)
             };
 
             Shift shift = GetShiftByDate(DateTime.Now);
@@ -98,7 +98,7 @@
             {
                 CheckIsTopManager(model);
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.TotalRequestInMonth = GetTotalRequestInMonth();
+                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -175,7 +175,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -210,26 +210,26 @@
             return View(model);
         }
 
-        private decimal GetTotalRequestInMonth()
+        private decimal GetTotalRequestInMonth(int employeeId)
         {
             var currentDate = DateTime.Now.Date;
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria()
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = employeeId,
                 RequestType = (int)RequestType.CheckIn,
                 FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
                 ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
             };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
             return numberRequests;
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int id)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
         {
             var criteria = new GetVerifierAndApproverCriteria
             {
-                EmpId = id,
-                RequestType = (byte)RequestType.ChangeShift
+                EmpId = employeeId,
+                RequestType = (byte)RequestType.CheckIn
             };
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
             return supervisor;

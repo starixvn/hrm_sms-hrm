@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertKeepInViewRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.KeepInView
+﻿namespace Fanex.NexHR.Criteria.Request.KeepInView
 {
-    using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
+    using System;
 
-    /// <summary>
-    /// InsertKeepInViewRequest Criteria.
-    /// </summary>
     public class InsertKeepInViewRequestCriteria : CriteriaBase
     {
         [Output]
@@ -39,8 +27,6 @@ namespace Fanex.NexHR.Criteria.Request.KeepInView
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
-
-        public DateTime CreatedDate { get; set; }
 
         public int CreatedBy { get; set; }
 

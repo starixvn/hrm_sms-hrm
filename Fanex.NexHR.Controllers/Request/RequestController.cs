@@ -21,8 +21,6 @@
 
     public class RequestController : BaseController
     {
-        #region protected services
-
         private readonly IEmployeeService _employeeService;
         private readonly IShiftService _shiftService;
         private readonly ILeaveTypeService _leaveTypeService;
@@ -36,28 +34,24 @@
         private readonly IOvertimeRequestService _overtimeService;
         private readonly IWorkingCalendarService _workingCalendarService;
 
-        #endregion protected services
-
-        #region Ctor
-
         public RequestController()
             : this(null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
         public RequestController(
-            IEmployeeService employeeService = null,
-            IShiftService shiftService = null,
-            ILeaveTypeService leaveTypeService = null,
-            IRequestService requestService = null,
-            ITeamService teamService = null,
-            IKeepInViewRequestService keepInViewRequestService = null,
-            IChangeShiftRequestService changeShiftRequestService = null,
-            ICheckInOutRequestService checkInOutRequestService = null,
-            ILateInEarlyOutRequestService lateInEarlyOutRequestService = null,
-            ILeaveRequestService leaveRequestService = null,
-            IOvertimeRequestService overtimeService = null,
-            IWorkingCalendarService workingCalendarService = null)
+            IEmployeeService employeeService,
+            IShiftService shiftService,
+            ILeaveTypeService leaveTypeService,
+            IRequestService requestService,
+            ITeamService teamService,
+            IKeepInViewRequestService keepInViewRequestService,
+            IChangeShiftRequestService changeShiftRequestService,
+            ICheckInOutRequestService checkInOutRequestService,
+            ILateInEarlyOutRequestService lateInEarlyOutRequestService,
+            ILeaveRequestService leaveRequestService,
+            IOvertimeRequestService overtimeService,
+            IWorkingCalendarService workingCalendarService)
         {
             _employeeService = employeeService ?? new EmployeeService();
             _shiftService = shiftService ?? new ShiftService();
@@ -72,8 +66,6 @@
             _overtimeService = overtimeService ?? new OvertimeRequestService();
             _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
         }
-
-        #endregion Ctor
 
         public IEmployeeService EmployeeService
         {
