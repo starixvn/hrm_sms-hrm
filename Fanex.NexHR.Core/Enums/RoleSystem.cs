@@ -6,7 +6,6 @@
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
     public enum RoleSystem : int
     {
-        
         [StringValue("Member")]
         Member = 1,
 

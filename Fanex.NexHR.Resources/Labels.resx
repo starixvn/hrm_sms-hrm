@@ -1335,4 +1335,19 @@
   <data name="ResignedDate" xml:space="preserve">
     <value>Resigned Date</value>
   </data>
+  <data name="AssistantSectionHead" xml:space="preserve">
+    <value>Assist.Section Head</value>
+  </data>
+  <data name="ExternalGroup" xml:space="preserve">
+    <value>External Group</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="SectionHead" xml:space="preserve">
+    <value>Section Head</value>
+  </data>
+  <data name="SectionSupervisor" xml:space="preserve">
+    <value>Section Supervisor</value>
+  </data>
 </root>

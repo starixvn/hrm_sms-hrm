@@ -1,7 +1,6 @@
-﻿@using Fanex.NexHR.Models.Supervisor
-@model List<TeamSupervisorModel>
+﻿@model List<TeamSupervisorModel>
 @{
-    ViewBag.Title = "Section Supervisor";
+    ViewBag.Title = Labels.SectionSupervisor;
 }
 @section css{
     @Url.CombresLink("teamsupervisorcss")
@@ -36,7 +35,6 @@
     {
         int rowCount = 0;
         <tbody>
-
             @foreach (TeamSupervisorModel item in Model)
             {
 
@@ -55,12 +53,11 @@
                         <td>
                             @if (item.ActionType == (short)RoleSystem.ShiftManager)
                             {
-
                             }
                             else
                             {
                                 <a href="@Url.Action("ShiftManager", "Team", new { TeamId = ViewBag.TeamId })">
-                                    <img src="~/Styles/Images/edit-icon.png" />
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                             }
                         </td>
@@ -79,20 +76,17 @@
                         <td>
                             @if (item.ActionType == (short)RoleSystem.ShiftManager)
                             {
-
                             }
                             else
                             {
                                 <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
-                                    <img src="~/Styles/Images/edit-icon.png" />
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                             }
                         </td>
                     </tr>
                 }
-
             }
-
             @Html.Hidden("TeamId", (int)ViewBag.TeamId)
         </tbody>
     }

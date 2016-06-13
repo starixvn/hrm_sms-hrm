@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Department
-@model DepartmentViewModel
+﻿@model DepartmentViewModel
 @{
     ViewBag.Title = @Labels.DepartmentManagement;
 }
@@ -18,19 +17,17 @@
 {
     var gender = new List<SelectListItem>
     {
-        new SelectListItem() {Text = "All", Value = ""}, 
+        new SelectListItem() {Text = "All", Value = ""},
         new SelectListItem() {Text = "Active", Value = "0"},
         new SelectListItem() {Text = "Inactive", Value = "1"}
     };
-    @Html.LabelFor(model=> model.IsActive, @Labels.Status)
-	@Html.DropDownListFor(model => model.IsActive, gender)
-    <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
+    @Html.LabelFor(model => model.IsActive, @Labels.Status)
+    @Html.DropDownListFor(model => model.IsActive, gender)
+    <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
     <div class="button-icon">
-    <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")</div>
+        <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")
+    </div>
 }
-
-
-    
 <div class="clear">
 </div>
 <div class="space">
@@ -38,23 +35,13 @@
 <table class="data" style="width: auto; min-width: 500px;">
     <thead>
         <tr>
-            <th>
-                #
-            </th>
-            <th>@Labels.Code
-            </th>
-            <th>@Labels.Department
-            </th>
-            <th>@Labels.Manager
-            </th>
-            <th>@Labels.Parent
-            </th>
-            <th>
-                @Labels.Edit
-            </th>
-            <th>
-                @Labels.Delete
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.Department</th>
+            <th>@Labels.Manager</th>
+            <th>@Labels.Parent</th>
+            <th>@Labels.Edit</th>
+            <th>@Labels.Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -63,49 +50,50 @@
             int index = 1;
             foreach (Department department in Model.Departments)
             {
-            <tr id="row@(department.Id)">
-                <td>@(index++)
-                </td>
-                <td>@department.Code
-                </td>
-                <td>@department.Name
-                </td>
-                @if (department.Manager != null)
-                {
-                    <td class="tooltip" title="@department.Manager.FullName">@department.Manager.NickName
-                    </td>
-                }
-                else
-                {
+                <tr id="row@(department.Id)">
                     <td>
+                        @(index++)
                     </td>
-                }
-
-                @if (department.Parent != null)
-                {
-                    <td>@department.Parent.Name
-                    </td>
-                }
-                else
-                {
                     <td>
+                        @department.Code
                     </td>
-                }
-                
-                <td class="cmd">
-                    <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
-                        <img src="~/Styles/Images/edit-icon.png" /></a>
-                </td>
-                <td>
-                    <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
-                   <img src="~/Styles/Images/delete-icon.png" /></a>
-                </td>
-            </tr>
+                    <td>
+                        @department.Name
+                    </td>
+                    @if (department.Manager != null)
+                    {
+                        <td class="tooltip" title="@department.Manager.FullName">
+                            @department.Manager.NickName
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (department.Parent != null)
+                    {
+                        <td>@department.Parent.Name</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td class="cmd">
+                        <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
+                            <i class="fa fa-pencil fa-lg icon-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
+                            <i class="fa fa-times fa-lg icon-delete"></i>
+                        </a>
+                    </td>
+                </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 7) 
+            @RazorHelper.DisplayNoInformation(colspan: 7)
         }
     </tbody>
 </table>

@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Memo
-@model MemoViewModel
+﻿@model MemoViewModel
 @{
     ViewBag.Title = "Company Memo";
 }
@@ -35,35 +34,27 @@
         <div class="grid_6">
             <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
             @if (Roles.IsUserInRole("HR"))
-            { 
+            {
                 <div class="button-icon">
-                    <span class="icon plus"></span>@Html.ActionLink("Create new Memo", "Create")</div>
+                    <span class="icon plus"></span>@Html.ActionLink("Create new Memo", "Create")
+                </div>
             }
         </div>
     </div>
     <div class="clear">
-    </div> 
+    </div>
     <table id="memo" class="data persist-area" style="width: 900px">
         <thead>
             <tr class="persist-header">
-                <th>
-                    #
-                </th>
-                <th>@Labels.RefNo
-                </th>
-                <th>@Labels.Subject
-                </th>
-                <th>
-                    Category
-                </th>
-                <th>@Labels.Date
-                </th>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.RefNo</th>
+                <th>@Labels.Subject</th>
+                <th>@Labels.Category</th>
+                <th>@Labels.Date</th>
                 @if (Roles.IsUserInRole("HR"))
-                { 
-                    <th>@Labels.Edit
-                    </th>
-                    <th>@Labels.Delete
-                    </th>
+                {
+                    <th>@Labels.Edit</th>
+                    <th>@Labels.Delete</th>
                 }
             </tr>
         </thead>
@@ -72,10 +63,10 @@
             <tbody>
                 @{int index = 1;}
                 @foreach (Memo item in ViewBag.EntityList)
-                { 
-            
+                {
                     <tr id="row_@item.Id">
-                        <td>@(index++)
+                        <td>
+                            @(index++)
                         </td>
                         <td>
                             @item.RefNo
@@ -90,14 +81,16 @@
                             @item.SentDate.ToDateMonthYearFormatedDate()
                         </td>
                         @if (Roles.IsUserInRole("HR"))
-                        { 
+                        {
                             <td class="cmd" title="Edit">
                                 <a href="@Url.Action("edit", "memo", new { Id = item.Id })">
-                                    <img src="~/Styles/Images/edit-icon.png" alt="Edit" /></a>
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
                             </td>
                             <td class="cmd" title="Delete">
                                 <a href="javascript:;" onclick="deleteMemo(@item.Id, '@System.Web.HttpUtility.HtmlEncode(item.Contents)', @item.MemoType);">
-                                    <img src="~/Styles/Images/delete-icon.png" alt="Delete" /></a>
+                                    <i class="fa fa-times fa-lg icon-delete"></i>
+                                </a>
                             </td>
                         }
                     </tr>

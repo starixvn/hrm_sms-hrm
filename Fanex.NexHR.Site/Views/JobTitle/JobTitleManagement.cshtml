@@ -10,7 +10,6 @@
 @section Breadcrumb {
     <a class="step" href="#">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
 <div class="container_24 bunhat">
     @Labels.Keyword
@@ -24,33 +23,31 @@
 <table id="data" class="data persist-area" style="width: auto; min-width: 622px;">
     <thead>
         <tr class="persist-header">
-            <th>
-                #
-            </th>
+            <th>@Labels.SymbolCount</th>
             <th style="width: 340px">
                 @Labels.JobTitle
-        </th>
-        <th>
-            @Labels.Category
-    </th>
-    <th>
-        @Labels.TotalExpat
-</th>
-<th>
-    @Labels.TotalLocal
-</th>
-<th>
-    @Labels.Total
-</th>
-<th>
-    @Labels.Edit
-</th>
-<th>
-    @Labels.Delete
-</th>
-</tr>
-</thead>
-<tbody></tbody>
+            </th>
+            <th>
+                @Labels.Category
+            </th>
+            <th>
+                @Labels.TotalExpat
+            </th>
+            <th>
+                @Labels.TotalLocal
+            </th>
+            <th>
+                @Labels.Total
+            </th>
+            <th>
+                @Labels.Edit
+            </th>
+            <th>
+                @Labels.Delete
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
     <tr id="row${Id}">
@@ -78,19 +75,25 @@
             {{/if}}
         </td>
         <td class="cmd">
-            <a href="javascript:;" class="lnkEdit" data-id=${Id} id='btnEditJobTitle_${Id}' data-categoryid="${CategoryId}"><img src="@Url.Content("~/Styles/Images/edit-icon.png")" /></a>
-            <a href="javascript:;" class="lnkSave" data-id=${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
+            <a href="javascript:;" class="lnkEdit" data-id=${Id} id='btnEditJobTitle_${Id}' data-categoryid="${CategoryId}">
+                <i class="fa fa-pencil fa-lg icon-edit"></i>
+            </a>
+            @*<a href="javascript:;" class="lnkSave" data-id=${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
                 <img src="@Url.Content("~/Styles/Images/approve.png")" />
             </a>
             <a href="javascript:;" class="lnkCancel" data-id=${Id} id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" title="Cancel">
                 <img src="@Url.Content("~/Styles/Images/reject.png")" />
-            </a>
+            </a>*@
         </td>
         <td class="cmd">
             {{if Value!='0'}}
-            <a href="javascript:;" style="cursor:default"><img src="@Url.Content("~/Styles/Images/disabled-delete.png")" /></a>
+            <a href="javascript:;" style="cursor:default">
+                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+            </a>
             {{else}}
-            <a href="javascript:;" class="lnkDelete" data-id=${Id} id="${Id}"><img src="@Url.Content("~/Styles/Images/delete-icon.png")" /></a>
+            <a href="javascript:;" class="lnkDelete" data-id=${Id} id="${Id}">
+                <i class="fa fa-times fa-lg icon-delete"></i>
+            </a>
             {{/if}}
         </td>
     </tr>
@@ -129,6 +132,5 @@
                 @Html.Hidden("jobtitleId")
             </div>
         </div>
-
     </form>
 </div>

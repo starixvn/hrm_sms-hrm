@@ -1,6 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Shifts
-@model ShiftByStatusViewModel
-
+﻿@model ShiftByStatusViewModel
 @section css{
     @Url.CombresLink("shiftcss")
 }
@@ -11,7 +9,7 @@
     ViewBag.Title = Labels.ShiftInfo;
 }
 @section Breadcrumb {
-    <a class="step">@Labels.CompanySpace</a> 
+    <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <span class="step">@ViewBag.Title</span>
 }
@@ -20,13 +18,12 @@
 {
     <span style="padding-right: 5px;">@Labels.Status</span>
     @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
-    <input type="submit" id="submit" value="@Labels.Submit"/>
+    <input type="submit" id="submit" value="@Labels.Submit" />
     if (Roles.IsUserInRole("SystemAdmin"))
-    { 
+    {
         <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
     }
 }
-
 <div class="clear">
 </div>
 <div class="space">
@@ -37,53 +34,51 @@
 </div>
 <div class="grid_24">
     <table id="tblShift" class="data persist-area">
-        <thead class ="persist-header">
+        <thead class="persist-header">
             <tr>
-                <th>#</th>
-                <th class="left">
-                    @Labels.Shift
-                </th>
-                <th>
-                    @Labels.In
-                </th>
-                <th>
-                    @Labels.Out
-                </th>
-                 @if (Roles.IsUserInRole("SystemAdmin"))
-                 { 
+                <th>@Labels.SymbolCount</th>
+                <th class="left">@Labels.Shift</th>
+                <th>@Labels.In</th>
+                <th>@Labels.Out</th>
+                @if (Roles.IsUserInRole("SystemAdmin"))
+                {
                     <th>@Labels.Edit</th>
-                 }
+                }
             </tr>
         </thead>
         <tbody>
-        @if (Model.Shifts != null && Model.Shifts.Any())
-        {
-            var i = 0;
-            foreach (Shift item in Model.Shifts)
+            @if (Model.Shifts != null && Model.Shifts.Any())
             {
-                i++;
-                <tr>
-                    <td>@i</td>
-                    <td class="left">@item.Name
-                    </td>
-                    <td>@item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                    </td>
-                    <td>
-                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                    </td>
-                    @if (Roles.IsUserInRole("SystemAdmin"))
-                    {
-                        <td class="cmd">
-                            <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })"><img src="~/Styles/Images/edit-icon.png" /></a>
+                var i = 0;
+                foreach (Shift item in Model.Shifts)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td class="left">
+                            @item.Name
                         </td>
-                    }
-                </tr>
+                        <td>
+                            @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
+                        </td>
+                        <td>
+                            @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
+                        </td>
+                        @if (Roles.IsUserInRole("SystemAdmin"))
+                        {
+                            <td class="cmd">
+                                <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
             }
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: 7);
-        }
+            else
+            {
+                @RazorHelper.DisplayNoInformation(colspan: 7);
+            }
         </tbody>
     </table>
 </div>

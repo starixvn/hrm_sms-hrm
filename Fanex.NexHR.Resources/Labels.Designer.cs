@@ -394,6 +394,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assist.Section Head.
+        /// </summary>
+        public static string AssistantSectionHead {
+            get {
+                return ResourceManager.GetString("AssistantSectionHead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assistant Leader.
         /// </summary>
         public static string AssitantLeader {
@@ -1240,6 +1249,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External Group.
+        /// </summary>
+        public static string ExternalGroup {
+            get {
+                return ResourceManager.GetString("ExternalGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Feb.
         /// </summary>
         public static string Feb {
@@ -1344,6 +1362,15 @@ namespace Fanex.NexHR.Resources {
         public static string GroupDate {
             get {
                 return ResourceManager.GetString("GroupDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Name.
+        /// </summary>
+        public static string GroupName {
+            get {
+                return ResourceManager.GetString("GroupName", resourceCulture);
             }
         }
         
@@ -2950,11 +2977,29 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section Head.
+        /// </summary>
+        public static string SectionHead {
+            get {
+                return ResourceManager.GetString("SectionHead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Section Management.
         /// </summary>
         public static string SectionManagement {
             get {
                 return ResourceManager.GetString("SectionManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Supervisor.
+        /// </summary>
+        public static string SectionSupervisor {
+            get {
+                return ResourceManager.GetString("SectionSupervisor", resourceCulture);
             }
         }
         

@@ -88,31 +88,31 @@ $(function () {
                 if (bValid) {
                     if ($("#isUpdate").val() === "1") {
                         $.post(_global.root + 'JobTitle/Update',
-        { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
-        function (response) {
-            if (response.IsSuccessful) {
-                document.location = '/jobtitle/jobtitlemanagement';
-            }
-            else {
-                alert(response.Message);
-            }
-        }).error(function () {
-            alert(_messages.errorTryAgain);
-        });
+                        { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
+                        function (response) {
+                            if (response.IsSuccessful) {
+                                document.location = '/jobtitle/jobtitlemanagement';
+                            }
+                            else {
+                                alert(response.Message);
+                            }
+                        }).error(function () {
+                            alert(_messages.errorTryAgain);
+                        });
                     }
                     else {
                         $.post(_global.root + 'JobTitle/Insert',
-        { name: $("#name").val(), categoryId: $("#category").val() },
-        function (response) {
-            if (response.IsSuccessful) {
-                document.location = '/jobtitle/jobtitlemanagement';
-            }
-            else {
-                alert(response.Message);
-            }
-        }).error(function () {
-            alert(_messages.errorTryAgain);
-        });
+                        { name: $("#name").val(), categoryId: $("#category").val() },
+                        function (response) {
+                            if (response.IsSuccessful) {
+                                document.location = '/jobtitle/jobtitlemanagement';
+                            }
+                            else {
+                                alert(response.Message);
+                            }
+                        }).error(function () {
+                            alert(_messages.errorTryAgain);
+                        });
                     }
                 }
             },
@@ -134,7 +134,6 @@ $(function () {
 });
 
 $(document).ready(function () {
-
     $('#keyword').keyup(function (event) {
         if (event.keyCode === 13) {
             query();

@@ -1,10 +1,7 @@
-﻿@model IList<Fanex.NexHR.Models.Holiday>
-@using Fanex.NexHR.Models
-@using Fanex.NexHR.Core;
+﻿@model IList<Holiday>
 @{
     ViewBag.Title = "Holiday";
 }
-
 @section css{
     @Url.CombresLink("sitecss")
 }
@@ -12,38 +9,35 @@
     @Url.CombresLink("holidayjs")
 }
 @section Breadcrumb {
-    <a class="step">@Labels.CompanySpace</a> 
-    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a> 
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 {
-        <span style="padding-right: 5px;">Year</span>
-        @Html.YearPicker("year", 2010, (int)ViewBag.year)
-        <input type="button" id="submit" value="@Labels.Submit" class="processing-submit"/>
+    <span style="padding-right: 5px;">Year</span>
+    @Html.YearPicker("year", 2010, (int)ViewBag.year)
+    <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
     if (Roles.IsUserInRole("HR"))
-    { 
-            <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
+    {
+        <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
     }
 }
 <table id="data" class="data persist-area">
     <thead>
-        <tr class ="persist-header">
-            <th>#</th>
-            @*<th>@Labels.ActualDate
-            </th>*@
-            <th>@Labels.Name
-            </th>
-            <th>@Labels.From
-            </th>
-            <th>@Labels.To
-            </th>
+        <tr class="persist-header">
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Name</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
             @if (Roles.IsUserInRole("HR"))
-            { 
-                <th>@Labels.Edit
+            {
+                <th>
+                    @Labels.Edit
                 </th>
-                <th>@Labels.Delete
+                <th>
+                    @Labels.Delete
                 </th>
             }
         </tr>
@@ -68,10 +62,14 @@
                     @if (Roles.IsUserInRole("HR"))
                     {
                         <td class="cmd">
-                            <a href="@Url.Action("Edit", "Holiday", new { Id = item.Id })"><img src="~/Styles/Images/edit-icon.png" /></a>
+                            <a href="@Url.Action("Edit", "Holiday", new { Id = item.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
                         </td>
-                        <td  class="cmd">
-                            <a href="javascript:;" onclick="deleteHoliday(@item.Id);"><img src="~/Styles/Images/delete-icon.png" /></a>
+                        <td class="cmd">
+                            <a href="javascript:;" onclick="deleteHoliday(@item.Id);">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
                         </td>
                     }
                 </tr>

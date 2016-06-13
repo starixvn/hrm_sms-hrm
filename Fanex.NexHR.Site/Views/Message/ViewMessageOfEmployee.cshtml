@@ -15,7 +15,6 @@
 @{
     IList<Message> messages = ViewBag.Messages as IList<Message>;
 }
-
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
@@ -42,82 +41,68 @@
     <table id="messageTable" class="data persist-area" style="width: 900px;">
         <thead>
             <tr>
-                <th>
-                    #
-                </th>
-                <th>
-                    @Labels.Subject
-            </th>
-            <th>
-                @Labels.Category
-        </th>
-        <th>
-            @Labels.FromDate
-    </th>
-    <th>
-        @Labels.ToDate
-</th>
-<th>
-    @Labels.IsRead
-</th>
-<th>
-    @Labels.Delete
-</th>
-</tr>
-</thead>
-@if (messages != null && messages.Count > 0)
-{
-    <tbody>
-        @{int index = 1;}
-        @foreach (Message message in messages)
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Subject</th>
+                <th>@Labels.Category</th>
+                <th>@Labels.FromDate</th>
+                <th>@Labels.ToDate</th>
+                <th>@Labels.IsRead</th>
+                <th>@Labels.Delete</th>
+            </tr>
+        </thead>
+        @if (messages != null && messages.Count > 0)
         {
-            <tr id="row_@message.MessageId">
-                <td>
-                    @(index++)
-            </td>
-            <td class="left">
-                @if (message.IsRead)
+            <tbody>
+                @{int index = 1;}
+                @foreach (Message message in messages)
                 {
-                    <a href="/message/DetailByEmployee/@message.MessageId">
-                        <span style="color:rgb(66, 127, 204);">@message.Subject</span>
-                    </a>
+                    <tr id="row_@message.MessageId">
+                        <td>
+                            @(index++)
+                        </td>
+                        <td class="left">
+                            @if (message.IsRead)
+                            {
+                                <a href="/message/DetailByEmployee/@message.MessageId">
+                                    <span style="color:rgb(66, 127, 204);">@message.Subject</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" onclick="detailMessage(@message.MessageId)">
+                                    @message.Subject
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            @message.CategoryName
+                        </td>
+                        <td>
+                            @message.FromDate.ToDateMonthYearFormatedDate()
+                        </td>
+                        <td>
+                            @message.ToDate.ToDateMonthYearFormatedDate()
+                        </td>
+                        <td>
+                            @{
+                                if (message.IsRead)
+                                {
+                                    <i class="fa fa-check fa-lg icon-check"></i>
+                                }
+                            }
+                        </td>
+                        <td class="cmd" title="Delete">
+                            <a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    </tr>
                 }
-                else
-                {
-                    <a href="javascript:;" onclick="detailMessage(@message.MessageId)">
-                        @message.Subject
-                    </a>
-                }
-            </td>
-            <td>
-                @message.CategoryName
-        </td>
-        <td>
-            @message.FromDate.ToDateMonthYearFormatedDate()
-    </td>
-    <td>
-        @message.ToDate.ToDateMonthYearFormatedDate()
-</td>
-<td>
-    @{
-            if (message.IsRead)
-            {
-                <img src="~/Styles/Images/tick-icon.png" title="Read"></img>
-            }
-    }
-</td>
-<td class="cmd" title="Delete">
-    <a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
-        <img src="~/Styles/Images/delete-icon.png" alt="Delete" />
-    </a>
-</td>
-</tr>
+            </tbody>
         }
-    </tbody>
-}
-else
-{
-    @RazorHelper.DisplayNoInformation(7)
-}
-</table>
+        else
+        {
+            @RazorHelper.DisplayNoInformation(7)
+        }
+    </table>
 }

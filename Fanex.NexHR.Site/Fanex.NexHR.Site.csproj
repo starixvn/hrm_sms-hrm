@@ -972,7 +972,7 @@
     <Content Include="Views\Request\History\ViewLeaveRequestHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ExtensionNumber\Index.cshtml" />
+    <Content Include="Views\ExtensionNo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Emails\MemoNotification.cshtml">
@@ -1046,10 +1046,10 @@
     <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
     <Content Include="ExcelTemplates\OvertimeReportTemplate.xls" />
     <Content Include="ExcelTemplates\EmployeeOvertimeRecordTemplate.xls" />
-    <Content Include="Views\ExtensionNumber\AddNewMember.cshtml" />
-    <Content Include="Views\ExtensionNumber\Edit.cshtml" />
+    <Content Include="Views\ExtensionNo\AddNewMember.cshtml" />
+    <Content Include="Views\ExtensionNo\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourMonthly.cshtml" />
-    <Content Include="Views\ExtensionNumber\ManageExternalGroup.cshtml" />
+    <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />
     <Content Include="Views\Calendar\MemberScheduleInOrder.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
