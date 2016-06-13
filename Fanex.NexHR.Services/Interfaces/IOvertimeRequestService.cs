@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IOvertimeRequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Overtime;
@@ -16,9 +7,6 @@ namespace Fanex.NexHR.Services.Interfaces
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.ViewModels.Overtime;
 
-    /// <summary>
-    /// Interface Overtime Request Service.
-    /// </summary>
     public interface IOvertimeRequestService
     {
         IList<OvertimeRequest> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);

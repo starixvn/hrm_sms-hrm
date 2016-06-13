@@ -23,12 +23,6 @@
             return detail;
         }
 
-        public IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
-        {
-            List<ChangeShiftDetailModel> details = GetData<ChangeShiftDetailModel>(criteria).ToList();
-            return details;
-        }
-
         public void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);

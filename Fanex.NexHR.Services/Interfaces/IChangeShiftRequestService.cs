@@ -8,8 +8,6 @@
     {
         IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
 
-        IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
-
         void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria);
 
         void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria);

@@ -1,23 +1,11 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TimeSheetRecordController.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.Support
+﻿namespace Fanex.NexHR.Controllers.Support
 {
-    using System;
-    using System.Web.Mvc;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.TimesheetRecord;
+    using System;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// Time Sheet Record Controller.
-    /// </summary>
     public class TimeSheetRecordController : BaseController
     {
         private readonly ISupportService _supportService;
@@ -44,20 +32,17 @@ namespace Fanex.NexHR.Controllers.Support
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Post TimeSheetRecordViewModel.
-        /// </summary>
-        /// <param name="model">TimeSheetRecord ViewModel.</param>
-        /// <returns>Boolean to check.</returns>
         [HttpPost]
         public ActionResult Index(TimeSheetRecordViewModel model)
         {
-            model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
+            if (model != null)
+            {
+                model.ForDate = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
+                model.RecordTime = model.ForDate;
+                model.InsertDate = model.ForDate;
 
-            model.RecordTime = model.ForDate;
-            model.InsertDate = model.ForDate;
-
-            ViewBag.Requested = _supportService.RecordTimeSheet(model);
+                ViewBag.Requested = _supportService.RecordTimeSheet(model);
+            }
 
             return View(model);
         }

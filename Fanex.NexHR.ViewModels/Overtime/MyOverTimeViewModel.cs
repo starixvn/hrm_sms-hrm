@@ -1,24 +1,13 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="MyOverTimeViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels.Overtime
 {
+    using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models.Overtime;
 
-    /// <summary>
-    /// My Overtime ViewModel.
-    /// </summary>
     public class MyOverTimeViewModel
     {
         private const string _OverTimeRequesttDetailTpl = "<Request OnDate='{0}' ShiftID='{1}' TimeIn='{2}' "
@@ -47,6 +36,8 @@ namespace Fanex.NexHR.ViewModels.Overtime
 
         [Required]
         public int EmpId { get; set; }
+
+        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 
         public string OvertimeRequestDetail
         {

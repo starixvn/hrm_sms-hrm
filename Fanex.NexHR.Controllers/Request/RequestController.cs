@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.LeaveType;
@@ -18,149 +14,36 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public class RequestController : BaseController
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly IShiftService _shiftService;
-        private readonly ILeaveTypeService _leaveTypeService;
-        private readonly IRequestService _requestService;
-        private readonly ITeamService _teamService;
-        private readonly IKeepInViewRequestService _keepInViewRequestService;
-        private readonly IChangeShiftRequestService _changeShiftRequestService;
-        private readonly ICheckInOutRequestService _checkInOutRequestService;
-        private readonly ILateInEarlyOutRequestService _lateInEarlyOutRequestService;
-        private readonly ILeaveRequestService _leaveRequestService;
-        private readonly IOvertimeRequestService _overtimeService;
-        private readonly IWorkingCalendarService _workingCalendarService;
+        private readonly IEmployeeService employeeService;
+        private readonly IShiftService shiftService;
+        private readonly IRequestService requestService;
+        private readonly ITeamService teamService;
+        private readonly ILeaveTypeService leaveTypeService;
 
         public RequestController()
-            : this(null, null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null)
         {
         }
 
         public RequestController(
             IEmployeeService employeeService,
             IShiftService shiftService,
-            ILeaveTypeService leaveTypeService,
             IRequestService requestService,
             ITeamService teamService,
-            IKeepInViewRequestService keepInViewRequestService,
-            IChangeShiftRequestService changeShiftRequestService,
-            ICheckInOutRequestService checkInOutRequestService,
-            ILateInEarlyOutRequestService lateInEarlyOutRequestService,
-            ILeaveRequestService leaveRequestService,
-            IOvertimeRequestService overtimeService,
-            IWorkingCalendarService workingCalendarService)
+            ILeaveTypeService leaveTypeService)
         {
-            _employeeService = employeeService ?? new EmployeeService();
-            _shiftService = shiftService ?? new ShiftService();
-            _leaveTypeService = leaveTypeService ?? new LeaveTypeService();
-            _requestService = requestService ?? new RequestService();
-            _teamService = teamService ?? new TeamService();
-            _keepInViewRequestService = keepInViewRequestService ?? new KeepInViewRequestService();
-            _changeShiftRequestService = changeShiftRequestService ?? new ChangeShiftRequestService();
-            _checkInOutRequestService = checkInOutRequestService ?? new CheckInOutRequestService();
-            _lateInEarlyOutRequestService = lateInEarlyOutRequestService ?? new LateInEarlyOutRequestService();
-            _leaveRequestService = leaveRequestService ?? new LeaveRequestService();
-            _overtimeService = overtimeService ?? new OvertimeRequestService();
-            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-        }
-
-        public IEmployeeService EmployeeService
-        {
-            get
-            {
-                return this._employeeService;
-            }
-        }
-
-        public IShiftService ShiftService
-        {
-            get
-            {
-                return this._shiftService;
-            }
-        }
-
-        public ILeaveTypeService LeaveTypeService
-        {
-            get
-            {
-                return this._leaveTypeService;
-            }
-        }
-
-        public IRequestService RequestService
-        {
-            get
-            {
-                return this._requestService;
-            }
-        }
-
-        public ITeamService TeamService
-        {
-            get
-            {
-                return this._teamService;
-            }
-        }
-
-        public IKeepInViewRequestService KeepInViewRequestService
-        {
-            get
-            {
-                return this._keepInViewRequestService;
-            }
-        }
-
-        public IChangeShiftRequestService ChangeShiftRequestService
-        {
-            get
-            {
-                return this._changeShiftRequestService;
-            }
-        }
-
-        public ICheckInOutRequestService CheckInOutRequestService
-        {
-            get
-            {
-                return this._checkInOutRequestService;
-            }
-        }
-
-        public ILateInEarlyOutRequestService LateInEarlyOutRequestService
-        {
-            get
-            {
-                return this._lateInEarlyOutRequestService;
-            }
-        }
-
-        public ILeaveRequestService LeaveRequestService
-        {
-            get
-            {
-                return this._leaveRequestService;
-            }
-        }
-
-        public IOvertimeRequestService OvertimeService
-        {
-            get
-            {
-                return this._overtimeService;
-            }
-        }
-
-        public IWorkingCalendarService WorkingCalendarService
-        {
-            get
-            {
-                return this._workingCalendarService;
-            }
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.shiftService = shiftService ?? new ShiftService();
+            this.requestService = requestService ?? new RequestService();
+            this.teamService = teamService ?? new TeamService();
+            this.leaveTypeService = leaveTypeService ?? new LeaveTypeService();
         }
 
         public PartialViewResult CriteriaPanel(RequestViewModel request)
@@ -210,7 +93,7 @@
                 RequestId = id,
                 RequestType = type
             };
-            IList<RequestEntity> requests = RequestService.GetHistoryRequest(criteria);
+            IList<RequestEntity> requests = requestService.GetHistoryRequest(criteria);
             ViewBag.EntityList = requests;
             ViewBag.requestType = type;
 
@@ -235,7 +118,7 @@
                 RequestId = id
             };
 
-            CommandResult result = _requestService.Delete(criteria);
+            CommandResult result = requestService.Delete(criteria);
             return Json(result);
         }
 
@@ -249,7 +132,7 @@
                 Query = query.Trim(),
                 IncludeLoginUser = true
             };
-            IList<SupervisorNameModel> supervisors = EmployeeService.GetSupervisorByQuery(criteria);
+            IList<SupervisorNameModel> supervisors = employeeService.GetSupervisorByQuery(criteria);
 
             return Json(supervisors, JsonRequestBehavior.AllowGet);
         }
@@ -277,22 +160,9 @@
                 Role = role,
                 RequestType = requestType
             };
-            IList<SupervisorNameModel> supervisors = _employeeService.GetSupervisorByRequestType(criteria);
+            IList<SupervisorNameModel> supervisors = employeeService.GetSupervisorByRequestType(criteria);
 
             return supervisors;
-        }
-
-        [NonAction]
-        public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, byte requestType)
-        {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = requestType
-            };
-            VerifierAndApproverForRequest supervisor = _requestService.GetVerifierAndApprover(criteria);
-
-            return supervisor;
         }
 
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
@@ -309,7 +179,7 @@
                             {
                                 RequestId = model.RequestId
                             };
-                            model.CheckInOutDetail = _checkInOutRequestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
+                            model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
                             break;
 
                         case (int)RequestType.LateIn:
@@ -318,11 +188,11 @@
                             {
                                 RequestId = model.RequestId
                             };
-                            model.LateInEarlyOutDetail = _lateInEarlyOutRequestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
+                            model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
                             break;
 
                         case (int)RequestType.ChangeShift:
-                            ViewBag.Shifts = _shiftService.GetAll(isShowOff: true);
+                            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
                             model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
                             break;
 
@@ -331,7 +201,7 @@
                             {
                                 ExcludeNotShown = true
                             };
-                            ViewBag.LeaveTypes = _leaveTypeService.GetAll(criteria);
+                            ViewBag.LeaveTypes = leaveTypeService.GetAll(criteria);
                             model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                             break;
                     }
@@ -363,36 +233,10 @@
                     Comment = model.Comment,
                     ProcessedBy = CurrentUser.Id
                 };
-                result = _requestService.Process(criteria);
+                result = requestService.Process(criteria);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        protected bool Editable(byte status, int employeeId, int creatorId)
-        {
-            return status == (byte)CurrentRequestStatus.Pending && (employeeId == CurrentUser.Id || creatorId == CurrentUser.Id);
-        }
-
-        protected string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
-        {
-            string role;
-            switch (requestViewType)
-            {
-                case RequestViewType.PersonalSpace:
-                    role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
-                    break;
-
-                case RequestViewType.HRSpace:
-                    role = ((int)RoleSystem.HR).ToString();
-                    break;
-
-                default:
-                    role = ((int)RoleSystem.Member).ToString();
-                    break;
-            }
-
-            return role;
         }
 
         protected string GetStatus(int statusId)
@@ -425,7 +269,7 @@
                 SupervisorId = CurrentUser.Id
             };
 
-            request.TeamCollection = _teamService.GetBySupervisor(getGroupCriteria);
+            request.TeamCollection = teamService.GetBySupervisor(getGroupCriteria);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
@@ -448,7 +292,7 @@
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
+            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             request.CurrentUserId = CurrentUser.Id;
             request.Requests = requestList;
         }
@@ -459,7 +303,7 @@
             {
                 RequestId = requestId
             };
-            IList<ChangeShiftDetailModel> changeShiftDetails = _changeShiftRequestService.GetChangeShiftDetailToIgnoreById(criteria);
+            IList<ChangeShiftDetailModel> changeShiftDetails = requestService.GetChangeShiftDetailToIgnoreById(criteria);
 
             return changeShiftDetails;
         }
@@ -471,7 +315,7 @@
                 RequestId = requestId
             };
 
-            IList<LeaveDetailModel> leaveRequestDetail = _requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
+            IList<LeaveDetailModel> leaveRequestDetail = requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
 
             return leaveRequestDetail;
         }
@@ -486,7 +330,7 @@
                 IgnoredDisciplines = model.IgnoredDisciplines,
                 ProcessedBy = CurrentUser.Id
             };
-            CommandResult result = _requestService.ApproveRequest(criteria);
+            CommandResult result = requestService.ApproveRequest(criteria);
 
             return result;
         }

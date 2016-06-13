@@ -126,10 +126,10 @@ var LeaveRequestView = (function ($) {
             $.ajax({
                 type: 'POST',
                 dataType: "json",
-                url: '/Leave/SendReasonReeditToSuperVisor',
+                url: _global.root + 'Leave/SendReasonReeditToSuperVisor',
                 data: { requestId: LeaveRequestView.requestId, reason: reason },
                 success: function (response) {
-                    if (response.Code === 0) {
+                    if (response.IsSuccessful) {
                         location.href = _global.root + requestType + "/Update?requestId=" + LeaveRequestView.requestId;
                     }
                     else {

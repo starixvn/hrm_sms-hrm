@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="LeaveRequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.11">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -23,59 +14,10 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// LeaveRequest Service.
-    /// </summary>
     public class LeaveRequestService : RequestService, ILeaveRequestService
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
         private const string _ReeditReasonEmailTpl = "~/app_data/emails/ReeditRequest.cshtml";
-
-        /// <summary>
-        /// Function to insert leave request.
-        /// </summary>
-        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult Insert(InsertLeaveRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = null;
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Insert(criteria, hasGetOutputParams: true);
-                if (commandResult.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForInsertLeaveSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Function to update leave request.
-        /// </summary>
-        /// <param name="criteria">UpdateLeaveRequest Criteria.</param>
-        /// <returns>Result of update.</returns>
-        public CommandResult Update(UpdateLeaveRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = null;
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-                if (commandResult.Code == 0)
-                {
-                    var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-                    var taskSendMail = new Task(() => this.SendMailForUpdateLeaveSuccessfully(criteria, templateEmailPath));
-                    taskSendMail.Start();
-                }
-            }
-
-            return commandResult;
-        }
 
         public IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria)
         {
@@ -89,11 +31,6 @@ namespace Fanex.NexHR.Services
             return detail;
         }
 
-        /// <summary>
-        /// Function to reset request and send mail to supervisor in case reedit.
-        /// </summary>
-        /// <param name="criteria">ResetLeaveRequest Criteria.</param>
-        /// <returns>Command Result.</returns>
         public CommandResult SendReasonReeditToSupervisor(ResetLeaveRequestCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -125,12 +62,21 @@ namespace Fanex.NexHR.Services
             return employeeLeaveBalance;
         }
 
-        /// <summary>
-        /// Function to send mail for saved success for leave request.
-        /// </summary>
-        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
-        /// <param name="templateEmailPath">Path of template email.</param>
-        private void SendMailForInsertLeaveSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria)
+        {
+            var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
+        }
+
+        public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria)
+        {
+            var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
+            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+            taskSendMail.Start();
+        }
+
+        private void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
@@ -152,7 +98,7 @@ namespace Fanex.NexHR.Services
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
                 email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
-                this.EmailService.SendEmail(
+                EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -161,12 +107,7 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to send mail for saved success for leave request.
-        /// </summary>
-        /// <param name="criteria">InsertLeaveRequest Criteria.</param>
-        /// <param name="templateEmailPath">Path of template email.</param>
-        private void SendMailForUpdateLeaveSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
+        private void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
@@ -188,7 +129,7 @@ namespace Fanex.NexHR.Services
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
                 email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
 
-                this.EmailService.SendEmail(
+                EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCc,
@@ -197,12 +138,6 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to send mail for leave request reset success.
-        /// </summary>
-        /// <param name="requestId">Request Id.</param>
-        /// <param name="reason">Reason to reedit.</param>
-        /// <param name="templateEmailPath">Path of template email.</param>
         private void SendMailForReSetSuccessfully(long requestId, string reason, string templateEmailPath)
         {
             var criteria = new GetRequestByIdCriteria()
@@ -217,18 +152,8 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        /// <summary>
-        /// Function to send mail to supervisor for reedit action.
-        /// </summary>
-        /// <param name="model">LeaveRequest ViewModel.</param>
-        /// <param name="reason">The reason to reedit.</param>
-        /// <param name="sendToNickName">Nick name of person email send to.</param>
-        /// <param name="templateEmailPath">The path of template email.</param>
-        /// <param name="mailTo">Input mail to.</param>
-        /// <param name="mailCC">Input mail cc.</param>
         private void SendMailForReeditRequest(RequestEntity model, string reason, string sendToNickName, string templateEmailPath, string mailTo, string mailCC)
         {
-            // send email(s)
             var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
             string subject = Messages.ReeditSubject + " " + model.Requester.NickName;
 

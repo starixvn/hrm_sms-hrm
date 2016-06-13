@@ -122,13 +122,13 @@
             @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
         </div>
         <div class="input">
-            @if (Model.VerifierList.Count > 1)
+            @if (Model.VerifierAndApprover.Verifiers.Count > 1)
             {
-                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList, Labels.SelectVerifier)
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier)
             }
             else
             {
-                @Html.DropDownListFor(model => model.VerifierId, Model.VerifierList)
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"))
             }
         </div>
         <div class="clear">
@@ -139,13 +139,13 @@
             @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
         </div>
         <div class="input">
-            @if (Model.ApproverList.Count > 1)
+            @if (Model.VerifierAndApprover.Approvers.Count > 1)
             {
-                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList, Labels.SelectApprover)
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover)
             }
             else
             {
-                @Html.DropDownListFor(model => model.ApproverId, Model.ApproverList)
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"))
             }
         </div>
         <div class="clear">

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="LeaveRequestViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
     using System.Collections.Generic;
@@ -68,13 +59,15 @@ namespace Fanex.NexHR.ViewModels.Request
 
         public IList<LeaveType> LeaveTypeList { get; set; }
 
-        public IList<SelectListItem> VerifierList { get; set; }
-
-        public IList<SelectListItem> ApproverList { get; set; }
+        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 
         public EmployeeLeaveBalance EmployeeLeaveBalance { get; set; }
 
         public RequestStatus Status { get; set; }
+
+        public DateTime MinDate { get; set; }
+
+        public DateTime MaxDate { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

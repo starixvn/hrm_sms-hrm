@@ -6,6 +6,8 @@
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -412,18 +414,6 @@
             return emailModel;
         }
 
-        public IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<LeaveDetailModel> leaveDetails = null;
-            if (criteria.IsValid())
-            {
-                leaveDetails = GetData<LeaveDetailModel>(criteria).ToList();
-            }
-
-            return leaveDetails;
-        }
-
         public string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
         {
             string role;
@@ -455,6 +445,40 @@
             }
 
             return supervisor;
+        }
+
+        public RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria)
+        {
+            RequestEntity request = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                request = RequestRepository.GetRequestToIgnoreById(criteria);
+            }
+
+            return request;
+        }
+
+        public RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria)
+        {
+            RequestEntity request = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                request = RequestRepository.GetRequestToIgnoreById(criteria);
+            }
+
+            return request;
+        }
+
+        public IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
+        {
+            List<ChangeShiftDetailModel> details = GetData<ChangeShiftDetailModel>(criteria).ToList();
+            return details;
+        }
+
+        public IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
+        {
+            IList<LeaveDetailModel> leaveDetails = GetData<LeaveDetailModel>(criteria).ToList();
+            return leaveDetails;
         }
 
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)

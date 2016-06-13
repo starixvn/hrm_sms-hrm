@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertLeaveRequestCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Request.Leave
+﻿namespace Fanex.NexHR.Criteria.Request.Leave
 {
     using System;
     using System.Collections.Generic;
@@ -45,8 +36,6 @@ namespace Fanex.NexHR.Criteria.Request.Leave
         public string LeaveTypeName { get; set; }
 
         public decimal TotalDays { get; set; }
-
-        public DateTime CreatedDate { get; set; }
 
         public int CreatedBy { get; set; }
 

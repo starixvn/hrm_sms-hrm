@@ -3,6 +3,8 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using System.Collections.Generic;
@@ -27,10 +29,16 @@
 
         CommandResult ApproveRequest(ApproveRequestCriteria criteria);
 
-        IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
-
         string CheckRoleAccordingToRequestType(RequestViewType requestViewType);
 
         VerifierAndApproverForRequest GetVerifierAndApprover(GetVerifierAndApproverCriteria criteria);
+
+        RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria);
+
+        RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria);
+
+        IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
+
+        IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
     }
 }

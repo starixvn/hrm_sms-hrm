@@ -112,6 +112,24 @@
             return supervisor;
         }
 
+        public RequestEntity GetRequestToIgnoreById(ICriteria criteria)
+        {
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<RequestEntity, Shift, Employee, RequestTypeModel, RequestEntity>(
+                    (request, shift, requester, type) =>
+                    {
+                        request.RequestType = type;
+                        request.FromShift = shift;
+                        request.Requester = requester;
+
+                        return request;
+                    },
+                    "ShiftId, RequesterId, RequestType",
+                    criteria.GetSpParams());
+            }
+        }
+
         private IList<RequestEntity> FillData(IDataReader reader)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();

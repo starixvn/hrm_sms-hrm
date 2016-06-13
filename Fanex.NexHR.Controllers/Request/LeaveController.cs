@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -15,10 +11,44 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
-    public class LeaveController : RequestController
+    public class LeaveController : BaseController
     {
+        private readonly ILeaveRequestService leaveRequestService;
+        private readonly IRequestService requestService;
+        private readonly ICommandService commandService;
+        private readonly IEmployeeService employeeService;
+        private readonly IWorkingCalendarService workingCalendarService;
+        private readonly ILeaveTypeService leaveTypeService;
+
+        public LeaveController()
+            : this(null, null, null, null, null, null)
+        {
+        }
+
+        public LeaveController(
+            ILeaveRequestService leaveRequestService, 
+            IRequestService requestService, 
+            ICommandService commandService,
+            IEmployeeService employeeService,
+            IWorkingCalendarService workingCalendarService,
+            ILeaveTypeService leaveTypeService)
+        {
+            this.leaveRequestService = leaveRequestService ?? new LeaveRequestService();
+            this.requestService = requestService ?? new RequestService();
+            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            this.leaveTypeService = leaveTypeService ?? new LeaveTypeService();
+        }
+
         public ActionResult Create()
         {
             var model = new LeaveRequestViewModel
@@ -32,8 +62,7 @@
                 LeaveTypeList = GetAllLeaveType(),
                 TotalRequest = GetNumberRequestInMonth(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
-                VerifierList = GetVerifiers(CurrentUser.Id),
-                ApproverList = GetApprovers(CurrentUser.Id)
+                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
 
             return View(model);
@@ -47,10 +76,14 @@
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = CurrentUser.Id;
-            criteria.CreatedDate = DateTime.Now;
 
-            CommandResult result = LeaveRequestService.Insert(criteria);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+            if (result.IsSuccessful)
+            {
+                leaveRequestService.SendMailForInsertSuccessfully(criteria);
+            }
+
+            return Json(result);
         }
 
         public ActionResult Update(long requestId)
@@ -59,42 +92,19 @@
             {
                 RequestId = requestId
             };
-            RequestEntity request = RequestService.GetRequestById(criteria);
+            RequestEntity request = requestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, model.EmployeeId))
             {
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-            minDate = minDate > model.FromDate ? model.FromDate : minDate;
-            if (model.LeaveTypeId == Constants.MaternityLeave)
-            {
-                //// rule: user can make leave request (maternity leave) for 6 months.
-                maxDate = maxDate.AddMonths(2);
-            }
-
-            var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
-            {
-                EmpId = this.CurrentUser.Id,
-                FromDate = minDate,
-                ToDate = maxDate
-            };
-
-            IList<DateTime> listUnavailDates = model.LeaveTypeId == Constants.GeneralLeave
-                ? null
-                : EmployeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            model.UnavailDates = listUnavailDates;
-
+            model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
-            model.VerifierList = GetVerifiers(CurrentUser.Id);
-            model.ApproverList = GetApprovers(CurrentUser.Id);
+            model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
 
             ViewBag.IsView = false;
-            ViewBag.MinDate = minDate;
-            ViewBag.MaxDate = maxDate;
             return View(model);
         }
 
@@ -106,11 +116,14 @@
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = CurrentUser.Id;
-            criteria.ModifiedDate = DateTime.Now;
 
-            CommandResult result = LeaveRequestService.Update(criteria);
+            CommandResult result = commandService.Update(criteria);
+            if (result.IsSuccessful)
+            {
+                leaveRequestService.SendMailForUpdateSuccessfully(criteria);
+            }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(result);
         }
 
         public ActionResult Detail(int requestId)
@@ -119,11 +132,10 @@
             {
                 RequestId = requestId
             };
-            RequestEntity request = RequestService.GetRequestById(criteria);
+            RequestEntity request = requestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = GetAllLeaveType();
-            model.VerifierList = GetVerifiers(request.Requester.Id, request);
-            model.ApproverList = GetApprovers(request.Requester.Id, request);
+            model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
 
             return View(model);
@@ -138,13 +150,6 @@
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
-            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
-            {
-                EmpId = CurrentUser.Id,
-                RequestId = null,
-                EffectedDay = new DateTime(year, 1, 1)
-            };
-            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             var criteria = new GetRequestCriteria()
             {
                 SupervisorId = CurrentUser.Id,
@@ -157,7 +162,7 @@
                 IsLocal = null
             };
 
-            IList<RequestEntity> entityList = RequestService.GetRequests(criteria);
+            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
 
             ViewBag.Year = year;
             ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
@@ -166,13 +171,13 @@
 
         public ActionResult GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
         {
-            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
+            var criteria = new GetLeaveBalanceCriteria()
             {
                 EmpId = employeeId,
                 RequestId = requestId == -1 ? null : requestId,
                 EffectedDay = toDate.HasValue ? toDate.Value : DateTime.Now.Date
             };
-            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(criteria);
             return Json(employeeLeaveBalance, JsonRequestBehavior.AllowGet);
         }
 
@@ -185,7 +190,7 @@
                 GroupIds = string.Empty,
                 EmpId = employeeId
             };
-            IList<WorkingCalendarModel> calendars = WorkingCalendarService.GetWorkingCalendarByDateRange(criteria);
+            IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
             IList<LeaveDetailModel> leaveRequestDetail = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
@@ -194,7 +199,7 @@
                     RequestId = requestId
                 };
 
-                leaveRequestDetail = LeaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
+                leaveRequestDetail = leaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
             }
 
             leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
@@ -215,7 +220,7 @@
                 EmpId = CurrentUser.Id,
                 Reason = reason
             };
-            CommandResult result = LeaveRequestService.SendReasonReeditToSupervisor(criteria);
+            CommandResult result = leaveRequestService.SendReasonReeditToSupervisor(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -336,58 +341,41 @@
             }
         }
 
-        private IList<SelectListItem> GetListItem(IList<SupervisorNameModel> supervisors)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, RequestEntity request = null)
         {
-            IList<SelectListItem> selectItems = supervisors.Select(x => new SelectListItem
+            var criteria = new GetVerifierAndApproverCriteria
             {
-                Text = x.NickName + " (" + x.FullName + ")",
-                Value = x.OwnerId.ToString()
-            }).ToList();
+                EmpId = employeeId,
+                RequestType = (byte)RequestType.Leave
+            };
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
 
-            return selectItems;
-        }
-
-        private IList<SelectListItem> GetVerifiers(int empId, RequestEntity request = null)
-        {
-            IList<SupervisorNameModel> verifiers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Verifier, (byte)RequestType.Leave);
-            if (request != null && request.VerifiedBy != null)
+            if (request != null)
             {
-                var verifier = new SupervisorNameModel()
+                if (request.VerifiedBy != null && !supervisor.Verifiers.Where(t => t.OwnerId == request.VerifiedBy.Id).Any())
                 {
-                    OwnerId = request.VerifiedBy.Id,
-                    NickName = request.VerifiedBy.NickName,
-                    FullName = request.VerifiedBy.FullName
-                };
+                    var verifier = new SupervisorNameModel()
+                    {
+                        OwnerId = request.VerifiedBy.Id,
+                        NickName = request.VerifiedBy.NickName,
+                        FullName = request.VerifiedBy.FullName
+                    };
+                    supervisor.Verifiers.Add(verifier);
+                }
 
-                if (!verifiers.Where(t => t.OwnerId == verifier.OwnerId).Any())
+                if (request.ApprovedBy != null && !supervisor.Approvers.Where(t => t.OwnerId == request.ApprovedBy.Id).Any())
                 {
-                    verifiers.Add(verifier);
+                    var approver = new SupervisorNameModel()
+                    {
+                        OwnerId = request.ApprovedBy.Id,
+                        NickName = request.ApprovedBy.NickName,
+                        FullName = request.ApprovedBy.FullName
+                    };
+                    supervisor.Approvers.Add(approver);
                 }
             }
 
-            return GetListItem(verifiers);
-        }
-
-        private IList<SelectListItem> GetApprovers(int empId, RequestEntity request = null)
-        {
-            IList<SupervisorNameModel> approvers = GetSupervisorByRequestType(empId, (byte)RoleSystem.Approver, (byte)RequestType.Leave);
-
-            if (request != null && request.ApprovedBy != null)
-            {
-                var approver = new SupervisorNameModel()
-                {
-                    OwnerId = request.ApprovedBy.Id,
-                    NickName = request.ApprovedBy.NickName,
-                    FullName = request.ApprovedBy.FullName
-                };
-
-                if (!approvers.Where(t => t.OwnerId == approver.OwnerId).Any())
-                {
-                    approvers.Add(approver);
-                }
-            }
-
-            return GetListItem(approvers);
+            return supervisor;
         }
 
         private IList<LeaveType> GetAllLeaveType()
@@ -396,7 +384,7 @@
             {
                 ExcludeNotShown = true
             };
-            IList<LeaveType> leaveTypes = LeaveTypeService.GetAll(criteria);
+            IList<LeaveType> leaveTypes = leaveTypeService.GetAll(criteria);
             return leaveTypes;
         }
 
@@ -427,6 +415,17 @@
                 };
             }
 
+            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
+            var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
+            
+            if (model.LeaveTypeId == Constants.MaternityLeave)
+            {
+                //// rule: user can make leave request (maternity leave) for 6 months.
+                maxDate = maxDate.AddMonths(2);
+            }
+
+            model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
+            model.MaxDate = maxDate;
             return model;
         }
 
@@ -439,7 +438,7 @@
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };
 
-            EmployeeLeaveBalance employeeLeaveBalance = LeaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
+            EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             return employeeLeaveBalance;
         }
 
@@ -448,16 +447,31 @@
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var requestInMonthCriteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria()
             {
                 EmployeeId = CurrentUser.Id,
                 RequestType = (int)RequestType.Leave,
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            decimal numberRequests = RequestService.GetNumberRequestInMonth(requestInMonthCriteria);
+            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
 
             return numberRequests;
+        }
+
+        private IList<DateTime> GetUnavailDate(LeaveRequestViewModel model)
+        {
+            var criteria = new GetUnavailableRequestDateCriteria()
+            {
+                EmpId = model.EmployeeId,
+                FromDate = model.MinDate,
+                ToDate = model.MaxDate
+            };
+
+            IList<DateTime> unavailDates = model.LeaveTypeId == Constants.GeneralLeave
+                ? new List<DateTime> { DateTime.Now.AddYears(-3) }
+                : employeeService.GetUnavailableDates(criteria);
+            return unavailDates;
         }
     }
 }
