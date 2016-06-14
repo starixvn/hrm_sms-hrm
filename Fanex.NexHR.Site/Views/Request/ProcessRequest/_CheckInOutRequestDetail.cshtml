@@ -1,7 +1,7 @@
 ﻿@model RequestEntity
 @if (Model != null)
 {
-    <table class="tabledata">
+    <table class="data">
         <thead>
             <tr>
                 <th>@Labels.RequestTime</th>
@@ -10,6 +10,7 @@
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Remark</th>
                 <th>@Labels.Ignored</th>
+                <th>@Labels.Confirmed</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +45,9 @@
                         var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
                     }
                     <input type="checkbox" data-workdate="@Model.RequestedDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                </td>
+                <td class="confirmedDiscipline">
+                    <input type="checkbox" />
                 </td>
             </tr>
         </tbody>

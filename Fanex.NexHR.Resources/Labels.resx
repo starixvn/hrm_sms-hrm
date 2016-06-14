@@ -1350,4 +1350,7 @@
   <data name="SectionSupervisor" xml:space="preserve">
     <value>Section Supervisor</value>
   </data>
+  <data name="Confirmed" xml:space="preserve">
+    <value>Confirmed</value>
+  </data>
 </root>

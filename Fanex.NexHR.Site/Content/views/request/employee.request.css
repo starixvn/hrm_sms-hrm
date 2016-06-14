@@ -1,0 +1,13 @@
+﻿#dialogProcessRequest form > .formrow > .label {
+  width: auto;
+}
+
+#dialogProcessRequest form > .formrow > .input {
+  margin-left: 0;
+}
+
+#dialogProcessRequest form > .formrow > .input textarea {
+  margin-left: 10px;
+}
+
+/*# sourceMappingURL=employee.request.css.map */

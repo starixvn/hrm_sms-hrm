@@ -181,6 +181,12 @@
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="Avatars\avatar.jpg" />
+    <Content Include="Content\main.css">
+      <DependentUpon>main.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\main.min.css">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -241,6 +247,12 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\views\request\employee.request.css">
+      <DependentUpon>employee.request.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\request\employee.request.min.css">
+      <DependentUpon>employee.request.css</DependentUpon>
+    </Content>
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\warning.png" />
@@ -749,7 +761,6 @@
     <Content Include="Styles\request.changeshift.css" />
     <Content Include="Styles\request.leave.css" />
     <Content Include="Styles\request.css" />
-    <Content Include="Styles\mgr.requests.css" />
     <Content Include="Styles\fixtable.css" />
     <Content Include="Styles\Images\approve.png" />
     <Content Include="Styles\Images\close.png" />
@@ -951,6 +962,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="Content\views\employee\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -1141,6 +1153,21 @@
     <Content Include="Libs\FontAwesome\scss\_screen-reader.scss" />
     <Content Include="Libs\FontAwesome\scss\_stacked.scss" />
     <Content Include="Libs\FontAwesome\scss\_variables.scss" />
+    <Content Include="Content\sass\abstracts\_variables.scss" />
+    <Content Include="Content\sass\abstracts\_mixins.scss" />
+    <Content Include="Content\sass\layout\_forms.scss" />
+    <Content Include="Content\sass\layout\_table.scss" />
+    <Content Include="Content\sass\components\_buttons.scss" />
+    <Content Include="Content\sass\components\_icon.scss" />
+    <Content Include="Content\sass\vendors\_contextmenu.scss" />
+    <Content Include="Content\main.scss" />
+    <Content Include="Content\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\request\employee.request.css.map">
+      <DependentUpon>employee.request.css</DependentUpon>
+    </Content>
+    <None Include="Content\views\request\employee.request.scss" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />

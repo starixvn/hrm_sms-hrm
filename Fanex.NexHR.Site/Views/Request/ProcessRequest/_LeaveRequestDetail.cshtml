@@ -13,6 +13,7 @@
                 <th>@Labels.FromTime</th>
                 <th>@Labels.ToTime</th>
                 <th>@Labels.Ignored</th>
+                <th>@Labels.Confirmed</th>
             </tr>
         </thead>
         <tbody>
@@ -43,7 +44,7 @@
                         </td>
                         <td>
                             @{
-                                IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
+                        IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
                             }
                             @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(leaveTypes.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @disabled = false })
                         </td>
@@ -84,18 +85,28 @@
                         <td class="ignoredDiscipline">
                             @if (item.IsUnpaidLeaveAbsent)
                             {
-                                var disciplinetypeId = (int) DisciplineType.UnpaidLeaveAbsent;
-                                <input type="checkbox" data-workdate="@item.LeaveDate" data-disciplinetypeid="@disciplinetypeId" />
+                                var disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
+                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
                             }
                             else if (item.IsAbsent)
                             {
                                 var disciplinetypeId = (int)DisciplineType.Absent;
-                                <input type="checkbox" data-workdate="@item.LeaveDate" data-disciplinetypeid="@disciplinetypeId" />
+                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
                             }
                             else if (item.LeaveTypeId == 25)//unpaid leave
                             {
-                                var disciplinetypeId = (int) DisciplineType.UnpaidLeave;
-                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId"/>
+                                var disciplinetypeId = (int)DisciplineType.UnpaidLeave;
+                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td class="confirmedDiscipline">
+                            @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.LeaveTypeId == 25)
+                            {
+                                <input type="checkbox" />
                             }
                             else
                             {
@@ -105,6 +116,7 @@
                     }
                     else
                     {
+                        <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>

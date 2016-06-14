@@ -21,6 +21,7 @@
       <resource path="~/styles/style.css" />
       <resource path="~/styles/table.css" />
       <resource path="~/styles/site.css" />
+      <resource path="~/content/main.css" />
       <resource path="~/styles/themes/Aristo/jquery.ui.css" />
       <resource path="~/styles/font.css" />
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.css" />
@@ -480,6 +481,7 @@
     <resourceSet name="employeerequestcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/criteriapanel.css" />
+      <resource path="~/content/views/request/employee.request.css" />
     </resourceSet>
 
     <resourceSet name="employeerequestjs" type="js">

@@ -1,0 +1,17 @@
+﻿#dialogProcessRequest {
+    form {
+        > .formrow {
+            > .label {
+                width: auto;
+            }
+
+            > .input {
+                margin-left: 0;
+
+                textarea {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+}
