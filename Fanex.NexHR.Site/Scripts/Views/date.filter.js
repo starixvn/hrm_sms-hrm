@@ -98,11 +98,11 @@ $(document).ready(function () {
 
     var mindate = $('.datepicker').attr('mindate');
     var maxdate = $('.datepicker').attr('maxdate');
-    if (mindate != 'null') {
+    if (mindate !== 'null') {
         mindate = mindate.split("/");
         $('.datepicker').datepicker("option", "minDate", new Date(mindate[0], mindate[1] - 1, mindate[2]));
     }
-    if (maxdate != 'null') {
+    if (maxdate !== 'null') {
         maxdate = maxdate.split("/");
         $('.datepicker').datepicker("option", "maxDate", new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
     }

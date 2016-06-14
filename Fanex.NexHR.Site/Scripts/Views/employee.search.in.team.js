@@ -2,7 +2,6 @@
 /*global _global*/
 /*exported*/
 
-var nickName;
 $(document).ready(function () {
     $("#Employee").autocomplete({
         source: function (request, response) {

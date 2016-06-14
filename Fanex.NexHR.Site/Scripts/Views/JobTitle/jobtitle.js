@@ -141,7 +141,7 @@ $(document).ready(function () {
     });
 
     var q = getParam('query');
-    if (q != null) {
+    if (q !== null) {
         $('#keyword').val(q);
     }
 
