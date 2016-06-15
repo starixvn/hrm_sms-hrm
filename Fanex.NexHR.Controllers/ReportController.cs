@@ -29,6 +29,8 @@
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -60,6 +62,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ReportHome, Policy = Policy.Read)]
         public ActionResult Index()
         {
             return View();
@@ -105,6 +108,7 @@
             return View(model);
         }
 
+        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Read)]
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
             if (!fromDate.HasValue || !toDate.HasValue)
@@ -125,7 +129,8 @@
 
             return View(timeRecordViewModel);
         }
-
+        
+        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Read)]
         public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
             if (!Roles.IsUserInRole("HR"))
@@ -147,6 +152,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -168,6 +174,7 @@
         }
 
         [Authorize(Roles = "HR,Verifier,Approver")]
+        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
             DateTime toDate,
@@ -213,6 +220,7 @@
         }
 
         [Authorize(Roles = "Verifier,Approver")]
+        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = GetUserRoles();

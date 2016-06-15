@@ -34,6 +34,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
     using System;
     using System.Collections.Generic;
@@ -334,6 +336,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "Verifier, Approver")]
+        //[CustomAuthorize(FunctionKey = FunctionKey.ExportMemberWorkingTimeRequest, Policy = Policy.Read)]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
@@ -358,6 +361,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "HR")]
+        //[CustomAuthorize(FunctionKey = FunctionKey.ExportHRWorkingTimeRequest, Policy = Policy.Read)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);

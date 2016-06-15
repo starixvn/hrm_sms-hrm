@@ -30,6 +30,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Nexus.RoleManagement.Services;
 
     /// <summary>
     /// Employee Service.
@@ -39,10 +40,16 @@ namespace Fanex.NexHR.Services
         private const HashProvider _HashProvider = HashProvider.Sha1;
 
         private IEmployeeRepository _employeeRepository;
+        private IFunctionService _functionService;
+        private IRoleService _roleService;
+        private IMenuService _menuService;
 
         public EmployeeService()
         {
             this._employeeRepository = new EmployeeRepository();
+            this._functionService = new FunctionService();
+            this._roleService = new RoleService();
+            this._menuService = new MenuService();
         }
 
         public EmployeeService(IEmployeeRepository employeeRepository)
@@ -93,6 +100,9 @@ namespace Fanex.NexHR.Services
             if (criteria.IsValid())
             {
                 userLogin = this.GetDataEntity<UserLoginModel>(criteria);
+                userLogin.NE_Functions = _functionService.GetFunctionsByUserId(userLogin.Id);
+                userLogin.NE_Menus = _menuService.GetMenusByUserId(userLogin.Id);
+                userLogin.NE_Roles = _roleService.GetRolesByUserId(userLogin.Id);
             }
 
             return userLogin;
@@ -171,7 +181,7 @@ namespace Fanex.NexHR.Services
             {
                 result = Repository.Update(criteria);
             }
-            
+
             return result;
         }
 
@@ -296,7 +306,7 @@ namespace Fanex.NexHR.Services
 
             return space;
         }
-        
+
         public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
         {
             IList<DateTime> offAndHoliday = null;
@@ -318,7 +328,7 @@ namespace Fanex.NexHR.Services
         {
             IList<DateTime> availableDates = GetOffDateAndHolidayDate(criteria);
             IList<DateTime> unavailableDates = new List<DateTime>();
-            
+
             if (availableDates != null)
             {
                 for (var dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))

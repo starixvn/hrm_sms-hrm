@@ -10,6 +10,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.ExtensionNumber;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
 
     public class ExtensionNoController : BaseController
     {
@@ -40,13 +42,14 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Create)]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Create)]
         public ActionResult Create(ExtensionNoModel model)
         {
             if (model != null)
@@ -80,6 +83,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Edit)]
         public ActionResult Edit(bool isInternal, int extensionNoId)
         {
             var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
@@ -109,6 +113,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Edit)]
         public ActionResult Edit(ExtensionNoModel model)
         {
             CheckExternalEmployee(model);
@@ -194,6 +199,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Delete)]
         public JsonResult DeleteExtensionNumber(int extId)
         {
             var criteria = new DeleteExtensionNumberMemberCriteria
@@ -206,6 +212,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Create)]
         public JsonResult AddNewExternalGroup(string groupName)
         {
             var criteria = new InsertExternalGroupCriteria
@@ -218,6 +225,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Delete)]
         public JsonResult DeleteExternalGroup(int extId)
         {
             var criteria = new DeleteExternalGroupCriteria
@@ -230,6 +238,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ExtensionNumber, Policy = Policy.Edit)]
         public JsonResult EditExternalGroup(int extId, string groupName)
         {
             var criteria = new UpdateExternalNumberCriteria

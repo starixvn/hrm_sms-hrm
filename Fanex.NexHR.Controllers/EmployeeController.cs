@@ -1,13 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Country;
@@ -23,8 +15,19 @@
     using Fanex.NexHR.ViewModels.Employee;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Supervisor;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using CommandResult = Models.CommandResult;
 
     [Authorize]
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
@@ -60,6 +63,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Read)]
         public ActionResult UserManagement(string jobTitleId = "", string groupIds = "")
         {
             ViewBag.JobTitleId = jobTitleId;
@@ -114,6 +118,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Create)]
         public ActionResult Create()
         {
             ViewBag.Shifts = _shiftService.GetSelectList();
@@ -126,6 +131,7 @@
 
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Create)]
         public ActionResult Create(CreateEmployeeViewModel model)
         {
             ViewBag.Shifts = _shiftService.GetSelectList();
@@ -165,6 +171,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public ActionResult Edit(int id)
         {
             string verifier;
@@ -191,6 +198,7 @@
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public ActionResult Edit(Employee model)
         {
             string verifier, approver, shiftManager, actingSupervisor;
@@ -233,6 +241,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public ActionResult DefaultSchedule(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -255,6 +264,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public ActionResult DefaultSchedule(EmployeeShift model)
         {
             if (ModelState.IsValid)
@@ -288,6 +298,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public ActionResult MonthSchedule(int id)
         {
             ViewBag.Id = id;
@@ -320,6 +331,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public JsonResult UploadAvatar(string code, HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
@@ -373,6 +385,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
         public ActionResult TeamManagement()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -382,6 +395,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Create)]
         public ActionResult AddTeam(int teamId = -1)
         {
             TeamViewModel model = null;

@@ -5,6 +5,8 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System.Collections;
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -26,6 +28,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Read)]
         public ActionResult JobTitleManagement()
         {
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
@@ -50,6 +53,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Delete)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteLookupDataCriteria
@@ -62,6 +66,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Create)]
         public JsonResult Insert(string name, int categoryId)
         {
             var criteria = new InsertLookupDataCriteria
@@ -76,6 +81,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Edit)]
         public JsonResult Update(int id, string name, int categoryId)
         {
             var criteria = new UpdateLookupDataCriteria

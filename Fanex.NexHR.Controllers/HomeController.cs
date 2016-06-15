@@ -9,6 +9,8 @@
 
 namespace Fanex.NexHR.Controllers
 {
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System.Web.Mvc;
 
     /// <summary>

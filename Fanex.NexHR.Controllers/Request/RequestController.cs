@@ -14,6 +14,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -52,6 +54,7 @@
         }
 
         [Authorize(Roles = "Verifier, Approver")]
+        [HRAuthorize(FunctionKey = FunctionKey.RequestOfMember, Policy = Policy.Read)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -68,6 +71,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.RequestOfEmployee, Policy = Policy.Read)]
         public ActionResult HRView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -101,6 +105,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.VoidRequest, Policy = Policy.Read)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -214,6 +219,7 @@
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessRequest, Policy = Policy.Edit)]
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {
             CommandResult result;

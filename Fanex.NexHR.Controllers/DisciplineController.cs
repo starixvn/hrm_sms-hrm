@@ -13,6 +13,8 @@
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Discipline;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
 
     public class DisciplineController : BaseController
     {
@@ -157,6 +159,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Create)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertOtherDisciplineCriteria
@@ -175,6 +178,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Delete)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
@@ -193,6 +197,7 @@
 
         [HttpPost]
         [Authorize(Roles = "Approver")]
+        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Edit)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
             int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.Approver);

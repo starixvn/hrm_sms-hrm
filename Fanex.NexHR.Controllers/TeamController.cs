@@ -10,6 +10,8 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Supervisor;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -33,6 +35,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
         public ActionResult Index()
         {
             var criteria = new GetAllGroupCriteria();
@@ -42,6 +45,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Create)]
         public ActionResult Create()
         {
             var model = new TeamViewModel
@@ -53,6 +57,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Create)]
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
@@ -88,6 +93,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
         public ActionResult Edit(int id)
         {
             var criteria = new GetGroupByIdCriteria
@@ -116,6 +122,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
         public ActionResult Edit(TeamViewModel model)
         {
             if (model != null)
@@ -157,6 +164,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Delete)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteGroupCriteria
@@ -169,11 +177,12 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
         public ActionResult TeamSupervisor(int id)
         {
-            var criteria = new GetSupervisorByTeamIdCriteria() 
-            { 
-                GroupId = id 
+            var criteria = new GetSupervisorByTeamIdCriteria()
+            {
+                GroupId = id
             };
             var model = teamService.GetSupervisorByTeamId(criteria);
             ViewBag.TeamId = id;
@@ -181,6 +190,7 @@
             return View(model);
         }
 
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -203,6 +213,7 @@
             return View("~/Views/Employee/Supervisor.cshtml", model);
         }
 
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
         public ActionResult ShiftManager(int teamId)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -226,6 +237,7 @@
         }
 
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
             var criteria = new InsertOrUpdateTeamSupervisorCriteria
@@ -246,6 +258,7 @@
         }
 
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
             var criteria = new InsertTeamShiftManagerCriteria

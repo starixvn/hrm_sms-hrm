@@ -14,6 +14,7 @@ namespace Fanex.NexHR.Models
     using System.Linq;
     using System.Web.Security;
     using Fanex.NexHR.Core.Enums;
+    using Nexus.RoleManagement.Services;
 
     /// <summary>
     /// UserLogin Model.
@@ -44,6 +45,12 @@ namespace Fanex.NexHR.Models
         public bool CanOT { get; set; }
 
         public bool PasswordReset { get; set; }
+
+        public IEnumerable<SystemRoleModel> NE_Roles { get; set; }
+
+        public IEnumerable<FunctionModel> NE_Functions { get; set; }
+
+        public IEnumerable<MenuModel> NE_Menus { get; set; }
 
         public IList<short> RoleList
         {
@@ -103,6 +110,11 @@ namespace Fanex.NexHR.Models
         public bool IsMember()
         {
             return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member);
+        }
+
+        public bool HasFunction(string functionKey)
+        {
+            return NE_Functions.Where(i => i.FunctionKey == functionKey).Any();
         }
     }
 }

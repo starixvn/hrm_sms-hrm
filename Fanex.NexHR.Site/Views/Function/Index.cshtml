@@ -1,0 +1,34 @@
+﻿@using Nexus.RoleManagement.Services;
+
+@model IEnumerable<FunctionModel>
+@{
+    ViewBag.Title = "Function Management";
+    var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
+}
+
+@section css{
+    @Url.CombresLink("jobtitlecss")
+}
+@section js{
+    @Url.CombresLink("functionjs")
+}
+@section Breadcrumb {
+    <a class="step" href="#">@ViewBag.Title</a>
+}
+<h2>@ViewBag.Title</h2>
+<div class="container_24 bunhat">
+    @using (Html.BeginForm())
+    {
+        <span>Role</span>
+        @Html.DropDownList("Role", new SelectList(roles, "RoleId", "RoleName"))
+        <input type="button" id="query" value="@Labels.Submit" class="button-primary submit " />
+    }
+</div>
+<div class="clear">
+</div>
+<div id="list-functions"></div>
+<div class="menu">
+    <div class="input">
+        <input type="button" value="Save" class="space" id="save" />
+    </div>
+</div>

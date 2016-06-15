@@ -64,12 +64,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\CustomRoleProvider.cs" />
+    <Compile Include="Providers\HRAuthorizeAttribute.cs" />
     <Compile Include="Providers\FormsAuthenticateRoleProvider.cs" />
     <Compile Include="Providers\FriendlyNameModelMetadataProvider.cs" />
   </ItemGroup>
@@ -89,6 +90,10 @@
     <ProjectReference Include="..\Fanex.NexHR.Services\Fanex.NexHR.Services.csproj">
       <Project>{7789CD20-1DC9-4077-921C-2548023BBC62}</Project>
       <Name>Fanex.NexHR.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nexus.RoleManagement.Services\Nexus.RoleManagement.Services.csproj">
+      <Project>{33514418-1ba4-4d30-afb6-512c585c080b}</Project>
+      <Name>Nexus.RoleManagement.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

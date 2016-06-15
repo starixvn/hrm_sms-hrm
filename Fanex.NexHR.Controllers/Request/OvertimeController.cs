@@ -15,6 +15,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Overtime;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -208,6 +210,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.YearlyOvertimeReport, Policy = Policy.Read)]
         public ActionResult YearlyReport()
         {
             ViewBag.Year = DateTime.Now.Year;
@@ -218,6 +221,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.YearlyOvertimeReport, Policy = Policy.Read)]
         public ActionResult GetYearlyOvertimeReport(int year, string team, int? empId, int? calendar)
         {
             ViewBag.Year = year;
@@ -255,6 +259,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.OvertimeDetailReport, Policy = Policy.Read)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {
             var id = this.CurrentUser.Id;
@@ -297,6 +302,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        //[CustomAuthorize(FunctionKey = FunctionKey.MonthlyOvertimeReport, Policy = Policy.Read)]
         public ActionResult HRMonthlyReport(int month, int year, int? calendar)
         {
             var date = new DateTime(year, month, 1);
@@ -350,6 +356,7 @@
         }
 
         [Authorize(Roles = "Verifier, Approver")]
+        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfMember, Policy = Policy.Read)]
         public ActionResult MemberOvertime()
         {
             var memberOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -359,6 +366,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfEmployee, Policy = Policy.Read)]
         public ActionResult EmployeeOvertime()
         {
             var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -369,6 +377,7 @@
 
         [Authorize(Roles = "Verifier, Approver")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfMember, Policy = Policy.Read)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -394,6 +403,7 @@
 
         [Authorize(Roles = "HR")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfEmployee, Policy = Policy.Read)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -483,6 +493,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Read)]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
             var criteria = new GetDetailOvertimeByRequestIdsCriteria
@@ -496,6 +507,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
         public void ReminderClaimOvertime(string subject, string content)
         {
             var sendMailTask = new Task(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));

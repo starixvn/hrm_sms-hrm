@@ -13,6 +13,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -62,6 +64,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Delete)]
         public bool DeleteEmployee(int id, DateTime resignedDate)
         {
             var deleteEmployeeCriteria = new DeleteEmployeeCriteria
@@ -77,6 +80,7 @@
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessRequest, Policy = Policy.Edit)]
         public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
             var criteria = new ProcessRequestCriteria()
@@ -94,6 +98,7 @@
 
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
         public JsonResult ProcessSingleOvertime(string command, long requestId, int roleId)
         {
             var processOvertimeCriteria = new ProcessSingleOvertimeCriteria
@@ -110,6 +115,7 @@
 
         [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
         public JsonResult ProcessMultipleOvertime(string command, string requestIds)
         {
             var criteria = new ProcessMultipleOvertimeCriteria
@@ -126,6 +132,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Edit)]
         public JsonResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria)
         {
             if (criteria != null)
@@ -226,6 +233,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Delete)]
         public bool DeleteHoliday(int id)
         {
             return holidayService.Delete(id, this.CurrentUser.Id);
@@ -233,6 +241,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
         public int ResetPassword(int id)
         {
             CommandResult result = employeeService.ResetPassword(id, "123456", CurrentUser.Id);

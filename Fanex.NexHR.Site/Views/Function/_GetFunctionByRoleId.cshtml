@@ -1,0 +1,56 @@
+﻿@using Nexus.RoleManagement.Services;
+
+@model IEnumerable<FunctionModel>
+
+<table id="data" class="data persist-area" style="width: auto; min-width: 622px;">
+    <thead>
+        <tr class="persist-header">
+            <th rowspan="2">Function</th>
+            <th colspan="4">Role Permission</th>
+        </tr>
+        <tr>
+            <th>Create</th>
+            <th>Read</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    @if (Model.Any())
+    {
+
+        <tbody>
+            @foreach (FunctionModel function in Model)
+            {
+                <tr>
+                    <td class="left">
+                        @function.FunctionName
+                        <input id="functionId" type="hidden" value="@function.FunctionId"/>
+                        <input id="functionKey" type="hidden" value="@function.FunctionKey" />
+                        <input id="functionName" type="hidden" value="@function.FunctionName" />
+                    </td>
+                    <td>
+                        @Html.CheckBox("IsCreate", function.IsCreate)
+                    </td>
+                    <td>
+                        @Html.CheckBox("IsRead", function.IsRead)
+                    </td>
+                    <td>
+                        @Html.CheckBox("IsEdit", function.IsEdit)
+                    </td>
+                    <td>
+                        @Html.CheckBox("IsDelete", function.IsDelete)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 5);
+    }
+
+
+
+</table>

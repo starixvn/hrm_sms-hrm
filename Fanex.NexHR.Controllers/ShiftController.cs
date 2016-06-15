@@ -5,6 +5,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Shifts;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -37,6 +39,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Create)]
         public ActionResult Create()
         {
             var model = new ShiftViewModel();
@@ -46,6 +49,7 @@
 
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Create)]
         public ActionResult Create(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -76,6 +80,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Edit)]
         public ActionResult Edit(int shiftId)
         {
             var criteria = new GetShiftByIdCriteria()
@@ -103,6 +108,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Edit)]
         public ActionResult Edit(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -136,6 +142,7 @@
 
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Delete)]
         public bool Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria()

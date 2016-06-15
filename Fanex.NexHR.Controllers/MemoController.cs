@@ -7,6 +7,8 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Memo;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Web.Mvc;
 
@@ -82,6 +84,7 @@
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
+        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Edit)]
         public ActionResult Edit(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -132,6 +135,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Create)]
         public ActionResult Create()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -155,6 +159,7 @@
         [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
+        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Create)]
         public ActionResult Create(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -202,6 +207,7 @@
 
         [Authorize(Roles = "HR")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Delete)]
         public JsonResult DeleteMemo(int id)
         {
             var criteria = new DeleteMemoCriteria

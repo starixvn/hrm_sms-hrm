@@ -5,6 +5,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Department;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
@@ -25,6 +27,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Read)]
         public ActionResult Index(bool? isActive)
         {
             var model = new DepartmentViewModel()
@@ -37,6 +40,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Read)]
         public ActionResult Index(DepartmentViewModel model)
         {
             if (model != null)
@@ -48,6 +52,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Create)]
         public ActionResult Create()
         {
             var model = new AddDepartmentViewModel();
@@ -58,6 +63,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Create)]
         public ActionResult Create(AddDepartmentViewModel model)
         {
             if (model != null)
@@ -92,6 +98,7 @@
         }
 
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Edit)]
         public ActionResult Edit(int departmentId)
         {
             Department department = GetDepartmentById(departmentId);
@@ -112,6 +119,7 @@
 
         [HttpPost]
         [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Edit)]
         public ActionResult Edit(EditDepartmentViewModel model)
         {
             if (model != null)
@@ -148,6 +156,7 @@
 
         [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
+        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Delete)]
         public JsonResult Delete(int departmentId)
         {
             var criteria = new DeleteDepartmentCriteria

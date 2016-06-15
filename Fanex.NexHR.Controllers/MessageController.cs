@@ -7,6 +7,8 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Web.Mvc;
 
@@ -48,6 +50,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Read)]
         public ActionResult Index(GetMessageByCreatorCriteria criteria)
         {
             if (criteria != null)
@@ -60,6 +63,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Create)]
         public ActionResult Create()
         {
             var getEmployeeCriteria = new GetAllEmployeeCriteria()
@@ -82,6 +86,7 @@
         [HttpPost]
         [ValidateInput(false)]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Create)]
         public JsonResult Create(Message model)
         {
             CommandResult result = new CommandResult();
@@ -107,6 +112,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Edit)]
         public ActionResult Edit(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria
@@ -136,6 +142,7 @@
         [HttpPost]
         [ValidateInput(false)]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Edit)]
         public JsonResult Edit(Message model)
         {
             CommandResult result = new CommandResult();
@@ -162,6 +169,7 @@
 
         [HttpPost]
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Delete)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteMessageCriteria
@@ -211,6 +219,7 @@
         }
 
         [Authorize(Roles = "HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Read)]
         public ActionResult Detail(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria

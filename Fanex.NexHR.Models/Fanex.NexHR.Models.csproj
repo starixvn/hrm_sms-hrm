@@ -188,6 +188,10 @@
       <Project>{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168}</Project>
       <Name>Fanex.NexHR.Resources</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nexus.RoleManagement.Services\Nexus.RoleManagement.Services.csproj">
+      <Project>{33514418-1ba4-4d30-afb6-512c585c080b}</Project>
+      <Name>Nexus.RoleManagement.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

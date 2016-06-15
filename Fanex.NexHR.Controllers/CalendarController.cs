@@ -28,6 +28,8 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Supervisor;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class CalendarController : BaseController
@@ -59,6 +61,7 @@ namespace Fanex.NexHR.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ShiftManager")]
+        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Read)]
         public ActionResult ArrangeSchedule()
         {
             var currentDate = DateTime.Now;
@@ -84,6 +87,7 @@ namespace Fanex.NexHR.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ShiftManager")]
+        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Create)]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
         {
             var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
@@ -110,6 +114,7 @@ namespace Fanex.NexHR.Controllers
 
         [HttpGet]
         [Authorize(Roles = "ShiftManager")]
+        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Read)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
             var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
@@ -135,6 +140,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
         public ActionResult ShiftStatistic()
         {
             var currentDate = DateTime.Now;
@@ -154,6 +160,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
             var getShiftCriteria = new GetShiftStatisticCriteria()
@@ -181,6 +188,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
             int? shiftId,
@@ -205,6 +213,7 @@ namespace Fanex.NexHR.Controllers
         }
 
         [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
         public ActionResult EmployeeShiftContent(
             DateTime workDate,
             int? shiftId,

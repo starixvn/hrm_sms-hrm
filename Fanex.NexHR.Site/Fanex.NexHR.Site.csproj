@@ -268,6 +268,7 @@
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
     <Content Include="Scripts\Views\Department\department.edit.js" />
     <Content Include="Scripts\Views\Department\department.js" />
+    <Content Include="Scripts\Views\function.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
@@ -1115,6 +1116,7 @@
     <Content Include="Views\Department\Create.cshtml" />
     <Content Include="Views\Department\Edit.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Function\Index.cshtml" />
     <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
@@ -1179,6 +1181,7 @@
     <Content Include="Views\Request\ProcessRequest\_CheckInOutRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_LateInEarlyOutRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
+    <Content Include="Views\Function\_GetFunctionByRoleId.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

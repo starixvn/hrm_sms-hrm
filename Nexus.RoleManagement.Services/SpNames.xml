@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+  <Function Name="RoleManagement">
+    <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="SMSEPA" Plain="0"></Setting>
+    <Setting Key="Function_GetFunctionsByRoleId" SpName="Function_GetFunctionsByRoleId" DbName="SMSEPA" Plain="0"></Setting>
+    <Setting Key="Function_GetFuntionsByUserId" SpName="Function_GetFuntionsByUserId" DbName="SMSEPA" Plain="0"></Setting>
+    <Setting Key="Menu_GetMenusByUserId" SpName="Menu_GetMenusByUserId" DbName="SMSEPA" Plain="0"></Setting>
+    <Setting Key="Role_GetRolesByUserId" SpName="Role_GetRolesByUserId" DbName="SMSEPA" Plain="0"></Setting>
+    <Setting Key="Role_GetRoles" SpName="Role_GetRoles" DbName="SMSEPA" Plain="0"></Setting>
+  </Function>
+</Functions>

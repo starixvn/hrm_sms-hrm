@@ -127,6 +127,7 @@
     <Compile Include="ExportController.cs" />
     <Compile Include="ExtensionNoController.cs" />
     <Compile Include="FileController.cs" />
+    <Compile Include="FunctionController.cs" />
     <Compile Include="HolidayController.cs" />
     <Compile Include="HomeController.cs" />
     <Compile Include="JobTitleController.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Request\LeaveController.cs" />
     <Compile Include="Request\OvertimeController.cs" />
     <Compile Include="Request\RequestController.cs" />
+    <Compile Include="RoleFunctionViewModel.cs" />
     <Compile Include="ShiftController.cs" />
     <Compile Include="Support\TimeSheetRecordController.cs" />
     <Compile Include="TeamController.cs" />
@@ -178,6 +180,14 @@
     <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Web\Fanex.NexHR.Web.csproj">
+      <Project>{d1d9a098-0ee6-41f8-8198-111cb66a493a}</Project>
+      <Name>Fanex.NexHR.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nexus.RoleManagement.Services\Nexus.RoleManagement.Services.csproj">
+      <Project>{33514418-1ba4-4d30-afb6-512c585c080b}</Project>
+      <Name>Nexus.RoleManagement.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
