@@ -77,6 +77,8 @@
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
+            ViewBag.HasPermissionToAddOther = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Create);
+
             return PartialView("_ListDisciplineSummary", disciplines);
         }
 
@@ -128,6 +130,7 @@
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
+            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Edit);
 
             return PartialView("_ListDisciplineDetail", disciplines);
         }
@@ -142,6 +145,7 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
+            ViewBag.HasPermissionToDelete = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Delete);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
@@ -162,9 +166,9 @@
             return PartialView("_AddOtherDiscipline", model);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "EditDiscipline")]
-        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.Discipline)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertOtherDisciplineCriteria
@@ -181,9 +185,9 @@
             return Json(commandResult);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "EditDiscipline")]
-        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.Discipline)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
@@ -200,9 +204,9 @@
             return string.Empty;
         }
 
+        /// [Authorize(Roles = "Approver")]
         [HttpPost]
-        [Authorize(Roles = "EditDiscipline")]
-        [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.Discipline)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
             int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.EditDiscipline);

@@ -1,12 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
-    using System.Web.Security;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
@@ -28,9 +21,15 @@
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
-    using NPOI.HSSF.UserModel;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using NPOI.HSSF.UserModel;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -61,8 +60,8 @@
         {
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ReportHome, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult Index()
         {
             return View();
@@ -108,7 +107,6 @@
             return View(model);
         }
 
-        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Read)]
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
             if (!fromDate.HasValue || !toDate.HasValue)
@@ -126,14 +124,15 @@
                 ToDate = toDate.Value,
                 Teams = teams
             };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
 
             return View(timeRecordViewModel);
         }
-        
-        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Read)]
+
         public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
         {
-            if (!Roles.IsUserInRole("HR"))
+            var hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
+            if (!hasPermissionToEdit)
             {
                 employeeId = this.CurrentUser.Id;
             }
@@ -147,12 +146,13 @@
                 IsLocal = isLocal
             };
             IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(criteria);
+            ViewBag.HasPermission = hasPermissionToEdit;
 
             return View(timeRecords);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatistic)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -173,8 +173,8 @@
             return View("RequestMonitoring", model);
         }
 
-        [Authorize(Roles = "HR,Verifier,Approver")]
-        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR,Verifier,Approver")]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatistic)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
             DateTime toDate,
@@ -208,7 +208,7 @@
             {
                 ViewBag.isLeader = true;
             }
-            
+
             if (isExcel)
             {
                 string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -219,8 +219,8 @@
             return PartialView("RequestMonitoringDetails", requests);
         }
 
-        [Authorize(Roles = "Verifier,Approver")]
-        [HRAuthorize(FunctionKey = FunctionKey.RequestStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "Verifier,Approver")]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatistic)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = GetUserRoles();
@@ -310,6 +310,7 @@
             var totalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.RequestOfEmployee, Policy.Read);
 
             return View(model);
         }
@@ -411,7 +412,7 @@
                 var getAllGroupCriteria = new GetAllGroupCriteria();
                 ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             }
-            
+
             return View(model);
         }
 
@@ -506,7 +507,7 @@
             ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
             ViewBag.DefaultFromDate = model.FromDate;
             ViewBag.DefaultToDate = model.ToDate;
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria 
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
@@ -552,6 +553,8 @@
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 Category = category
             };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FilterUnpaidLeaveSummary, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.FilterUnpaidLeaveSummary, Policy.Edit);
 
             return UnpaidLeaveSummary(model);
         }

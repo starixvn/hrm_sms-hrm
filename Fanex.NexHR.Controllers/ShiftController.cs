@@ -35,11 +35,13 @@
             };
             IList<Shift> shifts = shiftService.GetAll(statusId.Value);
             model.Shifts = shifts;
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Edit);
+
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Create)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
             var model = new ShiftViewModel();
@@ -47,15 +49,15 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
         public ActionResult Create(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new InsertShiftCriteria() 
-                { 
+                var criteria = new InsertShiftCriteria()
+                {
                     Name = model.Name,
                     CheckInTime = model.TimeIn,
                     CheckOutTime = model.TimeOut,
@@ -79,8 +81,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int shiftId)
         {
             var criteria = new GetShiftByIdCriteria()
@@ -88,7 +90,7 @@
                 ShiftId = shiftId
             };
             var shift = shiftService.GetById(criteria);
-            var model = new ShiftViewModel 
+            var model = new ShiftViewModel
             {
                 Name = shift.Name,
                 HourTimeIn = GetHour(shift.BeginCheckInTime),
@@ -106,9 +108,9 @@
             return View(model);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
         public ActionResult Edit(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -140,9 +142,9 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftManagement, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.ShiftManagement)]
         public bool Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria()

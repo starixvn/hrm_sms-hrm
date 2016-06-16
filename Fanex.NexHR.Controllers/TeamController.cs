@@ -34,8 +34,8 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
             var criteria = new GetAllGroupCriteria();
@@ -44,8 +44,8 @@
             return View(teams);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Create)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Create, FunctionKey.SectionManagement)]
         public ActionResult Create()
         {
             var model = new TeamViewModel
@@ -55,9 +55,9 @@
             return View(model);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.SectionManagement)]
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
@@ -92,8 +92,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Edit, FunctionKey.SectionManagement)]
         public ActionResult Edit(int id)
         {
             var criteria = new GetGroupByIdCriteria
@@ -120,9 +120,9 @@
             return View(model);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.SectionManagement)]
         public ActionResult Edit(TeamViewModel model)
         {
             if (model != null)
@@ -162,9 +162,9 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.SectionManagement)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteGroupCriteria
@@ -176,8 +176,8 @@
             return Json(result);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {
             var criteria = new GetSupervisorByTeamIdCriteria()
@@ -190,7 +190,7 @@
             return View(model);
         }
 
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -213,7 +213,7 @@
             return View("~/Views/Employee/Supervisor.cshtml", model);
         }
 
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ShiftManager(int teamId)
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -237,7 +237,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.SectionManagement)]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
             var criteria = new InsertOrUpdateTeamSupervisorCriteria
@@ -258,7 +258,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.SectionManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.SectionManagement)]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
             var criteria = new InsertTeamShiftManagerCriteria

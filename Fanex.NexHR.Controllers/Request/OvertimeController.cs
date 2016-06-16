@@ -82,7 +82,7 @@
         public ActionResult View(DateTime requestDate, int empId)
         {
             var getOvertimeMonthlyByEmployeeCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
-            { 
+            {
                 EmployeeId = empId,
                 Month = Convert.ToDateTime(requestDate).Date
             };
@@ -209,8 +209,8 @@
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.YearlyOvertimeReport, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyReport()
         {
             ViewBag.Year = DateTime.Now.Year;
@@ -220,8 +220,8 @@
             return View();
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.YearlyOvertimeReport, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult GetYearlyOvertimeReport(int year, string team, int? empId, int? calendar)
         {
             ViewBag.Year = year;
@@ -258,8 +258,8 @@
             return PartialView("YearlyReportDetails", listEntity);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.OvertimeDetailReport, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.OvertimeDetailReport)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {
             var id = this.CurrentUser.Id;
@@ -301,8 +301,7 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
-        //[CustomAuthorize(FunctionKey = FunctionKey.MonthlyOvertimeReport, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
         public ActionResult HRMonthlyReport(int month, int year, int? calendar)
         {
             var date = new DateTime(year, month, 1);
@@ -355,8 +354,8 @@
             }
         }
 
-        [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfMember, Policy = Policy.Read)]
+        /// [Authorize(Roles = "Verifier, Approver")]
+        [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime()
         {
             var memberOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -365,8 +364,8 @@
             return View(memberOvertimeViewModel);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfEmployee, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
         public ActionResult EmployeeOvertime()
         {
             var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -375,9 +374,9 @@
             return View("MemberOvertime", employeeOvertimeViewModel);
         }
 
-        [Authorize(Roles = "Verifier, Approver")]
+        /// [Authorize(Roles = "Verifier, Approver")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfMember, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -396,14 +395,16 @@
                 Status = statusId
             };
             var monthlyOvertimes = overtimeService.GetMemberOvertimeMonthly(criteria);
+            ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit);
+            ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Edit);
 
             ViewBag.CurrentUserId = this.CurrentUser.Id;
             return View(monthlyOvertimes);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(FunctionKey = FunctionKey.OvertimeOfEmployee, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -491,9 +492,9 @@
             return PartialView(entity);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
             var criteria = new GetDetailOvertimeByRequestIdsCriteria
@@ -505,9 +506,9 @@
             return Json(isInvalid, JsonRequestBehavior.AllowGet);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public void ReminderClaimOvertime(string subject, string content)
         {
             var sendMailTask = new Task(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));

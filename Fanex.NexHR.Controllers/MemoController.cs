@@ -25,7 +25,7 @@
 
         public MemoController()
             : this(null)
-        { 
+        {
         }
 
         public ActionResult Index()
@@ -41,6 +41,10 @@
                 Year = DateTime.Now.Year,
                 Category = -1
             };
+
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Memo, Policy.Edit)
+               || CurrentUser.HasPermission(FunctionKey.Memo, Policy.Create)
+               || CurrentUser.HasPermission(FunctionKey.Memo, Policy.Delete);
 
             return Index(model);
         }
@@ -60,6 +64,10 @@
                 Category = model.Category
             };
             ViewBag.EntityList = memoService.GetAll(criteria);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit)
+               || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create)
+               || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete);
+
             return View(model);
         }
 
@@ -81,10 +89,10 @@
             return View(memo);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.Memo)]
         public ActionResult Edit(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -134,8 +142,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Create)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Create, FunctionKey.Memo)]
         public ActionResult Create()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -156,10 +164,10 @@
             });
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.Memo)]
         public ActionResult Create(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -205,9 +213,9 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.Memo, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.Memo)]
         public JsonResult DeleteMemo(int id)
         {
             var criteria = new DeleteMemoCriteria

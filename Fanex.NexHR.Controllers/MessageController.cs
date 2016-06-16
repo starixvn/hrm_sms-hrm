@@ -44,13 +44,16 @@
                 FromDate = DateTime.Now.AddMonths(-3),
                 IsDisabled = 0
             };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Edit)
+               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Create)
+               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Delete);
 
             return Index(criteria);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.Message)]
         public ActionResult Index(GetMessageByCreatorCriteria criteria)
         {
             if (criteria != null)
@@ -59,11 +62,15 @@
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(criteria);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Edit)
+               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Create)
+               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Delete);
+
             return View(criteria);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Create)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Create, FunctionKey.Message)]
         public ActionResult Create()
         {
             var getEmployeeCriteria = new GetAllEmployeeCriteria()
@@ -83,10 +90,10 @@
             return View();
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.Message)]
         public JsonResult Create(Message model)
         {
             CommandResult result = new CommandResult();
@@ -111,8 +118,8 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Edit, FunctionKey.Message)]
         public ActionResult Edit(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria
@@ -139,10 +146,10 @@
             return View();
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.Message)]
         public JsonResult Edit(Message model)
         {
             CommandResult result = new CommandResult();
@@ -167,9 +174,9 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.Message)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteMessageCriteria
@@ -218,8 +225,8 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Message, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.Message)]
         public ActionResult Detail(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria

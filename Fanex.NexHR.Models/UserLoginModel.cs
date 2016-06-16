@@ -112,9 +112,25 @@ namespace Fanex.NexHR.Models
             return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member);
         }
 
-        public bool HasFunction(string functionKey)
+        public bool HasPermission(string functionKey, Policy policy)
         {
-            return NE_Functions.Where(i => i.FunctionKey == functionKey).Any();
+            var function = NE_Functions.Where(i => i.FunctionKey.Equals(functionKey));
+            if (function.Any())
+            {
+                switch (policy)
+                {
+                    case Policy.Create:
+                        return function.First().IsCreate;
+                    case Policy.Edit:
+                        return function.First().IsEdit;
+                    case Policy.Delete:
+                        return function.First().IsDelete;
+                    default:
+                        return function.First().IsRead;
+                }
+            }
+
+            return false;
         }
     }
 }

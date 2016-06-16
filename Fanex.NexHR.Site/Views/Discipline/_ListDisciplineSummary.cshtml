@@ -1,11 +1,7 @@
 ﻿@model IList<DisciplineSummaryModel>
 <table class="data discipline-summary">
     <thead>
-        @if (Model != null
-            && Model.Any()
-            && (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString())
-            || Roles.IsUserInRole(RoleSystem.HR.ToString())
-            || Roles.IsUserInRole(RoleSystem.Approver.ToString())))
+        @if ((bool)ViewBag.HasPermissionToAddOther)
         {
             <tr>
                 <th colspan="16" class="align-left">
@@ -15,6 +11,7 @@
                 </th>
             </tr>
         }
+
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Section</th>

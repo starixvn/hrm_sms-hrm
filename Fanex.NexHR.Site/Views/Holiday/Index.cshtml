@@ -1,6 +1,7 @@
 ﻿@model IList<Holiday>
 @{
     ViewBag.Title = "Holiday";
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -19,7 +20,7 @@
     <span style="padding-right: 5px;">Year</span>
     @Html.YearPicker("year", 2010, (int)ViewBag.year)
     <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-    if (Roles.IsUserInRole("HR"))
+    if (hasPermission)
     {
         <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
     }
@@ -31,7 +32,7 @@
             <th>@Labels.Name</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <th>
                     @Labels.Edit
@@ -40,6 +41,7 @@
                     @Labels.Delete
                 </th>
             }
+
         </tr>
     </thead>
     @if (Model.Any())
@@ -59,7 +61,7 @@
                     <td class="ddMMyyyy">
                         @item.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    @if (Roles.IsUserInRole("HR"))
+                    @if (hasPermission)
                     {
                         <td class="cmd">
                             <a href="@Url.Action("Edit", "Holiday", new { Id = item.Id })">

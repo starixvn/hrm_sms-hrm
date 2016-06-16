@@ -2,6 +2,7 @@
 @model LeaveSummaryViewModel
 @{
     ViewBag.Title = "Unpaid leave";
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("managerequestscss")
@@ -13,9 +14,7 @@
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@if (Roles.IsUserInRole(RoleSystem.HR.ToString())
-    || Roles.IsUserInRole(RoleSystem.Verifier.ToString())
-    || Roles.IsUserInRole(RoleSystem.Approver.ToString()))
+@if (hasPermission)
 {
     <div class="container_24 bunhat">
         @using (Html.BeginForm())

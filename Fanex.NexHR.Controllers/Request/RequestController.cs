@@ -55,8 +55,8 @@
             return PartialView(request);
         }
 
-        [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(FunctionKey = FunctionKey.RequestOfMember, Policy = Policy.Read)]
+        ///// [Authorize(Roles = "Verifier, Approver")]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestOfMember)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -72,8 +72,8 @@
             return View("EmployeeRequest", request);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.RequestOfEmployee, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestOfEmployee)]
         public ActionResult HRView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -106,8 +106,8 @@
             return View();
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.VoidRequest, Policy = Policy.Read)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Read, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -218,10 +218,10 @@
             return PartialView("_ProcessRequest", model);
         }
 
-        [Authorize(Roles = "Verifier,Approver,HR")]
+        /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessRequest, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.ProcessRequest)]
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {
             CommandResult result;

@@ -2,6 +2,7 @@
 @model GetMessageByCreatorCriteria
 @{
     ViewBag.Title = @Labels.Message;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("messagecss")
@@ -38,7 +39,7 @@
         </div>
         <div class="grid_6">
             <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <div class="button-icon">
                     <span class="icon plus"></span>@Html.ActionLink("Create Message", "Create")
@@ -66,7 +67,7 @@
                 <th>
                     @Labels.CreatedDate
                 </th>
-                @if (Roles.IsUserInRole("HR"))
+                @if (hasPermission)
                 {
                     <th>
                         @Labels.Edit
@@ -99,7 +100,7 @@
                         <td>
                             @message.CreatedDate.ToDateMonthYearFormatedDate()
                         </td>
-                        @if (Roles.IsUserInRole("HR"))
+                        @if (hasPermission)
                         {
                             <td class="cmd" title="Edit">
                                 <a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">

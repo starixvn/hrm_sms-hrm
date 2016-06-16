@@ -62,9 +62,9 @@
             return date;
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.EmployeeManagement)]
         public bool DeleteEmployee(int id, DateTime resignedDate)
         {
             var deleteEmployeeCriteria = new DeleteEmployeeCriteria
@@ -77,10 +77,10 @@
             return result.Code == 0;
         }
 
-        [Authorize(Roles = "Verifier,Approver,HR")]
+        /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessRequest, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.ProcessRequest)]
         public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
             var criteria = new ProcessRequestCriteria()
@@ -96,9 +96,9 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "Verifier,Approver,HR")]
+        /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public JsonResult ProcessSingleOvertime(string command, long requestId, int roleId)
         {
             var processOvertimeCriteria = new ProcessSingleOvertimeCriteria
@@ -113,9 +113,9 @@
             return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
-        [Authorize(Roles = "Verifier,Approver,HR")]
+        /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.ProcessOvertime, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public JsonResult ProcessMultipleOvertime(string command, string requestIds)
         {
             var criteria = new ProcessMultipleOvertimeCriteria
@@ -130,9 +130,9 @@
             return commandResult.Code == 0 ? Json(true) : Json(commandResult.Message);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.TimeRecord, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.TimeRecord)]
         public JsonResult ProcessInOut(TimeRecordUpdateTypeCriteria criteria)
         {
             if (criteria != null)
@@ -231,17 +231,17 @@
             }
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.Holiday)]
         public bool DeleteHoliday(int id)
         {
             return holidayService.Delete(id, this.CurrentUser.Id);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.EmployeeManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
         public int ResetPassword(int id)
         {
             CommandResult result = employeeService.ResetPassword(id, "123456", CurrentUser.Id);

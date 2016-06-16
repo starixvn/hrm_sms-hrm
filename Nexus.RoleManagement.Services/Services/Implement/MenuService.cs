@@ -6,7 +6,7 @@ namespace Nexus.RoleManagement.Services
     {
         public IEnumerable<MenuModel> GetMenusByUserId(int userId)
         {
-            var criteria = new GetFunctionByUserIdCriteria { UserId = userId };
+            var criteria = new GetMenusByUserIdCriteria { UserId = userId };
             IEnumerable<MenuModel> menus = new List<MenuModel>();
             if (criteria.IsValid())
             {

@@ -4,6 +4,7 @@
 
 @{
     ViewBag.Title = Labels.ReportWorkingHours;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("totalworkinghourcss")
@@ -160,7 +161,7 @@
                     <td>@item.ActualWorkingDay</td>
                     <td>@item.LeaveTaken.ToString("0.0")</td>
                     <td>
-                        @if (item.UnpaidLeave > 0 && Roles.IsUserInRole("HR"))
+                        @if (item.UnpaidLeave > 0 && hasPermission)
                         {
                             <a href="@Url.Action("hrview", "request", requestModel)">
                                 @item.UnpaidLeave.ToString("0.0")

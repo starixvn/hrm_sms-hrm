@@ -2,6 +2,7 @@
 @model KeepInViewRequestViewModel
 @{
     ViewBag.Title = "New Keep In View Request";
+    var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
     @Url.CombresLink("keepinviewcss")
@@ -41,7 +42,7 @@
                 @Html.LabelFor(model => model.Employee)
             </div>
             <div class="input">
-                @if (Roles.IsUserInRole("ActingSupervisor"))
+                @if (hasOnBehalfOthersPermission)
                 { 
                     @Html.EditorFor(model => model.Employee)
                 }

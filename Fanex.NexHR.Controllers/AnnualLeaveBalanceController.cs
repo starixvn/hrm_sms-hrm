@@ -63,15 +63,14 @@ namespace Fanex.NexHR.Controllers
             string employee,
             int? year = null,
             int? employeeId = null,
-            int? minAnnualBalance = null, 
+            int? minAnnualBalance = null,
             int? category = null)
         {
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
+            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Edit);
+            ViewBag.HasPermissionToEdit = hasPermissionToEdit;
 
-            if (!employeeId.HasValue 
-                && !Roles.IsUserInRole(RoleSystem.HR.ToString())
-                && !Roles.IsUserInRole(RoleSystem.Verifier.ToString())
-                && !Roles.IsUserInRole(RoleSystem.Approver.ToString()))
+            if (!employeeId.HasValue && !hasPermissionToEdit)
             {
                 employeeId = this.CurrentUser.Id;
             }
@@ -153,8 +152,8 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <param name="id">Employee's Id.</param>
         /// <returns>View AnnualLeaveBalance of Employee. </returns>
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Read)]
+        //// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -179,14 +178,9 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Employee.
-        /// </summary>
-        /// <param name="model">AnnualLeaveBalance ViewModel.</param>
-        /// <returns>View AnnualLeaveBalance of Employee.</returns>
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
@@ -204,8 +198,8 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Edit, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
             var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
@@ -217,15 +211,9 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="formCollection">Form Collection.</param>
-        /// <param name="model">AnnualLeaveBalance Model.</param>
-        /// <returns>View Edit.</returns>
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
@@ -282,8 +270,8 @@ namespace Fanex.NexHR.Controllers
         /// </summary>
         /// <param name="id">The employee Id.</param>
         /// <returns>The create view.</returns>
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Create)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Create, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -297,14 +285,9 @@ namespace Fanex.NexHR.Controllers
             });
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">AnnualLeaveBalance Model.</param>
-        /// <returns>View Create.</returns>
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.AnnualLeaveBalance, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };

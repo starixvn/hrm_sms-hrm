@@ -1,7 +1,8 @@
 ﻿@model IList<DisciplineDetailModel>
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 <table class="data discipline-detail">
     <thead>
-        @if (Model != null & Model.Any() && Roles.IsUserInRole(RoleSystem.EditDiscipline.ToString()) && Roles.IsUserInRole(RoleSystem.Approver.ToString()))
+        @if (Model != null & Model.Any() && hasPermissionToEdit)
         {
             <tr>
                 <th colspan="19" style="text-align: left;">

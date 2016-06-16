@@ -48,32 +48,5 @@
                 }
             }
         }
-
-        protected override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            UserLoginModel currentUser = this.CurrentUser;
-
-            var attributes = filterContext.ActionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true);
-            if (attributes.Length == 0)
-            {
-                attributes = GetType().GetCustomAttributes(typeof(AuthorizeAttribute), true);
-            }
-
-            if (attributes.Length == 0)
-            {
-                return;
-            }
-
-            if (currentUser != null)
-            {
-                foreach (AuthorizeAttribute item in attributes)
-                {
-                    if (!string.IsNullOrWhiteSpace(item.Roles) && !currentUser.IsInRoles(item.Roles.Split(new[] { ',' }).ToList()))
-                    {
-                        filterContext.Result = new RedirectResult("~/home/accessdenied?url=" + Request.Url.AbsoluteUri);
-                    }
-                }
-            }
-        }
     }
 }

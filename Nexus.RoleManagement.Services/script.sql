@@ -137,8 +137,8 @@ GO
 CREATE PROCEDURE [dbo].[Function_AssignFunctionToRole] @RoleId     INT,
                                                        @Functions  VARCHAR(5000) = '',
                                                        @ModifiedBy INT           = NULL,
-                                                       @ErrCode    INT           = 0 OUTPUT,
-                                                       @ErrMsg     VARCHAR(200)  = '' OUTPUT
+                                                       @ErrorCode    INT           = 0 OUTPUT,
+                                                       @ErrorMessage     VARCHAR(200)  = '' OUTPUT
 AS
 
 /*
@@ -285,15 +285,18 @@ Revisions:
 Param's Explanation:
 */
 
-     BEGIN
-         SET NOCOUNT ON;
-         SELECT emRo.RoleId,
-                loDa.Code AS RoleCode
-         FROM dbo.EmployeeRole AS emRo WITH (NOLOCK)
-              INNER JOIN dbo.LookupData loDa WITH (NOLOCK) ON emRo.RoleId = loDa.Value
-         WHERE emRO.EmployeeId = @UserId
-               AND loDa.Code = 'SR'; -- System Role
-     END;
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT emRo.RoleId
+		,loDa.Code AS RoleCode
+	FROM dbo.EmployeeRole AS emRo WITH (NOLOCK)
+		INNER JOIN dbo.LookupData loDa WITH (NOLOCK) ON emRo.RoleId = loDa.Value
+		INNER JOIN dbo.[Lookup] look WITH (NOLOCK) ON look.Id = loDa.LookupId
+	WHERE emRO.EmployeeId = @UserId
+		AND look.Code = 'SR';-- System Role
+END;
+
 GO
 CREATE PROCEDURE [dbo].[Role_GetRoles]
 AS
@@ -371,7 +374,6 @@ GO
 
   INSERT INTO [dbo].[FunctionKey] VALUES('Home','Home',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('RequestOfMember','Request Of Member',NULL,1)
-  INSERT INTO [dbo].[FunctionKey] VALUES('OvertimeOfMember','Overtime Of Member',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('RequestStatistic','Request Statistic',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('Discipline','Discipline',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('ScheduleArrange','Schedule Arrange',NULL,1)
@@ -393,9 +395,12 @@ GO
   INSERT INTO [dbo].[FunctionKey] VALUES('YearlyOvertimeReport','Yearly Overtime Report',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('OvertimeDetailReport','Overtime Detail Report',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('ShiftManagement','Shift Management',NULL,1)
-  INSERT INTO [dbo].[FunctionKey] VALUES('ProcessOvertime','Process Overtime',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('VerifyOvertime','Verify Overtime',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('ProcessRequest','Process Request',NULL,1)
-
+  INSERT INTO [dbo].[FunctionKey] VALUES('FilterUnpaidLeaveSummary','Filter Unpaid Leave Summary',null,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('ApproveOvertime','Approve Overtime',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('CanOnBehalfOthers','Can On Behalf Others',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('FunctionManagement','Function Management',NULL,1)
 
   INSERT INTO [dbo].[RoleFunction] VALUES(7,1,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,2,1,1,1,1,NULL,GETDATE())
@@ -423,3 +428,58 @@ GO
   INSERT INTO [dbo].[RoleFunction] VALUES(7,24,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,25,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,26,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,27,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,28,1,1,1,1,NULL,GETDATE())
+    INSERT INTO [dbo].[RoleFunction] VALUES(7,29,1,1,1,1,NULL,GETDATE())
+
+  --Insert into employeerole from employee table
+  CREATE TABLE #Employee (
+	EmpId INT
+	,Roles VARCHAR(20)
+	,ModifiedBy INT
+	,ModifiedDate DATETIME
+	)
+
+INSERT INTO #Employee
+SELECT EmpId
+	,Roles
+	,ModifiedBy
+	,ModifiedDate
+FROM dbo.Employee WITH (NOLOCK)
+
+DECLARE @EmpId INT
+	,@ModifiedBy INT
+	,@ModifiedDate DATETIME
+	,@RoleIds VARCHAR(20)
+
+WHILE (
+		EXISTS (
+			SELECT *
+			FROM #Employee
+			)
+		)
+BEGIN
+	SELECT TOP 1 @EmpId = EmpId
+		,@ModifiedBy = ModifiedBy
+		,@ModifiedDate = ModifiedDate
+		,@RoleIds = Roles
+	FROM #Employee
+
+	INSERT INTO [dbo].[EmployeeRole] (
+		[EmployeeId]
+		,[RoleId]
+		,[ModifiedBy]
+		,[ModifiedDate]
+		)
+	SELECT DISTINCT @EmpId
+		,val
+		,@ModifiedBy
+		,@ModifiedDate
+	FROM fnc_strSplit(@RoleIds, ',')
+
+	DELETE
+	FROM #Employee
+	WHERE EmpId = @EmpId
+END
+
+DROP TABLE #Employee

@@ -2,6 +2,7 @@
 @using Fanex.NexHR.Core.Enums
 @{
     ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information" ;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("accountcss")
@@ -11,7 +12,7 @@
 }
 @section Breadcrumb {
     <a class="step">Personal</a>
-    @if (Roles.IsUserInRole("HR"))
+    @if (hasPermission)
     {
         <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
     }
@@ -61,7 +62,7 @@
                 <div class="clear">
                 </div>
             </div>
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <div class="line">
                     <div class="label">
@@ -94,7 +95,7 @@
                 <div class="clear">
                 </div>
             </div>
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <div class="line">
                     <div class="label">
@@ -304,7 +305,7 @@
                 <div class="clear">
                 </div>
             </div>
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <div class="line">
                     <div class="label">

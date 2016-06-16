@@ -7,6 +7,7 @@
 }
 @{
     ViewBag.Title = Labels.ShiftInfo;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
@@ -19,7 +20,7 @@
     <span style="padding-right: 5px;">@Labels.Status</span>
     @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
     <input type="submit" id="submit" value="@Labels.Submit" />
-    if (Roles.IsUserInRole("SystemAdmin"))
+    if (hasPermission)
     {
         <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
     }
@@ -40,7 +41,7 @@
                 <th class="left">@Labels.Shift</th>
                 <th>@Labels.In</th>
                 <th>@Labels.Out</th>
-                @if (Roles.IsUserInRole("SystemAdmin"))
+                @if (hasPermission)
                 {
                     <th>@Labels.Edit</th>
                 }
@@ -64,7 +65,7 @@
                         <td>
                             @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
                         </td>
-                        @if (Roles.IsUserInRole("SystemAdmin"))
+                        @if (hasPermission)
                         {
                             <td class="cmd">
                                 <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })">

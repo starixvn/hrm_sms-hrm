@@ -20,7 +20,7 @@
     <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_Insert" SpName="Employee_Information_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Delete" SpName="Employee_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Employee_UpdateEmployee" SpName="Employee_Information_update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Employee_UpdateEmployee" SpName="Employee_Information_update_razor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Update" SpName="Employee_Shift_Update" DbName="nexhrx" Plain="0"></Setting>

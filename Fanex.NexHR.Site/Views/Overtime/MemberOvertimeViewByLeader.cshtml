@@ -2,13 +2,15 @@
 @model IList<RequestEntity>
 @{
     Layout = null;
+    var hasVerfifyPermision = (bool)ViewBag.HasVerfifyPermision;
+    var hasApprovePermision = (bool)ViewBag.HasApprovePermision;
 }
 <table class="tabledata">
         <thead>
             <tr class="headermenu">
                 <th colspan="11">
                     <div style="float:right;">
-                    @if (Roles.IsUserInRole("Verifier") && Roles.IsUserInRole("Approver"))
+                    @if (hasApprovePermision && hasVerfifyPermision)
                     {
                          <div>
                             <a id="lnkAccept" href="javascript:;"> Verify </a> || 
@@ -17,14 +19,14 @@
                             <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
                     }
-                    else if (Roles.IsUserInRole("Verifier"))
+                    else if (hasVerfifyPermision)
                     {
                         <div>
                             <a id="lnkAccept" href="javascript:;"> @Labels.Accept </a> || 
                             <a id="lnkNotAccept" href="javascript:;"> @Labels.NotAccept </a>
                         </div>
                     }
-                    else if (Roles.IsUserInRole("Approver"))
+                    else if (hasApprovePermision)
                     {
                         <div>
                             <a id="lnkApprove" href="javascript:;"> @Labels.Approve </a> ||

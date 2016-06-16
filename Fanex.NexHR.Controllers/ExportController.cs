@@ -335,8 +335,8 @@ namespace Fanex.NexHR.Controllers
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        [Authorize(Roles = "Verifier, Approver")]
-        //[CustomAuthorize(FunctionKey = FunctionKey.ExportMemberWorkingTimeRequest, Policy = Policy.Read)]
+        /// [Authorize(Roles = "Verifier, Approver")]
+        /// [CustomAuthorize,FunctionKey.ExportMemberWorkingTimeRequest Policy.Read)]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
@@ -360,8 +360,8 @@ namespace Fanex.NexHR.Controllers
             return new EmptyResult();
         }
 
-        [Authorize(Roles = "HR")]
-        //[CustomAuthorize(FunctionKey = FunctionKey.ExportHRWorkingTimeRequest, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        /// [CustomAuthorize,FunctionKey.ExportHRWorkingTimeRequest Policy.Read)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);

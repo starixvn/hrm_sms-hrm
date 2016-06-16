@@ -27,8 +27,8 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Read)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult JobTitleManagement()
         {
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
@@ -51,9 +51,9 @@
             return Json(datas, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.JobTitleManagement)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteLookupDataCriteria
@@ -64,9 +64,9 @@
             return Json(result);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.JobTitleManagement)]
         public JsonResult Insert(string name, int categoryId)
         {
             var criteria = new InsertLookupDataCriteria
@@ -79,9 +79,9 @@
             return Json(result);
         }
 
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.JobTitleManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.JobTitleManagement)]
         public JsonResult Update(int id, string name, int categoryId)
         {
             var criteria = new UpdateLookupDataCriteria

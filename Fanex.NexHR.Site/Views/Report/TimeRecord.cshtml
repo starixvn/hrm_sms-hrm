@@ -2,6 +2,7 @@
 @model TimeRecordViewModel
 @{
     ViewBag.Title = @Labels.TimeRecord;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("timerecordcss")
@@ -17,7 +18,7 @@
 </div>
 
 <div class="container_24 bunhat">
-    @if (Roles.IsUserInRole("HR"))
+    @if (hasPermission)
     {
         <div class="grid_2">
             @Html.LabelFor(model => model.FromDate)

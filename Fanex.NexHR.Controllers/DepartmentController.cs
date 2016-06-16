@@ -26,8 +26,8 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Read)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(bool? isActive)
         {
             var model = new DepartmentViewModel()
@@ -38,9 +38,9 @@
             return Index(model);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(DepartmentViewModel model)
         {
             if (model != null)
@@ -51,8 +51,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Create)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Create, FunctionKey.DivisionManagement)]
         public ActionResult Create()
         {
             var model = new AddDepartmentViewModel();
@@ -61,9 +61,9 @@
             return View(model);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.DivisionManagement)]
         public ActionResult Create(AddDepartmentViewModel model)
         {
             if (model != null)
@@ -97,8 +97,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Edit, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
         {
             Department department = GetDepartmentById(departmentId);
@@ -117,9 +117,9 @@
             return View(model);
         }
 
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.DivisionManagement)]
         public ActionResult Edit(EditDepartmentViewModel model)
         {
             if (model != null)
@@ -154,9 +154,9 @@
             return View(model);
         }
 
-        [Authorize(Roles = "SystemAdmin")]
+        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.DivisionManagement, Policy = Policy.Delete)]
+        [HRAuthorize(Policy.Delete, FunctionKey.DivisionManagement)]
         public JsonResult Delete(int departmentId)
         {
             var criteria = new DeleteDepartmentCriteria

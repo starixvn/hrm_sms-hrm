@@ -1,4 +1,7 @@
 ﻿@model IList<OtherDisciplineModel>
+@{
+    var hasPermissionToDelete = (bool)ViewBag.HasPermissionToDelete;
+}
 <table class="data">
     <thead>
         <tr>
@@ -24,7 +27,7 @@
                     <td>@item.Score</td>
                     <td>@item.Comment</td>
                     <td>
-                        @if (Roles.IsUserInRole(RoleSystem.SystemAdmin.ToString()))
+                        @if (hasPermissionToDelete)
                         {
                             <a href="javascript:;" class="deleteOtherDiscipline" data-row-index="@index" data-empid="@item.EmployeeId"
                                data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">

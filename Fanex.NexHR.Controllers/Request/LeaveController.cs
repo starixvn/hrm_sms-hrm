@@ -14,6 +14,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -64,6 +65,7 @@
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
 
             return View(model);
         }
@@ -105,6 +107,8 @@
             model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
 
             ViewBag.IsView = false;
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+
             return View(model);
         }
 
@@ -137,6 +141,7 @@
             model.LeaveTypeList = GetAllLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
 
             return View(model);
         }

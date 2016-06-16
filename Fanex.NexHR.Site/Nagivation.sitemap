@@ -27,7 +27,6 @@
       <siteMapNode title="User management" controller="employee" action="UserManagement" icon="users" />
       <siteMapNode title="Section management" controller="team" action="index" icon="setting" />
       <siteMapNode title="Job title management" controller="jobtitle" action="jobtitlemanagement" icon="user" />
-      <siteMapNode title="Function management" controller="function" action="index" icon="user" />
       <siteMapNode title="Time Record" controller="report" action="timerecord" icon="finger" roles="HR"/>
       <siteMapNode title="Reports" controller="report" action="index" icon="search" roles="HR"/>
       <siteMapNode title="Message" controller="message" action="index" icon="message1" roles="HR"/>
@@ -46,6 +45,7 @@
       <siteMapNode title="Create account" controller="employee" action="create" icon="adduser" roles="SystemAdmin"/>
       <siteMapNode title="Void request" controller="request" action="voidrequest" icon="user1" roles="SystemAdmin"/>
       <siteMapNode title="Division" controller="department" action="index" icon="setting" roles="SystemAdmin"/>
+      <siteMapNode title="Function management" controller="function" action="index" icon="SystemAdmin" />
     </siteMapNode>
   </siteMapNode>
 </siteMap>

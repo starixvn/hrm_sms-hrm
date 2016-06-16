@@ -2,6 +2,7 @@
 @model LeaveSummaryViewModel
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
 @section css{
     @Url.CombresLink("annualbalancecss")
@@ -13,9 +14,7 @@
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@if (Roles.IsUserInRole(RoleSystem.HR.ToString())
-    || Roles.IsUserInRole(RoleSystem.Verifier.ToString())
-    || Roles.IsUserInRole(RoleSystem.Approver.ToString()))
+@if (hasPermissionToEdit)
 {
     <div class="container_24 bunhat">
         @using (Html.BeginForm())
@@ -95,7 +94,7 @@
                                 <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>
                             </div>
                         }
-                        @if (Roles.IsUserInRole("HR"))
+                        @if (hasPermissionToEdit)
                         {
                             <div class="button-icon">
                                 <span class="icon plus"></span><a href="javascript:;" id="addadj">Adjustment</a>
@@ -138,7 +137,7 @@
 <th rowspan="2">
     Balance of KIV @Model.Year
 </th>
-@if (Roles.IsUserInRole("HR"))
+@if (hasPermissionToEdit)
 {
     <th rowspan="2">
         @Labels.Edit
@@ -411,7 +410,7 @@
                         }
                     }
                 </td>
-                @if (Roles.IsUserInRole("HR"))
+                @if (hasPermissionToEdit)
                 {
                     <td>
                         <a href="~/annualleavebalance/employee/@leave.Employee.Id">

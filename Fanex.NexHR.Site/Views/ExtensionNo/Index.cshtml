@@ -8,12 +8,13 @@
 }
 @{
     ViewBag.Title = "Extension Numbers";
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-@if (Roles.IsUserInRole("HR"))
+@if (hasPermission)
 {
     <div class="button-icon">
         <span class="icon plus"></span>@Html.ActionLink("New Extension Number", "Create")
@@ -35,7 +36,7 @@
             <th>
                 Extension Number
             </th>
-            @if (Roles.IsUserInRole("HR"))
+            @if (hasPermission)
             {
                 <th>
                     @Labels.Edit
@@ -75,7 +76,7 @@
                         <td style="color: #0789D1;">
                             @ext.ExtensionNo
                         </td>
-                        @if (Roles.IsUserInRole("HR"))
+                        @if (hasPermission)
                         {
                             <td>
                                 <a href="@Url.Action("Edit", "ExtensionNo", new { isInternal = ext.IsInternal, ExtensionNoId = ext.ExtensionNoId })">

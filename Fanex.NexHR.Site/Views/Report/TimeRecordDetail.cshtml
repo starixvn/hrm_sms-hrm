@@ -1,6 +1,7 @@
 ﻿@model IList<TimeRecordModel>
 @{
     Layout = null;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 <table id="data" class="data">
     <thead>
@@ -50,7 +51,7 @@
                         @item.GetInOutName
                     </td>*@
                     <td>
-                        @if (Roles.IsUserInRole("HR"))
+                        @if (hasPermission)
                         {
                             if (item.InOutType == 0)
                             {

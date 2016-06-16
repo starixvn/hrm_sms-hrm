@@ -6,8 +6,6 @@
 
         public const string RequestOfMember = "RequestOfMember";
 
-        public const string OvertimeOfMember = "OvertimeOfMember";
-
         public const string RequestStatistic = "RequestStatistic";
 
         public const string Discipline = "Discipline";
@@ -50,9 +48,16 @@
 
         public const string ShiftManagement = "ShiftManagement";
 
-        public const string ProcessOvertime = "ProcessOvertime";
+        public const string VerifyOvertime = "VerifyOvertime";
+
+        public const string ApproveOvertime = "ApproveOvertime";
 
         public const string ProcessRequest = "ProcessRequest";
-            
+
+        public const string FilterUnpaidLeaveSummary = "FilterUnpaidLeaveSummary";
+
+        public const string CanOnBehalfOthers = "CanOnBehalfOthers";
+
+        public const string FunctionManagement = "FunctionManagement";
     }
 }

@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Web.Mvc;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Web.Mvc;
 
     public class HolidayController : BaseController
     {
@@ -19,7 +19,7 @@
 
         public HolidayController()
             : this(null)
-        { 
+        {
         }
 
         public ActionResult Index()
@@ -31,11 +31,15 @@
         public ActionResult Index(int? year)
         {
             ViewBag.year = year ?? DateTime.Now.Year;
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete);
+
             return View(holidayService.GetByYear(ViewBag.year));
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Edit)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
         public ActionResult Edit(int id)
         {
             return View(holidayService.GetById(id));
@@ -46,9 +50,9 @@
         /// </summary>
         /// <param name="model">Holiday model.</param>
         /// <returns>View Edit.</returns>
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Edit)]
+        [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
         public ActionResult Edit(Holiday model)
         {
             if (ModelState.IsValid)
@@ -65,8 +69,8 @@
             return View(model);
         }
 
-        [Authorize(Roles = "HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Create)]
+        /// [Authorize(Roles = "HR")]
+        [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
         public ActionResult Create()
         {
             return View(new Holiday
@@ -84,9 +88,9 @@
         /// </summary>
         /// <param name="model">Holiday model.</param>
         /// <returns>View Create.</returns>
-        [Authorize(Roles = "HR")]
+        /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(FunctionKey = FunctionKey.Holiday, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
         public ActionResult Create(Holiday model)
         {
             if (ModelState.IsValid)

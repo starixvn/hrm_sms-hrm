@@ -10,6 +10,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -60,6 +61,7 @@
                 UnavailDates = GetUnavailDate(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
 
             return View(model);
         }
@@ -105,7 +107,9 @@
                     }
                 }
             }
-            
+
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+
             return View(model);
         }
 
@@ -141,6 +145,7 @@
                     VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
                     UnavailDates = GetUnavailDate(CurrentUser.Id)
                 };
+                ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
 
                 return View(viewModel);
             }
@@ -188,7 +193,9 @@
                     }
                 }
             }
-            
+
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+
             return View(model);
         }
 

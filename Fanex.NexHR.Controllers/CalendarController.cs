@@ -46,8 +46,8 @@ namespace Fanex.NexHR.Controllers
         }
 
         public CalendarController(
-            IWorkingCalendarService workingCalendarService, 
-            ITeamService teamService, 
+            IWorkingCalendarService workingCalendarService,
+            ITeamService teamService,
             IShiftService shiftService,
             ILookupDataService lookupDataService = null,
             IEmployeeService employeeService = null)
@@ -59,9 +59,9 @@ namespace Fanex.NexHR.Controllers
             _employeeService = employeeService ?? new EmployeeService();
         }
 
+        /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
-        [Authorize(Roles = "ShiftManager")]
-        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule()
         {
             var currentDate = DateTime.Now;
@@ -85,9 +85,9 @@ namespace Fanex.NexHR.Controllers
             return View(scheduleArrangeViewModel);
         }
 
+        /// [Authorize(Roles = "ShiftManager")]
         [HttpPost]
-        [Authorize(Roles = "ShiftManager")]
-        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Create)]
+        [HRAuthorize(Policy.Create, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
         {
             var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
@@ -112,9 +112,9 @@ namespace Fanex.NexHR.Controllers
             return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
         }
 
+        /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
-        [Authorize(Roles = "ShiftManager")]
-        [HRAuthorize(FunctionKey = FunctionKey.ScheduleArrange, Policy = Policy.Read)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
             var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
@@ -136,11 +136,13 @@ namespace Fanex.NexHR.Controllers
                 ScheduleArranges = scheduleArranges
             };
 
+            ViewBag.HasPermission = true; // !Roles.IsUserInRole("SystemAdmin");
+
             return View(scheduleViewModel);
         }
 
-        [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.ShiftStatistic)]
         public ActionResult ShiftStatistic()
         {
             var currentDate = DateTime.Now;
@@ -159,8 +161,8 @@ namespace Fanex.NexHR.Controllers
             return View(shiftStatisticViewModel);
         }
 
-        [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.ShiftStatistic)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
             var getShiftCriteria = new GetShiftStatisticCriteria()
@@ -176,7 +178,7 @@ namespace Fanex.NexHR.Controllers
 
             var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
             {
-                FromDate = fromDate, 
+                FromDate = fromDate,
                 ToDate = toDate,
                 ShiftStatisticModels = shiftStatisticModels,
                 GroupIds = groupIds,
@@ -187,8 +189,8 @@ namespace Fanex.NexHR.Controllers
             return View(shiftStatisticContentViewModel);
         }
 
-        [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.ShiftStatistic)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
             int? shiftId,
@@ -212,8 +214,8 @@ namespace Fanex.NexHR.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(FunctionKey = FunctionKey.ShiftStatistic, Policy = Policy.Read)]
+        /// [Authorize(Roles = "ShiftManager,HR")]
+        [HRAuthorize(Policy.Read, FunctionKey.ShiftStatistic)]
         public ActionResult EmployeeShiftContent(
             DateTime workDate,
             int? shiftId,
@@ -222,7 +224,7 @@ namespace Fanex.NexHR.Controllers
             bool? isShowWholeCompany,
             byte? isLocal = null)
         {
-            var criteria = new GetEmployeeShiftDateCriteria() 
+            var criteria = new GetEmployeeShiftDateCriteria()
             {
                 WorkDate = workDate,
                 ShiftId = shiftId,
@@ -240,7 +242,7 @@ namespace Fanex.NexHR.Controllers
 
         public ActionResult GetEmployeesByShiftMonitor(string query)
         {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria() 
+            var criteria = new GetEmployeeSupervisorByQueryCriteria()
             {
                 EmpId = this.CurrentUser.Id,
                 Role = (int)RoleSystem.ShiftManager,
@@ -329,8 +331,8 @@ namespace Fanex.NexHR.Controllers
                 ReportDate = DateTime.Parse(firstDateInMonth.ToString())
             };
             var userChangedShift = _employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
-            var userHalfDayOffs = _employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria); 
-           
+            var userHalfDayOffs = _employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
+
             ViewBag.FromNewDate = fromDate;
             ViewBag.ToNewDate = toDate;
             var criteria = new GetWorkingCalendarWeeklyCriteria()
@@ -347,7 +349,7 @@ namespace Fanex.NexHR.Controllers
             CheckChangeShiffAndHalfDayOff(fromDate, viewModel, userChangedShift, userHalfDayOffs);
             ViewBag.UserChangeShift = userChangedShift;
             ViewBag.HalfDayOffs = userHalfDayOffs;
-             
+
             return PartialView(viewModel);
         }
 
@@ -478,7 +480,7 @@ namespace Fanex.NexHR.Controllers
 
         [NonAction]
         private void CheckChangeShiffAndHalfDayOff(
-            DateTime fromDate, 
+            DateTime fromDate,
             IList<WorkingCalendarsViewModel> viewModel,
             IList<UserChangedShift> userChangeShift,
             IList<HalfDayOff> halfDayOff)
