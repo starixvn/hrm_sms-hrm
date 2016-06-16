@@ -10,8 +10,26 @@
 
         public int DisciplineTypeId { get; set; }
 
-        public float ApproverSubtractScore { get; set; }
+        public bool IsIgnored { get; set; }
 
-        public bool Ignored { get; set; }
+        public bool IsIgnoredChangeShift { get; set; }
+
+        public bool IsIgnoredMissingCheckInOut { get; set; }
+
+        public bool IsIgnoredLateIn { get; set; }
+
+        public bool IsIgnoredEarlyOut { get; set; }
+
+        public bool IsIgnoredAbsent { get; set; }
+
+        public bool IsIgnoredUnpaidLeave { get; set; }
+
+        public bool IsIgnoredWorkingUnderTime { get; set; }
+
+        public bool IsIgnoredUnpaidLeaveAbsent { get; set; }
+
+        public bool IsConfirmed { get; set; }
+
+        public decimal ApproverSubtractScore { get; set; }
     }
 }

@@ -43,5 +43,9 @@
         public string ApproverComment { get; set; }
 
         public string EmployeeComment { get; set; }
+
+        public bool Confirmed { get; set; }
+
+        public bool HasConfirmed { get; set; }
     }
 }

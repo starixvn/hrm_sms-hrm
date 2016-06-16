@@ -258,6 +258,9 @@
   <data name="OvertimeEmailSubject" xml:space="preserve">
     <value>Overtime request from</value>
   </data>
+  <data name="ProcessRequestWarning" xml:space="preserve">
+    <value>You must ignore or confirm on each type of request.</value>
+  </data>
   <data name="ProcessSubject" xml:space="preserve">
     <value>Your {0} request {1} {2} by {3}</value>
   </data>

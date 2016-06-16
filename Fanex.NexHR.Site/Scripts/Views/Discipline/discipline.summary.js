@@ -146,7 +146,7 @@
                                 url: _global.root + 'discipline/AddOtherDiscipline',
                                 data: $('#frmAddOtherDiscipline').serialize(),
                                 success: function (result) {
-                                    if (result.Code === 0) {
+                                    if (result.IsSuccessful) {
                                         showSuccessMsg('Add other discipline successful!');
                                     } else {
                                         showErrorMsg('<li>' + result.Message + '</li>');

@@ -56,7 +56,7 @@
                 }
 
                 model.Teams = GetAllTeam();
-                model.DisciplineTypes = GetDisciplineType();
+                model.DisciplineTypes = GetDisciplineType(true);
             }
 
             return View(model);
@@ -101,8 +101,13 @@
                     }
                 }
 
+                if (model.ReasonId < 0)
+                {
+                    model.ReasonId = null;
+                }
+
                 model.Teams = GetAllTeam();
-                model.DisciplineTypes = GetDisciplineType();
+                model.DisciplineTypes = GetDisciplineType(false);
             }
 
             return View(model);
@@ -158,7 +163,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
+        [Authorize(Roles = "EditDiscipline")]
         [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Create)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
@@ -177,7 +182,7 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = "SystemAdmin")]
+        [Authorize(Roles = "EditDiscipline")]
         [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Delete)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
@@ -186,7 +191,7 @@
                 criteria.ModifiedBy = CurrentUser.Id;
                 CommandResult commandResult = commandService.Delete(criteria);
 
-                if (commandResult.Code > 0)
+                if (!commandResult.IsSuccessful)
                 {
                     return commandResult.Message;
                 }
@@ -196,11 +201,11 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = "Approver")]
+        [Authorize(Roles = "EditDiscipline")]
         [HRAuthorize(FunctionKey = FunctionKey.Discipline, Policy = Policy.Edit)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
-            int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.Approver);
+            int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.EditDiscipline);
 
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
@@ -234,9 +239,13 @@
             return teamList;
         }
 
-        private IList<DisciplineTypeModel> GetDisciplineType()
+        private IList<DisciplineTypeModel> GetDisciplineType(bool includeOtherType)
         {
-            IList<DisciplineTypeModel> disciplineTypes = disciplineService.GetDisciplineType(new GetDisciplineTypeCriteria());
+            var criteria = new GetDisciplineTypeCriteria()
+            {
+                IncludeOtherType = includeOtherType
+            };
+            IList<DisciplineTypeModel> disciplineTypes = disciplineService.GetDisciplineType(criteria);
 
             return disciplineTypes;
         }

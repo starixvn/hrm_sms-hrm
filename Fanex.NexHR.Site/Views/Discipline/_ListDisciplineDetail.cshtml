@@ -1,11 +1,7 @@
 ﻿@model IList<DisciplineDetailModel>
-
-@{
-    var isApprover = Roles.IsUserInRole(RoleSystem.Approver.ToString());
-}
 <table class="data discipline-detail">
     <thead>
-        @if (Model != null & Model.Any() && isApprover)
+        @if (Model != null & Model.Any() && Roles.IsUserInRole(RoleSystem.EditDiscipline.ToString()) && Roles.IsUserInRole(RoleSystem.Approver.ToString()))
         {
             <tr>
                 <th colspan="19" style="text-align: left;">
@@ -243,17 +239,19 @@
                         {
                             if (item.ApproverSubtractScore <= item.SystemSubtractScore)
                             {
-                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
+                                <span class="float-left" style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
                             }
                             else
                             {
-                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                                <span class="float-left" style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
                             }
                         }
                         else
                         {
-                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
+                            <span class="float-left">@item.ApproverSubtractScore.ToString("0.0")</span>
                         }
+                        <input class="float-right confirmedDiscipline" type="checkbox" disabled="@item.HasConfirmed.Equals(false)"
+                               data-has-confirmed="@item.HasConfirmed" data-changed="false" />
                     </td>
                     @if (!string.IsNullOrEmpty(item.ApproverComment))
                     {

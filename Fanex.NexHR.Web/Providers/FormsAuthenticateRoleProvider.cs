@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="FormsAuthenticateRoleProvider.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Kan.Nguyen" date="2013.6.21">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Web.Providers
+﻿namespace Fanex.NexHR.Web.Providers
 {
     using System;
     using System.Collections.Generic;
@@ -18,9 +9,6 @@ namespace Fanex.NexHR.Web.Providers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Forms Authenticate Role Provider.
-    /// </summary>
     public class FormsAuthenticateRoleProvider : RoleProvider
     {
         private readonly IEmployeeService _employeeService;
@@ -73,11 +61,6 @@ namespace Fanex.NexHR.Web.Providers
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Function to get role for users.
-        /// </summary>
-        /// <param name="username">User name.</param>
-        /// <returns>Return array role.</returns>
         public override string[] GetRolesForUser(string username)
         {
             var roles = new List<string>();
@@ -94,18 +77,23 @@ namespace Fanex.NexHR.Web.Providers
                             case (int)RoleSystem.Verifier:
                                 roles.Add(RoleSystem.Verifier.ToString());
                                 break;
+
                             case (int)RoleSystem.Approver:
                                 roles.Add(RoleSystem.Approver.ToString());
                                 break;
+
                             case (int)RoleSystem.ShiftManager:
                                 roles.Add(RoleSystem.ShiftManager.ToString());
                                 break;
+
                             case (int)RoleSystem.ActingSupervisor:
                                 roles.Add(RoleSystem.ActingSupervisor.ToString());
                                 break;
+
                             case (int)RoleSystem.HR:
                                 roles.Add(RoleSystem.HR.ToString());
                                 break;
+
                             case (int)RoleSystem.SystemAdmin:
                                 roles.Add(RoleSystem.Verifier.ToString());
                                 roles.Add(RoleSystem.Approver.ToString());
@@ -113,6 +101,10 @@ namespace Fanex.NexHR.Web.Providers
                                 roles.Add(RoleSystem.ActingSupervisor.ToString());
                                 roles.Add(RoleSystem.HR.ToString());
                                 roles.Add(RoleSystem.SystemAdmin.ToString());
+                                break;
+
+                            case (int)RoleSystem.EditDiscipline:
+                                roles.Add(RoleSystem.EditDiscipline.ToString());
                                 break;
                         }
                     }

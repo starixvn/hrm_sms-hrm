@@ -22,7 +22,6 @@
             success: function (response) {
                 if (response.Code !== 0) {
                     alert(response.Message);
-                    return;
                 } else {
                     window.location.reload();
                 }
@@ -47,20 +46,30 @@
                     var ignoredDisciplines = [],
                         comment = $(this).find('textarea#Comment').val();
 
-                    $(this).find(".tabledata tbody tr").each(function () {
-                        var checkbox = $(this).find('td.ignoredDiscipline input:checkbox');
+                    $(this).find("table.data tbody tr").each(function () {
+                        var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
+                            chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
 
-                        if (checkbox.length === 1 && checkbox.prop('checked')) {
+                        if (chkIgnored.length === 1) {
                             ignoredDisciplines.push({
-                                WorkDate: checkbox.data('workdate'),
+                                WorkDate: chkIgnored.data('workdate'),
                                 EmployeeId: employeeId,
-                                DisciplineTypeId: checkbox.data('disciplinetypeid'),
-                                Ignored: checkbox.prop('checked')
+                                DisciplineTypeId: chkIgnored.data('disciplinetypeid'),
+                                IsIgnored: chkIgnored.prop('checked'),
+                                IsConfirmed: chkConfirmed.prop('checked')
                             });
                         }
                     });
 
-                    processRequest(requestId, roleId, command, comment, ignoredDisciplines);
+                    var data = jQuery.grep(ignoredDisciplines, function (item, index) {
+                        return item.IsIgnored === false && item.IsConfirmed === false;
+                    });
+
+                    if (data && data.length > 0) {
+                        alert('You must ignore or confirm on each type of request.');
+                    } else {
+                        processRequest(requestId, roleId, command, comment, ignoredDisciplines);
+                    }
                 },
                 'Cancel': function () {
                     $(this).dialog('close');
@@ -85,7 +94,23 @@
             dataType: 'html',
             success: function (data) {
                 $('#dialogProcessRequest').html(data);
+
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
+
+                $('#dialogProcessRequest').find("table.data tbody tr").each(function () {
+                    var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
+                        chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
+
+                    chkIgnored.on('click', function () {
+                        if ($(this).prop('checked')) {
+                            chkConfirmed.prop('checked', true);
+                            chkConfirmed.prop('disabled', true);
+                        } else {
+                            chkConfirmed.prop('checked', false);
+                            chkConfirmed.prop('disabled', false);
+                        }
+                    });
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);

@@ -32,11 +32,22 @@
             }
 
             if (approverSubstractScore > 0) {
-                $(this).closest('tr').find('td.approverSubtractScore span').text(-approverSubstractScore);
+                $(this).closest('tr').find('td.approverSubtractScore span').text(-approverSubstractScore.toFixed(1));
                 $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'red');
             } else {
                 $(this).closest('tr').find('td.approverSubtractScore span').text('0.0');
                 $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'inherit');
+            }
+        });
+
+        $('#discipline-detail table.discipline-detail td input.confirmedDiscipline:checkbox')
+        .on('click', function () {
+            var hasConfirmed = $(this).data('has-confirmed').toLowerCase() === 'true';
+
+            if ($(this).prop('checked') !== hasConfirmed) {
+                $(this).data('changed', true);
+            } else {
+                $(this).data('changed', false);
             }
         });
     }
@@ -44,22 +55,75 @@
     function getDataChanged() {
         var ignoredDisciplines = [];
 
-        $('#discipline-detail table.discipline-detail').find('tr').each(function () {
-            var approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text());
+        $('#discipline-detail table.discipline-detail').find('tbody tr').each(function () {
+            var approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text()),
+                isChanged = false,
+                isConfirmed = false;
+
+            $(this).find('td input.confirmedDiscipline').each(function () {
+                if ($(this).data('changed')) {
+                    isChanged = true;
+                    isConfirmed = $(this).prop('checked');
+                }
+            });
 
             $(this).find('td input.ignoredDiscipline').each(function () {
                 if ($(this).data('changed')) {
-                    var ignoredDiscipline = {
-                        WorkDate: $(this).data('workdate'),
-                        EmployeeId: $(this).data('employee-id'),
-                        DisciplineTypeId: $(this).data('discipline-type-id'),
-                        ApproverSubtractScore: Math.abs(approverSubstractScore),
-                        Ignored: $(this).prop('checked')
-                    };
-
-                    ignoredDisciplines.push(ignoredDiscipline);
+                    isChanged = true;
                 }
             });
+
+            if (isChanged) {
+                var ignoredDiscipline = {
+                    WorkDate: '',
+                    EmployeeId: false,
+                    IsIgnoredChangeShift: false,
+                    IsIgnoredMissingCheckInOut: false,
+                    IsIgnoredLateIn: false,
+                    IsIgnoredEarlyOut: false,
+                    IsIgnoredAbsent: false,
+                    IsIgnoredUnpaidLeave: false,
+                    IsIgnoredWorkingUnderTime: false,
+                    IsIgnoredUnpaidLeaveAbsent: false,
+                    IsConfirmed: isConfirmed,
+                    ApproverSubtractScore: Math.abs(approverSubstractScore)
+                };
+
+                $(this).find('td input.ignoredDiscipline').each(function () {
+                    var disciplineTypeId = $(this).data('discipline-type-id');
+                    ignoredDiscipline.WorkDate = $(this).data('workdate');
+                    ignoredDiscipline.EmployeeId = $(this).data('employee-id');
+
+                    switch (disciplineTypeId) {
+                        case 1:
+                            ignoredDiscipline.IsIgnoredChangeShift = $(this).prop('checked');
+                            break;
+                        case 2:
+                            ignoredDiscipline.IsIgnoredMissingCheckInOut = $(this).prop('checked');
+                            break;
+                        case 3:
+                            ignoredDiscipline.IsIgnoredLateIn = $(this).prop('checked');
+                            break;
+                        case 4:
+                            ignoredDiscipline.IsIgnoredEarlyOut = $(this).prop('checked');
+                            break;
+                        case 5:
+                            ignoredDiscipline.IsIgnoredAbsent = $(this).prop('checked');
+                            break;
+                        case 6:
+                            ignoredDiscipline.IsIgnoredUnpaidLeave = $(this).prop('checked');
+                            break;
+                        case 7:
+                            ignoredDiscipline.IsIgnoredWorkingUnderTime = $(this).prop('checked');
+                            break;
+                        case 8:
+                            ignoredDiscipline.IsIgnoredUnpaidLeaveAbsent = $(this).prop('checked');
+                            break;
+                    }
+                });
+
+                ignoredDisciplines.push(ignoredDiscipline);
+            }
         });
 
         return ignoredDisciplines;
@@ -69,25 +133,28 @@
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
             var ignoredDisciplines = getDataChanged();
 
+            console.log(ignoredDisciplines);
+
             if (ignoredDisciplines.length > 0) {
                 ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });
 
                 confirm('Are you sure you want to save?',
-                    function() {
+                    function () {
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: _global.root + 'discipline/UpdateIgnoredDiscipline',
                             data: ignoredDisciplines,
                             contentType: 'application/json; charset=utf-8',
-                            success: function(result) {
-                                if (result.Code === 0) {
+                            success: function (result) {
+                                if (result.IsSuccessful) {
+                                    alert('Updated Successfully!');
                                     query();
                                 } else {
                                     alert(result.Message);
                                 }
                             },
-                            error: function(jqXHR, textStatus, errorThrown) {
+                            error: function (jqXHR, textStatus, errorThrown) {
                                 alert(textStatus + ': ' + errorThrown);
                             }
                         });

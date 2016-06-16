@@ -193,7 +193,7 @@
             if (criteria.IsValid())
             {
                 result = Repository.Update(criteria);
-                if (result != null && result.Code == 0)
+                if (result != null && result.IsSuccessful)
                 {
                     var getRequestByIdCriteria = new GetRequestByIdCriteria()
                     {
@@ -226,7 +226,7 @@
             if (criteria.IsValid())
             {
                 result = Repository.Update(criteria);
-                if (result != null && result.Code == 0)
+                if (result != null && result.IsSuccessful)
                 {
                     var getRequestByIdCriteria = new GetRequestByIdCriteria()
                     {

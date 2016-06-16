@@ -8,7 +8,7 @@
 
     public class ApproveRequestCriteria : CriteriaBase
     {
-        private const string DisciplineTemp = "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' Ignored='{3}'></Discipline>";
+        private const string DisciplineTemp = "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' IsIgnored='{3}' IsConfirmed='{4}'></Discipline>";
         private const string BeginRootTag = "<ROOT>";
         private const string EndRootTag = "</ROOT>";
 
@@ -54,7 +54,7 @@
 
                 foreach (IgnoredDisciplineModel item in IgnoredDisciplines)
                 {
-                    disciplineXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.Ignored);
+                    disciplineXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.IsIgnored, item.IsConfirmed);
                 }
 
                 disciplineXmlBuilder.Append(EndRootTag);

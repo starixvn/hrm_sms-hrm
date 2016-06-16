@@ -78,7 +78,9 @@
                     WorkingUnderTime = GetWorkingUnderTime(discipline),
                     UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
                     EmployeeComment = discipline.EmployeeComment,
-                    ApproverComment = discipline.ApproverComment
+                    ApproverComment = discipline.ApproverComment,
+                    Confirmed = discipline.IsConfirmed,
+                    HasConfirmed = discipline.HasConfirmed
                 };
             }).ToList();
         }

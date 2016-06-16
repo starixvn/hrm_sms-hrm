@@ -4,6 +4,8 @@
 
     public class GetDisciplineTypeCriteria : CriteriaBase
     {
+        public bool IncludeOtherType { get; set; }
+
         public override bool IsValid()
         {
             return true;

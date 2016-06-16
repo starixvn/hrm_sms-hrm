@@ -8,8 +8,11 @@
 
     public class UpdateIgnoredDisciplineCriteria : CriteriaBase
     {
-        private const string DisciplineTemp = 
-            "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' ApproverSubtractScore='{3}' Ignored='{4}'></Discipline>";
+        private const string DisciplineTemp =
+            @"<Discipline WorkDate='{0}' EmployeeId='{1}' IsIgnoredChangeShift='{2}' IsIgnoredMissingCheckInOut='{3}' IsIgnoredLateIn='{4}'
+                IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnpaidLeave='{7}'
+                IsIgnoredWorkingUnderTime='{8}' IsIgnoredUnpaidLeaveAbsent='{9}'
+                IsConfirmed='{10}' ApproverSubtractScore='{11}'></Discipline>";
 
         private const string BeginRootTag = "<ROOT>";
         private const string EndRootTag = "</ROOT>";
@@ -49,7 +52,20 @@
 
                 foreach (IgnoredDisciplineModel item in IgnoredDisciplines)
                 {
-                    disciplineXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.ApproverSubtractScore, item.Ignored);
+                    disciplineXmlBuilder.AppendFormat(
+                        DisciplineTemp,
+                        item.WorkDate,
+                        item.EmployeeId,
+                        item.IsIgnoredChangeShift,
+                        item.IsIgnoredMissingCheckInOut,
+                        item.IsIgnoredLateIn,
+                        item.IsIgnoredEarlyOut,
+                        item.IsIgnoredAbsent,
+                        item.IsIgnoredUnpaidLeave,
+                        item.IsIgnoredWorkingUnderTime,
+                        item.IsIgnoredUnpaidLeaveAbsent,
+                        item.IsConfirmed,
+                        item.ApproverSubtractScore);
                 }
 
                 disciplineXmlBuilder.Append(EndRootTag);
