@@ -1,45 +1,51 @@
-﻿@using Fanex.NexHR.Models.Request
-@model RequestEntity
-
+﻿@model OvertimeRequest
 @{
-    var request = (RequestEntity)Model;
+    var request = (OvertimeRequest)Model;
     if (request.ApprovedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
     {
-        switch (request.Status.Id)
+        switch (request.CurrentStatus)
         {
             case (byte)CurrentRequestStatus.Verified:
                 <td>
-                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-pending menu">
+                        @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                    </a>
                 </td>
                 break;
             case (byte)CurrentRequestStatus.Pending:
                 if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
                 {
                     <td>
-                        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-pending menu">@request.Status.ToString()</a>
+                        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-pending menu">
+                            @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                        </a>
                     </td>
                 }
                 break;
             case (byte)CurrentRequestStatus.Approved:
-                <td>
-                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-approved menu">@request.Status.ToString()</a>
-                </td>
-                                                                                                                                                  break;
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-approved menu">
+                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                </a>
+            </td>
+                break;
             case (byte)CurrentRequestStatus.Rejected:
-                <td>
-                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" href="javascript:void(0);" class="approver-rejected menu">@request.Status.ToString()</a>
-                </td>
-                                                                                                                                                  break;
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-rejected menu">
+                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                </a>
+            </td>
+                break;
             case (byte)CurrentRequestStatus.NotVerified:
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
             default:
-                <td class="tooltip"><span class="status">@request.Status.ToString()</span> </td>
-                                                    break;
+            <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
+                break;
         }
     }
     else
     {
-    <td class="tooltip"><span class="status">@request.Status.ToString()</span> </td>
+        <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
     }
 }

@@ -2,7 +2,6 @@
 {
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
@@ -30,9 +29,10 @@
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
         private readonly IOvertimeRequestService overtimeService;
+        private readonly ICommandService commandService;
 
         public OvertimeController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
@@ -41,118 +41,90 @@
             IRequestService requestService,
             ITeamService teamService,
             IOvertimeRequestService overtimeService,
-            ILookupDataService lookupDataService)
+            ILookupDataService lookupDataService,
+            ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.requestService = requestService ?? new RequestService();
             this.teamService = teamService ?? new TeamService();
             this.overtimeService = overtimeService ?? new OvertimeRequestService();
             this.lookupDataService = lookupDataService ?? new LookupDataService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         [HttpGet]
         public ActionResult EmployeeView()
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = CurrentUser.Id };
-            Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var overtimeReportViewModel = new OvertimeReportViewModel()
+            var model = new OvertimeReportViewModel()
             {
-                Employee = employee.NickName,
-                EmpId = employee.Id
+                Employee = CurrentUser.NickName,
+                EmpId = CurrentUser.Id,
+                Year = DateTime.Now.Year
             };
-            return EmployeeView(overtimeReportViewModel, DateTime.Now.Year);
+            return EmployeeView(model);
         }
 
         [HttpPost]
-        public ActionResult EmployeeView(OvertimeReportViewModel model, int year = 0)
+        public ActionResult EmployeeView(OvertimeReportViewModel model)
         {
-            var currentYear = year != 0 ? year : DateTime.Now.Year;
-            ViewBag.Year = currentYear;
-            var getOvertimeReportInYearCriteria = new GetOvertimeReportInYearCriteria
+            if (model != null)
             {
-                EmployeeId = model.EmpId,
-                Year = currentYear
-            };
-            IList<RequestEntity> entityList = overtimeService.GetOvertimeReportInYear(getOvertimeReportInYearCriteria);
-            model.TotalRequest = entityList;
+                var criteria = new GetOvertimeReportInYearCriteria
+                {
+                    EmployeeId = model.EmpId,
+                    Year = model.Year
+                };
+                IList<RequestEntity> entityList = overtimeService.GetOvertimeReportInYear(criteria);
+                model.TotalRequest = entityList;
+            }
 
             return View(model);
         }
 
-        public ActionResult View(DateTime requestDate, int empId)
+        public ActionResult ViewDetail(DateTime requestDate, int empId)
         {
-            var getOvertimeMonthlyByEmployeeCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
+            var criteria = new GetOvertimeRequestByMonthCriteria
             {
-                EmployeeId = empId,
-                Month = Convert.ToDateTime(requestDate).Date
+                EmpId = empId,
+                Month = requestDate
             };
-            IList<OvertimeRequest> entityList = overtimeService.GetOvertimeRequests(getOvertimeMonthlyByEmployeeCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
-            var employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var entity = new OvertimeRequest();
-            if (entityList != null)
-            {
-                entity = entityList.Where(x => x.RequestId > 0).Take(1).FirstOrDefault();
-            }
 
-            var requestId = entity != null ? entity.RequestId : 0;
-            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
-            {
-                RequestID = requestId
-            };
-            RequestEntity overtimeMonthlyRequest = overtimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
-
+            OvertimeRequest overtime = overtimeService.GetOvertimeRequestByMonth(criteria);
             var model = new MyOverTimeViewModel()
             {
-                OvertimeRequest = entityList,
+                OvertimeRequest = overtime.OvertimeDaily,
                 EmpId = empId,
-                OvertimeRequestStatus = overtimeMonthlyRequest != null ? overtimeMonthlyRequest.Status.Name : string.Empty
+                Month = requestDate,
+                Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus),
+                Employee = overtime.Employee.DisplayName
             };
-            ViewBag.RequestedDate = requestDate;
-            ViewBag.Update = false;
-            ViewBag.Employee = employee.DisplayName;
-            model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
 
-            return View("ViewDetails", model);
+            return View(model);
         }
 
         public ActionResult Update(DateTime requestDate, int empId)
         {
-            var getOvertimeRequestCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
+            MyOverTimeViewModel model = new MyOverTimeViewModel();
+            var criteria = new GetOvertimeRequestByMonthCriteria
             {
-                EmployeeId = empId,
-                Month = Convert.ToDateTime(requestDate).Date
-            };
-            IList<OvertimeRequest> entityList = overtimeService.GetOvertimeRequests(getOvertimeRequestCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
-            var employeeInfo = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var entity = new OvertimeRequest();
-            if (entityList != null)
-            {
-                entity = entityList.Where(x => x.RequestId > 0).Take(1).FirstOrDefault();
-            }
-
-            var requestId = entity != null ? entity.RequestId : 0;
-            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
-            {
-                RequestID = requestId
-            };
-            RequestEntity overtimeMonthlyRequest = overtimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
-            var model = new MyOverTimeViewModel()
-            {
-                OvertimeRequest = entityList,
-                VerifierId = overtimeMonthlyRequest != null ? overtimeMonthlyRequest.VerifiedBy.Id : 0,
-                ApproverId = overtimeMonthlyRequest != null ? overtimeMonthlyRequest.ApprovedBy.Id : 0,
                 EmpId = empId,
-                OvertimeRequestStatus = overtimeMonthlyRequest != null ? overtimeMonthlyRequest.Status.Name : "Pending"
+                Month = requestDate
             };
 
-            ViewBag.RequestStatus = model.OvertimeRequestStatus;
-            ViewBag.WorkingHours = employeeInfo.WorkingHours;
-            ViewBag.RequestedDate = requestDate;
-            ViewBag.Update = true;
-            ViewBag.Employee = employeeInfo.DisplayName;
-            model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+            OvertimeRequest overtime = overtimeService.GetOvertimeRequestByMonth(criteria);
+            if (overtime != null)
+            {
+                model.OvertimeRequest = overtime.OvertimeDaily;
+                model.VerifierId = overtime.VerifiedBy != null ? overtime.VerifiedBy.Id : 0;
+                model.ApproverId = overtime.ApprovedBy != null ? overtime.ApprovedBy.Id : 0;
+                model.EmpId = empId;
+                model.Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus);
+                model.Employee = overtime.Employee.DisplayName;
+                model.Month = requestDate;
+                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+
+                ViewBag.WorkingHours = overtime.Employee.WorkingHours;
+            }
 
             return View(model);
         }
@@ -160,53 +132,113 @@
         [HttpPost]
         public JsonResult Update(string overtimeJson, string overtimeDetailsJson)
         {
-            var id = this.CurrentUser.Id;
             var model = JsonConverter.FromJson<MyOverTimeViewModel>(overtimeJson);
-            var overtimeDetailModel = JsonConverter.FromJsonArray<OvertimeRequest>(overtimeDetailsJson).ToList();
-            model.ProcessedBy = id;
-            model.ProcessedDate = DateTime.Now.Date;
-            model.OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList();
-            var updateOvertimeRequestCriteria = new UpdateOvertimeRequestCriteria
+            var overtimeDetailModel = JsonConverter.FromJsonArray<OvertimeDaily>(overtimeDetailsJson).ToList();
+            var criteria = new UpdateOvertimeRequestCriteria
             {
                 EmployeeId = model.EmpId,
-                ProcessedBy = model.ProcessedBy,
-                ProcessedDate = model.ProcessedDate,
+                ProcessedBy = CurrentUser.Id,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                ListDetail = model.OvertimeRequestDetail
+                OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList()
             };
-            CommandResult commandResult = overtimeService.UpdateOvertimeRequest(updateOvertimeRequestCriteria);
-            if (commandResult.Code == 0)
-            {
-                foreach (var item in ModelState.Values)
-                {
-                    foreach (ModelError error in item.Errors)
-                    {
-                        return Json(new { success = false, errors = error.ErrorMessage });
-                    }
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
-
-            return Json(new { success = true });
+            CommandResult result = commandService.Update(criteria);
+            return Json(result);
         }
 
         public ActionResult GetActingEmployees(string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = CurrentUser.Id,
                 Role = (int)RoleSystem.ActingSupervisor,
                 RequestType = null,
-                Query = query.Trim(),
+                Query = string.IsNullOrWhiteSpace(query) ? string.Empty : query.Trim(),
                 IncludeLoginUser = true
             };
 
             IList<SupervisorNameModel> employees = employeeService.GetSupervisorByQuery(criteria);
             return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize(Roles = "Verifier, Approver")]
+        public ActionResult MemberOvertime()
+        {
+            var memberOvertimeViewModel = GetMemberOvertimeViewModel();
+            memberOvertimeViewModel.IsHRView = false;
+
+            return View(memberOvertimeViewModel);
+        }
+
+        [Authorize(Roles = "HR")]
+        public ActionResult EmployeeOvertime()
+        {
+            var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
+            employeeOvertimeViewModel.IsHRView = true;
+
+            return View("MemberOvertime", employeeOvertimeViewModel);
+        }
+
+        [Authorize(Roles = "Verifier, Approver")]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
+        {
+            if (!month.HasValue)
+            {
+                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+
+            var criteria = new GetMemberOvertimeCriteria
+            {
+                SupervisorID = CurrentUser.Id,
+                Role = "2,3",
+                FromDate = month.Value,
+                ToDate = month.Value,
+                EmployeeId = employeeId,
+                GroupIds = teamIds,
+                Status = statusId
+            };
+            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
+
+            ViewBag.CurrentUserId = CurrentUser.Id;
+            return View(memberOvertimes);
+        }
+
+        [Authorize(Roles = "HR")]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
+        {
+            if (!month.HasValue)
+            {
+                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+
+            var criteria = new GetMemberOvertimeCriteria
+            {
+                SupervisorID = CurrentUser.Id,
+                Role = "6",
+                FromDate = month.Value,
+                ToDate = month.Value,
+                EmployeeId = employeeId,
+                GroupIds = teamIds,
+                Status = statusId
+            };
+            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
+
+            return View(memberOvertimes);
+        }
+
+        public ActionResult MemberDailyOvertime(int requestId, bool isHRView)
+        {
+            var criteria = new GetOvertimeRequestByIdCriteria()
+            {
+                RequestId = requestId
+            };
+            OvertimeRequest overtime = overtimeService.GetOvertimeRequestById(criteria);
+
+            ViewBag.IsHRView = isHRView;
+            ViewBag.CurrentUserId = CurrentUser.Id;
+            return View(overtime);
         }
 
         /// [Authorize(Roles = "HR")]
@@ -232,12 +264,12 @@
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
-                    SupervisorID = this.CurrentUser.Id,
+                    SupervisorID = CurrentUser.Id,
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
                     Status = null,
-                    Role = this.CurrentUser.Roles
+                    Role = CurrentUser.Roles
                 };
                 listEntity = overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
@@ -245,12 +277,12 @@
             {
                 var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
                 {
-                    SupervisorID = this.CurrentUser.Id,
+                    SupervisorID = CurrentUser.Id,
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
                     Status = null,
-                    Role = this.CurrentUser.Roles
+                    Role = CurrentUser.Roles
                 };
                 listEntity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
@@ -262,43 +294,17 @@
         [HRAuthorize(Policy.Read, FunctionKey.OvertimeDetailReport)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {
-            var id = this.CurrentUser.Id;
-            IList<OvertimeRequest> entityList = new List<OvertimeRequest>();
-            if (calendar == 0)
+            var criteria = new GetOvertimeDailyReportCriteria
             {
-                var getOvertimeNormalDailyByHRCriteria = new GetOvertimeNormalDailyByHRCriteria
-                {
-                    SupervisorID = id,
-                    EmployeeId = empId,
-                    Month = Convert.ToDateTime(requestDate).Date,
-                    Role = this.CurrentUser.Roles
-                };
-                entityList = overtimeService.HRGetNormalOvertimeRequest(getOvertimeNormalDailyByHRCriteria);
-            }
-            else
-            {
-                var getOvertimeByHRCriteria = new GetOvertimeMonthlyByHRCriteria
-                {
-                    SupervisorID = id,
-                    EmployeeId = empId,
-                    Month = Convert.ToDateTime(requestDate).Date,
-                    Role = this.CurrentUser.Roles
-                };
-                entityList = overtimeService.HRGetOvertimeRequest(getOvertimeByHRCriteria);
-            }
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = empId };
-            var employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var model = new MyOverTimeViewModel()
-            {
-                OvertimeRequest = entityList,
+                SupervisorID = CurrentUser.Id,
                 EmpId = empId,
-                Employee = employee.DisplayName
+                Month = Convert.ToDateTime(requestDate).Date,
+                Role = CurrentUser.Roles,
+                IsNormal = calendar == 0
             };
-            ViewBag.RequestedDate = requestDate;
-            ViewBag.Update = false;
-            model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
-            return View(model);
+
+            OvertimeRequest overtime = overtimeService.GetOvertimeDailyReport(criteria);
+            return View(overtime);
         }
 
         /// [Authorize(Roles = "HR")]
@@ -344,7 +350,7 @@
             else
             {
                 var date = new DateTime(toDate.Year, toDate.Month, 1);
-                var criteria = new GetMemberOvertimeMonthlyCriteria
+                var criteria = new GetMemberOvertimeCriteria
                 {
                     FromDate = date,
                     ToDate = date
@@ -356,109 +362,14 @@
 
         /// [Authorize(Roles = "Verifier, Approver")]
         [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
-        public ActionResult MemberOvertime()
-        {
-            var memberOvertimeViewModel = GetMemberOvertimeViewModel();
-            memberOvertimeViewModel.IsHRView = false;
-
-            return View(memberOvertimeViewModel);
-        }
-
         /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
-        public ActionResult EmployeeOvertime()
-        {
-            var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
-            employeeOvertimeViewModel.IsHRView = true;
-
-            return View("MemberOvertime", employeeOvertimeViewModel);
-        }
-
         /// [Authorize(Roles = "Verifier, Approver")]
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
-        public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
-        {
-            if (!month.HasValue)
-            {
-                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
-
-            var criteria = new GetMemberOvertimeMonthlyCriteria
-            {
-                SupervisorID = this.CurrentUser.Id,
-                Role = "2,3",
-                FromDate = month.Value,
-                ToDate = month.Value,
-                EmployeeId = employeeId,
-                GroupIds = teamIds,
-                Status = statusId
-            };
-            var monthlyOvertimes = overtimeService.GetMemberOvertimeMonthly(criteria);
             ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit);
             ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Edit);
-
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
-            return View(monthlyOvertimes);
-        }
-
         /// [Authorize(Roles = "HR")]
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
-        public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
-        {
-            if (!month.HasValue)
-            {
-                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
-
-            var criteria = new GetMemberOvertimeMonthlyCriteria
-            {
-                SupervisorID = this.CurrentUser.Id,
-                Role = "6",
-                FromDate = month.Value,
-                ToDate = month.Value,
-                EmployeeId = employeeId,
-                GroupIds = teamIds,
-                Status = statusId
-            };
-            var monthlyOvertimes = overtimeService.GetMemberOvertimeMonthly(criteria);
-
-            ViewBag.CurrentUserId = this.CurrentUser.Id;
-            return View(monthlyOvertimes);
-        }
-
-        public ActionResult MemberDailyOvertime(int requestId, bool isHRView)
-        {
-            IList<OvertimeRequest> overtimeDaily = null;
-
-            var getOvertimeRequestByIdCriteria = new GetOvertimeByRequestIdCriteria
-            {
-                RequestID = requestId
-            };
-            RequestEntity overtimeMonthlyRequest = overtimeService.GetOvertimeRequestById(getOvertimeRequestByIdCriteria);
-            if (overtimeMonthlyRequest != null)
-            {
-                var getOvertimeRequestCriteria = new GetOvertimeMonthlyByEmployeeIdCriteria
-                {
-                    EmployeeId = overtimeMonthlyRequest.Requester.Id,
-                    Month = overtimeMonthlyRequest.RequestedDate
-                };
-                overtimeDaily = overtimeService.GetOvertimeRequests(getOvertimeRequestCriteria);
-            }
-
-            var overtimeDailyViewModel = new MemberOvertimeDailyViewModel
-            {
-                Month = overtimeMonthlyRequest.RequestedDate,
-                DailyOvertimes = overtimeDaily,
-                MonthlyOvertime = overtimeMonthlyRequest,
-                CurrentUserId = this.CurrentUser.Id,
-                IsHRView = isHRView
-            };
-
-            return View(overtimeDailyViewModel);
-        }
-
         public ActionResult OTExcelReport()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -511,8 +422,10 @@
         [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public void ReminderClaimOvertime(string subject, string content)
         {
-            var sendMailTask = new Task(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
-            sendMailTask.Start();
+            Task.Factory.StartNew(() =>
+            {
+                overtimeService.SendMailToReminderClaimOvertime(subject, content);
+            });
         }
 
         [NonAction]

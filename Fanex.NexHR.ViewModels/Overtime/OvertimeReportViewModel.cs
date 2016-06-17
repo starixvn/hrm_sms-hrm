@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeReportViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels.Overtime
 {
+    using Fanex.NexHR.Models.Request;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Fanex.NexHR.Models.Request;
 
-    /// <summary>
-    /// Overtime Report ViewModel.
-    /// </summary>
     public class OvertimeReportViewModel
     {
         [Required]
@@ -23,6 +11,8 @@ namespace Fanex.NexHR.ViewModels.Overtime
 
         [Required]
         public int EmpId { get; set; }
+
+        public int Year { get; set; }
 
         public IList<RequestEntity> TotalRequest { get; set; }
     }

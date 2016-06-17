@@ -92,7 +92,6 @@
     <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestID" ObjectProperty="Id" />
       <Mapping DataField="RequesterID" ObjectProperty="Id" />
       <Mapping DataField="Requester" ObjectProperty="NickName" />
       <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
@@ -151,6 +150,24 @@
     <Setting Key="Overtime_ResetMultiRequest" SpName="Overtime_ResetMultiRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ResetSingleRequest" SpName="Overtime_ResetSingleRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_GeByMonth" SpName="Overtime_GeByMonth" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Overtime_GeById" SpName="Overtime_GeById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Overtime_GetDailyReport" SpName="Overtime_GetDailyReport" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
     <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
       <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />

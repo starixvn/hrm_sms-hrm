@@ -13,23 +13,15 @@
 @section Breadcrumb {
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
-@*<script type="text/javascript">
-        $(document).ready(function () {
-            initMonthPick('@ViewBag.MaxDate', '@ViewBag.CurrentDate');
-        });
-    </script>*@
+
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
-    @*    <input type="hidden" id="Year" name="Year" value="@ViewBag.Year" />
-        <input type="hidden" id="Month" name="Month" value="@ViewBag.Month" />
-        <input type="hidden" id="maxDate" value="@ViewBag.MaxDate" />*@
-
     <div class="grid_1 gridlabel">
         Year:
     </div>
     <div class="grid_4">
-        @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+        @Html.YearPicker("Year", 2010, Model.Year)
     </div>
     <div class="grid_1 gridlabel">
         @Html.LabelFor(model => model.Employee)
@@ -99,7 +91,7 @@
                             }
                         </td>
                         <td>
-                            <a href="@Url.Action("View", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
+                            <a href="@Url.Action("ViewDetail", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
                                 View
                             </a>
                         </td>
@@ -120,7 +112,6 @@
                                 var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
                                 var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
 
-                                //if (currentDate >= canEditFrom && currentDate <= canEditTo)
                                 if (request.Status == null || (int)(request.Status.Id) == 1)
                                 {
                                     <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">

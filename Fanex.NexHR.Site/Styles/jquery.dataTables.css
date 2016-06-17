@@ -362,7 +362,7 @@ span.highlight-date
 
 table thead th.weekend
 {
-    color: rgb(253, 2, 2);
+    color: #FF0000;
 }
 
 /* Table Style */

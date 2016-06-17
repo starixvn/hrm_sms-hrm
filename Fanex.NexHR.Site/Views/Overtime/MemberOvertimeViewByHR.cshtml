@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
+﻿@model IList<OvertimeRequest>
 @{
     Layout = null;
 }
@@ -9,8 +8,8 @@
         <tr class="headermenu">
             <th colspan="21">
                 <div style="float:right;">
-                <a id="lnkProcess" href="javascript:;"> Process </a> ||
-                <a id="lnkVoid" href="javascript:;"> Void </a> 
+                <a id="lnkProcess" href="javascript:;"> @Labels.Process </a> ||
+                <a id="lnkVoid" href="javascript:;"> @Labels.Void </a> 
             </div>
             </th>
         </tr>
@@ -40,20 +39,20 @@
     <tbody>
         @if (Model != null)
         {
-            foreach (var item in Model)
+            foreach (OvertimeRequest item in Model)
             {
             <tr>
                 <td>
-                    <input type="checkbox" class="chkSelect" data-requestId = "@item.Id" />
+                    <input type="checkbox" class="chkSelect" data-requestId = "@item.RequestId" />
                 </td>
                 <td class="left">
-                    @item.Requester.FullName
+                    @item.Employee.FullName
                 </td>
                 <td>
-                    @item.Requester.NickName
+                    @item.Employee.NickName
                 </td>
-                <td class="tooltip" title="@item.Requester.Team.Name">
-                    @item.Requester.Team.Code
+                <td class="tooltip" title="@item.Employee.Team.Name">
+                    @item.Employee.Team.Code
                 </td>
                 <td>
                 @if (item.NormalHours > 0)
@@ -74,7 +73,7 @@
                 }
                 </td>
                 <td>
-                    <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.Id, isHRView = true })">
+                    <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.RequestId, isHRView = true })">
                         @Labels.View </a>
                 </td>
                     

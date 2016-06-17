@@ -205,7 +205,7 @@ namespace Fanex.NexHR.Controllers
                 JobTitleId = jobTitle,
                 GroupIds = groups
             };
-            IList<OvertimeRequest> entity = _overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
+            IList<OvertimeDaily> entity = _overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
             var hssfworkbook = _exportService.ExportOvertimeReport(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);

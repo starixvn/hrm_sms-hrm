@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Utilities.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     using System;
     using System.Collections.Generic;
@@ -357,6 +348,37 @@ namespace Fanex.NexHR.Core
         public static bool CheckUserCanEditRequest(int currentUserId, int employeeId)
         {
             return currentUserId == employeeId;
+        }
+
+        public static string GetCurrentStatusName(int statusId)
+        {
+            var statusName = Labels.NA;
+            switch (statusId) 
+            { 
+                case 1:
+                    statusName = Labels.Pending;
+                    break;
+                case 2:
+                    statusName = Labels.Verified;
+                    break;
+                case 3:
+                    statusName = Labels.NotVerified;
+                    break;
+                case 4:
+                    statusName = Labels.Approved;
+                    break;
+                case 5:
+                    statusName = Labels.Rejected;
+                    break;
+                case 6:
+                    statusName = Labels.Processed;
+                    break;
+                case 7:
+                    statusName = Labels.Void;
+                    break;
+            }
+
+            return statusName;
         }
     }
 }

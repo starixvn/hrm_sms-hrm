@@ -1,14 +1,14 @@
-﻿@using Fanex.NexHR.ViewModels.Overtime
-@model MemberOvertimeDailyViewModel
+﻿@model OvertimeRequest
 @{
     var modifier = string.Empty;
     var approver = string.Empty;
-
-    if (Model != null && Model.MonthlyOvertime != null)
+    var isHRView = ViewBag.IsHRView != null ? (bool)ViewBag.IsHRView : false;
+    var currentUserId = ViewBag.CurrentUserId != null ? (int)ViewBag.CurrentUserId : 0;
+    if (Model != null)
     {
-        ViewBag.Title = Labels.MemberOvertime + " of " + Model.MonthlyOvertime.Requester.NickName + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
-        modifier = Model.MonthlyOvertime.VerifiedBy == null ? string.Empty : Model.MonthlyOvertime.VerifiedBy.DisplayName;
-        approver = Model.MonthlyOvertime.ApprovedBy == null ? string.Empty : Model.MonthlyOvertime.ApprovedBy.DisplayName;
+        ViewBag.Title = Labels.MemberOvertime + " of " + Model.Employee.NickName + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
+        modifier = Model.VerifiedBy == null ? string.Empty : Model.VerifiedBy.DisplayName;
+        approver = Model.ApprovedBy == null ? string.Empty : Model.ApprovedBy.DisplayName;
     }
 }
 
@@ -22,13 +22,12 @@
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
 
-
-@if (Model != null && Model.MonthlyOvertime != null)
+@if (Model != null)
 {
     <h2>@ViewBag.Title</h2>
     
-    @Html.HiddenFor(model => model.IsHRView)
-    @Html.Hidden("RequestId", Model.MonthlyOvertime.Id)
+    @Html.Hidden("IsHRView", isHRView)
+    @Html.Hidden("RequestId", Model.RequestId)
     
     <div class="grid_7 gridlabel fontbold">
         ※ <span class="leftinfo">@Labels.VerifiedBy:</span>
@@ -40,13 +39,13 @@
     </div>
     <div class="grid_1 gridlabel fontbold statusmargin"> 
         ※ <span class="leftinfo">@Labels.Status:</span> 
-        <span class="">@Model.MonthlyOvertime.Status</span>
+        <span class="">@Model.GetCurrentStatusName()</span>
     </div>
    
     <div class="float-right">
-        @if (Model.IsHRView)
+        @if (isHRView)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Approved:
                     <input type="button" id="btnProcess" value="Process"/>
@@ -62,12 +61,12 @@
                     break;
             }
         }
-        else if (Model.MonthlyOvertime.ApprovedBy != null && Model.MonthlyOvertime.ApprovedBy.Id == Model.CurrentUserId)
+        else if (Model.ApprovedBy != null && Model.ApprovedBy.Id == currentUserId)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    if (Model.MonthlyOvertime.VerifiedBy.Id == Model.CurrentUserId)
+                    if (Model.VerifiedBy.Id == currentUserId)
                     {
                         <input type="button" id="btnApprove" value="Approve"/>
                         <input type="button" id="btnReject" value="Reject"/>
@@ -87,9 +86,9 @@
                     break;
             }
         }
-        else if (Model.MonthlyOvertime.VerifiedBy != null && Model.MonthlyOvertime.VerifiedBy.Id == Model.CurrentUserId)
+        else if (Model.VerifiedBy != null && Model.VerifiedBy.Id == currentUserId)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Pending:
                     <input type="button" id="btnAccept" value="Verified"/>
@@ -117,13 +116,13 @@
     </div>
 
     <div class="formrow" id="overtimeDetails">
-        @Html.Partial("MemberDailyOvertimeDetail", Model.DailyOvertimes.ToList())
+        @Html.Partial("MemberDailyOvertimeDetail", Model.OvertimeDaily)
     </div>
     
     <div class="float-right">
-        @if (Model.IsHRView)
+        @if (isHRView)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Approved:
                     <input type="button" id="btnProcessFooter" value="Process"/>
@@ -139,9 +138,9 @@
                     break;
             }
         }
-        else if (Model.MonthlyOvertime.ApprovedBy != null && Model.MonthlyOvertime.ApprovedBy.Id == Model.CurrentUserId)
+        else if (Model.ApprovedBy != null && Model.ApprovedBy.Id == currentUserId)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Verified:
                     <input type="button" id="btnApproveFooter" value="Approve"/>
@@ -157,9 +156,9 @@
                     break;
             }
         }
-        else if (Model.MonthlyOvertime.VerifiedBy != null && Model.MonthlyOvertime.VerifiedBy.Id == Model.CurrentUserId)
+        else if (Model.VerifiedBy != null && Model.VerifiedBy.Id == currentUserId)
         {
-            switch (Model.MonthlyOvertime.Status.Id)
+            switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Pending:
                     <input type="button" id="btnAcceptFooter" value="Verified"/>

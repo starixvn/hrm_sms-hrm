@@ -1015,7 +1015,7 @@
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
     <Content Include="Views\Employee\ChangePwd.cshtml" />
-    <Content Include="Views\Overtime\ViewDetails.cshtml" />
+    <Content Include="Views\Overtime\ViewDetail.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
     <Content Include="Views\Overtime\Update.cshtml" />
     <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />

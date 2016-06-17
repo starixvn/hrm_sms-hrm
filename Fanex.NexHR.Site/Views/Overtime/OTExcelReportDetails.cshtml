@@ -1,5 +1,5 @@
 ﻿@using Fanex.NexHR.Models.Overtime
-@model IList<OvertimeRequest>
+@model IList<OvertimeDaily>
 @{
     ViewBag.Title = "Overtime Report Details";
 }
@@ -59,7 +59,7 @@
         <tbody>
             @if (Model != null)
             {
-                foreach (OvertimeRequest item in Model)
+                foreach (OvertimeDaily item in Model)
                 {
                 <tr>
                     <td>

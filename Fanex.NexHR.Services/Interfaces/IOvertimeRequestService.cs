@@ -9,9 +9,13 @@
 
     public interface IOvertimeRequestService
     {
-        IList<OvertimeRequest> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
+        OvertimeRequest GetOvertimeRequestByMonth(GetOvertimeRequestByMonthCriteria criteria);
 
-        CommandResult UpdateOvertimeRequest(UpdateOvertimeRequestCriteria criteria);
+        OvertimeRequest GetOvertimeRequestById(GetOvertimeRequestByIdCriteria criteria);
+
+        OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria);
+
+        IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
 
         IList<RequestEntity> GetOvertimeReportInYear(GetOvertimeReportInYearCriteria criteria);
 
@@ -19,23 +23,21 @@
 
         IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
 
-        IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeMonthlyCriteria criteria);
+        IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria);
 
         IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria);
 
-        IList<OvertimeRequest> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria);
+        IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria);
 
-        IList<OvertimeRequest> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
+        IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
 
-        RequestEntity GetOvertimeRequestById(GetOvertimeByRequestIdCriteria criteria);
-
-        IList<RequestEntity> GetMemberOvertimeMonthly(GetMemberOvertimeMonthlyCriteria criteria);
+        IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria);
 
         void SendMailToReminderClaimOvertime(string subject, string content);
 
         bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria);
 
-        IList<OvertimeRequest> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
+        IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 
         IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria); 
     }

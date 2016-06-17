@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Models.Overtime
-@model IList<OvertimeRequest>
+﻿@model IList<OvertimeDaily>
 @using (Html.BeginForm())
 {
     <table class="data" id="data">
@@ -29,7 +28,7 @@
         <tbody>
             @if (Model != null)
             {
-                foreach (OvertimeRequest request in Model)
+                foreach (OvertimeDaily request in Model)
                 {
                 <tr id="row@(request.Id)">
                     @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
@@ -51,7 +50,10 @@
                     <td>@request.TimeOut
                     </td>
                     <td class="totalHours">
-                        @request.TotalWorkHours
+                        @if (request.TotalWorkHours > 0)
+                        {
+                            @request.TotalWorkHours
+                        }
                     </td>
                    
                         <td class="sumnormal">

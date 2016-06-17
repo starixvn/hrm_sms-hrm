@@ -1,21 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GetMemberOvertimeMonthlyCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.8.1">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria.Overtime
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get member overtime monthly criteria.
-    /// </summary>
-    public class GetMemberOvertimeMonthlyCriteria : CriteriaBase
+    public class GetMemberOvertimeCriteria : CriteriaBase
     {
         public int? SupervisorID { get; set; }
 

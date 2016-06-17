@@ -109,6 +109,7 @@
     <Compile Include="MemberOrderModel.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MySpaceModel.cs" />
+    <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />

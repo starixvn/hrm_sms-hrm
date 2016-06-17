@@ -1,7 +1,6 @@
-﻿@using Fanex.NexHR.ViewModels.Overtime;
-@model MyOverTimeViewModel
+﻿@model OvertimeRequest
 @{
-    ViewBag.Title = Model.Employee + " 's " + Labels.OvertimeReport + " in " + ((DateTime)ViewBag.RequestedDate).ToString("MMM-yyyy");
+    ViewBag.Title = Model.Employee.DisplayName + " 's " + Labels.OvertimeReport + " in " + Model.Month.ToString("MMM-yyyy");
 }
 @section css{
     @Url.CombresLink("myovertimecss")
@@ -11,10 +10,10 @@
 }
 @section Breadcrumb {
     <a class="step">Personal</a> 
-    <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.MyLeaveRequest</a>
+    <a class="step" href="@Url.Action("yearlyreport", "overtime")">Yearly Overtime Report</a>
     <a class="step">@Model.Employee's @Labels.OvertimeReport Details</a>
 }
-@*<h2>@ViewBag.Title</h2>*@
+
 @using (Html.BeginForm())
 {    
      <div class="grid_2 gridlabel title">
@@ -28,7 +27,7 @@
     <div class="clear">
     </div>
     <div class="formrow" id="overtimeDetails">
-        @Html.Partial("OvertimeRequestDetails", Model.OvertimeRequest.ToList())
+        @Html.Partial("OvertimeRequestDetails", Model.OvertimeDaily)
     </div>
 }
 @RazorHelper.EmployeeProcessMenu()

@@ -5,46 +5,19 @@ var nickName = '';
 
 function calculateTotalOTHours(selector) {
     var sumResult = 0;
-    var formUpdate = $("#formUpdateOT").val();
+    selector.each(function () {
+        var value = $(this).val().trim();
+        if (value !== "") {
+            if (!isNaN(value) && value.lenght !== 0) {
+                sumResult += parseFloat(value);
+            }
+        }
+    });
 
-    if (formUpdate === "True") {
-        selector.each(function () {
-            var value = $(this).val().trim();
-            if (value !== "") {
-                if (!isNaN(value) && value.lenght !== 0) {
-                    sumResult += parseFloat(value);
-                }
-            }
-        });
-    }
-    else {
-        selector.each(function () {
-            var value = $(this).text().trim();
-            if (value !== "") {
-                if (!isNaN(value) && value.lenght !== 0) {
-                    sumResult += parseFloat(value);
-                }
-            }
-        });
-    }
     return sumResult;
 }
 
-function requestToCalculateOTHours() {
-    var sumTotal = calculateTotalOTHours($(".sumtotal"));
-    $("#sumtotal").text(sumTotal.toFixed(2));
-
-    var sumNormal = calculateTotalOTHours($(".sumnormal"));
-    $("#sumnormal").text(sumNormal.toFixed(2));
-
-    var sumOff = calculateTotalOTHours($(".sumoff"));
-    $("#sumoff").text(sumOff.toFixed(2));
-
-    var sumPublic = calculateTotalOTHours($(".sumpublic"));
-    $("#sumpublic").text(sumPublic.toFixed(2));
-}
-
-function requestToCalculateOTHoursFormUpdate() {
+function calculateOTHours() {
     var sumNormal = calculateTotalOTHours($("input.sumnormal"));
     $("#sumnormal").text(sumNormal.toFixed(2));
 
@@ -53,16 +26,6 @@ function requestToCalculateOTHoursFormUpdate() {
 
     var sumPublic = calculateTotalOTHours($("input.sumpublic"));
     $("#sumpublic").text(sumPublic.toFixed(2));
-}
-
-function checkIsUpdateForm() {
-    var formUpdate = $("#formUpdateOT").val();
-    if (formUpdate === "True") {
-        requestToCalculateOTHoursFormUpdate();
-    }
-    else {
-        requestToCalculateOTHours();
-    }
 }
 
 function rangeTextBox(textbox, min, max) {
@@ -147,7 +110,7 @@ $(document).ready(function () {
                 data: { overtimeJson: OvertimeInfoJson, overtimeDetailsJson: OvertimeDetailsJson },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.success) {
+                    if (response.IsSuccessful) {
                         $('form').removeClass("dirty");
                         alert("Data Saved!");
                     } else {
@@ -261,10 +224,9 @@ $(document).ready(function () {
                 rangeTextBox(object, 0, offOrHolidayLimit);
             }
         }
-        checkIsUpdateForm();
+        calculateOTHours();
     });
 
-    checkIsUpdateForm();
     $('form').areYouSure();
 });
 

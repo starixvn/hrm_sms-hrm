@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeRequestService.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
@@ -25,61 +16,68 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Overtime;
 
-    /// <summary>
-    /// OvertimeRequest Service.
-    /// </summary>
     public class OvertimeRequestService : BaseService, IOvertimeRequestService
     {
-        private readonly IOvertimeRequestRepository _overtimeRepository;
-        private readonly IEmailService _emailService;
+        private readonly IOvertimeRequestRepository overtimeRepository;
+        private readonly IEmailService emailService;
 
         public OvertimeRequestService()
+            : this(null, null)
         {
-            this._overtimeRepository = new OvertimeRequestRepository();
-            this._emailService = new EmailService();
         }
 
-        /// <summary>
-        /// Get overtime requests.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Request.</returns>
-        public IList<OvertimeRequest> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
+        public OvertimeRequestService(IOvertimeRequestRepository overtimeRepository, IEmailService emailService)
+        {
+            this.overtimeRepository = overtimeRepository ?? new OvertimeRequestRepository();
+            this.emailService = emailService ?? new EmailService();
+        }
+
+        public OvertimeRequest GetOvertimeRequestByMonth(GetOvertimeRequestByMonthCriteria criteria)
+        {
+            OvertimeRequest overtime = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                overtime = overtimeRepository.GetOvertimeRequestByMonth(criteria);
+            }
+
+            return overtime;
+        }
+
+        public OvertimeRequest GetOvertimeRequestById(GetOvertimeRequestByIdCriteria criteria)
+        {
+            OvertimeRequest overtime = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                overtime = overtimeRepository.GetOvertimeRequestById(criteria);
+            }
+
+            return overtime;
+        }
+
+        public OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria)
+        {
+            OvertimeRequest overtime = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                overtime = overtimeRepository.GetOvertimeDailyReport(criteria);
+            }
+
+            return overtime;
+        }
+
+        public IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeRequest> overtimeRequests = GetData<OvertimeRequest>(criteria).ToList();
+                IList<OvertimeDaily> overtimeRequests = GetData<OvertimeDaily>(criteria).ToList();
                 return overtimeRequests;
             }
 
             return null;
         }
 
-        /// <summary>
-        /// Update overtime request.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Command Result.</returns>
-        public CommandResult UpdateOvertimeRequest(UpdateOvertimeRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
-
-        /// <summary>
-        /// Get overtime report in year.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Request Entity.</returns>
         public IList<RequestEntity> GetOvertimeReportInYear(GetOvertimeReportInYearCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -87,17 +85,12 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                requestEntities = _overtimeRepository.GetOvertimeReportInYear(criteria);
+                requestEntities = overtimeRepository.GetOvertimeReportInYear(criteria);
             }
 
             return requestEntities;
         }
 
-        /// <summary>
-        /// Get overtime record.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list overtime record.</returns>
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -105,17 +98,12 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                overtimeRecord = _overtimeRepository.OvertimeRecord(criteria);
+                overtimeRecord = overtimeRepository.OvertimeRecord(criteria);
             }
 
             return overtimeRecord;
         }
 
-        /// <summary>
-        /// Get yearly overtime report.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Annual Report.</returns>
         public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -129,11 +117,6 @@ namespace Fanex.NexHR.Services
             return null;
         }
 
-        /// <summary>
-        /// Get yearly overtime report by normal calendar.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Annual Report.</returns>
         public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -147,29 +130,19 @@ namespace Fanex.NexHR.Services
             return null;
         }
 
-        /// <summary>
-        /// Get monthly overtime report.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Request Entity.</returns>
-        public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeMonthlyCriteria criteria)
+        public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> overtimeReports = new List<RequestEntity>();
 
             if (criteria.IsValid())
             {
-                overtimeReports = _overtimeRepository.GetMonthlyOvertimeReport(criteria);
+                overtimeReports = overtimeRepository.GetMonthlyOvertimeReport(criteria);
             }
 
             return overtimeReports;
         }
 
-        /// <summary>
-        /// Get monthly overtime report by normal calendar.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Request Entity.</returns>
         public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -177,89 +150,49 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                overtimeReports = _overtimeRepository.GetMonthlyOvertimeReportByNormalCalendar(criteria);
+                overtimeReports = overtimeRepository.GetMonthlyOvertimeReportByNormalCalendar(criteria);
             }
 
             return overtimeReports;
         }
 
-        /// <summary>
-        /// Get overtime by request Id.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The Request Entity.</returns>
-        public RequestEntity GetOvertimeRequestById(GetOvertimeByRequestIdCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            RequestEntity requestEntity = null;
-
-            if (criteria.IsValid())
-            {
-                return _overtimeRepository.GetOvertimeRequestById(criteria);
-            }
-
-            return requestEntity;
-        }
-
-        /// <summary>
-        /// Get overtime request by HR.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Request.</returns>
-        public IList<OvertimeRequest> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)
+        public IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeRequest> overtimeRequest = GetData<OvertimeRequest>(criteria).ToList();
+                IList<OvertimeDaily> overtimeRequest = GetData<OvertimeDaily>(criteria).ToList();
                 return overtimeRequest;
             }
 
             return null;
         }
 
-        /// <summary>
-        /// Get overtime request normal daily by HR.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Request.</returns>
-        public IList<OvertimeRequest> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
+        public IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeRequest> overtimeRequest = GetData<OvertimeRequest>(criteria).ToList();
+                IList<OvertimeDaily> overtimeRequest = GetData<OvertimeDaily>(criteria).ToList();
                 return overtimeRequest;
             }
 
             return null;
         }
 
-        /// <summary>
-        /// Get member overtime monthly.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Request Entity.</returns>
-        public IList<RequestEntity> GetMemberOvertimeMonthly(GetMemberOvertimeMonthlyCriteria criteria)
+        public IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<RequestEntity> memberOvertime = null;
-
-            if (criteria.IsValid())
+            IList<OvertimeRequest> memberOvertimes = null;
+            if (criteria != null && criteria.IsValid())
             {
-                memberOvertime = _overtimeRepository.GetMemberOvertimeMonthly(criteria);
+                memberOvertimes = overtimeRepository.GetMemberOvertime(criteria);
             }
 
-            return memberOvertime;
+            return memberOvertimes ?? new List<OvertimeRequest>();
         }
 
-        /// <summary>
-        /// Function to send mail to reminder claim OT.
-        /// </summary>
-        /// <param name="subject">The subject mail.</param>
-        /// <param name="content">The content mail.</param>
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             IList<SupervisorNameModel> employees = null;
@@ -277,34 +210,24 @@ namespace Fanex.NexHR.Services
                 foreach (List<string> list in emails)
                 {
                     var mailTo = string.Join(";", list);
-                    this._emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                    this.emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
                 }
             }
         }
 
-        /// <summary>
-        /// Get Overtime excel report.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>The list Overtime Request.</returns>
-        public IList<OvertimeRequest> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria)
+        public IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
             if (criteria.IsValid())
             {
-                IList<OvertimeRequest> reportDetails = GetData<OvertimeRequest>(criteria).ToList();
+                IList<OvertimeDaily> reportDetails = GetData<OvertimeDaily>(criteria).ToList();
                 return reportDetails;
             }
 
             return null;
         }
 
-        /// <summary>
-        /// Function to check invalid overtimes.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>Result of check.</returns>
         public bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -312,11 +235,11 @@ namespace Fanex.NexHR.Services
 
             if (criteria.IsValid())
             {
-                IEnumerable<OvertimeRequest> rawOvertime = GetData<OvertimeRequest>(criteria);
+                IEnumerable<OvertimeDaily> rawOvertime = GetData<OvertimeDaily>(criteria);
 
                 if (rawOvertime != null)
                 {
-                    IList<OvertimeRequest> overtimes = rawOvertime.ToList();
+                    IList<OvertimeDaily> overtimes = rawOvertime.ToList();
 
                     if (overtimes != null && overtimes.Any())
                     {
@@ -333,12 +256,7 @@ namespace Fanex.NexHR.Services
             return isInvalid;
         }
 
-        /// <summary>
-        /// Function to check invalid overtime.
-        /// </summary>
-        /// <param name="overtime">Overtime Request.</param>
-        /// <returns>Result of check.</returns>
-        private bool CheckInvalidOvertimes(OvertimeRequest overtime)
+        private bool CheckInvalidOvertimes(OvertimeDaily overtime)
         {
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)

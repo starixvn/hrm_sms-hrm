@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="MemberOvertimeViewModel.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.12.13">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels.Overtime
 {
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
 
-    /// <summary>
-    /// MemberOvertime ViewModel.
-    /// </summary>
     public class MemberOvertimeViewModel
     {
         public DateTime Month { get; set; }

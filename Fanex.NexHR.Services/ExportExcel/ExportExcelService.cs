@@ -653,7 +653,7 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate)
+        public HSSFWorkbook ExportOvertimeReport(IList<OvertimeDaily> requestList, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_OvertimeReportFilePathExcelTemplate);
@@ -1317,7 +1317,7 @@
            ref ICell cellPublicHoliday,
            ref ICell cellRemark,
            ref ICell cellStatus,
-           OvertimeRequest item,
+           OvertimeDaily item,
            IRow row)
         {
             cellNo = row.GetCell(0);

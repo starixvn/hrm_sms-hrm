@@ -1,20 +1,12 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="CurrentRequestStatus.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2013.11.20">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Core.Enums
+﻿namespace Fanex.NexHR.Core.Enums
 {
-    using System.Diagnostics.CodeAnalysis;
     using Fanex.Common.Extensions;
 
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
-    public enum CurrentRequestStatus : int
+    public enum CurrentRequestStatus
     {
+        [StringValue("N/A")]
+        NA = 0,
+
         [StringValue("Pending")]
         Pending = 1,
 

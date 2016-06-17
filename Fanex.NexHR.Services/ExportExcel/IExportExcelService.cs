@@ -23,7 +23,7 @@
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList);
 
-        HSSFWorkbook ExportOvertimeReport(IList<OvertimeRequest> requestList, DateTime fromDate, DateTime toDate);
+        HSSFWorkbook ExportOvertimeReport(IList<OvertimeDaily> requestList, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar);
 

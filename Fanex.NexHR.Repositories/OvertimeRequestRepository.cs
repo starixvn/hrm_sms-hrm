@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeRequestRepository.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -21,41 +12,74 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    /// <summary>
-    /// Overtime Request Repository.
-    /// </summary>
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {
-        /// <summary>
-        /// Method Get OvertimeRequest By Id.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>RequestEntity model.</returns>
-        public RequestEntity GetOvertimeRequestById(ICriteria criteria)
+        public OvertimeRequest GetOvertimeRequestByMonth(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
-                    (re, reter, gr, ve, appr, rety, stt) =>
-                    {
-                        reter.Team = gr;
-                        re.Requester = reter;
-                        re.VerifiedBy = ve;
-                        re.ApprovedBy = appr;
-                        re.RequestType = rety;
-                        re.Status = stt;
-                        return re;
-                    },
-                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
-                    criteria.GetSpParams());
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    var overtime = multi.Read<OvertimeRequest, Employee, Employee, Employee, Employee, OvertimeRequest>(
+                        (ot, e, ve, ap, hr) => 
+                        {
+                            ot.Employee = e;
+                            ot.VerifiedBy = ve;
+                            ot.ApprovedBy = ap;
+                            ot.ProcessedBy = hr;
+                            return ot;
+                        },
+                        "EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
+                    overtime.OvertimeDaily = multi.Read<OvertimeDaily>().ToList();
+                    return overtime;
+                }
             }
         }
 
-        /// <summary>
-        /// Method Get Overtime Report In A Year.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>RequestEntity List.</returns>
+        public OvertimeRequest GetOvertimeRequestById(ICriteria criteria)
+        {
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    var overtime = multi.Read<OvertimeRequest, Employee, Employee, Employee, Employee, OvertimeRequest>(
+                        (ot, e, ve, ap, hr) =>
+                        {
+                            ot.Employee = e;
+                            ot.VerifiedBy = ve;
+                            ot.ApprovedBy = ap;
+                            ot.ProcessedBy = hr;
+                            return ot;
+                        },
+                        "EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
+                    overtime.OvertimeDaily = multi.Read<OvertimeDaily>().ToList();
+                    return overtime;
+                }
+            }
+        }
+
+        public OvertimeRequest GetOvertimeDailyReport(ICriteria criteria)
+        {
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    var overtime = multi.Read<OvertimeRequest, Employee, Employee, Employee, Employee, OvertimeRequest>(
+                        (ot, e, ve, ap, hr) =>
+                        {
+                            ot.Employee = e;
+                            ot.VerifiedBy = ve;
+                            ot.ApprovedBy = ap;
+                            ot.ProcessedBy = hr;
+                            return ot;
+                        },
+                        "EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
+                    overtime.OvertimeDaily = multi.Read<OvertimeDaily>().ToList();
+                    return overtime;
+                }
+            }
+        }
+
         public IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
@@ -76,11 +100,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// HR View Overtime Report by Monthly.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List of Request Entity.</returns>
         public IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
@@ -101,11 +120,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Method Get Monthly Overtime Report By Normal Calendar.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List of RequestEntity.</returns>
         public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
@@ -122,36 +136,24 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Function to get member request of login user.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List of Overtime request.</returns>
-        public IList<RequestEntity> GetMemberOvertimeMonthly(ICriteria criteria)
+        public IList<OvertimeRequest> GetMemberOvertime(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
-                    (re, reter, gr, ver, appr, rety, stt) =>
+                return db.Query<OvertimeRequest, Employee, Team, Employee, Employee, OvertimeRequest>(
+                    (ot, e, gr, ver, appr) =>
                     {
-                        reter.Team = gr;
-                        re.Requester = reter;
-                        re.VerifiedBy = ver;
-                        re.ApprovedBy = appr;
-                        re.RequestType = rety;
-                        re.Status = stt;
-                        return re;
+                        e.Team = gr;
+                        ot.Employee = e;
+                        ot.VerifiedBy = ver;
+                        ot.ApprovedBy = appr;
+                        return ot;
                     },
-                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    "RequesterID,GroupId,VerifierID,ApproverID,",
                     criteria.GetSpParams()).ToList();
             }
         }
 
-        /// <summary>
-        /// Query Overtime Record.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List OvertimeExcelReport entity.</returns>
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
         {
