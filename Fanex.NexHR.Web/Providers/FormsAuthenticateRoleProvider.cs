@@ -77,23 +77,18 @@
                             case (int)RoleSystem.Verifier:
                                 roles.Add(RoleSystem.Verifier.ToString());
                                 break;
-
                             case (int)RoleSystem.Approver:
                                 roles.Add(RoleSystem.Approver.ToString());
                                 break;
-
                             case (int)RoleSystem.ShiftManager:
                                 roles.Add(RoleSystem.ShiftManager.ToString());
                                 break;
-
                             case (int)RoleSystem.ActingSupervisor:
                                 roles.Add(RoleSystem.ActingSupervisor.ToString());
                                 break;
-
                             case (int)RoleSystem.HR:
                                 roles.Add(RoleSystem.HR.ToString());
                                 break;
-
                             case (int)RoleSystem.SystemAdmin:
                                 roles.Add(RoleSystem.Verifier.ToString());
                                 roles.Add(RoleSystem.Approver.ToString());
@@ -102,7 +97,6 @@
                                 roles.Add(RoleSystem.HR.ToString());
                                 roles.Add(RoleSystem.SystemAdmin.ToString());
                                 break;
-
                             case (int)RoleSystem.EditDiscipline:
                                 roles.Add(RoleSystem.EditDiscipline.ToString());
                                 break;

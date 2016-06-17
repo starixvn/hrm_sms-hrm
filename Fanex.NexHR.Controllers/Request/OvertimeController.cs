@@ -360,15 +360,6 @@
             }
         }
 
-        /// [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
-        /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
-        /// [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
-            ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit);
-            ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Edit);
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.OvertimeOfEmployee)]
         public ActionResult OTExcelReport()
         {
