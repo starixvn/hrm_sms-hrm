@@ -20,31 +20,17 @@
 </div>
 <div class="clear">
 </div>
-<table id="data" class="data persist-area" style="width: auto; min-width: 622px;">
+<table id="data" class="table table-custom" style="width: auto; min-width: 622px;">
     <thead>
-        <tr class="persist-header">
+        <tr>
             <th>@Labels.SymbolCount</th>
-            <th style="width: 340px">
-                @Labels.JobTitle
-            </th>
-            <th>
-                @Labels.Category
-            </th>
-            <th>
-                @Labels.TotalExpat
-            </th>
-            <th>
-                @Labels.TotalLocal
-            </th>
-            <th>
-                @Labels.Total
-            </th>
-            <th>
-                @Labels.Edit
-            </th>
-            <th>
-                @Labels.Delete
-            </th>
+            <th>@Labels.JobTitle</th>
+            <th>@Labels.Category</th>
+            <th>@Labels.TotalExpat</th>
+            <th>@Labels.TotalLocal</th>
+            <th>@Labels.Total</th>
+            <th>@Labels.Edit</th>
+            <th>@Labels.Delete</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -54,11 +40,11 @@
         <td>
             ${index()}
         </td>
-        <td class="left" style="width: 340px">
+        <td class="align-left" style="width: 340px">
             <span id="spanJobTitle_${Id}"> ${Name}</span>
             <input type="text" value="${Name}" id="txtJobTile_${Id}" style="display:none;height:22px;width: 300px;" />
         </td>
-        <td class="left">
+        <td class="align-left">
             ${CategoryName}
         </td>
         <td>
@@ -74,7 +60,7 @@
             0
             {{/if}}
         </td>
-        <td class="cmd">
+        <td>
             <a href="javascript:;" class="lnkEdit" data-id=${Id} id='btnEditJobTitle_${Id}' data-categoryid="${CategoryId}">
                 <i class="fa fa-pencil fa-lg icon-edit"></i>
             </a>
@@ -85,7 +71,7 @@
                 <img src="@Url.Content("~/Styles/Images/reject.png")" />
             </a>*@
         </td>
-        <td class="cmd">
+        <td>
             {{if Value!='0'}}
             <a href="javascript:;" style="cursor:default">
                 <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>

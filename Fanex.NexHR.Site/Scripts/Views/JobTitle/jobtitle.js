@@ -25,6 +25,7 @@ function query() {
 
                 $('#data tbody').children().remove();
                 $('#itemTemplate').tmpl(data).appendTo('#data');
+                floatThead('table#data');
             }
             else {
                 $('#data tbody').children().remove();

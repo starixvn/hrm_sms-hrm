@@ -6,7 +6,7 @@
     @Url.CombresLink("sitecss")
 }
 @section js{
-    @Url.CombresLink("teameditjs")
+    @Url.CombresLink("teamjs")
 }
 @section Breadcrumb {
     <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
@@ -19,7 +19,7 @@
 </div>
 <div class="space">
 </div>
-<table class="data" style="width: auto; min-width: 600px;">
+<table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -42,18 +42,10 @@
         @foreach (Team team in Model)
         {
             <tr id="row@(team.Id)">
-                <td>
-                    @(index++)
-                </td>
-                <td>
-                    @team.Code
-                </td>
-                <td>
-                    @team.Name
-                </td>
-                <td>
-                    @team.Department.Name
-                </td>
+                <td>@(index++)</td>
+                <td>@team.Code</td>
+                <td>@team.Name</td>
+                <td>@team.Department.Name</td>
                 @if (team.Leader != null)
                 {
                     <td class="tooltip" title="@team.Leader.FullName">
@@ -74,15 +66,9 @@
                 {
                     <td></td>
                 }
-                <td class="left">
-                    @team.MailGroup
-                </td>
-                <td>
-                    @team.TotalExpat
-                </td>
-                <td>
-                    @team.TotalLocal
-                </td>
+                <td class="align-left">@team.MailGroup</td>
+                <td>@team.TotalExpat</td>
+                <td>@team.TotalLocal</td>
                 <td>
                     @{
                         if (@team.NoOfMembers > 0)
@@ -95,15 +81,15 @@
                         }
                     }
                 </td>
-                <td class="cmd">
+                <td>
                     <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
                         <i class="fa fa-pencil fa-lg icon-edit"></i>
                     </a>
                 </td>
-                <td class="cmd">
+                <td>
                     <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
                 </td>
-                <td class="cmd">
+                <td>
                     @{
                         if (team.NoOfMembers > 0)
                         {
@@ -111,7 +97,7 @@
                         }
                         else
                         {
-                            <a href="javascript:;" onclick="deleteTeam(@team.Id);">
+                            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         }

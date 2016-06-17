@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -12,9 +15,6 @@
     using Fanex.NexHR.ViewModels.Supervisor;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class TeamController : BaseController
     {
@@ -173,6 +173,7 @@
                 ModifiedBy = CurrentUser.Id
             };
             CommandResult result = commandService.Delete(criteria);
+
             return Json(result);
         }
 

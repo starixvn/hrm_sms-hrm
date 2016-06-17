@@ -768,3 +768,16 @@ $(function () {
         }
     });
 });
+
+function floatThead(el) {
+    $(el).floatThead({
+        scrollContainer: function($table){
+            return $table.closest('.content_scroll');
+        },
+        position: 'fixed',
+        top: 72,
+        zIndex: 888
+    });
+
+    $(el).floatThead('reflow');
+}

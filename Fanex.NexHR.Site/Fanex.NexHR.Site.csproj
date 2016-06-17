@@ -256,6 +256,8 @@
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\warning.png" />
+    <Content Include="Libs\FloatThead\jquery.floatThead.js" />
+    <Content Include="Libs\FloatThead\jquery.floatThead.min.js" />
     <Content Include="Libs\FontAwesome\css\font-awesome.css" />
     <Content Include="Libs\FontAwesome\css\font-awesome.min.css" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.svg" />
@@ -346,8 +348,7 @@
     <Content Include="Scripts\Views\Calendar\schedulearrangedetail.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
-    <Content Include="Scripts\Views\team.edit.js" />
-    <Content Include="Scripts\Views\team.js" />
+    <Content Include="Scripts\Views\Team\team.edit.js" />
     <Content Include="Scripts\Views\employee.search.in.company.js" />
     <Content Include="Scripts\Views\timesheetrecord\timesheetrecord.js" />
     <Content Include="Styles\account.css" />
@@ -1182,6 +1183,7 @@
     <Content Include="Views\Request\ProcessRequest\_LateInEarlyOutRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
     <Content Include="Views\Function\_GetFunctionByRoleId.cshtml" />
+    <Content Include="Scripts\Views\Team\team.index.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

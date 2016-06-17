@@ -4,110 +4,96 @@
 @{
     ViewBag.Title = "Edit Section's Informations";
 }
-
 @section css{
     @Url.CombresLink("sitecss")
 }
 @section js{
-    @Url.CombresLink("teamjs")
+    @Url.CombresLink("teameditjs")
 }
 @section Breadcrumb {
     <a class="step">HR Space</a>
-    <a class="step" href="@Url.Action("index", "team")">Section Management</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.SectionManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
-
 <h2>@Labels.Edit</h2>
-
 @using (Html.BeginForm())
 {
-<div class="bunhat">
-    @Html.ValidationSummary(true)
-    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
-    {
-    <div class="success">@Messages.TeamUpdated</div> 
-    }
+    <div class="bunhat">
+        @Html.ValidationSummary(true)
+        @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+        {
+            <div class="success">@Messages.TeamUpdated</div>
+        }
 
-    @Html.HiddenFor(model => model.CreatedDate)
-    @Html.HiddenFor(model => model.CreatedBy)
-    @Html.HiddenFor(model => model.ModifiedDate)
-    @Html.HiddenFor(model => model.ModifiedBy)
+        @Html.HiddenFor(model => model.CreatedDate)
+        @Html.HiddenFor(model => model.CreatedBy)
+        @Html.HiddenFor(model => model.ModifiedDate)
+        @Html.HiddenFor(model => model.ModifiedBy)
 
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.TeamCode)
-            
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.TeamCode)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.TeamCode)
+                @Html.ValidationMessageFor(model => model.TeamCode)
+            </div>
         </div>
-        <div class="input">
-            @Html.EditorFor(model => model.TeamCode)
-            @Html.ValidationMessageFor(model =>model.TeamCode)
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.TeamName)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.TeamName)
+                @Html.ValidationMessageFor(model => model.TeamName)
+            </div>
         </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.TeamName)
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.DepartmentId, Labels.Department)
+            </div>
+            <div class="input">
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"))
+                @Html.ValidationMessage("DepartmentId")
+            </div>
         </div>
-        <div class="input">
-            @Html.EditorFor(model => model.TeamName)
-            @Html.ValidationMessageFor(model => model.TeamName)
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Leader, "Head")
+            </div>
+            <div class="input">
+                @Html.TextBox("Leader", Model.Leader, new { placeholder = Messages.SearchEmployeeWatermark })
+                @Html.ValidationMessage("Leader")
+                @Html.HiddenFor(model => model.Leader)
+                @Html.HiddenFor(model => model.LeaderId)
+            </div>
         </div>
-    </div>
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.DepartmentId, Labels.Department)
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.AssistantLeader, "Assist Head")
+            </div>
+            <div class="input">
+                @Html.TextBox("AssistantLeader", Model.AssistantLeader, new { placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.AssistantLeader)
+                @Html.HiddenFor(model => model.AssistantLeaderId)
+            </div>
         </div>
-        <div class="input">
-            @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"))
-            @Html.ValidationMessage("DepartmentId")
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.MailGroup)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.MailGroup)
+                @Html.ValidationMessageFor(model => model.MailGroup)
+            </div>
         </div>
-    </div>
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Leader, "Head")
-        </div>
-        <div class="input">
-            @Html.TextBox("Leader", Model.Leader, new { placeholder = Messages.SearchEmployeeWatermark })
-            
-            @Html.ValidationMessage("Leader")
-            
-            @Html.HiddenFor(model => model.Leader)
-            @Html.HiddenFor(model => model.LeaderId)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.AssistantLeader, "Assist Head")
-        </div>
-        <div class="input">
-            @Html.TextBox("AssistantLeader", Model.AssistantLeader , new { placeholder = Messages.SearchEmployeeWatermark })
-            
-            @Html.HiddenFor(model => model.AssistantLeader)
-            @Html.HiddenFor(model => model.AssistantLeaderId)
-        </div>
-    </div>
-
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.MailGroup)
-        </div>
-        <div class="input">
-            @Html.EditorFor(model => model.MailGroup)
-            @Html.ValidationMessageFor(model => model.MailGroup)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-
-        </div>
-        <div class="input">
-            <input type="submit" value="@Labels.Update"/>
-            <a href="@Url.Action("index","team")" class="button">@Labels.Back</a>
+        <div class="formrow">
+            <div class="label">
+            </div>
+            <div class="input">
+                <input type="submit" value="@Labels.Update" />
+                <a href="@Url.Action("index","team")" class="button">@Labels.Back</a>
+            </div>
         </div>
     </div>
-
-</div>
 }
-
