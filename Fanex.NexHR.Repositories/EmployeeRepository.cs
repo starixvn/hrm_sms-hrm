@@ -1,31 +1,17 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeRepository.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.23">Created</change>
-//   <change who="Anders.Le" date="2012.5.23">Modify Get function</change>
-// </history>
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    /// <summary>
-    /// Employee Repository.
-    /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
-        /// <summary>
-        /// Method get Employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Employee entity.</returns>
         public Employee GetEmployeeById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -51,11 +37,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Method get Employee by code.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Employee entity.</returns>
         public Employee GetEmployeeByCode(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -73,11 +54,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Get All Employees.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List Of Employee.</returns>
         public IList<Employee> GetEmployees(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -90,15 +66,20 @@ namespace Fanex.NexHR.Repositories
                      },
                      splitOn: "TeamID",
                      parameterValues: criteria.GetSpParams());
+
+                PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
+                        prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalrow")).FirstOrDefault();
+
+                if (totalitem != null)
+                {
+                    var hashParam = db.GetOuputParams();
+                    totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
+                }
+
                 return entityList.ToList();
             }
         }
 
-        /// <summary>
-        /// Get Employees by role.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List of employee.</returns>
         public IList<Employee> GetEmployeesByRole(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

@@ -28,6 +28,7 @@
       <resource path="~/Scripts/MultiSelect/style.css" />
       <resource path="~/Scripts/MultiSelect/prettify.css" />
       <resource path="~/Libs/FontAwesome/css/font-awesome.min.css" />
+      <resource path="~/Libs/SimplePagination/simplePagination.css" />
     </resourceSet>
     <resourceSet name="sitejs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
@@ -46,6 +47,7 @@
       <resource path="~/Scripts/MultiSelect/prettify.js" />
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
       <resource path="~/Libs/FloatThead/jquery.floatThead.min.js" />
+      <resource path="~/Libs/SimplePagination/jquery.simplePagination.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
       <resource path="~/scripts/views/home.js" />
@@ -72,14 +74,12 @@
     <resourceSet name="employeecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
-      <resource path="~/styles/jquery.dataTables.css" />
     </resourceSet>
     <resourceSet name="employeejs" type="js">
       <resource path="~/scripts/libs/date.js" />
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/datatable/jquery.dataTables.js" />
+      <resource path="~/scripts/views/employee/employee.index.js" />
     </resourceSet>
 
     <resourceSet name="contactlistcss" type="css">

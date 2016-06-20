@@ -262,6 +262,10 @@
     <Content Include="Libs\FontAwesome\css\font-awesome.min.css" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Libs\FontAwesome\HELP-US-OUT.txt" />
+    <Content Include="Libs\SimplePagination\.gitignore" />
+    <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
+    <Content Include="Libs\SimplePagination\LICENSE.txt" />
+    <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
@@ -270,6 +274,7 @@
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
     <Content Include="Scripts\Views\Department\department.edit.js" />
     <Content Include="Scripts\Views\Department\department.js" />
+    <Content Include="Scripts\Views\Employee\employee.index.js" />
     <Content Include="Scripts\Views\function.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
@@ -1171,6 +1176,8 @@
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
     <None Include="Content\views\request\employee.request.scss" />
+    <Content Include="Libs\SimplePagination\bower.json" />
+    <Content Include="Libs\SimplePagination\README.md" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
@@ -1184,6 +1191,7 @@
     <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
     <Content Include="Views\Function\_GetFunctionByRoleId.cshtml" />
     <Content Include="Scripts\Views\Team\team.index.js" />
+    <Content Include="Views\Employee\_ListEmployee.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

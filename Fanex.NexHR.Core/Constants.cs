@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Constants.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.12">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     public static class Constants
     {
@@ -36,6 +27,10 @@ namespace Fanex.NexHR.Core
         public const string TimeFormat = "HH:mm";
 
         public const decimal MaxScoreSubtractDate = (decimal)3.5;
+
+        public const int CurrentPage = 1;
+
+        public const int ItemsPerPage = 50;
 
         /// <summary>
         /// Key name: WorkingTimeRequest_GetAllByRequestID.

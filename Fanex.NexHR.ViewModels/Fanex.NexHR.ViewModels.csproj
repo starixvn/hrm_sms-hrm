@@ -83,6 +83,8 @@
     <Compile Include="Discipline\DisciplineSummaryViewModel.cs" />
     <Compile Include="Discipline\AddOtherDisciplineViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
+    <Compile Include="Employee\UserManagementViewModel.cs" />
+    <Compile Include="PagerOptionModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />

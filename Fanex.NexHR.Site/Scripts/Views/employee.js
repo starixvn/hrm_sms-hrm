@@ -32,7 +32,7 @@ function query(jobTitleId) {
         jobTitleId = $('#title').val();
     }
 
-    var keyword = $('#keyword').val();
+    var keyword = $('#Keyword').val();
     actingLoading('#query', true);
 
     var enable = null;
@@ -132,7 +132,7 @@ function query(jobTitleId) {
         reloadButtonText('#query');
         alert(_messages.errorTryAgain);
     });
-    $('#keyword').focus().select();
+    $('#Keyword').focus().select();
 }
 
 function resetPassword(id, nickName) {
@@ -145,7 +145,7 @@ function resetPassword(id, nickName) {
 function exportExcel(object) {
     var jobTitleId = $('#title').val();
     var groups = $("#group").val() !== null ? $("#group").val().join() : "";
-    var keyword = $('#keyword').val();
+    var keyword = $('#Keyword').val();
     var url = null;
 
     var enable = null;
@@ -199,7 +199,7 @@ $(document).ready(function () {
     dropDownTittle.chosen();
     dropDownTittle.trigger("liszt:updated");
 
-    $('#keyword').keyup(function (event) {
+    $('#Keyword').keyup(function (event) {
         if (event.keyCode === 13) {
             $("#userdata").dataTable().fnDestroy();
             query(jobTitleId);
@@ -208,13 +208,13 @@ $(document).ready(function () {
 
     var q = getParam('query');
     if (q !== null) {
-        $('#keyword').val(q);
+        $('#Keyword').val(q);
     }
 
     //search onload
     query(jobTitleId);
 
-    $('#query').live("click", function (evt) {
+    $('#query').on("click", function (evt) {
         evt.preventDefault();
 
         $("#userdata").dataTable().fnDestroy();

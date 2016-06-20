@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetAllEmployeeCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.30">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Employee
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
 
-    /// <summary>
-    /// Get All Employee Criteria.
-    /// </summary>
     public class GetAllEmployeeCriteria : CriteriaBase
     {
         public string Query { get; set; }
@@ -27,7 +16,7 @@ namespace Fanex.NexHR.Criteria.Employee
                 int? disableUsers = null;
                 if (EnableUser.HasValue)
                 {
-                    disableUsers = EnableUser.Value ? 0 : 1;
+                    disableUsers = EnableUser.Value ? 1 : 0;
                 }
 
                 return disableUsers;
@@ -66,6 +55,7 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public int? PageSize { get; set; }
 
+        [Output]
         public int? TotalRow { get; set; }
 
         public int? TitleId { get; set; }

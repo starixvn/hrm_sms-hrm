@@ -1,5 +1,13 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Country;
@@ -12,6 +20,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Supervisor;
@@ -19,14 +28,6 @@
     using Nexus.RoleManagement.Services;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
     using CommandResult = Models.CommandResult;
 
     [Authorize]
@@ -64,26 +65,68 @@
 
         /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult UserManagement(string jobTitleId = "", string groupIds = "")
+        public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
-            ViewBag.JobTitleId = jobTitleId;
-            ViewBag.GroupId = groupIds;
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            IList<Team> groups = _teamService.GetAll(new GetAllGroupCriteria());
 
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
-            ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+            IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
-                Selected = j.Id.ToString() == jobTitleId
+                Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
 
-            return View();
+            var model = new UserManagementViewModel()
+            {
+                JobTitleId = jobTitleId,
+                GroupIds = groupIds,
+                IsEnable = true,
+                Groups = groups,
+                JobTitles = jobTitles,
+                CurrentPage = Constants.CurrentPage,
+                ItemsPerPage = Constants.ItemsPerPage
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        public ActionResult ListEmployee(UserManagementViewModel model)
+        {
+            IList<Employee> employees = new List<Employee>();
+
+            if (model != null)
+            {
+                var criteria = new GetAllEmployeeCriteria()
+                {
+                    Query = model.Keyword,
+                    GroupIds = model.GroupIds,
+                    EnableUser = model.IsEnable,
+                    IsDeleteUser = model.IsDelete,
+                    TitleId = model.JobTitleId,
+                    IsLocalUser = model.IsLocal,
+                    PageNumber = model.CurrentPage,
+                    PageSize = model.ItemsPerPage
+                };
+
+                employees = _employeeService.GetEmployees(criteria);
+
+                var pagerOption = new PagerOptionModel()
+                {
+                    CurrentPage = model.CurrentPage,
+                    ItemsPerPage = model.ItemsPerPage,
+                    TotalItem = (int)criteria.TotalRow
+                };
+                ViewBag.PagerOption = pagerOption;
+            }
+
+            return PartialView("_ListEmployee", employees);
         }
 
         public ActionResult Detail(int id)
@@ -370,7 +413,7 @@
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (this.CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit) 
+            if (this.CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit)
                 || CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Edit))
             {
                 var getHRLeaderDashboardCriteria = new GetHRLeaderDashboardCriteria
