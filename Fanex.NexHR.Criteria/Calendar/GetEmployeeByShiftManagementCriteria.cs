@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="GetEmployeeByShiftManagementCriteria.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
+// <copyright file="GetEmployeeByShiftManagementCriteria.cs" company=".">
+// Copyright (c) .. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
 // <history>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="LeaveSummaryByTeam.cs" company="Nexcel Solutions Vietnam">
-// Copyright (c) Nexcel Solutions Vietnam. All rights reserved.
+// <copyright file="LeaveSummaryByTeam.cs" company=".">
+// Copyright (c) .. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
 // <history>
