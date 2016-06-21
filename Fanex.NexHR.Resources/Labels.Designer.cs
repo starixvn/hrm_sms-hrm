@@ -997,6 +997,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline Setting.
+        /// </summary>
+        public static string DisciplineSetting {
+            get {
+                return ResourceManager.GetString("DisciplineSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discipline Summary.
         /// </summary>
         public static string DisciplineSummary {
@@ -1083,6 +1092,15 @@ namespace Fanex.NexHR.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Discipline.
+        /// </summary>
+        public static string EditDiscipline {
+            get {
+                return ResourceManager.GetString("EditDiscipline", resourceCulture);
             }
         }
         
@@ -1191,6 +1209,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeManagement {
             get {
                 return ResourceManager.GetString("EmployeeManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee Personal Information.
+        /// </summary>
+        public static string EmployeePersonalInformation {
+            get {
+                return ResourceManager.GetString("EmployeePersonalInformation", resourceCulture);
             }
         }
         
@@ -2644,6 +2671,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Priority.
+        /// </summary>
+        public static string Priority {
+            get {
+                return ResourceManager.GetString("Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Probation Resigned.
         /// </summary>
         public static string ProbationResigned {
@@ -2784,6 +2820,15 @@ namespace Fanex.NexHR.Resources {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove All.
+        /// </summary>
+        public static string RemoveAll {
+            get {
+                return ResourceManager.GetString("RemoveAll", resourceCulture);
             }
         }
         
@@ -3036,6 +3081,15 @@ namespace Fanex.NexHR.Resources {
         public static string SectionSupervisor {
             get {
                 return ResourceManager.GetString("SectionSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Supervisors.
+        /// </summary>
+        public static string SectionSupervisors {
+            get {
+                return ResourceManager.GetString("SectionSupervisors", resourceCulture);
             }
         }
         
@@ -3549,6 +3603,24 @@ namespace Fanex.NexHR.Resources {
         public static string UpdateLeaveRequest {
             get {
                 return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Shift Manager.
+        /// </summary>
+        public static string UpdateShiftManager {
+            get {
+                return ResourceManager.GetString("UpdateShiftManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Supervisor.
+        /// </summary>
+        public static string UpdateSupervisor {
+            get {
+                return ResourceManager.GetString("UpdateSupervisor", resourceCulture);
             }
         }
         

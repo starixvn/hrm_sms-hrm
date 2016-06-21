@@ -10,11 +10,11 @@
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
-    <a href="~/team/index" class="step">@Labels.SectionManagement</a>
+    <a href="@Url.Action("index", "team")" class="step">@Labels.SectionManagement</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-<table class="data" style="width: auto; min-width: 800px;">
+<table class="table table-custom" style="width: auto; min-width: 800px;">
     <thead>
         <tr>
             <th class="supervisor-team">
@@ -35,13 +35,14 @@
     {
         int rowCount = 0;
         <tbody>
+            @Html.Hidden("TeamId", (int)ViewBag.TeamId)
             @foreach (TeamSupervisorModel item in Model)
             {
 
                 if (rowCount == 0)
                 {
                     <tr>
-                        <td rowspan="4">
+                        <td rowspan="5">
                             @item.Code
                         </td>
                         <td>
@@ -62,7 +63,7 @@
                             }
                         </td>
                     </tr>
-                            rowCount++;
+                    rowCount++;
                 }
                 else
                 {
@@ -74,20 +75,27 @@
                             @item.Supervisors
                         </td>
                         <td>
-                            @if (item.ActionType == (short)RoleSystem.ShiftManager)
+                            @switch (item.ActionType)
                             {
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+                                case (short)RoleSystem.ShiftManager:
+                                    break;
+                                case (short)RoleSystem.Verifier:
+                                case (short)RoleSystem.Approver:
+                                case (short)RoleSystem.ActingSupervisor:
+                                    <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+                                        <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                    </a>
+                                    break;
+                                case (short)RoleSystem.EditDiscipline:
+                                <a href="@Url.Action("DisciplineSetting", "Team", new { TeamId = ViewBag.TeamId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
+                                    break;
                             }
                         </td>
                     </tr>
                 }
             }
-            @Html.Hidden("TeamId", (int)ViewBag.TeamId)
         </tbody>
     }
 </table>

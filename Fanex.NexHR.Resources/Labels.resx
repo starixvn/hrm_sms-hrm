@@ -1362,4 +1362,28 @@
   <data name="DisabledUsers" xml:space="preserve">
     <value>Disabled Users</value>
   </data>
+  <data name="DisciplineSetting" xml:space="preserve">
+    <value>Discipline Setting</value>
+  </data>
+  <data name="EditDiscipline" xml:space="preserve">
+    <value>Edit Discipline</value>
+  </data>
+  <data name="EmployeePersonalInformation" xml:space="preserve">
+    <value>Employee Personal Information</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="RemoveAll" xml:space="preserve">
+    <value>Remove All</value>
+  </data>
+  <data name="SectionSupervisors" xml:space="preserve">
+    <value>Section Supervisors</value>
+  </data>
+  <data name="UpdateShiftManager" xml:space="preserve">
+    <value>Update Shift Manager</value>
+  </data>
+  <data name="UpdateSupervisor" xml:space="preserve">
+    <value>Update Supervisor</value>
+  </data>
 </root>

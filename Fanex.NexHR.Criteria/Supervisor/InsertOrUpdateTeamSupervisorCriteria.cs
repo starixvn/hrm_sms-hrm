@@ -20,6 +20,8 @@
 
         public string EmpIdKeepInViews { get; set; }
 
+        public string EmpIdDisciplines { get; set; }
+
         public int ModifiedBy { get; set; }
 
         public override bool IsValid()

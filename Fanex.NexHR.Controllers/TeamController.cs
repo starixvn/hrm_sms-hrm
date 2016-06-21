@@ -4,10 +4,12 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
@@ -27,7 +29,10 @@
         {
         }
 
-        public TeamController(ITeamService teamService, IDepartmentService departmentService, ICommandService commandService)
+        public TeamController(
+            ITeamService teamService,
+            IDepartmentService departmentService,
+            ICommandService commandService)
         {
             this.teamService = teamService ?? new TeamService();
             this.departmentService = departmentService ?? new DepartmentService();
@@ -38,8 +43,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
-            var criteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(criteria);
+            IList<Team> teams = GetAllTeam();
 
             return View(teams);
         }
@@ -185,7 +189,8 @@
             {
                 GroupId = id
             };
-            var model = teamService.GetSupervisorByTeamId(criteria);
+
+            IList<TeamSupervisorModel> model = teamService.GetSupervisorByTeamId(criteria);
             ViewBag.TeamId = id;
 
             return View(model);
@@ -194,18 +199,17 @@
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             var criteria = new GetTeamSupervisorCriteria()
             {
                 GroupId = teamId,
                 Role = supervisorRole
             };
-            var supervisorModel = teamService.GetTeamSupervisor(criteria);
+            IList<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
 
             var model = new SupervisorViewModel
             {
-                SupervisorList = supervisorModel,
+                SupervisorList = supervisors,
                 TeamId = teamId,
                 SupervisorRole = supervisorRole,
                 ForView = "Team"
@@ -217,14 +221,14 @@
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ShiftManager(int teamId)
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
+
             var criteria = new GetTeamSupervisorCriteria()
             {
                 GroupId = teamId,
                 Role = (short)RoleSystem.ShiftManager
             };
-            var supervisorModel = teamService.GetTeamSupervisor(criteria);
+            IList<SupervisorModel> supervisorModel = teamService.GetTeamSupervisor(criteria);
 
             var model = new ShiftManagerViewModel
             {
@@ -235,6 +239,27 @@
             };
 
             return View("~/Views/Employee/ShiftManager.cshtml", model);
+        }
+
+        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        public ActionResult DisciplineSetting(int teamId)
+        {
+            ViewBag.Groups = GetAllTeam();
+
+            var criteria = new GetDisciplineSettingByGroupIdCriteria()
+            {
+                GroupId = teamId
+            };
+            IList<SupervisorModel> supervisors = teamService.GetDisciplineSettingByGroupId(criteria);
+
+            var model = new SupervisorViewModel
+            {
+                SupervisorList = supervisors,
+                TeamId = teamId,
+                SupervisorRole = (short)RoleSystem.EditDiscipline
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -274,6 +299,22 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [HRAuthorize(Policy.Edit, FunctionKey.SectionManagement)]
+        public ActionResult UpdateDisciplineSetting(SupervisorViewModel model)
+        {
+            var criteria = new InsertOrUpdateTeamSupervisorCriteria
+            {
+                EmpIdDisciplines = model.RoleDisciplines,
+                GroupId = model.TeamId,
+                ModifiedBy = CurrentUser.Id,
+                Role = (short)RoleSystem.EditDiscipline
+            };
+            CommandResult result = commandService.Update(criteria);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private IList<Department> GetAllDepartment(bool? isActive)
         {
             var criteria = new GetDepartmentByParentIdCriteria()
@@ -283,6 +324,14 @@
             IList<Department> departments = departmentService.GetDepartment(criteria);
 
             return departments;
+        }
+
+        private IList<Team> GetAllTeam()
+        {
+            var criteria = new GetAllGroupCriteria();
+            IList<Team> teams = teamService.GetAll(criteria);
+
+            return teams;
         }
     }
 }

@@ -26,6 +26,8 @@
 
         public string RoleKeepInViews { get; set; }
 
+        public string RoleDisciplines { get; set; }
+
         public string ForView { get; set; }
 
         public string DisplayTitle

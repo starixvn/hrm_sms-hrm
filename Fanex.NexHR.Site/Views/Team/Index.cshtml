@@ -42,6 +42,7 @@
         @foreach (Team team in Model)
         {
             <tr id="row@(team.Id)">
+                @Html.Hidden("groupid", team.Id)
                 <td>@(index++)</td>
                 <td>@team.Code</td>
                 <td>@team.Name</td>
@@ -71,14 +72,14 @@
                 <td>@team.TotalLocal</td>
                 <td>
                     @{
-                        if (@team.NoOfMembers > 0)
-                        {
-                            <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
-                        }
-                        else
-                        {
-                            <span>@team.NoOfMembers</span>
-                        }
+            if (@team.NoOfMembers > 0)
+            {
+                <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
+            }
+            else
+            {
+                <span>@team.NoOfMembers</span>
+            }
                     }
                 </td>
                 <td>
@@ -91,19 +92,18 @@
                 </td>
                 <td>
                     @{
-                        if (team.NoOfMembers > 0)
-                        {
-                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                        }
-                        else
-                        {
-                            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                                <i class="fa fa-times fa-lg icon-delete"></i>
-                            </a>
-                        }
+            if (team.NoOfMembers > 0)
+            {
+                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+            }
+            else
+            {
+                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+                    <i class="fa fa-times fa-lg icon-delete"></i>
+                </a>
+            }
                     }
                 </td>
-                @Html.Hidden("groupid", team.Id)
             </tr>
         }
     </tbody>

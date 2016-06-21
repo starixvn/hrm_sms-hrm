@@ -188,6 +188,7 @@
     <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
+    <Compile Include="Supervisor\GetDisciplineSettingByGroupIdCriteria.cs" />
     <Compile Include="Team\GetGroupBySupervisorCriteria.cs" />
     <Compile Include="TimeRecord\TimeRecordUpdateTypeCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />

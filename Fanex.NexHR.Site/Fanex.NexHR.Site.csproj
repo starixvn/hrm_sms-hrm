@@ -253,6 +253,12 @@
     <Content Include="Content\views\request\employee.request.min.css">
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\team\team.css">
+      <DependentUpon>team.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\team\team.min.css">
+      <DependentUpon>team.css</DependentUpon>
+    </Content>
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\warning.png" />
@@ -290,6 +296,7 @@
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.js" />
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
+    <Content Include="Scripts\Views\Team\team.discipline.setting.js" />
     <Content Include="Scripts\Views\timerecord.detail.js" />
     <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
@@ -1178,6 +1185,10 @@
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
+    <Content Include="Content\views\team\team.scss" />
+    <Content Include="Content\views\team\team.css.map">
+      <DependentUpon>team.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
@@ -1192,6 +1203,7 @@
     <Content Include="Views\Function\_GetFunctionByRoleId.cshtml" />
     <Content Include="Scripts\Views\Team\team.index.js" />
     <Content Include="Views\Employee\_ListEmployee.cshtml" />
+    <Content Include="Views\Team\DisciplineSetting.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

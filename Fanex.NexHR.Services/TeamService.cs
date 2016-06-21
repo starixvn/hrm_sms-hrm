@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -7,8 +10,6 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class TeamService : BaseService, ITeamService
     {
@@ -62,6 +63,12 @@
         public IList<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria)
         {
             IList<TeamSupervisorModel> supervisors = GetData<TeamSupervisorModel>(criteria).ToList();
+            return supervisors;
+        }
+
+        public IList<SupervisorModel> GetDisciplineSettingByGroupId(GetDisciplineSettingByGroupIdCriteria criteria)
+        {
+            IList<SupervisorModel> supervisors = GetData<SupervisorModel>(criteria).ToList();
             return supervisors;
         }
     }

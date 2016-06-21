@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -17,5 +18,7 @@
         IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
 
         IList<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria);
+
+        IList<SupervisorModel> GetDisciplineSettingByGroupId(GetDisciplineSettingByGroupIdCriteria criteria);
     }
 }

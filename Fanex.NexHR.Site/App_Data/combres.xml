@@ -513,6 +513,16 @@
       <resource reference="sitejs" />
     </resourceSet>
 
+    <resourceSet name="teamdisciplinesettingcss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/content/views/team/team.min.css" />
+    </resourceSet>
+    
+    <resourceSet name="teamdisciplinesettingjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/team/team.discipline.setting.js" />
+    </resourceSet>
+
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
