@@ -515,7 +515,7 @@
 
     <resourceSet name="teamdisciplinesettingcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/content/views/team/team.min.css" />
+      <resource path="~/content/views/team.min.css" />
     </resourceSet>
     
     <resourceSet name="teamdisciplinesettingjs" type="js">
@@ -749,6 +749,16 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/discipline/discipline.detail.js" />
+    </resourceSet>
+
+    <resourceSet name="employeedisciplinesettingcss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/content/views/employee.min.css" />
+    </resourceSet>
+
+    <resourceSet name="employeedisciplinesettingjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee/employee.discipline.setting.js" />
     </resourceSet>
   </resourceSets>
 </combres>

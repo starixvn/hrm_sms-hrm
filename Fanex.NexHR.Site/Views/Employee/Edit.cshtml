@@ -21,7 +21,7 @@
         @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
             <div class="success flash">
-                Saved
+                @Labels.Saved
             </div>
         }
         else if (ViewBag.Updated != null && !(bool)ViewBag.Updated)
@@ -273,7 +273,7 @@
         <div class="employeeInfo">
             <div class="boxtitle">
                 <span class="fa fa-chevron-down"></span>
-                <span>Contact</span>
+                <span>@Labels.Contact</span>
             </div>
             <div class="boxcontent">
                 <div class="line">
@@ -356,7 +356,7 @@
         <div class="employeeInfo">
             <div class="boxtitle">
                 <span class="fa fa-chevron-down"></span>
-                <span>Information</span>
+                <span>@Labels.Information</span>
             </div>
             <div class="boxcontent">
                 <div class="line">
@@ -415,6 +415,17 @@
                     </div>
                 </div>
                 <div class="line">
+                    <div class="label marginlable">
+                        @Html.Label(Labels.EditDiscipline)
+                    </div>
+                    <div class="input">
+                        <span id="lstDisciplinarian">@Model.Disciplinarian</span>
+                        @Html.ActionLink("Update", "DisciplineSetting", "Employee", new { employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    </div>
+                    <div class="clear">
+                    </div>
+                </div>
+                <div class="line">
                     <div class="label">
                         @Html.LabelFor(model => model.JoinedDate, Labels.GroupDate)
                     </div>
@@ -461,7 +472,7 @@
         <div class="employeeInfo">
             <div class="boxtitle">
                 <span class="fa fa-chevron-down"></span>
-                <span>Policy</span>
+                <span>@Labels.Policy</span>
             </div>
             <div class="boxcontent">
                 <div class="line">
@@ -533,7 +544,7 @@
         <div class="employeeInfo">
             <div class="boxtitle">
                 <span class="fa fa-chevron-down"></span>
-                <span>Permission</span>
+                <span>@Labels.Permission</span>
             </div>
             <div class="boxcontent">
                 <div class="line role-system">
@@ -657,7 +668,7 @@
         <div class="employeeInfo">
             <div class="boxtitle">
                 <span class="fa fa-chevron-down"></span>
-                <span>Contract</span>
+                <span>@Labels.Contract</span>
             </div>
             <div class="boxcontent">
                 <div class="line">

@@ -247,16 +247,22 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\views\employee.css">
+      <DependentUpon>employee.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\employee.min.css">
+      <DependentUpon>employee.css</DependentUpon>
+    </Content>
     <Content Include="Content\views\request\employee.request.css">
       <DependentUpon>employee.request.scss</DependentUpon>
     </Content>
     <Content Include="Content\views\request\employee.request.min.css">
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
-    <Content Include="Content\views\team\team.css">
+    <Content Include="Content\views\team.css">
       <DependentUpon>team.scss</DependentUpon>
     </Content>
-    <Content Include="Content\views\team\team.min.css">
+    <Content Include="Content\views\team.min.css">
       <DependentUpon>team.css</DependentUpon>
     </Content>
     <Content Include="Images\ajax-loader.gif" />
@@ -281,6 +287,7 @@
     <Content Include="Scripts\Views\Department\department.edit.js" />
     <Content Include="Scripts\Views\Department\department.js" />
     <Content Include="Scripts\Views\Employee\employee.index.js" />
+    <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\function.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
@@ -976,7 +983,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="Content\views\employee\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -1182,11 +1188,15 @@
     <Content Include="Content\views\request\employee.request.css.map">
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\employee.scss" />
+    <Content Include="Content\views\employee.css.map">
+      <DependentUpon>employee.css</DependentUpon>
+    </Content>
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
-    <Content Include="Content\views\team\team.scss" />
-    <Content Include="Content\views\team\team.css.map">
+    <Content Include="Content\views\team.scss" />
+    <Content Include="Content\views\team.css.map">
       <DependentUpon>team.css</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
@@ -1204,6 +1214,7 @@
     <Content Include="Scripts\Views\Team\team.index.js" />
     <Content Include="Views\Employee\_ListEmployee.cshtml" />
     <Content Include="Views\Team\DisciplineSetting.cshtml" />
+    <Content Include="Views\Employee\DisciplineSetting.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

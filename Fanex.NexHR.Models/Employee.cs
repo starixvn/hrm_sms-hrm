@@ -123,6 +123,8 @@
 
         public string Approver { get; set; }
 
+        public string Disciplinarian { get; set; }
+
         [Display(Name = "Emp. Shift List")]
         public string EmpShiftList { get; set; }
 

@@ -16,6 +16,7 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Country;
@@ -662,12 +663,12 @@ namespace Fanex.NexHR.Services
             return result;
         }
 
-        /// <summary>
-        /// Function to validate user.
-        /// </summary>
-        /// <param name="employee">Employee need validate.</param>
-        /// <param name="password">Password of employee.</param>
-        /// <returns>Result of validate.</returns>
+        public IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria)
+        {
+            IList<SupervisorModel> supervisors = GetData<SupervisorModel>(criteria).ToList();
+            return supervisors;
+        }
+
         private int ValidateUser(Employee employee, string password)
         {
             //// -1: wrong username

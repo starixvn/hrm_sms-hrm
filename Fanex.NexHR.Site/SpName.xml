@@ -228,6 +228,8 @@
     <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_UpdateOrderShiftArrange" SpName="EmployeeSupervisor_UpdateOrderShiftArrange" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0">
+    </Setting>
   </Function>
   <Function Name="Group">
     <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
@@ -268,7 +270,6 @@
       <Mapping DataField="GroupId" ObjectProperty="TeamId" />
     </Setting>
     <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="OwnerId" />
     </Setting>
   </Function>
   <Function Name="Lookup">
