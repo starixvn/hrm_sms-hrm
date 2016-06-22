@@ -373,7 +373,7 @@ GO
     INSERT INTO [dbo].[LookupData] VALUES(@id,'ActingSupervisor','On Behalf Function',5)
     INSERT INTO [dbo].[LookupData] VALUES(@id,'HR','HR',6)
     INSERT INTO [dbo].[LookupData] VALUES(@id,'SystemAdmin','System Admin',7)
-
+    INSERT INTO [dbo].[LookupData] VALUES(@id,'DisciplineManager','Discipline Manager',8)
 
   INSERT INTO [dbo].[FunctionKey] VALUES('Home','Home',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('RequestOfMember','Request Of Member',NULL,1)

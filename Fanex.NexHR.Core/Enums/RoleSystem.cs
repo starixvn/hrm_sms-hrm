@@ -27,7 +27,7 @@
         [StringValue("SystemAdmin")]
         SystemAdmin = 7,
 
-        [StringValue("EditDiscipline")]
-        EditDiscipline = 8
+        [StringValue("DisciplineManager")]
+        DisciplineManager = 8
     }
 }

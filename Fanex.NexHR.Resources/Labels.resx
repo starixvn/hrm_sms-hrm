@@ -1365,8 +1365,8 @@
   <data name="DisciplineSetting" xml:space="preserve">
     <value>Discipline Setting</value>
   </data>
-  <data name="EditDiscipline" xml:space="preserve">
-    <value>Edit Discipline</value>
+  <data name="DisciplineManager" xml:space="preserve">
+    <value>Discipline Manager</value>
   </data>
   <data name="EmployeePersonalInformation" xml:space="preserve">
     <value>Employee Personal Information</value>

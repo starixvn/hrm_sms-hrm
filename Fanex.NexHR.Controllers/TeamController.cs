@@ -256,7 +256,7 @@
             {
                 SupervisorList = supervisors,
                 TeamId = teamId,
-                SupervisorRole = (short)RoleSystem.EditDiscipline
+                SupervisorRole = (short)RoleSystem.DisciplineManager
             };
 
             return View(model);
@@ -308,7 +308,7 @@
                 EmpIdDisciplines = model.RoleDisciplines,
                 GroupId = model.TeamId,
                 ModifiedBy = CurrentUser.Id,
-                Role = (short)RoleSystem.EditDiscipline
+                Role = (short)RoleSystem.DisciplineManager
             };
             CommandResult result = commandService.Update(criteria);
 

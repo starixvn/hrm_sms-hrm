@@ -642,7 +642,7 @@
             {
                 SupervisorList = supervisors,
                 EmployeeId = employeeId,
-                SupervisorRole = (short)RoleSystem.EditDiscipline
+                SupervisorRole = (short)RoleSystem.DisciplineManager
             };
 
             return View(model);
@@ -657,7 +657,7 @@
                 EmpIdDisciplines = model.RoleDisciplines,
                 EmpId = model.EmployeeId,
                 ModifiedBy = CurrentUser.Id,
-                Role = (short)RoleSystem.EditDiscipline
+                Role = (short)RoleSystem.DisciplineManager
             };
             CommandResult result = commandService.Update(criteria);
 
@@ -688,7 +688,7 @@
                 approverList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Approver).ToList();
                 shiftMonitorList = supervisors.Where(x => x.ActionType == (int)RoleSystem.ShiftManager).ToList();
                 actingList = supervisors.Where(x => x.ActionType == (int)RoleSystem.ActingSupervisor).ToList();
-                disciplinarianList = supervisors.Where(x => x.ActionType == (int)RoleSystem.EditDiscipline).ToList();
+                disciplinarianList = supervisors.Where(x => x.ActionType == (int)RoleSystem.DisciplineManager).ToList();
             }
 
             listVerifierName = verifierList.Select(x => x.NickName).Take(3).ToList();

@@ -19,6 +19,6 @@
         OnBehalfRequest = 5,
 
         [StringValue("Edit Discipline")]
-        EditDiscipline = 8
+        DisciplineManager = 8
     }
 }
