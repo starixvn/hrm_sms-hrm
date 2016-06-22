@@ -10,42 +10,29 @@
     @Url.CombresLink("empchangeshiftjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
-{ 
-        
+{
     <input type="hidden" value="ChangeShift" id="RequestType" />
-    
     <span>Year:</span>
     @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-    
-    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
+    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
     <div class="button-icon">
         <span class="icon plus"></span>@Html.ActionLink(Labels.ChangeShiftRequest, "Create")
-    </div>    
-        
-    <table class="data">
+    </div>
+    <table class="table table-custom">
         <thead>
             <tr>
-                <th>
-                    #
-                </th>
-                <th>@Labels.RefNo1
-                </th>
-                <th>@Labels.FromDate
-                </th>
-                <th>@Labels.ToDate
-                </th>
-                <th>@Labels.CreatedDate
-                </th>
-                <th>@Labels.Remark
-                </th>
-                <th>@Labels.Status
-                </th>
-                <th>@Labels.History
-                </th>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.RefNo1</th>
+                <th>@Labels.FromDate</th>
+                <th>@Labels.ToDate</th>
+                <th>@Labels.CreatedDate</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.History</th>
             </tr>
         </thead>
         @if (Model.Count > 0)
@@ -53,22 +40,25 @@
             <tbody>
                 @{int index = 1;}
                 @foreach (RequestEntity request in Model)
-                { 
+                {
                     <tr id="row@(request.Id)">
-                        <td>@(index++)
+                        <td>
+                            @(index++)
                         </td>
-                        <td class="ddMMyyyy highlight">@request.Id
+                        <td class="ddMMyyyy">
+                            @request.Id
                         </td>
-                        <td class="highlight">
+                        <td>
                             @request.FromDate.ToDateMonthYearFormatedDate()
                         </td>
-                        <td class="highlight">
+                        <td>
                             @request.ToDate.ToDateMonthYearFormatedDate()
                         </td>
-                        <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
+                        <td class="ddMMyyyyhhmm">
+                            @request.CreatedDate.ToShortFormatedDate()
                         </td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
-                        { 
+                        {
                             <td class="tooltip" title="@request.Remark">
                                 <span class="icon remark" alt="remark" />
                             </td>
@@ -82,14 +72,15 @@
                         @Html.Partial("_SharedRequestStatus", request)
                         <td>
                             <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                                @Labels.View </a>
+                                @Labels.View
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         }
         else
-        { 
+        {
             @RazorHelper.DisplayNoInformation(colspan: 10);
         }
     </table>

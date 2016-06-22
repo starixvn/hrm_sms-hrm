@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Criteria.Message
 @model GetMessageByCreatorCriteria
 @{
-    ViewBag.Title = @Labels.Message;
+    ViewBag.Title = Labels.Message;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
@@ -49,7 +49,7 @@
     </div>
     <div class="clear">
     </div>
-    <table id="messageTable" class="data persist-area" style="width: 942px;">
+    <table id="messageTable" class="table table-custom persist-area" style="width: 942px;">
         <thead>
             <tr>
                 <th>

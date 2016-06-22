@@ -1,107 +1,115 @@
 ﻿@using Fanex.NexHR.ViewModels.Request
 @model RequestsMonitoringViewModel
 @{
-	ViewBag.Title = "Requests statistic";
+    ViewBag.Title = "Requests statistic";
 }
 @section css{
-	@Url.CombresLink("requestmonitoringcss")
+    @Url.CombresLink("requestmonitoringcss")
 }
 @section js{
-	@Url.CombresLink("requestmonitoringjs")
+    @Url.CombresLink("requestmonitoringjs")
 }
 @section Breadcrumb {
-	<a class="step">HR</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">HR</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
-	@Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
-	@Html.Hidden("ViewRole", (string)ViewBag.ViewRole)
-	<div class="container_24 bunhat">
-		<div class="grid_23">
-			<div class="grid_2 gridlabel">
-				@Labels.DateRange
-			</div>
-			<div class="grid_6">
-				<select id="Date" name="Date" style="min-width: 150px;">
-					<option value="0">
-						@Labels.DateRange</option>
-					<option value="1">
-						@Labels.ToDay</option>
-					<option value="2">
-						@Labels.Yesterday</option>
-					<option value="3">
-						@Labels.CurrentWeek</option>
-					<option value="4">
-						@Labels.LastWeek</option>
-					<option value="5">
-						@Labels.CurrentMonth</option>
-					<option value="6">
-						@Labels.LastMonth</option>
-					<option value="7">
-						@Labels.SinceLastMonth</option>
-				</select>
-				@Html.Hidden("DateOption", Model.DateOption)
-			</div>
-			<div class="grid_3 gridlabel">
-				@Html.LabelFor(model => model.FromDate)
-			</div>
-			<div class="grid_4">
-				@Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 01, 01))
-			</div>
-			<div class="grid_2 gridlabel">
-				@Html.LabelFor(model => model.ToDate)
-			</div>
-			<div class="grid_4">
-				@Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 01, 01))
-			</div>
-			<div class="clear">
-			</div>
-			<div class="space">
-			</div>
-			<div class="grid_2 gridlabel">@Labels.Employee</div>
-			<div class="grid_6">
-				@Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-				@Html.HiddenFor(model => model.EmployeeId)
-			</div>
-			<div class="grid_3 gridlabel">@Labels.Team</div>
-			<div class="grid_6">
-				<select id="group" multiple="multiple" class="team-select">
-					@foreach (Team item in ViewBag.Groups)
-	 { 
-						<option value="@item.Id">@item.Name</option>
-	 }
-				</select>
-			</div>
-			<div class="clear">
-			</div>
-			<div class="space">
-			</div>
-			<div class="grid_2 gridlabel">
-				Category
-			</div>
-			<div class="grid_6">
-				@{
-	 var category = new List<SelectListItem>
+    @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+    @Html.Hidden("ViewRole", (string)ViewBag.ViewRole)
+    <div class="container_24 bunhat">
+        <div class="grid_23">
+            <div class="grid_2 gridlabel">
+                @Labels.DateRange
+            </div>
+            <div class="grid_6">
+                <select id="Date" name="Date" style="min-width: 150px;">
+                    <option value="0">
+                        @Labels.DateRange
+                    </option>
+                    <option value="1">
+                        @Labels.ToDay
+                    </option>
+                    <option value="2">
+                        @Labels.Yesterday
+                    </option>
+                    <option value="3">
+                        @Labels.CurrentWeek
+                    </option>
+                    <option value="4">
+                        @Labels.LastWeek
+                    </option>
+                    <option value="5">
+                        @Labels.CurrentMonth
+                    </option>
+                    <option value="6">
+                        @Labels.LastMonth
+                    </option>
+                    <option value="7">
+                        @Labels.SinceLastMonth
+                    </option>
+                </select>
+                @Html.Hidden("DateOption", Model.DateOption)
+            </div>
+            <div class="grid_3 gridlabel">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 01, 01))
+            </div>
+            <div class="grid_2 gridlabel">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 01, 01))
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="grid_2 gridlabel">@Labels.Employee</div>
+            <div class="grid_6">
+                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+            <div class="grid_3 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="grid_2 gridlabel">
+                Category
+            </div>
+            <div class="grid_6">
+                @{
+                    var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
-				}
-				@Html.DropDownList("category", category, new { @class = "category" })
-			</div>
-			<div class="grid_3 gridlabel">@Html.LabelFor(model => model.MaxRequest)</div>
-			<div class="grid_2">@RazorHelper.MaxRequestDropDownList(Model.MaxRequest)
-			</div>
-			<div>
-				<input type="button" value="@Labels.Submit" id="queryData"/>
-				<input type="button" value="Excel" id="excel" />
-			</div>
-		</div>
-	</div>
-    
+                }
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
+            <div class="grid_3 gridlabel">@Html.LabelFor(model => model.MaxRequest)</div>
+            <div class="grid_2">
+                @RazorHelper.MaxRequestDropDownList(Model.MaxRequest)
+            </div>
+            <div>
+                <input type="button" value="@Labels.Submit" id="queryData" />
+                <input type="button" value="Excel" id="excel" />
+            </div>
+        </div>
+    </div>
 }
 <div class="clear">
 </div>

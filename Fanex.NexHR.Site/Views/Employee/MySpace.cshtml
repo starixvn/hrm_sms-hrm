@@ -6,27 +6,20 @@
     @Url.CombresLink("myspacejs")
 }
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = Labels.Dashboard;
 }
 @section Breadcrumb {
-    <a class="step" href="#">Personal</a> <span class="step">@ViewBag.Title</span>
+    <a class="step" href="#">@Labels.Personal</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>@Labels.MySpace</h2>
 @Html.Hidden("ChangePassword", (bool)ViewBag.ResetPassword)
 <table class="data" id="myspace">
     <thead>
         <tr>
-            <th class="firstColumn">
-                @Labels.Request
-            </th>
-            <th>@DateTime.Now.ToString("MMM yyyy")
-            </th>
-            <th>
-                @Labels.Pending
-            </th>
-            <th>
-                @Labels.CreateRequest
-            </th>
+            <th class="firstColumn">@Labels.Request</th>
+            <th>@DateTime.Now.ToString("MMM yyyy")</th>
+            <th>@Labels.Pending</th>
+            <th>@Labels.CreateRequest</th>
         </tr>
     </thead>
     <tbody>

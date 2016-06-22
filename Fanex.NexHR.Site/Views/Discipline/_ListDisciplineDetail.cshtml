@@ -2,7 +2,7 @@
 @{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
-<table class="data discipline-detail">
+<table class="table table-custom discipline-detail">
     <thead>
         @if (Model != null & Model.Any() && hasPermissionToEdit)
         {

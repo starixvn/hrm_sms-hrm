@@ -3,27 +3,15 @@
     Layout = null;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
-<table id="data" class="data">
+<table id="data" class="table table-custom">
     <thead>
         <tr>
-            <th>
-                #
-            </th>
-            <th>
-                @Labels.Code
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>
-                @Labels.TimeRecord
-            </th>
-            <th>
-                @Labels.InOut
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.TimeRecord</th>
+            <th>@Labels.InOut</th>
         </tr>
     </thead>
     <tbody>
@@ -32,7 +20,7 @@
             var i = 0;
             foreach (TimeRecordModel item in Model)
             {
-                i++; 
+                i++;
                 <tr>
                     <td>@i</td>
                     <td>
@@ -48,22 +36,22 @@
                         @item.RecordTime.ToDetailFormatedDate()
                     </td>
                     @*<td>
-                        @item.GetInOutName
-                    </td>*@
+                            @item.GetInOutName
+                        </td>*@
                     <td>
                         @if (hasPermission)
                         {
                             if (item.InOutType == 0)
                             {
-                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
-                                @item.GetInOutName
-                            </a>
+                                <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
+                                    @item.GetInOutName
+                                </a>
                             }
                             else
                             {
-                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
-                                @item.GetInOutName
-                            </a>
+                                <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
+                                    @item.GetInOutName
+                                </a>
                             }
                         }
                         else
@@ -72,7 +60,7 @@
                         }
                     </td>
                 </tr>
-                
+
             }
         }
         else

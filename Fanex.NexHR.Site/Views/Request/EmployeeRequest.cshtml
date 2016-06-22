@@ -16,7 +16,7 @@
 <div>
     @Html.Partial("CriteriaPanel", Model)
 </div>
-<table class="data persist-area">
+<table class="table table-custom persist-area">
     <thead>
         <tr class="persist-header">
             <th>@Labels.SymbolCount</th>
@@ -57,7 +57,7 @@
                     <td class="tooltip" title="@request.Requester.Team.Name">
                         @request.Requester.Team.Code
                     </td>
-                    <td class="highlight">
+                    <td>
                         @switch (request.RequestType.Id)
                         {
                             case (int)RequestType.Leave:
@@ -71,7 +71,7 @@
                                 break;
                         }
                     </td>
-                    <td class="left">
+                    <td class="align-left">
                         @Html.Raw(RequestService.ToRequestMessage(request))
                     </td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))

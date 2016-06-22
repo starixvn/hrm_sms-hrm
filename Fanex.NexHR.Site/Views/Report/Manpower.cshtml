@@ -16,7 +16,8 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2>
-    @ViewBag.Title</h2>
+    @ViewBag.Title
+</h2>
 @using (Html.BeginGetForm())
 {
     <div class="grid_1 gridlabel">
@@ -26,7 +27,7 @@
         @Html.YearPicker("Year", 2010, Model.Year)
     </div>
     <div class="grid_6">
-        <input type="submit" value="@Labels.Submit" id="btnSubmit"/>
+        <input type="submit" value="@Labels.Submit" id="btnSubmit" />
         <input type="button" value="Excel" id="btnExcel" />
     </div>
 }
@@ -34,7 +35,7 @@
 </div>
 <div class="space">
 </div>
-<table id="data" class="data persist-area">
+<table id="data" class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
             <th rowspan="2">
@@ -106,92 +107,98 @@
         {
             int index = 1;
             foreach (ManpowerModel manpower in Model.Manpowers)
-            { 
-            <tr>
-                <td>@(index++)
-                </td>
-                <td class="tooltip" title="@manpower.GroupName">
-                    @manpower.GroupCode
-                </td>
-                <td class="right">
-                    @manpower.ProbationResigned
-                </td>
-                <td class="right">
-                    @manpower.ConfirmedResigned
-                </td>
-                <td class="right">
-                    @manpower.NewHire
-                </td>
-                <td class="right">
-                    @manpower.ActiveUser
-                </td>
-                @RenderCell(manpower.ProbationResignedJan, Model.Year, 1)
-                @RenderCell(manpower.ConfirmedResignedJan, Model.Year, 1)
-                @RenderCell(manpower.NewHireJan, Model.Year, 1)
-                @RenderCell(manpower.ActiveUserJan, Model.Year, 1)
-                @RenderCell(manpower.ProbationResignedFeb, Model.Year, 2)
-                @RenderCell(manpower.ConfirmedResignedFeb, Model.Year, 2)
-                @RenderCell(manpower.NewHireFeb, Model.Year, 2)
-                @RenderCell(manpower.ActiveUserFeb, Model.Year, 2)
-                @RenderCell(manpower.ProbationResignedMar, Model.Year, 3)
-                @RenderCell(manpower.ConfirmedResignedMar, Model.Year, 3)
-                @RenderCell(manpower.NewHireMar, Model.Year, 3)
-                @RenderCell(manpower.ActiveUserMar, Model.Year, 3)
-                @RenderCell(manpower.ProbationResignedApr, Model.Year, 4)
-                @RenderCell(manpower.ConfirmedResignedApr, Model.Year, 4)
-                @RenderCell(manpower.NewHireApr, Model.Year, 4)
-                @RenderCell(manpower.ActiveUserApr, Model.Year, 4)
-                @RenderCell(manpower.ProbationResignedMay, Model.Year, 5)
-                @RenderCell(manpower.ConfirmedResignedMay, Model.Year, 5)
-                @RenderCell(manpower.NewHireMay, Model.Year, 5)
-                @RenderCell(manpower.ActiveUserMay, Model.Year, 5)
-                @RenderCell(manpower.ProbationResignedJun, Model.Year, 6)
-                @RenderCell(manpower.ConfirmedResignedJun, Model.Year, 6)
-                @RenderCell(manpower.NewHireJun, Model.Year, 6)
-                @RenderCell(manpower.ActiveUserJun, Model.Year, 6)
-                @RenderCell(manpower.ProbationResignedJul, Model.Year, 7)
-                @RenderCell(manpower.ConfirmedResignedJul, Model.Year, 7)
-                @RenderCell(manpower.NewHireJul, Model.Year, 7)
-                @RenderCell(manpower.ActiveUserJul, Model.Year, 7)
-                @RenderCell(manpower.ProbationResignedAug, Model.Year, 8)
-                @RenderCell(manpower.ConfirmedResignedAug, Model.Year, 8)
-                @RenderCell(manpower.NewHireAug, Model.Year, 8)
-                @RenderCell(manpower.ActiveUserAug, Model.Year, 8)
-                @RenderCell(manpower.ProbationResignedSep, Model.Year, 9)
-                @RenderCell(manpower.ConfirmedResignedSep, Model.Year, 9)
-                @RenderCell(manpower.NewHireSep, Model.Year, 9)
-                @RenderCell(manpower.ActiveUserSep, Model.Year, 9)
-                @RenderCell(manpower.ProbationResignedOct, Model.Year, 10)
-                @RenderCell(manpower.ConfirmedResignedOct, Model.Year, 10)
-                @RenderCell(manpower.NewHireOct, Model.Year, 10)
-                @RenderCell(manpower.ActiveUserOct, Model.Year, 10)
-                @RenderCell(manpower.ProbationResignedNov, Model.Year, 11)
-                @RenderCell(manpower.ConfirmedResignedNov, Model.Year, 11)
-                @RenderCell(manpower.NewHireNov, Model.Year, 11)
-                @RenderCell(manpower.ActiveUserNov, Model.Year, 11)
-                @RenderCell(manpower.ProbationResignedDec, Model.Year, 12)
-                @RenderCell(manpower.ConfirmedResignedDec, Model.Year, 12)
-                @RenderCell(manpower.NewHireDec, Model.Year, 12)
-                @RenderCell(manpower.ActiveUserDec, Model.Year, 12)
-            </tr>
+            {
+                <tr>
+                    <td>
+                        @(index++)
+                    </td>
+                    <td class="tooltip" title="@manpower.GroupName">
+                        @manpower.GroupCode
+                    </td>
+                    <td class="right">
+                        @manpower.ProbationResigned
+                    </td>
+                    <td class="right">
+                        @manpower.ConfirmedResigned
+                    </td>
+                    <td class="right">
+                        @manpower.NewHire
+                    </td>
+                    <td class="right">
+                        @manpower.ActiveUser
+                    </td>
+                    @RenderCell(manpower.ProbationResignedJan, Model.Year, 1)
+                    @RenderCell(manpower.ConfirmedResignedJan, Model.Year, 1)
+                    @RenderCell(manpower.NewHireJan, Model.Year, 1)
+                    @RenderCell(manpower.ActiveUserJan, Model.Year, 1)
+                    @RenderCell(manpower.ProbationResignedFeb, Model.Year, 2)
+                    @RenderCell(manpower.ConfirmedResignedFeb, Model.Year, 2)
+                    @RenderCell(manpower.NewHireFeb, Model.Year, 2)
+                    @RenderCell(manpower.ActiveUserFeb, Model.Year, 2)
+                    @RenderCell(manpower.ProbationResignedMar, Model.Year, 3)
+                    @RenderCell(manpower.ConfirmedResignedMar, Model.Year, 3)
+                    @RenderCell(manpower.NewHireMar, Model.Year, 3)
+                    @RenderCell(manpower.ActiveUserMar, Model.Year, 3)
+                    @RenderCell(manpower.ProbationResignedApr, Model.Year, 4)
+                    @RenderCell(manpower.ConfirmedResignedApr, Model.Year, 4)
+                    @RenderCell(manpower.NewHireApr, Model.Year, 4)
+                    @RenderCell(manpower.ActiveUserApr, Model.Year, 4)
+                    @RenderCell(manpower.ProbationResignedMay, Model.Year, 5)
+                    @RenderCell(manpower.ConfirmedResignedMay, Model.Year, 5)
+                    @RenderCell(manpower.NewHireMay, Model.Year, 5)
+                    @RenderCell(manpower.ActiveUserMay, Model.Year, 5)
+                    @RenderCell(manpower.ProbationResignedJun, Model.Year, 6)
+                    @RenderCell(manpower.ConfirmedResignedJun, Model.Year, 6)
+                    @RenderCell(manpower.NewHireJun, Model.Year, 6)
+                    @RenderCell(manpower.ActiveUserJun, Model.Year, 6)
+                    @RenderCell(manpower.ProbationResignedJul, Model.Year, 7)
+                    @RenderCell(manpower.ConfirmedResignedJul, Model.Year, 7)
+                    @RenderCell(manpower.NewHireJul, Model.Year, 7)
+                    @RenderCell(manpower.ActiveUserJul, Model.Year, 7)
+                    @RenderCell(manpower.ProbationResignedAug, Model.Year, 8)
+                    @RenderCell(manpower.ConfirmedResignedAug, Model.Year, 8)
+                    @RenderCell(manpower.NewHireAug, Model.Year, 8)
+                    @RenderCell(manpower.ActiveUserAug, Model.Year, 8)
+                    @RenderCell(manpower.ProbationResignedSep, Model.Year, 9)
+                    @RenderCell(manpower.ConfirmedResignedSep, Model.Year, 9)
+                    @RenderCell(manpower.NewHireSep, Model.Year, 9)
+                    @RenderCell(manpower.ActiveUserSep, Model.Year, 9)
+                    @RenderCell(manpower.ProbationResignedOct, Model.Year, 10)
+                    @RenderCell(manpower.ConfirmedResignedOct, Model.Year, 10)
+                    @RenderCell(manpower.NewHireOct, Model.Year, 10)
+                    @RenderCell(manpower.ActiveUserOct, Model.Year, 10)
+                    @RenderCell(manpower.ProbationResignedNov, Model.Year, 11)
+                    @RenderCell(manpower.ConfirmedResignedNov, Model.Year, 11)
+                    @RenderCell(manpower.NewHireNov, Model.Year, 11)
+                    @RenderCell(manpower.ActiveUserNov, Model.Year, 11)
+                    @RenderCell(manpower.ProbationResignedDec, Model.Year, 12)
+                    @RenderCell(manpower.ConfirmedResignedDec, Model.Year, 12)
+                    @RenderCell(manpower.NewHireDec, Model.Year, 12)
+                    @RenderCell(manpower.ActiveUserDec, Model.Year, 12)
+                </tr>
             }
         }
         else
-        { 
+        {
             @RazorHelper.DisplayNoInformation(colspan: 42)
         }
     </tbody>
     <tfoot>
         <tr class="footer">
-            <td colspan="2">@Labels.Total
+            <td colspan="2">
+                @Labels.Total
             </td>
-            <td class="right">@Model.Manpowers.Sum(t => t.ProbationResigned)
+            <td class="right">
+                @Model.Manpowers.Sum(t => t.ProbationResigned)
             </td>
-            <td class="right">@Model.Manpowers.Sum(t => t.ConfirmedResigned)
+            <td class="right">
+                @Model.Manpowers.Sum(t => t.ConfirmedResigned)
             </td>
-            <td class="right">@Model.Manpowers.Sum(t => t.NewHire)
+            <td class="right">
+                @Model.Manpowers.Sum(t => t.NewHire)
             </td>
-            <td class="right">@Model.Manpowers.Sum(t => t.ActiveUser)
+            <td class="right">
+                @Model.Manpowers.Sum(t => t.ActiveUser)
             </td>
             @RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedJan), Model.Year, 1)
             @RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedJan), Model.Year, 1)
@@ -245,20 +252,21 @@
     </tfoot>
 </table>
 @helper RenderCell(int value, int year, int month)
+{
+    string display = "-";
+    if (DateTime.Now.Year > year)
     {
-        string display = "-";
-        if (DateTime.Now.Year > year)
+        display = value.ToString();
+    }
+    else if (DateTime.Now.Year == year)
+    {
+        if (DateTime.Now.Month >= month)
         {
             display = value.ToString();
         }
-        else if (DateTime.Now.Year == year)
-        {
-            if (DateTime.Now.Month >= month)
-            {
-                display = value.ToString();
-            }
-        }
+    }
 
-    <td class="right">@display
+    <td class="right">
+        @display
     </td>
 }

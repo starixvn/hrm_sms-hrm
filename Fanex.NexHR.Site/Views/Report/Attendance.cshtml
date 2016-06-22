@@ -13,39 +13,48 @@
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>
-    @ViewBag.Title</h2>
+    @ViewBag.Title
+</h2>
 <div class="container_24 bunhat">
     @using (Html.BeginGetForm())
     {
         @Html.ValidationSummary(true)
-        
+
         @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
-         @Html.HiddenFor(model => model.SupervisorId)
+        @Html.HiddenFor(model => model.SupervisorId)
         <div class="grid_2 gridlabel">
             @Labels.DateRange
         </div>
         <div class="grid_4">
             <select id="Date" name="Date">
                 <option value="0">
-                    @Labels.DateRange</option>
+                    @Labels.DateRange
+                </option>
                 <option value="1">
-                    @Labels.ToDay</option>
+                    @Labels.ToDay
+                </option>
                 <option value="2">
-                    @Labels.Yesterday</option>
+                    @Labels.Yesterday
+                </option>
                 <option value="3">
-                    @Labels.CurrentWeek</option>
+                    @Labels.CurrentWeek
+                </option>
                 <option value="4">
-                    @Labels.LastWeek</option>
+                    @Labels.LastWeek
+                </option>
                 <option value="5">
-                    @Labels.CurrentMonth</option>
+                    @Labels.CurrentMonth
+                </option>
                 <option value="6">
-                    @Labels.LastMonth</option>
+                    @Labels.LastMonth
+                </option>
                 <option value="7">
-                    @Labels.SinceLastMonth</option>
+                    @Labels.SinceLastMonth
+                </option>
             </select>
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
-        
+
         <div class="grid_2">
             From date
         </div>
@@ -79,7 +88,7 @@
             }
             @Html.DropDownListFor(model => model.AttendanceType, types)
         </div>
-        
+
         <div class="grid_2">
             @Labels.Team
         </div>
@@ -93,7 +102,7 @@
             {
                 <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
                     @foreach (Team item in ViewBag.Groups)
-                    { 
+                    {
                         <option value="@item.Id">@item.Name</option>
                     }
                 </select>
@@ -108,7 +117,7 @@
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
         @Html.HiddenFor(model => model.IsMember)
-        
+
         <div class="clear">
         </div>
         <div class="space">
@@ -117,34 +126,33 @@
         </div>
         <div class="space">
         </div>
-        
+
         <div class="grid_2 gridlabel">
             @Labels.Category
         </div>
         <div class="grid_4">
             @{
-            var category = new List<SelectListItem>
+        var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
             }
             @Html.DropDownList("category", category, new { @class = "category" })
         </div>
-        
 
-        
         <div class="grid_4" style="margin-top: 5px;">
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
-        
+
         <div class="grid_2">
-            &nbsp</div>
-        
+            &nbsp
+        </div>
+
         <div class="grid_6">
-            <input type="submit" value="@Labels.Submit" id="view"/>
+            <input type="submit" value="@Labels.Submit" id="view" />
             <input type="button" value="Excel" id="btnExcel" />
         </div>
         <div class="clear">
@@ -155,12 +163,10 @@
 </div>
 <div class="space">
 </div>
-<table id="data" class="data persist-area">
+<table id="data" class="table table-custom persist-area">
     <thead>
         <tr class="persist-header">
-            <th>
-                #
-            </th>
+            <th>@Labels.SymbolCount</th>
             <th>
                 @Labels.Date
             </th>
@@ -201,17 +207,16 @@
             </th>
         </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-	<tr {{if LateIn > 30 || EarlyOut > 30}}class="highlight-row"{{/if}}>
+    <tr {{if LateIn > 30 || EarlyOut > 30}} class="highlight-row" {{/if}}>
         <td>${index()}</td>
 
-		{{if IsWeekend == true}}
-            <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
+        {{if IsWeekend == true}}
+        <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
         {{else}}
-			<td>${jsonToDetailsDate(AttendanceDate)}</td>
+        <td>${jsonToDetailsDate(AttendanceDate)}</td>
         {{/if}}
 
         <td title="${FullName}" class="left tooltip">
@@ -221,13 +226,13 @@
             ${TeamCode}
         </td>
         {{if IsOffDay != 0 && ShiftId != null}}
-            <td class=" mytimesheet-workinginoffday tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
-                ${ShiftCode}
-            </td>
+        <td class=" mytimesheet-workinginoffday tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
+            ${ShiftCode}
+        </td>
         {{else}}
-            <td class="tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
-                ${ShiftCode}
-            </td>
+        <td class="tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
+            ${ShiftCode}
+        </td>
         {{/if}}
         <td class="tooltip" title="${jsonToFullDateTime(InFixed)}">
             {{if InFixed}}${jsonTojsDate(InFixed).format("HH:MM")}{{/if}}
@@ -237,22 +242,22 @@
         </td>
         <td>
             {{if TotalWorkHours > 0}}
-                ${totalHoursToTime(TotalWorkHours)}
+            ${totalHoursToTime(TotalWorkHours)}
             {{/if}}
         </td>
         <td>
             {{if LateIn > 0}}
-                ${displayMinute(LateIn)}
+            ${displayMinute(LateIn)}
             {{/if}}
         </td>
         <td>
             {{if EarlyOut > 0}}
-                ${displayMinute(EarlyOut)}
+            ${displayMinute(EarlyOut)}
             {{/if}}
         </td>
         <td>
             {{if RequestList != null > 0}}
-                {{each RequestList}}
+            {{each RequestList}}
             <a href='#' class="tooltip-request req"
                data-requesttype="${RequestType.Id}"
                data-fromdate="${FromDate}"
@@ -266,14 +271,14 @@
                data-totalmins="${TotalMins}"
                data-remark='${Remark}'>
                 ${RequestType.Name}
-            </a> 
-                {{/each}}
-               
+            </a>
+            {{/each}}
+
             {{/if}}
         </td>
         <td>
             {{if IsOvertime != 0}}
-                <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
+            <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
             {{/if}}
         </td>
         <td class="left">
@@ -281,7 +286,7 @@
         </td>
         <td class="td-warning">
             {{if IsWarning == true}}
-                <span class="icon-warning"/>
+            <span class="icon-warning" />
             {{/if}}
         </td>
     </tr>

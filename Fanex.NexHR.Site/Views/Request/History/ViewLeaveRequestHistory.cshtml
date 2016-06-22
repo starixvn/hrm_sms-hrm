@@ -1,6 +1,6 @@
 ﻿@model IList<RequestEntity>
 
-<table class="data">
+<table class="table table-custom">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -28,13 +28,13 @@
                     <td class="tooltip" title="@request.Requester.Team.Name">@request.Requester.Team.Code</td>
                     <td class="tooltip" title="@request.Requester.FullName">@request.Requester.NickName</td>
                     <td>@request.LeaveType.Name</td>
-                    <td class="ddMMyyyy highlight">
+                    <td class="ddMMyyyy">
                         @request.FromDate.ToDateMonthYearFormatedDate()
                     </td>
-                    <td class="ddMMyyyy highlight">
+                    <td class="ddMMyyyy">
                         @request.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    <td class="highlight">@request.TotalDays.ToString("0.0")</td>
+                    <td>@request.TotalDays.ToString("0.0")</td>
                     <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()</td>
 
                     @if (!string.IsNullOrWhiteSpace(request.Remark))

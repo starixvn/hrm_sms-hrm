@@ -74,11 +74,21 @@
                     color: rgba(0, 0, 0, 0.2);
                     cursor: default;
                 }
+
+                &.rowdivider {
+                    background: #f2f2c2;
+                }
             }
         }
     }
 
     tfoot {
+        tr {
+            &.summary {
+                background-color: #bbf8f2;
+            }
+        }
+
         #pagination {
             select.itemsPerPageOption {
                 min-width: unset;

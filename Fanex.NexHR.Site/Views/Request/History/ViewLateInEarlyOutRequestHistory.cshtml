@@ -1,6 +1,6 @@
 ﻿@model IList<RequestEntity>
 
-<table class="data">
+<table class="table table-custom">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -29,9 +29,9 @@
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName
                     </td>
-                    <td class="highlight">@request.RequestType.ToString()</td>
-                    <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.RequestType.Id)</td>
-                    <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@request.RequestType.ToString()</td>
+                    <td>@RazorHelper.LateInEarlyOutTimeFormat(request.TotalMins, (short)request.RequestType.Id)</td>
+                    <td class="ddMMyyyy">@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.FromShift.Name</td>
                     <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()</td>
 

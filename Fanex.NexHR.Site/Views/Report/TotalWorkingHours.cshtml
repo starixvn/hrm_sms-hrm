@@ -16,12 +16,12 @@
 
 @section Breadcrumb {
     <a class="step">HR</a>
-	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
- @using (Html.BeginForm())
- {        
+@using (Html.BeginForm())
+{
     @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
     <div class="container_24 bunhat">
         <div class="grid_2 gridlabel">
@@ -30,21 +30,29 @@
         <div class="grid_4">
             <select id="Date" name="Date">
                 <option value="0">
-                    @Labels.DateRange</option>
+                    @Labels.DateRange
+                </option>
                 <option value="1">
-                    @Labels.ToDay</option>
+                    @Labels.ToDay
+                </option>
                 <option value="2">
-                    @Labels.Yesterday</option>
+                    @Labels.Yesterday
+                </option>
                 <option value="3">
-                    @Labels.CurrentWeek</option>
+                    @Labels.CurrentWeek
+                </option>
                 <option value="4">
-                    @Labels.LastWeek</option>
+                    @Labels.LastWeek
+                </option>
                 <option value="5">
-                    @Labels.CurrentMonth</option>
+                    @Labels.CurrentMonth
+                </option>
                 <option value="6">
-                    @Labels.LastMonth</option>
+                    @Labels.LastMonth
+                </option>
                 <option value="7">
-                    @Labels.SinceLastMonth</option>
+                    @Labels.SinceLastMonth
+                </option>
             </select>
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
@@ -87,7 +95,7 @@
                                 selected = "selected";
                             }
                         }
-                        <option @selected value="@team.Id">@team.Name</option> 
+                        <option @selected value="@team.Id">@team.Name</option>
                     }
                 }
             </select>
@@ -100,23 +108,22 @@
             @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="clear"></div>
-    <div class="space"></div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="clear"></div>
+        <div class="space"></div>
 
-    <div class="grid_5 prefix_2">
-        <input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit"/>
-        <input id="btnExcel" type="submit" value="Excel"/>
+        <div class="grid_5 prefix_2">
+            <input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit" />
+            <input id="btnExcel" type="submit" value="Excel" />
+        </div>
+        <div class="clear"></div>
     </div>
-    <div class="clear"></div>
-    </div>
- }
-
-<table class="data persist-area">
+}
+<table class="table table-custom persist-area">
     <thead>
-        <tr class = "persist-header">
-            <th>#</th>
+        <tr class="persist-header">
+            <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
             <th>@Labels.Name</th>
             <th>@Labels.Nick</th>
@@ -124,37 +131,37 @@
             <th>@Labels.WorkigDay</th>
             <th>@Labels.ActualWorkingDay</th>
             <th>@Labels.LeaveTaken</th>
-            <th> Upaid leave </th>
-            <th>Late in</th>
-            <th>Early out</th>
+            <th>@Labels.UnpaidLeave</th>
+            <th>@Labels.LateIn</th>
+            <th>@Labels.EarlyOut</th>
             <th>@Labels.TotalHours</th>
             <th>Average Hours</th>
         </tr>
     </thead>
-   
-@if (ViewBag.EntityList.Count > 0)
-{
-    <tbody>
-    @{int index = 1;}
-    @foreach (TotalWorkingHours item in ViewBag.EntityList)
+    @if (ViewBag.EntityList.Count > 0)
     {
-        var requestModel = new RequestViewModel
-        {
-            DateOption = Model.DateOption,
-            FromDate = Model.FromDate,
-            ToDate = Model.ToDate,
-            EmployeeId = item.Employee.Id,
-            Employee = item.Employee.NickName + " (" + item.Employee.FullName + ")",
-            TeamIds = string.Empty,
-            StatusId = 0,
-            RequestType = (int)RequestFilter.Leave,
-            ViewType = RequestViewType.CompanySpace
-        };
-            <tr>
-                    <td>@(index++)
+        <tbody>
+            @{int index = 1;}
+            @foreach (TotalWorkingHours item in ViewBag.EntityList)
+            {
+                var requestModel = new RequestViewModel
+                {
+                    DateOption = Model.DateOption,
+                    FromDate = Model.FromDate,
+                    ToDate = Model.ToDate,
+                    EmployeeId = item.Employee.Id,
+                    Employee = item.Employee.NickName + " (" + item.Employee.FullName + ")",
+                    TeamIds = string.Empty,
+                    StatusId = 0,
+                    RequestType = (int)RequestFilter.Leave,
+                    ViewType = RequestViewType.CompanySpace
+                };
+                <tr>
+                    <td>
+                        @(index++)
                     </td>
                     <td>@item.Employee.Code</td>
-                    <td class="left">@item.Employee.FullName</td>
+                    <td class="align-left">@item.Employee.FullName</td>
                     <td>@item.Employee.NickName</td>
                     <td>@item.Employee.Team.Name</td>
                     <td>@item.WorkingDay</td>
@@ -176,12 +183,12 @@
                     <td>@Utilities.MinuteToTime(item.EarlyOutMins)</td>
                     <td>@Utilities.TotalHoursToTime(item.TotalHours)</td>
                     <td>@Utilities.TotalHoursToTime(item.AverageHours)</td>
-                </tr>  
+                </tr>
+            }
+        </tbody>
     }
-    </tbody>
-}
-else
-{ 
-    @RazorHelper.DisplayNoInformation(colspan: 13);
-}
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 13);
+    }
 </table>

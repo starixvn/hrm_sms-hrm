@@ -1,6 +1,6 @@
 ﻿@model IList<RequestEntity>
 
-<table class="data">
+<table class="table table-custom">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -29,13 +29,13 @@
                     <td class="tooltip" title="@request.Requester.FullName">
                         @request.Requester.NickName
                     </td>
-                    <td class="highlight">
+                    <td>
                         @request.RequestType.ToString()
                     </td>
-                    <td class="highlight">
+                    <td>
                         @request.FromShift.Name
                     </td>
-                    <td class="ddMMyyyyhhmm highlight">
+                    <td class="ddMMyyyyhhmm">
                         @request.RequestedDate.ToShortFormatedDate()
                     </td>
                     <td class="ddMMyyyyhhmm">

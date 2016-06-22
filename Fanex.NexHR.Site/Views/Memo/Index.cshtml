@@ -44,7 +44,7 @@
     </div>
     <div class="clear">
     </div>
-    <table id="memo" class="data persist-area" style="width: 900px">
+    <table id="memo" class="table table-custom persist-area" style="width: 900px">
         <thead>
             <tr class="persist-header">
                 <th>@Labels.SymbolCount</th>
@@ -72,7 +72,7 @@
                         <td>
                             @item.RefNo
                         </td>
-                        <td class="left">
+                        <td class="align-left">
                             <a href="@Url.Action("detail", "memo", new { Id = item.Id })">@item.Subject</a>
                         </td>
                         <td>

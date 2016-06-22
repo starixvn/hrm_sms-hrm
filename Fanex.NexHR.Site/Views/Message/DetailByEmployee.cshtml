@@ -19,53 +19,52 @@
 
 @if (!ReferenceEquals(Model, null))
 {
-    <table class="data memo" style="width:50%;">
+    <table class="table table-custom memo" style="width:50%;">
         <thead>
             <tr>
                 <th colspan="4">
                     @Model.Subject
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                @Labels.Category
-            </td>
-            <td>
-                <b>@Model.CategoryName</b>
-            </td>
-        </tr>
-        <tr>
-            <td class="left" style="width:80px;">
-                @Labels.FromDate
-            </td>
-            <td class="left">
-                <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Labels.ToDate
-            </td>
-            <td>
-                <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
-            </td>
-        </tr>
-        <tr>
-            <td class="left">
-                @Labels.Content
-            </td>
-            <td colspan="3">
-                <b>@Model.Contents</b>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="align-left">
+                    @Labels.Category
+                </td>
+                <td class="align-left">
+                    <b>@Model.CategoryName</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left" style="width:80px;">
+                    @Labels.FromDate
+                </td>
+                <td class="align-left">
+                    <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    @Labels.ToDate
+                </td>
+                <td class="align-left">
+                    <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    @Labels.Content
+                </td>
+                <td colspan="3" class="align-left">
+                    <b>@Model.Contents</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <a href="/Message/ViewMessageOfEmployee" class="button">@Labels.Back</a>
 }
 else
 {
     <h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
 }
-

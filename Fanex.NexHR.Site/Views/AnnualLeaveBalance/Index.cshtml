@@ -50,21 +50,21 @@
                 <div class="grid_6">
                     <select id="TeamId" multiple="multiple" name="TeamId" class="yearpicker">
                         @{
-            var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
-            var selected = string.Empty;
-            foreach (Team team in ViewBag.Groups)
-            {
-                selected = string.Empty;
-                if (teamIds != null)
-                {
-                    int pos = Array.IndexOf(teamIds, team.Id.ToString());
-                    if (pos > -1)
-                    {
-                        selected = "selected";
-                    }
-                }
-                <option @selected value="@team.Id">@team.Name</option>
-            }
+                            var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
+                            var selected = string.Empty;
+                            foreach (Team team in ViewBag.Groups)
+                            {
+                                selected = string.Empty;
+                                if (teamIds != null)
+                                {
+                                    int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                                    if (pos > -1)
+                                    {
+                                        selected = "selected";
+                                    }
+                                }
+                                <option @selected value="@team.Id">@team.Name</option>
+                            }
                         }
                     </select>
                 </div>
@@ -112,8 +112,7 @@
     <div class="clear">
     </div>
 }
-
-<table class="data persist-area">
+<table class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
             <th rowspan="2">
@@ -121,312 +120,312 @@
             </th>
             <th rowspan="2">
                 @Labels.Nick
-        </th>
-        <th rowspan="2">
-            @Labels.KeepInView
-    </th>
-    <th rowspan="2">
-        @Labels.AnnualLeave
-</th>
-<th colspan="12">
-    Leave's Report @Model.Year
-</th>
-<th rowspan="2">
-    Balance of AL @Model.Year
-</th>
-<th rowspan="2">
-    Balance of KIV @Model.Year
-</th>
-@if (hasPermissionToEdit)
-{
-    <th rowspan="2">
-        @Labels.Edit
-</th>
-}
-</tr>
-<tr>
-    <th>
-        @Labels.Jan
-</th>
-<th>
-    @Labels.Feb
-</th>
-<th>
-    @Labels.Mar
-</th>
-<th>
-    @Labels.Apr
-</th>
-<th>
-    @Labels.May
-</th>
-<th>
-    @Labels.Jun
-</th>
-<th>
-    @Labels.Jul
-</th>
-<th>
-    @Labels.Aug
-</th>
-<th>
-    @Labels.Sep
-</th>
-<th>
-    @Labels.Oct
-</th>
-<th>
-    @Labels.Nov
-</th>
-<th>
-    @Labels.Dec
-</th>
-</tr>
-</thead>
-@*Check if exists*@
-@{
-    bool checkSummaryList = true;
-    foreach (LeaveSummaryByTeam leaveSumaryByTeam in ViewBag.LeaveSummaryByTeamList)
-    {
-        if (leaveSumaryByTeam.LeaveSummaryInTeam.Count > 0)
+            </th>
+            <th rowspan="2">
+                @Labels.KeepInView
+            </th>
+            <th rowspan="2">
+                @Labels.AnnualLeave
+            </th>
+            <th colspan="12">
+                Leave's Report @Model.Year
+            </th>
+            <th rowspan="2">
+                Balance of AL @Model.Year
+            </th>
+            <th rowspan="2">
+                Balance of KIV @Model.Year
+            </th>
+            @if (hasPermissionToEdit)
+            {
+                <th rowspan="2">
+                    @Labels.Edit
+                </th>
+            }
+        </tr>
+        <tr>
+            <th>
+                @Labels.Jan
+            </th>
+            <th>
+                @Labels.Feb
+            </th>
+            <th>
+                @Labels.Mar
+            </th>
+            <th>
+                @Labels.Apr
+            </th>
+            <th>
+                @Labels.May
+            </th>
+            <th>
+                @Labels.Jun
+            </th>
+            <th>
+                @Labels.Jul
+            </th>
+            <th>
+                @Labels.Aug
+            </th>
+            <th>
+                @Labels.Sep
+            </th>
+            <th>
+                @Labels.Oct
+            </th>
+            <th>
+                @Labels.Nov
+            </th>
+            <th>
+                @Labels.Dec
+            </th>
+        </tr>
+    </thead>
+    @*Check if exists*@
+    @{
+        bool checkSummaryList = true;
+        foreach (LeaveSummaryByTeam leaveSumaryByTeam in ViewBag.LeaveSummaryByTeamList)
         {
-            checkSummaryList = true;
-            break;
-        }
-        else
-        {
-            checkSummaryList = false;
-        }
+            if (leaveSumaryByTeam.LeaveSummaryInTeam.Count > 0)
+            {
+                checkSummaryList = true;
+                break;
+            }
+            else
+            {
+                checkSummaryList = false;
+            }
 
+        }
     }
-}
-@if (checkSummaryList)
-{
-    <tbody>
-        @{int index = 1;}
-        @foreach (LeaveSummaryByTeam item in ViewBag.LeaveSummaryByTeamList)
-        {
-            if (item.LeaveSummaryInTeam.Count > 0)
+    @if (checkSummaryList)
+    {
+        <tbody>
+            @{int index = 1;}
+            @foreach (LeaveSummaryByTeam item in ViewBag.LeaveSummaryByTeamList)
             {
-                <tr>
-                    <td class="rowdivider highlight left" colspan="19">
-                        <b>@item.Team.Name.ToUpper()</b>
-                    </td>
-                </tr>
-            }
-
-            foreach (LeaveSummary leave in item.LeaveSummaryInTeam)
-            {
-                <tr>
-                    <td>
-                        <input type="checkbox" class="aba" data-id="@leave.Employee.Id" />
-                    </td>
-                    <td class="tooltip" title="@leave.Employee.FullName">
-                        @leave.Employee.NickName
-                </td>
-                <td>
-                    @if (leave.CreditKIV > 0)
-                    {
-                        <span>@leave.CreditKIV.ToString("0.0")</span>
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.AnnualLeaveCurrentYear > 0)
-                        {
-                            <span>@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
-                        }
-                        if (leave.AnnualLeaveCurrentYear < 0)
-                        {
-                            <span class="red">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Jan > 0)
-                        {
-                            <span>@leave.Jan.ToString("0.0")</span>
-                        }
-                        if (leave.Jan < 0)
-                        {
-                            <span class="red">@leave.Jan.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Feb > 0)
-                        {
-                            <span>@leave.Feb.ToString("0.0")</span>
-                        }
-                        if (leave.Feb < 0)
-                        {
-                            <span class="red">@leave.Feb.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Mar > 0)
-                        {
-                            <span>@leave.Mar.ToString("0.0")</span>
-                        }
-                        if (leave.Mar < 0)
-                        {
-                            <span class="red">@leave.Mar.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Apr > 0)
-                        {
-                            <span>@leave.Apr.ToString("0.0")</span>
-                        }
-                        if (leave.Apr < 0)
-                        {
-                            <span class="red">@leave.Apr.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.May > 0)
-                        {
-                            <span>@leave.May.ToString("0.0")</span>
-                        }
-                        if (leave.May < 0)
-                        {
-                            <span class="red">@leave.May.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Jun > 0)
-                        {
-                            <span>@leave.Jun.ToString("0.0")</span>
-                        }
-                        if (leave.Jun < 0)
-                        {
-                            <span class="red">@leave.Jun.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Jul > 0)
-                        {
-                            <span>@leave.Jul.ToString("0.0")</span>
-                        }
-                        if (leave.Jul < 0)
-                        {
-                            <span class="red">@leave.Jul.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Aug > 0)
-                        {
-                            <span>@leave.Aug.ToString("0.0")</span>
-                        }
-                        if (leave.Aug < 0)
-                        {
-                            <span class="red">@leave.Aug.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Sep > 0)
-                        {
-                            <span>@leave.Sep.ToString("0.0")</span>
-                        }
-                        if (leave.Sep < 0)
-                        {
-                            <span class="red">@leave.Sep.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Oct > 0)
-                        {
-                            <span>@leave.Oct.ToString("0.0")</span>
-                        }
-                        if (leave.Oct < 0)
-                        {
-                            <span class="red">@leave.Oct.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Nov > 0)
-                        {
-                            <span>@leave.Nov.ToString("0.0")</span>
-                        }
-                        if (leave.Nov < 0)
-                        {
-                            <span class="red">@leave.Nov.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.Dec > 0)
-                        {
-                            <span>@leave.Dec.ToString("0.0")</span>
-                        }
-                        if (leave.Dec < 0)
-                        {
-                            <span class="red">@leave.Dec.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.LeaveBalance >= 0)
-                        {
-                            <span>@leave.LeaveBalance.ToString("0.0")</span>
-                        }
-                        if (leave.LeaveBalance < 0)
-                        {
-                            <span class="red">@leave.LeaveBalance.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                <td>
-                    @{
-                        if (leave.KIVBalance >= 0)
-                        {
-                            <span>@leave.KIVBalance.ToString("0.0")</span>
-                        }
-                        if (leave.KIVBalance < 0)
-                        {
-                            <span class="red">@leave.KIVBalance.ToString("0.0")</span>
-                        }
-                    }
-                </td>
-                @if (hasPermissionToEdit)
+                if (item.LeaveSummaryInTeam.Count > 0)
                 {
-                    <td>
-                        <a href="~/annualleavebalance/employee/@leave.Employee.Id">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                    </td>
+                    <tr>
+                        <td class="rowdivider align-left" colspan="19">
+                            <b>@item.Team.Name.ToUpper()</b>
+                        </td>
+                    </tr>
                 }
-            </tr>
+
+                foreach (LeaveSummary leave in item.LeaveSummaryInTeam)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="aba" data-id="@leave.Employee.Id" />
+                        </td>
+                        <td class="tooltip" title="@leave.Employee.FullName">
+                            @leave.Employee.NickName
+                        </td>
+                        <td>
+                            @if (leave.CreditKIV > 0)
+                            {
+                                <span>@leave.CreditKIV.ToString("0.0")</span>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.AnnualLeaveCurrentYear > 0)
+                                {
+                                    <span>@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
+                                }
+                                if (leave.AnnualLeaveCurrentYear < 0)
+                                {
+                                    <span class="red">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Jan > 0)
+                                {
+                                    <span>@leave.Jan.ToString("0.0")</span>
+                                }
+                                if (leave.Jan < 0)
+                                {
+                                    <span class="red">@leave.Jan.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Feb > 0)
+                                {
+                                    <span>@leave.Feb.ToString("0.0")</span>
+                                }
+                                if (leave.Feb < 0)
+                                {
+                                    <span class="red">@leave.Feb.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Mar > 0)
+                                {
+                                    <span>@leave.Mar.ToString("0.0")</span>
+                                }
+                                if (leave.Mar < 0)
+                                {
+                                    <span class="red">@leave.Mar.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Apr > 0)
+                                {
+                                    <span>@leave.Apr.ToString("0.0")</span>
+                                }
+                                if (leave.Apr < 0)
+                                {
+                                    <span class="red">@leave.Apr.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.May > 0)
+                                {
+                                    <span>@leave.May.ToString("0.0")</span>
+                                }
+                                if (leave.May < 0)
+                                {
+                                    <span class="red">@leave.May.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Jun > 0)
+                                {
+                                    <span>@leave.Jun.ToString("0.0")</span>
+                                }
+                                if (leave.Jun < 0)
+                                {
+                                    <span class="red">@leave.Jun.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Jul > 0)
+                                {
+                                    <span>@leave.Jul.ToString("0.0")</span>
+                                }
+                                if (leave.Jul < 0)
+                                {
+                                    <span class="red">@leave.Jul.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Aug > 0)
+                                {
+                                    <span>@leave.Aug.ToString("0.0")</span>
+                                }
+                                if (leave.Aug < 0)
+                                {
+                                    <span class="red">@leave.Aug.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Sep > 0)
+                                {
+                                    <span>@leave.Sep.ToString("0.0")</span>
+                                }
+                                if (leave.Sep < 0)
+                                {
+                                    <span class="red">@leave.Sep.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Oct > 0)
+                                {
+                                    <span>@leave.Oct.ToString("0.0")</span>
+                                }
+                                if (leave.Oct < 0)
+                                {
+                                    <span class="red">@leave.Oct.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Nov > 0)
+                                {
+                                    <span>@leave.Nov.ToString("0.0")</span>
+                                }
+                                if (leave.Nov < 0)
+                                {
+                                    <span class="red">@leave.Nov.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.Dec > 0)
+                                {
+                                    <span>@leave.Dec.ToString("0.0")</span>
+                                }
+                                if (leave.Dec < 0)
+                                {
+                                    <span class="red">@leave.Dec.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.LeaveBalance >= 0)
+                                {
+                                    <span>@leave.LeaveBalance.ToString("0.0")</span>
+                                }
+                                if (leave.LeaveBalance < 0)
+                                {
+                                    <span class="red">@leave.LeaveBalance.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (leave.KIVBalance >= 0)
+                                {
+                                    <span>@leave.KIVBalance.ToString("0.0")</span>
+                                }
+                                if (leave.KIVBalance < 0)
+                                {
+                                    <span class="red">@leave.KIVBalance.ToString("0.0")</span>
+                                }
+                            }
+                        </td>
+                        @if (hasPermissionToEdit)
+                        {
+                            <td>
+                                <a href="~/annualleavebalance/employee/@leave.Employee.Id">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
             }
-        }
-    </tbody>
-}
-else
-{
-    @RazorHelper.DisplayNoInformation(19)
-}
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(19)
+    }
 </table>
 <div class="hide">
     <div id="insertform" title="Adjust annual leave balance">

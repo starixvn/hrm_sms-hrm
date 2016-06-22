@@ -137,6 +137,14 @@ table.table.table-custom tbody tr td .icon-delete.fa-disabled {
   cursor: default;
 }
 
+table.table.table-custom tbody tr td.rowdivider {
+  background: #f2f2c2;
+}
+
+table.table.table-custom tfoot tr.summary {
+  background-color: #bbf8f2;
+}
+
 table.table.table-custom tfoot #pagination select.itemsPerPageOption {
   min-width: unset;
   max-width: unset;
