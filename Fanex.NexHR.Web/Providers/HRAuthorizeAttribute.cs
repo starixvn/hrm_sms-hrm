@@ -1,10 +1,6 @@
 ﻿using Fanex.NexHR.Models;
 using Nexus.RoleManagement.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -16,12 +12,12 @@ namespace Fanex.NexHR.Web.Providers
         public HRAuthorizeAttribute(Policy policy, params string[] functionKey)
         {
             Policy = policy;
-            FunctionKey = string.Join(",", functionKey);
+            FunctionKey = functionKey;
         }
 
         private Policy Policy { get; set; }
 
-        private string FunctionKey { get; set; }
+        private string[] FunctionKey { get; set; }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -38,7 +34,7 @@ namespace Fanex.NexHR.Web.Providers
             if (isAuthorized)
             {
                 var user = (UserLoginModel)httpContext.Session["CurrentUser"];
-                foreach (var functionKey in FunctionKey.Split(','))
+                foreach (var functionKey in FunctionKey)
                 {
                     var hasPermission = user.HasPermission(functionKey, Policy);
                     if (hasPermission)
