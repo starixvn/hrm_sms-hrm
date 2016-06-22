@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[EmployeeContract] (
+    [EmpID]              INT            NOT NULL,
+    [BankAccount]        NVARCHAR (100) NULL,
+    [TaxCode]            NVARCHAR (150) NULL,
+    [SocialInsuranceNo]  NVARCHAR (150) NULL,
+    [RegisteredHospital] NVARCHAR (250) NULL,
+    [Contract1]          TINYINT        NULL,
+    [FromDate1]          DATETIME       NULL,
+    [ToDate1]            DATETIME       NULL,
+    [Contract2]          TINYINT        NULL,
+    [FromDate2]          DATETIME       NULL,
+    [ToDate2]            DATETIME       NULL,
+    [Contract3]          TINYINT        NULL,
+    [FromDate3]          DATETIME       NULL,
+    [ToDate3]            DATETIME       NULL,
+    [Contract4]          TINYINT        NULL,
+    [FromDate4]          DATETIME       NULL,
+    [ToDate4]            DATETIME       NULL,
+    [Contract5]          TINYINT        NULL,
+    [FromDate5]          DATETIME       NULL,
+    [ToDate5]            DATETIME       NULL,
+    [History]            NVARCHAR (500) NULL,
+    CONSTRAINT [PK_EmployeeContract_1] PRIMARY KEY CLUSTERED ([EmpID] ASC) ON [Employee]
+);
+

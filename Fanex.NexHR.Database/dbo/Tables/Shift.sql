@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[Shift] (
+    [ShiftID]           INT             IDENTITY (1, 1) NOT NULL,
+    [Code]              VARCHAR (20)    NOT NULL,
+    [Name]              NVARCHAR (100)  NOT NULL,
+    [BeginCheckInTime]  NCHAR (5)       NOT NULL,
+    [EndCheckInTime]    NCHAR (5)       NOT NULL,
+    [BeginCheckOutTime] NCHAR (5)       NOT NULL,
+    [EndCheckOutTime]   NCHAR (5)       NOT NULL,
+    [BreakTimeMins]     INT             NOT NULL,
+    [OrderNo]           SMALLINT        NULL,
+    [BeginBreakTime]    NCHAR (5)       NULL,
+    [EndBreakTime]      NCHAR (5)       NULL,
+    [CrossDay]          SMALLINT        NULL,
+    [Color]             NVARCHAR (50)   NULL,
+    [TotalHours]        DECIMAL (10, 2) NULL,
+    [IsInAfterDay]      BIT             NULL,
+    [IsOutAfterDay]     BIT             NULL,
+    [IsDisabled]        BIT             NULL,
+    [CreatedBy]         INT             NULL,
+    [CreatedDate]       DATETIME        NULL,
+    [ModifiedBy]        INT             NULL,
+    [ModifiedDate]      DATETIME        NULL,
+    CONSTRAINT [PK_Shift] PRIMARY KEY CLUSTERED ([ShiftID] ASC) ON [EmpCommon]
+);
+
