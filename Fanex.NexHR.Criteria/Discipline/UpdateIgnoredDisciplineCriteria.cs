@@ -27,8 +27,6 @@
             }
         }
 
-        public int RoleId { get; set; }
-
         [SpParam(Ignored = true)]
         public IList<IgnoredDisciplineModel> IgnoredDisciplines { get; set; }
 

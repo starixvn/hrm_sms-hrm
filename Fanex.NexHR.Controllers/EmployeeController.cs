@@ -41,6 +41,7 @@
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
+        private readonly IRoleService _roleService;
 
         public EmployeeController()
             : this(null, null, null, null, null)
@@ -52,13 +53,15 @@
             ITeamService teamService,
             ILookupDataService lookupDataService,
             IShiftService shiftService,
-            ICommandService commandService)
+            ICommandService commandService,
+            IRoleService roleService = null)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.teamService = teamService ?? new TeamService();
             this.lookupDataService = lookupDataService ?? new LookupDataService();
             this.shiftService = shiftService ?? new ShiftService();
             this.commandService = commandService ?? new CommandService();
+            _roleService = roleService ?? new RoleService();
         }
 
         public ActionResult Index()
@@ -227,7 +230,6 @@
             IList<Country> countryList = employeeService.GetAllCountry(getAllCountryCriteria);
             model.ListCountryCode = countryList.Select(x => new SelectListItem { Text = x.CountryName, Value = x.CountryCode }).ToList();
 
-            CheckAdminUserRole();
             GetListSupervisorName(id, out verifier, out approver, out shiftManager, out actingSupervisor, out disciplinarian);
             model.Verifier = verifier;
             model.Approver = approver;
@@ -235,6 +237,7 @@
             model.EmpShiftList = shiftManager;
             model.ActingEmpList = actingSupervisor;
             this.ComposeViewBagsForEditEmployee();
+            ViewBag.Roles = _roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
 
             return View(model);
         }
@@ -255,7 +258,6 @@
             IList<Country> countryList = employeeService.GetAllCountry(getAllCountryCriteria);
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
             model.ListCountryCode = new List<SelectListItem>();
-            CheckRoleUser(model);
 
             if (ModelState.IsValid)
             {
@@ -284,8 +286,8 @@
             model.EmpShiftList = shiftManager;
             model.ActingEmpList = actingSupervisor;
 
-            CheckAdminUserRole();
             this.ComposeViewBagsForEditEmployee();
+            ViewBag.Roles = _roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
 
             return View(model);
         }
@@ -662,27 +664,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private void CheckRoleUser(Employee model)
-        {
-            if (model.RoleList != null && model.RoleList.Any())
-            {
-                if (model.RoleList.Any(x => x == (int)RoleSystem.SystemAdmin))
-                {
-                    var roleList = Enum.GetValues(typeof(RoleSystem)).Cast<RoleSystem>()
-                        .Where(x => (int)x != (int)RoleSystem.Member && (int)x != (int)RoleSystem.EditDiscipline)
-                        .Select(x => (int)x).ToList();
-                    roleList.AddRange(model.RoleList.Where(x => x != (int)RoleSystem.SystemAdmin).Select(x => (int)x));
-                    model.Roles = string.Join(",", roleList);
-                }
-            }
-
-            if (model.RoleList == null)
-            {
-                var role = (int)RoleSystem.Member;
-                model.Roles = role.ToString();
-            }
-        }
-
         private void GetListSupervisorName(
             int id,
             out string verifier,
@@ -758,18 +739,6 @@
             };
 
             return employee;
-        }
-
-        private void CheckAdminUserRole()
-        {
-            var authorize = false;
-            var currentUserRole = this.CurrentUser.RoleList;
-            if (currentUserRole != null)
-            {
-                authorize = currentUserRole.Any(x => x == (int)RoleSystem.SystemAdmin);
-            }
-
-            ViewBag.Authorize = authorize;
         }
 
         [NonAction]

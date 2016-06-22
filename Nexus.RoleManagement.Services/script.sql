@@ -19,7 +19,8 @@ CREATE TABLE [dbo].[Menu]
 ([MenuId]       INT IDENTITY(1, 1)
                     NOT NULL,
  [Name]         NVARCHAR(50) NOT NULL,
- [Url]          NVARCHAR(100) NULL,
+ [Text] NVARCHAR(100) NULL,
+ [Link]          NVARCHAR(100) NULL,
  [ParentId]     INT NULL,
  [FunctionId]   INT NULL,
  [DisplayOrder] INT NULL,
@@ -258,8 +259,9 @@ Param's Explanation:
          SET NOCOUNT ON;
          SELECT DISTINCT
                 me.MenuId,
-                me.[Name] AS MenuName,
-                me.Url AS MenuLink,
+                me.[Name],
+			 me.[Text],
+                me.Link,
                 me.ParentId,
                 me.FunctionId,
                 me.DisplayOrder,
@@ -289,7 +291,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT emRo.RoleId
-		,loDa.Code AS RoleCode
+		,loDa.Code AS RoleCode		
+		,loDa.Name AS RoleName
 	FROM dbo.EmployeeRole AS emRo WITH (NOLOCK)
 		INNER JOIN dbo.LookupData loDa WITH (NOLOCK) ON emRo.RoleId = loDa.Value
 		INNER JOIN dbo.[Lookup] look WITH (NOLOCK) ON look.Id = loDa.LookupId
@@ -401,6 +404,9 @@ GO
   INSERT INTO [dbo].[FunctionKey] VALUES('ApproveOvertime','Approve Overtime',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('CanOnBehalfOthers','Can On Behalf Others',NULL,1)
   INSERT INTO [dbo].[FunctionKey] VALUES('FunctionManagement','Function Management',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('AnonymousFunction','Anonymous Function',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('HRFunction','HR Function',NULL,1)
+  INSERT INTO [dbo].[FunctionKey] VALUES('SAFunction','SA Function',NULL,1)
 
   INSERT INTO [dbo].[RoleFunction] VALUES(7,1,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,2,1,1,1,1,NULL,GETDATE())
@@ -430,9 +436,71 @@ GO
   INSERT INTO [dbo].[RoleFunction] VALUES(7,26,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,27,1,1,1,1,NULL,GETDATE())
   INSERT INTO [dbo].[RoleFunction] VALUES(7,28,1,1,1,1,NULL,GETDATE())
-    INSERT INTO [dbo].[RoleFunction] VALUES(7,29,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,29,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,30,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,31,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(7,32,1,1,1,1,NULL,GETDATE())
+  INSERT INTO [dbo].[RoleFunction] VALUES(6,31,1,1,1,1,NULL,GETDATE())
 
-  --Insert into employeerole from employee table
+  INSERT INTO [dbo].[RoleFunction] VALUES(1,30,1,1,1,1,NULL,GETDATE())
+INSERT INTO [dbo].[RoleFunction] VALUES(2,30,1,1,1,1,NULL,GETDATE())
+INSERT INTO [dbo].[RoleFunction] VALUES(3,30,1,1,1,1,NULL,GETDATE())
+INSERT INTO [dbo].[RoleFunction] VALUES(4,30,1,1,1,1,NULL,GETDATE())
+INSERT INTO [dbo].[RoleFunction] VALUES(5,30,1,1,1,1,NULL,GETDATE())
+INSERT INTO [dbo].[RoleFunction] VALUES(6,30,1,1,1,1,NULL,GETDATE())
+
+
+  
+  
+  INSERT INTO [dbo].[Menu] VALUES('Personal','Personal',NULL,NULL,30,1,1)
+  INSERT INTO [dbo].[Menu] VALUES('HrSpace','Hr Space',NULL,NULL,31,10,1)
+  INSERT INTO [dbo].[Menu] VALUES('CompanySpace','Company Space',NULL,NULL,30,20,1)
+  INSERT INTO [dbo].[Menu] VALUES('SaSpace','Sa Space',NULL,NULL,32,30,1)
+  
+  INSERT INTO [dbo].[Menu] VALUES('Mydashboard','My dashboard','/',1,30,1,1)
+  INSERT INTO [dbo].[Menu] VALUES('LeaveRequest','Leave request','/leave/employeeview',1,30,5,1)
+  INSERT INTO [dbo].[Menu] VALUES('ChangeShift','Change shift','/changeshift/employeeview',1,30,10,1)
+  INSERT INTO [dbo].[Menu] VALUES('LateInEarlyOut','Late in - Early out','/lateinearlyout/employeeview',1,30,15,1)
+  INSERT INTO [dbo].[Menu] VALUES('CheckInCheckOut','Check in - Check out','/checkinout/employeeview',1,30,20,1)
+  INSERT INTO [dbo].[Menu] VALUES('KeepInView','Keep in view','/keepinview/employeeview',1,30,25,1)
+  INSERT INTO [dbo].[Menu] VALUES('MyOvertime','My overtime','/overtime/employeeview',1,30,30,1)
+  INSERT INTO [dbo].[Menu] VALUES('MyTimesheet','My timesheet','/report/timesheet',1,30,35,1)
+  INSERT INTO [dbo].[Menu] VALUES('MyCalendar','My calendar','/calendar/myworkingschedule',1,30,40,1)
+  INSERT INTO [dbo].[Menu] VALUES('MembersRequest','Members''s request','/request/member',1,2,45,1)
+  INSERT INTO [dbo].[Menu] VALUES('MembersOvertime','Members''s overtime','/overtime/memberovertime',1,30,50,1)
+  INSERT INTO [dbo].[Menu] VALUES('DisciplineSummary','Discipline summary','/discipline/disciplinesummary',1,4,55,1)
+  INSERT INTO [dbo].[Menu] VALUES('RequestsStatistic','Requests statistic','/report/leaderrequestmonitoring',1,3,60,1)
+  INSERT INTO [dbo].[Menu] VALUES('ScheduleArrange','Schedule arrange','/calendar/arrangeschedule',1,5,65,1)
+  INSERT INTO [dbo].[Menu] VALUES('ShiftStatistic','Shift statistic','/calendar/shiftstatistic',1,6,70,1)
+  INSERT INTO [dbo].[Menu] VALUES('MyProfile','My profile','/account/index',1,30,75,1)
+  INSERT INTO [dbo].[Menu] VALUES('MyMessage','My message','/message/viewmessageofemployee',1,30,80,1)
+  
+  INSERT INTO [dbo].[Menu] VALUES('EmployeeRequest','Employee''s request','/request/hrview',2,15,1,1)
+  INSERT INTO [dbo].[Menu] VALUES('EmployeeOvertime','Employee''s overtime','/overtime/employeeovertime',2,16,5,1)
+  INSERT INTO [dbo].[Menu] VALUES('RequestStatistic','Request statistic','/report/hrrequestmonitoring',2,3,15,1)
+  INSERT INTO [dbo].[Menu] VALUES('UserManagement','User management','/employee/usermanagement',2,14,20,1)
+  INSERT INTO [dbo].[Menu] VALUES('SectionManagement','Section management','/team/index',2,13,25,1)
+  INSERT INTO [dbo].[Menu] VALUES('JobTitleManagement','Job title management','/jobtitle/jobtitlemanagement',2,12,30,1)
+  INSERT INTO [dbo].[Menu] VALUES('TimeRecord','Time record','/report/timerecord',2,11,35,1)
+  INSERT INTO [dbo].[Menu] VALUES('Reports','Reports','/report/index',2,10,40,1)
+  INSERT INTO [dbo].[Menu] VALUES('Message','Message','/message/index',2,9,45,1)
+  
+  
+  INSERT INTO [dbo].[Menu] VALUES('ContactList','Contact list','/employee/index',3,30,1,1)
+  INSERT INTO [dbo].[Menu] VALUES('WorkingCalendars','Working calendars','/calendar/workingcalendars',3,30,5,1)
+  INSERT INTO [dbo].[Menu] VALUES('DailyRequest','Daily request','/request/dailyview',3,NULL,15,1)
+  INSERT INTO [dbo].[Menu] VALUES('AttendanceReport','Attendance report','/report/attendance',3,30,20,1)
+  INSERT INTO [dbo].[Menu] VALUES('AnnualLeaveBalance','Annual leave balance','/annualleavebalance/index',3,19,25,1)
+  INSERT INTO [dbo].[Menu] VALUES('UnpaidLeave','Unpaid leave','/report/unpaidleavesummary',3,30,30,1)
+  INSERT INTO [dbo].[Menu] VALUES('ExtensionNumber','Extension number','/extensionnumber/index',3,8,35,1)
+  INSERT INTO [dbo].[Menu] VALUES('CompanyMemo','Company memo','/memo/index',3,7,40,1)
+  
+  INSERT INTO [dbo].[Menu] VALUES('CreateAccount','Create account','/employee/create',4,14,1,1)
+  INSERT INTO [dbo].[Menu] VALUES('VoidRequest','Void request','/request/voidrequest',4,17,5,1)
+  INSERT INTO [dbo].[Menu] VALUES('Division','Division','/department/index',4,18,10,1)
+  INSERT INTO [dbo].[Menu] VALUES('FunctionManagement','Function management','/function/index',4,29,15,1)
+
+  --INSERT INTO employeerole from employee table
   CREATE TABLE #Employee (
 	EmpId INT
 	,Roles VARCHAR(20)

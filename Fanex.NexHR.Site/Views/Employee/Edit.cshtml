@@ -1,6 +1,8 @@
 ﻿@model Employee
 @{
     ViewBag.Title = "Edit";
+    var roles = (IEnumerable<Nexus.RoleManagement.Services.SystemRoleModel>)ViewBag.Roles;
+    var roleItemList = roles.Select(i => new SelectListItem() { Text = i.RoleName, Value = i.RoleId });
 }
 @section css{
     @Url.CombresLink("employeeeditcss")
@@ -48,7 +50,7 @@
                 </div>
                 <div class="line">
                     <div class="label">
-                        @Html.LabelFor(model=>model.Code, Labels.EmployeeID)
+                        @Html.LabelFor(model => model.Code, Labels.EmployeeID)
                     </div>
                     <div class="input">
                         @Html.EditorFor(model => model.Code)
@@ -165,7 +167,7 @@
                     </div>
                     <div class="input">
                         @{
-                            var gender = new List<SelectListItem>
+    var gender = new List<SelectListItem>
                             {
                                 new SelectListItem() {Text = "Unknown", Value = ""},
                                 new SelectListItem() {Text = "Female", Value = "0"},
@@ -552,21 +554,9 @@
                         @Html.Label(Labels.AuthorityLevel)
                     </div>
                     <div class="input" id="userRole">
-                        @{
-                            var roles = new List<SelectListItem>
-                            {
-                                new SelectListItem() {Text = "Verifier", Value = "2"},
-                                new SelectListItem() {Text = "Approver", Value = "3"},
-                                new SelectListItem() {Text = "Shift Monitor", Value = "4"},
-                                new SelectListItem() {Text = "On Behalf Function", Value = "5"},
-                                new SelectListItem() {Text = "Human Resource", Value = "6"},
-                                new SelectListItem() {Text = "System Admin", Value = "7"},
-                                new SelectListItem() {Text = "Edit Discipline", Value = "8"}
-                            };
-                        }
                         @Html.CheckBox("Member", true, new { disabled = true })
-                        @Html.Label("Member", "Member")
-                        @Html.CheckBoxListFor(model => model.RoleArray, roles)
+                            @Html.Label("Member", "Member")
+                        @Html.CheckBoxListFor(model => model.RoleArray, roleItemList)
                         @Html.ValidationMessageFor(model => model.RoleArray)
                     </div>
                     <div class="clear">
@@ -610,7 +600,7 @@
                     </div>
                     <div class="input">
                         @{
-                        var empType = new List<SelectListItem>
+    var empType = new List<SelectListItem>
                             {
                                 new SelectListItem() {Text = "Local", Value = "true"},
                                 new SelectListItem() {Text = "Expat", Value = "false"},
@@ -717,7 +707,6 @@
             <div class="input">
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
-                @Html.Hidden("Authorize", (bool)ViewBag.Authorize)
                 <input type="button" value="Save" id="postform" class="space" />
                 <input type="button" id="delete" value="Delete" class="space" />
                 <input type="button" id="resetpassword" value="Reset Password" />

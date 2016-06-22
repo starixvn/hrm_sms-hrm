@@ -223,7 +223,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.RequestStatistic)]
         public ActionResult LeaderRequestMonitoring()
         {
-            string viewRole = GetUserRoles();
+            string viewRole = string.Join(",", CurrentUser.NE_Roles.Select(i => i.RoleId));
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             var model = new RequestsMonitoringViewModel
@@ -716,34 +716,6 @@
             MemoryStream output = new MemoryStream();
             hssfworkbook.Write(output);
             return File(output.ToArray(), "application/vnd.ms-excel", fileName);
-        }
-
-        private string GetUserRoles()
-        {
-            string currentUserrole = string.Empty;
-            var listRole = CurrentUser.RoleList;
-            if (listRole != null)
-            {
-                if (listRole.Any(x => x == (int)RoleSystem.Approver))
-                {
-                    currentUserrole = ((int)RoleSystem.Approver).ToString();
-                }
-
-                if (listRole.Any(x => x == (int)RoleSystem.Verifier))
-                {
-                    int roleId = (int)RoleSystem.Verifier;
-                    if (string.IsNullOrEmpty(currentUserrole))
-                    {
-                        currentUserrole = roleId.ToString();
-                    }
-                    else
-                    {
-                        currentUserrole += string.Concat(',', (int)RoleSystem.Verifier);
-                    }
-                }
-            }
-
-            return currentUserrole;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
+    using Nexus.RoleManagement.Services;
 
     /// <summary>
     /// UI Controller.
@@ -71,65 +72,16 @@ namespace Fanex.NexHR.Controllers
             var routeData = ControllerContext.ParentActionViewContext.RouteData;
             ViewBag.Controller = routeData.Values["controller"];
             ViewBag.Action = routeData.Values["action"];
-            ViewBag.NavigationItems = GetNagivationData();
+            var menus = GetNagivationData();
 
-            return PartialView();
+            return PartialView(menus);
         }
 
-        /// <summary>
-        /// Get navigation site map.
-        /// </summary>
-        /// <returns>Return list.</returns>
         [NonAction]
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
-        public IList<NavigationViewModel> GetNagivationData()
+        public IEnumerable<MenuModel> GetNagivationData()
         {
-            var navigationItemList = new List<NavigationViewModel>();
-            var roles = Roles.GetRolesForUser();
-            navigationItemList = new List<NavigationViewModel>();
-
-            // populate sitemap data
-            SiteMapNode root = SiteMap.RootNode;
-
-            foreach (SiteMapNode sectionNode in root.ChildNodes)
-            {
-                var user = this.CurrentUser;
-                //// section level
-                if (sectionNode.Roles.Count == 0 || this.CurrentUser.IsInRoles(sectionNode.Roles.Cast<string>().ToList<string>()))
-                {
-                    var sectionItem = new NavigationViewModel(sectionNode);
-                    navigationItemList.Add(sectionItem);
-
-                    // populate navigation item by section item
-                    sectionItem.Childs = new List<NavigationViewModel>();
-                    foreach (SiteMapNode navNode in sectionNode.ChildNodes)
-                    {
-                        var navItem = new NavigationViewModel(navNode);
-                        if (navNode.Roles == null || navNode.Roles.Count == 0 || roles.Any(i => navNode.Roles.Contains(i)))
-                        {
-                            if (navItem.Title.Equals("My messages"))
-                            {
-                                var criteria = new GetUnreadMessageOfEmployeeCriteria
-                                {
-                                    EmployeeId = this.CurrentUser.Id
-                                };
-                                IEnumerable<Message> unreadMessages = _messageService.GetUnreadMessageOfEmployee(criteria);
-
-                                if (unreadMessages != null && unreadMessages.Count() > 0)
-                                {
-                                    navItem.Title += " (" + unreadMessages.Count() + ")";
-                                }
-                            }
-
-                            sectionItem.Childs.Add(navItem);
-                        }
-                    }
-
-                    CheckRoleForDisplayNavigationItem(sectionNode, user, sectionItem);
-                }
-            }
-
-            return navigationItemList;
+            return CurrentUser.NE_Menus;
         }
 
         /// <summary>

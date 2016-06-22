@@ -1,7 +1,7 @@
 ﻿@model Fanex.NexHR.Models.Employee
 @using Fanex.NexHR.Core.Enums
 @{
-    ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information" ;
+    ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information";
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
@@ -20,7 +20,7 @@
     {
         <a class="step" href="@Url.Action("index", "employee")">Contact list</a>
     }
-    
+
     <span class="step">@ViewBag.Title</span>
 }
 <div class="leftpersonal">
@@ -110,7 +110,7 @@
                     <div class="clear">
                     </div>
                 </div>
-                
+
                 <div class="line">
                     <div class="label">
                         Card No:
@@ -123,44 +123,48 @@
                 </div>
                 if (Model.PassportNo != null)
                 {
-                <div class="line">
-                    <div class="label">
-                        Passport No:
+                    <div class="line">
+                        <div class="label">
+                            Passport No:
+                        </div>
+                        <div class="pcontent">
+                            @Model.PassportNo
+                        </div>
+                        <div class="clear">
+                        </div>
                     </div>
-                    <div class="pcontent">
-                        @Model.PassportNo
-                    </div>
-                    <div class="clear">
-                    </div>
-                </div>
                 }
 
                 if (Model.PassportExp != null)
                 {
                     var date = (DateTime)Model.PassportExp;
-                <div class="line">
-                    <div class="label">
-                        Passport Exp:
+                    <div class="line">
+                        <div class="label">
+                            Passport Exp:
+                        </div>
+                        <div class="pcontent">
+                            @date.ToString("dd MMM, yyyy")
+                        </div>
+                        <div class="clear">
+                        </div>
                     </div>
-                    <div class="pcontent">
-                        @date.ToString("dd MMM, yyyy")
-                    </div>
-                    <div class="clear">
-                    </div>
-                </div>
                 }
 
                 if (Model.WorkingDays > 0)
                 {
-                    <div class="line"> <div class="label"> Working Days: </div> <div class="pcontent">
-                    @Model.WorkingDays
-                </div> <div class="clear"> </div> </div>
+                    <div class="line">
+                        <div class="label"> Working Days: </div> <div class="pcontent">
+                            @Model.WorkingDays
+                        </div> <div class="clear"> </div>
+                    </div>
                 }
                 if (Model.WorkingHours > 0)
                 {
-                    <div class="line"> <div class="label"> Working Hours: </div> <div class="pcontent">
-                    @Model.WorkingHours
-                </div> <div class="clear"> </div> </div>
+                    <div class="line">
+                        <div class="label"> Working Hours: </div> <div class="pcontent">
+                            @Model.WorkingHours
+                        </div> <div class="clear"> </div>
+                    </div>
                 }
             }
         </div>
@@ -195,7 +199,7 @@
                     Roles:
                 </div>
                 <div class="pcontent role">
-                    @Model.MemberRole()
+                    @Model.NX_Roles2String)
                 </div>
                 <div class="clear">
                 </div>
@@ -361,77 +365,77 @@
             @{
                 if ((bool)ViewBag.DefaultCalendar)
                 {
-                       <div class="line">
-                <div class="label2">
-                    Default Working Calendar:
-                </div>
-                <div class="pcontent">
-                    
-                    <div class="schedule">
-                        <div class="day">
-                            Mon
+                    <div class="line">
+                        <div class="label2">
+                            Default Working Calendar:
                         </div>
-                        <div class="shift">
-                            @ViewBag.Mon
-                        </div>
-                    </div>
-                    <div class="schedule">
-                        <div class="day">
-                            Tue
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Tue
-                        </div>
-                    </div>
-                    <div class="schedule">
-                        <div class="day">
-                            Wed
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Wed
-                        </div>
-                    </div>
-                    <div class="schedule">
-                        <div class="day">
-                            Thu
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Thu
-                        </div>
-                    </div>
-                    <div class="schedule">
-                        <div class="day">
-                            Fri
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Fri
-                        </div>
-                    </div>
-                    <div class="scheduleoff">
-                        <div class="day">
-                            Sat
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Sat
-                        </div>
-                    </div>
-                    <div class="scheduleoff">
-                        <div class="day">
-                            Sun
-                        </div>
-                        <div class="shift">
-                            @ViewBag.Sun
-                        </div>
-                    </div>
+                        <div class="pcontent">
 
-                </div>
-                <div class="clear">
-                </div>
-            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Mon
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Mon
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Tue
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Tue
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Wed
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Wed
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Thu
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Thu
+                                </div>
+                            </div>
+                            <div class="schedule">
+                                <div class="day">
+                                    Fri
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Fri
+                                </div>
+                            </div>
+                            <div class="scheduleoff">
+                                <div class="day">
+                                    Sat
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Sat
+                                </div>
+                            </div>
+                            <div class="scheduleoff">
+                                <div class="day">
+                                    Sun
+                                </div>
+                                <div class="shift">
+                                    @ViewBag.Sun
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clear">
+                        </div>
+                    </div>
                 }
-             }
+            }
 
-         
+
         </div>
     </div>
 </div>

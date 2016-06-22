@@ -10,9 +10,11 @@ namespace Nexus.RoleManagement.Services
     {
         public int MenuId { get; set; }
 
-        public string MenuName { get; set; }
+        public string Name { get; set; }
 
-        public string MenuLink { get; set; }
+        public string Text { get; set; }
+
+        public string Link { get; set; }
 
         public int? ParentId { get; set; }
 

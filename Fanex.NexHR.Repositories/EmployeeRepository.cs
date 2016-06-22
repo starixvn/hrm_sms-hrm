@@ -1,39 +1,45 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
+    using Nexus.RoleManagement.Services;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class EmployeeRepository : IEmployeeRepository
     {
         public Employee GetEmployeeById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<Employee, dynamic, Employee>(
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    var employee = new Employee();
+                    employee = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team
                             {
                                 Id = t.TeamID,
                                 Name = t.Team,
-                                Department = new Department 
+                                Department = new Department
                                 {
                                     Id = t.DepartmentId == null ? -1 : t.DepartmentId
                                 }
                             };
                             return e;
                         },
-                        splitOn: "TeamID",
-                        parameters: criteria.GetSpParams());
+                        splitOn: "TeamID").First();
 
-                return entity;
+                    employee.NX_Roles = multi.Read<SystemRoleModel>().ToList();
+
+                    return employee;
+                }
             }
         }
 
@@ -56,18 +62,32 @@
 
         public IList<Employee> GetEmployees(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entityList = db.Query<Employee, dynamic, Employee>(
-                     (e, t) =>
-                     {
-                         e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
-                         return e;
-                     },
-                     splitOn: "TeamID",
-                     parameterValues: criteria.GetSpParams());
+                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                {
+                    var employees = multi.Read<Employee, dynamic, Employee>(
+                        (e, t) =>
+                        {
+                            e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
+                            return e;
+                        },
+                        splitOn: "TeamID");
 
-                PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
+                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                        (er, r) =>
+                        {
+                            er.Role = r;
+
+                            return er;
+                        },
+                        "RoleId");
+                    foreach (var employee in employees)
+                    {
+                        employee.NX_Roles = roles.Where(i => i.EmployeeId == employee.Id).Select(i => i.Role).ToList();
+                    }
+
+                     PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalrow")).FirstOrDefault();
 
                 if (totalitem != null)
@@ -76,7 +96,8 @@
                     totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
                 }
 
-                return entityList.ToList();
+                    return employees.ToList();
+                }
             }
         }
 

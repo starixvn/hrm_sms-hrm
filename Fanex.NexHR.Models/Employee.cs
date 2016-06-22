@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
+    using Nexus.RoleManagement.Services;
 
     public class Employee : EntityBase<int>
     {
@@ -174,6 +175,16 @@
 
         public bool PasswordReset { get; set; }
 
+        public List<SystemRoleModel> NX_Roles { get; set; }
+
+        public string NX_Roles2String
+        {
+            get
+            {
+                return NX_Roles == null ? string.Empty : string.Join(", ", NX_Roles.Select(i => i.RoleName));
+            }
+        }
+
         #region Contract
 
         public string BankAccount { get; set; }
@@ -187,27 +198,6 @@
         public string ExtensionNo { get; set; }
 
         #endregion Contract
-
-        public IList<short> RoleList
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(Roles))
-                {
-                    return null;
-                }
-
-                var roles = Roles.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                var result = new List<short>();
-
-                foreach (var item in roles)
-                {
-                    result.Add(short.Parse(item));
-                }
-
-                return result;
-            }
-        }
 
         public string[] RoleArray
         {
@@ -255,128 +245,9 @@
             }
         }
 
-        public string MemberRoleAbbreviation
-        {
-            get
-            {
-                string roles = string.Empty;
-                if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member))
-                {
-                    return roles = "Member";
-                }
-                else
-                {
-                    foreach (var item in RoleList)
-                    {
-                        switch (item)
-                        {
-                            case (short)RoleSystem.Verifier:
-                                roles += ", Verifier";
-                                break;
-
-                            case (short)RoleSystem.Approver:
-                                roles += ", Approver";
-                                break;
-
-                            case (short)RoleSystem.ShiftManager:
-                                roles += ", SM";
-                                break;
-
-                            case (short)RoleSystem.ActingSupervisor:
-                                roles += ", AS";
-                                break;
-
-                            case (short)RoleSystem.HR:
-                                roles += ", HR";
-                                break;
-
-                            case (short)RoleSystem.SystemAdmin:
-                                roles += ", SA";
-                                break;
-
-                            case (short)RoleSystem.EditDiscipline:
-                                roles += ", Edit Discipline";
-                                break;
-                        }
-                    }
-
-                    roles = roles.Remove(0, roles.IndexOf(' ') + 1);
-                }
-
-                return roles;
-            }
-        }
-
-        public bool IsInRoles(params RoleSystem[] roles)
-        {
-            if (RoleList == null)
-            {
-                return false;
-            }
-
-            var userRoles = System.Web.Security.Roles.GetRolesForUser();
-            return roles.Any(role => userRoles.Contains(role.ToString()));
-        }
-
-        public bool IsInRoles(IList<string> roles)
-        {
-            if (roles == null || roles.Count == 0)
-            {
-                return false;
-            }
-
-            var userRoles = System.Web.Security.Roles.GetRolesForUser();
-            return roles.Any(role => userRoles.Contains(role));
-        }
-
-        public string MemberRole()
-        {
-            string roles = string.Empty;
-            if (string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member))
-            {
-                return roles = "Member";
-            }
-            else
-            {
-                foreach (var item in RoleList)
-                {
-                    switch (item)
-                    {
-                        case 2:
-                            roles += ", Verifier";
-                            break;
-
-                        case 3:
-                            roles += ", Approver";
-                            break;
-
-                        case 4:
-                            roles += ", Shift Manager";
-                            break;
-
-                        case 5:
-                            roles += ", Acting Supervisor";
-                            break;
-
-                        case 6:
-                            roles += ", Human Resource";
-                            break;
-
-                        case 7:
-                            roles += ", System Admin";
-                            break;
-                    }
-                }
-
-                roles = roles.Remove(0, roles.IndexOf(' ') + 1);
-            }
-
-            return roles;
-        }
-
         public bool IsMember()
         {
-            return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member);
+            return NX_Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
         }
     }
 }

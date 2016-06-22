@@ -667,7 +667,7 @@ input:-moz-placeholder {
     top: 1px;
 }
 
-    .xicon.mobile {
+    .xicon.ExtensionNumber {
         background-position: 0px 0px;
     }
 
@@ -675,27 +675,67 @@ input:-moz-placeholder {
         background-position: 0px -72px;
     }
 
-    .xicon.news {
+    .xicon.MyDashboard {
         background-position: -168px 0px;
     }
 
-    .xicon.user {
+    .xicon.MyProfile {
         background-position: -72px -48px;
     }
 
-    .xicon.user1 {
+    .xicon.MembersRequest {
         background-position: -96px -216px;
     }
 
-    .xicon.users {
+    .xicon.MembersOvertime {
+        background-position: -96px -216px;
+    }
+
+    .xicon.DisciplineSummary {
+        background-position: -96px -216px;
+    }
+
+    .xicon.EmployeeRequest {
+        background-position: -96px -216px;
+    }
+
+    .xicon.VoidRequest {
+        background-position: -96px -216px;
+    }
+
+    .xicon.EmployeeOvertime {
+        background-position: -96px -216px;
+    }
+
+    .xicon.DailyRequest {
+        background-position: -96px -216px;
+    }
+
+    .xicon.JobTitleManagement {
+        background-position: -96px -216px;
+    }
+
+    .xicon.UserManagement {
         background-position: -24px 0px;
     }
 
-    .xicon.calendar {
+    .xicon.ContactList {
+        background-position: -24px 0px;
+    }
+
+    .xicon.MyCalendar {
         background-position: -192px 0px;
     }
 
-    .xicon.calendar1 {
+    .xicon.WorkingCalendars {
+        background-position: -192px 0px;
+    }
+
+    .xicon.MyOvertime {
+        background-position: -192px -192px;
+    }
+
+    .xicon.AttendanceReport {
         background-position: -192px -192px;
     }
 
@@ -711,15 +751,19 @@ input:-moz-placeholder {
         background-position: -144px -216px;
     }
 
-    .xicon.calendar6 {
+    .xicon.AnnualLeaveBalance {
         background-position: -120px -216px;
     }
 
-    .xicon.calendar7 {
+    .xicon.LeaveRequest {
         background-position: -24px -216px;
     }
 
-    .xicon.calendar8 {
+    .xicon.UnpaidLeave {
+        background-position: -24px -216px;
+    }
+
+    .xicon.MyTimesheet {
         background-position: 0px -216px;
     }
 
@@ -727,15 +771,23 @@ input:-moz-placeholder {
         background-position: -216px -192px;
     }
 
-    .xicon.memo {
+    .xicon.CompanyMemo {
         background-position: -24px -240px;
     }
 
-    .xicon.adduser {
+    .xicon.CreateAccount {
         background-position: -216px -216px;
     }
 
-    .xicon.setting {
+    .xicon.SectionManagement {
+        background-position: -96px 0px;
+    }
+
+    .xicon.FunctionManagement {
+        background-position: -96px 0px;
+    }
+
+    .xicon.Division {
         background-position: -96px 0px;
     }
 
@@ -743,19 +795,28 @@ input:-moz-placeholder {
         background-position: -168px -216px;
     }
 
-    .xicon.clock1 {
+    .xicon.CheckInCheckOut {
         background-position: -144px -48px;
     }
 
-    .xicon.clock2 {
+    .xicon.LateInEarlyOut {
         background-position: -72px -216px;
     }
 
-    .xicon.clock3 {
+    .xicon.ChangeShift {
         background-position: -48px -216px;
     }
 
-    .xicon.search {
+    .xicon.RequestStatistic {
+        background-position: 0px -96px;
+    }
+
+    .xicon.RequestsStatistic {
+        background-position: 0px -96px;
+    }
+
+
+    .xicon.Reports {
         background-position: 0px -96px;
     }
 
@@ -767,7 +828,7 @@ input:-moz-placeholder {
         background-position: -48px -192px;
     }
 
-    .xicon.keepinview {
+    .xicon.KeepInView {
         background-position: -216px -121px;
     }
 
@@ -775,19 +836,23 @@ input:-moz-placeholder {
         background-position: -216px -96px;
     }
 
-    .xicon.finger {
+    .xicon.TimeRecord {
         background-position: -168px -24px;
     }
 
-    .xicon.message1 {
+    .xicon.MyMessage {
         background-position: -72px 0px;
     }
 
-    .xicon.schedule {
+    .xicon.Message {
+        background-position: -72px 0px;
+    }
+
+    .xicon.ShiftStatistic {
         background-position: -144px -216px;
     }
 
-    .xicon.schedule1 {
+    .xicon.ScheduleArrange {
         background-position: 0px -240px;
     }
 

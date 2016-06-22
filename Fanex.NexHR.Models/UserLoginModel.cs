@@ -9,12 +9,11 @@
 
 namespace Fanex.NexHR.Models
 {
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Security;
-    using Fanex.NexHR.Core.Enums;
-    using Nexus.RoleManagement.Services;
 
     /// <summary>
     /// UserLogin Model.
@@ -52,64 +51,12 @@ namespace Fanex.NexHR.Models
 
         public IEnumerable<MenuModel> NE_Menus { get; set; }
 
-        public IList<short> RoleList
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(Roles))
-                {
-                    return null;
-                }
-
-                var roles = Roles.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                return roles.Select(role => short.Parse(role)).ToList();
-            }
-        }
-
         public string DisplayName
         {
             get
             {
                 return (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FullName)) ? string.Empty : NickName + " (" + FullName + ")";
             }
-        }
-
-        /// <summary>
-        /// Check user is in specific roles.
-        /// </summary>
-        /// <param name="roles">Role of user.</param>
-        /// <returns>Return Boolean.</returns>
-        public bool IsInRoles(params RoleSystem[] roles)
-        {
-            if (RoleList == null)
-            {
-                return false;
-            }
-
-            var userRoles = System.Web.Security.Roles.GetRolesForUser();
-            return roles.Any(role => userRoles.Contains(role.ToString()));
-        }
-
-        /// <summary>
-        /// Check user is in specific roles.
-        /// </summary>
-        /// <param name="roles">Role of user.</param>
-        /// <returns>Return Boolean.</returns>
-        public bool IsInRoles(IList<string> roles)
-        {
-            if (roles == null || roles.Count == 0)
-            {
-                return false;
-            }
-
-            var userRoles = System.Web.Security.Roles.GetRolesForUser();
-            return roles.Any(role => userRoles.Contains(role));
-        }
-
-        public bool IsMember()
-        {
-            return string.IsNullOrWhiteSpace(Roles) || (RoleList.Count == 1 && RoleList[0] == (short)RoleSystem.Member);
         }
 
         public bool HasPermission(string functionKey, Policy policy)

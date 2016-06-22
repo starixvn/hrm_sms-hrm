@@ -37,6 +37,7 @@
             this.commandService = commandService ?? new CommandService();
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult DisciplineSummary(DisciplineSummaryViewModel model)
         {
             if (model != null)
@@ -62,6 +63,7 @@
             return View(model);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialListDisciplineSummary(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineSummaryCriteria
@@ -82,6 +84,7 @@
             return PartialView("_ListDisciplineSummary", disciplines);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult DisciplineDetail(DisciplineSummaryViewModel model)
         {
             if (model != null)
@@ -115,6 +118,7 @@
             return View(model);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialListDisciplineDetail(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineDetailCriteria
@@ -135,6 +139,7 @@
             return PartialView("_ListDisciplineDetail", disciplines);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetOtherDisciplineOfEmployeeCriteria()
@@ -150,6 +155,7 @@
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialAddOtherDiscipline(string employee, int? employeeId = null)
         {
             var criteria = new GetOtherDisciplineTypeCriteria();
@@ -209,13 +215,10 @@
         [HRAuthorize(Policy.Edit, FunctionKey.Discipline)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
-            int roleId = CurrentUser.RoleList.FirstOrDefault(x => x == (int)RoleSystem.EditDiscipline);
-
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
                 IgnoredDisciplines = ignoredDisciplineDetails,
                 ModifiedBy = CurrentUser.Id,
-                RoleId = roleId
             };
 
             CommandResult commandResult = commandService.Update(criteria);

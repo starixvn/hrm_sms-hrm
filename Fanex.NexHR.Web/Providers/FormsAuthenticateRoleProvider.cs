@@ -63,49 +63,50 @@
 
         public override string[] GetRolesForUser(string username)
         {
-            var roles = new List<string>();
-            Employee user = GetCurrentUser(username);
-            if (user != null)
-            {
-                roles.Add(RoleSystem.Member.ToString());
-                if (user.RoleList != null)
-                {
-                    foreach (var item in user.RoleList)
-                    {
-                        switch (item)
-                        {
-                            case (int)RoleSystem.Verifier:
-                                roles.Add(RoleSystem.Verifier.ToString());
-                                break;
-                            case (int)RoleSystem.Approver:
-                                roles.Add(RoleSystem.Approver.ToString());
-                                break;
-                            case (int)RoleSystem.ShiftManager:
-                                roles.Add(RoleSystem.ShiftManager.ToString());
-                                break;
-                            case (int)RoleSystem.ActingSupervisor:
-                                roles.Add(RoleSystem.ActingSupervisor.ToString());
-                                break;
-                            case (int)RoleSystem.HR:
-                                roles.Add(RoleSystem.HR.ToString());
-                                break;
-                            case (int)RoleSystem.SystemAdmin:
-                                roles.Add(RoleSystem.Verifier.ToString());
-                                roles.Add(RoleSystem.Approver.ToString());
-                                roles.Add(RoleSystem.ShiftManager.ToString());
-                                roles.Add(RoleSystem.ActingSupervisor.ToString());
-                                roles.Add(RoleSystem.HR.ToString());
-                                roles.Add(RoleSystem.SystemAdmin.ToString());
-                                break;
-                            case (int)RoleSystem.EditDiscipline:
-                                roles.Add(RoleSystem.EditDiscipline.ToString());
-                                break;
-                        }
-                    }
-                }
-            }
+            //var roles = new List<string>();
+            //Employee user = GetCurrentUser(username);
+            //if (user != null)
+            //{
+            //    roles.Add(RoleSystem.Member.ToString());
+            //    if (user.RoleList != null)
+            //    {
+            //        foreach (var item in user.RoleList)
+            //        {
+            //            switch (item)
+            //            {
+            //                case (int)RoleSystem.Verifier:
+            //                    roles.Add(RoleSystem.Verifier.ToString());
+            //                    break;
+            //                case (int)RoleSystem.Approver:
+            //                    roles.Add(RoleSystem.Approver.ToString());
+            //                    break;
+            //                case (int)RoleSystem.ShiftManager:
+            //                    roles.Add(RoleSystem.ShiftManager.ToString());
+            //                    break;
+            //                case (int)RoleSystem.ActingSupervisor:
+            //                    roles.Add(RoleSystem.ActingSupervisor.ToString());
+            //                    break;
+            //                case (int)RoleSystem.HR:
+            //                    roles.Add(RoleSystem.HR.ToString());
+            //                    break;
+            //                case (int)RoleSystem.SystemAdmin:
+            //                    roles.Add(RoleSystem.Verifier.ToString());
+            //                    roles.Add(RoleSystem.Approver.ToString());
+            //                    roles.Add(RoleSystem.ShiftManager.ToString());
+            //                    roles.Add(RoleSystem.ActingSupervisor.ToString());
+            //                    roles.Add(RoleSystem.HR.ToString());
+            //                    roles.Add(RoleSystem.SystemAdmin.ToString());
+            //                    break;
+            //                case (int)RoleSystem.EditDiscipline:
+            //                    roles.Add(RoleSystem.EditDiscipline.ToString());
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //}
 
-            return roles.ToArray();
+            //return roles.ToArray();
+            throw new NotImplementedException();
         }
 
         public override string[] GetUsersInRole(string roleName)

@@ -255,7 +255,7 @@ namespace Fanex.NexHR.Services.ExportExcel
                     row.GetCell(1).SetCellValue(item.Employee.NickName);
                     row.GetCell(2).SetCellValue(item.Employee.FullName);
                     row.GetCell(3).SetCellValue(item.Employee.Team.Code);
-                    row.GetCell(4).SetCellValue(item.Employee.MemberRoleAbbreviation);
+                    row.GetCell(4).SetCellValue(item.Employee.NX_Roles2String);
 
                     MergeCell(row, rowIndex, rowIndex + 3);
 
