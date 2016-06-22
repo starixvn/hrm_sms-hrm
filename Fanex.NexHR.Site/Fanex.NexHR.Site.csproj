@@ -1182,15 +1182,16 @@
     <Content Include="Content\sass\components\_icon.scss" />
     <Content Include="Content\sass\vendors\_contextmenu.scss" />
     <Content Include="Content\main.scss" />
-    <Content Include="Content\main.css.map">
-      <DependentUpon>main.css</DependentUpon>
-    </Content>
     <Content Include="Content\views\request\employee.request.css.map">
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
     <Content Include="Content\views\employee.scss" />
     <Content Include="Content\views\employee.css.map">
       <DependentUpon>employee.css</DependentUpon>
+    </Content>
+    <Content Include="Content\sass\layout\_grid.scss" />
+    <Content Include="Content\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
     </Content>
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />

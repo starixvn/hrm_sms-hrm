@@ -68,22 +68,26 @@ table.table.table-custom {
   border-collapse: separate !important;
 }
 
-table.table.table-custom thead tr th, table.table.table-custom tbody tr td {
+table.table.table-custom thead tr th, table.table.table-custom tbody tr td, table.table.table-custom tfoot tr td {
+  font-weight: normal;
+  vertical-align: middle;
+  padding: 8px 7px;
+  line-height: 1.42857143;
   border-right-width: 0;
   border-top-width: 0;
   border-left: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
 }
 
-table.table.table-custom thead tr th.align-left, table.table.table-custom tbody tr td.align-left {
+table.table.table-custom thead tr th.align-left, table.table.table-custom tbody tr td.align-left, table.table.table-custom tfoot tr td.align-left {
   text-align: left;
 }
 
-table.table.table-custom thead tr th.align-right, table.table.table-custom tbody tr td.align-right {
+table.table.table-custom thead tr th.align-right, table.table.table-custom tbody tr td.align-right, table.table.table-custom tfoot tr td.align-right {
   text-align: right;
 }
 
-table.table.table-custom thead tr th:last-child, table.table.table-custom tbody tr td:last-child {
+table.table.table-custom thead tr th:last-child, table.table.table-custom tbody tr td:last-child, table.table.table-custom tfoot tr td:last-child {
   border-right: 1px solid #d2d2d2;
 }
 
@@ -92,12 +96,8 @@ table.table.table-custom thead {
 }
 
 table.table.table-custom thead tr th {
-  font-weight: normal;
-  vertical-align: middle;
-  padding: 8px 7px;
   border-color: #646d80;
   text-align: center;
-  line-height: 1.42857143;
 }
 
 table.table.table-custom thead tr:first-child {
@@ -117,10 +117,6 @@ table.table.table-custom tbody tr:nth-child(odd) {
 }
 
 table.table.table-custom tbody tr td {
-  font-weight: normal;
-  vertical-align: middle;
-  padding: 8px 7px;
-  line-height: 1.42857143;
   text-align: center;
 }
 
@@ -141,10 +137,55 @@ table.table.table-custom tbody tr td .icon-delete.fa-disabled {
   cursor: default;
 }
 
-table.table.table-custom tfoot tr {
-  border-left: 1px solid #d2d2d2;
-  border-right: 1px solid #d2d2d2;
-  border-bottom: 1px solid #d2d2d2;
+table.table.table-custom tfoot #pagination select.itemsPerPageOption {
+  min-width: unset;
+  max-width: unset;
+  width: 60px;
+  float: left;
 }
+
+table.table.table-custom tfoot #pagination .detailtext {
+  float: right;
+  padding-top: 8px;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination {
+  padding: 0;
+  float: left;
+  margin-left: 12px;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li {
+  box-shadow: none;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li span, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li a {
+  background: none;
+  cursor: pointer;
+  box-shadow: none;
+  padding: 0 5px;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li span.prev, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li span.next, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li a.prev, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li a.next {
+  background: #78828c;
+  color: #fff;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.active span {
+  background: #78828c;
+  color: #fff;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled span, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled a {
+  cursor: not-allowed;
+}
+
+table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled span.prev, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled span.next, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled a.prev, table.table.table-custom tfoot #pagination ul.pagination.simple-pagination li.disabled a.next {
+  opacity: .7;
+}
+
+/*@import 'sass/layout/grid';
+@import 'sass/layout/forms';*/
+/*@import 'sass/components/buttons';*/
 
 /*# sourceMappingURL=main.css.map */

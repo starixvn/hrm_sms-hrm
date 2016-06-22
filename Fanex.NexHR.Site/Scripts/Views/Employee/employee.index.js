@@ -16,8 +16,8 @@
             itemsOnPage: itemsOnPage,
             currentPage: currentPage,
             displayedPages: 3,
-            prevText: '<i class="fa fa-chevron-left"></i>',
-            nextText: '<i class="fa fa-chevron-right"></i>',
+            prevText: '<i class="fa fa-angle-left"></i>',
+            nextText: '<i class="fa fa-angle-right"></i>',
             ellipsePageSet: false,
             cssStyle: 'compact-theme',
             onPageClick: function (pageNumber) {
@@ -57,6 +57,12 @@
 
                 if ($('table#data #pagination').length > 0) {
                     initPagination();
+
+                    $('#ItemsPerPageOption').on('change', function () {
+                        $('form.form-filter #ItemsPerPage').val($(this).val());
+                        $('form.form-filter #CurrentPage').val(1);
+                        query();
+                    });
                 }
 
                 floatThead('table#data');
@@ -155,9 +161,8 @@
 
         $('#query').on("click", function (evt) {
             evt.preventDefault();
-
-            console.log($('form.form-filter').serialize());
-            query(jobTitleId);
+            $('form.form-filter #CurrentPage').val('1');
+            query();
         });
 
         $("#basicExcel").on('click', function () {
