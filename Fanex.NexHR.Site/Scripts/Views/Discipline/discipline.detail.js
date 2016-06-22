@@ -42,7 +42,7 @@
 
         $('#discipline-detail table.discipline-detail td input.confirmedDiscipline:checkbox')
         .on('click', function () {
-            var hasConfirmed = $(this).data('has-confirmed').toLowerCase() === 'true';
+            var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
 
             if ($(this).prop('checked') !== hasConfirmed) {
                 $(this).data('changed', true);
@@ -132,8 +132,6 @@
     function initEventForSaveChange() {
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
             var ignoredDisciplines = getDataChanged();
-
-            console.log(ignoredDisciplines);
 
             if (ignoredDisciplines.length > 0) {
                 ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });

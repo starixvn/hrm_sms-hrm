@@ -18,7 +18,7 @@
         [StringValue("On Behalf Request")]
         OnBehalfRequest = 5,
 
-        [StringValue("Edit Discipline")]
+        [StringValue("Discipline Manager")]
         DisciplineManager = 8
     }
 }

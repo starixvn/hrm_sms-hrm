@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TeamSupervisorModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.23">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Supervisor
+﻿namespace Fanex.NexHR.Models.Supervisor
 {
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;

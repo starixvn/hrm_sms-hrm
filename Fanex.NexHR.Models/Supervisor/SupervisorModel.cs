@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="SupervisorModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.10.22">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Supervisor
+﻿namespace Fanex.NexHR.Models.Supervisor
 {
-    /// <summary>
-    /// Supervisor Model.
-    /// </summary>
     public class SupervisorModel
     {
         public Employee Supervisor { get; set; }

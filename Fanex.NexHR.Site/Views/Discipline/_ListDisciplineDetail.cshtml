@@ -1,5 +1,7 @@
 ﻿@model IList<DisciplineDetailModel>
+@{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+}
 <table class="data discipline-detail">
     <thead>
         @if (Model != null & Model.Any() && hasPermissionToEdit)
@@ -251,8 +253,8 @@
                         {
                             <span class="float-left">@item.ApproverSubtractScore.ToString("0.0")</span>
                         }
-                        <input class="float-right confirmedDiscipline" type="checkbox" disabled="@item.HasConfirmed.Equals(false)"
-                               data-has-confirmed="@item.HasConfirmed" data-changed="false" />
+                        <input class="float-right confirmedDiscipline" type="checkbox" disabled="@item.HasConfirmed.Equals(false)" checked="@item.Confirmed"
+                               data-confirmed="@item.Confirmed" data-changed="false" />
                     </td>
                     @if (!string.IsNullOrEmpty(item.ApproverComment))
                     {
