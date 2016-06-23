@@ -27,23 +27,14 @@
         });
     }
 
-    function checkDisabledUser() {
-        if ($("#disabled").prop("checked")) {
-            $('table#data .resignedDate').show();
-        } else {
-            $('table#data .resignedDate').hide();
-        }
-    }
-
     function query() {
         $.ajax({
-            url: _global.root + 'employee/ListEmployee',
+            url: _global.root + 'employee/ContactList',
             type: 'POST',
             dataType: 'html',
             data: $('form.form-filter').serialize(),
             success: function (response) {
-                $('#user-management').html(response);
-                checkDisabledUser();
+                $('#contact-list').html(response);
 
                 $('.nick').tooltip({
                     track: true,
@@ -94,32 +85,11 @@
     }
 
     $(document).ready(function () {
-        var jobTitleId = $('#JobtitleId').val();
-        var dropDownTittle = $('#title');
         $("#group").multiselect();
-
-        dropDownTittle.val(jobTitleId);
-        dropDownTittle.chosen();
-        dropDownTittle.trigger("liszt:updated");
-
-        $('#Keyword').keyup(function (event) {
-            if (event.keyCode === 13) {
-                query();
-            }
-        });
-
-        var q = getParam('query');
-        if (q !== null) {
-            $('#Keyword').val(q);
-        }
 
         $('#group').on('change', function () {
             var groupIds = $(this).val() !== null ? $(this).val().join(',') : '';
             $('#GroupIds').val(groupIds);
-        });
-
-        $('#title').on('change', function () {
-            $('#JobtitleId').val($(this).val());
         });
 
         $('#category').on('change', function () {
@@ -136,41 +106,12 @@
             }
         });
 
-        $('#enabled').on('click', function () {
-            $("#IsEnable").val(true);
-            $("#IsDelete").val(null);
-            $('#deleted').prop('checked', false);
-            $('#disabled').prop('checked', false);
-        });
-
-        $('#disabled').on('click', function () {
-            $("#IsEnable").val(false);
-            $("#IsDelete").val(null);
-            $('#deleted').prop('checked', false);
-            $('#enabled').prop('checked', false);
-        });
-
-        $('#deleted').on('click', function () {
-            $("#IsDelete").val(true);
-            $("#IsEnable").val(null);
-            $('#enabled').prop('checked', false);
-            $('#disabled').prop('checked', false);
-        });
-
         query();
 
         $('#query').on("click", function (evt) {
             evt.preventDefault();
             $('form.form-filter #CurrentPage').val('1');
             query();
-        });
-
-        $("#basicExcel").on('click', function () {
-            exportExcel($(this));
-        });
-
-        $("#detailsExcel").on('click', function () {
-            exportExcel($(this));
         });
     });
 })();

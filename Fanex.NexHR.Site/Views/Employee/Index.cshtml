@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Staff info";
+﻿@model UserManagementViewModel
+@{
+    ViewBag.Title = Labels.StaffInfo;
 }
 @section css{
     @Url.CombresLink("contactlistcss")
@@ -10,43 +11,49 @@
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
 <div class="container_24 bunhat">
-    <div class="grid_24">
-        <div class="grid_2 gridlabel">
-            Category
-        </div>
-        <div class="grid_3">
-            @{
-                var category = new List<SelectListItem>
+    <form class="form-filter">
+        @Html.HiddenFor(model => model.GroupIds)
+        @Html.HiddenFor(model => model.IsEnable)
+        @Html.HiddenFor(model => model.IsLocal)
+        @Html.HiddenFor(model => model.CurrentPage)
+        @Html.HiddenFor(model => model.ItemsPerPage)
+        <div class="grid_24">
+            <div class="grid_2 gridlabel">
+                @Html.LabelFor(model => model.Keyword, Labels.Keyword)
+            </div>
+            <div class="grid_7">
+                @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark })
+            </div>
+            <div class="grid_1 gridlabel">
+                @Labels.Team
+            </div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in Model.Groups)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="grid_2 gridlabel">
+                @Labels.Category
+            </div>
+            <div class="grid_3">
+                @{
+                    var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
-            }
-            @Html.DropDownList("category", category, new { @class = "category" })
-        </div>
-        <div class="grid_2 gridlabel">
-            @Labels.Keyword
-        </div>
-        <div class="grid_7">
-            <input id="keyword" type="text" placeholder="@Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark" />
-        </div>
-        <div class="grid_1 gridlabel">
-            @Labels.Team
-        </div>
-        <div class="grid_6">
-            <select id="group" multiple="multiple" class="team-select">
-                @foreach (Team item in ViewBag.Groups)
-                {
-                    <option value="@item.Id">@item.Name</option>
                 }
-            </select>
+                @Html.DropDownList("category", category, new { @class = "category" })
+            </div>
+            <input id="query" type="button" value="@Labels.Submit" />
         </div>
-        <input id="query" type="button" value="Submit" />
-    </div>
+    </form>
 </div>
 <div class="clear">
 </div>
@@ -56,52 +63,4 @@
 </div>
 <div class="space">
 </div>
-<table id="data" class="table table-custom persist-area">
-    <thead>
-        <tr class="persist-header">
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.Code</th>
-            <th>@Labels.Nick</th>
-            <th>@Labels.Name</th>
-            <th>@Labels.Team</th>
-            <th>@Labels.JobTitle</th>
-            <th>@Labels.Skype</th>
-            <th>@Labels.Email</th>
-            <th>@Labels.Phone</th>
-            <th>Ext No</th>
-            <th style="width: 80px">@Labels.GroupDate</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-<script id="itemTemplate" type="text/x-jquery-tmpl">
-    <tr id="row${Id}">
-        <td>
-            ${index()}
-        </td>
-        <td class="left">${Code}</td>
-        <td class="nick left" data-code="${Code}">
-            <a href="/employee/detail/${Id}">${NickName}</a>
-        </td>
-        <td class="left" style="width:110px">${FullName}</td>
-        <td title="${Team[" name"]}" class="tooltip left">${Team["Code"]}</td>
-        <td class="left">${JobTitle}</td>
-        <td class="left"><a href="skype:${Skype}?chat">${Skype}</a></td>
-        <td class="left"><a href="mailto:${Email}">${Email}</a></td>
-        <td title="${Phone}">
-            {{if Phone != null && Phone.indexOf(",") > 0}}
-            ${Phone.substring(0,Phone.indexOf(","))}
-            {{else}}
-            ${Phone}
-            {{/if}}
-        </td>
-        <td class="left">${ExtensionNo}</td>
-        <td style="width:80px">
-            {{if JoinedDate}}
-            ${jsonToShortDate(JoinedDate)}
-            {{/if}}
-        </td>
-    </tr>
-</script>
-<script id="mytemplate" type="text/html">
-</script>
+<div id="contact-list"></div>

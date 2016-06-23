@@ -56,13 +56,13 @@
         </div>
 
         <div class="grid_2">
-            From date
+            @Labels.FromDate
         </div>
         <div class="grid_6">
             @Html.DatePicker("FromDate", Model.FromDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
         <div class="grid_2">
-            To date
+            @Labels.ToDate
         </div>
         <div class="grid_4">
             @Html.DatePicker("ToDate", Model.ToDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
@@ -117,7 +117,6 @@
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
         @Html.HiddenFor(model => model.IsMember)
-
         <div class="clear">
         </div>
         <div class="space">
@@ -126,7 +125,6 @@
         </div>
         <div class="space">
         </div>
-
         <div class="grid_2 gridlabel">
             @Labels.Category
         </div>
@@ -146,11 +144,9 @@
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
-
         <div class="grid_2">
-            &nbsp
+            &nbsp;
         </div>
-
         <div class="grid_6">
             <input type="submit" value="@Labels.Submit" id="view" />
             <input type="button" value="Excel" id="btnExcel" />

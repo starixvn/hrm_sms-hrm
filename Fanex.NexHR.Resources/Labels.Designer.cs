@@ -3337,6 +3337,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staff Info.
+        /// </summary>
+        public static string StaffInfo {
+            get {
+                return ResourceManager.GetString("StaffInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Standard Leave.
         /// </summary>
         public static string StandardLeave {

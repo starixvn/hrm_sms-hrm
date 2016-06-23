@@ -6,7 +6,7 @@
 var rowIndex = 1;
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
-createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours) {
+    createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours) {
     var result = '';
     dontBlock = true;
     $.ajax({

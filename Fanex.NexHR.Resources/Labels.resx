@@ -1410,4 +1410,7 @@
   <data name="UnpaidLeave" xml:space="preserve">
     <value>Unpaid Leave</value>
   </data>
+  <data name="StaffInfo" xml:space="preserve">
+    <value>Staff Info</value>
+  </data>
 </root>

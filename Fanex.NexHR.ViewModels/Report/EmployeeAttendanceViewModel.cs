@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeAttendanceViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels.Report
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// EmployeeAttendance ViewModel.
-    /// </summary>
     public class EmployeeAttendanceViewModel
     {
         [DataType(DataType.Date)]

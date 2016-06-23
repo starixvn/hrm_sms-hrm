@@ -66,15 +66,52 @@
 
         public ActionResult Index()
         {
-            ViewBag.Groups = GetAllTeam();
-            return View();
+            var model = new UserManagementViewModel()
+            {
+                IsEnable = true,
+                Groups = GetAllTeam(),
+                CurrentPage = Constants.CurrentPage,
+                ItemsPerPage = Constants.ItemsPerPage
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ContactList(UserManagementViewModel model)
+        {
+            IList<Employee> employees = new List<Employee>();
+
+            if (model != null)
+            {
+                var criteria = new GetAllEmployeeCriteria()
+                {
+                    Query = model.Keyword,
+                    GroupIds = model.GroupIds,
+                    EnableUser = model.IsEnable,
+                    IsLocalUser = model.IsLocal,
+                    PageNumber = model.CurrentPage,
+                    PageSize = model.ItemsPerPage
+                };
+
+                employees = employeeService.GetEmployees(criteria);
+
+                var pagerOption = new PagerOptionModel()
+                {
+                    CurrentPage = model.CurrentPage,
+                    ItemsPerPage = model.ItemsPerPage,
+                    TotalItem = (int)criteria.TotalRow
+                };
+                ViewBag.PagerOption = pagerOption;
+            }
+
+            return PartialView("_ContactList", employees);
         }
 
         /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
-            IList<Team> groups = GetAllTeam();
             IList<LookupData> listJobTitle = GetAllJobTitle();
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
@@ -88,7 +125,7 @@
                 JobTitleId = jobTitleId,
                 GroupIds = groupIds,
                 IsEnable = true,
-                Groups = groups,
+                Groups = GetAllTeam(),
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage

@@ -79,7 +79,7 @@
       <resource path="~/scripts/libs/date.js" />
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employee/employee.index.js" />
+      <resource path="~/scripts/views/employee/user.management.js" />
     </resourceSet>
 
     <resourceSet name="contactlistcss" type="css">
@@ -90,7 +90,7 @@
       <resource path="~/scripts/libs/date.js" />
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/contactlist.js" />
+      <resource path="~/scripts/views/employee/employee.index.js" />
     </resourceSet>
 
     <resourceSet name="employeecreatecss" type="css">

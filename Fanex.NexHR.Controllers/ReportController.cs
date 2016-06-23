@@ -1,5 +1,11 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
@@ -24,12 +30,6 @@
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
