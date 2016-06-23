@@ -1,11 +1,13 @@
 ﻿select {
-	min-width:152px !important;
+    min-width: 152px !important;
 }
-.offdate
-{
-	background:#ccc; 
+
+.table.table-custom tr.offdate {
+    background: #bdbdbd !important;
 }
-.noshift
-{
-	background: #ccc;
+
+.table.table-custom tr.noshift {
+    background: #bdbdbd !important;
 }
+
+

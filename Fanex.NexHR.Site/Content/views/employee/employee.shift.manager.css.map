@@ -1,0 +1,10 @@
+﻿{
+	"version": 3,
+	"file": "employee.shift.manager.css",
+	"sources": [
+		"employee.shift.manager.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AAAM,MAAM,AAAA,aAAa,CAAL;EAChB,SAAS,EAAE,KAAM;CADA;;AAGjB,MAAM,AAAA,aAAa,CAAC,MAAM,CAAnB;EACH,KAAK,EAAE,IAAK;EACZ,KAAK,EAAE,IAAK;EACZ,MAAM,EAAE,CAAE;EACV,WAAW,EAAE,GAAI;CAJb",
+	"names": []
+}

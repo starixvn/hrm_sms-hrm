@@ -31,7 +31,6 @@
             @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
         }
     </div>
-
     <div class="grid_2 gridlabel fontbold">@Html.LabelFor(model => model.ApproverId)</div>
     <div class="grid_5">
         @if (Model.VerifierAndApprover.Approvers.Count() > 1)
@@ -43,26 +42,22 @@
             @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
         }
     </div>
-
     <div class="grid_1 gridlabel fontbold statusmargin">
         @Labels.Status:
-</div>
+    </div>
     <div class="grid_7 gridlabel">@Model.Status</div>
-
     <div class="float-right">
         <input type="button" id="savefooter" value="@Labels.Save" />
         <input type="button" id="backfooter" value="@Labels.Back" />
     </div>
-
     <div class="clear">
     </div>
     <div class="space">
     </div>
     <div class="clear">
     </div>
-
     <div class="formrow" id="overtimeDetails">
-        <table class="data" id="data">
+        <table class="table table-custom" id="data">
             <thead>
                 <tr>
                     <th>
@@ -100,15 +95,16 @@
                     foreach (OvertimeDaily request in Model.OvertimeRequest)
                     {
                         <tr id="row@(request.Id)">
+                            @Html.HiddenFor(model => request.ShiftId)
                             @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
                             {
-                                <td class="dateColumn weekend">
+                                <td class="weekend">
                                     @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                                 </td>
                             }
                             else
                             {
-                                <td class="dateColumn">
+                                <td>
                                     @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                                 </td>
                             }
@@ -127,8 +123,7 @@
                                     @request.TotalWorkHours
                                 }
                             </td>
-                            @if (request.TotalWorkHours > 0
-                        && !request.IsKeepInView)
+                            @if (request.TotalWorkHours > 0 && !request.IsKeepInView)
                             {
                                 @Html.HiddenFor(model => request.TotalShiftHours)
 
@@ -145,7 +140,6 @@
                                         @request.NormalHours
                                     </td>
                                 }
-
                                 // for Off day.
                                 if (request.IsOffDay)
                                 {
@@ -173,7 +167,6 @@
                                         @request.PublicHours
                                     </td>
                                 }
-
                                 <td>
                                     @Html.TextBoxFor(model => request.Remark)
                                 </td>
@@ -198,7 +191,6 @@
                                         @request.PublicHours
                                     }
                                 </td>
-
                                 if (!string.IsNullOrWhiteSpace(request.Remark))
                                 {
                                     <td>
@@ -210,10 +202,8 @@
                                     <td></td>
                                 }
                             }
-                            @Html.HiddenFor(model => request.ShiftId)
                         </tr>
                     }
-
                 }
                 else
                 {
@@ -221,28 +211,27 @@
                 }
             </tbody>
             <tfoot>
-                <tr class="sum">
-                    <td colspan="1" class="sumhours">
+                <tr class="summary">
+                    <td class="sumhours align-right">
                         @Labels.TotalOvertimeHours:
                     </td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1" id="sumnormal">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td ></td>
+                    <td id="sumnormal">
                         @Model.OvertimeRequest.Sum(t => t.NormalHours).ToString("0.00")
                     </td>
-                    <td colspan="1" id="sumoff">
+                    <td id="sumoff">
                         @Model.OvertimeRequest.Sum(t => t.OffHours).ToString("0.00")
                     </td>
-                    <td colspan="1" id="sumpublic">
+                    <td id="sumpublic">
                         @Model.OvertimeRequest.Sum(t => t.PublicHours).ToString("0.00")
                     </td>
-                    <td colspan="1"></td>
+                    <td></td>
                 </tr>
             </tfoot>
         </table>
-
     </div>
     <div class="clear">
     </div>
@@ -250,12 +239,10 @@
     </div>
     <div class="clear">
     </div>
-
     <div class="float-right">
         <input type="button" id="save" value="@Labels.Save" />
         <input type="button" id="back" value="@Labels.Back" />
     </div>
-
     <div id="errordialog" title="Update Failure!">
     </div>
 }

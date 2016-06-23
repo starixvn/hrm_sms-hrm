@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UIController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -23,9 +14,6 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.ViewModels;
     using Nexus.RoleManagement.Services;
 
-    /// <summary>
-    /// UI Controller.
-    /// </summary>
     [Authorize]
     public class UIController : BaseController
     {
@@ -41,10 +29,6 @@ namespace Fanex.NexHR.Controllers
             _messageService = messageService ?? new MessageService();
         }
 
-        /// <summary>
-        /// The Header.
-        /// </summary>
-        /// <returns>The partial view of current user.</returns>
         [ChildActionOnly]
         public ActionResult Header()
         {
@@ -84,12 +68,6 @@ namespace Fanex.NexHR.Controllers
             return CurrentUser.NE_Menus;
         }
 
-        /// <summary>
-        /// Method check role for display navigation item.
-        /// </summary>
-        /// <param name="sectionNode">SiteMap Node.</param>
-        /// <param name="user">UserLoginModel entity.</param>
-        /// <param name="sectionItem">NavigationViewModel entity.</param>
         private static void CheckRoleForDisplayNavigationItem(
             SiteMapNode sectionNode,
             UserLoginModel user,

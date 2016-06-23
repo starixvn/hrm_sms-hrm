@@ -28,72 +28,77 @@
     }
     <a class="step">@Model.DisplayTitle</a>
 }
-<div class="addnew-supervisor">
-    <span class="title">@Html.Label("Employee")</span> <span class="control">
-        @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
-    </span>
-    @Html.Hidden("SupervisorId")
-    @Html.Hidden("SupervisorTeam")
-    <span class="add">
-        <a id="lknAdd" href="javascript:;">+ Add to list</a>
-    </span>
-</div>
-<div class="addnew-supervisor">
-    <span class="title">@Labels.Team</span> <span class="control">
-        <select id="group" multiple="multiple" class="team-select">
-            @foreach (Team item in ViewBag.Groups)
+<table id="tblSupervisor" class="table table-custom">
+    <thead>
+        <tr>
+            <th colspan="4" class="align-left">
+                <p class="title">@Labels.Employee</p>
+                <span class="control">
+                    @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
+                </span>
+                @Html.Hidden("SupervisorId")
+                @Html.Hidden("SupervisorTeam")
+                <span class="add">
+                    <a id="lknAdd" href="javascript:;">+ Add to list</a>
+                </span>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="4" class="align-left">
+                <p class="title">@Labels.Team</p>
+                <span class="control">
+                    <select id="group" multiple="multiple" class="team-select">
+                        @foreach (Team item in ViewBag.Groups)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </span>
+                <span class="add">
+                    <a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
+                </span>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                @Labels.Priority
+            </th>
+            <th>
+                @Labels.Employee
+            </th>
+            <th>
+                @Labels.Team
+            </th>
+            <th>
+                <a id="removeAll" href="javascript:;">Remove All</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.ShiftManagerList != null)
+        {
+            foreach (var item in Model.ShiftManagerList)
             {
-                <option value="@item.Id">@item.Name</option>
-            }
-        </select>
-    </span><span class="add">
-        <a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
-    </span>
-</div>
-<div>
-    <table id="tblSupervisor" class="datasupervisor">
-        <thead>
-            <tr>
-                <th rowspan="2" class="supervisor">
-                    Priority
-                </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Employee")
-                </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Team")
-                </th>
-                <th rowspan="1">
-                    <a id="removeAll" href="javascript:;">Remove All</a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.ShiftManagerList != null)
-            {
-                foreach (var item in Model.ShiftManagerList)
-                {
-                    <tr>
-                        <td>
-                            <a href="javascript:;" class="up">Up |</a>
-                            <a href="javascript:;" class="down">Down |</a>
-                            <a href="javascript:;" class="moveTop">Top</a>
-                        </td>
-                        <td class="left" data-id="@item.OwnerId">
-                            @item.NickName (@item.FullName)
-                        </td>
-                        <td class="left">
-                            @item.Team
+                <tr>
+                    <td>
+                        <a href="javascript:;" class="up">Up |</a>
+                        <a href="javascript:;" class="down">Down |</a>
+                        <a href="javascript:;" class="moveTop">Top</a>
+                    </td>
+                    <td class="align-left" data-id="@item.OwnerId">
+                        @item.NickName (@item.FullName)
+                    </td>
+                    <td class="align-left">
+                        @item.Team
                     </td>
                     <td>
                         <a href="javascript:;" class="lnkremove">Remove</a>
                     </td>
                 </tr>
-                }
             }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
 <div>
     @Html.Hidden("EmployeeId", Model.EmployeeId)
     @Html.Hidden("TeamId", Model.TeamId)

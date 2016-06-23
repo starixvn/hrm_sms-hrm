@@ -113,13 +113,12 @@
     <resourceSet name="employeesupervisorcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
-      <resource path="~/styles/employeesupervisor.css" />
     </resourceSet>
 
     <resourceSet name="employeeshiftmanagercss" type="css">
       <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
-      <resource path="~/styles/emplyeeshiftmanager.css" />
+      <resource path="~/content/views/employee/employee.shift.manager.min.css" />
     </resourceSet>
 
     <resourceSet name="employeesupervisorjs" type="js">
@@ -515,7 +514,6 @@
 
     <resourceSet name="teamdisciplinesettingcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/content/views/team.min.css" />
     </resourceSet>
     
     <resourceSet name="teamdisciplinesettingjs" type="js">
@@ -753,7 +751,6 @@
 
     <resourceSet name="employeedisciplinesettingcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/content/views/employee.min.css" />
     </resourceSet>
 
     <resourceSet name="employeedisciplinesettingjs" type="js">

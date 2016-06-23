@@ -13,10 +13,10 @@
 }
 <h2>@Labels.MySpace</h2>
 @Html.Hidden("ChangePassword", (bool)ViewBag.ResetPassword)
-<table class="data" id="myspace">
+<table class="table table-custom" id="myspace" style="width: 500px;">
     <thead>
         <tr>
-            <th class="firstColumn">@Labels.Request</th>
+            <th class="align-left">@Labels.Request</th>
             <th>@DateTime.Now.ToString("MMM yyyy")</th>
             <th>@Labels.Pending</th>
             <th>@Labels.CreateRequest</th>
@@ -24,7 +24,7 @@
     </thead>
     <tbody>
         <tr>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Labels.CheckInOut
             </td>
             <td>
@@ -45,7 +45,7 @@
             </td>
         </tr>
         <tr>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Labels.LateInEarlyOut
             </td>
             <td>
@@ -66,7 +66,7 @@
             </td>
         </tr>
         <tr>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Labels.ChangeShift
             </td>
             <td>
@@ -87,7 +87,7 @@
             </td>
         </tr>
         <tr>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Labels.Leave
             </td>
             <td>
@@ -108,7 +108,7 @@
             </td>
         </tr>
         <tr>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Labels.KeepInView
             </td>
             <td>
@@ -128,13 +128,11 @@
                 @Html.ActionLink(Labels.Request, "create", "KeepInView")
             </td>
         </tr>
-		<tr>
-            <td class="firstColumn">
+        <tr>
+            <td class="align-left">
                 @Labels.Overtime
             </td>
-            <td>
-                -
-            </td>
+            <td>-</td>
             <td>
                 @if (Model.TotalPendingOverTimeRequest > 0)
                 { 
@@ -149,7 +147,6 @@
                 @Html.ActionLink(Labels.Request, "employeeView", "overtime")
             </td>
         </tr>
-
     </tbody>
 </table>
 <div class="space">

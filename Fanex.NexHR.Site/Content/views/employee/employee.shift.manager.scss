@@ -1,0 +1,25 @@
+﻿.table.table-custom {
+    max-width: 950px;
+
+    .title {
+        width: 75px;
+        float: left;
+        margin: 0;
+        padding-top: 5px;
+    }
+}
+
+.filter {
+    width: 828px;
+    padding: 10px;
+    background: #F4F4F4;
+    border: 1px solid #d2d2d2;
+}
+
+.filter * {
+    vertical-align: middle;
+}
+
+.ordercode {
+    width: 50px !important;
+}

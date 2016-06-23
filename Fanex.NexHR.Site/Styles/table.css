@@ -165,23 +165,6 @@ table.form div.time {
     width: 120px;
 }
 
-/*My space table*/
-table#myspace {
-    width: 500px;
-}
-
-    table#myspace th.firstColumn {
-        width: 100px;
-    }
-
-    table#myspace td.firstColumn {
-        text-align: left;
-    }
-
-    table#myspace td {
-        text-align: center;
-    }
-
 /*Reports table*/
 table#reports {
     width: 350px;

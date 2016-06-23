@@ -25,7 +25,7 @@ var ScheduleArrangeSort = (function ($) {
             });
         }
     };
-} (jQuery));
+} ($));
 
 $(document).ready(function () {
     ScheduleArrangeSort.init();

@@ -14,7 +14,7 @@
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
-{   
+{
     @Html.ValidationSummary(true)
     <div class="container_24">
         <div class="grid_1 gridlabel">
@@ -33,7 +33,7 @@
         </div>
         <div class="grid_4 pull_1">
             @{
-    var types = new List<SelectListItem>
+                var types = new List<SelectListItem>
                 {
                     new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
                     new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
@@ -47,7 +47,7 @@
             @Html.ValidationMessageFor(model => model.TimeSheetType)
         </div>
         <div class="grid_3 pull_1">
-            <input type="submit" id="view" value="Submit" name="@Labels.View"/>
+            <input type="submit" id="view" value="Submit" name="@Labels.View" />
         </div>
         <div class="clear">
         </div>
@@ -55,12 +55,10 @@
 }
 <div class="clear">
 </div>
-<table id="data" class="data persist-area">
+<table id="data" class="table table-custom persist-area">
     <thead>
         <tr class="persist-header">
-            <th>
-                #
-            </th>
+            <th>@Labels.SymbolCount</th>
             <th>
                 @Labels.Date
             </th>
@@ -100,26 +98,24 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>
 <script id="itemTemplate" type="text/x-jquery-tmpl">
-	<tr {{if IsNotWork != 0}}class="offdate"{{else ShiftId }} {{else}} class="noshift"{{/if}}>
+    <tr {{if IsNotWork != 0}} class="offdate" {{else ShiftId }} {{else}} class="noshift" {{/if}}>
         <td>${index()}</td>
-
-		{{if IsWeekend == true}}
-			<td class="weekend">
-				<a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-					${jsonToDetailsDate(AttendanceDate)}
-				</a>
-			</td>
-		{{else}}
-			<td>
-				<a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-					${jsonToDetailsDate(AttendanceDate)}
-				</a>
-			</td>
-		{{/if}}
+        {{if IsWeekend == true}}
+        <td class="weekend">
+            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+                ${jsonToDetailsDate(AttendanceDate)}
+            </a>
+        </td>
+        {{else}}
+        <td>
+            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
+                ${jsonToDetailsDate(AttendanceDate)}
+            </a>
+        </td>
+        {{/if}}
 
         <td title="${FullName}" class="tooltip">
             ${NickName}
@@ -128,9 +124,9 @@
             ${TeamCode}
         </td>
         {{if IsOffDay != 0 && ShiftId != null}}
-            <td class="mytimesheet-workinginoffday">${ShiftCode}</td>
+        <td class="mytimesheet-workinginoffday">${ShiftCode}</td>
         {{else}}
-            <td>${ShiftCode}</td>
+        <td>${ShiftCode}</td>
         {{/if}}
         <td class="tooltip" title="${jsonToFullDateTime(InFixed)}">
             {{if InFixed}} ${jsonTojsDate(InFixed).format("HH:MM")}{{/if}}
@@ -140,22 +136,22 @@
         </td>
         <td>
             {{if TotalWorkHours > 0}}
-                ${totalHoursToTime(TotalWorkHours)}
+            ${totalHoursToTime(TotalWorkHours)}
             {{/if}}
         </td>
         <td>
             {{if LateIn > 0}}
-                ${displayMinute(LateIn)}
+            ${displayMinute(LateIn)}
             {{/if}}
         </td>
         <td>
             {{if EarlyOut > 0}}
-                ${displayMinute(EarlyOut)}
+            ${displayMinute(EarlyOut)}
             {{/if}}
         </td>
         <td>
             {{if RequestList != null > 0}}
-                {{each RequestList}}
+            {{each RequestList}}
             <a href='#' class="tooltip-request req"
                data-requesttype="${RequestType.Id}"
                data-fromdate="${FromDate}"
@@ -169,14 +165,14 @@
                data-totalmins="${TotalMins}"
                data-remark='${Remark}'>
                 ${RequestType.Name}
-            </a> 
-                {{/each}}
-               
+            </a>
+            {{/each}}
+
             {{/if}}
         </td>
         <td>
             {{if IsOvertime != 0}}
-                <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
+            <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
             {{/if}}
         </td>
         <td class="left">
@@ -184,7 +180,7 @@
         </td>
         <td class="td-warning">
             {{if IsWarning == true}}
-                <span class="icon-warning"/>
+            <span class="icon-warning" />
             {{/if}}
         </td>
     </tr>

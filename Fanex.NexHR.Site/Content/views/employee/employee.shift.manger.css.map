@@ -1,0 +1,10 @@
+﻿{
+	"version": 3,
+	"file": "employee.shift.manger.css",
+	"sources": [
+		"employee.shift.manger.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AACI,MAAM,AAAA,aAAa,CAAC,MAAM,CAAnB;EACH,KAAK,EAAE,IAAK;CADR",
+	"names": []
+}

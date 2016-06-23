@@ -28,52 +28,54 @@
     }
     <a class="step">@Model.DisplayTitle</a>
 }
-<div class="addnew-supervisor">
-    @{
-        if (Model.SupervisorRole == (short)RoleSystem.Verifier)
-        {
-            @Html.Label("Verifier")
-        }
-        if (Model.SupervisorRole == (short)RoleSystem.Approver)
-        {
-            @Html.Label("Approver")
-        }
-        if (Model.SupervisorRole == (short)RoleSystem.ShiftManager)
-        {
-            @Html.Label("Employee")
-        }
-        if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
-        {
-            @Html.Label("Employee")
-            @Html.Hidden("supervisorRole", true)
-        }
-    }
-    @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
-    @Html.Hidden("SupervisorId")
-    @Html.Hidden("SupervisorTeam")
-    <a id="lknAdd" href="javascript:;">+ Add to list</a>
-    @if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
-    {
-        <span class="title team">@Labels.Team</span> <span class="control">
-            <select id="group" multiple="multiple" class="team-select">
-                @foreach (Team item in ViewBag.Groups)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </span><span class="add">
-            <a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
-        </span>
-    }
-</div>
 <div>
-    <table id="tblSupervisor" class="datasupervisor">
+    <table id="tblSupervisor" class="table table-custom">
         <thead>
             <tr>
-                <th rowspan="2" class="supervisor">
-                    Priority
+                <th colspan="10" class="align-left">
+                    @{
+                        if (Model.SupervisorRole == (short)RoleSystem.Verifier)
+                        {
+                            @Labels.Verifier
+                        }
+                        if (Model.SupervisorRole == (short)RoleSystem.Approver)
+                        {
+                            @Labels.Approver
+                        }
+                        if (Model.SupervisorRole == (short)RoleSystem.ShiftManager)
+                        {
+                            @Labels.Employee
+                        }
+                        if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
+                        {
+                            @Labels.Employee
+                            @Html.Hidden("supervisorRole", true)
+                        }
+                    }
+                    @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
+                    @Html.Hidden("SupervisorId")
+                    @Html.Hidden("SupervisorTeam")
+                    <a id="lknAdd" href="javascript:;">+ Add to list</a>
+                    @if (Model.SupervisorRole == (short)RoleSystem.ActingSupervisor)
+                    {
+                        <span class="title team">@Labels.Team</span> <span class="control">
+                            <select id="group" multiple="multiple" class="team-select">
+                                @foreach (Team item in ViewBag.Groups)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </span><span class="add">
+                            <a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
+                        </span>
+                    }
                 </th>
-                <th rowspan="2" class="supervisor">
+            </tr>
+            <tr>
+                <th rowspan="2">
+                    @Labels.Priority
+                </th>
+                <th rowspan="2">
                     @{
                         if (Model.SupervisorRole == (short)RoleSystem.Verifier)
                         {
@@ -90,7 +92,7 @@
                         }
                     }
                 </th>
-                <th rowspan="2" class="supervisor">
+                <th rowspan="2">
                     @Labels.Team
                 </th>
                 <th colspan="6">
@@ -132,10 +134,10 @@
                             <a href="javascript:;" class="down">Down |</a>
                             <a href="javascript:;" class="moveTop">Top</a>
                         </td>
-                        <td class="left" data-id="@item.OwnerId">
+                        <td class="align-left" data-id="@item.OwnerId">
                             @item.NickName (@item.FullName)
                         </td>
-                        <td class="left">
+                        <td class="align-left">
                             @item.Team
                         </td>
                         <td>

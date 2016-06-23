@@ -13,7 +13,6 @@
 @section Breadcrumb {
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
@@ -37,7 +36,7 @@
     </div>
     <div class="clear">
     </div>
-    <table class="data" id="data">
+    <table class="table table-custom" id="data">
         <thead>
             <tr>
                 <th>@Labels.Month</th>
@@ -134,16 +133,16 @@
             }
         </tbody>
         <tfoot>
-            <tr class="sum">
-                <td colspan="1" class="sumhours">
+            <tr class="summary">
+                <td class="sumhours align-right">
                     @Labels.TotalOvertimeHours:
                 </td>
-                <td colspan="1" id="sumtotal"></td>
-                <td colspan="1" id="sumnormal"></td>
-                <td colspan="1" id="sumoff"></td>
-                <td colspan="1" id="sumpublic"></td>
-                <td colspan="1"></td>
-                <td colspan="1"></td>
+                <td id="sumtotal"></td>
+                <td id="sumnormal"></td>
+                <td id="sumoff"></td>
+                <td id="sumpublic"></td>
+                <td></td>
+                <td></td>
             </tr>
         </tfoot>
     </table>

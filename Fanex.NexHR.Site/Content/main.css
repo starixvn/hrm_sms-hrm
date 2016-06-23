@@ -16,8 +16,20 @@
   margin: 0;
 }
 
+.contextMenu li.accepted:hover a, .contextMenu li.accepted:hover i.fa, .contextMenu li.approved:hover a, .contextMenu li.approved:hover i.fa, .contextMenu li.processed:hover a, .contextMenu li.processed:hover i.fa {
+  color: #5eb85d;
+}
+
+.contextMenu li.notaccepted:hover a, .contextMenu li.notaccepted:hover i.fa, .contextMenu li.rejected:hover a, .contextMenu li.rejected:hover i.fa, .contextMenu li.reset:hover a, .contextMenu li.reset:hover i.fa, .contextMenu li.void:hover a, .contextMenu li.void:hover i.fa {
+  color: #da5350;
+}
+
+.contextMenu li.reseted:hover a, .contextMenu li.reseted:hover i.fa, .contextMenu li.edit:hover a, .contextMenu li.edit:hover i.fa {
+  color: #3985bd;
+}
+
 .contextMenu li a {
-  color: #000;
+  color: #78828c;
   text-decoration: none;
   display: block;
   line-height: 20px;
@@ -30,23 +42,6 @@
 
 .contextMenu li a i.fa {
   padding-right: 5px;
-}
-
-.contextMenu li a i.fa.icon-check {
-  color: #5eb85d;
-}
-
-.contextMenu li a i.fa.icon-edit {
-  color: #3985bd;
-}
-
-.contextMenu li a i.fa.icon-delete {
-  color: #da5350;
-}
-
-.contextMenu li.hover a {
-  color: #fff;
-  background-color: #3399ff;
 }
 
 .contextMenu li.disabled a {
@@ -71,12 +66,13 @@ table.table.table-custom {
 table.table.table-custom thead tr th, table.table.table-custom tbody tr td, table.table.table-custom tfoot tr td {
   font-weight: normal;
   vertical-align: middle;
-  padding: 8px 7px;
+  padding: 5px 7px;
   line-height: 1.42857143;
   border-right-width: 0;
   border-top-width: 0;
   border-left: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
+  text-align: center;
 }
 
 table.table.table-custom thead tr th.align-left, table.table.table-custom tbody tr td.align-left, table.table.table-custom tfoot tr td.align-left {
@@ -95,16 +91,23 @@ table.table.table-custom thead {
   color: #fff;
 }
 
-table.table.table-custom thead tr th {
-  border-color: #646d80;
-  text-align: center;
+table.table.table-custom thead tr input {
+  box-shadow: unset;
 }
 
-table.table.table-custom thead tr:first-child {
+table.table.table-custom thead tr a {
+  color: #ef9e36;
+}
+
+table.table.table-custom thead tr th {
+  border-color: #646d80;
+}
+
+table.table.table-custom thead tr:nth-child(n + 1) {
   background: #343c4e;
 }
 
-table.table.table-custom thead tr:nth-child(2) {
+table.table.table-custom thead tr:nth-child(n + 2) {
   background: #3b4254;
 }
 
@@ -113,11 +116,7 @@ table.table.table-custom tbody tr:hover {
 }
 
 table.table.table-custom tbody tr:nth-child(odd) {
-  background-color: #ececec;
-}
-
-table.table.table-custom tbody tr td {
-  text-align: center;
+  background: #ececec;
 }
 
 table.table.table-custom tbody tr td .icon-check {
@@ -139,6 +138,10 @@ table.table.table-custom tbody tr td .icon-delete.fa-disabled {
 
 table.table.table-custom tbody tr td.rowdivider {
   background: #f2f2c2;
+}
+
+table.table.table-custom tbody tr td.weekend {
+  background: #adadad;
 }
 
 table.table.table-custom tfoot tr.summary {

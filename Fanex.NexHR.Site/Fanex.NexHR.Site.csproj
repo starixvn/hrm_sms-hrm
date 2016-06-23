@@ -247,23 +247,23 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Content\views\employee.css">
-      <DependentUpon>employee.scss</DependentUpon>
+    <Content Include="Content\views\employee\employee.shift.manager.css">
+      <DependentUpon>employee.shift.manager.scss</DependentUpon>
     </Content>
-    <Content Include="Content\views\employee.min.css">
-      <DependentUpon>employee.css</DependentUpon>
+    <Content Include="Content\views\employee\employee.shift.manager.min.css">
+      <DependentUpon>employee.shift.manager.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\employee\employee.shift.manger.css">
+      <DependentUpon>employee.shift.manager.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\employee\employee.shift.manger.min.css">
+      <DependentUpon>employee.shift.manger.css</DependentUpon>
     </Content>
     <Content Include="Content\views\request\employee.request.css">
       <DependentUpon>employee.request.scss</DependentUpon>
     </Content>
     <Content Include="Content\views\request\employee.request.min.css">
       <DependentUpon>employee.request.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\team.css">
-      <DependentUpon>team.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\team.min.css">
-      <DependentUpon>team.css</DependentUpon>
     </Content>
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
@@ -385,8 +385,6 @@
     <Content Include="Styles\workingcalendardatatable.css" />
     <Content Include="Styles\keepinview.css" />
     <Content Include="Styles\employeechangeshift.css" />
-    <Content Include="Styles\emplyeeshiftmanager.css" />
-    <Content Include="Styles\employeesupervisor.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\nexHRMicon.png" />
@@ -1185,21 +1183,20 @@
     <Content Include="Content\views\request\employee.request.css.map">
       <DependentUpon>employee.request.css</DependentUpon>
     </Content>
-    <Content Include="Content\views\employee.scss" />
-    <Content Include="Content\views\employee.css.map">
-      <DependentUpon>employee.css</DependentUpon>
-    </Content>
     <Content Include="Content\sass\layout\_grid.scss" />
     <Content Include="Content\main.css.map">
       <DependentUpon>main.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\employee\employee.shift.manger.css.map">
+      <DependentUpon>employee.shift.manger.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\employee\employee.shift.manager.css.map">
+      <DependentUpon>employee.shift.manager.css</DependentUpon>
+    </Content>
+    <None Include="Content\views\employee\employee.shift.manager.scss" />
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
-    <Content Include="Content\views\team.scss" />
-    <Content Include="Content\views\team.css.map">
-      <DependentUpon>team.css</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />

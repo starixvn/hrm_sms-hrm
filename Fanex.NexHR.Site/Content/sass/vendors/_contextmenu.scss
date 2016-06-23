@@ -14,8 +14,32 @@
         padding: 0;
         margin: 0;
 
+        &.accepted, &.approved, &.processed {
+            &:hover {
+                a, i.fa {
+                    color: #5eb85d;
+                }
+            }
+        }
+
+        &.notaccepted, &.rejected, &.reset, &.void {
+            &:hover {
+                a, i.fa {
+                    color: #da5350;
+                }
+            }
+        }
+
+        &.reseted, &.edit {
+            &:hover {
+                a, i.fa {
+                    color: #3985bd;
+                }
+            }
+        }
+
         a {
-            color: #000;
+            color: #78828c;
             text-decoration: none;
             display: block;
             line-height: 20px;
@@ -27,25 +51,6 @@
 
             i.fa {
                 padding-right: 5px;
-
-                &.icon-check {
-                    color: #5eb85d;
-                }
-
-                &.icon-edit {
-                    color: #3985bd;
-                }
-
-                &.icon-delete {
-                    color: #da5350;
-                }
-            }
-        }
-
-        &.hover {
-            a {
-                color: #fff;
-                background-color: #3399ff;
             }
         }
 

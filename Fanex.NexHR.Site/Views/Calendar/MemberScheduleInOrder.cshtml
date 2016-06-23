@@ -9,23 +9,21 @@
 @Url.CombresLink("schedulearrangesortjs")
 
 <div class="heightcroll">
-    <table id="tblSupervisor" class="datasupervisor">
+    <table id="tblSupervisor" class="table table-custom">
         <thead>
             <tr>
-                <th>
-                    #
-                </th>
+                <th>@Labels.SymbolCount</th>
                 <th>
                     Order Code
                 </th>
-                <th rowspan="2" class="supervisor">
-                    Priority
+                <th rowspan="2">
+                    @Labels.Priority
                 </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Employee")
+                <th rowspan="1">
+                    @Labels.Employee
                 </th>
-                <th rowspan="1" class="supervisor">
-                    @Html.Label("Team")
+                <th rowspan="1">
+                    @Labels.Team
                 </th>
             </tr>
         </thead>
@@ -33,7 +31,7 @@
             @if (Model != null && Model.ShiftManagerList != null)
             {
                 int index = 0;
-				foreach (SupervisorModel item in Model.ShiftManagerList)
+                foreach (SupervisorModel item in Model.ShiftManagerList)
                 {
                     index++;
                 <tr>
@@ -45,9 +43,11 @@
                         <a href="javascript:;" class="up">Up |</a> <a href="javascript:;" class="down">Down
                             |</a> <a href="javascript:;" class="moveTop">Top</a>
                     </td>
-                    <td class="left" data-id="@item.OwnerId">@item.NickName (@item.FullName)
+                    <td class="align-left" data-id="@item.OwnerId">
+                        @item.NickName (@item.FullName)
                     </td>
-                    <td class="left">@item.Team
+                    <td class="align-left">
+                        @item.Team
                     </td>
                 </tr>
                 }

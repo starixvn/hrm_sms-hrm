@@ -31,7 +31,6 @@
 
         //show/hide navigation secion
         $("div.togglable_section").bind("click", function () {
-
             var currentSection = $(this);
             var divItems = currentSection.next("div.navItem");
             if (currentSection.hasClass("folded")) {
@@ -39,7 +38,6 @@
                 divItems.show(200);
             }
             else {
-
                 currentSection.addClass("folded");
                 divItems.hide(200);
             }
@@ -55,6 +53,4 @@
             $(this).find('.hoveraction').hide();
         });
     });
-
-
 </script>

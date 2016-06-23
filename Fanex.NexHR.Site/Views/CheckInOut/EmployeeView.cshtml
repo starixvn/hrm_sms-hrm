@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
+﻿@model IList<RequestEntity>
 @{
     ViewBag.Title = Labels.MyCheckInOutRequests;
 }
@@ -9,33 +8,29 @@
 @section js{
     @Url.CombresLink("empcheckinoutjs")
 }
-
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
-
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-
 @using (Html.BeginForm())
 {
-
-    <input type="hidden" value="CheckInOut" id="RequestType"/>
-
+    <input type="hidden" value="CheckInOut" id="RequestType" />
     <span>Year:</span>
     @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-
-    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit"/>
+    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
     <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("Check In/Out Request", "Create")</div>
-<table class="data">
-    <thead>
-        <tr>
-                <th>#</th>
+        <span class="icon plus"></span>@Html.ActionLink("Check In/Out Request", "Create")
+    </div>
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
                 <th>@Labels.Request</th>
                 <th>@Labels.Shift</th>
-				<th>@Labels.Date</th>
-				<th>@Labels.RequestTime
-				</th>
+                <th>@Labels.Date</th>
+                <th>
+                    @Labels.RequestTime
+                </th>
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Remark</th>
                 <th>@Labels.Status</th>
@@ -49,37 +44,39 @@
                 @{string selectedClass = string.Empty;}
                 @foreach (RequestEntity request in Model)
                 {
-                    selectedClass = (index % 2 == 0) ? "class=odd" : string.Empty;
-                        
-                    <tr  @selectedClass id="row@(request.Id)">
+                    <tr id="row@(request.Id)">
                         <td>@(index++)</td>
-                        <td class="highlight">@request.RequestType.ToString()
+                        <td>
+                            @request.RequestType.ToString()
                         </td>
-                        <td class="highlight" >@request.FromShift.Name
+                        <td>
+                            @request.FromShift.Name
                         </td>
-						 <td class="ddMMyyyyhhmm highlight">@request.FromDate.ToDateMonthYearFormatedDate()
+                        <td class="ddMMyyyyhhmm">
+                            @request.FromDate.ToDateMonthYearFormatedDate()
                         </td>
-                        <td class="ddMMyyyyhhmm highlight">@request.RequestedDate.ToShortFormatedDate()
+                        <td class="ddMMyyyyhhmm">
+                            @request.RequestedDate.ToShortFormatedDate()
                         </td>
-                        <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()
+                        <td class="ddMMyyyyhhmm">
+                            @request.CreatedDate.ToShortFormatedDate()
                         </td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
-                        { 
+                        {
                             <td class="tooltip" title="@request.Remark">
                                 <span class="icon remark" alt="remark" />
                             </td>
                         }
                         else
                         {
-                            <td>
-                                -
-                            </td>
+                            <td>-</td>
                         }
                         @Html.Partial("_SharedRequestStatus", request)
 
                         <td>
                             <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                                @Labels.View </a>
+                                @Labels.View
+                            </a>
                         </td>
                     </tr>
                 }
@@ -92,5 +89,4 @@
     </table>
 }
 @RazorHelper.EmployeeProcessMenu()
-
 <div id="dialoghistorycontent" />

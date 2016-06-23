@@ -27,7 +27,7 @@
     <div class="clear">
     </div>
     <div class="formrow" id="overtimeDetails">
-        <table class="data" id="data">
+        <table class="table table-custom" id="data">
             <thead>
                 <tr>
                     <th>
@@ -65,15 +65,16 @@
                     foreach (OvertimeDaily request in Model.OvertimeRequest)
                     {
                         <tr id="row@(request.Id)">
+                            @Html.HiddenFor(model => request.ShiftId)
                             @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
                             {
-                                <td class="dateColumn weekend">
+                                <td class="weekend">
                                     @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                                 </td>
                             }
                             else
                             {
-                                <td class="dateColumn">
+                                <td>
                                     @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                                 </td>
                             }
@@ -92,8 +93,6 @@
                                     @request.TotalWorkHours
                                 }
                             </td>
-
-
                             <td class="sumnormal">
                                 @if (request.NormalHours > 0)
                                 {
@@ -112,22 +111,18 @@
                                     @request.PublicHours
                                 }
                             </td>
-
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
                             {
-                            <td>
-                                @request.Remark
-                            </td>
+                                <td>
+                                    @request.Remark
+                                </td>
                             }
                             else
                             {
-                            <td></td>
+                                <td></td>
                             }
-
-                            @Html.HiddenFor(model => request.ShiftId)
                         </tr>
                     }
-
                 }
                 else
                 {
@@ -137,51 +132,46 @@
             @if (Model != null && Model.OvertimeRequest != null)
             {
                 <tfoot>
-                <tr class="sum">
-                    <td colspan="1" class="sumhours">
-                        @Labels.TotalOvertimeHours:
-                    </td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1" id="sumnormal">
-                        @Model.OvertimeRequest.Sum(t => t.NormalHours).ToString("0.00")
-                    </td>
-                    <td colspan="1" id="sumoff">
-                        @Model.OvertimeRequest.Sum(t => t.OffHours).ToString("0.00")
-                    </td>
-                    <td colspan="1" id="sumpublic">
-                        @Model.OvertimeRequest.Sum(t => t.PublicHours).ToString("0.00")
-                    </td>
-                    <td colspan="1"></td>
-                </tr>
-            </tfoot>
+                    <tr class="summary">
+                        <td class="sumhours align-right">
+                            @Labels.TotalOvertimeHours:
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td id="sumnormal">
+                            @Model.OvertimeRequest.Sum(t => t.NormalHours).ToString("0.00")
+                        </td>
+                        <td id="sumoff">
+                            @Model.OvertimeRequest.Sum(t => t.OffHours).ToString("0.00")
+                        </td>
+                        <td id="sumpublic">
+                            @Model.OvertimeRequest.Sum(t => t.PublicHours).ToString("0.00")
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             }
             else
-            { 
+            {
                 <tfoot>
-                <tr class="sum">
-                    <td colspan="1" class="sumhours">
-                        @Labels.TotalOvertimeHours:
-                    </td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1"></td>
-                    <td colspan="1" id="sumnormal">
-                    </td>
-                    <td colspan="1" id="sumoff">
-                    </td>
-                    <td colspan="1" id="sumpublic">
-                    </td>
-                    <td colspan="1"></td>
-                </tr>
-            </tfoot>
+                    <tr class="summary">
+                        <td class="sumhours align-right">
+                            @Labels.TotalOvertimeHours:
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td id="sumnormal"></td>
+                        <td id="sumoff"></td>
+                        <td id="sumpublic"></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             }
-            
         </table>
-
     </div>
 }
 @RazorHelper.EmployeeProcessMenu()
