@@ -681,13 +681,10 @@
     <resourceSet name="timerecordjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/timerecord.js" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
-    </resourceSet>
-    <resourceSet name="timerecorddetailjs" type="js">
-      <resource path="~/scripts/views/timerecord.detail.js" />
+      <resource path="~/scripts/views/report/report.timerecord.js" />
     </resourceSet>
 
     <resourceSet name="shiftcss" type="css">

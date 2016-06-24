@@ -1,20 +1,13 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ReportRepository.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+    using System.Reflection;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
@@ -210,11 +203,9 @@ namespace Fanex.NexHR.Repositories
 
         public IList<TimeRecordModel> GetTimeRecords(ICriteria criteria)
         {
-            IList<TimeRecordModel> timeRecords = null;
-
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
+                IList<TimeRecordModel> timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
                     (t, e, g) =>
                     {
                         t.Employee = e;
@@ -223,9 +214,18 @@ namespace Fanex.NexHR.Repositories
                     },
                        splitOn: "EmpId, GroupId",
                        parameterValues: criteria.GetSpParams()).ToList();
-            }
 
-            return timeRecords;
+                PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
+                    prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalitem")).FirstOrDefault();
+
+                if (totalitem != null)
+                {
+                    var hashParam = db.GetOuputParams();
+                    totalitem.SetValue(criteria, (int)hashParam["totalitem"], null);
+                }
+
+                return timeRecords;
+            }
         }
 
         public IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria)

@@ -1,23 +1,12 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetTimeRecordCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.TimeRecord
+﻿namespace Fanex.NexHR.Criteria.TimeRecord
 {
     using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
 
-    /// <summary>
-    /// Get Time Record Criteria.
-    /// </summary>
     public class GetTimeRecordCriteria : CriteriaBase
     {
-        public int? EmpID { get; set; }
+        public int? EmpId { get; set; }
 
         public byte? IsLocal { get; set; }
 
@@ -26,6 +15,13 @@ namespace Fanex.NexHR.Criteria.TimeRecord
         public DateTime ToDate { get; set; }
 
         public string GroupIds { get; set; }
+
+        public int? PageIndex { get; set; }
+
+        public int? ItemsPerPage { get; set; }
+
+        [Output]
+        public int? TotalItem { get; set; }
 
         public override string GetSettingKey()
         {

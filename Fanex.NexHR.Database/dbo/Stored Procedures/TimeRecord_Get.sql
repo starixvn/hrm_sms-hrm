@@ -1,10 +1,11 @@
-﻿
-CREATE PROCEDURE [dbo].[TimeRecord_Get] --NULL, NULL, '2015-09-15', '2015-09-15'
-	@EmpID INT = NULL,	
-	@isLocal BIT = NULL,
-	@fromDate DATETIME, 
-	@toDate DATETIME, 
-	@groupIds VARCHAR(MAX) = ''
+﻿CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
+	,@FromDate DATETIME
+	,@ToDate DATETIME
+	,@GroupIds VARCHAR(MAX) = ''
+	,@IsLocal BIT = NULL
+	,@PageIndex INT = NULL
+	,@ItemsPerPage INT = NULL
+	,@TotalItem INT = NULL OUT
 AS
 /*
 Created: Quinn.Vo@2014-01-24
@@ -17,21 +18,88 @@ Param's Explanation:
 
 */
 BEGIN
-	SET ARITHABORT ON;
+	SET NOCOUNT ON
 
-	DECLARE @GroupsList TABLE (GroupId TINYINT)
+	IF OBJECT_ID('tempdb..#TimeRecord') IS NOT NULL
+	BEGIN
+		DROP TABLE #TimeRecord
+	END
+
+	CREATE TABLE #TimeRecord (
+		RecordTimeId INT
+		,RecordTime DATETIME
+		,InOutType TINYINT
+		,EmpId INT
+		,Code VARCHAR(20)
+		,NickName NVARCHAR(20)
+		,FullName NVARCHAR(50)
+		,GroupId INT
+		,GroupCode VARCHAR(20)
+		,[Name] NVARCHAR(50)
+		)
+
+	DECLARE @GroupsList TABLE (GroupId INT)
+
 	INSERT INTO @GroupsList (GroupId)
-	SELECT val FROM fnc_strSplit (@groupids, ',')
+	SELECT val
+	FROM fnc_strSplit(@GroupIds, ',')
 
-	SELECT t.ID AS RecordTimeId, t.RecordTime, t.InOutType, e.EmpId, e.Code, e.NickName, e.FullName, g.GroupId, g.Code AS GroupCode, g.Name
-	FROM dbo.TimeRecord t WITH (NOLOCK) 
-		INNER JOIN dbo.Employee e WITH (NOLOCK) ON t.EmpID = e.EmpId
-		INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
-		LEFT JOIN dbo.EmployeeSummary e_s WITH (NOLOCK)  ON e_s.EmpId = e.EmpId 
-	WHERE 
-		CONVERT(VARCHAR(10), RecordTime, 111) BETWEEN CONVERT(VARCHAR(10), @fromDate, 111) AND CONVERT(VARCHAR(10), @toDate, 111)
-		AND (@EmpID IS NULL OR e.EmpId = @EmpID) 
-		AND (@groupIds = '' OR e.GroupId IN (SELECT GroupId FROM @GroupsList))
-		AND (@isLocal IS NULL OR e_s.IsLocal = @isLocal )
-	ORDER BY e.EmpId, t.RecordTime
+	INSERT INTO #TimeRecord
+	SELECT t.[Id]
+		,t.RecordTime
+		,t.InOutType
+		,e.EmpId
+		,e.Code
+		,e.NickName
+		,e.FullName
+		,g.GroupId
+		,g.Code
+		,g.[Name]
+	FROM dbo.TimeRecord AS t WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON t.EmpID = e.EmpId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+	WHERE CONVERT(VARCHAR(10), RecordTime, 111) BETWEEN CONVERT(VARCHAR(10), @FromDate, 111)
+			AND CONVERT(VARCHAR(10), @ToDate, 111)
+		AND (
+			@EmpId IS NULL
+			OR e.EmpId = @EmpId
+			)
+		AND (
+			ISNULL(@GroupIds, '') = ''
+			OR e.GroupId IN (
+				SELECT GroupId
+				FROM @GroupsList
+				)
+			)
+		AND (
+			@IsLocal IS NULL
+			OR es.IsLocal = @IsLocal
+			)
+	ORDER BY e.EmpId
+		,t.RecordTime DESC
+
+	IF @PageIndex IS NOT NULL
+		AND @ItemsPerPage IS NOT NULL
+	BEGIN
+		SELECT t.*
+		FROM #TimeRecord AS t
+		ORDER BY t.RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
+
+		FETCH NEXT @ItemsPerPage ROWS ONLY;
+	END
+	ELSE
+	BEGIN
+		SELECT t.*
+		FROM #TimeRecord AS t
+		ORDER BY t.RecordTime DESC
+	END
+
+	SELECT @TotalItem = COUNT(*)
+	FROM #TimeRecord
+
+	IF OBJECT_ID('tempdb..#TimeRecord') IS NOT NULL
+	BEGIN
+		DROP TABLE #TimeRecord
+	END
 END

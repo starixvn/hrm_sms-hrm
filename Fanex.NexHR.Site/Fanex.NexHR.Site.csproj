@@ -305,8 +305,6 @@
     <Content Include="Scripts\Views\shift.js" />
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
     <Content Include="Scripts\Views\Team\team.discipline.setting.js" />
-    <Content Include="Scripts\Views\timerecord.detail.js" />
-    <Content Include="Scripts\Views\timerecord.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Report\report.manpower.css" />
@@ -1087,7 +1085,6 @@
     <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
     <Content Include="Views\Report\OvertimeReport.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
-    <Content Include="Views\Report\TimeRecordDetail.cshtml" />
     <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
@@ -1218,6 +1215,8 @@
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\Create.cshtml" />
     <Content Include="Views\Menu\Edit.cshtml" />
+    <Content Include="Scripts\Views\Report\report.timerecord.js" />
+    <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

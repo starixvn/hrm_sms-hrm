@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TimeRecordViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.1.27">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels.Report
 {
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
 
-    /// <summary>
-    /// TimeRecord ViewModel.
-    /// </summary>
-    public class TimeRecordViewModel
+    public class TimeRecordViewModel : PagerOptionModel
     {
         public DateTime FromDate { get; set; }
 

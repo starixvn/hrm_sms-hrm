@@ -23,6 +23,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Report;
@@ -115,23 +116,25 @@
                 toDate = DateTime.Now.Date;
             }
 
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = GetAllTeam();
 
-            var timeRecordViewModel = new TimeRecordViewModel
+            var model = new TimeRecordViewModel
             {
                 FromDate = fromDate.Value,
                 ToDate = toDate.Value,
-                Teams = teams
+                Teams = teams,
+                CurrentPage = Constants.CurrentPage,
+                ItemsPerPage = Constants.ItemsPerPage
             };
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
 
-            return View(timeRecordViewModel);
+            return View(model);
         }
 
-        public ActionResult TimeRecordDetail(DateTime fromDate, DateTime toDate, string groupIds, int? employeeId = null, byte? isLocal = null)
+        public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
-            var hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
+            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
+            int? employeeId = null;
             if (!hasPermissionToEdit)
             {
                 employeeId = this.CurrentUser.Id;
@@ -139,16 +142,26 @@
 
             var criteria = new GetTimeRecordCriteria()
             {
-                EmpID = employeeId,
-                GroupIds = groupIds,
-                FromDate = fromDate,
-                ToDate = toDate,
-                IsLocal = isLocal
+                EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
+                GroupIds = model.TeamIds,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                IsLocal = model.IsLocal,
+                PageIndex = model.CurrentPage - 1,
+                ItemsPerPage = model.ItemsPerPage
             };
             IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(criteria);
             ViewBag.HasPermission = hasPermissionToEdit;
 
-            return View(timeRecords);
+            var pagerOption = new PagerOptionModel()
+            {
+                CurrentPage = model.CurrentPage,
+                ItemsPerPage = model.ItemsPerPage,
+                TotalItem = (int)criteria.TotalItem
+            };
+            ViewBag.PagerOption = pagerOption;
+
+            return PartialView("_TimeRecordDetail", timeRecords);
         }
 
         /// [Authorize(Roles = "HR")]
@@ -166,8 +179,7 @@
                 DateOption = 0
             };
 
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             ViewBag.ViewRole = viewRole;
 
             return View("RequestMonitoring", model);
@@ -243,9 +255,7 @@
             ViewBag.ToDate = model.ToDate;
             ViewBag.isLeader = true;
             ViewBag.ViewRole = viewRole;
-
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
 
             return View("RequestMonitoring", model);
         }
@@ -300,8 +310,7 @@
                 return export.TotalWorkingHours(model);
             }
 
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             ViewBag.TeamIds = model.TeamIds;
 
             var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria()
@@ -371,8 +380,7 @@
 
             ViewBag.EntityList = totalWorkingHourMonthly;
             ViewBag.FirstRecord = firstRecord;
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             ViewBag.TeamIds = model.TeamIds;
 
             return View(model);
@@ -415,8 +423,7 @@
             }
             else
             {
-                var getAllGroupCriteria = new GetAllGroupCriteria();
-                ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+                ViewBag.Groups = GetAllTeam();
             }
 
             return View(model);
@@ -439,8 +446,7 @@
                 endDate = startDate.Value.AddDays(6);
             }
 
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             ViewBag.TeamIds = teamIds;
 
             var model = new TotalWorkingHourWeeklyViewModel
@@ -509,8 +515,7 @@
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds
             };
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             ViewBag.DefaultFromDate = model.FromDate;
             ViewBag.DefaultToDate = model.ToDate;
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
@@ -623,8 +628,7 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             return View();
         }
 
@@ -654,8 +658,7 @@
 
         public ActionResult TeamSupervisor()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = GetAllTeam();
             return View();
         }
 
@@ -722,6 +725,13 @@
             MemoryStream output = new MemoryStream();
             hssfworkbook.Write(output);
             return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+        }
+
+        private IList<Team> GetAllTeam()
+        {
+            var criteria = new GetAllGroupCriteria();
+
+            return _teamService.GetAll(criteria);
         }
     }
 }
