@@ -1,8 +1,6 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Update_IsPublic]
-	@empid int=NULL,
-	@ErrCode int=0 OUTPUT,
-	@ErrMsg varchar(200)='' OUTPUT
+﻿CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Update_IsPublic] @empid INT = NULL
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2014-03-15
@@ -14,24 +12,27 @@ Revisions:
 	
 Param's Explanation:
 */
-SET NOCOUNT ON
+BEGIN
+	SET NOCOUNT ON
 
-DECLARE	
-	@fromdate datetime, 
-	@todate datetime
+	DECLARE @fromdate DATETIME
+		,@todate DATETIME
 
-SELECT @todate = DATEADD(wk, DATEDIFF(wk,0,GETDATE()), 6) 
+	SELECT @todate = DATEADD(wk, DATEDIFF(wk, 0, GETDATE()), 6)
 
-SELECT @fromdate = @todate-60
+	SELECT @fromdate = @todate - 60
 
-IF @empid IS NOT NULL
-	UPDATE EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-	SET IsPublic=1
-	WHERE WorkDate BETWEEN @fromdate AND @todate
-		AND EmpId = @empid
-		AND ISNULL(IsPublic,0)=0
-ELSE 
-	UPDATE EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-	SET IsPublic=1
-	WHERE WorkDate BETWEEN @fromdate AND @todate
-		AND ISNULL(IsPublic,0)=0
+	IF @empid IS NOT NULL
+		UPDATE EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+		SET IsPublic = 1
+		WHERE WorkDate BETWEEN @fromdate
+				AND @todate
+			AND EmpId = @empid
+			AND ISNULL(IsPublic, 0) = 0
+	ELSE
+		UPDATE EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+		SET IsPublic = 1
+		WHERE WorkDate BETWEEN @fromdate
+				AND @todate
+			AND ISNULL(IsPublic, 0) = 0
+END

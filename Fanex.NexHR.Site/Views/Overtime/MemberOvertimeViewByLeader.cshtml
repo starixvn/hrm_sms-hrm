@@ -5,15 +5,15 @@
     var hasApprovePermision = (bool)ViewBag.HasApprovePermision;
 }
 <table class="tabledata">
-        <thead>
-            <tr class="headermenu">
-                <th colspan="11">
-                    <div style="float:right;">
+    <thead>
+        <tr class="headermenu">
+            <th colspan="11">
+                <div style="float:right;">
                     @if (hasApprovePermision && hasVerfifyPermision)
                     {
-                         <div>
-                            <a id="lnkAccept" href="javascript:;"> Verify </a> || 
-                            <a id="lnkNotAccept" href="javascript:;"> Not verify </a> || 
+                        <div>
+                            <a id="lnkAccept" href="javascript:;"> Verify </a> ||
+                            <a id="lnkNotAccept" href="javascript:;"> Not verify </a> ||
                             <a id="lnkApprove" href="javascript:;"> @Labels.Approve </a> ||
                             <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
@@ -21,7 +21,7 @@
                     else if (hasVerfifyPermision)
                     {
                         <div>
-                            <a id="lnkAccept" href="javascript:;"> Verify </a> || 
+                            <a id="lnkAccept" href="javascript:;"> Verify </a> ||
                             <a id="lnkNotAccept" href="javascript:;"> Not verify </a>
                         </div>
                     }
@@ -32,47 +32,33 @@
                             <a id="lnkReject" href="javascript:;"> @Labels.Reject </a>
                         </div>
                     }
-                     
                 </div>
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <input id="chkAll" type="checkbox" />
-                </th>
-                <th>@Labels.FullName
-                </th>
-                <th>@Labels.Nick
-                </th>
-                <th>
-                    @Labels.Team
-                </th>
-                <th>@Labels.NormalDay
-                </th>
-                <th>@Labels.OffDay
-                </th>
-                <th>@Labels.PublicHoliday
-                </th>
-                <th>@Labels.Details
-                </th>
-                <th>
-                    @Labels.Verifier
-                </th>
-                <th>
-                    @Labels.Approver
-                </th>
-                <th>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input id="chkAll" type="checkbox" />
+            </th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.Details</th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.Approver</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (OvertimeRequest item in Model)
             {
-                foreach (OvertimeRequest item in Model)
-                {
                 <tr>
                     <td>
-                        <input type="checkbox" class="chkSelect" data-requestId = "@item.RequestId" />
+                        <input type="checkbox" class="chkSelect" data-requestid="@item.RequestId" />
                     </td>
                     <td class="left">
                         @item.Employee.FullName
@@ -84,26 +70,27 @@
                         @item.Employee.Team.Code
                     </td>
                     <td>
-                    @if (item.NormalHours > 0)
-                    {
-                        <span class="sumnormal">@item.NormalHours</span>
-                    }
+                        @if (item.NormalHours > 0)
+                        {
+                            <span class="sumnormal">@item.NormalHours</span>
+                        }
                     </td>
                     <td>
-                    @if (item.OffHours > 0)
-                    {
-                        <span class="sumoff">@item.OffHours</span>
-                    }
+                        @if (item.OffHours > 0)
+                        {
+                            <span class="sumoff">@item.OffHours</span>
+                        }
                     </td>
                     <td>
-                    @if (item.PublicHours > 0)
-                    {
-                        <span class="sumpublic">@item.PublicHours</span>
-                    }
+                        @if (item.PublicHours > 0)
+                        {
+                            <span class="sumpublic">@item.PublicHours</span>
+                        }
                     </td>
                     <td>
                         <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.RequestId, isHRView = false })">
-                            @Labels.View </a>
+                            @Labels.View
+                        </a>
                     </td>
 
                     @Html.Partial("SharedVerifierStatus", item)
@@ -111,48 +98,38 @@
 
                     <td>
                         @if (item.IsShowWarning)
-                        { 
+                        {
                             <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.RequestId, isHRView = false })">
-                                <img src="../../Images/warning.png" width="16px;" height="16px;"/>
+                                <img src="../../Images/warning.png" width="16px;" height="16px;" />
                             </a>
                         }
                     </td>
                 </tr>
-                }
             }
-            else
-            { 
-                @RazorHelper.DisplayNoInformation(colspan: 12);
-            }
-        </tbody>
-        <tfoot>
-            <tr class="sum">
-                <td colspan="1" class="sumhours">@Labels.TotalOvertimeHours:
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1" id="sumnormal">
-                </td>
-                <td colspan="1" id="sumoff">
-                </td>
-                <td colspan="1" id="sumpublic">
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1">
-                </td>
-                <td colspan="1">
-                </td>
-            </tr>
-        </tfoot>
-
-    </table>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 12);
+        }
+    </tbody>
+    <tfoot>
+        <tr class="sum">
+            <td class="sumhours">
+                @Labels.TotalOvertimeHours:
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="sumnormal"></td>
+            <td id="sumoff"></td>
+            <td id="sumpublic"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
 @RazorHelper.VerifierAndApproverOvertimeMenu()
 
 @Url.CombresLink("monthlyovertimememberdetailjs")

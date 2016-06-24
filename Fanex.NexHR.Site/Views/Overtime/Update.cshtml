@@ -60,33 +60,15 @@
         <table class="table table-custom" id="data">
             <thead>
                 <tr>
-                    <th>
-                        @Labels.Date
-                    </th>
-                    <th>
-                        @Labels.Schedule
-                    </th>
-                    <th>
-                        @Labels.TimeIn
-                    </th>
-                    <th>
-                        @Labels.TimeOut
-                    </th>
-                    <th>
-                        @Labels.TotalHours
-                    </th>
-                    <th>
-                        @Labels.NormalDay
-                    </th>
-                    <th>
-                        @Labels.OffDay
-                    </th>
-                    <th>
-                        @Labels.PublicHoliday
-                    </th>
-                    <th>
-                        @Labels.Remark
-                    </th>
+                    <th>@Labels.Date</th>
+                    <th>@Labels.Scheduleth>
+                    <th>@Labels.TimeIn</th>
+                    <th>@Labels.TimeOut</th>
+                    <th>@Labels.TotalHours</th>
+                    <th>@Labels.NormalDay</th>
+                    <th>@Labels.OffDay</th>
+                    <th>@Labels.PublicHoliday</th>
+                    <th>@Labels.Remark</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,15 +90,9 @@
                                     @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                                 </td>
                             }
-                            <td>
-                                @request.Schedule
-                            </td>
-                            <td>
-                                @request.TimeIn
-                            </td>
-                            <td>
-                                @request.TimeOut
-                            </td>
+                            <td>@request.Schedule</td>
+                            <td>@request.TimeIn</td>
+                            <td>@request.TimeOut</td>
                             <td class="totalHours">
                                 @if (request.TotalWorkHours > 0)
                                 {
@@ -126,7 +102,6 @@
                             @if (request.TotalWorkHours > 0 && !request.IsKeepInView)
                             {
                                 @Html.HiddenFor(model => request.TotalShiftHours)
-
                                 //for normal day.
                                 if (!request.IsOffDay && !request.IsHoliday)
                                 {
@@ -218,7 +193,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td ></td>
+                    <td></td>
                     <td id="sumnormal">
                         @Model.OvertimeRequest.Sum(t => t.NormalHours).ToString("0.00")
                     </td>

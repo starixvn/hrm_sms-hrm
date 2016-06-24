@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_AddOtherDiscipline] @EmpId INT
+﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_AddOtherDiscipline] @EmpId INT
 	,@WorkDate DATETIME
 	,@DisciplineTypeId INT
 	,@ApproverComment NVARCHAR(500) = NULL
@@ -18,33 +17,6 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @Roles NVARCHAR(100)
-
-	CREATE TABLE #Roles (RoleId INT)
-
-	SELECT @Roles = Roles
-	FROM dbo.Employee WITH (NOLOCK)
-	WHERE EmpId = @CreatedBy
-
-	IF ISNULL(@Roles, '') <> ''
-	BEGIN
-		INSERT INTO #Roles
-		SELECT DISTINCT val
-		FROM dbo.fnc_strSplit(@Roles, ',')
-	END
-
-	IF NOT EXISTS (
-			SELECT 1
-			FROM #Roles
-			WHERE RoleId = 7 -- SA
-			)
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'You do not permission.'
-
-		RETURN
-	END
 
 	IF EXISTS (
 			SELECT 1
@@ -90,6 +62,4 @@ BEGIN
 		SELECT @ErrCode = 1
 			,@ErrMsg = N'Insert other violation unsuccessfully.'
 	END CATCH
-
-	DROP TABLE #Roles
 END

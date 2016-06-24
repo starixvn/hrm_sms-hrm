@@ -12,7 +12,7 @@
 @section Breadcrumb {
     <a class="step">HR Space</a> <a class="step">@ViewBag.Title</a>
 }
-@functions 
+@functions
  {
     private DateTime DisplayDate(int Year, int Month)
     {
@@ -23,29 +23,32 @@
         }
         return new DateTime();
     }
- }
+}
 @using (Html.BeginForm())
 {
-    
-    <table class="data" id="yearlyReport">
+    <table class="table table-custom" id="yearlyReport">
         <thead>
             <tr>
-                <th rowspan="2">@Labels.Department
+                <th rowspan="2">
+                    @Labels.Department
                 </th>
-                <th rowspan="2">@Labels.FullName
+                <th rowspan="2">
+                    @Labels.FullName
                 </th>
-                <th rowspan="2">@Labels.Nick
+                <th rowspan="2">
+                    @Labels.Nick
                 </th>
                 <th colspan="12">
                     Overtime Summary in @ViewBag.Year
                 </th>
-                <th rowspan="2">@Labels.Total
+                <th rowspan="2">
+                    @Labels.Total
                 </th>
             </tr>
             @*Fiscal Calendar*@
             @if (ViewBag.Calendar == 1)
             {
-                <tr class="overtime-header">
+                <tr>
                     <th>
                         <a href="@Url.Action("HRMonthlyReport", "Overtime", new { month = 1, year = ViewBag.Year })">
                             @Labels.Jan
@@ -108,10 +111,10 @@
                     </th>
                 </tr>
             }
-@*Normal Calendar*@
+            @*Normal Calendar*@
             @if (ViewBag.Calendar == 0)
             {
-                <tr class="overtime-header">
+                <tr>
                     <th>
                         <a href="@Url.Action("HRMonthlyReport", "Overtime", new { month = 1, year = ViewBag.Year, calendar = ViewBag.Calendar })">
                             @Labels.Jan
@@ -182,323 +185,308 @@
                 {
                     if (ViewBag.Calendar == 1)
                     {
-                    <tr id="row@(request.EmpId)">
-                        <td>
-                            @request.Team
-                        </td>
-                        <td>
-                            @request.FullName
-                        </td>
-                        <td>
-                            @request.NickName
-                        </td>
-                        <td class="sumjan">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jan != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 1);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Jan
-                                </a>
-                            }
-                        </td>
-                        <td class="sumfeb">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Feb != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 2);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Feb
-                                </a>
-                            }
-                        </td>
-                        <td class="summar">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Mar != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 3);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Mar
-                                </a>
-                            }
-                        </td>
-                        <td class="sumapr">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Apr != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 4);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Apr
-                                </a>
-                            }
-                        </td>
-                        <td class="summay">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.May != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 5);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.May
-                                </a>
-                            }
-                        </td>
-                        <td class="sumjun">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jun != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 6);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Jun
-                                </a>
-                            }
-                        </td>
-                        <td class="sumjul">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jul != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 7);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Jul
-                                </a>
-                            }
-                        </td>
-                        <td class="sumaug">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Aug != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 8);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Aug
-                                </a>
-                            }
-                        </td>
-                        <td class="sumsep">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Sep != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 9);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Sep
-                                </a>
-                            }
-                        </td>
-                        <td class="sumoct">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Oct != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 10);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Oct
-                                </a>
-                            }
-                        </td>
-                        <td class="sumnov">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Nov != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 11);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Nov
-                                </a>
-                            }
-                        </td>
-                        <td class="sumdec">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Dec != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 12);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
-                                    @request.Dec
-                                </a>
-                                
-                            }
-                        </td>
-                        <td class="total">
-                            @request.Total.ToString("F")
-                        </td>
-                    </tr>
+                        <tr id="row@(request.EmpId)">
+                            <td>
+                                @request.Team
+                            </td>
+                            <td class="align-left">
+                                @request.FullName
+                            </td>
+                            <td>
+                                @request.NickName
+                            </td>
+                            <td class="sumjan">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jan != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 1);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Jan
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumfeb">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Feb != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 2);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Feb
+                                    </a>
+                                }
+                            </td>
+                            <td class="summar">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Mar != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 3);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Mar
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumapr">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Apr != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 4);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Apr
+                                    </a>
+                                }
+                            </td>
+                            <td class="summay">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.May != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 5);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.May
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumjun">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jun != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 6);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Jun
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumjul">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jul != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 7);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Jul
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumaug">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Aug != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 8);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Aug
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumsep">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Sep != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 9);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Sep
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumoct">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Oct != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 10);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Oct
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumnov">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Nov != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 11);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Nov
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumdec">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Dec != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 12);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId })">
+                                        @request.Dec
+                                    </a>
+
+                                }
+                            </td>
+                            <td class="total">
+                                @request.Total.ToString("F")
+                            </td>
+                        </tr>
                     }
                     if (ViewBag.Calendar == 0)
                     {
-                    <tr id="row@(request.EmpId)">
-                        <td>
-                            @request.Team
-                        </td>
-                        <td>
-                            @request.FullName
-                        </td>
-                        <td>
-                            @request.NickName
-                        </td>
-                        <td class="sumjan">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jan != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 1);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Jan
-                                </a>
-                            }
-                        </td>
-                        <td class="sumfeb">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Feb != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 2);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Feb
-                                </a>
-                            }
-                        </td>
-                        <td class="summar">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Mar != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 3);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Mar
-                                </a>
-                            }
-                        </td>
-                        <td class="sumapr">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Apr != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 4);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Apr
-                                </a>
-                            }
-                        </td>
-                        <td class="summay">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.May != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 5);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.May
-                                </a>
-                            }
-                        </td>
-                        <td class="sumjun">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jun != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 6);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Jun
-                                </a>
-                            }
-                        </td>
-                        <td class="sumjul">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Jul != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 7);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Jul
-                                </a>
-                            }
-                        </td>
-                        <td class="sumaug">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Aug != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 8);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Aug
-                                </a>
-                            }
-                        </td>
-                        <td class="sumsep">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Sep != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 9);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Sep
-                                </a>
-                            }
-                        </td>
-                        <td class="sumoct">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Oct != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 10);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Oct
-                                </a>
-                            }
-                        </td>
-                        <td class="sumnov">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Nov != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 11);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Nov
-                                </a>
-                            }
-                        </td>
-                        <td class="sumdec">
-                            @Html.HiddenFor(model => request.EmpId)
-                            @if (request.Dec != 0)
-                            {
-                                var currentMonth = DisplayDate((int)ViewBag.Year, 12);
-                                <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
-                                    @request.Dec
-                                </a>
-                                
-                            }
-                        </td>
-                        <td class="total">
-                            @request.Total.ToString("F")
-                        </td>
-                    </tr>
+                        <tr id="row@(request.EmpId)">
+                            <td>
+                                @request.Team
+                            </td>
+                            <td>
+                                @request.FullName
+                            </td>
+                            <td>
+                                @request.NickName
+                            </td>
+                            <td class="sumjan">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jan != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 1);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Jan
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumfeb">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Feb != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 2);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Feb
+                                    </a>
+                                }
+                            </td>
+                            <td class="summar">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Mar != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 3);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Mar
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumapr">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Apr != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 4);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Apr
+                                    </a>
+                                }
+                            </td>
+                            <td class="summay">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.May != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 5);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.May
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumjun">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jun != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 6);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Jun
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumjul">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Jul != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 7);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Jul
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumaug">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Aug != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 8);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Aug
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumsep">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Sep != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 9);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Sep
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumoct">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Oct != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 10);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Oct
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumnov">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Nov != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 11);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Nov
+                                    </a>
+                                }
+                            </td>
+                            <td class="sumdec">
+                                @Html.HiddenFor(model => request.EmpId)
+                                @if (request.Dec != 0)
+                                {
+                                    var currentMonth = DisplayDate((int)ViewBag.Year, 12);
+                                    <a href="@Url.Action("HRViewDetails", "Overtime", new { requestDate = currentMonth, empId = request.EmpId, calendar = ViewBag.Calendar })">
+                                        @request.Dec
+                                    </a>
+
+                                }
+                            </td>
+                            <td class="total">
+                                @request.Total.ToString("F")
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
-            
             <tfoot>
-                <tr class="sum">
-                    <td colspan="1" class="sumhours">@Labels.TotalOvertimeHours:
+                <tr class="summary">
+                    <td class="sumhours align-right">
+                        @Labels.TotalOvertimeHours:
                     </td>
-                    <td colspan="1">
-                    </td>
-                    <td colspan="1">
-                    </td>
-                    <td colspan="1" id="sumjan">
-                    </td>
-                    <td colspan="1" id="sumfeb">
-                    </td>
-                    <td colspan="1" id="summar">
-                    </td>
-                    <td colspan="1" id="sumapr">
-                    </td>
-                    <td colspan="1" id="summay">
-                    </td>
-                    <td colspan="1" id="sumjun">
-                    </td>
-                    <td colspan="1" id="sumjul">
-                    </td>
-                    <td colspan="1" id="sumaug">
-                    </td>
-                    <td colspan="1" id="sumsep">
-                    </td>
-                    <td colspan="1" id="sumoct">
-                    </td>
-                    <td colspan="1" id="sumnov">
-                    </td>
-                    <td colspan="1" id="sumdec">
-                    </td>
-                    <td colspan="1" id="sumtotal">
-                    </td>
+                    <td></td>
+                    <td></td>
+                    <td id="sumjan"></td>
+                    <td id="sumfeb"></td>
+                    <td id="summar"></td>
+                    <td id="sumapr"></td>
+                    <td id="summay"></td>
+                    <td id="sumjun"></td>
+                    <td id="sumjul"></td>
+                    <td id="sumaug"></td>
+                    <td id="sumsep"></td>
+                    <td id="sumoct"></td>
+                    <td id="sumnov"></td>
+                    <td id="sumdec"></td>
+                    <td id="sumtotal"></td>
                 </tr>
             </tfoot>
         }
         else
-        { 
-            @RazorHelper.DisplayNoInformation(16)    
+        {
+            @RazorHelper.DisplayNoInformation(16)
         }
     </table>
 }

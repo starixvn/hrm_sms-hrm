@@ -9,17 +9,17 @@
     @Url.CombresLink("myovertimerequestjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> 
+    <a class="step">Personal</a>
     <a class="step" href="@Url.Action("yearlyreport", "overtime")">Yearly Overtime Report</a>
     <a class="step">@Model.Employee's @Labels.OvertimeReport Details</a>
 }
 
 @using (Html.BeginForm())
-{    
-     <div class="grid_2 gridlabel title">
-         @ViewBag.Title
+{
+    <div class="grid_2 gridlabel title">
+        @ViewBag.Title
     </div>
-    <input type="button" id="backHrReport" class="float-right" value="@Labels.Back"/>
+    <input type="button" id="backHrReport" class="float-right" value="@Labels.Back" />
     <div class="clear">
     </div>
     <div class="space">

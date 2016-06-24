@@ -1,6 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Department_Delete] 
-	@DepartmentId INT
+﻿CREATE PROCEDURE [dbo].[Department_Delete] @DepartmentId INT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -37,35 +35,37 @@ BEGIN
 	END
 
 	IF (
-		EXISTS (
-			SELECT 1
-			FROM dbo.Department WITH (NOLOCK)
-			WHERE [ParentId] = @DepartmentId
-		)
-	)
+			EXISTS (
+				SELECT 1
+				FROM dbo.Department WITH (NOLOCK)
+				WHERE [ParentId] = @DepartmentId
+				)
+			)
 	BEGIN
 		SELECT @ErrCode = 1
 			,@ErrMsg = N'The department has child departments '
 
 		RETURN
 	END
-	
+
 	IF (
-		EXISTS (
-			SELECT 1
-			FROM dbo.Department AS dep WITH (NOLOCK)
-			INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON dep.DepartmentId = g.DepartmentId
-			WHERE dep.DepartmentId = @DepartmentId AND g.IsDeleted != 1
-		)
-	)
+			EXISTS (
+				SELECT 1
+				FROM dbo.Department AS dep WITH (NOLOCK)
+					INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON dep.DepartmentId = g.DepartmentId
+				WHERE dep.DepartmentId = @DepartmentId
+					AND g.IsDeleted != 1
+				)
+			)
 	BEGIN
 		SELECT @ErrCode = 1
 			,@ErrMsg = N'The department has teams '
 
 		RETURN
 	END
-	
-	DELETE FROM dbo.Department
+
+	DELETE
+	FROM dbo.Department
 	WHERE DepartmentId = @DepartmentId
 
 	IF @@ERROR <> 0

@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[Employee_Export_InformationBasic]
-
 AS
 /*
 Created: Tom.Vo@2014-01-06
@@ -13,28 +12,34 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT
-		e.EmpID As [Employee ID]
+	SELECT e.EmpID AS [Employee ID]
 		,e.FullName AS [Full Name]
 		,e.NickName AS [Nick Name]
-		,g.Name AS [Department/Team]
+		,g.NAME AS [Department/Team]
 		,e.JoinedDate AS [Group Date]
 		,e_s.CompanyDate AS [Company Date]
 		,e.ConfirmedDate AS [Confirmed Date]
 		,e.ResignedDate AS [Resigned Date]
 		,e.DOB
-		,CASE WHEN e.Gender IS NULL THEN 'UnKnown'
-			WHEN e.Gender =0 THEN 'Female'
-			WHEN e.Gender =1 THEN 'Male'
-			END as Gender
+		,(CASE 
+			WHEN e.Gender IS NULL THEN 'UnKnown'
+			WHEN e.Gender = 0 THEN 'Female'
+			WHEN e.Gender = 1 THEN 'Male' END
+			) AS Gender
 		,e.Phone AS Cellphone
 		,e.Email AS [Work Email]
 		,e.CurrentAddress AS [Current Address]
 		,e_s.Unit
-		,CASE WHEN e_s.IsLocal = 1 THEN 'LOCAL' ELSE 'EXPAT' END  Category
-
-	from dbo.Employee e WITH (NOLOCK) 
+		,(CASE 
+			WHEN e_s.IsLocal = 1 THEN 'LOCAL'
+			ELSE 'EXPAT' END
+			) AS Category
+	FROM dbo.Employee e WITH (NOLOCK)
 		LEFT JOIN dbo.EmployeeSummary e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
 		LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
-	WHERE (e.isDeleted IS NULL OR e.isDeleted = 0) AND e.Enabled = 1
+	WHERE (
+			e.isDeleted IS NULL
+			OR e.isDeleted = 0
+			)
+		AND e.[Enabled] = 1
 END

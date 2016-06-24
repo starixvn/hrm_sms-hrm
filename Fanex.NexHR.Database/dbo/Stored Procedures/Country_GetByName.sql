@@ -1,6 +1,4 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[Country_GetByName]
-	@CountryName NVARCHAR(150)
+﻿CREATE PROCEDURE [dbo].[Country_GetByName] @CountryName NVARCHAR(150)
 AS
 /*
 Created: Tom.Vo@2013-10-21
@@ -15,12 +13,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT [CountryCode]
-		  ,[Nationality] [CountryName]
-	  FROM [dbo].[Country] WITH(NOLOCK)
-	  WHERE [Nationality] like @CountryName + '%'
-	  ORDER BY [CountryOrder]
-
+		,[Nationality] [CountryName]
+	FROM [dbo].[Country] WITH (NOLOCK)
+	WHERE [Nationality] LIKE @CountryName + '%'
+	ORDER BY [CountryOrder]
 END
-
-
-

@@ -23,24 +23,24 @@
                 }
                 break;
             case (byte)CurrentRequestStatus.Approved:
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-approved menu">
-                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
-                </a>
-            </td>
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-approved menu">
+                        @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                    </a>
+                </td>
                 break;
             case (byte)CurrentRequestStatus.Rejected:
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-rejected menu">
-                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
-                </a>
-            </td>
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-rejected menu">
+                        @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                    </a>
+                </td>
                 break;
             case (byte)CurrentRequestStatus.NotVerified:
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
             default:
-            <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
+                <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
                 break;
         }
     }

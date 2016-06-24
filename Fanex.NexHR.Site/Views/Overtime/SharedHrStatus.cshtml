@@ -9,21 +9,20 @@
             </td>
             break;
         case (byte)CurrentRequestStatus.Processed:
-        <td>
-            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.RequestId" href="javascript:void(0);" class="hr-processed menu">@Utilities.GetCurrentStatusName(request.CurrentStatus)</a>
-        </td>
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.RequestId" href="javascript:void(0);" class="hr-processed menu">@Utilities.GetCurrentStatusName(request.CurrentStatus)</a>
+            </td>
             break;
         case (byte)CurrentRequestStatus.Void:
-        <td>
-            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.RequestId" href="javascript:void(0);" class="hr-void menu">@Utilities.GetCurrentStatusName(request.CurrentStatus)</a>
-        </td>
+            <td>
+                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.RequestId" href="javascript:void(0);" class="hr-void menu">@Utilities.GetCurrentStatusName(request.CurrentStatus)</a>
+            </td>
             break;
-
         case (byte)CurrentRequestStatus.Pending:
         case (byte)CurrentRequestStatus.Verified:
         case (byte)CurrentRequestStatus.NotVerified:
         default:
-        <td class="tooltip"> <span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
+            <td class="tooltip"> <span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
             break;
     }
 }

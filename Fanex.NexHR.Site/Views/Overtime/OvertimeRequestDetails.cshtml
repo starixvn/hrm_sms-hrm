@@ -1,39 +1,19 @@
 ﻿@model IList<OvertimeDaily>
 @using (Html.BeginForm())
 {
-    <table class="data" id="data">
+    <table class="table table-custom" id="data">
         <thead>
             <tr>
-                <th>
-                    @Labels.Date
-                </th>
-                <th>
-                    @Labels.Schedule
-                </th>
-                <th>
-                    @Labels.TimeIn
-                </th>
-                <th>
-                    @Labels.TimeOut
-                </th>
-                <th>
-                    @Labels.TotalHours
-                </th>
-                <th>
-                    @Labels.NormalDay
-                </th>
-                <th>
-                    @Labels.OffDay
-                </th>
-                <th>
-                    @Labels.PublicHoliday
-                </th>
-                <th>
-                    @Labels.Remark
-                </th>
-                <th>
-                    @Labels.Status
-                </th>
+                <th>@Labels.Date</th>
+                <th>@Labels.Schedule</th>
+                <th>@Labels.TimeIn</th>
+                <th>@Labels.TimeOut</th>
+                <th>@Labels.TotalHours</th>
+                <th>@Labels.NormalDay</th>
+                <th>@Labels.OffDay</th>
+                <th>@Labels.PublicHoliday</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Status</th>
             </tr>
         </thead>
         <tbody>
@@ -42,27 +22,22 @@
                 foreach (OvertimeDaily request in Model)
                 {
                     <tr id="row@(request.Id)">
+                        @Html.HiddenFor(model => request.ShiftId)
                         @if (request.OvertimeDate.DayOfWeek == DayOfWeek.Saturday || request.OvertimeDate.DayOfWeek == DayOfWeek.Sunday)
                         {
-                            <td class="dateColumn weekend">
+                            <td class="weekend">
                                 @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                             </td>
                         }
                         else
                         {
-                            <td class="dateColumn">
+                            <td>
                                 @request.OvertimeDate.ToString("dd-MMM-yyyy") (@request.OvertimeDate.ToString("ddd"))
                             </td>
                         }
-                        <td>
-                            @request.Schedule
-                        </td>
-                        <td>
-                            @request.TimeIn
-                        </td>
-                        <td>
-                            @request.TimeOut
-                        </td>
+                        <td>@request.Schedule</td>
+                        <td>@request.TimeIn</td>
+                        <td>@request.TimeOut</td>
                         <td class="totalHours">
                             @if (request.TotalWorkHours > 0)
                             {
@@ -87,30 +62,23 @@
                                 @request.PublicHours
                             }
                         </td>
-
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
                         {
-                            <td>
-                                @request.Remark
-                            </td>
+                            <td>@request.Remark</td>
                         }
                         else
                         {
                             <td></td>
                         }
                         <td>
-                            @{
-                    if (request.Status != 0)
-                    {
-                        CurrentRequestStatus status = (CurrentRequestStatus)request.Status;
-                        <span>@status</span>
-                    }
+                            @if (request.Status != 0)
+                            {
+                                CurrentRequestStatus status = (CurrentRequestStatus)request.Status;
+                                <span>@status</span>
                             }
                         </td>
-                        @Html.HiddenFor(model => request.ShiftId)
                     </tr>
                 }
-
             }
             else
             {
@@ -118,25 +86,25 @@
             }
         </tbody>
         <tfoot>
-            <tr class="sum">
-                <td colspan="1" class="sumhours">
+            <tr class="summary">
+                <td class="sumhours align-right">
                     @Labels.TotalOvertimeHours:
                 </td>
-                <td colspan="1"></td>
-                <td colspan="1"></td>
-                <td colspan="1"></td>
-                <td colspan="1"></td>
-                <td colspan="1" id="sumnormal">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td id="sumnormal">
                     @Model.Sum(t => t.NormalHours).ToString("0.00")
                 </td>
-                <td colspan="1" id="sumoff">
+                <td id="sumoff">
                     @Model.Sum(t => t.OffHours).ToString("0.00")
                 </td>
-                <td colspan="1" id="sumpublic">
+                <td id="sumpublic">
                     @Model.Sum(t => t.PublicHours).ToString("0.00")
                 </td>
-                <td colspan="1"></td>
-                <td colspan="1"></td>
+                <td></td>
+                <td></td>
             </tr>
         </tfoot>
     </table>

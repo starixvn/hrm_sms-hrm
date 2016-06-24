@@ -58,35 +58,27 @@
                             @request.RequestedDate.ToString("MMM-yyyy")
                         </td>
                         <td class="sumtotal">
-                            @{
-                                if (request.ToTalHours > 0)
-                                {
-                                    <span>@request.ToTalHours</span>
-                                }
+                            @if (request.ToTalHours > 0)
+                            {
+                                @request.ToTalHours
                             }
                         </td>
                         <td class="sumnormal">
-                            @{
-                                if (request.NormalHours > 0)
-                                {
-                                    <span>@request.NormalHours</span>
-                                }
+                            @if (request.NormalHours > 0)
+                            {
+                                @request.NormalHours
                             }
                         </td>
                         <td class="sumoff">
-                            @{
-                                if (request.OffHours > 0)
-                                {
-                                    <span>@request.OffHours</span>
-                                }
+                            @if (request.OffHours > 0)
+                            {
+                                @request.OffHours
                             }
                         </td>
                         <td class="sumpublic">
-                            @{
-                                if (request.PublicHours > 0)
-                                {
-                                    <span>@request.PublicHours</span>
-                                }
+                            @if (request.PublicHours > 0)
+                            {
+                                @request.PublicHours
                             }
                         </td>
                         <td>
@@ -96,31 +88,31 @@
                         </td>
                         <td>
                             @{
-                                var currentDate = DateTime.Now.Date;
-                                var requestDate = request.RequestedDate.Date;
-                                var requestDatePreviousOneMonth = requestDate.AddMonths(-1).Date;
-                                var canEditFrom = new DateTime();
-                                if (requestDate.Month == 1)
-                                {
-                                    canEditFrom = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
-                                }
-                                else
-                                {
-                                    canEditFrom = new DateTime(requestDate.Year, requestDate.AddMonths(-1).Month, 10);
-                                }
-                                var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
-                                var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
+                            var currentDate = DateTime.Now.Date;
+                            var requestDate = request.RequestedDate.Date;
+                            var requestDatePreviousOneMonth = requestDate.AddMonths(-1).Date;
+                            var canEditFrom = new DateTime();
+                            if (requestDate.Month == 1)
+                            {
+                                canEditFrom = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
+                            }
+                            else
+                            {
+                                canEditFrom = new DateTime(requestDate.Year, requestDate.AddMonths(-1).Month, 10);
+                            }
+                            var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
+                            var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
 
-                                if (request.Status == null || (int)(request.Status.Id) == 1)
-                                {
-                                    <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
-                                        <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span>-</span>
-                                }
+                            if (request.Status == null || (int)(request.Status.Id) == 1)
+                            {
+                                <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
                             }
                         </td>
                     </tr>

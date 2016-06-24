@@ -8,13 +8,11 @@
     @Url.CombresLink("overtimereportdetailsjs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a> 
-	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">HR</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
-
 @using (Html.BeginForm())
 {
     @Html.Hidden("EmpId")
@@ -28,7 +26,7 @@
             <div class="grid_6">
                 <select id="group" multiple="multiple" class="team-select">
                     @foreach (Team item in ViewBag.Groups)
-                    { 
+                    {
                         <option value="@item.Id">@item.Name</option>
                     }
                 </select>
@@ -53,7 +51,7 @@
                     var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"}, 
+                        new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
                 }
@@ -85,7 +83,6 @@
     </div>
     <div class="space">
     </div>
-    
     <div id="OTExcelReportDetails">
     </div>
 }

@@ -25,10 +25,10 @@
 @if (Model != null)
 {
     <h2>@ViewBag.Title</h2>
-    
+
     @Html.Hidden("IsHRView", isHRView)
     @Html.Hidden("RequestId", Model.RequestId)
-    
+
     <div class="grid_7 gridlabel fontbold">
         ※ <span class="leftinfo">@Labels.VerifiedBy:</span>
         <span class="">@modifier</span>
@@ -37,27 +37,27 @@
         ※ <span class="leftinfo">@Labels.ApprovedBy:</span>
         <span class="">@approver</span>
     </div>
-    <div class="grid_1 gridlabel fontbold statusmargin"> 
-        ※ <span class="leftinfo">@Labels.Status:</span> 
+    <div class="grid_1 gridlabel fontbold statusmargin">
+        ※ <span class="leftinfo">@Labels.Status:</span>
         <span class="">@Model.GetCurrentStatusName()</span>
     </div>
-   
+
     <div class="float-right">
         @if (isHRView)
         {
             switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" id="btnProcess" value="Process"/>
-                    <input type="button" id="btnVoid" value="Void"/>
+                    <input type="button" id="btnProcess" value="Process" />
+                    <input type="button" id="btnVoid" value="Void" />
                     break;
                 case (byte)CurrentRequestStatus.Processed:
-                    <input type="button" id="btnHRReset" value="Reset"/>
-                    @*<input type="button" id="btnVoid" value="Void"/>*@
+                <input type="button" id="btnHRReset" value="Reset" />
+                @*<input type="button" id="btnVoid" value="Void" />*@
                     break;
                 case (byte)CurrentRequestStatus.Void:
-                    <input type="button" id="btnHRReset" value="Reset"/>
-                    @*<input type="button" id="btnProcess" value="Process"/>*@
+                <input type="button" id="btnHRReset" value="Reset" />
+                @*<input type="button" id="btnProcess" value="Process" />*@
                     break;
             }
         }
@@ -68,21 +68,21 @@
                 case (byte)CurrentRequestStatus.Pending:
                     if (Model.VerifiedBy.Id == currentUserId)
                     {
-                        <input type="button" id="btnApprove" value="Approve"/>
-                        <input type="button" id="btnReject" value="Reject"/>
+                        <input type="button" id="btnApprove" value="Approve" />
+                        <input type="button" id="btnReject" value="Reject" />
                     }
                     break;
                 case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" id="btnApprove" value="Approve"/>
-                    <input type="button" id="btnReject" value="Reject"/>
+                <input type="button" id="btnApprove" value="Approve" />
+                <input type="button" id="btnReject" value="Reject" />
                     break;
                 case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" id="btnApproverReset" value="Reset"/>
-                    @*<input type="button" id="btnReject" value="Reject"/>*@
+                <input type="button" id="btnApproverReset" value="Reset" />
+                @*<input type="button" id="btnReject" value="Reject" />*@
                     break;
                 case (byte)CurrentRequestStatus.Rejected:
-                    <input type="button" id="btnApproverReset" value="Reset"/>
-                    @*<input type="button" id="btnApprove" value="Approve"/>*@
+                <input type="button" id="btnApproverReset" value="Reset" />
+                @*<input type="button" id="btnApprove" value="Approve" />*@
                     break;
             }
         }
@@ -91,50 +91,47 @@
             switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" id="btnAccept" value="Verified"/>
-                    <input type="button" id="btnNotAccept" value="Not Verified"/>
+                    <input type="button" id="btnAccept" value="Verified" />
+                    <input type="button" id="btnNotAccept" value="Not Verified" />
                     break;
                 case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" id="btnVerifierReset" value="Reset"/>
-                    @*<input type="button" id="btnNotAccept" value="Not Accept"/>*@
+                <input type="button" id="btnVerifierReset" value="Reset" />
+                @*<input type="button" id="btnNotAccept" value="Not Accept" />*@
                     break;
                 case (byte)CurrentRequestStatus.NotVerified:
-                    <input type="button" id="btnVerifierReset" value="Reset"/>
-                    @*<input type="button" id="btnAccept" value="Accept"/>*@
+                <input type="button" id="btnVerifierReset" value="Reset" />
+                @*<input type="button" id="btnAccept" value="Accept" />*@
                     break;
             }
         }
-    
-        <input type="button" id="btnBack" value="@Labels.Back"/>
-    </div>
 
+        <input type="button" id="btnBack" value="@Labels.Back" />
+    </div>
     <div class="clear">
     </div>
     <div class="space">
     </div>
     <div class="clear">
     </div>
-
     <div class="formrow" id="overtimeDetails">
         @Html.Partial("MemberDailyOvertimeDetail", Model.OvertimeDaily)
     </div>
-    
     <div class="float-right">
         @if (isHRView)
         {
             switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" id="btnProcessFooter" value="Process"/>
-                    <input type="button" id="btnVoidFooter" value="Void"/>
+                    <input type="button" id="btnProcessFooter" value="Process" />
+                    <input type="button" id="btnVoidFooter" value="Void" />
                     break;
                 case (byte)CurrentRequestStatus.Processed:
-                    <input type="button" id="btnHRResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnVoidFooter" value="Void"/>*@
+                <input type="button" id="btnHRResetFooter" value="Reset" />
+                @*<input type="button" id="btnVoidFooter" value="Void" />*@
                     break;
                 case (byte)CurrentRequestStatus.Void:
-                    <input type="button" id="btnHRResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnProcessFooter" value="Process"/>*@
+                <input type="button" id="btnHRResetFooter" value="Reset" />
+                @*<input type="button" id="btnProcessFooter" value="Process" />*@
                     break;
             }
         }
@@ -143,16 +140,16 @@
             switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" id="btnApproveFooter" value="Approve"/>
-                    <input type="button" id="btnRejectFooter" value="Reject"/>
+                    <input type="button" id="btnApproveFooter" value="Approve" />
+                    <input type="button" id="btnRejectFooter" value="Reject" />
                     break;
                 case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" id="btnApproverResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnRejectFooter" value="Reject"/>*@
+                <input type="button" id="btnApproverResetFooter" value="Reset" />
+                @*<input type="button" id="btnRejectFooter" value="Reject" />*@
                     break;
                 case (byte)CurrentRequestStatus.Rejected:
-                    <input type="button" id="btnApproverResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnApproveFooter" value="Approve"/>*@
+                <input type="button" id="btnApproverResetFooter" value="Reset" />
+                @*<input type="button" id="btnApproveFooter" value="Approve" />*@
                     break;
             }
         }
@@ -161,21 +158,20 @@
             switch (Model.CurrentStatus)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" id="btnAcceptFooter" value="Verified"/>
-                    <input type="button" id="btnNotAcceptFooter" value="Not Verified"/>
+                    <input type="button" id="btnAcceptFooter" value="Verified" />
+                    <input type="button" id="btnNotAcceptFooter" value="Not Verified" />
                     break;
                 case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" id="btnVerifierResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnNotAcceptFooter" value="Not Accept"/>*@
+                <input type="button" id="btnVerifierResetFooter" value="Reset" />
+                @*<input type="button" id="btnNotAcceptFooter" value="Not Accept" />*@
                     break;
                 case (byte)CurrentRequestStatus.NotVerified:
-                    <input type="button" id="btnVerifierResetFooter" value="Reset"/>
-                    @*<input type="button" id="btnAcceptFooter" value="Accept"/>*@
+                <input type="button" id="btnVerifierResetFooter" value="Reset" />
+                @*<input type="button" id="btnAcceptFooter" value="Accept" />*@
                     break;
             }
         }
-    
-        <input type="button" id="btnBackFooter" value="@Labels.Back"/>
+        <input type="button" id="btnBackFooter" value="@Labels.Back" />
     </div>
     <div class="clear">
     </div>
@@ -185,6 +181,6 @@
     </div>
 }
 else
-{ 
+{
     <h2>Request does not exist.</h2>
 }

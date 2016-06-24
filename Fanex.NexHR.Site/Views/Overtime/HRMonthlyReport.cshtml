@@ -14,8 +14,8 @@
 @using (Html.BeginForm())
 {
     <h2>
-        Overtime Report in @ViewBag.Date</h2>
-    
+        Overtime Report in @ViewBag.Date
+    </h2>
     <div class="container_24 bunhat">
         <div class="grid_24">
             <div class="grid_2 gridlabel">
@@ -23,9 +23,9 @@
             </div>
             <div class="grid_3">
                 @{
-    var calendarType = new List<SelectListItem>
+                    var calendarType = new List<SelectListItem>
                     {
-                        new SelectListItem() {Text = "Fiscal", Value = "1"}, 
+                        new SelectListItem() {Text = "Fiscal", Value = "1"},
                         new SelectListItem() {Text = "Normal", Value = "0"},
                     };
                 }
@@ -45,21 +45,18 @@
                     @Html.DatePicker("toDate", (DateTime)ViewBag.ToDate, (DateTime)ViewBag.FromDate, (DateTime)ViewBag.ToDate)
                 </div>
             </div>
-            <input type="button" value="@Labels.Submit" id="submitMonthlyReport"/>
-            @*<input type="button" id="exportExcel" value="Excel"/>*@
-            <input type="button" id="backPrevious" value="@Labels.Back"/>
+            <input type="button" value="@Labels.Submit" id="submitMonthlyReport" />
+            @*<input type="button" id="exportExcel" value="Excel" />*@
+            <input type="button" id="backPrevious" value="@Labels.Back" />
         </div>
     </div>
     @Html.Hidden("FiscalDate", (string)ViewBag.Date);
-    
     <div class="clear">
     </div>
     <div class="space">
     </div>
     <div class="clear">
     </div>
-    
     <div id="HRMonthlyReportDetails">
     </div>
-    
 }

@@ -15,75 +15,71 @@
 
 @if (Model.IsHRView)
 {
-    <span class="header-title">@ViewBag.Title → </span> 
+    <span class="header-title">@ViewBag.Title → </span>
     <a href="javascript:;" id="lknSendMail">Send mail to reminder claim OT</a>
 }
 else
 {
-    <span class="header-title">@ViewBag.Title</span> 
+    <span class="header-title">@ViewBag.Title</span>
 }
-
 <br />
 <br />
 <div class="container_24 bunhat">
-        <div class="grid_2">
-            @Html.Label(@Labels.Month, new { @class = "lablemonth" })
-        </div>
-        <div class="grid_7">
-            <div id="DateControl">
-            </div>
-            <input type="hidden" id="Year" name="Year" value="@Model.Month.Year" />
-            <input type="hidden" id="Month" name="Month" value="@Model.Month.Month" />
-        </div>
-        <div class="grid_1">
-            @Html.LabelFor(model => model.StatusId)
-        </div>
-        <div class="grid_4">
-            @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "statusId")
-        </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        
-        <div class="grid_2">
-            @Html.Label("Team", new { @class = "lableteam" })
-        </div>
-        <div class="grid_6">
-            <select id="TeamId" multiple="multiple" name="TeamId" title="@Labels.Team">
-                @foreach (Team item in Model.Teams)
-                { 
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </div>
-        <div class="grid_2">
-            @Html.LabelFor(model => model.Employee, new { @class = "labelforemployee" })
-        </div>
-        <div class="grid_4">
-            @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-            @Html.HiddenFor(model => model.EmployeeId)
-        </div>
-       
-        <div class="clear">
-        &nbsp;
-        </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        &nbsp;
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_22 prefix_2">
-            <input id="btnSubmit" type="button" value="@Labels.Submit"/>
-        </div>
+    <div class="grid_2">
+        @Html.Label(@Labels.Month, new { @class = "lablemonth" })
     </div>
-
+    <div class="grid_7">
+        <div id="DateControl">
+        </div>
+        <input type="hidden" id="Year" name="Year" value="@Model.Month.Year" />
+        <input type="hidden" id="Month" name="Month" value="@Model.Month.Month" />
+    </div>
+    <div class="grid_1">
+        @Html.LabelFor(model => model.StatusId)
+    </div>
+    <div class="grid_4">
+        @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "statusId")
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="grid_2">
+        @Html.Label("Team", new { @class = "lableteam" })
+    </div>
+    <div class="grid_6">
+        <select id="TeamId" multiple="multiple" name="TeamId" title="@Labels.Team">
+            @foreach (Team item in Model.Teams)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="grid_2">
+        @Html.LabelFor(model => model.Employee, new { @class = "labelforemployee" })
+    </div>
+    <div class="grid_4">
+        @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
+        @Html.HiddenFor(model => model.EmployeeId)
+    </div>
+    <div class="clear">
+        &nbsp;
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+        &nbsp;
+    </div>
+    <div class="space">
+    </div>
+    <div class="grid_22 prefix_2">
+        <input id="btnSubmit" type="button" value="@Labels.Submit" />
+    </div>
+</div>
 @Html.HiddenFor(model => model.IsHRView)
 @Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
 <div class="clear">
@@ -99,7 +95,6 @@ else
 <br />
 <div id="memberOvertimeDetail">
 </div>
-
 <div id="dialog-mail" title="@Labels.TitleReminderClaimOT" style="display: none;">
     <div>
         <span>@Messages.ReminderClaimOT</span>
@@ -107,23 +102,20 @@ else
     <hr />
     <div class="grid_24">
         <div class="grid_2">
-            <label >@Labels.Subject: </label>
+            <label>@Labels.Subject: </label>
         </div>
         <div class="grid_10">
-            <input id="txtSubjectMail" maxlength="200" type="text"/>
+            <input id="txtSubjectMail" maxlength="200" type="text" />
         </div>
-
         <div class="clear">
         </div>
         <div class="space">
         </div>
-
         <div class="grid_2">
             <label>@Labels.Content: </label>
         </div>
         <div class="grid_10">
             <textarea id="txtContentMail" maxlength="5000" rows="2" cols="20"></textarea>
         </div>
-        
     </div>
 </div>

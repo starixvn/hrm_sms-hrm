@@ -1,6 +1,4 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[Country_GetByCode]
-	@CountryCode  VARCHAR(5)
+﻿CREATE PROCEDURE [dbo].[Country_GetByCode] @CountryCode VARCHAR(5)
 AS
 /*
 Created: Tom.Vo@2013-10-21
@@ -15,13 +13,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT [CountryCode]
-		  ,CASE WHEN  [Nationality] is null THEN [CountryName] ELSE [Nationality] END [CountryName]
-	  FROM [dbo].[Country] WITH(NOLOCK)
-	  WHERE [CountryCode]= @CountryCode
-
-
+		,CASE 
+			WHEN [Nationality] IS NULL THEN [CountryName]
+			ELSE [Nationality]
+			END [CountryName]
+	FROM [dbo].[Country] WITH (NOLOCK)
+	WHERE [CountryCode] = @CountryCode
 END
-
-
-
-

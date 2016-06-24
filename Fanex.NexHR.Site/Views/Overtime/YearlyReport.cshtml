@@ -1,81 +1,77 @@
 ﻿@{
-	ViewBag.Title = "Yearly Overtime Report";
+    ViewBag.Title = "Yearly Overtime Report";
 }
 @section css{
-	@Url.CombresLink("overtimereportcss")
+    @Url.CombresLink("overtimereportcss")
 }
 @section js{
-	@Url.CombresLink("overtimereportjs")
+    @Url.CombresLink("overtimereportjs")
 }
 @section Breadcrumb {
-	<a class="step">HR Space</a>
-	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">HR Space</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
-
 @using (Html.BeginForm())
 {
-	<div class="container_24 bunhat">
-		<div class="grid_24">
-			<div class="grid_1 gridlabel">
-				Year:
-			</div>
-			<div class="grid_2">
-				@Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-			</div>
-			<div class="grid_2 gridlabel">
-				Calendar:
-			</div>
-			<div class="grid_3">
-				@{
-	var calendarType = new List<SelectListItem>
+    <div class="container_24 bunhat">
+        <div class="grid_24">
+            <div class="grid_1 gridlabel">
+                Year:
+            </div>
+            <div class="grid_2">
+                @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+            </div>
+            <div class="grid_2 gridlabel">
+                Calendar:
+            </div>
+            <div class="grid_3">
+                @{
+                    var calendarType = new List<SelectListItem>
                     {
-                        new SelectListItem() {Text = "Fiscal", Value = "1"}, 
+                        new SelectListItem() {Text = "Fiscal", Value = "1"},
                         new SelectListItem() {Text = "Normal", Value = "0"},
                     };
-				}
-				@Html.DropDownList("calendar", calendarType)
-			</div>
-			<div class="grid_1 gridlabel">@Labels.Team</div>
-			<div class="grid_6">
-				<select id="group" multiple="multiple" class="team-select">
-					@foreach (Team item in ViewBag.Groups)
-	 { 
-						<option value="@item.Id">@item.Name</option>
-	 }
-				</select>
-			</div>
-			<div class="grid_2 gridlabel">
-				Employee
-			</div>
-			<div class="grid_4">
-				@Html.Editor("Employee")
-				@Html.Hidden("EmpId")
-			</div>
-			<div class="clear">
-			</div>
-			<div class="space">
-			</div>
-			<div class="clear">
-			</div>
-			<div class="grid_5 prefix_1">
-				<input type="button" value="@Labels.Submit" id="submit"/>
-				<input type="button" id="excel" value="Excel" />
-			</div>
-		</div>
-	</div>
-	<div class="clear">
-	</div>        
-	<div class="space">
-	</div> 
-	<div class="clear">
-	</div>        
-	<div class="space">
-	</div> 
-    
-	<div class="formrow" id="yearlyReportDetails">
-	</div>
-    
+                }
+                @Html.DropDownList("calendar", calendarType)
+            </div>
+            <div class="grid_1 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="grid_2 gridlabel">
+                Employee
+            </div>
+            <div class="grid_4">
+                @Html.Editor("Employee")
+                @Html.Hidden("EmpId")
+            </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="clear">
+            </div>
+            <div class="grid_5 prefix_1">
+                <input type="button" value="@Labels.Submit" id="submit" />
+                <input type="button" id="excel" value="Excel" />
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <div class="formrow" id="yearlyReportDetails">
+    </div>
 }

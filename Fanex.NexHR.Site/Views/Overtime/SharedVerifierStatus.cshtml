@@ -14,25 +14,25 @@
                 </td>
                 break;
             case (byte)CurrentRequestStatus.Verified:
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:void(0);" class="verifier-accepted menu">
-                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
-                </a>
-            </td>
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:void(0);" class="verifier-accepted menu">
+                        @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                    </a>
+                </td>
                 break;
             case (byte)CurrentRequestStatus.NotVerified:
-            <td>
-                <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:void(0);" class="verifier-notAccepted menu">
-                    @Utilities.GetCurrentStatusName(request.CurrentStatus)
-                </a>
-            </td>
+                <td>
+                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:void(0);" class="verifier-notAccepted menu">
+                        @Utilities.GetCurrentStatusName(request.CurrentStatus)
+                    </a>
+                </td>
                 break;
             case (byte)CurrentRequestStatus.Approved:
             case (byte)CurrentRequestStatus.Rejected:
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
             default:
-            <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
+                <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
                 break;
         }
     }
