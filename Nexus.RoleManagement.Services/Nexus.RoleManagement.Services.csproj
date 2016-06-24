@@ -71,28 +71,36 @@
   <ItemGroup>
     <Compile Include="Core\FunctionKey.cs" />
     <Compile Include="Core\Policy.cs" />
-    <Compile Include="Criteria\AssignFunctionToRoleCriteria.cs" />
-    <Compile Include="Criteria\GetMenusByUserIdCriteria.cs" />
-    <Compile Include="Criteria\GetRolesCriteria.cs" />
-    <Compile Include="Criteria\GetRolesByUserIdCriteria.cs" />
-    <Compile Include="Criteria\GetFunctionsByUserIdCriteria.cs" />
-    <Compile Include="Criteria\GetFunctionsByRoleIdCriteria.cs" />
+    <Compile Include="Criteria\Function\AssignFunctionToRoleCriteria.cs" />
+    <Compile Include="Criteria\Menu\GetMenuByIdCriteria.cs" />
+    <Compile Include="Criteria\Menu\GetMenusCriteria.cs" />
+    <Compile Include="Criteria\Menu\GetMenusByUserIdCriteria.cs" />
+    <Compile Include="Criteria\Role\GetRolesCriteria.cs" />
+    <Compile Include="Criteria\Role\GetRolesByUserIdCriteria.cs" />
+    <Compile Include="Criteria\Function\GetFunctionsByUserIdCriteria.cs" />
+    <Compile Include="Criteria\Function\GetFunctionsByRoleIdCriteria.cs" />
+    <Compile Include="Criteria\Menu\DeleteMenuCriteria.cs" />
+    <Compile Include="Criteria\Menu\UpdateMenuCriteria.cs" />
+    <Compile Include="Criteria\Menu\InsertMenuCriteria.cs" />
     <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\IBaseRepository.cs" />
     <Compile Include="Model\CommandResult.cs" />
     <Compile Include="Model\FunctionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IMenuRepository.cs" />
+    <Compile Include="Repositories\MenuRepository.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\IFunctionService.cs" />
     <Compile Include="Services\IMenuService.cs" />
-    <Compile Include="Criteria\GetFunctionsCriteria.cs" />
+    <Compile Include="Criteria\Function\GetFunctionsCriteria.cs" />
     <Compile Include="Services\Implement\MenuService.cs" />
     <Compile Include="Services\Implement\FunctionService.cs" />
     <Compile Include="Services\Implement\RoleService.cs" />
     <Compile Include="Services\IRoleService.cs" />
     <Compile Include="Model\MenuModel.cs" />
     <Compile Include="Model\SystemRole.cs" />
+    <Compile Include="ViewModel\MenuViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

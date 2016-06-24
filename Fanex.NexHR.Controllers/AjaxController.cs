@@ -80,7 +80,12 @@
         /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Edit, FunctionKey.ProcessRequest)]
+        [HRAuthorize(
+            Policy.Edit,
+            FunctionKey.VerifyRequestOfMember,
+            FunctionKey.VerifyRequestOfEmployee,
+            FunctionKey.ApproveRequestOfMember,
+            FunctionKey.ApproveRequestOfEmployee)]
         public JsonResult ProcessRequest(string command, long requestId, int roleId, string remark = null)
         {
             var criteria = new ProcessRequestCriteria()
@@ -98,7 +103,7 @@
 
         /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
         public JsonResult ProcessSingleOvertime(string command, long requestId, int roleId)
         {
             var processOvertimeCriteria = new ProcessSingleOvertimeCriteria
@@ -115,7 +120,7 @@
 
         /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
         public JsonResult ProcessMultipleOvertime(string command, string requestIds)
         {
             var criteria = new ProcessMultipleOvertimeCriteria

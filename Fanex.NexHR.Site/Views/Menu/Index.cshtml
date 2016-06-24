@@ -1,0 +1,89 @@
+﻿@using Nexus.RoleManagement.Services;
+
+@model IEnumerable<MenuViewModel>
+@{
+    ViewBag.Title = "Menu Management";
+    var hasPermission = (bool)ViewBag.HasPermission;
+}
+@section css{
+    @Url.CombresLink("menucss")
+}
+@section js{
+    @Url.CombresLink("menujs")
+}
+@section Breadcrumb {
+    <span class="step">@ViewBag.Title</span>
+}
+@if (hasPermission)
+{
+    <div class="button-icon">
+        <span class="icon plus"></span>@Html.ActionLink("New Menu", "Create")
+    </div>
+}
+
+<table id="data" class="data persist-area">
+    <thead>
+        <tr>
+            <th>Order. Name</th>
+            <th>Link</th>
+            <th>Function</th>
+            <th>Parent Menu</th>
+            <th>Active</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
+        </tr>
+    </thead>
+
+    @if (Model.Any())
+    {
+
+        <tbody>
+            @foreach (MenuViewModel menu in Model.Where(i => i.ParentMenu == null))
+            {
+                <tr>
+                    <td class="rowdivider highlight left" colspan="7">
+                        @(menu.DisplayOrder + ". " + menu.Text)
+                    </td>
+                </tr>
+
+                foreach (MenuViewModel chilmenu in Model.Where(i => i.ParentMenu != null && i.ParentMenu.MenuId == menu.MenuId))
+                {
+                    <tr id="row_@chilmenu.MenuId">
+                        <td class="center">
+                            @(chilmenu.DisplayOrder + ". " + chilmenu.Text)
+                        </td>
+                        <td>
+                            @chilmenu.Link
+                        </td>
+                        <td>
+                            @(chilmenu.Function != null ? chilmenu.Function.Name : string.Empty)
+                        </td>
+                        <td>
+                            @chilmenu.ParentMenu.Text
+                        </td>
+                        <td>
+                            @chilmenu.IsActive
+                        </td>
+                        @if (hasPermission)
+                        {
+                            <td class="cmd" title="Edit">
+                                <a href="@Url.Action("edit", "menu", new { Id = chilmenu.MenuId })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            </td>
+                            <td class="cmd" title="Delete">
+                                <a href="javascript:;" onclick="deleteMenu(@chilmenu.MenuId);">
+                                    <i class="fa fa-times fa-lg icon-delete"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    }
+
+</table>

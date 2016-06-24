@@ -757,5 +757,12 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee/employee.discipline.setting.js" />
     </resourceSet>
+  <resourceSet name="menujs" type="js">
+    <resource reference="sitejs" />
+    <resource path="~/scripts/views/menu.js" />
+  </resourceSet>
+    <resourceSet name="menucss" type="css">
+      <resource reference="sitecss" />
+    </resourceSet>
   </resourceSets>
 </combres>

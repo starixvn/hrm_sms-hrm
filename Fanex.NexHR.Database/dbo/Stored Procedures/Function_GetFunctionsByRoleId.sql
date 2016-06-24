@@ -16,7 +16,7 @@ Param's Explanation:
          SET NOCOUNT ON;
          SELECT fk.[FunctionId],
                 fk.[FunctionKey],
-                fk.[Name] AS FunctionName,
+                fk.[Name],
                 fk.[ParentFunctionId],
                 rf.[IsRead],
                 rf.[IsEdit],

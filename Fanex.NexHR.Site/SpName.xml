@@ -429,9 +429,16 @@
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Function_GetFunctionsByRoleId" SpName="Function_GetFunctionsByRoleId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Function_GetFunctionsByUserId" SpName="Function_GetFunctionsByUserId" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Menu_GetMenusByUserId" SpName="Menu_GetMenusByUserId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Role_GetRolesByUserId" SpName="Role_GetRolesByUserId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Role_GetRoles" SpName="Role_GetRoles" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Function_GetFunctions" SpName="Function_GetFunctions" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
+  <Function Name="Menu">
+    <Setting Key="Menu_GetMenusByUserId" SpName="Menu_GetMenusByUserId" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Menu_GetMenus" SpName="Menu_GetMenus" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Menu_GetMenuById" SpName="Menu_GetMenuById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Menu_Insert" SpName="Menu_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Menu_Update" SpName="Menu_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Menu_Delete" SpName="Menu_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

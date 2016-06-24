@@ -280,6 +280,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
@@ -1214,6 +1215,9 @@
     <Content Include="Views\Team\DisciplineSetting.cshtml" />
     <Content Include="Views\Employee\DisciplineSetting.cshtml" />
     <Content Include="Views\Employee\_ContactList.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="Views\Menu\Create.cshtml" />
+    <Content Include="Views\Menu\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

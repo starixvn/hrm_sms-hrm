@@ -4,20 +4,23 @@
     <div class="nav_links">
         @foreach (var parentMenu in Model.Where(i => i.ParentId == null))
         {
-            <div class="overview_section togglable_section" id="@parentMenu.MenuId">
-                <div class="separator">
-                    <strong>@parentMenu.Text</strong>
-                </div>
-            </div>
-            <div class="navItem">
-                @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
-                {
-                    <div id="@childMenu.MenuId" class="el">
-                        <span class="xicon @childMenu.Name"></span>
-                        <a href="@childMenu.Link">@childMenu.Text</a>
+            if (Model.Any(i => i.ParentId == parentMenu.MenuId))
+            {
+                <div class="overview_section togglable_section" id="@parentMenu.MenuId">
+                    <div class="separator">
+                        <strong>@parentMenu.Text</strong>
                     </div>
-                }
-            </div>
+                </div>
+                <div class="navItem">
+                    @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
+                    {
+                        <div id="@childMenu.MenuId" class="el">
+                            <span class="xicon @childMenu.Name"></span>
+                            <a href="@childMenu.Link">@childMenu.Text</a>
+                        </div>
+                    }
+                </div>
+            }
         }
     </div>
 </div>

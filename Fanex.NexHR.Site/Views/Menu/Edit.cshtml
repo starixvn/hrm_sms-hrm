@@ -1,0 +1,102 @@
+﻿@using Nexus.RoleManagement.Services;
+
+@model MenuModel
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css{
+@Url.CombresLink("menucss")
+}
+@section js{
+    @Url.CombresLink("menujs")
+}
+@section Breadcrumb {
+    <a class="step" href="@Url.Action("Index", "Menu")">Memu</a>
+    <span class="step">Edit Menu "@Model.Name"</span>
+}
+<h2>Edit Menu</h2>
+@using (Html.BeginForm())
+{
+    <div class="bunhat container_24">
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.MenuId)
+
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Name)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Text)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Text)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Link)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Link)
+            </div>
+        </div>
+
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ParentId)
+            </div>
+            <div class="input">
+                @{
+                var menus = new List<MenuViewModel>();
+                menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
+                menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
+                }
+                @Html.DropDownListFor(model => model.ParentId, new SelectList(menus, "MenuId", "Name"))
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.FunctionId)
+            </div>
+            <div class="input">
+                @{var functions = new List<FunctionModel>();
+                functions.Add(new FunctionModel { FunctionId = 0, Name = string.Empty });
+                functions.AddRange((List<FunctionModel>)ViewBag.Functions);
+                }
+                @Html.DropDownListFor(model => model.FunctionId, new SelectList(functions, "FunctionId", "Name"))
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.DisplayOrder)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.DisplayOrder)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.IsActive)
+            </div>
+            <div class="input">
+                @Html.CheckBoxFor(model => model.IsActive, new { @checked = "checked" })
+            </div>
+        </div>
+
+
+        <div class="formrow">
+            <div class="label">
+                &nbsp
+            </div>
+            <div class="input">
+                <input type="submit" value="Save" class="button-primary submit" />
+                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+            </div>
+        </div>
+    </div>
+}

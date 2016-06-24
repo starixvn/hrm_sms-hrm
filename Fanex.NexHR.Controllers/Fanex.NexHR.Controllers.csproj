@@ -110,6 +110,7 @@
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuController.cs" />
     <Compile Include="AccountController.cs" />
     <Compile Include="AjaxController.cs" />
     <Compile Include="AnnualLeaveBalanceController.cs" />

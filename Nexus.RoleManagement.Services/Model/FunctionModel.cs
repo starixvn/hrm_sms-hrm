@@ -13,7 +13,7 @@ namespace Nexus.RoleManagement.Services
 
         public string FunctionKey { get; set; }
 
-        public string FunctionName { get; set; }
+        public string Name { get; set; }
 
         public int? ParentFunctionId { get; set; }
 

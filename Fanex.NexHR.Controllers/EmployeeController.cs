@@ -458,8 +458,8 @@
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (this.CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Edit))
+            if (this.CurrentUser.HasPermission(FunctionKey.VerifyRequestOfMember, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.ApproveRequestOfMember, Policy.Read))
             {
                 var getHRLeaderDashboardCriteria = new GetHRLeaderDashboardCriteria
                 {
@@ -733,6 +733,7 @@
             {
                 listVerifierName.Add(displayMore);
             }
+
             verifier = string.Join(", ", listVerifierName);
 
             listApproverName = approverList.Select(x => x.NickName).Take(3).ToList();
@@ -740,6 +741,7 @@
             {
                 listApproverName.Add(displayMore);
             }
+
             approver = string.Join(", ", listApproverName);
 
             listShiftName = shiftMonitorList.Select(x => x.NickName).Take(3).ToList();
@@ -747,6 +749,7 @@
             {
                 listShiftName.Add(displayMore);
             }
+
             shiftManager = string.Join(", ", listShiftName);
 
             listActingName = actingList.Select(x => x.NickName).Take(3).ToList();
@@ -754,6 +757,7 @@
             {
                 listActingName.Add(displayMore);
             }
+
             actingSupervisor = string.Join(", ", listActingName);
 
             listDisciplinarianName = disciplinarianList.Select(x => x.NickName).Take(3).ToList();
@@ -761,6 +765,7 @@
             {
                 listDisciplinarianName.Add(displayMore);
             }
+
             disciplinarian = string.Join(", ", listDisciplinarianName);
         }
 

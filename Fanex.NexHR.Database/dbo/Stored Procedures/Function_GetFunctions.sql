@@ -16,7 +16,7 @@ Param's Explanation:
          SET NOCOUNT ON;
          SELECT [FunctionId],
                 [FunctionKey],
-                [Name] AS FunctionName,
+                [Name] AS Name,
                 [ParentFunctionId],
                 [IsActive]
          FROM dbo.[FunctionKey] WITH (NOLOCK)
