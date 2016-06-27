@@ -72,6 +72,11 @@ table.data {
             text-align: left;
         }
 
+        table.data td.sub {
+            text-align: left;
+            padding-left: 20px;
+        }
+
         table.data td.status {
             width: 80px;
         }
