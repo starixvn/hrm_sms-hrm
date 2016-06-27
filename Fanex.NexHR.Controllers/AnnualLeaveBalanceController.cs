@@ -48,16 +48,7 @@ namespace Fanex.NexHR.Controllers
             _reportService = reportService ?? new ReportService();
         }
 
-        /// <summary>
-        /// ActionResult Index.
-        /// </summary>
-        /// <param name="teamIds">Team's id.</param>
-        /// <param name="employee">Employee name.</param>
-        /// <param name="year">Current Year.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="minAnnualBalance">Min Annual Balance.</param>
-        /// <param name="category">Employee category.</param>
-        /// <returns>Index View.</returns>
+        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(
             string teamIds,
             string employee,
@@ -88,12 +79,8 @@ namespace Fanex.NexHR.Controllers
             return Index(model);
         }
 
-        /// <summary>
-        /// ActionResult Index.
-        /// </summary>
-        /// <param name="model">LeaveSummary ViewModel.</param>
-        /// <returns>View Index.</returns>
         [HttpPost]
+        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
@@ -147,11 +134,6 @@ namespace Fanex.NexHR.Controllers
             });
         }
 
-        /// <summary>
-        /// ActionResult Employee.
-        /// </summary>
-        /// <param name="id">Employee's Id.</param>
-        /// <returns>View AnnualLeaveBalance of Employee. </returns>
         //// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)

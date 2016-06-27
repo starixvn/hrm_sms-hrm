@@ -28,6 +28,7 @@
         {
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -50,6 +51,7 @@
         }
 
         [HttpPost]
+        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index(MemoViewModel model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -64,14 +66,15 @@
                 Category = model.Category
             };
             ViewBag.EntityList = memoService.GetAll(criteria);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit)
-               || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create)
-               || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Memo, Policy.Edit)
+               || CurrentUser.HasPermission(FunctionKey.Memo, Policy.Create)
+               || CurrentUser.HasPermission(FunctionKey.Memo, Policy.Delete);
 
             return View(model);
         }
 
         [HttpGet]
+        [HRAuthorize(Policy.Edit, FunctionKey.Memo)]
         public ActionResult Edit(int id)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria
@@ -228,6 +231,7 @@
             return Json(result);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
         public ActionResult Detail(int id)
         {
             var criteria = new GetMemoByIdCriteria

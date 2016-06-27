@@ -1072,7 +1072,7 @@
     <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
     <Content Include="ExcelTemplates\OvertimeReportTemplate.xls" />
     <Content Include="ExcelTemplates\EmployeeOvertimeRecordTemplate.xls" />
-    <Content Include="Views\ExtensionNo\AddNewMember.cshtml" />
+    <Content Include="Views\ExtensionNo\Create.cshtml" />
     <Content Include="Views\ExtensionNo\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourMonthly.cshtml" />
     <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />

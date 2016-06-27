@@ -36,6 +36,7 @@
             this.commandService = commandService ?? new CommandService();
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Message)]
         public ActionResult Index()
         {
             var criteria = new GetMessageByCreatorCriteria

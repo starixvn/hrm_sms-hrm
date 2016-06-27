@@ -22,12 +22,14 @@
         {
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index()
         {
             return View(holidayService.GetByYear(DateTime.Now.Year));
         }
 
         [HttpGet]
+        [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
             ViewBag.year = year ?? DateTime.Now.Year;
