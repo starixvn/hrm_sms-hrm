@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, fadeOutMessage, showMessage, floatThead*/
+/*global _global, _messages, fadeOutMessage, showMessage, floatThead*/
 
 (function () {
     function initPagination() {

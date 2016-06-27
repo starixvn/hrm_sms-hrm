@@ -19,7 +19,6 @@
     @using (Html.BeginGetForm())
     {
         @Html.ValidationSummary(true)
-
         @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
         @Html.HiddenFor(model => model.SupervisorId)
         <div class="grid_2 gridlabel">

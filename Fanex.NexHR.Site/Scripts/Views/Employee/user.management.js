@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, floatThead*/
+/*global _global, _messages, floatThead*/
 
 (function () {
     function initPagination() {

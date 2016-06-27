@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = 'No@Comment!'
@@ -28,14 +27,6 @@ BEGIN
 		,@ApprovedStatus INT
 		,@HRStatus INT
 		,@ProcessedDate DATETIME
-
-	IF @RoleId NOT IN (2, 3, 6)
-	BEGIN
-		SET @ErrCode = 100
-		SET @ErrMsg = 'You don''t have permission on this function.'
-
-		RETURN
-	END
 
 	-- if status is not pending, show error
 	IF @ProcessedBy IS NULL
@@ -149,7 +140,12 @@ BEGIN
 		SET @now = getdate()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" ' + 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" ' + 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" ' + 'ProcessedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" ' + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" ' + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" '
+			+ 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
+			+ 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
+			+ 'ProcessedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
+			+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
+			+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 		SELECT @Description = 'Reject Request:' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1))
 

@@ -179,11 +179,9 @@
     <Build Include="dbo\Stored Procedures\Department_GetByParentId.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetNormalYearlyByHR.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Role_GetFunctionByRoleId.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetOTMonthlyOfEmpByHR.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Role_AssignFunctionToRole.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetRequestByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_Get.sql" />

@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''
@@ -24,14 +23,6 @@ BEGIN
 		,@VerifierId INT
 		,@ApproverId INT
 		,@ProcessedDate DATETIME
-
-	IF @RoleId NOT IN (2, 3, 6)
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'You don''t have permission on this request.'
-
-		RETURN
-	END
 
 	BEGIN TRY
 		SELECT TOP 1 @EmpId = EmpId
@@ -193,7 +184,12 @@ BEGIN
 			SET @now = getdate()
 
 			--Log general info
-			SELECT @LogSPData = '<WorkingTimeRequest_ResetRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" ' + 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" ' + 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" ' + 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" ' + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" ' + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+			SELECT @LogSPData = '<WorkingTimeRequest_ResetRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" '
+				+ 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
+				+ 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
+				+ 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
+				+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
+				+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 			SELECT @Description = 'Reset Status Request:' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1))
 

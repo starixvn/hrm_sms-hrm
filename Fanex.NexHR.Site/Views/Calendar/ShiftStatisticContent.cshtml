@@ -4,13 +4,11 @@
 @{
     Layout = null;
 }
-
 @Html.Hidden("PreviousFromDate", Model.FromDate.AddDays(-7).ToDateMonthYearFormatedDate())
 @Html.Hidden("PreviousToDate", Model.ToDate.AddDays(-7).ToDateMonthYearFormatedDate())
 @Html.Hidden("NextFromDate", Model.FromDate.AddDays(7).ToDateMonthYearFormatedDate())
 @Html.Hidden("NextToDate", Model.ToDate.AddDays(7).ToDateMonthYearFormatedDate())
-
-<table id="tblshiftstatistic" class="tabledata">
+<table id="tblshiftstatistic" class="table table-custom">
     <thead>
         <tr class="headerFilter">
             <th colspan="18">
@@ -48,7 +46,6 @@
             </th>
         </tr>
     </thead>
-    
         @if (Model.ShiftStatisticModels != null && Model.ShiftStatisticModels.Any())
         {
             var totalMonday = 0;
@@ -60,7 +57,6 @@
             var totalSunday = 0;
             var url = string.Empty;
             <tbody>
-
             @foreach (ShiftStatisticModel shiftStatisticModel in Model.ShiftStatisticModels)
             {
                 totalMonday += shiftStatisticModel.WorkMonday;
@@ -71,9 +67,7 @@
                 totalSaturday += shiftStatisticModel.WorkSaturday;
                 totalSunday += shiftStatisticModel.WorkSunday;
                 url = "employeeshift?teamIds=" + @Model.GroupIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany 
-                    + "&shiftId=" + @shiftStatisticModel.ShiftId
-                    + "&workdate=";
-                    
+                    + "&shiftId=" + @shiftStatisticModel.ShiftId + "&workdate=";
                 <tr>
                     <td>@shiftStatisticModel.ShiftCode</td>
                     <td>
@@ -99,7 +93,6 @@
                     </td>
                 </tr>
             }
-
             </tbody>
             <tfoot>
                 <tr>
@@ -119,5 +112,4 @@
             @RazorHelper.DisplayNoInformation(colspan: 8); 
         }
 </table>
-
 @Url.CombresLink("shiftstatisticcontentjs")
