@@ -23,6 +23,7 @@ Param's Explanation:
 */
 
 SET NOCOUNT ON;
+
 DECLARE @fromDate NVARCHAR(100),@toDate NVARCHAR(100)
 
 SELECT @fromDate = CONVERT(VARCHAR(10),@fromtime,111) + ' 00:00:00',
@@ -55,7 +56,7 @@ ELSE
 		SELECT GRoupID FROM [Group] g WITH (NOLOCK)
 	END
 
-CREATE TABLE #JobTitleList (JobTitleId TINYINT)
+CREATE TABLE #JobTitleList (JobTitleId INT)
 
 IF ISNULL(@JobTitleId,'')  <>''
 	INSERT INTO #JobTitleList (JobTitleId)
