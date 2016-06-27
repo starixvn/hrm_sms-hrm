@@ -14,6 +14,8 @@
 
         public const string EmployeeManagement = "EmployeeManagement";
 
+        public const string CreateEmployee = "CreateEmployee";
+
         public const string DivisionManagement = "DivisionManagement";
 
         public const string MenuManagement = "MenuManagement";
@@ -32,7 +34,7 @@
 
         public const string ReportHome = "ReportHome";
 
-        public const string FilterUnpaidLeaveSummary = "FilterUnpaidLeaveSummary";
+        public const string CanFilterUnpaidLeaveSummary = "CanFilterUnpaidLeaveSummary";
 
         public const string CanOnBehalfOthers = "CanOnBehalfOthers";
 

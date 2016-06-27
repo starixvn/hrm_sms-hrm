@@ -61,7 +61,11 @@
                 UnavailDates = GetUnavailDate(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
             return View(model);
         }
@@ -108,7 +112,11 @@
                 }
             }
 
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
             return View(model);
         }
@@ -145,7 +153,11 @@
                     VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
                     UnavailDates = GetUnavailDate(CurrentUser.Id)
                 };
-                ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+                ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                    || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                    || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                    || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
                 return View(viewModel);
             }
@@ -194,7 +206,11 @@
                 }
             }
 
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
             return View(model);
         }

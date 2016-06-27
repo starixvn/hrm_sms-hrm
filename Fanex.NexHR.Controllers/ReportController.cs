@@ -187,10 +187,10 @@
 
         /// [Authorize(Roles = "HR,Verifier,Approver")]
         [HRAuthorize(
-            Policy.Read, 
-            FunctionKey.VerifyRequestOfEmployee, 
-            FunctionKey.ApproveRequestOfEmployee, 
-            FunctionKey.VerifyRequestOfMember, 
+            Policy.Read,
+            FunctionKey.VerifyRequestOfEmployee,
+            FunctionKey.ApproveRequestOfEmployee,
+            FunctionKey.VerifyRequestOfMember,
             FunctionKey.ApproveRequestOfMember)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
@@ -564,8 +564,10 @@
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 Category = category
             };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FilterUnpaidLeaveSummary, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.FilterUnpaidLeaveSummary, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Delete);
 
             return UnpaidLeaveSummary(model);
         }

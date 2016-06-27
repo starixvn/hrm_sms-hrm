@@ -35,8 +35,8 @@
         }
 
         public LeaveController(
-            ILeaveRequestService leaveRequestService, 
-            IRequestService requestService, 
+            ILeaveRequestService leaveRequestService,
+            IRequestService requestService,
             ICommandService commandService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
@@ -65,7 +65,11 @@
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
             return View(model);
         }
@@ -107,7 +111,11 @@
             model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
 
             ViewBag.IsView = false;
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+
 
             return View(model);
         }
@@ -141,7 +149,10 @@
             model.LeaveTypeList = GetAllLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit);
+            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
 
             return View(model);
         }
@@ -422,7 +433,7 @@
 
             var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-            
+
             if (model.LeaveTypeId == Constants.MaternityLeave)
             {
                 //// rule: user can make leave request (maternity leave) for 6 months.
