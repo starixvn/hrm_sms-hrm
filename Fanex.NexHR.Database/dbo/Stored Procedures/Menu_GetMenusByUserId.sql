@@ -37,5 +37,5 @@ BEGIN
 		,me.DisplayOrder
 		,me.IsActive
 	FROM dbo.Menu AS me WITH (NOLOCK)
-	WHERE FunctionId IS NULL
+	WHERE FunctionId IS NULL AND IsActive = 1
 END;
