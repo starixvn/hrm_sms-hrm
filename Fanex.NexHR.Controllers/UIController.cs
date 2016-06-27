@@ -54,8 +54,12 @@
         public PartialViewResult NavBar()
         {
             var routeData = ControllerContext.ParentActionViewContext.RouteData;
-            ViewBag.Controller = routeData.Values["controller"];
-            ViewBag.Action = routeData.Values["action"];
+            var controller = routeData.Values["controller"];
+            var action = routeData.Values["action"];
+            var link = string.Format("/{0}/{1}", controller, action);
+            var selectedMenu = CurrentUser.NE_Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            ViewBag.SelectedMenu = selectedMenu;
             var menus = GetNagivationData();
 
             return PartialView(menus);

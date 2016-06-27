@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Nexus.RoleManagement.Services
 {
@@ -23,6 +24,7 @@ namespace Nexus.RoleManagement.Services
             if (criteria.IsValid())
             {
                 menus = GetData<MenuModel>(criteria);
+                menus = menus.GroupBy(i => i.Name).Select(g => g.First()).ToList();
             }
 
             return menus;

@@ -8,7 +8,7 @@ namespace Nexus.RoleManagement.Services
     [Serializable]
     public class SystemRoleModel
     {
-        public string RoleId { get; set; }
+        public int RoleId { get; set; }
 
         public string RoleName { get; set; }
 

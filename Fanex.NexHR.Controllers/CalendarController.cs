@@ -136,7 +136,7 @@ namespace Fanex.NexHR.Controllers
                 ScheduleArranges = scheduleArranges
             };
 
-            ViewBag.HasPermission = true; // !Roles.IsUserInRole("SystemAdmin");
+            ViewBag.IsSARole = CurrentUser.NE_Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
 
             return View(scheduleViewModel);
         }

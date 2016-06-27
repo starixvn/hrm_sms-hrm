@@ -3,9 +3,10 @@
 @model ScheduleViewModel
 @{
     Layout = null;
+    var isSARole = (bool)ViewBag.IsSARole;
 }
 
-@helper RenderShiftInput(WorkingCalendarModel workingCalendarModel, string classOfCheckbox)
+@helper RenderShiftInput(WorkingCalendarModel workingCalendarModel, string classOfCheckbox, bool isSARole)
 {
     var classOfInput = string.Empty;
     var valueOfInput = string.Empty;
@@ -15,7 +16,7 @@
     var isShowAddShiftInLeaveHalfday = false;
     var shiftCodeForHalfday = string.Empty;
     var classOfleavetype = string.Empty;
-    
+
     if (workingCalendarModel.IsLeaveOffDay)
     {
         valueOfInput = "Off";
@@ -81,7 +82,7 @@
             classOfInput = "holiday keepinviewday";
             disabledAttribute = "disabled";
         }
-        
+
         //isShowCheckBox = false;
     }
     else if (workingCalendarModel.IsOffDay)
@@ -129,7 +130,7 @@
     {
         classOfInput = "shift";
     }
-    
+
     if (workingCalendarModel.IsOvertime)
     {
         disabledAttribute = "disabled";
@@ -154,28 +155,28 @@
                 break;
         }
     }
-    
+
     classOfInput += " tooltip";
     if (!string.IsNullOrWhiteSpace(classOfleavetype))
     {
         classOfInput += " " + classOfleavetype;
     }
 
-	if (!Roles.IsUserInRole("SystemAdmin") && workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-28))
+    if (!isSARole && workingCalendarModel.WorkDate.Date <= DateTime.Now.Date.AddDays(-28))
     {
         isShowCheckBox = false;
         disabledAttribute = "disabled";
     }
-    
+
     <td class="shiftdate noneborderright">
         <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)" data-date="@workingCalendarModel.WorkDate.ToDateMonthYearFormatedDate()" @dataShiftId @disabledAttribute />
     </td>
     <td class="noneborderleft">
         @if (isShowCheckBox)
-        { 
-            <input type="checkbox" class="@classOfCheckbox"/>
+        {
+            <input type="checkbox" class="@classOfCheckbox" />
         }
-        else if(isShowAddShiftInLeaveHalfday)
+        else if (isShowAddShiftInLeaveHalfday)
         {
             <a class="lnkAddShift tooltip" title="@shiftCodeForHalfday" href="javascript:;">+</a>
         }
@@ -191,7 +192,7 @@
 @Html.Hidden("NextToDate", Model.ToDate.AddDays(7).ToDateMonthYearFormatedDate())
 
 <div class="summary">
-<br />
+    <br />
     <span class="success">Saved successfully!</span>
     <span class="validation-summary-errors">Saved not successfully!</span>
 </div>
@@ -201,7 +202,7 @@
         <tr class="headerFilter">
             <th colspan="21">
                 <div style="float:left;">
-                    <a class="lnkSave" href="javascript:;" title="Save all"><img src="../../Images/icon-save.png"/></a> &nbsp; ||
+                    <a class="lnkSave" href="javascript:;" title="Save all"><img src="../../Images/icon-save.png" /></a> &nbsp; ||
                     <a class="lnkCheckAll" href="javascript:;"> Check all </a> ||
                     <a class="lnkUnCheckAll" href="javascript:;"> Uncheck all </a> ||
                     <a class="lnkOffAndNoShift" href="javascript:;"> Off No Shift </a> ||
@@ -210,7 +211,7 @@
                 </div>
                 <div style="float:right;">
                     <a class="lnkPrevious" href="javascript:;"> << Previous </a> ||
-                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span> 
+                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span>
                     || <a class="lnkNext" href="javascript:;"> Next >> </a>
                 </div>
             </th>
@@ -274,43 +275,43 @@
         {
             foreach (ScheduleArrangeViewModel scheduleModel in Model.ScheduleArranges)
             {
-                
+
                 var isPublic = scheduleModel.MondaySchedule.IsPublic ? "checked" : string.Empty;
                 <tr>
                     <td>
                         <a class="lnkremove" href="javascript:;">-</a>
                     </td>
                     <td class="tooltip" title="@scheduleModel.TeamName">@scheduleModel.TeamCode</td>
-                    <td class="tdemployee" data-employeeId="@scheduleModel.EmployeeId">
+                    <td class="tdemployee" data-employeeid="@scheduleModel.EmployeeId">
                         <a href="/employee/detail/@scheduleModel.EmployeeId" class="tooltip" title="@scheduleModel.NickName">@scheduleModel.NickName</a>
                     </td>
                     <td>
-                        <input type="text" class="shift multipleShift" 
-                            value="@scheduleModel.MondaySchedule.ShiftMultipleCode" 
-                            data-numberoffbyweek="@scheduleModel.MondaySchedule.OffDaysbyWeek" 
-                            data-shiftid="@scheduleModel.MondaySchedule.ShiftMultipleID" 
-                            data-date="@scheduleModel.MondaySchedule.WorkDate.ToDateMonthYearFormatedDate()"/>
+                        <input type="text" class="shift multipleShift"
+                               value="@scheduleModel.MondaySchedule.ShiftMultipleCode"
+                               data-numberoffbyweek="@scheduleModel.MondaySchedule.OffDaysbyWeek"
+                               data-shiftid="@scheduleModel.MondaySchedule.ShiftMultipleID"
+                               data-date="@scheduleModel.MondaySchedule.WorkDate.ToDateMonthYearFormatedDate()" />
                         <a class="copyrow" href="javascript:;"> >> </a>
                     </td>
-                    @RenderShiftInput(scheduleModel.MondaySchedule, "chkMonday multiple")
-                    @RenderShiftInput(scheduleModel.TuesdaySchedule, "chkTuesday multiple")
-                    @RenderShiftInput(scheduleModel.WednesdaySchedule, "chkWednesday multiple")
-                    @RenderShiftInput(scheduleModel.ThursdaySchedule, "chkThursday multiple")
-                    @RenderShiftInput(scheduleModel.FridaySchedule, "chkFriday multiple")
-                    @RenderShiftInput(scheduleModel.SaturdaySchedule, "chkSaturday multiple")
-                    @RenderShiftInput(scheduleModel.SundaySchedule, "chkSunday multiple")
+                    @RenderShiftInput(scheduleModel.MondaySchedule, "chkMonday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.TuesdaySchedule, "chkTuesday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.WednesdaySchedule, "chkWednesday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.ThursdaySchedule, "chkThursday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.FridaySchedule, "chkFriday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.SaturdaySchedule, "chkSaturday multiple", isSARole)
+                    @RenderShiftInput(scheduleModel.SundaySchedule, "chkSunday multiple", isSARole)
                     <td>
-                        <input class="chkIsPublic" @isPublic type="checkbox"/>
+                        <input class="chkIsPublic" @isPublic type="checkbox" />
                     </td>
                     <td>
-                        <a class="lnkSaveRow" href="javascript:;"><img src="../../Images/icon-save.png"/></a>
+                        <a class="lnkSaveRow" href="javascript:;"><img src="../../Images/icon-save.png" /></a>
                     </td>
                     @if (string.IsNullOrWhiteSpace(scheduleModel.MondaySchedule.ModifierName))
                     {
-                         <td></td>
+                        <td></td>
                     }
                     else
-                    { 
+                    {
                         <td class="tooltip" title="@scheduleModel.MondaySchedule.ModifiedDate.ToShortFormatedDate()">@scheduleModel.MondaySchedule.ModifierName</td>
                     }
                 </tr>
@@ -322,38 +323,46 @@
 <hr />
 <div class="container_24" id="colordef">
     <div class="grid_2 holiday tooltip" title="Public Holiday">
-        PH</div>
+        PH
+    </div>
     <div class="grid_2 offday tooltip" title="Off Day">
-        OFF</div>
+        OFF
+    </div>
     <div class="grid_2 leaveday annualleave tooltip alpha" title="Annual Leave">
-        AL</div>
+        AL
+    </div>
     <div class="grid_2 leaveday unpaidleave tooltip alpha" title="Unpaid Leave">
-        UPL</div>
+        UPL
+    </div>
     <div class="grid_2 leaveday businesstrip tooltip" title="Business Trip">
-        BT</div>
+        BT
+    </div>
     <div class="grid_2 leaveday weddingleave tooltip" title="Wedding Leave">
-        WL</div>
+        WL
+    </div>
     <div class="grid_2 leaveday leavehalfday2 tooltip" title="2 Leave half day">
-        H/H</div>
+        H/H
+    </div>
     <div class="grid_2 changeshift tooltip" title="Change Shift">
-        CS</div>
+        CS
+    </div>
 </div>
 
 <div id="dialog-multiple" title="Shift multiple" style="display:none;">
     <form>
         <fieldset>
-        <label for="name">Shift</label>
-        <input type="text" id="shiftmulti" class="shift"/>
-        <input type="checkbox" id="chkIsShiftInOffday" />
-        <label for="chkIsShiftInOffday">Is Offday</label>
+            <label for="name">Shift</label>
+            <input type="text" id="shiftmulti" class="shift" />
+            <input type="checkbox" id="chkIsShiftInOffday" />
+            <label for="chkIsShiftInOffday">Is Offday</label>
         </fieldset>
     </form>
 </div>
 <div id="dialog-halfday" title="Add Shift" style="display:none;">
     <form>
         <fieldset>
-        <label for="name">Shift</label>
-        <input type="text" id="shifthalfday" class="shift"/>
+            <label for="name">Shift</label>
+            <input type="text" id="shifthalfday" class="shift" />
         </fieldset>
     </form>
 </div>

@@ -964,9 +964,6 @@
     <Content Include="Views\AnnualLeaveBalance\MultipleInsert.cshtml" />
     <Content Include="Views\UI\Header.cshtml" />
     <Content Include="Views\UI\NavBar.cshtml" />
-    <Content Include="Nagivation.sitemap">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Report\RequestMonitoring.cshtml" />
     <Content Include="Views\Report\TotalWorkingHours.cshtml" />

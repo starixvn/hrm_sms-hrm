@@ -1,8 +1,12 @@
-﻿@model System.Collections.Generic.IEnumerable<Nexus.RoleManagement.Services.MenuModel>
-
+﻿@using Nexus.RoleManagement.Services;
+@model System.Collections.Generic.IEnumerable<MenuModel>
+@{
+    var selectedMenu = (MenuModel)ViewBag.SelectedMenu;
+    var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;
+}
 <div class="column">
     <div class="nav_links">
-        @foreach (var parentMenu in Model.Where(i => i.ParentId == null))
+        @foreach (var parentMenu in Model.Where(i => i.ParentId == null).OrderBy(i => i.DisplayOrder))
         {
             if (Model.Any(i => i.ParentId == parentMenu.MenuId))
             {
@@ -14,7 +18,7 @@
                 <div class="navItem">
                     @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
                     {
-                        <div id="@childMenu.MenuId" class="el">
+                        <div id="@(childMenu.Name + "_"+childMenu.MenuId)" class="el">
                             <span class="xicon @childMenu.Name"></span>
                             <a href="@childMenu.Link">@childMenu.Text</a>
                         </div>
@@ -26,7 +30,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        var currentUrl = '@(ViewBag.Controller.ToString().ToLower() + "_" + ViewBag.Action.ToString().ToLower())';
+        var currentUrl = '@idSelected';
         var selectNavItem = $("#" + currentUrl);
         if (selectNavItem != undefined) {
             selectNavItem.addClass("selected");

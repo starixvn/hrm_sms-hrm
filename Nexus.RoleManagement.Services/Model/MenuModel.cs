@@ -18,7 +18,7 @@ namespace Nexus.RoleManagement.Services
 
         public int? ParentId { get; set; }
 
-        public int FunctionId { get; set; }
+        public int? FunctionId { get; set; }
 
         public int DisplayOrder { get; set; }
 

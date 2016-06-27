@@ -262,7 +262,7 @@ BEGIN
 		,g.[Rank]
 	ORDER BY [Rank]
 		,[Name]
-		,Code
+		,g.Code
 
 	DROP TABLE #EmployeeId
 	DROP TABLE #GroupsList

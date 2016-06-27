@@ -52,7 +52,7 @@
                 foreach (MenuViewModel chilmenu in Model.Where(i => i.ParentMenu != null && i.ParentMenu.MenuId == menu.MenuId))
                 {
                     <tr id="row_@chilmenu.MenuId">
-                        <td class="center">
+                        <td>
                             @(chilmenu.DisplayOrder + ". " + chilmenu.Text)
                         </td>
                         <td>

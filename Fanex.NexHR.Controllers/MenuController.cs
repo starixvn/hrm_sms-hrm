@@ -50,10 +50,10 @@
                 var criteria = new InsertMenuCriteria
                 {
                     DisplayOrder = menu.DisplayOrder,
-                    FunctionId = menu.FunctionId,
+                    FunctionId = menu.FunctionId == 0 ? null : menu.FunctionId,
                     Link = menu.Link,
                     Name = menu.Name,
-                    ParentId = menu.ParentId,
+                    ParentId = menu.ParentId == 0 ? null : menu.ParentId,
                     Text = menu.Text
                 };
                 var result = this._menuService.Insert(criteria);
@@ -86,10 +86,10 @@
                 var criteria = new UpdateMenuCriteria
                 {
                     DisplayOrder = menu.DisplayOrder,
-                    FunctionId = menu.FunctionId,
+                    FunctionId = menu.FunctionId == 0 ? null : menu.FunctionId,
                     Link = menu.Link,
                     Name = menu.Name,
-                    ParentId = menu.ParentId,
+                    ParentId = menu.ParentId == 0 ? null : menu.ParentId,
                     Text = menu.Text,
                     MenuId = menu.MenuId,
                     IsActive = menu.IsActive

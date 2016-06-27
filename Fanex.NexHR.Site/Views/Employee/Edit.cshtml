@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Edit";
     var roles = (IEnumerable<Nexus.RoleManagement.Services.SystemRoleModel>)ViewBag.Roles;
-    var roleItemList = roles.Select(i => new SelectListItem() { Text = i.RoleName, Value = i.RoleId });
+    var roleItemList = roles.Select(i => new SelectListItem() { Text = i.RoleName, Value = i.RoleId.ToString() });
 }
 @section css{
     @Url.CombresLink("employeeeditcss")

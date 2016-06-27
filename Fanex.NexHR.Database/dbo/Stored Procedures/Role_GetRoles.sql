@@ -13,7 +13,7 @@ Param's Explanation:
 
      BEGIN
          SET NOCOUNT ON;
-         SELECT loDa.Value AS RoleId,
+         SELECT CAST(loDa.Value AS INT) AS RoleId,
                 loDa.NAME AS RoleName,
                 loDa.Code AS RoleCode
          FROM dbo.[Lookup] AS look WITH (NOLOCK)
