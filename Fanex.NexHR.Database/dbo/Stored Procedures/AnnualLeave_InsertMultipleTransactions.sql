@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
+﻿ALTER PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
 	,@Description NVARCHAR(4000) = ''
 	,@FromDate DATETIME
 	,@DeductDays NUMERIC(18, 1)
@@ -89,7 +89,7 @@ BEGIN
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN @Emp AS temp ON emp.EmpId = temp.ID
 		WHERE (
-				@EmpIds IS NULL
+				@EmpIds IS NOT NULL
 				AND ISNULL(isdeleted, 0) = 0
 				)
 
