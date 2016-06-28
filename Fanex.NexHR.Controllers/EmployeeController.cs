@@ -295,6 +295,7 @@
             IList<Country> countryList = employeeService.GetAllCountry(getAllCountryCriteria);
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
             model.ListCountryCode = new List<SelectListItem>();
+            model.Roles = AddMemberToRoleList(model.Roles);
 
             if (ModelState.IsValid)
             {
@@ -890,5 +891,9 @@
 
             return criteria;
         }
-    }
+        private string AddMemberToRoleList(string roles)
+        {
+            return string.Format("{0},{1}", ((int)RoleSystem.Member).ToString(), roles);
+        }
+    } 
 }

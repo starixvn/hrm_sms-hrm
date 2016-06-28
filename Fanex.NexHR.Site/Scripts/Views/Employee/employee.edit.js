@@ -3,7 +3,7 @@
 /* exported */
 
 function bindSARole(onload) {
-    var combineSARole = $('#RoleArray2, #RoleArray3, #RoleArray4, #RoleArray5, #RoleArray6');
+    var combineSARole = $('#RoleArray2, #RoleArray3, #RoleArray4, #RoleArray5, #RoleArray6,#RoleArray8');
     if ($('#RoleArray7').prop('checked')) {
         combineSARole.prop('checked', true).prop('disabled', true);
     }

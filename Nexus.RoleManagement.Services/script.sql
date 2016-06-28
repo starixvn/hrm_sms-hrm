@@ -1502,6 +1502,9 @@ WHILE(EXISTS
                      @ModifiedDate = ModifiedDate,
                      @RoleIds = Roles
         FROM #Employee;
+	   
+	   IF(length(@RoleIds)>1) SET @RoleIds = '1,' + @RoleIds
+
         INSERT INTO [dbo].[EmployeeRole]
         ([EmployeeId],
          [RoleId],
