@@ -66,7 +66,6 @@
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
 
-
             return View(model);
         }
 
@@ -117,7 +116,6 @@
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
 
-
             return View(model);
         }
 
@@ -157,7 +155,6 @@
                     || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
                     || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
                     || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
-
 
                 return View(viewModel);
             }
@@ -210,7 +207,6 @@
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
-
 
             return View(model);
         }

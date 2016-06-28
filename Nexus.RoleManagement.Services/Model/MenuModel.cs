@@ -15,10 +15,12 @@ namespace Nexus.RoleManagement.Services
         public string Text { get; set; }
 
         public string Link { get; set; }
-
+        
         public int? ParentId { get; set; }
 
         public int? FunctionId { get; set; }
+        
+        public int Policy { get; set; }
 
         public int DisplayOrder { get; set; }
 

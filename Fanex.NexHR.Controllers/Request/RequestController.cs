@@ -107,12 +107,7 @@
         }
 
         /// [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(
-            Policy.Delete, 
-            FunctionKey.VerifyRequestOfMember, 
-            FunctionKey.VerifyRequestOfEmployee, 
-            FunctionKey.ApproveRequestOfMember, 
-            FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Edit, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -177,6 +172,7 @@
             return supervisors;
         }
 
+        [HRAuthorize(Policy.Edit, FunctionKey.VoidRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))
@@ -227,10 +223,10 @@
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(
-            Policy.Edit, 
-            FunctionKey.VerifyRequestOfMember, 
-            FunctionKey.VerifyRequestOfEmployee, 
-            FunctionKey.ApproveRequestOfMember, 
+            Policy.Edit,
+            FunctionKey.VerifyRequestOfMember,
+            FunctionKey.VerifyRequestOfEmployee,
+            FunctionKey.ApproveRequestOfMember,
             FunctionKey.ApproveRequestOfEmployee)]
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {

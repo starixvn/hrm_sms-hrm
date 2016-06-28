@@ -21,12 +21,31 @@ BEGIN
 		,me.FunctionId
 		,me.DisplayOrder
 		,me.IsActive
+		,me.Policy
 	FROM dbo.EmployeeRole AS empRo WITH (NOLOCK)
 		INNER JOIN dbo.RoleFunction AS roFunc WITH (NOLOCK) ON empRo.RoleId = roFunc.RoleId
-		AND roFunc.IsRead = 1
 		INNER JOIN dbo.Menu AS me WITH (NOLOCK) ON roFunc.FunctionId = me.FunctionId
 		AND me.IsActive = 1
 	WHERE empRo.EmployeeId = @UserId
+		AND (
+			(
+				me.Policy = 1
+				AND roFunc.IsRead = 1
+				)
+			OR (
+				me.Policy = 2
+				AND roFunc.IsEdit = 1
+				)
+			OR (
+				me.Policy = 3
+				AND roFunc.IsCreate = 1
+				)
+			OR (
+				me.Policy = 4
+				AND roFunc.IsDelete = 1
+				)
+			)
+	
 	UNION ALL
 	SELECT DISTINCT me.MenuId
 		,me.[Name]
@@ -36,6 +55,8 @@ BEGIN
 		,me.FunctionId
 		,me.DisplayOrder
 		,me.IsActive
+		,me.Policy
 	FROM dbo.Menu AS me WITH (NOLOCK)
-	WHERE FunctionId IS NULL AND IsActive = 1
+	WHERE FunctionId IS NULL
+		AND IsActive = 1
 END;

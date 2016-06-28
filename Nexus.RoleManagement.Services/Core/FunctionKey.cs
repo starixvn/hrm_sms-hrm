@@ -14,8 +14,6 @@
 
         public const string EmployeeManagement = "EmployeeManagement";
 
-        public const string CreateEmployee = "CreateEmployee";
-
         public const string DivisionManagement = "DivisionManagement";
 
         public const string MenuManagement = "MenuManagement";
@@ -53,5 +51,7 @@
         public const string VerifyOTEmployee = "VerifyOTEmployee";
 
         public const string ApproveOTEmployee = "ApproveOTEmployee";
+
+        public const string VoidRequest = "VoidRequest";
     }
 }

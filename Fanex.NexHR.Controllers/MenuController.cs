@@ -54,7 +54,8 @@
                     Link = menu.Link,
                     Name = menu.Name,
                     ParentId = menu.ParentId == 0 ? null : menu.ParentId,
-                    Text = menu.Text
+                    Text = menu.Text,
+                    Policy = menu.Policy
                 };
                 var result = this._menuService.Insert(criteria);
                 if (result.IsSuccessful)
@@ -92,7 +93,8 @@
                     ParentId = menu.ParentId == 0 ? null : menu.ParentId,
                     Text = menu.Text,
                     MenuId = menu.MenuId,
-                    IsActive = menu.IsActive
+                    IsActive = menu.IsActive,
+                    Policy = menu.Policy
                 };
                 var result = this._menuService.Update(criteria);
                 if (result.IsSuccessful)

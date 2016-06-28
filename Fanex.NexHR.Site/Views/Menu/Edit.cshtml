@@ -5,7 +5,7 @@
     ViewBag.Title = Labels.Edit;
 }
 @section css{
-@Url.CombresLink("menucss")
+    @Url.CombresLink("menucss")
 }
 @section js{
     @Url.CombresLink("menujs")
@@ -52,9 +52,9 @@
             </div>
             <div class="input">
                 @{
-                var menus = new List<MenuViewModel>();
-                menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
-                menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
+    var menus = new List<MenuViewModel>();
+    menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
+    menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
                 }
                 @Html.DropDownListFor(model => model.ParentId, new SelectList(menus, "MenuId", "Name"))
             </div>
@@ -69,6 +69,14 @@
                 functions.AddRange((List<FunctionModel>)ViewBag.Functions);
                 }
                 @Html.DropDownListFor(model => model.FunctionId, new SelectList(functions, "FunctionId", "Name"))
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Policy)
+            </div>
+            <div class="input">
+                @RazorHelper.PolicyDropDownList("Policy", Model.Policy)
             </div>
         </div>
         <div class="formrow">

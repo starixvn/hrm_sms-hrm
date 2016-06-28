@@ -27,6 +27,7 @@
             <th>Order. Name</th>
             <th>Link</th>
             <th>Function</th>
+            <th>Policy</th>
             <th>Parent Menu</th>
             <th>Active</th>
             @if (hasPermission)
@@ -60,6 +61,9 @@
                         </td>
                         <td>
                             @(chilmenu.Function != null ? chilmenu.Function.Name : string.Empty)
+                        </td>
+                        <td>
+                            @((Policy)chilmenu.Policy)
                         </td>
                         <td>
                             @chilmenu.ParentMenu.Text
