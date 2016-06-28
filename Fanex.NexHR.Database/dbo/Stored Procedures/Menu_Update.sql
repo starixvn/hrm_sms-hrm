@@ -1,10 +1,11 @@
 ﻿CREATE PROCEDURE [dbo].[Menu_Update] @MenuId       INT,
                                     @Name         NVARCHAR(50),
-                                    @Text         NVARCHAR(100),
-                                    @Link         NVARCHAR(100),
-                                    @ParentId     INT,
-                                    @FunctionId   INT,
-                                    @DisplayOrder INT,
+                                    @Text         NVARCHAR(100) = NULL,
+                                    @Link         NVARCHAR(100) = NULL,
+                                    @ParentId     INT = NULL,
+                                    @FunctionId   INT = NULL,
+                                    @Policy INT = NULL,
+                                    @DisplayOrder INT = NULL,
                                     @IsActive     BIT,
                                     @ErrorCode    INT           = 0 OUTPUT,
                                     @ErrorMessage VARCHAR(200)  = '' OUTPUT
@@ -30,6 +31,7 @@ Param's Explanation:
                [ParentId] = @ParentId,
                [FunctionId] = @FunctionId,
                [DisplayOrder] = @DisplayOrder,
-               [IsActive] = @IsActive
+               [IsActive] = @IsActive,
+               [Policy] = @Policy
          WHERE MenuId = @MenuId;
      END;

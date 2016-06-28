@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Menu_GetMenuById] @MenuId INT
+﻿CREATE PROCEDURE [dbo].[Menu_GetMenusById] @MenuId INT
 AS
 
 /*
@@ -21,7 +21,8 @@ Param's Explanation:
                 me.ParentId,
                 me.FunctionId,
                 me.DisplayOrder,
-                me.IsActive
+                me.IsActive,
+                me.Policy
          FROM dbo.Menu AS me WITH (NOLOCK)
          WHERE me.MenuId = @MenuId;
      END;
