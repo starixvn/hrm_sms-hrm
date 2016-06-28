@@ -26,6 +26,7 @@
         public ActionResult Index()
         {
             ViewBag.roles = _roleService.GetRoles();
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Edit);
 
             return View();
         }
@@ -34,6 +35,7 @@
         public ActionResult GetFunctionByRoleId(int roleId)
         {
             IEnumerable<FunctionModel> functions = _functionService.GetFunctionsByRoleId(roleId);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Edit);
 
             return PartialView("_GetFunctionByRoleId", functions);
         }

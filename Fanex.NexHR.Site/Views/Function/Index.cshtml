@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Function Management";
     var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 
 @section css{
@@ -27,8 +28,11 @@
 <div class="clear">
 </div>
 <div id="list-functions"></div>
-<div class="menu">
-    <div class="input">
-        <input type="button" value="Save" class="space" id="save" />
+@if (hasPermission)
+{
+    <div class="menu">
+        <div class="input">
+            <input type="button" value="Save" class="space" id="save" />
+        </div>
     </div>
-</div>
+}

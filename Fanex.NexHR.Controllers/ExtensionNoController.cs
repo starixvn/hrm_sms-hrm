@@ -30,6 +30,7 @@
             this.teamService = teamService ?? new TeamService();
             this.commandService = commandService ?? new CommandService();
         }
+
         [HRAuthorize(Policy.Read, FunctionKey.ExtensionNumber)]
         public ActionResult Index()
         {

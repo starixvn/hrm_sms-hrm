@@ -26,7 +26,8 @@
         {
             var menus = this._menuService.GetMenus();
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Delete)
-                || CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Edit);
+                || CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Create);
 
             return View(menus);
         }
