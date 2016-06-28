@@ -22,7 +22,6 @@
             <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.Year)
             </div>
-
             <div class="grid_3">
                 @Html.YearPickerFor(model => model.Year, 2010)
             </div>
@@ -44,7 +43,7 @@
                     @{
                         var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
                         var selected = string.Empty;
-                        foreach (Fanex.NexHR.Models.Team team in ViewBag.Groups)
+                        foreach (Team team in ViewBag.Groups)
                         {
                             selected = string.Empty;
                             if (teamIds != null)
@@ -55,7 +54,6 @@
                                     selected = "selected";
                                 }
                             }
-
                             <option @selected value="@team.Id">@team.Name</option>
                         }
                     }
@@ -72,7 +70,6 @@
                 @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
-
             <div class="grid_5 prefix_1">
                 <input type="submit" value="@Labels.Submit" class="processing-submit" />
                 <input type="button" value="Excel" id="btnExcel" />
@@ -106,42 +103,18 @@
             </th>
         </tr>
         <tr>
-            <th>
-                @Labels.Jan
-            </th>
-            <th>
-                @Labels.Feb
-            </th>
-            <th>
-                @Labels.Mar
-            </th>
-            <th>
-                @Labels.Apr
-            </th>
-            <th>
-                @Labels.May
-            </th>
-            <th>
-                @Labels.Jun
-            </th>
-            <th>
-                @Labels.Jul
-            </th>
-            <th>
-                @Labels.Aug
-            </th>
-            <th>
-                @Labels.Sep
-            </th>
-            <th>
-                @Labels.Oct
-            </th>
-            <th>
-                @Labels.Nov
-            </th>
-            <th>
-                @Labels.Dec
-            </th>
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
+            <th>@Labels.Mar</th>
+            <th>@Labels.Apr</th>
+            <th>@Labels.May</th>
+            <th>@Labels.Jun</th>
+            <th>@Labels.Jul</th>
+            <th>@Labels.Aug</th>
+            <th>@Labels.Sep</th>
+            <th>@Labels.Oct</th>
+            <th>@Labels.Nov</th>
+            <th>@Labels.Dec</th>
         </tr>
     </thead>
     @{
@@ -157,7 +130,6 @@
             {
                 checkSummaryList = false;
             }
-
         }
     }
     @if (checkSummaryList)
@@ -174,7 +146,6 @@
                         </td>
                     </tr>
                 }
-
                 foreach (LeaveSummary leave in item.LeaveSummaryInTeam)
                 {
                     <tr>
@@ -187,7 +158,6 @@
                         <td class="align-left">
                             @leave.Employee.FullName
                         </td>
-
                         @if (leave.Jan > 0)
                         {
                             <td>
@@ -308,7 +278,6 @@
                         {
                             <td></td>
                         }
-
                         @if (leave.LeaveBalance > 0)
                         {
                             <td>

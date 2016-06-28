@@ -41,6 +41,10 @@
 
             th {
                 border-color: #646d80;
+
+                &.weekend {
+                    color: red;
+                }
             }
 
             &:nth-child(n + 1) {
@@ -61,6 +65,10 @@
 
             &:nth-child(odd) {
                 background: #ececec;
+            }
+
+            input {
+                box-shadow: unset;
             }
 
             td {

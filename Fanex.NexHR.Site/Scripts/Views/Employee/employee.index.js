@@ -64,26 +64,6 @@
         });
     }
 
-    function exportExcel(object) {
-        var jobTitleId = $('#title').val(),
-            groups = $("#group").val() !== null ? $("#group").val().join() : "",
-            keyword = $('#Keyword').val(),
-            url = null;
-
-        var controllerPath;
-        if (object.attr("id") === "basicExcel") {
-            controllerPath = "export/EmployeeBasicInfo?query=";
-        }
-        if (object.attr("id") === "detailsExcel") {
-            controllerPath = "export/EmployeeDetailsInfo?query=";
-        }
-
-        url = _global.root + controllerPath + keyword + "&groupIds=" + groups +
-            "&enable=" + enable + "&isDelete=" + isDelete + "&titleId=" + jobTitleId + "&isLocal=" + isLocal;
-
-        location.href = url;
-    }
-
     $(document).ready(function () {
         $("#group").multiselect();
 

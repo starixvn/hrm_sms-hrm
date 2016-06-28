@@ -2,10 +2,10 @@
 @{
     Layout = null;
 }
-<table class="tabledata">
+<table class="table table-custom">
     <thead>
-        <tr class="headermenu">
-            <th colspan="21">
+        <tr>
+            <th colspan="12">
                 <div style="float:right;">
                     <a id="lnkProcess" href="javascript:;"> @Labels.Process </a> ||
                     <a id="lnkVoid" href="javascript:;"> @Labels.Void </a>
@@ -35,7 +35,7 @@
                     <td>
                         <input type="checkbox" class="chkSelect" data-requestid="@item.RequestId" />
                     </td>
-                    <td class="left">
+                    <td class="align-left">
                         @item.Employee.FullName
                     </td>
                     <td>
@@ -77,8 +77,8 @@
         }
     </tbody>
     <tfoot>
-        <tr class="sum">
-            <td class="sumhours">
+        <tr class="summary">
+            <td class="sumhours align-right">
                 @Labels.TotalOvertimeHours:
             </td>
             <td></td>

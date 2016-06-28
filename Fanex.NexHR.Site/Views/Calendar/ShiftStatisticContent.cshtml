@@ -10,7 +10,7 @@
 @Html.Hidden("NextToDate", Model.ToDate.AddDays(7).ToDateMonthYearFormatedDate())
 <table id="tblshiftstatistic" class="table table-custom">
     <thead>
-        <tr class="headerFilter">
+        <tr>
             <th colspan="18">
                 <div style="float:left;">
                     <a id="lnkPrevious" href="javascript:;"> << Previous </a> ||
@@ -96,7 +96,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>@Labels.Total:</td>
+                    <td class="align-right">@Labels.Total:</td>
                     <td>@totalMonday</td>
                     <td>@totalTuesday</td>
                     <td>@totalWednesday</td>

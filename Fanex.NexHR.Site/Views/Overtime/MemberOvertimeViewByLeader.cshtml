@@ -4,9 +4,9 @@
     var hasVerfifyPermision = (bool)ViewBag.HasVerfifyPermision;
     var hasApprovePermision = (bool)ViewBag.HasApprovePermision;
 }
-<table class="tabledata">
+<table class="table table-custom">
     <thead>
-        <tr class="headermenu">
+        <tr>
             <th colspan="11">
                 <div style="float:right;">
                     @if (hasApprovePermision && hasVerfifyPermision)
@@ -60,7 +60,7 @@
                     <td>
                         <input type="checkbox" class="chkSelect" data-requestid="@item.RequestId" />
                     </td>
-                    <td class="left">
+                    <td class="align-left">
                         @item.Employee.FullName
                     </td>
                     <td>
@@ -92,15 +92,13 @@
                             @Labels.View
                         </a>
                     </td>
-
                     @Html.Partial("SharedVerifierStatus", item)
                     @Html.Partial("SharedApproverStatus", item)
-
                     <td>
                         @if (item.IsShowWarning)
                         {
                             <a href="@Url.Action("MemberDailyOvertime", "Overtime", new { requestId = item.RequestId, isHRView = false })">
-                                <img src="../../Images/warning.png" width="16px;" height="16px;" />
+                                <img src="../../Images/warning.png" width="16" height="16" />
                             </a>
                         }
                     </td>
@@ -113,8 +111,8 @@
         }
     </tbody>
     <tfoot>
-        <tr class="sum">
-            <td class="sumhours">
+        <tr class="summary">
+            <td class="sumhours align-right">
                 @Labels.TotalOvertimeHours:
             </td>
             <td></td>

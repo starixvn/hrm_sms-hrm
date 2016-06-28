@@ -103,6 +103,10 @@ table.table.table-custom thead tr th {
   border-color: #646d80;
 }
 
+table.table.table-custom thead tr th.weekend {
+  color: red;
+}
+
 table.table.table-custom thead tr:nth-child(n + 1) {
   background: #343c4e;
 }
@@ -117,6 +121,10 @@ table.table.table-custom tbody tr:hover {
 
 table.table.table-custom tbody tr:nth-child(odd) {
   background: #ececec;
+}
+
+table.table.table-custom tbody tr input {
+  box-shadow: unset;
 }
 
 table.table.table-custom tbody tr td .icon-check {

@@ -65,8 +65,7 @@
     function eventAddSupervisor() {
         $('#lknAdd').click(function () {
             var supervisorName = $('#Supervisor').val(),
-                supervisorId = $('#SupervisorId').val(),
-                supervisorTeam = $('#SupervisorTeam').val();
+                supervisorId = $('#SupervisorId').val();
             if (supervisorId.length > 0 && supervisorName.length > 0) {
                 var html = $('<tr><td><a href="javascript:;" class="moveUp">Up | </a><a href="javascript:;" class="moveDown">Down | </a>' +
                     '<a href="javascript:;" class="moveTop">Top</a>' +

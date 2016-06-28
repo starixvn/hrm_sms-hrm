@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, _messages, floatThead*/
+/*global _global, _messages, floatThead, getParam*/
 
 (function () {
     function initPagination() {
@@ -74,22 +74,17 @@
     }
 
     function exportExcel(object) {
-        var jobTitleId = $('#title').val(),
-            groups = $("#group").val() !== null ? $("#group").val().join() : "",
-            keyword = $('#Keyword').val(),
-            url = null;
+        var url = null,
+            controllerPath;
 
-        var controllerPath;
         if (object.attr("id") === "basicExcel") {
-            controllerPath = "export/EmployeeBasicInfo?query=";
+            controllerPath = "export/EmployeeBasicInfo?";
         }
         if (object.attr("id") === "detailsExcel") {
-            controllerPath = "export/EmployeeDetailsInfo?query=";
+            controllerPath = "export/EmployeeDetailsInfo?";
         }
 
-        url = _global.root + controllerPath + keyword + "&groupIds=" + groups +
-            "&enable=" + enable + "&isDelete=" + isDelete + "&titleId=" + jobTitleId + "&isLocal=" + isLocal;
-
+        url = _global.root + controllerPath + $('form.form-filter').serialize();
         location.href = url;
     }
 

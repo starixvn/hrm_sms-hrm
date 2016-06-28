@@ -35,12 +35,17 @@
     [ValidateInput(false)]
     public class ReportController : BaseController
     {
-        private readonly IReportService _reportService;
-        private readonly ITeamService _teamService;
-        private readonly IExportExcelService _exportExcelService;
-        private readonly IEmployeeService _employeeService;
-        private readonly ILookupDataService _lookupDataService;
+        private readonly IReportService reportService;
+        private readonly ITeamService teamService;
+        private readonly IExportExcelService exportExcelService;
+        private readonly IEmployeeService employeeService;
+        private readonly ILookupDataService lookupDataService;
         private IExportService exportService;
+
+        public ReportController()
+            : this(null, null, null, null, null)
+        {
+        }
 
         public ReportController(
             IReportService reportSevice = null,
@@ -49,16 +54,11 @@
             IEmployeeService employeeService = null,
             ILookupDataService lookupDataService = null)
         {
-            this._reportService = reportSevice ?? new ReportService();
-            this._teamService = teamService ?? new TeamService();
-            this._exportExcelService = exportExcelService ?? new ExportExcelService();
-            this._employeeService = employeeService ?? new EmployeeService();
-            this._lookupDataService = lookupDataService ?? new LookupDataService();
-        }
-
-        public ReportController()
-            : this(null, null, null, null, null)
-        {
+            this.reportService = reportSevice ?? new ReportService();
+            this.teamService = teamService ?? new TeamService();
+            this.exportExcelService = exportExcelService ?? new ExportExcelService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
         /// [Authorize(Roles = "HR")]
@@ -76,7 +76,7 @@
             };
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = CurrentUser.Id };
 
-            ViewBag.Groups = _teamService.GetBySupervisor(getGroupCriteria);
+            ViewBag.Groups = teamService.GetBySupervisor(getGroupCriteria);
             var model = new EmployeeAttendanceViewModel
             {
                 FromDate = DateTime.Now,
@@ -87,7 +87,7 @@
                 SupervisorId = CurrentUser.Id
             };
 
-            Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee != null)
             {
                 model.TeamName = employee.Team.Name;
@@ -150,7 +150,7 @@
                 PageIndex = model.CurrentPage - 1,
                 ItemsPerPage = model.ItemsPerPage
             };
-            IList<TimeRecordModel> timeRecords = _reportService.GetTimeRecords(criteria);
+            IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
             ViewBag.HasPermission = hasPermissionToEdit;
 
             var pagerOption = new PagerOptionModel()
@@ -213,7 +213,7 @@
                 GroupIds = group,
                 IsLocal = isLocal
             };
-            List<RequestsMonitoring> requests = _reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
+            List<RequestsMonitoring> requests = reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
             ViewBag.MaxRequest = maxRequest;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
@@ -229,7 +229,7 @@
             if (isExcel)
             {
                 string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportHRRequestStatistic(requests, fromDate, toDate);
+                var hssfworkbook = exportExcelService.ExportHRRequestStatistic(requests, fromDate, toDate);
                 return ExcelFile(hssfworkbook, fileName);
             }
 
@@ -321,7 +321,7 @@
                 GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal
             };
-            var totalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
+            var totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.VerifyRequestOfEmployee, Policy.Read)
@@ -366,7 +366,7 @@
                 IsLocal = isLocal,
                 ReportMonth = model.Month
             };
-            var totalWorkingHourMonthly = _reportService.GetTotalWorkingHourMonthly(getWorkingHourMonthlyCriteria);
+            var totalWorkingHourMonthly = reportService.GetTotalWorkingHourMonthly(getWorkingHourMonthlyCriteria);
             var firstRecord = totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any() ? totalWorkingHourMonthly[0] : null;
 
             if (model.IsExportExcel)
@@ -413,7 +413,7 @@
                     IsLocal = isLocal,
                     WorkDate = model.WorkDate
                 };
-                var totalWorkingHourDaily = _reportService.GetTotalWorkingHourDaily(criteria);
+                var totalWorkingHourDaily = reportService.GetTotalWorkingHourDaily(criteria);
                 string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
 
                 exportService = new TotalWorkingHourDailyExportService(totalWorkingHourDaily);
@@ -469,7 +469,7 @@
                     GroupIds = teamIds,
                     IsLocal = isLocal
                 };
-                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = _reportService.GetTotalWorkingHourWeekly(getTotalWorkingHourWeeklyCriteria);
+                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = reportService.GetTotalWorkingHourWeekly(getTotalWorkingHourWeeklyCriteria);
                 TotalWorkingHourMonthly firstRecord = totalWorkingHourWeekly != null && totalWorkingHourWeekly.Any() ? totalWorkingHourWeekly[0] : null;
                 ViewBag.EntityList = totalWorkingHourWeekly;
                 ViewBag.FirstRecord = firstRecord;
@@ -522,7 +522,7 @@
             {
                 LookupCode = Constants.JobTitle
             };
-            IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
+            IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -540,9 +540,9 @@
                     IsLocal = model.IsLocal,
                     JobTitleId = model.JobTitleId
                 };
-                List<WorkingCalendarSummary> calendars = _reportService.CalendarSummaryList(criteria).ToList();
+                List<WorkingCalendarSummary> calendars = reportService.CalendarSummaryList(criteria).ToList();
                 string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportWorkingCalendarSummary(calendars, fromDate.Value, toDate.Value);
+                var hssfworkbook = exportExcelService.ExportWorkingCalendarSummary(calendars, fromDate.Value, toDate.Value);
                 return ExcelFile(hssfworkbook, fileName);
             }
 
@@ -592,19 +592,18 @@
                 IsLocal = (byte?)model.Category,
                 SupervisorId = CurrentUser.Id
             };
-            IList<LeaveSummary> entityList = _reportService.GetUnpaidLeave(criteria);
+            IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
 
             var getGroupCriteria = new GetGroupBySupervisorCriteria()
             {
                 SupervisorId = CurrentUser.Id
             };
-            IList<Team> teams = _teamService.GetBySupervisor(getGroupCriteria);
+            IList<Team> teams = teamService.GetBySupervisor(getGroupCriteria);
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;
             ViewBag.EntityList = entityList;
 
-            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(entityList, teams);
-
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
@@ -643,12 +642,12 @@
                 IsLocal = isLocal,
                 ActionType = supervisorType
             };
-            IList<SupervisorReportModel> supervisors = _reportService.GetSupervisorReport(getSupervisorReportCriteria);
+            IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(getSupervisorReportCriteria);
 
             if (isExcel.Value)
             {
                 string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportEmployeeSupervisor(supervisors);
+                var hssfworkbook = exportExcelService.ExportEmployeeSupervisor(supervisors);
 
                 return ExcelFile(hssfworkbook, fileName);
             }
@@ -670,12 +669,12 @@
             {
                 GroupIds = groups,
             };
-            IList<TeamSupervisorReportModel> supervisors = _reportService.GetAllTeamSupervisor(criteria);
+            IList<TeamSupervisorReportModel> supervisors = reportService.GetAllTeamSupervisor(criteria);
 
             if (isExcel.Value)
             {
                 string fileName = "TeamSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = _exportExcelService.ExportTeamSupervisor(supervisors);
+                var hssfworkbook = exportExcelService.ExportTeamSupervisor(supervisors);
                 return ExcelFile(hssfworkbook, fileName);
             }
             else
@@ -697,7 +696,7 @@
                 Year = model.Year
             };
 
-            IList<ManpowerModel> manpowers = _reportService.GetManpower(criteria);
+            IList<ManpowerModel> manpowers = reportService.GetManpower(criteria);
             model.Manpowers = manpowers;
 
             return View(model);
@@ -716,7 +715,7 @@
                 Year = model.Year
             };
 
-            IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+            IList<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(criteria);
             model.Manpowers = manpowers;
 
             return View(model);
@@ -733,7 +732,7 @@
         {
             var criteria = new GetAllGroupCriteria();
 
-            return _teamService.GetAll(criteria);
+            return teamService.GetAll(criteria);
         }
     }
 }
