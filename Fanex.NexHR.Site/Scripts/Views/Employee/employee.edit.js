@@ -2,6 +2,16 @@
 /*global _global, _messages, reloadButtonText, actingButton*/
 /* exported */
 
+function bindSARole(onload) {
+    var combineSARole = $('#RoleArray2, #RoleArray3, #RoleArray4, #RoleArray5, #RoleArray6,#RoleArray8');
+    if ($('#RoleArray7').prop('checked')) {
+        combineSARole.prop('checked', true).prop('disabled', true);
+    }
+    else if (!onload) {
+        combineSARole.prop('checked', false).prop('disabled', false);
+    }
+}
+
 function uploadComplete(evt) {
     if (evt.target.status === 200) {
         var url = $('#avatar').attr('src');
@@ -77,6 +87,11 @@ function showExpatApplicableHoliday() {
 $(document).ready(function () {
     $(".dropdown").chosen();
     $('#JobTitleId').chosen();
+
+    bindSARole(true);
+    $('#RoleArray7').click(function () {
+        bindSARole(false);
+    });
 
     //checkUserIsSystemAdmin
     checkAuthorizeToGrantAccess();

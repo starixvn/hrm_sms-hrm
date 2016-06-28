@@ -295,7 +295,7 @@
             IList<Country> countryList = employeeService.GetAllCountry(getAllCountryCriteria);
             model.Modifier = ConvertUserToEmployee(this.CurrentUser);
             model.ListCountryCode = new List<SelectListItem>();
-            model.Roles = AddMemberToRoleList(model.Roles);
+            model.Roles = BuildRole(model.Roles);
 
             if (ModelState.IsValid)
             {
@@ -891,9 +891,24 @@
 
             return criteria;
         }
-        private string AddMemberToRoleList(string roles)
+
+        private string BuildRole(string roles)
         {
-            return string.Format("{0},{1}", ((int)RoleSystem.Member).ToString(), roles);
+            if (roles == ((int)RoleSystem.SystemAdmin).ToString())
+            {
+                roles = string.Format("{0},{1},{2},{3},{4},{5},{6}",
+                    ((int)RoleSystem.ActingSupervisor).ToString(),
+                    ((int)RoleSystem.Approver).ToString(),
+                    ((int)RoleSystem.DisciplineManager).ToString(),
+                    ((int)RoleSystem.HR).ToString(),
+                    ((int)RoleSystem.ShiftManager).ToString(),
+                    ((int)RoleSystem.SystemAdmin).ToString(),
+                    ((int)RoleSystem.Verifier).ToString());
+            }
+
+            roles = string.IsNullOrEmpty(roles) ? ((int)RoleSystem.Member).ToString() : string.Format("{0},{1}", ((int)RoleSystem.Member).ToString(), roles);
+
+            return roles;
         }
-    } 
+    }
 }
