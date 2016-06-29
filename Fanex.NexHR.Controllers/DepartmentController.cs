@@ -48,6 +48,10 @@
                 model.Departments = GetAllDepartment(model.IsActive);
             }
 
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Delete);
+
             return View(model);
         }
 

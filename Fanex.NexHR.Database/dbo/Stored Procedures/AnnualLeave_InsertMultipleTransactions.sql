@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
+﻿CREATE PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
 	,@Description NVARCHAR(4000) = ''
 	,@FromDate DATETIME
 	,@DeductDays NUMERIC(18, 1)

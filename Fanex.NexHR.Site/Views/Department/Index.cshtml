@@ -1,6 +1,9 @@
 ﻿@model DepartmentViewModel
 @{
     ViewBag.Title = @Labels.DepartmentManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 7 : 5;
+
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -24,9 +27,12 @@
     @Html.LabelFor(model => model.IsActive, @Labels.Status)
     @Html.DropDownListFor(model => model.IsActive, gender)
     <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")
-    </div>
+    if (hasPermission)
+    {
+        <div class="button-icon">
+            <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")
+        </div>
+    }
 }
 <div class="clear">
 </div>
@@ -40,8 +46,11 @@
             <th>@Labels.Department</th>
             <th>@Labels.Manager</th>
             <th>@Labels.Parent</th>
-            <th>@Labels.Edit</th>
-            <th>@Labels.Delete</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -78,22 +87,25 @@
                     {
                         <td></td>
                     }
-                    <td class="cmd">
-                        <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
-                            <i class="fa fa-times fa-lg icon-delete"></i>
-                        </a>
-                    </td>
+                    @if (hasPermission)
+                    {
+                        <td class="cmd">
+                            <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
                 </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 7)
+            @RazorHelper.DisplayNoInformation(colspan: totalColumn)
         }
     </tbody>
 </table>
