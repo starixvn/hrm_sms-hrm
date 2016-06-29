@@ -1,16 +1,12 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
+    using Fanex.NexHR.Models;
+    using NPOI.HSSF.UserModel;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
-    using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Util;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
 
-    [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class TotalWorkingHourExportService : IExportService
     {
         private readonly IList<TotalWorkingHours> totalWorkingHours;

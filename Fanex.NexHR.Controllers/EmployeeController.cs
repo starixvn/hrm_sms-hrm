@@ -702,6 +702,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private void GetListSupervisorName(
             int id,
             out string verifier,
@@ -713,13 +714,8 @@
             List<string> listVerifierName = null, listApproverName = null, listShiftName = null, listActingName = null, listDisciplinarianName = null;
             List<SupervisorNameModel> verifierList = null, approverList = null, shiftMonitorList = null, actingList = null, disciplinarianList = null;
             string displayMore = "...";
-            var getListSupervisor = new GetListSupervisorNameCriteria()
-            {
-                EmpId = id,
-                Role = null,
-                RequestType = null,
-            };
-            IList<SupervisorNameModel> supervisors = employeeService.GetListSupervisorName(getListSupervisor);
+            var getListSupervisor = new GetListSupervisorNameCriteria() { EmpId = id, Role = null, RequestType = null };
+            var supervisors = employeeService.GetListSupervisorName(getListSupervisor);
             if (supervisors != null)
             {
                 verifierList = supervisors.Where(x => x.ActionType == (int)RoleSystem.Verifier).ToList();
@@ -736,7 +732,6 @@
             }
 
             verifier = string.Join(", ", listVerifierName);
-
             listApproverName = approverList.Select(x => x.NickName).Take(3).ToList();
             if (approverList.Count > 3)
             {
@@ -744,7 +739,6 @@
             }
 
             approver = string.Join(", ", listApproverName);
-
             listShiftName = shiftMonitorList.Select(x => x.NickName).Take(3).ToList();
             if (shiftMonitorList.Count > 3)
             {
@@ -752,7 +746,6 @@
             }
 
             shiftManager = string.Join(", ", listShiftName);
-
             listActingName = actingList.Select(x => x.NickName).Take(3).ToList();
             if (actingList.Count > 3)
             {
@@ -760,7 +753,6 @@
             }
 
             actingSupervisor = string.Join(", ", listActingName);
-
             listDisciplinarianName = disciplinarianList.Select(x => x.NickName).Take(3).ToList();
             if (disciplinarianList.Count > 3)
             {
@@ -830,7 +822,7 @@
             return jobTitles;
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)
         {
             var criteria = new UpdateEmployeeCriteria
@@ -896,7 +888,8 @@
         {
             if (roles == ((int)RoleSystem.SystemAdmin).ToString())
             {
-                roles = string.Format("{0},{1},{2},{3},{4},{5},{6}",
+                roles = string.Format(
+                    "{0},{1},{2},{3},{4},{5},{6}",
                     ((int)RoleSystem.ActingSupervisor).ToString(),
                     ((int)RoleSystem.Approver).ToString(),
                     ((int)RoleSystem.DisciplineManager).ToString(),

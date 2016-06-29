@@ -1,11 +1,5 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
@@ -15,16 +9,19 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
-    using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
 
-    [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelService : IExportExcelService
     {
         private const int _RowStartBodyAttendance = 3;

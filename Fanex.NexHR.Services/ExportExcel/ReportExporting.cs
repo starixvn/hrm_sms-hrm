@@ -1,20 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ReportExporting.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.16">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services.ExportExcel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -22,11 +7,17 @@ namespace Fanex.NexHR.Services.ExportExcel
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
 
     /// <summary>
     /// Report Exporting.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportExporting
     {
         private const int _RowStartBodyHrRequestStatistic = 4;

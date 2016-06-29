@@ -102,10 +102,10 @@
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         public static string ToRequestMessage(RequestEntity request)
         {
-            StringBuilder msg = new StringBuilder();
+            var msg = new StringBuilder();
             var message = string.Empty;
 
             switch (request.RequestType.Id)
@@ -570,7 +570,7 @@
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;

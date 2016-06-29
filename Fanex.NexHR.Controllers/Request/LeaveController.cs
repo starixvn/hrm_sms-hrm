@@ -115,7 +115,6 @@
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
                 || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
 
-
             return View(model);
         }
 

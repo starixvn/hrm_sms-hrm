@@ -1,16 +1,15 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
 
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {
@@ -21,7 +20,7 @@
                 using (GridReader multi = db.QueryMultiple(criteria))
                 {
                     var overtime = multi.Read<OvertimeRequest, Employee, Employee, Employee, Employee, OvertimeRequest>(
-                        (ot, e, ve, ap, hr) => 
+                        (ot, e, ve, ap, hr) =>
                         {
                             ot.Employee = e;
                             ot.VerifiedBy = ve;
@@ -154,25 +153,20 @@
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                IList<OvertimeExcelReport> entityList = new List<OvertimeExcelReport>();
-                var ds = new DataSet();
-                ds = db.ExecuteDataSet(criteria.GetSpParams());
+                var entityList = new List<OvertimeExcelReport>();
+                var ds = db.ExecuteDataSet(criteria.GetSpParams());
+                var dataTableOvertimeExcelReport = ds != null && ds.Tables != null && ds.Tables.Count > 0 ? ds.Tables[0] : null;
 
-                var dataTableOvertimeExcelReport = ds != null && ds.Tables != null && ds.Tables.Count > 0 
-                                                            ? ds.Tables[0] : null;
-
-                if (dataTableOvertimeExcelReport != null && dataTableOvertimeExcelReport.Rows != null && 
-                                dataTableOvertimeExcelReport.Rows.Count != 0)
+                if (dataTableOvertimeExcelReport != null && dataTableOvertimeExcelReport.Rows != null && dataTableOvertimeExcelReport.Rows.Count != 0)
                 {
                     var columnCount = (dataTableOvertimeExcelReport.Columns.Count - 12) / 2;
                     int rowIndex = 0;
 
-                    foreach (System.Data.DataRow row in dataTableOvertimeExcelReport.Rows)
+                    foreach (DataRow row in dataTableOvertimeExcelReport.Rows)
                     {
                         var overtimeExcelReport = new OvertimeExcelReport();
 
@@ -190,7 +184,7 @@
                         overtimeExcelReport.Tax = Convert.ToDouble(!string.IsNullOrEmpty(row["Tax"].ToString()) ? row["Tax"].ToString() : "0");
 
                         var list = new List<OvertimeDailyReport>();
-                        
+
                         for (int column = 1; column <= columnCount; column++)
                         {
                             var entity = new OvertimeDailyReport()
