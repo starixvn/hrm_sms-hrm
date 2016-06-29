@@ -13,7 +13,7 @@ function bindSARole(onload) {
 }
 
 function bindDisciplineRole(onload) {
-    var combineDisciplineRole = $('#RoleArray3,#RoleArray8');
+    var combineDisciplineRole = $('#RoleArray3');
     if ($('#RoleArray8').prop('checked')) {
         combineDisciplineRole.prop('checked', true).prop('disabled', true);
     }
