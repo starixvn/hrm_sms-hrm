@@ -112,7 +112,7 @@ $(document).ready(function () {
 
     var successed = $("#successed").val();
     if (successed === "true") {
-        document.location = _global.root + "extensionnumber/index";
+        document.location = _global.root + "extensionno/index";
     }
 
 });

@@ -6,11 +6,11 @@ $(document).ready(function () {
     $("#deleteExt").live("click", function () {
         var id = $(this).closest('tr').attr('id');
         confirm('Are you sure you want to delete?', function () {
-            $.post(_global.root + 'ExtensionNumber/DeleteExtensionNumber',
+            $.post(_global.root + 'ExtensionNo/DeleteExtensionNumber',
 { extId: id },
 function (response) {
     if (response.IsSuccessful) {
-        document.location = '/extensionnumber/index';
+        document.location = '/extensionno/index';
     }
     else {
         alert(response.Message);
@@ -24,11 +24,11 @@ function (response) {
     $("#deleteExternal").live("click", function () {
         var id = $(this).closest('tr').attr('id');
         confirm('Are you sure you want to delete?', function () {
-            $.post(_global.root + 'ExtensionNumber/DeleteExternalGroup',
+            $.post(_global.root + 'ExtensionNo/DeleteExternalGroup',
 { extId: id },
 function (response) {
     if (response.IsSuccessful) {
-        document.location = '/extensionnumber/ManageExternalGroup';
+        document.location = '/ExtensionNo/ManageExternalGroup';
     }
     else {
         alert(response.Message);
@@ -73,11 +73,11 @@ min + " and " + max + ".");
                 bValid = bValid && checkLength(name, "job title", 3, 100);
 
                 if (bValid) {
-                    $.post(_global.root + 'ExtensionNumber/AddNewExternalGroup',
+                    $.post(_global.root + 'ExtensionNo/AddNewExternalGroup',
 { groupName: name.val() },
 function (response) {
     if (response.IsSuccessful) {
-        document.location = '/extensionnumber/ManageExternalGroup';
+        document.location = '/ExtensionNo/ManageExternalGroup';
     }
     else {
         alert(response.Message);
@@ -139,11 +139,11 @@ min + " and " + max + ".");
                     bValid = bValid && checkLength(name, "job title", 3, 100);
 
                     if (bValid) {
-                        $.post(_global.root + 'ExtensionNumber/EditExternalGroup',
+                        $.post(_global.root + 'ExtensionNo/EditExternalGroup',
 { groupName: name.val(), extId: id },
 function (response) {
     if (response.IsSuccessful) {
-        document.location = '/extensionnumber/ManageExternalGroup';
+        document.location = '/ExtensionNo/ManageExternalGroup';
     }
     else {
         alert(response.Message);
