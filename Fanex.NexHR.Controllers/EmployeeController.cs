@@ -906,6 +906,13 @@
                     ((int)RoleSystem.Verifier).ToString());
             }
 
+            if (roles == ((int)RoleSystem.DisciplineManager).ToString())
+            {
+                roles = string.Format("{0},{1}",
+                    ((int)RoleSystem.Approver).ToString(),
+                    ((int)RoleSystem.DisciplineManager).ToString());
+            }
+
             roles = string.IsNullOrEmpty(roles) ? ((int)RoleSystem.Member).ToString() : string.Format("{0},{1}", ((int)RoleSystem.Member).ToString(), roles);
 
             return roles;

@@ -172,7 +172,13 @@
             return supervisors;
         }
 
-        [HRAuthorize(Policy.Edit, FunctionKey.VoidRequest)]
+        [HRAuthorize(
+            Policy.Edit,
+            FunctionKey.VoidRequest,
+            FunctionKey.VerifyRequestOfEmployee,
+            FunctionKey.VerifyRequestOfMember,
+            FunctionKey.ApproveRequestOfEmployee,
+            FunctionKey.ApproveRequestOfMember)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))

@@ -12,6 +12,16 @@ function bindSARole(onload) {
     }
 }
 
+function bindDisciplineRole(onload) {
+    var combineDisciplineRole = $('#RoleArray3,#RoleArray8');
+    if ($('#RoleArray8').prop('checked')) {
+        combineDisciplineRole.prop('checked', true).prop('disabled', true);
+    }
+    else if (!onload) {
+        combineDisciplineRole.prop('checked', false).prop('disabled', false);
+    }
+}
+
 function uploadComplete(evt) {
     if (evt.target.status === 200) {
         var url = $('#avatar').attr('src');
@@ -91,6 +101,11 @@ $(document).ready(function () {
     bindSARole(true);
     $('#RoleArray7').click(function () {
         bindSARole(false);
+    });
+
+    bindDisciplineRole(true);
+    $('#RoleArray8').click(function () {
+        bindDisciplineRole(false);
     });
 
     //checkUserIsSystemAdmin
