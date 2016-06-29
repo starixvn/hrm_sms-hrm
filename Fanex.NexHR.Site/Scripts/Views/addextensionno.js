@@ -5,7 +5,7 @@ function bindingDataToDropdown() {
     var dropdownTeam = $("#TeamId");
 
     if ($("#IsInternal").is(":checked")) {
-        $.getJSON(_global.root + 'extensionnumber/GetGroupExtension', { isInternal: true, groupId: null },
+        $.getJSON(_global.root + 'extensionno/GetGroupExtension', { isInternal: true, groupId: null },
 function (data) {
     if (data[0] != null) {
         dropdownTeam.empty();
@@ -18,7 +18,7 @@ function (data) {
 });
     }
     else {
-        $.getJSON(_global.root + 'extensionnumber/GetGroupExtension', { isInternal: false, groupId: null },
+        $.getJSON(_global.root + 'extensionno/GetGroupExtension', { isInternal: false, groupId: null },
 function (data) {
     console.log(data);
     if (data[0] != null) {

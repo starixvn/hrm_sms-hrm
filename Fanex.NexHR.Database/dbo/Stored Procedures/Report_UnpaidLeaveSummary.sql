@@ -297,7 +297,7 @@ BEGIN
 		,g.[Rank]
 	ORDER BY [Rank]
 		,g.[Name]
-		,Code
+		,g.Code
 
 	DROP TABLE #EmployeeId
 
