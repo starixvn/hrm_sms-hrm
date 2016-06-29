@@ -456,3 +456,13 @@
         <option @(selected == (int)Policy.Delete ? "selected" : "") value="@((int)Policy.Delete)">@Policy.Delete.ToString()</option>
     </select>
 }
+
+@helper PolicyDropDownList(string inputId)
+{
+    <select id="@inputId" name="@inputId">
+        <option value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
+        <option value="@((int)Policy.Create)">@Policy.Create.ToString()</option>
+        <option value="@((int)Policy.Edit)">@Policy.Edit.ToString()</option>
+        <option value="@((int)Policy.Delete)">@Policy.Delete.ToString()</option>
+    </select>
+}

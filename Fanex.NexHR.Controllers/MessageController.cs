@@ -184,6 +184,7 @@
             {
                 MessageId = id,
                 ModifiedBy = CurrentUser.Id,
+                ModifiedDate = DateTime.Now
             };
 
             CommandResult result = commandService.Delete(criteria);

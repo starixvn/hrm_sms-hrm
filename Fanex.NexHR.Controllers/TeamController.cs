@@ -143,7 +143,7 @@
                         DepartmentId = model.DepartmentId,
                         MailGroup = model.MailGroup,
                         LeaderId = model.LeaderId,
-                        AssistantLeaderId = string.IsNullOrEmpty(model.AssistantLeader) ? (int?)null : int.Parse(model.AssistantLeader),
+                        AssistantLeaderId = model.AssistantLeaderId,
                         ModifiedBy = CurrentUser.Id
                     };
                     CommandResult result = commandService.Update(criteria);
