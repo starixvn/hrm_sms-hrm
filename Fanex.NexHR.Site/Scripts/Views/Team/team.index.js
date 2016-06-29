@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, autoIndex*/
+/*global _global, autoIndex, floatThead*/
 
 (function () {
     function deleteTeam(id) {

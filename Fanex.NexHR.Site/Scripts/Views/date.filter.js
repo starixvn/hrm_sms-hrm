@@ -1,12 +1,12 @@
 ﻿'use strict';
-/* exported DatePicker*/
+/* exported DatePicker */
 
 function setDateTimeRange(selectedIndex) {
     var fromDate = new Date($("#FromDate").val()).toString('dd MMM, yyyy');
     var toDate = new Date($("#ToDate").val()).toString('dd MMM, yyyy');
     var now = $('#DateTime-Now').val();
 
-    switch (parseInt(selectedIndex)) {
+    switch (parseInt(selectedIndex, 10)) {
         case 0: //default
             break;
         case 1: //today

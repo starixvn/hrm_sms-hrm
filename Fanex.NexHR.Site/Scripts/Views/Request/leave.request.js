@@ -277,8 +277,8 @@ var LeaveRequest = (function ($) {
                     var arrTimeIn = data.BeginCheckInTime.split(":");
                     var arrTimeOut = data.BeginCheckOutTime.split(":");
 
-                    var minuteFrom = (parseInt(arrTimeIn[0]) * 60) + parseInt(arrTimeIn[1]);
-                    var minuteTo = (parseInt(arrTimeOut[0]) * 60) + parseInt(arrTimeOut[1]);
+                    var minuteFrom = (parseInt(arrTimeIn[0], 10) * 60) + parseInt(arrTimeIn[1], 10);
+                    var minuteTo = (parseInt(arrTimeOut[0], 10) * 60) + parseInt(arrTimeOut[1], 10);
                     var isFromAfterday = data.IsInAfterDay;
                     var isToAfterday = false;
                     if (data.IsInAfterDay) {

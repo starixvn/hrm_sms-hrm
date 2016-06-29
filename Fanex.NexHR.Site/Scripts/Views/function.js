@@ -24,7 +24,7 @@ function save() {
     var roleFunctions = [];
     $("#list-functions tbody tr").each(function () {
         var record = {
-            FunctionId: parseInt($('td #functionId', this).val()),
+            FunctionId: parseInt($('td #functionId', this).val(), 10),
             FunctionKey: $('td #functionKey', this).val(),
             FunctionName: $('td #functionName', this).val(),
             IsRead: $('td #IsRead', this).attr('checked') === 'checked',
@@ -36,7 +36,7 @@ function save() {
         roleFunctions.push(record);
     });
 
-    var roleId = parseInt($("#Role").val());
+    var roleId = parseInt($("#Role").val(), 10);
 
     $.ajax({
         type: 'POST',

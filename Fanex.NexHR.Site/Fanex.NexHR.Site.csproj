@@ -22,7 +22,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <JSLintSkip>|\Scripts\chosen\|\Scripts\datatable\|\Scripts\Libs\|\Scripts\MultiSelect\|\Scripts\tiny_mce\</JSLintSkip>
+    <JSLintSkip>|\Scripts\chosen\|\Scripts\datatable\|\Scripts\Libs\|\Scripts\MultiSelect\|\Scripts\tiny_mce\|\Libs\FloatThead\|\Libs\SimplePagination\</JSLintSkip>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -32,6 +32,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

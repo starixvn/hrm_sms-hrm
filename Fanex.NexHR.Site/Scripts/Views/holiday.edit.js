@@ -24,7 +24,7 @@ $(document).ready(function () {
         var fromDate = $("#FromDate").val();
         var dat = Date.parse(fromDate);
         var theDate = new Date(dat);
-        theDate.setDate(theDate.getDate() + parseInt(numday) - 1);
+        theDate.setDate(theDate.getDate() + parseInt(numday, 10) - 1);
         $("#ToDate, #ActualToDate").val(theDate.format("dd mmm, yyyy"));
     }
 

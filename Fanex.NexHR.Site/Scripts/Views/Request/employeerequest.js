@@ -124,10 +124,10 @@
         },
         function (command, eventElement) {
             var title,
-                requestTypeId = parseInt($(eventElement).attr('requestTypeId')),
-                requestId = parseInt($(eventElement).attr('requestId')),
-                roleId = parseInt($(eventElement).attr('roleId')),
-                employeeId = parseInt($(eventElement).attr('employeeId'));
+                requestTypeId = parseInt($(eventElement).attr('requestTypeId'), 10),
+                requestId = parseInt($(eventElement).attr('requestId'), 10),
+                roleId = parseInt($(eventElement).attr('roleId'), 10),
+                employeeId = parseInt($(eventElement).attr('employeeId'), 10);
 
             switch (command) {
                 case 'Accept':

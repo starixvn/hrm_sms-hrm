@@ -32,7 +32,7 @@
             workDate = $('#dialogAddOtherDiscipline #WorkDate').datepicker('getDate'),
             disciplineTypeId = $('#dialogAddOtherDiscipline #OtherDisciplineTypeId').val();
 
-        if (empId && parseInt(empId) <= 0) {
+        if (empId && parseInt(empId, 10) <= 0) {
             errorString += '<li>The Employee field is required.</li>';
         }
 
@@ -40,7 +40,7 @@
             errorString += '<li>Discipline Date field is required.</li>';
         }
 
-        if (disciplineTypeId && parseInt(disciplineTypeId) === 0) {
+        if (disciplineTypeId && parseInt(disciplineTypeId, 10) === 0) {
             errorString += '<li>Discipline Type field is required.</li>';
         }
 
@@ -188,7 +188,7 @@
 
     function initEventViewOtherDiscipline() {
         $('table a.viewOtherDiscipline').on('click', function () {
-            var empId = parseInt($(this).data('empid')),
+            var empId = parseInt($(this).data('empid'), 10),
                 nickname = $(this).data('nickname');
 
             if (empId > 0) {

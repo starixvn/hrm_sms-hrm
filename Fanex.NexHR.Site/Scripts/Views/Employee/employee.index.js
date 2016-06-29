@@ -7,9 +7,9 @@
             itemsOnPage = $('table#data #pagination #ItemsPerPage').val(),
             totalItem = $('table#data #pagination #TotalItem').val();
 
-        currentPage = currentPage ? parseInt(currentPage) : 1;
-        itemsOnPage = itemsOnPage ? parseInt(itemsOnPage) : 1;
-        totalItem = totalItem ? parseInt(totalItem) : 1;
+        currentPage = currentPage ? parseInt(currentPage, 10) : 1;
+        itemsOnPage = itemsOnPage ? parseInt(itemsOnPage, 10) : 1;
+        totalItem = totalItem ? parseInt(totalItem, 10) : 1;
 
         $('table#data #pagination #numberlist').pagination({
             items: totalItem,
