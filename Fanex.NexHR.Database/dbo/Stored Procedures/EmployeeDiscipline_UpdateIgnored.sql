@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_UpdateIgnored] @ModifiedBy INT
+﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_UpdateIgnored] @ModifiedBy INT
 	,@IgnoredDetails NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT

@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetDetail] @FromDate DATETIME
+﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetDetail] @FromDate DATETIME
 	,@ToDate DATETIME
 	,@ApproverId INT
 	,@GroupId INT = NULL
@@ -516,10 +515,13 @@ BEGIN
 							AND empS.ActionType IN (2, 3)
 						)
 				)
-			OR EXISTS (
-				SELECT 1
-				FROM #Roles
-				WHERE RoleId = 6 -- Employee
+			OR (
+				EXISTS (
+					SELECT 1
+					FROM #Roles
+					WHERE RoleId = 1 -- Employee
+					)
+				AND emp.EmpId = @ApproverId
 				)
 			)
 		AND (

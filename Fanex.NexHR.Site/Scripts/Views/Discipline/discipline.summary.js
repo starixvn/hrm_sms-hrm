@@ -147,7 +147,7 @@
                                 data: $('#frmAddOtherDiscipline').serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
-                                        showSuccessMsg('Add other discipline successful!');
+                                        showSuccessMsg('Add other discipline successfully!');
                                     } else {
                                         showErrorMsg('<li>' + result.Message + '</li>');
                                     }
@@ -157,6 +157,12 @@
                                 }
                             });
                         }
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    click: function () {
+                        $(this).dialog('close');
                     }
                 }
             ],

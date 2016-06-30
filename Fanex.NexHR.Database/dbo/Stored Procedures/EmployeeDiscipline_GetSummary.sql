@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetSummary] @FromDate DATE
+﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetSummary] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
 	,@GroupId INT = NULL
@@ -414,10 +413,13 @@ BEGIN
 							AND empS.ActionType IN (2, 3)
 						)
 				)
-			OR EXISTS (
-				SELECT 1
-				FROM #Roles
-				WHERE RoleId = 1 -- Employee can view their discipline
+			OR (
+				EXISTS (
+					SELECT 1
+					FROM #Roles
+					WHERE RoleId = 1 -- Employee
+					)
+				AND emp.EmpId = @ApproverId
 				)
 			)
 		AND (
