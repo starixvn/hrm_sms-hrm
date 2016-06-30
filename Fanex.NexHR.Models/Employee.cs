@@ -181,6 +181,17 @@
         {
             get
             {
+                var convertedRole = Roles.Split(',');
+                if (NX_Roles == null || !NX_Roles.Any())
+                {
+                    NX_Roles = convertedRole.Select(i => new SystemRoleModel 
+                    {
+                        RoleId = int.Parse(i), 
+                        RoleCode = ((RoleSystem)int.Parse(i)).ToString(), 
+                        RoleName = ((RoleSystem)int.Parse(i)).ToString() 
+                    }).ToList();
+                }
+
                 return NX_Roles == null ? string.Empty : string.Join(", ", NX_Roles.Select(i => i.RoleName));
             }
         }

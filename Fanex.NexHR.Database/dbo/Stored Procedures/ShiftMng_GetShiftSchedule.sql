@@ -7,8 +7,8 @@ CREATE PROCEDURE [dbo].[ShiftMng_GetShiftSchedule] @SupervisorID INT
 	,@totime DATETIME
 	,@groupIds VARCHAR(max) = ''
 	,@JobTitleId VARCHAR(1000) = ''
-	,@ErrCode INT = 0
-	,@ErrMsg NVARCHAR(200) = ''
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 	,@isDebug BIT = 0
 AS
 /*
@@ -41,20 +41,7 @@ BEGIN
 
 		RETURN
 	END
-
-	IF NOT EXISTS (
-			SELECT TOP 1 1
-			FROM dbo.Employee ee(NOLOCK)
-			WHERE EmpId = @SupervisorID
-				AND Roles LIKE '%4%'
-			)
-	BEGIN
-		SELECT @ErrCode = 102
-			,@ErrMsg = N'You don''t have permission on the funcion.'
-
-		RETURN
-	END
-
+	
 	CREATE TABLE #Calendar (
 		WorkDate DATETIME
 		,[Enabled] BIT
