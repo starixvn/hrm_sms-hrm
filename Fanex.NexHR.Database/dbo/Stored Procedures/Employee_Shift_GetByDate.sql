@@ -21,7 +21,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	CREATE TABLE #GroupIds (GroupId TINYINT)
+	CREATE TABLE #GroupIds (GroupId INT)
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
