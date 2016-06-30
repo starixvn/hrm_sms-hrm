@@ -9,11 +9,12 @@
 
 namespace Fanex.NexHR.Controllers.ApiControllers
 {
-    using System.Collections.Generic;
-    using System.Web.Http;
+    using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Web.Http;
 
     /// <summary>
     /// Holiday Controller.
@@ -32,9 +33,9 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             _holidayService = holidayRepository ?? new HolidayService();
         }
 
-        public IList<Holiday> GetHolidays(int year)
+        public IList<Holiday> GetHolidays(GetHolidaysCriteria criteria)
         {
-            return _holidayService.GetByYear(year);
+            return _holidayService.GetByYear(criteria);
         }
     }
 }

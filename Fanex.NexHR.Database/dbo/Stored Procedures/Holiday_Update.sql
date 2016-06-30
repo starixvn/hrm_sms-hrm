@@ -5,7 +5,9 @@ CREATE PROCEDURE [dbo].[Holiday_Update]
 	@FromDate datetime,
 	@ToDate datetime,
 	@ModifiedBy int,
-	@ModifiedDate datetime 	
+	@ModifiedDate datetime,
+	@ErrCode INT = 0 OUTPUT,
+	@ErrMsg VARCHAR(200) = '' OUTPUT 	  	
 AS
 /*
 Created: Tom.Vo@2013-10-23

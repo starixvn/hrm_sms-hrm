@@ -1,15 +1,14 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Criteria.Holidays;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.TimeRecord;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
@@ -24,27 +23,24 @@
     public class AjaxController : BaseController
     {
         private readonly IRequestService requestService;
-        private readonly IHolidayService holidayService;
         private readonly IEmployeeService employeeService;
         private readonly ILookupDataService lookupDataService;
         private readonly IReportService reportService;
         private readonly ICommandService commandService;
 
         public AjaxController()
-            : this(null, null, null, null, null, null)
+            : this(null, null, null, null, null)
         {
         }
 
         public AjaxController(
             IRequestService requestService,
-            IHolidayService holidayService,
             IEmployeeService employeeService,
             ILookupDataService lookupDataService,
             IReportService reportService,
             ICommandService commandService)
         {
             this.requestService = requestService ?? new RequestService();
-            this.holidayService = holidayService ?? new HolidayService();
             this.employeeService = employeeService ?? new EmployeeService();
             this.lookupDataService = lookupDataService ?? new LookupDataService();
             this.reportService = reportService ?? new ReportService();
@@ -236,12 +232,13 @@
             }
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Delete, FunctionKey.Holiday)]
         public bool DeleteHoliday(int id)
         {
-            return holidayService.Delete(id, this.CurrentUser.Id);
+            var criteria = new DeleteHolidayCriteria { Id = id, ModifiedBy = CurrentUser.Id, ModifiedDate = DateTime.Now };
+
+            return commandService.Delete(criteria).IsSuccessful;
         }
 
         /// [Authorize(Roles = "HR")]

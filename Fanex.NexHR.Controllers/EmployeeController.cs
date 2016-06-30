@@ -901,7 +901,8 @@
 
             if (roles == ((int)RoleSystem.DisciplineManager).ToString())
             {
-                roles = string.Format("{0},{1}",
+                roles = string.Format(
+                    "{0},{1}",
                     ((int)RoleSystem.Approver).ToString(),
                     ((int)RoleSystem.DisciplineManager).ToString());
             }

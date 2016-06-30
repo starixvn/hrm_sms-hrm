@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
@@ -11,21 +12,17 @@
     public class HolidayController : BaseController
     {
         private readonly IHolidayService holidayService;
+        private readonly ICommandService commandService;
 
-        public HolidayController(IHolidayService holidayService)
+        public HolidayController(IHolidayService holidayService, ICommandService commandService)
         {
             this.holidayService = holidayService ?? new HolidayService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         public HolidayController()
-            : this(null)
+            : this(null, null)
         {
-        }
-
-        [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
-        public ActionResult Index()
-        {
-            return View(holidayService.GetByYear(DateTime.Now.Year));
         }
 
         [HttpGet]
@@ -36,32 +33,36 @@
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit)
                 || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create)
                 || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete);
+            var criteria = new GetHolidaysCriteria { Year = ViewBag.Year };
 
-            return View(holidayService.GetByYear(ViewBag.year));
+            return View(holidayService.GetByYear(criteria));
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
         public ActionResult Edit(int id)
         {
-            return View(holidayService.GetById(id));
+            var criteria = new GetHolidayByIdCriteria { Id = id };
+
+            return View(holidayService.GetById(criteria));
         }
 
-        /// <summary>
-        /// ActionResult Edit.
-        /// </summary>
-        /// <param name="model">Holiday model.</param>
-        /// <returns>View Edit.</returns>
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
         public ActionResult Edit(Holiday model)
         {
+            var criteria = new UpdateHolidayCriteria
+            {
+                Id = model.Id,
+                HolidayName = model.HolidayName,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                ModifiedBy = CurrentUser.Id,
+                ModifiedDate = DateTime.Now
+            };
+
             if (ModelState.IsValid)
             {
-                model.ModifiedDate = DateTime.Now;
-                model.ModifiedBy = this.CurrentUser.Id;
-                ViewBag.Updated = holidayService.Update(model);
+                ViewBag.Updated = commandService.Update(criteria).IsSuccessful;
             }
             else
             {
@@ -71,43 +72,36 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
         public ActionResult Create()
         {
-            return View(new Holiday
-            {
-                Name = string.Empty,
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-                ModifiedBy = this.CurrentUser.Id
-            });
+            return View(new Holiday { Name = string.Empty, FromDate = DateTime.Now, ToDate = DateTime.Now });
         }
 
-        /// <summary>
-        /// ActionResult Create.
-        /// </summary>
-        /// <param name="model">Holiday model.</param>
-        /// <returns>View Create.</returns>
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
         public ActionResult Create(Holiday model)
         {
-            if (ModelState.IsValid)
+            var criteria = new InsertHolidayCriteria
             {
-                model.ModifiedDate = DateTime.Now;
-                model.ModifiedBy = this.CurrentUser.Id;
-                var id = holidayService.Insert(model);
-                if (id == -1)
+                HolidayName = model.HolidayName,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                ModifiedBy = CurrentUser.Id,
+                ModifiedDate = DateTime.Now
+            };
+
+            if (criteria.IsValid())
+            {
+                var result = commandService.Insert(criteria);
+                if (result.IsSuccessful)
                 {
-                    ViewBag.Updated = false;
-                    ModelState.AddModelError(string.Empty, "Duplicate holiday");
+                    ViewBag.Updated = true;
                 }
                 else
                 {
-                    ViewBag.Updated = true;
+                    ViewBag.Updated = false;
+                    ModelState.AddModelError(string.Empty, "Duplicate holiday");
                 }
             }
             else

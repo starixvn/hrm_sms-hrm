@@ -3,7 +3,9 @@
 CREATE PROCEDURE [dbo].[Holiday_Delete]
 	@Id int	,
 	@ModifiedBy int,
-	@ModifiedDate datetime 	
+	@ModifiedDate datetime,
+	@ErrCode INT = 0 OUTPUT,
+	@ErrMsg VARCHAR(200) = '' OUTPUT 	  	
 AS
 
 /*

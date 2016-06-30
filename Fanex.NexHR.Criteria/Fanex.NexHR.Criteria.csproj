@@ -95,6 +95,11 @@
     <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
+    <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
+    <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
+    <Compile Include="Holidays\GetHolidaysCriteria.cs" />
+    <Compile Include="Holidays\InsertHolidayCriteria.cs" />
+    <Compile Include="Holidays\UpdateHolidayCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />

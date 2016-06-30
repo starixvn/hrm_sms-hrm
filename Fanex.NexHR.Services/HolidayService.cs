@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
+    using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class HolidayService : BaseService, IHolidayService
     {
@@ -48,19 +50,28 @@
             return result;
         }
 
-        public IList<Holiday> GetByYear(int year)
+        public IList<Holiday> GetByYear(GetHolidaysCriteria criteria)
         {
-            return this.holidayRepository.GetByYear(year);
-        }
+            IList<Holiday> holidays = null;
 
-        public Holiday GetById(int holidayId)
-        {
-            if (holidayId > 0)
+            if (criteria.IsValid())
             {
-                return this.holidayRepository.GetById(holidayId);
+                holidays = GetData<Holiday>(criteria).ToList();
             }
 
-            return new Holiday();
+            return holidays ?? new List<Holiday>();
+        }
+
+        public Holiday GetById(GetHolidayByIdCriteria criteria)
+        {
+            Holiday holiday = null;
+
+            if (criteria.IsValid())
+            {
+                holiday = GetDataEntity<Holiday>(criteria);
+            }
+
+            return holiday ?? new Holiday();
         }
     }
 }
