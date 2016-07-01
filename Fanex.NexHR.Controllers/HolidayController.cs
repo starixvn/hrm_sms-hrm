@@ -29,11 +29,16 @@
         [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
-            ViewBag.year = year ?? DateTime.Now.Year;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete);
-            var criteria = new GetHolidaysCriteria { Year = ViewBag.Year };
+            var criteria = new GetHolidaysCriteria { Year = year ?? DateTime.Now.Year };
+            var policiesModel = new PoliciesModel
+            {
+                CanCreate = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create),
+                CanEdit = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit),
+                CanDelete = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete)
+            };
+
+            ViewBag.Policies = policiesModel;
+            ViewBag.Year = criteria.Year;
 
             return View(holidayService.GetByYear(criteria));
         }

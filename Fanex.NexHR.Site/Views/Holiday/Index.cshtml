@@ -1,7 +1,7 @@
 ﻿@model IList<Holiday>
 @{
     ViewBag.Title = "Holiday";
-    var hasPermission = (bool)ViewBag.HasPermission;
+    var policies = ViewBag.Policies as PoliciesModel;
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -20,7 +20,7 @@
     <span style="padding-right: 5px;">Year</span>
     @Html.YearPicker("year", 2010, (int)ViewBag.year)
     <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-    if (hasPermission)
+    if (policies.CanCreate)
     {
         <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
     }
@@ -32,16 +32,18 @@
             <th>@Labels.Name</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
-            @if (hasPermission)
+            @if (policies.CanEdit)
             {
                 <th>
                     @Labels.Edit
                 </th>
+            }
+            @if (policies.CanDelete)
+            {
                 <th>
                     @Labels.Delete
                 </th>
             }
-
         </tr>
     </thead>
     @if (Model.Any())
@@ -61,13 +63,16 @@
                     <td class="ddMMyyyy">
                         @item.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    @if (hasPermission)
+                    @if (policies.CanEdit)
                     {
                         <td class="cmd">
                             <a href="@Url.Action("Edit", "Holiday", new { Id = item.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
+                    }
+                    @if (policies.CanDelete)
+                    {
                         <td class="cmd">
                             <a href="javascript:;" onclick="deleteHoliday(@item.Id);">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
@@ -77,9 +82,9 @@
                 </tr>
             }
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 7);
-    }
+                }
+                else
+                {
+                    @RazorHelper.DisplayNoInformation(colspan: 7);
+                }
 </table>
