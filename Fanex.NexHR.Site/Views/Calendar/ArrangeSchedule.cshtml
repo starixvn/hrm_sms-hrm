@@ -2,6 +2,7 @@
 @model ScheduleArrangeFilterViewModel
 @{
     ViewBag.Title = @Labels.ScheduleArrange;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("schedulearrangecss")
@@ -15,75 +16,78 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="container_24 bunhat">
-        <div class="row">
-            <div class="grid_2">
-                @Labels.Team
-            </div>
-            <div class="grid_8">
-                <select id="GroupId" multiple="multiple" class="dropdown" name="GroupId" title="@Labels.Team">
-                    @foreach (Team team in Model.Groups)
-                    { 
-                        <option value="@team.Id">@team.Name</option>
-                    }
-                </select>
-            </div>
-            
-            <div class="grid_2">
-                @Html.LabelFor(model => model.EmployeeId)
-            </div>
-            <div class="grid_8">
-                @Html.TextBox("Employee", Model.Employee, new { placeholder = @Messages.SearchEmployeeWatermark })
-                @Html.HiddenFor(model => model.EmployeeId)
-            </div>
-            </div>
-            <div class="clear"></div>
-            <div class="space"></div>
-            <div class="clear"></div>
-            <div class="space"></div>
-           
-        <div class="row">
-            <div class="grid_2">
-                @Labels.JobTitle
-            </div>
-            <div class="grid_8">
-                <select id="JobTitle" class="dropdown" multiple="multiple" name="JobTitle">
-                    @foreach (LookupData jobTitle in Model.JobTitles)
-                    { 
-                        <option value="@jobTitle.Id">@jobTitle.Name</option>
-                    }
-                </select>
-            </div>
+    <div class="row">
+        <div class="grid_2">
+            @Labels.Team
+        </div>
+        <div class="grid_8">
+            <select id="GroupId" multiple="multiple" class="dropdown" name="GroupId" title="@Labels.Team">
+                @foreach (Team team in Model.Groups)
+                {
+                    <option value="@team.Id">@team.Name</option>
+                }
+            </select>
+        </div>
 
-            <div class="grid_2">
-                @Html.Label("Week")
-            </div>
-            <div class="grid_8">
-                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(), new { @class = "startDateOfWeek", @readonly = "readonly"})
-                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(), new { @class = "endDateOfWeek", @readonly = "readonly" })
-                <img class="weekPickerImg" src="~/images/calendar.png" />
-                <div class="week-picker">
-                </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.EmployeeId)
+        </div>
+        <div class="grid_8">
+            @Html.TextBox("Employee", Model.Employee, new { placeholder = @Messages.SearchEmployeeWatermark })
+            @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="space"></div>
+    <div class="clear"></div>
+    <div class="space"></div>
+
+    <div class="row">
+        <div class="grid_2">
+            @Labels.JobTitle
+        </div>
+        <div class="grid_8">
+            <select id="JobTitle" class="dropdown" multiple="multiple" name="JobTitle">
+                @foreach (LookupData jobTitle in Model.JobTitles)
+                {
+                    <option value="@jobTitle.Id">@jobTitle.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="grid_2">
+            @Html.Label("Week")
+        </div>
+        <div class="grid_8">
+            @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(), new { @class = "startDateOfWeek", @readonly = "readonly" })
+            @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(), new { @class = "endDateOfWeek", @readonly = "readonly" })
+            <img class="weekPickerImg" src="~/images/calendar.png" />
+            <div class="week-picker">
             </div>
         </div>
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="clear"></div>
-        <div class="space"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="space"></div>
+    <div class="clear"></div>
+    <div class="space"></div>
 
-        <div class="row">
-            <div class="grid_2 prefix_2">
-                <input type="button" value="@Labels.Submit" id="btnSubmit"/>
-            </div>
-            <div class="grid_3">
-                <input style="width:115px;" type="button" value="Current Week" id="btnCurrentWeek"/>
-            </div>
-            <div class="grid_2">
-                <input type="button" value="@Labels.Save" id="btnSave"/>
-            </div>
-            <div class="clear"></div>
+    <div class="row">
+        <div class="grid_2 prefix_2">
+            <input type="button" value="@Labels.Submit" id="btnSubmit" />
         </div>
-        @Html.Hidden("CurrentStartDateOfWeek", Model.FromDate.ToDateMonthYearFormatedDate())
-        @Html.Hidden("CurrentEndDateOfWeek", Model.ToDate.ToDateMonthYearFormatedDate())
+        <div class="grid_3">
+            <input style="width:115px;" type="button" value="Current Week" id="btnCurrentWeek" />
+        </div>
+        @if (hasPermission)
+        {
+            <div class="grid_2">
+                <input type="button" value="@Labels.Save" id="btnSave" />
+            </div>
+        }
+        <div class="clear"></div>
+    </div>
+    @Html.Hidden("CurrentStartDateOfWeek", Model.FromDate.ToDateMonthYearFormatedDate())
+    @Html.Hidden("CurrentEndDateOfWeek", Model.ToDate.ToDateMonthYearFormatedDate())
 </div>
 <div class="clear"></div>
 <div class="space"></div>

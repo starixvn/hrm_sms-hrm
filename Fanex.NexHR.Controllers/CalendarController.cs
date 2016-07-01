@@ -52,7 +52,7 @@
 
         /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule()
         {
             var currentDate = DateTime.Now;
@@ -73,12 +73,16 @@
                 JobTitles = jobTitles
             };
 
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Delete)
+                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
+
             return View(scheduleArrangeViewModel);
         }
 
         /// [Authorize(Roles = "ShiftManager")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Create, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
         {
             var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
@@ -105,7 +109,7 @@
 
         /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
             var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
@@ -128,12 +132,15 @@
             };
 
             ViewBag.IsSARole = CurrentUser.NE_Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Delete)
+                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
 
             return View(scheduleViewModel);
         }
 
         /// [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
             var currentDate = DateTime.Now;
@@ -153,7 +160,7 @@
         }
 
         /// [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
             var getShiftCriteria = new GetShiftStatisticCriteria()
@@ -181,7 +188,7 @@
         }
 
         /// [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
             int? shiftId,
@@ -206,7 +213,7 @@
         }
 
         /// [Authorize(Roles = "ShiftManager,HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShiftContent(
             DateTime workDate,
             int? shiftId,

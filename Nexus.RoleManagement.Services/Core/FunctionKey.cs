@@ -30,6 +30,8 @@
 
         public const string ShiftManagement = "ShiftManagement";
 
+        public const string ScheduleArrange = "ScheduleArrange";
+
         public const string ReportHome = "ReportHome";
 
         public const string CanFilterUnpaidLeaveSummary = "CanFilterUnpaidLeaveSummary";

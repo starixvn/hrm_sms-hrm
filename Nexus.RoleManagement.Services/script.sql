@@ -735,6 +735,7 @@ VALUES
  NULL,
  1
 );
+insert into FunctionKey values('ScheduleArrange','Schedule Arrange',null,1)
 
 INSERT INTO [dbo].[RoleFunction]
 VALUES
@@ -1004,6 +1005,30 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  25,
+ 1,
+ 1,
+ 1,
+ 1,
+ NULL,
+ GETDATE()
+);
+
+INSERT INTO [dbo].[RoleFunction]
+VALUES
+(7,
+ 26,
+ 1,
+ 1,
+ 1,
+ 1,
+ NULL,
+ GETDATE()
+);
+
+INSERT INTO [dbo].[RoleFunction]
+VALUES
+(7,
+ 27,
  1,
  1,
  1,
