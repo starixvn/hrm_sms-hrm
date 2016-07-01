@@ -1,11 +1,13 @@
 ﻿.table.table-custom {
-    max-width: 950px;
-
     .title {
         width: 75px;
         float: left;
         margin: 0;
         padding-top: 5px;
+    }
+
+    tr td a {
+        color: #0789d1;
     }
 }
 
@@ -20,6 +22,6 @@
     vertical-align: middle;
 }
 
-.ordercode {
+input.ordercode {
     width: 50px !important;
 }

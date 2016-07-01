@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="WorkingCalendarsViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Calendar
+﻿namespace Fanex.NexHR.ViewModels.Calendar
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// WorkingCalendars ViewModel.
-    /// </summary>
     public class WorkingCalendarsViewModel
     {
         public int EmpId { get; set; }

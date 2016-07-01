@@ -212,8 +212,8 @@
                         e.Team = g;
                         return t;
                     },
-                       splitOn: "EmpId, GroupId",
-                       parameterValues: criteria.GetSpParams()).ToList();
+                    splitOn: "EmpId, GroupId",
+                    parameterValues: criteria.GetSpParams()).ToList();
 
                 PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
                     prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalitem")).FirstOrDefault();
@@ -241,22 +241,36 @@
 
         public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)
         {
-            IList<SupervisorReportModel> supervisors = null;
-
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                supervisors = db.Query<SupervisorReportModel, Employee, Team, SupervisorReportModel>(
-                    (su, e, g) =>
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, Team, SupervisorReportModel>(
+                    (su, g) =>
                     {
-                        su.Employee = e;
-                        e.Team = g;
+                        su.Team = g;
+
                         return su;
                     },
-                    splitOn: "EmpId, GroupId",
-                    parameterValues: criteria.GetSpParams()).ToList();
-            }
+                    splitOn: "GroupId").ToList();
 
-            return supervisors;
+                    IList<SupervisorModel> employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
+                    (su, e) =>
+                    {
+                        su.Supervisor = e;
+
+                        return su;
+                    },
+                    splitOn: "EmpId").ToList();
+
+                    foreach (SupervisorReportModel supervisor in supervisors)
+                    {
+                        supervisor.Supervisors = employees.Where(x => x.Supervisor.Id == supervisor.Id).ToList();
+                    }
+
+                    return supervisors;
+                }
+            }
         }
 
         public IList<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)

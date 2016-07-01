@@ -82,8 +82,6 @@
             classOfInput = "holiday keepinviewday";
             disabledAttribute = "disabled";
         }
-
-        //isShowCheckBox = false;
     }
     else if (workingCalendarModel.IsOffDay)
     {
@@ -168,7 +166,7 @@
         disabledAttribute = "disabled";
     }
 
-    <td class="shiftdate noneborderright">
+    <td class="shiftdate">
         <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)" data-date="@workingCalendarModel.WorkDate.ToDateMonthYearFormatedDate()" @dataShiftId @disabledAttribute />
     </td>
     <td class="noneborderleft">
@@ -180,7 +178,6 @@
         {
             <a class="lnkAddShift tooltip" title="@shiftCodeForHalfday" href="javascript:;">+</a>
         }
-
     </td>
 }
 
@@ -221,43 +218,43 @@
             <th><a href="javascript:;" class="lnkDepartment">Dept.</a></th>
             <th><a href="javascript:;" class="lnkSort">@Labels.Nick</a></th>
             <th><a href="javascript:;" class="lnkmultiple">Shift Multiple</a></th>
-            <th class="noneborderright">
+            <th>
                 @Model.FromDate.ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllMonday", new { @class = "chkAllMonday" })
             </th>
-            <th class="noneborderright">
+            <th>
                 @Model.FromDate.AddDays(1).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllTuesday", new { @class = "chkAllTuesday" })
             </th>
-            <th class="noneborderright">
+            <th>
                 @Model.FromDate.AddDays(2).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllWednesday", new { @class = "chkAllWednesday" })
             </th>
-            <th class="noneborderright">
+            <th>
                 @Model.FromDate.AddDays(3).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllThursday", new { @class = "chkAllThursday" })
             </th>
-            <th class="noneborderright">
+            <th>
                 @Model.FromDate.AddDays(4).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllFriday", new { @class = "chkAllFriday" })
             </th>
-            <th class="weekend noneborderright">
+            <th class="weekend">
                 @Model.FromDate.AddDays(5).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
                 @Html.CheckBox("chkAllSaturday", new { @class = "chkAllSaturday" })
             </th>
-            <th class="weekend noneborderright">
+            <th class="weekend">
                 @Model.FromDate.AddDays(6).ToDateOfWeek()
             </th>
             <th class="noneborderleft">
@@ -275,11 +272,12 @@
         {
             foreach (ScheduleArrangeViewModel scheduleModel in Model.ScheduleArranges)
             {
-
                 var isPublic = scheduleModel.MondaySchedule.IsPublic ? "checked" : string.Empty;
                 <tr>
                     <td>
-                        <a class="lnkremove" href="javascript:;">-</a>
+                        <a class="lnkremove" href="javascript:;">
+                            <i class="fa fa-times fa-lg icon-delete"></i>
+                        </a>
                     </td>
                     <td class="tooltip" title="@scheduleModel.TeamName">@scheduleModel.TeamCode</td>
                     <td class="tdemployee" data-employeeid="@scheduleModel.EmployeeId">

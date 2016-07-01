@@ -50,7 +50,7 @@ END
  WHERE WorkDate = @date
     
  -- update attendate record   
- EXEC EmployeeAttendance_ProcessingAndInsert @empId = null, @fromdate=@date, @todate=@date, @onlyUpdate=1 , @ErrCode=@ErrCode output,@ErrMsg=@ErrMsg output
+ EXEC EmployeeAttendance_ProcessingAndInsert @empId = null, @fromtime=@date, @totime=@date, @onlyUpdate=1
  
  -- write log
 Declare @LogSPData varchar(4000), @now datetime

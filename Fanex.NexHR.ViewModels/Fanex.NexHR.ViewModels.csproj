@@ -85,6 +85,7 @@
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
     <Compile Include="Employee\UserManagementViewModel.cs" />
     <Compile Include="PagerOptionModel.cs" />
+    <Compile Include="Report\EmployeeSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />

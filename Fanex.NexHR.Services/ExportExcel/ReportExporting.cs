@@ -1,5 +1,11 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
@@ -7,16 +13,7 @@
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
 
-    /// <summary>
-    /// Report Exporting.
-    /// </summary>
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportExporting
     {
@@ -26,16 +23,8 @@
         private const int _RowStartBodyTeamSupervisor = 4;
         private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
-        private const string _EmployeeSupervisorFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeSupervisorTemplate.xls";
         private const string _TeamSupervisorFilePathExcelTemplate = "~\\ExcelTemplates\\TeamSupervisorTemplate.xls";
 
-        /// <summary>
-        /// Method Export HR Request Statistic.
-        /// </summary>
-        /// <param name="requests">List of Request Monitoring Entity.</param>
-        /// <param name="fromDate">Export From Date.</param>
-        /// <param name="toDate">Export To Date.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
@@ -85,13 +74,6 @@
             return hssfworkbook;
         }
 
-        /// <summary>
-        /// Method Export Total Working Calendar Summary.
-        /// </summary>
-        /// <param name="calendars">List of Working Calendar Entity.</param>
-        /// <param name="fromDate">Export From Date.</param>
-        /// <param name="toDate">Export To Date.</param>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportWorkingCalendarSummary(
             List<WorkingCalendarSummary> calendars,
             DateTime fromDate,
@@ -202,67 +184,6 @@
 
                     rowIndex++;
                     index++;
-                }
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
-
-        public HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
-        {
-            HSSFWorkbook hssfworkbook;
-
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeSupervisorFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "Employee Supervisor");
-
-            var rowIndex = _RowStartBodyEmployeeSupervisor;
-            var rowCopy = _RowStartBodyEmployeeSupervisor;
-            var height = sheet.GetRow(_RowStartBodyEmployeeSupervisor).Height;
-            var groupIndex = 1;
-            int rowCount = 0;
-
-            foreach (SupervisorReportModel item in supervisors)
-            {
-                var row = sheet.GetRow(rowIndex);
-                rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                row = sheet.GetRow(rowIndex);
-                row.Height = height;
-
-                row.GetCell(5).SetCellValue(item.ActionName);
-                row.GetCell(6).SetCellValue(item.Supervisors);
-
-                if (rowCount == 0)
-                {
-                    row.GetCell(0).SetCellValue(groupIndex);
-                    row.GetCell(1).SetCellValue(item.Employee.NickName);
-                    row.GetCell(2).SetCellValue(item.Employee.FullName);
-                    row.GetCell(3).SetCellValue(item.Employee.Team.Code);
-                    row.GetCell(4).SetCellValue(item.Employee.NX_Roles2String);
-
-                    MergeCell(row, rowIndex, rowIndex + 3);
-
-                    rowCount++;
-                    rowIndex++;
-                }
-                else if (rowCount == 3)
-                {
-                    rowCount = 0;
-                    rowIndex++;
-                    groupIndex++;
-                }
-                else
-                {
-                    rowCount++;
-                    rowIndex++;
                 }
             }
 

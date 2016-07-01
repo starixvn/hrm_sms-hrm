@@ -1,31 +1,14 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="SupervisorReportModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.17">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Supervisor
+﻿namespace Fanex.NexHR.Models.Supervisor
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
+    using System.Collections.Generic;
 
-    public class SupervisorReportModel
+    public class SupervisorReportModel : Employee
     {
-        public Employee Employee { get; set; }
-
-        public string Supervisors { get; set; }
-
-        public int ActionType { get; set; }
-
-        public string ActionName
+        public SupervisorReportModel()
         {
-            get
-            {
-                return Enumerations.GetStringValue((SupervisorActionType)ActionType);
-            }
+            Supervisors = new List<SupervisorModel>();
         }
+
+        public IList<SupervisorModel> Supervisors { get; set; }
     }
 }

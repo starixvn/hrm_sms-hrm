@@ -1,5 +1,11 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
@@ -14,12 +20,6 @@
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
 
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelService : IExportExcelService
@@ -75,12 +75,20 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
+        public void ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors, string templatePath)
         {
-            var exportExcel = new ReportExporting();
-            HSSFWorkbook hssfworkbook = exportExcel.ExportEmployeeSupervisor(supervisors);
+            string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Supervisor");
 
-            return hssfworkbook;
+            // Fill report title.
+            writer.CopyRows(0, 2);
+            // Fill report header.
+            writer.CopyRows(2, 1);
+
+            FillContentRowEmployeeSupervisorReport(supervisors, ref writer);
+            writer.SyncColumnsWidth(10);
+
+            writer.Render();
         }
 
         public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
@@ -1063,6 +1071,50 @@
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;
+        }
+
+        private void FillContentRowEmployeeSupervisorReport(IList<SupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (SupervisorReportModel supervisor in supervisors)
+            {
+                FillRowEmployeeSupervisorReport(supervisor, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRowEmployeeSupervisorReport(SupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecordEmployeeSupervisorReport(supervisor, ref rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(3, record);
+            }
+            else
+            {
+                writer.WriteRow(4, record);
+            }
+
+            rowIndex++;
+        }
+
+        private object CreateRecordEmployeeSupervisorReport(SupervisorReportModel supervisor, ref int rowIndex)
+        {
+            var record = new
+            {
+                Count = rowIndex,
+                NickName = supervisor.NickName,
+                FullName = supervisor.FullName,
+                Group = supervisor.Team.Code,
+                Roles = supervisor.NX_Roles2String,
+                Verifier = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName)),
+                Approver = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName)),
+                ShiftArrangement = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName)),
+                OnBehalfRequest = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName)),
+                DisciplineManager = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
+            };
+
+            return record;
         }
 
         private void SetNumberValue(ICell cell, float value)

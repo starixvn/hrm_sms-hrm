@@ -83,6 +83,11 @@ table.table.table-custom thead tr th.align-right, table.table.table-custom tbody
   text-align: right;
 }
 
+table.table.table-custom thead tr th.noneborderleft, table.table.table-custom tbody tr td.noneborderleft, table.table.table-custom tfoot tr td.noneborderleft {
+  padding-left: 0;
+  border-left: 0;
+}
+
 table.table.table-custom thead tr th:last-child, table.table.table-custom tbody tr td:last-child, table.table.table-custom tfoot tr td:last-child {
   border-right: 1px solid #d2d2d2;
 }

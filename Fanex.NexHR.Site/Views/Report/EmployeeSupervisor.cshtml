@@ -1,69 +1,66 @@
-﻿@{
-	ViewBag.Title = "Employee Supervisor";
+﻿@model EmployeeSupervisorViewModel
+
+@{
+    ViewBag.Title = "Employee Supervisor";
 }
 @section css{
-	@Url.CombresLink("staffrepresentativecss")
+    @Url.CombresLink("staffrepresentativecss")
 }
 @section js{
-	@Url.CombresLink("staffrepresentativjs")
+    @Url.CombresLink("staffrepresentativjs")
 }
 @section Breadcrumb {
-	<a class="step">HR</a>
-	<a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">HR</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
-{        
-	<div class="container_24 bunhat">
-		<div class="grid_2 gridlabel">
-			<label for="Employee">
-				@Labels.Employee</label>
-		</div>
-		<div class="grid_6">
-			@Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
-			@Html.Hidden("EmployeeId")
-		</div>
-		<div class="grid_1 gridlabel">@Labels.Team</div>
-		<div class="grid_6">
-			<select id="group" multiple="multiple" class="team-select">
-				@foreach (Team item in ViewBag.Groups)
-	{ 
-					<option value="@item.Id">@item.Name</option>
-	}
-			</select>
-		</div>
-		<div class="grid_2 gridlabel">
-			@Labels.Category
-		</div>
-		<div class="grid_3">
-			@RazorHelper.CategoryDropDownList("category", "category", "")
-		</div>
-		<div class="clear">
-		</div>
-		<div class="space">
-		</div>
-		<div class="clear">
-		</div>
-		<div class="space">
-		</div>
-@*		<div class="grid_2 gridlabel">
-			<label>
-				@Labels.Roles</label>
-		</div>
-		<div class="grid_4">
-			@RazorHelper.SupervisorRolesDropDownList(0, "Supervisor")
-		</div>*@
+<form class="form-filter">
+    @Html.HiddenFor(model => model.GroupIds)
+    @Html.HiddenFor(model => model.IsLocal)
+    @Html.HiddenFor(model => model.EmployeeId)
+    <div class="container_24 bunhat">
+        <div class="grid_2 gridlabel">
+            <label for="Employee">
+                @Labels.Employee
+            </label>
+        </div>
+        <div class="grid_6">
+            @Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
+        </div>
+        <div class="grid_1 gridlabel">@Labels.Team</div>
+        <div class="grid_6">
+            <select id="group" multiple="multiple" class="team-select">
+                @foreach (Team item in Model.Groups)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="grid_2 gridlabel">
+            @Labels.Category
+        </div>
+        <div class="grid_3">
+            @RazorHelper.CategoryDropDownList("category", "category", "")
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
         <div class="grid_2 gridlabel">&nbsp;</div>
-		<div class="grid_5">
-			<input id="submit" type="button" value="@Labels.Submit"/>
-			<input id="excel" type="button" value="Excel" />
-		</div>
-		<div class="clear">
-		</div>
-	</div>
-}
+        <div class="grid_5">
+            <input id="submit" type="button" value="@Labels.Submit" />
+            <input id="excel" type="button" value="Excel" />
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</form>
 <div id="EmployeeSupervisorDetails">
 </div>

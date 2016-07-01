@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetSupervisorReportCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.17">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Supervisor
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Supervisor Report Criteria.
-    /// </summary>
     public class GetSupervisorReportCriteria : CriteriaBase
     {
         public int? EmployeeId { get; set; }

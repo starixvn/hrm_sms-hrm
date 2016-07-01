@@ -21,109 +21,106 @@
         double totalAnnualLeave = 0;
         double totalUnpaidLeave = 0;
         <tbody>
-        @foreach (LeaveDetailModel item in Model.LeaveRequestDetail)
-        {
-            if (!item.IsOffOrHoliday)
+            @foreach (LeaveDetailModel item in Model.LeaveRequestDetail)
             {
-                if (item.LeaveTypeId == Constants.AnnualLeave)
+                if (!item.IsOffOrHoliday)
                 {
-                    if (item.IsHalfDay)
+                    if (item.LeaveTypeId == Constants.AnnualLeave)
                     {
-                        totalAnnualLeave += 0.5;
+                        if (item.IsHalfDay)
+                        {
+                            totalAnnualLeave += 0.5;
+                        }
+                        else
+                        {
+                            totalAnnualLeave += 1;
+                        }
+                    }
+                    if (item.LeaveTypeId == Constants.UnpaidLeave)
+                    {
+                        if (item.IsHalfDay)
+                        {
+                            totalUnpaidLeave += 0.5;
+                        }
+                        else
+                        {
+                            totalUnpaidLeave += 1;
+                        }
+                    }
+                }
+                <tr>
+                    <td class="tdleavedate" data-date="@item.LeaveDate.ToDateMonthYearFormatedDate()">
+                        @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
+                    </td>
+                    <td class="tdschedulestatus">
+                        @item.ScheduleStatus
+                    </td>
+                    @if (!item.IsOffOrHoliday)
+                    {
+                        var leaveSelected = string.Empty;
+                        var offSelected = string.Empty;
+                        var workSelected = string.Empty;
+                        if (item.WorkType == (int)WorkType.Leave)
+                        {
+                            leaveSelected = "selected";
+                        }
+                        else if (item.WorkType == (int)WorkType.Off)
+                        {
+                            offSelected = "selected";
+                        }
+                        else
+                        {
+                            workSelected = "selected";
+                        }
+                        <td>
+                            <select class="ddlWorkType">
+                                <option value="2" @leaveSelected>Leave</option>
+                                <option value="3" @workSelected>On Duty</option>
+                                @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
+                                {
+                                    <option value="1" @offSelected>Off</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })
+                        </td>
+                        <td>
+                            <span class="tdnumberleaves">
+                                @(item.IsHalfDay ? "0.5" : "1")
+                            </span>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @class = "ddlfromtime" })
+                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @class = "ddltotime" })
+                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
                     }
                     else
                     {
-                        totalAnnualLeave += 1;
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="tdhalfday">-</td>
                     }
-                }
-
-                if (item.LeaveTypeId == Constants.UnpaidLeave)
-                {
-                    if (item.IsHalfDay)
-                    {
-                        totalUnpaidLeave += 0.5;
-                    }
-                    else
-                    {
-                        totalUnpaidLeave += 1;
-                    }
-                }
+                </tr>
             }
-            
-            <tr>
-                <td class="tdleavedate" data-date="@item.LeaveDate.ToDateMonthYearFormatedDate()">
-                    @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
-                </td>
-                <td class="tdschedulestatus">
-                    @item.ScheduleStatus
-                </td>
-                
-                @if (!item.IsOffOrHoliday)
-                {
-                    var leaveSelected = string.Empty;
-                    var offSelected = string.Empty;
-                    var workSelected = string.Empty;
-                    if (item.WorkType == (int)WorkType.Leave)
-                    {
-                        leaveSelected = "selected";
-                    }
-                    else if (item.WorkType == (int)WorkType.Off)
-                    {
-                        offSelected = "selected";
-                    }
-                    else
-                    {
-                        workSelected = "selected";
-                    }
-                    <td>
-                        <select class="ddlWorkType">
-                            <option value= "2" @leaveSelected>Leave</option>
-                            <option value= "3" @workSelected>On Duty</option>
-                            @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
-                            {
-                                <option value= "1" @offSelected>Off</option>
-                            }
-                        </select>
-                    </td> 
-                    <td>
-                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
-                    </td>
-                    <td>
-                        @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })
-                    </td>
-                    <td>
-                        <span class="tdnumberleaves">
-                            @(item.IsHalfDay ? "0.5" : "1")
-                        </span>
-                    </td>
-                    <td>
-                        <div class="timehalfday">
-                            @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @class = "ddlfromtime" })
-                            @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
-                            *
-                        </div>
-                    </td>
-                    <td>
-                        <div class="timehalfday">
-                            @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @class = "ddltotime" })
-                            @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
-                            *
-                        </div>
-                    </td>
-                    <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
-                }
-                else
-                {
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td class="tdhalfday">-</td>
-                }
-            </tr>
-        }
         </tbody>
         <tfoot class="footleavedetail">
             <tr>
@@ -146,6 +143,5 @@
             </tr>
         </tbody>
     }
-    
 </table>
 @Url.CombresLink("leavedetailjs")

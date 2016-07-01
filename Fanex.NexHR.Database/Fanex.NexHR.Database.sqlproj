@@ -25,6 +25,7 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <ValidateCasingOnIdentifiers>False</ValidateCasingOnIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -373,7 +374,6 @@
     <Build Include="dbo\Stored Procedures\Employee_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_3.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetDetail_xtest.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_4.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetDailyReport.sql" />
@@ -461,5 +461,12 @@
     <Build Include="dbo\Stored Procedures\Log_WriteLog.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetVerifierAndApprover.sql" />
     <Build Include="dbo\Stored Procedures\Lookup_GetLookupData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
   </ItemGroup>
 </Project>

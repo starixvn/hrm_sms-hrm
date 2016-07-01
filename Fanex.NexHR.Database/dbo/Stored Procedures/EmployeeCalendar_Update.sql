@@ -47,11 +47,11 @@ Param's Explanation:
  WHERE datediff(d, WorkDate, @date) = 0   AND empId = @EmpId  
   
 	-- update attendance record 
-EXEC EmployeeAttendance_ProcessingAndInsert @empId = @empId, @fromdate=@date, @todate=@date, @onlyUpdate=1 , @ErrCode=@ErrCode output,@ErrMsg=@ErrMsg output
+EXEC EmployeeAttendance_ProcessingAndInsert @empId = @empId, @fromtime=@date, @totime=@date, @onlyUpdate=1
 
 IF @ErrCode <> 0
 	SELECT @ErrCode = 100, @ErrMsg = N'working calendar for an employee failed.'
 ELSE 
-	SELECT @ErrCode=0,@ErrCode=''		
+	SELECT @ErrCode=0,@ErrCode=''
 
 

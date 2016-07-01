@@ -42,12 +42,16 @@ namespace Fanex.NexHR.Controllers
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Criteria.Supervisor;
 
     public class ExportController : RequestController
     {
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
+        private const string EmployeeSupervisorTemplatePath = @"~\ExcelTemplates\EmployeeSupervisorTemplate.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -484,6 +488,23 @@ namespace Fanex.NexHR.Controllers
 
             string templatePath = Server.MapPath(DisciplineDetailTemplatePath);
             _disciplineService.ExportDisciplineDetailReport(criteria, disciplines, templatePath);
+
+            return new EmptyResult();
+        }
+
+        public ActionResult ExportEmployeeSupervisor(EmployeeSupervisorViewModel model)
+        {
+            var criteria = new GetSupervisorReportCriteria()
+            {
+                EmployeeId = model.EmployeeId,
+                GroupIds = model.GroupIds,
+                IsLocal = model.IsLocal,
+                ActionType = model.ActionType
+            };
+            IList<SupervisorReportModel> supervisors = _reportService.GetSupervisorReport(criteria);
+
+            string templatePath = Server.MapPath(EmployeeSupervisorTemplatePath);
+            _exportService.ExportEmployeeSupervisor(supervisors, templatePath);
 
             return new EmptyResult();
         }

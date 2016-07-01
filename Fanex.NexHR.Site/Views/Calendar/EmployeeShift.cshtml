@@ -7,7 +7,7 @@
     shift.Id = -1;
     shift.Name = "-- " + Labels.All + " --";
     shifts.Insert(0, shift);
-    }
+}
 @section css{
     @Url.CombresLink("employeeshiftcss")
 }
@@ -51,8 +51,8 @@
                             selected = "selected";
                         }
                     }
-                        
-                <option @selected value="@team.Id">@team.Name</option> 
+
+                    <option @selected value="@team.Id">@team.Name</option>
                 }
             }
         </select>
@@ -61,7 +61,6 @@
     </div>
     <div class="space">
     </div>
-    
     <div class="grid_2 gridlabel">
         @Html.LabelFor(model => model.Employee)
     </div>
@@ -80,7 +79,7 @@
         @Html.LabelFor(model => model.IsShowWholeCompany, Labels.ShowWholeSection)
     </div>
     <div class="grid_2">
-        <input type="button" value="@Labels.Submit" id="btnSubmit"/>
+        <input type="button" value="@Labels.Submit" id="btnSubmit" />
     </div>
     <div class="clear">
     </div>

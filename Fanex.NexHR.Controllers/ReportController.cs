@@ -629,32 +629,26 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            ViewBag.Groups = GetAllTeam();
-            return View();
+            var model = new EmployeeSupervisorViewModel()
+            {
+                Groups = GetAllTeam()
+            };
+
+            return View(model);
         }
 
-        public ActionResult EmployeeSupervisorDetails(int? employeeId, string groups, int? supervisorType, bool? isExcel, byte? isLocal = null)
+        public ActionResult EmployeeSupervisorDetails(EmployeeSupervisorViewModel model)
         {
-            var getSupervisorReportCriteria = new GetSupervisorReportCriteria()
+            var criteria = new GetSupervisorReportCriteria()
             {
-                EmployeeId = employeeId,
-                GroupIds = groups,
-                IsLocal = isLocal,
-                ActionType = supervisorType
+                EmployeeId = model.EmployeeId,
+                GroupIds = model.GroupIds,
+                IsLocal = model.IsLocal,
+                ActionType = model.ActionType
             };
-            IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(getSupervisorReportCriteria);
+            IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
 
-            if (isExcel.Value)
-            {
-                string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = exportExcelService.ExportEmployeeSupervisor(supervisors);
-
-                return ExcelFile(hssfworkbook, fileName);
-            }
-            else
-            {
-                return PartialView(supervisors);
-            }
+            return PartialView("_EmployeeSupervisorDetails", supervisors);
         }
 
         public ActionResult TeamSupervisor()

@@ -11,17 +11,17 @@ $(document).ready(function () {
         $('.aba').prop('checked', _checked);
         $('.checkuncheckall').prop('checked', _checked);
         if (_checked) {
-            $('tr').addClass('selected');
+            $('tbody tr').addClass('selected');
         }
         else {
-            $('tr').removeClass('selected');
+            $('tbody tr').removeClass('selected');
         }
     });
 
     $("#errors-model-state").hide();
 
     $('.aba').click(function () {
-        var tr = $(this).parent().parent();
+        var tr = $(this).closest('tr');
         if (tr.hasClass('selected')) {
             tr.removeClass();
         }

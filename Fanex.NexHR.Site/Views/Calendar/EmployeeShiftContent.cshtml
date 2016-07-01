@@ -3,25 +3,17 @@
 @{
     Layout = null;
 }
-<table id="tblemployeeshift" class="data tblemployeeshift">
+<table id="tblemployeeshift" class="table table-custom tblemployeeshift">
     <thead>
         <tr>
-            <th>
-                #
-            </th>
-            <th>@Labels.Date
-            </th>
-            <th>@Labels.Nick
-            </th>
-            <th>@Labels.FullName
-            </th>
-            <th>@Labels.Team
-            </th>
-            <th>@Labels.Shift
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Date</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Shift</th>
         </tr>
     </thead>
-
     @if (Model != null && Model.Any())
     {
         int i = 0;
@@ -30,17 +22,21 @@
             {
                 i++;
                 <tr>
-                    <td>@i
+                    <td>@i</td>
+                    <td>
+                        @(model.WorkDate.ToDateMonthYearFormatedDate())
                     </td>
-                    <td>@(model.WorkDate.ToDateMonthYearFormatedDate())
+                    <td>
+                        @(model.Employee.NickName)
                     </td>
-                    <td>@(model.Employee.NickName)
+                    <td class="align-left">
+                        @(model.Employee.FullName)
                     </td>
-                    <td class="left">@(model.Employee.FullName)
+                    <td class="tooltip" title="@(model.Employee.Team.Name)">
+                        @(model.Employee.Team.Code)
                     </td>
-                    <td class="tooltip" title="@(model.Employee.Team.Name)">@(model.Employee.Team.Code)
-                    </td>
-                    <td class="left">@(model.Shift.Name)
+                    <td class="align-left">
+                        @(model.Shift.Name)
                     </td>
                 </tr>
             }
@@ -50,5 +46,4 @@
     {
         @RazorHelper.DisplayNoInformation(colspan: 6);
     }
- 
 </table>

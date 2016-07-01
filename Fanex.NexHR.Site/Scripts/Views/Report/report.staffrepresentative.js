@@ -1,93 +1,42 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, _messages, floatThead*/
 
-function submitForm(isExcel) {
-	var url;
-	var employeeText = $("#Employee").val();
-	var employeeId = $("#EmployeeId").val();
-	if (employeeText === "" || employeeText == null) {
-		employeeId = null;
-	}
+(function () {
+    function query() {
+        $.ajax({
+            url: _global.root + 'report/EmployeeSupervisorDetails',
+            type: 'POST',
+            dataType: 'html',
+            data: $('form.form-filter').serialize(),
+            success: function (response) {
+                $('#EmployeeSupervisorDetails').html(response);
 
-	var group = $("#group").val() != null ? $("#group").val().join() : "";
-	var supervisorType = $("#Supervisor").val();
+                floatThead('table#data');
+            },
+            error: function () {
+                alert(_messages.errorTryAgain);
+            }
+        });
+    }
 
-	var isLocal = $("#category").val();
-	if (isLocal === "0") {
-		isLocal = 0;
-	}
-	if (isLocal === "1") {
-		isLocal = 1;
-	}
-	if (isExcel) {
-		url = _global.root + "report/EmployeeSupervisorDetails?employeeId=" + employeeId + "&groups=" + group +
-			"&supervisorType=" + supervisorType + "&isExcel=" + isExcel + "&isLocal=" + isLocal;
+    $(document).ready(function () {
+        $('#group').multiselect();
 
-		location.href = url;
-	}
-	else {
-		var template = $("#EmployeeSupervisorDetails");
-		var params = {
-			employeeId: employeeId,
-			groups: group,
-			supervisorType: supervisorType,
-			isExcel: isExcel,
-			isLocal: isLocal
-		};
+        $('#group').on('change', function () {
+            var groupIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#GroupIds').val(groupIds);
+        });
 
-		$.ajax({
-			url: _global.root + "report/EmployeeSupervisorDetails",
-			data: params,
-			async: false
-		}).done(function (response) {
-			template.empty();
-			template.html(response);
-		});
-	}
-}
+        $('#category').on('change', function () {
+            $('#IsLocal').val($(this).val());
+        });
 
-function submitFormTeam(isExcel) {
-	var group = $("#group").val() != null ? $("#group").val().join() : "";
-	if (isExcel) {
-		var url = _global.root + "report/TeamSupervisorDetails?groups=" + group + "&isExcel=" + isExcel;
+        $("#submit").on('click', function () {
+            query();
+        });
 
-		location.href = url;
-	}
-	else {
-		var template = $("#TeamSupervisorDetails");
-		var params = { groups: group, isExcel: isExcel };
-
-		$.ajax({
-			url: _global.root + "report/TeamSupervisorDetails",
-			data: params,
-			async: false
-		}).done(function (response) {
-			template.empty();
-			template.html(response);
-		});
-	}
-}
-
-$(document).ready(function () {
-	$('#group').multiselect();
-	$("#title").multiselect({
-		noneSelectedText: 'Select positions',
-		selectedText: '# selected',
-		selectedList: 0
-	});
-	//submitForm(false);
-
-	$("#submit").click(function () {
-		submitForm(false);
-	});
-	$("#excel").click(function () {
-		submitForm(true);
-	});
-
-	$("#submitTeam").click(function () {
-		submitFormTeam(false);
-	});
-	$("#excelTeam").click(function () {
-		submitFormTeam(true);
-	});
-});
+        $('form.form-filter #excel').on('click', function () {
+            window.location.href = _global.root + 'Export/ExportEmployeeSupervisor?' + $('form.form-filter').serialize();
+        });
+    });
+})();

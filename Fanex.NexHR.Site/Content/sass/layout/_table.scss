@@ -22,6 +22,11 @@
             text-align: right;
         }
 
+        &.noneborderleft {
+            padding-left: 0;
+            border-left: 0;
+        }
+
         &:last-child {
             border-right: 1px solid #d2d2d2;
         }

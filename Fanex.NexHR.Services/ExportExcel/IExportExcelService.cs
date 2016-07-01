@@ -39,7 +39,7 @@
 
         HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate);
 
-        HSSFWorkbook ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors);
+        void ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors, string templatePath);
 
         HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors);
 

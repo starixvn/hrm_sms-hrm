@@ -86,6 +86,11 @@
             }
         });
 
+        var q = getParam('query');
+        if (q !== null) {
+            $('#Keyword').val(q);
+        }
+
         query();
 
         $('#query').on("click", function (evt) {

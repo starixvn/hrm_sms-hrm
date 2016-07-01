@@ -19,8 +19,9 @@
     font-weight: bold;
     text-shadow: 0 1px 0 #ff6600;
 }
-.offday
+input.offday
 {
+    max-width: 80px;
     background-color: #F8F89C !important;
 }
 .keepinviewday
@@ -35,8 +36,9 @@
 {
     background-color: #F3AA4B !important;
 }
-.leaveday
+input.leaveday
 {
+    max-width: 80px;
     color: #ED4646 !important;
 }
 .leavehalfday2

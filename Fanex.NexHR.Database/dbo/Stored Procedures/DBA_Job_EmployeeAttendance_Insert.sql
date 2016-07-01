@@ -19,9 +19,6 @@ BEGIN
 		,@fromtime = @fromdate
 		,@totime = @todate
 		,@onlyUpdate = 0
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
-		,@Debug = 1
 
 	IF @@ERROR <> 0
 		SELECT @ErrCode = 100

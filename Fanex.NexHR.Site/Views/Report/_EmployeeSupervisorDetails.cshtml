@@ -1,0 +1,56 @@
+﻿@using Fanex.NexHR.Models.Supervisor
+@model IList<SupervisorReportModel>
+<div>
+    <table id="data" class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Nick</th>
+                <th>@Labels.FullName</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.AuthorityLevel</th>
+                <th>@Labels.VerifiedBy</th>
+                <th>@Labels.ApprovedBy</th>
+                <th>@Labels.ShiftArrangement</th>
+                <th>@Labels.OnBehalfRequest</th>
+                <th>@Labels.DisciplineManager</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            int index = 0;
+            <tbody>
+                @foreach (SupervisorReportModel item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.NickName</td>
+                        <td class="align-left">@item.FullName</td>
+                        <td>@item.Team.Code</td>
+                        <td class="align-left">@item.NX_Roles2String</td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 7);
+        }
+    </table>
+</div>
