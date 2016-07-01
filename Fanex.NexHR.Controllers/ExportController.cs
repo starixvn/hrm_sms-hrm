@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ExportController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
@@ -19,32 +10,30 @@ namespace Fanex.NexHR.Controllers
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Criteria.Supervisor;
 
     public class ExportController : RequestController
     {

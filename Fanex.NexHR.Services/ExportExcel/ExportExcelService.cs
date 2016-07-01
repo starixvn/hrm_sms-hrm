@@ -80,9 +80,9 @@
             string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Supervisor");
 
-            // Fill report title.
+            /// Fill report title.
             writer.CopyRows(0, 2);
-            // Fill report header.
+            /// Fill report header.
             writer.CopyRows(2, 1);
 
             FillContentRowEmployeeSupervisorReport(supervisors, ref writer);
