@@ -1215,6 +1215,7 @@
     <Content Include="Views\Menu\Edit.cshtml" />
     <Content Include="Scripts\Views\Report\report.timerecord.js" />
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
+    <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

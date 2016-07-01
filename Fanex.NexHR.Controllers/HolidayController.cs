@@ -54,18 +54,18 @@
         [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
         public ActionResult Edit(Holiday model)
         {
-            var criteria = new UpdateHolidayCriteria
-            {
-                Id = model.Id,
-                HolidayName = model.HolidayName,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                ModifiedBy = CurrentUser.Id,
-                ModifiedDate = DateTime.Now
-            };
-
             if (ModelState.IsValid)
             {
+                var criteria = new UpdateHolidayCriteria
+                {
+                    Id = model.Id,
+                    HolidayName = model.HolidayName,
+                    FromDate = model.FromDate,
+                    ToDate = model.ToDate,
+                    ModifiedBy = CurrentUser.Id,
+                    ModifiedDate = DateTime.Now
+                };
+
                 ViewBag.Updated = commandService.Update(criteria).IsSuccessful;
             }
             else
@@ -86,17 +86,17 @@
         [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
         public ActionResult Create(Holiday model)
         {
-            var criteria = new InsertHolidayCriteria
+            if (ModelState.IsValid)
             {
-                HolidayName = model.HolidayName,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                ModifiedBy = CurrentUser.Id,
-                ModifiedDate = DateTime.Now
-            };
+                var criteria = new InsertHolidayCriteria
+                {
+                    HolidayName = model.HolidayName,
+                    FromDate = model.FromDate,
+                    ToDate = model.ToDate,
+                    ModifiedBy = CurrentUser.Id,
+                    ModifiedDate = DateTime.Now
+                };
 
-            if (criteria.IsValid())
-            {
                 var result = commandService.Insert(criteria);
                 if (result.IsSuccessful)
                 {

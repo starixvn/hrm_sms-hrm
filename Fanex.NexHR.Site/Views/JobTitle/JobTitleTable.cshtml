@@ -1,0 +1,67 @@
+﻿@{
+    Layout = null;
+    var policies = ViewBag.Policies as PoliciesModel;
+}
+@model IList<LookupData>
+@if (Model.Any())
+{
+    for (var index = 0; index < Model.Count; index++)
+    {
+        var currentIndex = index + 1;
+        var job = Model[index];
+        <tr>
+            <td>
+                @currentIndex
+            </td>
+            <td class="align-left" style="width: 340px">
+                <span data-id="@job.Id">@job.Name</span>
+                @*<input type="text" value="@job.Name" id="txtJobTile_@job.Id" style="display:none;height:22px;width: 300px;" />*@
+            </td>
+            <td class="align-left">
+                @job.CategoryName
+            </td>
+            <td>
+                @job.TotalExpat
+            </td>
+            <td>
+                @job.TotalLocal
+            </td>
+            <td>
+                @if (job.Value != "0")
+                {
+                    <a href="javascript:;" class="js-link-redirect-use-management" data-id="@job.Id">@job.Value</a>
+                }
+                else
+                {
+                    <span>0</span>
+                }
+            </td>
+            @if (policies.CanEdit)
+            {
+                <td>
+                    <a href="javascript:;" class="js-link-edit-job" data-id=@job.Id data-category-id="@job.CategoryId" data-job-title="@job.Name">
+                        <i class="fa fa-pencil fa-lg icon-edit"></i>
+                    </a>
+                </td>
+            }
+            <td>
+                @if (job.Value != "0" || !policies.CanDelete)
+                {
+                    <a href="javascript:;" style="cursor:default">
+                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                    </a>
+                }
+                else
+                {
+                    <a href="javascript:;" class="ls-link-delete-job" data-id=@job.Id>
+                        <i class="fa fa-times fa-lg icon-delete"></i>
+                    </a>
+                }
+            </td>
+        </tr>
+    }
+}
+else
+{
+    RazorHelper.DisplayNoInformation(colspan: 8);
+}
