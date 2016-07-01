@@ -38,7 +38,10 @@
             {
                 <th>@Labels.Edit</th>
             }
-            <th>@Labels.Delete</th>
+            @if (policies.CanDelete)
+            {
+                <th>@Labels.Delete</th>
+            }
         </tr>
     </thead>
     <tbody class="js-job-title-table-body"></tbody>

@@ -44,20 +44,24 @@
                     </a>
                 </td>
             }
-            <td>
-                @if (job.Value != "0" || !policies.CanDelete)
-                {
-                    <a href="javascript:;" style="cursor:default">
-                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                    </a>
-                }
-                else
-                {
-                    <a href="javascript:;" class="ls-link-delete-job" data-id=@job.Id>
-                        <i class="fa fa-times fa-lg icon-delete"></i>
-                    </a>
-                }
-            </td>
+
+            @if (policies.CanDelete)
+            {
+                <td>
+                    @if (job.Value != "0")
+                        {
+                        <a href="javascript:;" style="cursor:default">
+                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" class="ls-link-delete-job" data-id=@job.Id>
+                            <i class="fa fa-times fa-lg icon-delete"></i>
+                        </a>
+                    }
+                </td>
+            }
         </tr>
     }
 }

@@ -35,7 +35,8 @@
             ViewBag.Policies = new PoliciesModel
             {
                 CanCreate = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Create),
-                CanEdit = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit)
+                CanEdit = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit),
+                CanDelete = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete)
             };
 
             return View(JobCategories);
