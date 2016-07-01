@@ -1,6 +1,8 @@
 ﻿@model IList<Team>
 @{
     ViewBag.Title = Labels.SectionManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -12,9 +14,12 @@
     <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-<div class="button-icon">
-    <span class="icon plus"></span>@Html.ActionLink("New Section", "Create")
-</div>
+@if (hasPermission)
+{
+    <div class="button-icon">
+        <span class="icon plus"></span>@Html.ActionLink("New Section", "Create")
+    </div>
+}
 <div class="clear">
 </div>
 <div class="space">
@@ -32,9 +37,12 @@
             <th>@Labels.TotalExpat</th>
             <th>@Labels.TotalLocal</th>
             <th>@Labels.Total</th>
-            <th>@Labels.Edit</th>
-            <th>@Labels.Roles</th>
-            <th>@Labels.Delete</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Roles</th>
+                <th>@Labels.Delete</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -72,7 +80,7 @@
                 <td>@team.TotalLocal</td>
                 <td>
                     @{
-            if (@team.NoOfMembers > 0)
+            if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
             {
                 <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
             }
@@ -82,28 +90,30 @@
             }
                     }
                 </td>
-                <td>
-                    <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
-                        <i class="fa fa-pencil fa-lg icon-edit"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
-                </td>
-                <td>
-                    @{
-            if (team.NoOfMembers > 0)
-            {
-                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-            }
-            else
-            {
-                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                    <i class="fa fa-times fa-lg icon-delete"></i>
-                </a>
-            }
-                    }
-                </td>
+                @if (hasPermission)
+                {
+                    <td>
+                        <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
+                            <i class="fa fa-pencil fa-lg icon-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
+                    </td>
+                    <td>
+                        @if (team.NoOfMembers > 0)
+                        {
+                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                        }
+                        else
+                        {
+                            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        }
+
+                    </td>
+                }
             </tr>
         }
     </tbody>

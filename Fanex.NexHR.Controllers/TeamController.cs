@@ -44,6 +44,11 @@
         public ActionResult Index()
         {
             IList<Team> teams = GetAllTeam();
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.SectionManagement, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.SectionManagement, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.SectionManagement, Policy.Delete);
+
+            ViewBag.HasPermissionToViewEmployee = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Read);
 
             return View(teams);
         }

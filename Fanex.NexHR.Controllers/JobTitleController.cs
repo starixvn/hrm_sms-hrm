@@ -36,6 +36,10 @@
                 LookupCode = Constants.JobTitle
             };
             ViewBag.JobTitles = lookupDataService.GetAll(getAllJobTitleCriteria);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Create)
+                || CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit)
+                || CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete);
+
             return View();
         }
 

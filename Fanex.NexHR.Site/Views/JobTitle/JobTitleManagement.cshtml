@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = @Labels.JobTitleManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("jobtitlecss")
@@ -14,9 +15,12 @@
 <div class="container_24 bunhat">
     @Labels.Keyword
     <input id="keyword" type="text" placeholder="@Messages.JobTitle" />
-    <div class="button-icon">
-        <span class="icon plus"></span><a href="javascript:;" id="btnNewJobTitle">@Labels.NewJobTitle</a>
-    </div>
+    @if (hasPermission)
+    {
+        <div class="button-icon">
+            <span class="icon plus"></span><a href="javascript:;" id="btnNewJobTitle">@Labels.NewJobTitle</a>
+        </div>
+    }
 </div>
 <div class="clear">
 </div>
@@ -29,8 +33,11 @@
             <th>@Labels.TotalExpat</th>
             <th>@Labels.TotalLocal</th>
             <th>@Labels.Total</th>
-            <th>@Labels.Edit</th>
-            <th>@Labels.Delete</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
         </tr>
     </thead>
     <tbody></tbody>
@@ -60,28 +67,25 @@
             0
             {{/if}}
         </td>
-        <td>
-            <a href="javascript:;" class="lnkEdit" data-id=${Id} id='btnEditJobTitle_${Id}' data-categoryid="${CategoryId}">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>
-            </a>
-            @*<a href="javascript:;" class="lnkSave" data-id=${Id} id="btnUpdateJT_${Id}" style="display:none" title="Apply">
-                <img src="@Url.Content("~/Styles/Images/approve.png")" />
-            </a>
-            <a href="javascript:;" class="lnkCancel" data-id=${Id} id="btnCancelUpdateJT_${Id}" style="display:none;margin-left:10px;" title="Cancel">
-                <img src="@Url.Content("~/Styles/Images/reject.png")" />
-            </a>*@
-        </td>
-        <td>
-            {{if Value!='0'}}
-            <a href="javascript:;" style="cursor:default">
-                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-            </a>
-            {{else}}
-            <a href="javascript:;" class="lnkDelete" data-id=${Id} id="${Id}">
-                <i class="fa fa-times fa-lg icon-delete"></i>
-            </a>
-            {{/if}}
-        </td>
+        @if (hasPermission)
+        {
+            <td>
+                <a href="javascript:;" class="lnkEdit" data-id=${Id} id='btnEditJobTitle_${Id}' data-categoryid="${CategoryId}">
+                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                </a>
+            </td>
+            <td>
+                {{if Value!='0'}}
+                <a href="javascript:;" style="cursor:default">
+                    <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                </a>
+                {{else}}
+                <a href="javascript:;" class="lnkDelete" data-id=${Id} id="${Id}">
+                    <i class="fa fa-times fa-lg icon-delete"></i>
+                </a>
+                {{/if}}
+            </td>
+        }
     </tr>
 </script>
 <script id="mytemplate" type="text/html">
