@@ -13,11 +13,28 @@ function query() {
         },
         success: function (response) {
             $('#list-functions').html(response);
+            $('#save').attr('disabled','disabled');
+            generateEventForCheckbox();
         },
         complete: function () {
 
         }
     });
+}
+
+function generateEventForCheckbox()
+{
+    var input = $('input');
+    for (var i = 0, len = input.length; i < len; i++) {
+        if (input[i].type === 'checkbox') {
+            input[i].onclick = CheckboxOnChange;
+        }
+    }
+}
+
+function CheckboxOnChange()
+{
+    $("#save").removeAttr('disabled');
 }
 
 function save() {
@@ -62,7 +79,7 @@ function save() {
 }
 
 $(document).ready(function () {
-    $('#query').click(function () {
+    $('#Role').change(function () {
         query();
     });
 

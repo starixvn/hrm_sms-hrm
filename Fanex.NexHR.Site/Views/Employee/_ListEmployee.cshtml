@@ -1,6 +1,11 @@
 ﻿@model IList<Employee>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    var hasPermissionToSchedule = (bool)ViewBag.HasPermissionToSchedule;
+    var totalColumn = 11;
+    totalColumn -= hasPermissionToEdit ? 1 : 0;
+    totalColumn -= hasPermissionToSchedule ? 1 : 0;
 }
 
 <table id="data" class="table table-custom">
@@ -15,8 +20,14 @@
             <th>@Labels.JobTitle</th>
             <th>@Labels.AuthorityLevel</th>
             <th class="resignedDate">@Labels.ResignedDate</th>
-            <th>@Labels.Edit</th>
-            <th>@Labels.Schedule</th>
+            @if (hasPermissionToEdit)
+            {
+                <th>@Labels.Edit</th>
+            }
+            @if (hasPermissionToSchedule)
+            {
+                <th>@Labels.Schedule</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -49,37 +60,43 @@
                             @employee.ResignedDate.Value.ToDateMonthYearFormatedDate()
                         }
                     </td>
-                    <td>
-                        @if (!employee.IsDeleted)
-                        {
-                            <a href="@Url.Action("edit", "employee", new { id = employee.Id })" title="Edit"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (!employee.IsDeleted)
-                        {
-                            <a href="@Url.Action("defaultschedule", "employee", new { id = employee.Id })" title="Edit"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            @if (!employee.IsDeleted)
+                            {
+                                <a href="@Url.Action("edit", "employee", new { id = employee.Id })" title="Edit"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                    }
+                    @if (hasPermissionToSchedule)
+                    {
+                        <td>
+                            @if (!employee.IsDeleted)
+                            {
+                                <a href="@Url.Action("defaultschedule", "employee", new { id = employee.Id })" title="Edit"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                    }
                 </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(11)
+            @RazorHelper.DisplayNoInformation(totalColumn)
         }
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="11" id="pagination">
+            <td colspan="@totalColumn" id="pagination">
                 @{
                     var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
                     var to = from + (Model.Count - 1);

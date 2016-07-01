@@ -22,7 +22,6 @@
     {
         <span>Role</span>
         @Html.DropDownList("Role", new SelectList(roles, "RoleId", "RoleName"))
-        <input type="button" id="query" value="@Labels.Submit" class="button-primary submit " />
     }
 </div>
 <div class="clear">
@@ -32,7 +31,7 @@
 {
     <div class="menu">
         <div class="input">
-            <input type="button" value="Save" class="space" id="save" />
+            <input type="button" value="Save" class="space" id="save" disabled/>
         </div>
     </div>
 }

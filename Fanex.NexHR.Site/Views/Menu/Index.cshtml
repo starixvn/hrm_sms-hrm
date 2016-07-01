@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Menu Management";
     var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 8 : 6;
 }
 @section css{
     @Url.CombresLink("menucss")
@@ -45,7 +46,7 @@
             @foreach (MenuViewModel menu in Model.Where(i => i.ParentMenu == null))
             {
                 <tr>
-                    <td class="rowdivider highlight left" colspan="7">
+                    <td class="rowdivider highlight left" colspan="@totalColumn">
                         @(menu.DisplayOrder + ". " + menu.Text)
                     </td>
                 </tr>

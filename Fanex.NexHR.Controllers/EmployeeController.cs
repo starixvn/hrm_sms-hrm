@@ -165,6 +165,9 @@
                 ViewBag.PagerOption = pagerOption;
             }
 
+            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Edit);
+            ViewBag.HasPermissionToSchedule = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
+
             return PartialView("_ListEmployee", employees);
         }
 
@@ -346,7 +349,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Edit, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -369,7 +372,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Edit, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(EmployeeShift model)
         {
             if (ModelState.IsValid)

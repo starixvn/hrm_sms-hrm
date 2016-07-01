@@ -310,6 +310,9 @@
                 Selected = string.IsNullOrEmpty(j.Id.ToString())
             }).ToList();
 
+            ViewBag.HasPermissionToViewHoliday = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Read);
+            ViewBag.HasPermissionToViewShift = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Read);
+
             return View();
         }
 

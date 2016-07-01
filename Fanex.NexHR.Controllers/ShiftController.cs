@@ -29,6 +29,7 @@
             this.shiftService = shiftService ?? new ShiftService();
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
         public ActionResult Index(int? statusId = (int)ShiftStatus.Active)
         {
             var model = new ShiftByStatusViewModel

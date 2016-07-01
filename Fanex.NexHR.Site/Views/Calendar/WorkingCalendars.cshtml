@@ -1,5 +1,9 @@
 ﻿@using Fanex.NexHR.ViewModels.Calendar
 @model IList<WorkingCalendarsViewModel>
+@{
+    var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
+    var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
+}
 @section css{
     @Url.CombresLink("workingcalendarscss")
 }
@@ -14,9 +18,18 @@
     <span class="step">@ViewBag.Title</span>
 }
 <div style="float:right">
-    <a href="~/Holiday/index">Holiday</a>
-    ||
-    <a href="~/Shift/index">Shift</a>
+    @if (hasPermissionToViewHoliday)
+    {
+        <a href="~/Holiday/index">Holiday</a>
+    }
+    @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
+    {
+        <span>||</span>
+    }
+    @if (hasPermissionToViewShift)
+    {
+        <a href="~/Shift/index">Shift</a>
+    }
 </div>
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
