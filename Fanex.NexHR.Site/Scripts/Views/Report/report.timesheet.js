@@ -12,7 +12,7 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, creat
     var result = '';
     dontBlock = true;
     $.ajax({
-        url: _global.root + "ajax/GetMessageDetailRequest",
+        url: _global.root + "request/GetMessageDetailRequest",
         async: false,
         type: 'post',
         data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,

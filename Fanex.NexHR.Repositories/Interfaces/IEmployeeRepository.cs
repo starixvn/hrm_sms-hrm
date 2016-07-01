@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="IEmployeeRepository.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-namespace Fanex.NexHR.Repositories.Interfaces
+﻿namespace Fanex.NexHR.Repositories.Interfaces
 {
     using System.Collections.Generic;
     using Fanex.Data.Repository;

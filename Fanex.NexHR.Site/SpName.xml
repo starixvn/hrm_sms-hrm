@@ -14,6 +14,7 @@
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TimeRecord_Insert" SpName="TimeRecord_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetByCode" SpName="Country_GetByCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetNewEmployeecode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="0"></Setting>

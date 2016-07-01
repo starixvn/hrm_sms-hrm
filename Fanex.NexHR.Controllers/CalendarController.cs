@@ -22,7 +22,6 @@
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
 
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class CalendarController : BaseController
     {
         private readonly IWorkingCalendarService _workingCalendarService;

@@ -124,7 +124,7 @@
     <Compile Include="Calendar\ShiftStatisticViewModel.cs" />
     <Compile Include="Supervisor\SupervisorViewModel.cs" />
     <Compile Include="EmployeeGroup\TeamViewModel.cs" />
-    <Compile Include="TimesheetRecord\TimeSheetRecordViewModel.cs" />
+    <Compile Include="Time\TimeRecordViewModel.cs" />
     <Compile Include="Report\TimesheetViewModel.cs" />
     <Compile Include="Request\LeaveRequestViewModel.cs" />
     <Compile Include="Request\CheckInOutRequestViewModel.cs" />

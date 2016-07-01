@@ -112,7 +112,6 @@
   <ItemGroup>
     <Compile Include="MenuController.cs" />
     <Compile Include="AccountController.cs" />
-    <Compile Include="AjaxController.cs" />
     <Compile Include="AnnualLeaveBalanceController.cs" />
     <Compile Include="ApiControllers\EmployeeController.cs" />
     <Compile Include="ApiControllers\HolidayController.cs" />
@@ -147,8 +146,8 @@
     <Compile Include="Request\RequestController.cs" />
     <Compile Include="RoleFunctionViewModel.cs" />
     <Compile Include="ShiftController.cs" />
-    <Compile Include="Support\TimeSheetRecordController.cs" />
     <Compile Include="TeamController.cs" />
+    <Compile Include="TimeController.cs" />
     <Compile Include="UIController.cs">
       <SubType>Code</SubType>
     </Compile>

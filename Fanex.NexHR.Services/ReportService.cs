@@ -1,23 +1,12 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ReportService.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.9.20">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
-    using Fanex.NexHR.Criteria.TimeRecord;
+    using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Report;
@@ -26,6 +15,8 @@ namespace Fanex.NexHR.Services
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class ReportService : BaseService, IReportService
     {

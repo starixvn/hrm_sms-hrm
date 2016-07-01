@@ -1,31 +1,12 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="FileController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
 
-    /// <summary>
-    /// File Controller.
-    /// </summary>
     public class FileController : BaseController
     {
-        /// <summary>
-        /// Method Upload File.
-        /// </summary>
-        /// <param name="files">Http Posted File Base.</param>
-        /// <param name="categoryID">Category ID.</param>
-        /// <param name="overRide">Check Override.</param>
-        /// <returns>File Paths.</returns>
         [HttpPost]
         public string UploadFile(IEnumerable<HttpPostedFileBase> files, int categoryID, int overRide)
         {

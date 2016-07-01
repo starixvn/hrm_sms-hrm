@@ -52,6 +52,17 @@
             this.commandService = commandService ?? new CommandService();
         }
 
+        [HttpPost]
+        public string GetMessageDetailRequest(RequestEntity request, short requestType, string fromShiftCode, string toShiftCode)
+        {
+            request.RequestType = new RequestTypeModel { Id = requestType };
+            request.FromShift = new Shift { Name = fromShiftCode };
+            request.ToShift = new Shift { Name = toShiftCode };
+
+            var date = RequestService.ToRequestMessage(request);
+            return date;
+        }
+
         public PartialViewResult CriteriaPanel(RequestViewModel request)
         {
             return PartialView(request);

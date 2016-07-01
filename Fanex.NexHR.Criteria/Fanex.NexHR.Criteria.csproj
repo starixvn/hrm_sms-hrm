@@ -196,7 +196,7 @@
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByGroupIdCriteria.cs" />
     <Compile Include="Team\GetGroupBySupervisorCriteria.cs" />
-    <Compile Include="TimeRecord\TimeRecordUpdateTypeCriteria.cs" />
+    <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
     <Compile Include="Request\GetRequestByIdCriteria.cs" />
@@ -244,7 +244,8 @@
     <Compile Include="Team\GetGroupByIdCriteria.cs" />
     <Compile Include="Team\InsertNewGroupCriteria.cs" />
     <Compile Include="Team\UpdateGroupCriteria.cs" />
-    <Compile Include="TimeRecord\GetTimeRecordCriteria.cs" />
+    <Compile Include="Time\GetTimeRecordCriteria.cs" />
+    <Compile Include="Time\InsertTimeRecordCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

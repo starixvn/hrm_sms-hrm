@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.ApiControllers
+﻿namespace Fanex.NexHR.Controllers.ApiControllers
 {
     using System;
     using System.Collections.Generic;
@@ -78,14 +69,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return employees;
         }
 
-        /// <summary>
-        /// Function to get number work date between from and to.
-        /// </summary>
-        /// <param name="leaveTypeId">LeaveType Id.</param>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="fromDate">The From date.</param>
-        /// <param name="toDate">The To Date.</param>
-        /// <returns>Numbers day.</returns>
         public int GetRangeDate(int leaveTypeId, int employeeId, DateTime fromDate, DateTime toDate)
         {
             var numberDays = 0;
@@ -119,13 +102,6 @@ namespace Fanex.NexHR.Controllers.ApiControllers
             return numberDays;
         }
 
-        /// <summary>
-        /// Function to get all unavailable date.
-        /// </summary>
-        /// <param name="employeeId">Employee Id.</param>
-        /// <param name="date">The current date.</param>
-        /// <param name="leaveTypeId">LeaveType Id.</param>
-        /// <returns>List date time.</returns>
         public IEnumerable<DateTime> GetUnavailableDates(int employeeId, DateTime date, int? leaveTypeId = null)
         {
             IEnumerable<DateTime> dates = null;

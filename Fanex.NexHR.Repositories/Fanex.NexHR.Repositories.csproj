@@ -77,36 +77,24 @@
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
-    <Compile Include="CheckInOutRequestRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
-    <Compile Include="LateInEarlyOutRequestRepository.cs" />
-    <Compile Include="Interfaces\ICheckInOutRequestRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
     <Compile Include="Interfaces\IBaseRepository.cs" />
     <Compile Include="Interfaces\IDisciplineRepository.cs" />
-    <Compile Include="Interfaces\ILateInEarlyOutRequestRepository.cs" />
-    <Compile Include="Interfaces\IMessageRepository.cs" />
     <Compile Include="Interfaces\IOvertimeRequestRepository.cs" />
-    <Compile Include="Interfaces\ISupportRepository.cs" />
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
     <Compile Include="Interfaces\IRequestRepository.cs" />
     <Compile Include="Interfaces\ITeamRepository.cs" />
-    <Compile Include="Interfaces\IMemoRepository.cs" />
     <Compile Include="Interfaces\IReportRepository.cs" />
-    <Compile Include="Interfaces\ITimeRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
-    <Compile Include="MessageRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="RequestRepository.cs" />
-    <Compile Include="SupportRepository.cs" />
     <Compile Include="TeamRepository.cs" />
-    <Compile Include="MemoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportRepository.cs" />
-    <Compile Include="TimeRepository.cs" />
     <Compile Include="WorkingCalendarRepository.cs" />
   </ItemGroup>
   <ItemGroup>

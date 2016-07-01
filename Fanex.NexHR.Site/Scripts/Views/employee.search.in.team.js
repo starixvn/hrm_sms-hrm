@@ -6,7 +6,7 @@ $(document).ready(function () {
     $("#Employee").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: _global.root + 'ajax/getmemberbymanager',
+                url: _global.root + 'employee/getmemberbymanager',
                 data: {
                     keyword: request.term
                 },

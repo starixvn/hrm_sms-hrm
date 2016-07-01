@@ -17,18 +17,6 @@
     {
         private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
 
-        private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
-
-        public LateInEarlyOutRequestService()
-            : this(null)
-        {
-        }
-
-        public LateInEarlyOutRequestService(ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository)
-        {
-            this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository ?? new LateInEarlyOutRequestRepository();
-        }
-
         public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
         {
             EmployeeLateInEarlyOutModel lateInEarlyOut = GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);

@@ -1,16 +1,16 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.TimeRecord;
+    using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Report;
+    using System.Collections.Generic;
 
     public interface IReportService
     {

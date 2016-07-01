@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ShiftController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers.ApiControllers
+﻿namespace Fanex.NexHR.Controllers.ApiControllers
 {
     using System;
     using System.Web.Http;
@@ -16,12 +7,9 @@ namespace Fanex.NexHR.Controllers.ApiControllers
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
-    /// <summary>
-    /// Shift Controller.
-    /// </summary>
     public class ShiftController : ApiController
     {
-        private readonly IShiftService _shiftService;
+        private readonly IShiftService shiftService;
 
         public ShiftController() : this(null)
         {
@@ -29,7 +17,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
 
         public ShiftController(IShiftService shiftService = null)
         {
-            _shiftService = shiftService ?? new ShiftService();
+            shiftService = shiftService ?? new ShiftService();
         }
 
         public Shift GetShiftByDate(int employeeId, DateTime date)
@@ -40,7 +28,7 @@ namespace Fanex.NexHR.Controllers.ApiControllers
                 Date = date
             };
 
-            Shift shift = _shiftService.GetByDate(criteria);
+            Shift shift = shiftService.GetByDate(criteria);
             return shift;
         }
     }

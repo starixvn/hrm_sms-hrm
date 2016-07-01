@@ -18,18 +18,6 @@
     {
         private const string CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
 
-        private readonly ICheckInOutRequestRepository checkInOutRequestRepository;
-
-        public CheckInOutRequestService()
-            : this(null)
-        {
-        }
-
-        public CheckInOutRequestService(ICheckInOutRequestRepository checkInOutRequestRepository)
-        {
-            this.checkInOutRequestRepository = checkInOutRequestRepository ?? new CheckInOutRequestRepository();
-        }
-
         public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);

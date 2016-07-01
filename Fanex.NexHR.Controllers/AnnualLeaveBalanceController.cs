@@ -99,7 +99,7 @@
 
             if (!employeeId.HasValue && !hasPermissionToEdit)
             {
-                employeeId = this.CurrentUser.Id;
+                employeeId = CurrentUser.Id;
             }
 
             var model = new LeaveSummaryViewModel

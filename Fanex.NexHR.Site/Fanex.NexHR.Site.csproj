@@ -1050,7 +1050,7 @@
     <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
-    <Content Include="Views\TimeSheetRecord\Index.cshtml" />
+    <Content Include="Views\Time\AddTimeRecord.cshtml" />
     <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
     <Content Include="Views\Overtime\OvertimeRequestDetails.cshtml" />
     <Content Include="Views\Overtime\YearlyReport.cshtml" />

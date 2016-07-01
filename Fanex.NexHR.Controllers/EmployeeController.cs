@@ -33,7 +33,6 @@
     using System.Web.Mvc;
     using CommandResult = Models.CommandResult;
 
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class EmployeeController : BaseController
     {
         private readonly ITeamService teamService;
@@ -41,10 +40,10 @@
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
-        private readonly IRoleService _roleService;
+        private readonly IRoleService roleService;
 
         public EmployeeController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
@@ -54,14 +53,14 @@
             ILookupDataService lookupDataService,
             IShiftService shiftService,
             ICommandService commandService,
-            IRoleService roleService = null)
+            IRoleService roleService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.teamService = teamService ?? new TeamService();
             this.lookupDataService = lookupDataService ?? new LookupDataService();
             this.shiftService = shiftService ?? new ShiftService();
             this.commandService = commandService ?? new CommandService();
-            _roleService = roleService ?? new RoleService();
+            this.roleService = roleService ?? new RoleService();
         }
 
         public ActionResult Index()
@@ -278,7 +277,7 @@
             model.EmpShiftList = shiftManager;
             model.ActingEmpList = actingSupervisor;
             this.ComposeViewBagsForEditEmployee();
-            ViewBag.Roles = _roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
+            ViewBag.Roles = roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
 
             return View(model);
         }
@@ -329,7 +328,7 @@
             model.ActingEmpList = actingSupervisor;
 
             this.ComposeViewBagsForEditEmployee();
-            ViewBag.Roles = _roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
+            ViewBag.Roles = roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
 
             return View(model);
         }
@@ -676,6 +675,19 @@
             CommandResult result = commandService.Update(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMemberByManager(string keyword)
+        {
+            var criteria = new GetMemberByManagerCriteria()
+            {
+                SupervisorId = this.CurrentUser.Id,
+                Query = keyword,
+                ExcludedManager = false
+            };
+            IList<Employee> employees = employeeService.GetMemberByManager(criteria);
+
+            return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
         }
 
         [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]

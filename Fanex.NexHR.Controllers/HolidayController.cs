@@ -2,6 +2,7 @@
 {
     using Criteria.Holidays;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
@@ -70,7 +71,7 @@
             }
             else
             {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);
@@ -110,10 +111,19 @@
             }
             else
             {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Delete, FunctionKey.Holiday)]
+        public bool Delete(int id)
+        {
+            var criteria = new DeleteHolidayCriteria { Id = id, ModifiedBy = CurrentUser.Id, ModifiedDate = DateTime.Now };
+
+            return commandService.Delete(criteria).IsSuccessful;
         }
     }
 }

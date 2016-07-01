@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.ViewModels.TimesheetRecord.TimeSheetRecordViewModel
+﻿@model Fanex.NexHR.ViewModels.Time.TimeRecordViewModel
 @using System.Web.Mvc.Html5
 @section css{
     @Url.CombresLink("timesheetrecordcss")
@@ -52,7 +52,6 @@
                 @Labels.RequestTime
             </div>
             <div class="input">
-           @* new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now*@
                 @Html.DatePickerFor(model => model.ForDate)
                 @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour" })
                 :

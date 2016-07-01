@@ -31,7 +31,7 @@
         var recordTimeId = $(eventElement).attr('data-id');
         showMessage('Processing');
 
-        $.post(_global.root + 'ajax/ProcessInOut',
+        $.post(_global.root + 'time/ProcessInOut',
         { inoutType: inoutType, recordTimeId: recordTimeId },
         function (response) {
             if (response.IsSuccessful) {

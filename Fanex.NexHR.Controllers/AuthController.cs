@@ -11,16 +11,16 @@
 
     public class AuthController : Controller
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeService employeeService;
 
         public AuthController()
+            : this(null)
         {
-            _employeeService = new EmployeeService();
         }
 
         public AuthController(IEmployeeService employeeService)
         {
-            _employeeService = employeeService;
+            this.employeeService = employeeService ?? new EmployeeService();
         }
 
         [HttpGet]
@@ -34,12 +34,12 @@
         {
             if (ModelState.IsValid)
             {
-                int retCode = _employeeService.ValidateUser(model.UserName, model.Password);
+                int retCode = employeeService.ValidateUser(model.UserName, model.Password);
                 switch (retCode)
                 {
                     case 0: // OK
                         var criteria = new GetEmployeeByCodeCriteria() { Code = model.UserName };
-                        UserLoginModel user = _employeeService.GetUserLoginByCode(criteria);
+                        UserLoginModel user = employeeService.GetUserLoginByCode(criteria);
                         user.IsShowLeftNavigation = true;
                         HttpContext.Session["CurrentUser"] = user;
                         FormsAuthentication.SetAuthCookie(model.UserName, false);

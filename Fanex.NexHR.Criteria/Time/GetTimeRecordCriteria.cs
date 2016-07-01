@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.TimeRecord
+﻿namespace Fanex.NexHR.Criteria.Time
 {
     using System;
     using Fanex.Data.Repository;
