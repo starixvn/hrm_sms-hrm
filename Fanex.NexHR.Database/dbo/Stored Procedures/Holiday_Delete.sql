@@ -37,8 +37,12 @@ IF(@fromdate < GETDATE())
 BEGIN
 	EXEC EmployeeAttendance_ProcessingAndInsert null, @fromdate, @todate , 1 
 END
+
 -- delete the holiday
 DELETE Holiday
 WHERE Id=@id
 
-
+IF @@ERROR <> 0  
+	SELECT @ErrCode = 1, @ErrMsg = N'Delete Holiday failed.'
+ELSE  
+	SELECT @ErrCode = 0 ,@ErrMsg = ''

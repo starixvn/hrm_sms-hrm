@@ -74,6 +74,15 @@ begin
 		FromDate = @FromDate,
 		ToDate = @ToDate 
 	WHERE ID=@ID
+
+	IF @@ERROR <> 0
+	BEGIN
+		SELECT @ErrCode = 1, @ErrMsg = N'Update Holiday failed.'
+	END;
+	ELSE
+	BEGIN
+		SELECT @ErrCode = 0, @ErrMsg = ''
+	END;
 end
 COMMIT TRANSACTION;
 

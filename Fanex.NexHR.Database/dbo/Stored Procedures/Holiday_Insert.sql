@@ -34,9 +34,15 @@ VALUES
 DECLARE @id int  
   
 IF @@ERROR <> 0  
-	SET @ID = 0  
+	BEGIN
+		SET @ID = 0  
+		SELECT @ErrCode = 1, @ErrMsg = N'Create Holiday failed.'
+	END
 ELSE  
-	SET @id = cast(SCOPE_IDENTITY() as int)  
+	BEGIN
+		SET @id = cast(SCOPE_IDENTITY() as int)  
+		SELECT @ErrCode = 0 ,@ErrMsg = ''
+	END
   
 -- update working calendar for employee  
 UPDATE dbo.EmployeeCalendar  WITH(ROWLOCK,UPDLOCK)

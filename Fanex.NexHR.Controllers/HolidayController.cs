@@ -30,14 +30,13 @@
         public ActionResult Index(int? year)
         {
             var criteria = new GetHolidaysCriteria { Year = year ?? DateTime.Now.Year };
-            var policiesModel = new PoliciesModel
+
+            ViewBag.Policies = new PoliciesModel
             {
                 CanCreate = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create),
                 CanEdit = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit),
                 CanDelete = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete)
             };
-
-            ViewBag.Policies = policiesModel;
             ViewBag.Year = criteria.Year;
 
             return View(holidayService.GetByYear(criteria));

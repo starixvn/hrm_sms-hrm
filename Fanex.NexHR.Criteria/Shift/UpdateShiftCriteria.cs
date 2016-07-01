@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateShiftCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.25">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Shift
+﻿namespace Fanex.NexHR.Criteria.Shift
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// UpdateShift Criteria.
-    /// </summary>
     public class UpdateShiftCriteria : CriteriaBase
     {
         public int ShiftId { get; set; }

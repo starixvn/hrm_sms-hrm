@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Core.Enums;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -8,11 +9,12 @@
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     public class ShiftController : BaseController
     {
+        private const int HourIndex = 0;
+        private const int MinutesIndex = 1;
         private readonly IShiftService shiftService;
         private readonly ICommandService commandService;
 
@@ -27,20 +29,23 @@
             this.shiftService = shiftService ?? new ShiftService();
         }
 
-        public ActionResult Index(int? statusId = 1)
+        public ActionResult Index(int? statusId = (int)ShiftStatus.Active)
         {
             var model = new ShiftByStatusViewModel
             {
-                StatusId = statusId.Value
+                StatusId = statusId.Value,
+                Shifts = shiftService.GetAll(statusId.Value)
             };
-            IList<Shift> shifts = shiftService.GetAll(statusId.Value);
-            model.Shifts = shifts;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Edit);
+
+            ViewBag.Policies = new PoliciesModel
+            {
+                CanEdit = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Edit),
+                CanCreate = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Create)
+            };
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
@@ -49,7 +54,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
         public ActionResult Create(ShiftViewModel model)
@@ -81,34 +85,34 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int shiftId)
         {
-            var criteria = new GetShiftByIdCriteria()
-            {
-                ShiftId = shiftId
-            };
+            var criteria = new GetShiftByIdCriteria() { ShiftId = shiftId };
             var shift = shiftService.GetById(criteria);
             var model = new ShiftViewModel
             {
                 Name = shift.Name,
-                HourTimeIn = GetHour(shift.BeginCheckInTime),
-                MinuteTimeIn = GetMinute(shift.BeginCheckInTime),
-                HourTimeOut = GetHour(shift.BeginCheckOutTime),
-                MinuteTimeOut = GetMinute(shift.BeginCheckOutTime),
+                HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
+                MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
+                HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
+                MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
                 IsDisabled = shift.IsDisabled,
                 ShiftId = shift.Id,
                 IsInAfterDay = shift.IsInAfterDay,
                 IsOutAfterDay = shift.IsOutAfterDay,
                 IsUsed = shift.IsUsed
             };
+
             ViewBag.Successed = false;
+            ViewBag.Policies = new PoliciesModel
+            {
+                CanDelete = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Delete)
+            };
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
         public ActionResult Edit(ShiftViewModel model)
@@ -123,7 +127,7 @@
                     CheckOutTime = model.TimeOut,
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
-                    ModifiedBy = this.CurrentUser.Id,
+                    ModifiedBy = CurrentUser.Id,
                     ModifiedDate = DateTime.Now,
                     IsDisabled = model.IsDisabled
                 };
@@ -139,50 +143,36 @@
                 }
             }
 
+            ViewBag.Policies = new PoliciesModel
+            {
+                CanDelete = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Delete)
+            };
+
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Delete, FunctionKey.ShiftManagement)]
         public bool Delete(int shiftId)
         {
-            var criteria = new DeleteShiftCriteria()
-            {
-                ShiftId = shiftId
-            };
+            var criteria = new DeleteShiftCriteria() { ShiftId = shiftId };
             CommandResult result = commandService.Delete(criteria);
             return result.IsSuccessful;
         }
 
-        private int GetHour(string time)
+        private static int GetTime(string time, int index = 0)
         {
-            var hour = 0;
+            var value = 0;
             if (!string.IsNullOrWhiteSpace(time))
             {
                 var timeArr = time.Split(':');
                 if (timeArr.Length == 2)
                 {
-                    hour = int.Parse(timeArr[0]);
+                    value = int.Parse(timeArr[index]);
                 }
             }
 
-            return hour;
-        }
-
-        private int GetMinute(string time)
-        {
-            var minute = 0;
-            if (!string.IsNullOrWhiteSpace(time))
-            {
-                var timeArr = time.Split(':');
-                if (timeArr.Length == 2)
-                {
-                    minute = int.Parse(timeArr[1]);
-                }
-            }
-
-            return minute;
+            return value;
         }
     }
 }

@@ -22,11 +22,7 @@
 
         public override bool IsValid()
         {
-            return !string.IsNullOrEmpty(HolidayName) && 
-                FromDate != null && 
-                ToDate != null && 
-                ModifiedDate != null &&
-                ModifiedBy > 0;
+            return !string.IsNullOrEmpty(HolidayName) && ModifiedBy > 0;
         }
     }
 }

@@ -24,12 +24,7 @@
 
         public override bool IsValid()
         {
-            return Id > 0 && 
-                !string.IsNullOrEmpty(HolidayName) &&
-                FromDate != null &&
-                ToDate != null &&
-                ModifiedDate != null &&
-                ModifiedBy > 0;
+            return Id > 0 && !string.IsNullOrEmpty(HolidayName) && ModifiedBy > 0;
         }
     }
 }
