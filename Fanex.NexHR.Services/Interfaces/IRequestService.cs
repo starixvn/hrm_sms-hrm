@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -11,23 +10,17 @@
 
     public interface IRequestService
     {
-        CommandResult Delete(DeleteRequestCriteria criteria);
-
-        CommandResult Process(ProcessRequestCriteria criteria);
-
         RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
 
         IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
 
         IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria);
 
-        CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria);
-
-        CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria);
-
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
-        CommandResult ApproveRequest(ApproveRequestCriteria criteria);
+        void SendMailForProcessSuccessfully(long requestId, int processedBy, string action);
+
+        void SendMailForDeleteSuccessfully(long requestId);
 
         string CheckRoleAccordingToRequestType(RequestViewType requestViewType);
 

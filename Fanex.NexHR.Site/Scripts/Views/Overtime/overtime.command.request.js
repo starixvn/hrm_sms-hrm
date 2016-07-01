@@ -93,21 +93,21 @@ window.CommandOvertime = (function ($) {
 		},
 		commandProcessRequest: function (command, requestId, roleId) {
 			showMessage('Processing');
-			$.post(_global.root + 'ajax/ProcessSingleOvertime',
+			$.post(_global.root + 'overtime/ProcessSingle',
 			{ command: command, requestId: requestId, roleId: roleId },
 			function (response) {
 				fadeOutMessage();
-				if (response !== true) {
-					alert(response);
-					return;
+				if (response.IsSuccessful) {
+				    if (typeof DailyOvertimeMember === 'undefined' && typeof OvertimeMemberDetail !== 'undefined') {
+				        MemberOvertime.submitEvent();
+				    }
+				    else {
+				        window.location.reload();
+				    }
 				}
 				else {
-					if (typeof DailyOvertimeMember === 'undefined' && typeof OvertimeMemberDetail !== 'undefined') {
-						MemberOvertime.submitEvent();
-					}
-					else {
-						window.location.reload();
-					}
+				    alert(response.Message);
+				    return;
 				}
 			});
 		},

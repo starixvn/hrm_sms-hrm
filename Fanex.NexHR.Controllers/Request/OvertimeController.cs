@@ -161,6 +161,38 @@
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
+        public JsonResult ProcessSingle(string command, long requestId, int roleId)
+        {
+            var criteria = new ProcessSingleOvertimeCriteria
+            {
+                CommandProcess = command,
+                RequestID = requestId,
+                RoleID = roleId,
+                ProcessedBy = CurrentUser.Id,
+                ProcessedDate = DateTime.Now
+            };
+            CommandResult result = commandService.Update(criteria);
+            return Json(result);
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
+        public JsonResult ProcessMultiple(string command, string requestIds)
+        {
+            var criteria = new ProcessMultipleOvertimeCriteria
+            {
+                CommandProcess = command,
+                ListRequestID = requestIds,
+                ProcessedBy = this.CurrentUser.Id,
+                ProcessedDate = DateTime.Now
+            };
+            criteria.RoleID = criteria.GetRoleIdForProcessOvertime(command);
+            CommandResult result = commandService.Update(criteria);
+            return Json(result);
+        }
+
         /// [Authorize(Roles = "Verifier, Approver")]
         [HRAuthorize(Policy.Read, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTMember)]
         public ActionResult MemberOvertime()

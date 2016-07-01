@@ -35,18 +35,6 @@
             return lateInEarlyOut;
         }
 
-        public RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria)
-        {
-            RequestEntity request = null;
-
-            if (criteria != null && criteria.IsValid())
-            {
-                request = lateInEarlyOutRequestRepository.GetLateInEarlyOutRequestToIgnoreById(criteria);
-            }
-
-            return request;
-        }
-
         public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);

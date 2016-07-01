@@ -226,18 +226,6 @@
             return View(model);
         }
 
-        public ActionResult SendReasonReeditToSupervisor(long requestId, string reason)
-        {
-            var criteria = new ResetLeaveRequestCriteria()
-            {
-                RequestId = requestId,
-                EmpId = CurrentUser.Id,
-                Reason = reason
-            };
-            CommandResult result = leaveRequestService.SendReasonReeditToSupervisor(criteria);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         private List<LeaveDetailModel> ConvertToLeaveRequestDetail(
             IList<WorkingCalendarModel> workingCalendars,
             IList<LeaveDetailModel> leaveRequestDetailInput,

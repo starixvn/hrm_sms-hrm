@@ -59,17 +59,17 @@ var OvertimeMemberDetail = (function ($) {
                         requestIds = requestIds.substring(0, requestIds.length - 1);
                     }
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime',
-{ command: ConstantRequest.CONSTANT_ACCEPT, requestIds: requestIds }, function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert("There are some request which you doesn't role to Verify.");
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                    $.post(_global.root + 'overtime/ProcessMultiple',
+                        { command: ConstantRequest.CONSTANT_ACCEPT, requestIds: requestIds }, function (response) {
+                            fadeOutMessage();
+                            if (response.IsSuccessful) {
+                                MemberOvertime.submitEvent();
+                            }
+                            else {
+                                alert("There are some request which you doesn't role to Verify.");
+                                return;
+                            }
+                        });
                 });
             }
             else {
@@ -102,18 +102,17 @@ var OvertimeMemberDetail = (function ($) {
                         requestIds = requestIds.substring(0, requestIds.length - 1);
                     }
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_NOTACCEPT, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert("There are some request which you doesn't role to Not Verify.");
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
-
+                    $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_NOTACCEPT, requestIds: requestIds },
+                        function (response) {
+                            fadeOutMessage();
+                            if (response.IsSuccessful) {
+                                MemberOvertime.submitEvent();
+                            }
+                            else {
+                                alert("There are some request which you doesn't role to Not Verify.");
+                                return;
+                            }
+                        });
                 });
             }
             else {
@@ -145,17 +144,17 @@ function (response) {
                         requestIds = requestIds.substring(0, requestIds.length - 1);
                     }
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_APPROVE, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert(response);
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                    $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_APPROVE, requestIds: requestIds },
+                    function (response) {
+                        fadeOutMessage();
+                        if (response.IsSuccessful) {
+                            MemberOvertime.submitEvent();
+                        }
+                        else {
+                            alert(response.Message);
+                            return;
+                        }
+                    });
                 });
             }
             else {
@@ -187,17 +186,17 @@ function (response) {
                         requestIds = requestIds.substring(0, requestIds.length - 1);
                     }
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_REJECT, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert(response);
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                    $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_REJECT, requestIds: requestIds },
+                        function (response) {
+                            fadeOutMessage();
+                            if (response.IsSuccessful) {
+                                MemberOvertime.submitEvent();
+                            }
+                            else {
+                                alert(response.Message);
+                                return;
+                            }
+                        });
                 });
             }
             else {
@@ -224,31 +223,31 @@ function (response) {
                     CommandOvertime.checkInvalidOvertime(requestIds);
                     if (CommandOvertime.isInvalid) {
                         confirm('There are some overtimes are invalid. Are you sure you want to process?', function () {
-                            $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert(response);
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                            $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
+                                function (response) {
+                                    fadeOutMessage();
+                                    if (response.IsSuccessful) {
+                                        MemberOvertime.submitEvent();
+                                    }
+                                    else {
+                                        alert(response.Message);
+                                        return;
+                                    }
+                                });
                         });
                     }
                     else {
-                        $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert(response);
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                        $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_PROCESS, requestIds: requestIds },
+                            function (response) {
+                                fadeOutMessage();
+                                if (response.IsSuccessful) {
+                                    MemberOvertime.submitEvent();
+                                }
+                                else {
+                                    alert(response.Message);
+                                    return;
+                                }
+                            });
                     }
                 });
             }
@@ -273,17 +272,17 @@ function (response) {
                         requestIds = requestIds.substring(0, requestIds.length - 1);
                     }
 
-                    $.post(_global.root + 'ajax/ProcessMultipleOvertime', { command: ConstantRequest.CONSTANT_VOID, requestIds: requestIds },
-function (response) {
-    fadeOutMessage();
-    if (response !== true) {
-        alert(response);
-        return;
-    }
-    else {
-        MemberOvertime.submitEvent();
-    }
-});
+                    $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_VOID, requestIds: requestIds },
+                    function (response) {
+                        fadeOutMessage();
+                        if (response.IsSuccessful) {
+                            MemberOvertime.submitEvent();
+                        }
+                        else {
+                            alert(response.Message);
+                            return;
+                        }
+                    });
                 });
             }
             else {
@@ -292,7 +291,7 @@ function (response) {
             return false;
         }
     };
-} (jQuery));
+}(jQuery));
 
 $(document).ready(function () {
     OvertimeMemberDetail.init();

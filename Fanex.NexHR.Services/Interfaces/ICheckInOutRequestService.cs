@@ -6,8 +6,6 @@
 
     public interface ICheckInOutRequestService
     {
-        RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria);
-
         void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria);
 
         void SendMailForUpdateSuccessfully(UpdateCheckInOutRequestCriteria criteria);

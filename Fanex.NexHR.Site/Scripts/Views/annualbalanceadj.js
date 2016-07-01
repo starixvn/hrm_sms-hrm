@@ -80,15 +80,15 @@ $(document).ready(function () {
         if (validate) {
             $.ajax({
                 type: 'POST',
-                url: _global.root + 'ajax/AdjustAnnualLeaves',
+                url: _global.root + 'AnnualLeaveBalance/Adjust',
                 data: { annualLeaveJson: annualJsonFormat },
                 dataType: 'json',
                 success: function (response) {
-                    if (response) {
+                    if (response.IsSuccessful) {
                         document.location = _global.root + 'annualleavebalance/index';
                     } else {
                         $("#errors-model-state").show();
-                        $("#errors-model-state").html("* " + response.errors);
+                        $("#errors-model-state").html("* " + response.Message);
                     }
                 }
             });
@@ -101,15 +101,13 @@ $(document).ready(function () {
         _totalDays = parseFloat($('#TotalDays').val());
 
         if ($form.valid()) {
-            $.post(_global.root + 'ajax/ResetAnnualLeaves', $('form').serialize(), function (response) {
-                if (response === -1) {
-                    alert(_messages.invalidInputData);
-                }
-                else if (response) {
+            $.post(_global.root + 'AnnualLeaveBalance/Reset', $('form').serialize(), function (response) {
+                if (response.IsSuccessful) {
                     $('#resetform').dialog('close');
                 }
-                else {
-                    alert(_messages.errorTryAgain);
+                else
+                {
+                    alert(response.Message);
                 }
             });
         }

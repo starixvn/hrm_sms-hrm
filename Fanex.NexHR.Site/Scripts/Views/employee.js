@@ -137,7 +137,7 @@ function query(jobTitleId) {
 
 function resetPassword(id, nickName) {
     confirm("Are you sure you want to reset " + nickName + "'s password?", function () {
-        $.post(_global.root + 'ajax/ResetPassword', { id: id }, function () {
+        $.post(_global.root + 'Account/ResetPassword', { id: id }, function () {
         });
     });
 }

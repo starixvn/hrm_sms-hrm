@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -13,6 +9,10 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
 
     public class LeaveRequestService : RequestService, ILeaveRequestService
     {
@@ -29,25 +29,6 @@
             }
 
             return detail;
-        }
-
-        public CommandResult SendReasonReeditToSupervisor(ResetLeaveRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            if (result != null && result.Code == 0)
-            {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_ReeditReasonEmailTpl);
-                var taskSendMail = new Task(() => this.SendMailForReSetSuccessfully(criteria.RequestId, criteria.Reason, templateEmailPath));
-                taskSendMail.Start();
-            }
-
-            return result;
         }
 
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
@@ -136,48 +117,6 @@
                 email.Subject,
                 email.Body);
             }
-        }
-
-        private void SendMailForReSetSuccessfully(long requestId, string reason, string templateEmailPath)
-        {
-            var criteria = new GetRequestByIdCriteria()
-            {
-                RequestId = requestId
-            };
-            EmailModel email = GetMailToAndMailCC(requestId, (int)SettingsSendMail.Reedit);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
-            {
-                var leaveRequest = GetRequestById(criteria);
-                this.SendMailForReeditRequest(leaveRequest, reason, email.SendToNickName, templateEmailPath, email.SendTo, email.SendCc);
-            }
-        }
-
-        private void SendMailForReeditRequest(RequestEntity model, string reason, string sendToNickName, string templateEmailPath, string mailTo, string mailCC)
-        {
-            var bodyTemplate = Utilities.ReadTextFile(templateEmailPath);
-            string subject = Messages.ReeditSubject + " " + model.Requester.NickName;
-
-            if (model.TotalDays > 1)
-            {
-                subject += " from " + model.FromDate.ToDateMonthYearFormatedDate() + " to " + model.ToDate.ToDateMonthYearFormatedDate();
-            }
-            else
-            {
-                subject += " on " + model.FromDate.ToDateMonthYearFormatedDate();
-            }
-
-            var body = string.Format(
-                bodyTemplate, 
-                sendToNickName,
-                string.Format("{0} ({1})", model.Requester.NickName, model.Requester.FullName),
-                model.RefNO, 
-                reason);
-            this.EmailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                mailTo,
-                mailCC,
-                subject,
-                body);
         }
     }
 }

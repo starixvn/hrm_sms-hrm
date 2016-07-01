@@ -1,25 +1,14 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="AuthController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System.Web.Mvc;
-    using System.Web.Security;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Employee;
+    using System.Web.Mvc;
+    using System.Web.Security;
 
-    /// <summary>
-    /// AUTH Controller.
-    /// </summary>
     public class AuthController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -40,11 +29,6 @@ namespace Fanex.NexHR.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Login Action.
-        /// </summary>
-        /// <param name="model">LoginModel Object.</param>
-        /// <returns>Action Result Login.</returns>
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
@@ -62,17 +46,17 @@ namespace Fanex.NexHR.Controllers
                         return RedirectToAction("Index", "Home");
 
                     case 1: // deleted
-                        ModelState.AddModelError(string.Empty, Resources.Messages.DeletedUser);
+                        ModelState.AddModelError(string.Empty, Messages.DeletedUser);
                         break;
 
                     case 2: // disalbed
-                        ModelState.AddModelError(string.Empty, Resources.Messages.DisabledUser);
+                        ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                         break;
 
                     case -1:
                     case 3:
                     default: // wrong username/password
-                        ModelState.AddModelError(string.Empty, Resources.Messages.WrongUsernameOrPassword);
+                        ModelState.AddModelError(string.Empty, Messages.WrongUsernameOrPassword);
                         break;
                 }
             }

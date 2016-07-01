@@ -29,9 +29,10 @@
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
         private readonly ILeaveTypeService leaveTypeService;
+        private readonly ICommandService commandService;
 
         public RequestController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
@@ -40,13 +41,15 @@
             IShiftService shiftService,
             IRequestService requestService,
             ITeamService teamService,
-            ILeaveTypeService leaveTypeService)
+            ILeaveTypeService leaveTypeService,
+            ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.shiftService = shiftService ?? new ShiftService();
             this.requestService = requestService ?? new RequestService();
             this.teamService = teamService ?? new TeamService();
             this.leaveTypeService = leaveTypeService ?? new LeaveTypeService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         public PartialViewResult CriteriaPanel(RequestViewModel request)
@@ -124,7 +127,8 @@
                 RequestId = id
             };
 
-            CommandResult result = requestService.Delete(criteria);
+            requestService.SendMailForDeleteSuccessfully(id);
+            CommandResult result = commandService.Delete(criteria);
             return Json(result);
         }
 
@@ -224,7 +228,6 @@
             return PartialView("_ProcessRequest", model);
         }
 
-        /// [Authorize(Roles = "Verifier,Approver,HR")]
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(
@@ -244,15 +247,7 @@
             }
             else
             {
-                var criteria = new ProcessRequestCriteria()
-                {
-                    Action = model.Command,
-                    RequestId = model.RequestId,
-                    RoleId = model.RoleId,
-                    Comment = model.Comment,
-                    ProcessedBy = CurrentUser.Id
-                };
-                result = requestService.Process(criteria);
+                result = Process(model);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -359,7 +354,31 @@
                     ProcessedBy = CurrentUser.Id
                 };
 
-                result = requestService.ApproveRequest(criteria);
+                result = commandService.Update(criteria);
+                if (result != null && result.IsSuccessful)
+                {
+                    requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
+                }
+            }
+
+            return result;
+        }
+
+        private CommandResult Process(ProcessRequestViewModel model)
+        {
+            var criteria = new ApproveRequestCriteria()
+            {
+                RequestId = model.RequestId,
+                RoleId = model.RoleId,
+                Comment = model.Comment,
+                IgnoredDisciplines = model.IgnoredDisciplines,
+                ProcessedBy = CurrentUser.Id
+            };
+
+            CommandResult result = commandService.Update(criteria);
+            if (result != null && result.IsSuccessful)
+            {
+                requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
             }
 
             return result;

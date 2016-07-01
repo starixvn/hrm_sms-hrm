@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="MemoRepository.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    /// <summary>
-    /// Memo Repository.
-    /// </summary>
     public class MemoRepository : IMemoRepository
     {
         public int Insert(ICriteria criteria)

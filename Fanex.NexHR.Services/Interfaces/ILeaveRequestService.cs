@@ -10,8 +10,6 @@
     {
         IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria);
 
-        CommandResult SendReasonReeditToSupervisor(ResetLeaveRequestCriteria criteria);
-
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
         void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria);

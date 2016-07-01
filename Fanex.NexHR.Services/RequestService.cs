@@ -186,130 +186,34 @@
             return result;
         }
 
-        public CommandResult Process(ProcessRequestCriteria criteria)
+        public void SendMailForProcessSuccessfully(long requestId, int processedBy, string action)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
+            var getRequestByIdCriteria = new GetRequestByIdCriteria()
             {
-                result = Repository.Update(criteria);
-                if (result != null && result.IsSuccessful)
-                {
-                    var getRequestByIdCriteria = new GetRequestByIdCriteria()
-                    {
-                        RequestId = criteria.RequestId
-                    };
-                    RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
-                    var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
+                RequestId = requestId
+            };
 
-                    var sendMailTask = new Task(()
-                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRelated));
-                    sendMailTask.Start();
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Messages.InvalidInputData
-                };
-            }
+            RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
+            var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
 
-            return result;
+            var sendMailTask = new Task(()
+                => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
+            sendMailTask.Start();
         }
 
-        public CommandResult ApproveRequest(ApproveRequestCriteria criteria)
+        public void SendMailForDeleteSuccessfully(long requestId)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
+            var getRequestByIdCriteria = new GetRequestByIdCriteria()
             {
-                result = Repository.Update(criteria);
-                if (result != null && result.IsSuccessful)
-                {
-                    var getRequestByIdCriteria = new GetRequestByIdCriteria()
-                    {
-                        RequestId = criteria.RequestId
-                    };
-
-                    RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
-                    var templateEmailPathForRelated = this.GetEmailTemplatePath(request.RequestType.Id);
-
-                    var sendMailTask = new Task(()
-                        => this.SendMailProcess(criteria.Action, request, criteria.ProcessedBy, templateEmailPathForRelated));
-                    sendMailTask.Start();
-                }
-            }
-            else
+                RequestId = requestId
+            };
+            RequestEntity request = RequestRepository.GetRequestById(getRequestByIdCriteria);
+            if (request != null)
             {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Messages.InvalidInputData
-                };
+                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
+                var taskSendMail = new Task(() => SendMailForCancelRequest(request, templateEmailPath));
+                taskSendMail.Start();
             }
-
-            return result;
-        }
-
-        public CommandResult ProcessOvertime(ProcessSingleOvertimeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
-
-        public CommandResult ProcessOvertime(ProcessMultipleOvertimeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult commandResult = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                commandResult = Repository.Update(criteria);
-            }
-
-            return commandResult;
-        }
-
-        public CommandResult Delete(DeleteRequestCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = new CommandResult();
-
-            if (criteria.IsValid())
-            {
-                var getRequestByIdCriteria = new GetRequestByIdCriteria()
-                {
-                    RequestId = criteria.RequestId
-                };
-                RequestEntity request = this.RequestRepository.GetRequestById(getRequestByIdCriteria);
-                if (request != null)
-                {
-                    var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
-                    var taskSendMail = new Task(() => this.SendMailForCancelRequest(request, templateEmailPath));
-                    taskSendMail.Start();
-
-                    result = Repository.Delete(criteria);
-                }
-            }
-            else
-            {
-                result = new CommandResult()
-                {
-                    Code = 1,
-                    Message = Messages.InvalidInputData
-                };
-            }
-
-            return result;
         }
 
         public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)

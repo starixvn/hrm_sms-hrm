@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetAnnualLeaveBalanceCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.1">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.AnnualLeave
+﻿namespace Fanex.NexHR.Criteria.AnnualLeave
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Annual Leave Balance Criteria.
-    /// </summary>
     public class GetAnnualLeaveBalanceCriteria : CriteriaBase
     {
         public int? EmpId { get; set; }

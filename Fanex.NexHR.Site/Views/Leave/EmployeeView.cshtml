@@ -95,20 +95,6 @@
                     <td class="ddMMyyyy">
                         @request.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    @*@if (request.TotalDays < 1 && request.LeaveType.Id != Constants.GeneralLeave)
-                        {
-                            <td class="ddMMyyyy highlight">@request.FromDate.ToShortFormatedDate()
-                            </td>
-                            <td class="ddMMyyyy highlight">@request.ToDate.ToShortFormatedDate()
-                            </td>
-                        }
-                        else
-                        {
-                            <td class="ddMMyyyy highlight">@request.FromDate.ToDateMonthYearFormatedDate()
-                            </td>
-                            <td class="ddMMyyyy highlight">@request.ToDate.ToDateMonthYearFormatedDate()
-                            </td>
-                        }*@
                     <td>
                         @request.TotalDays.ToString("0.0")
                     </td>
@@ -141,15 +127,5 @@
     </tbody>
 </table>
 
-<div id="dialog-reason" title="@Labels.ReasonReedit">
-    <div>
-        <span>@Messages.ReasonReedit</span>
-    </div>
-    <br />
-    <div>
-        <textarea id="txtReason" rows="2" cols="20"></textarea>
-    </div>
-</div>
 @RazorHelper.EmployeeProcessMenu()
-@RazorHelper.EmployeeReeditMenu()
 <div id="dialoghistorycontent" />

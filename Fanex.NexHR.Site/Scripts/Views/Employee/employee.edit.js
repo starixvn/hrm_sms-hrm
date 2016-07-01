@@ -175,7 +175,7 @@ $(document).ready(function () {
                 return;
             }
 
-            $.post(_global.root + 'ajax/DeleteEmployee',
+            $.post(_global.root + 'Employee/Delete',
             { id: $('#Id').val(), resignedDate: resignedDate },
             function (response) {
                 if (response) {

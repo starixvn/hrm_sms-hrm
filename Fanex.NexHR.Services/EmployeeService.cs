@@ -1,82 +1,73 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeService.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.8">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.Common.Helper;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Security;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Country;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.AnnualLeave;
-    using Nexus.RoleManagement.Services;
+using Fanex.NexHR.Core;
+using Fanex.NexHR.Core.Enums;
+using Fanex.NexHR.Core.Security;
+using Fanex.NexHR.Criteria;
+using Fanex.NexHR.Criteria.AnnualLeave;
+using Fanex.NexHR.Criteria.Calendar;
+using Fanex.NexHR.Criteria.Country;
+using Fanex.NexHR.Criteria.Employee;
+using Fanex.NexHR.Criteria.Request;
+using Fanex.NexHR.Criteria.Shift;
+using Fanex.NexHR.Criteria.Supervisor;
+using Fanex.NexHR.Models;
+using Fanex.NexHR.Models.Calendar;
+using Fanex.NexHR.Models.Supervisor;
+using Fanex.NexHR.Repositories;
+using Fanex.NexHR.Repositories.Interfaces;
+using Fanex.NexHR.Services.Interfaces;
+using Fanex.NexHR.ViewModels.AnnualLeave;
+using Nexus.RoleManagement.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-    /// <summary>
-    /// Employee Service.
-    /// </summary>
     public class EmployeeService : BaseService, IEmployeeService
     {
-        private const HashProvider _HashProvider = HashProvider.Sha1;
-
-        private IEmployeeRepository _employeeRepository;
-        private IFunctionService _functionService;
-        private IRoleService _roleService;
-        private IMenuService _menuService;
+        private IEmployeeRepository employeeRepository;
+        private IFunctionService functionService;
+        private IRoleService roleService;
+        private IMenuService menuService;
 
         public EmployeeService()
+            : this(null, null, null, null)
         {
-            this._employeeRepository = new EmployeeRepository();
-            this._functionService = new FunctionService();
-            this._roleService = new RoleService();
-            this._menuService = new MenuService();
         }
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(
+            IEmployeeRepository employeeRepository,
+            IFunctionService functionService,
+            IRoleService roleService,
+            IMenuService menuService)
         {
-            this._employeeRepository = employeeRepository;
+            this.employeeRepository = employeeRepository ?? new EmployeeRepository();
+            this.functionService = functionService ?? new FunctionService();
+            this.roleService = roleService ?? new RoleService();
+            this.menuService = menuService ?? new MenuService();
+        }
+
+        public HashProvider HashProvider
+        {
+            get
+            {
+                return HashProvider.Sha1;
+            }
         }
 
         public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            string newCode = string.Empty;
-            if (criteria.IsValid())
-            {
-                newCode = this.GetDataEntity<string>(criteria);
-            }
-
+            string newCode = GetDataEntity<string>(criteria);
             return newCode;
         }
 
         public Employee GetEmployeeById(GetEmployeeByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             Employee employee = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                employee = this._employeeRepository.GetEmployeeById(criteria);
+                employee = employeeRepository.GetEmployeeById(criteria);
             }
 
             return employee;
@@ -84,26 +75,18 @@ namespace Fanex.NexHR.Services
 
         public UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            UserLoginModel user = null;
-            if (criteria.IsValid())
-            {
-                user = this.GetDataEntity<UserLoginModel>(criteria);
-            }
-
+            UserLoginModel user = GetDataEntity<UserLoginModel>(criteria);
             return user;
         }
 
         public UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            UserLoginModel userLogin = null;
-            if (criteria.IsValid())
+            UserLoginModel userLogin = GetDataEntity<UserLoginModel>(criteria);
+            if (userLogin != null)
             {
-                userLogin = this.GetDataEntity<UserLoginModel>(criteria);
-                userLogin.NE_Functions = _functionService.GetFunctionsByUserId(userLogin.Id);
-                userLogin.NE_Menus = _menuService.GetMenusByUserId(userLogin.Id);
-                userLogin.NE_Roles = _roleService.GetRolesByUserId(userLogin.Id);
+                userLogin.NE_Functions = functionService.GetFunctionsByUserId(userLogin.Id);
+                userLogin.NE_Menus = menuService.GetMenusByUserId(userLogin.Id);
+                userLogin.NE_Roles = roleService.GetRolesByUserId(userLogin.Id);
             }
 
             return userLogin;
@@ -111,23 +94,16 @@ namespace Fanex.NexHR.Services
 
         public UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            UserLoginModel userLogin = null;
-            if (criteria.IsValid())
-            {
-                userLogin = this.GetDataEntity<UserLoginModel>(criteria);
-            }
-
+            UserLoginModel userLogin = GetDataEntity<UserLoginModel>(criteria);
             return userLogin;
         }
 
         public Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             Employee employee = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                employee = this._employeeRepository.GetEmployeeByCode(criteria);
+                employee = employeeRepository.GetEmployeeByCode(criteria);
             }
 
             return employee;
@@ -135,11 +111,10 @@ namespace Fanex.NexHR.Services
 
         public IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<Employee> employees = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                employees = this._employeeRepository.GetEmployees(criteria);
+                employees = employeeRepository.GetEmployees(criteria);
             }
 
             return employees;
@@ -147,129 +122,19 @@ namespace Fanex.NexHR.Services
 
         public IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<Employee> employees = null;
-            if (criteria.IsValid())
-            {
-                employees = this.GetData<Employee>(criteria).ToList();
-            }
-
+            IList<Employee> employees = GetData<Employee>(criteria).ToList();
             return employees;
         }
 
         public IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<Employee> employees = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                employees = this._employeeRepository.GetEmployeesByRole(criteria);
+                employees = employeeRepository.GetEmployeesByRole(criteria);
             }
 
             return employees;
-        }
-
-        /// <summary>
-        /// Adjust Annual Leave.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult AdjustAnnualLeaves(AdjustEmployeeAnnualLeaveCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Insert Employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to insert DB.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult Insert(InsertEmployeeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
-                result = Repository.Insert(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult Delete(DeleteEmployeeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Delete(criteria);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update Employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to update DB.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult Update(UpdateEmployeeCriteria criteria)
-        {
-            CommandResult result = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                if (!string.IsNullOrWhiteSpace(criteria.Password))
-                {
-                    criteria.Password = Encryptor.ComputeHash(_HashProvider, criteria.Password);
-                }
-
-                if (criteria.IsLocal)
-                {
-                    criteria.IsExpatUseHoliday = false;
-                }
-
-                result = Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Update Personal Information.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult UpdatePersonalInformation(UpdateEmployeePersonalInformationCriteria criteria)
-        {
-            CommandResult result = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
         }
 
         public EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria)
@@ -282,18 +147,6 @@ namespace Fanex.NexHR.Services
             }
 
             return employeeShift;
-        }
-
-        public CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria)
-        {
-            CommandResult result = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
         }
 
         public MySpaceModel GetMySpace(GetMySpaceCriteria criteria)
@@ -320,11 +173,6 @@ namespace Fanex.NexHR.Services
             return offAndHoliday;
         }
 
-        /// <summary>
-        /// Get Off Date And Holiday Date.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>List of Date Time.</returns>
         public IList<DateTime> GetNotOffOrHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
         {
             IList<DateTime> availableDates = GetOffDateAndHolidayDate(criteria);
@@ -391,42 +239,6 @@ namespace Fanex.NexHR.Services
             return annualLeave;
         }
 
-        public CommandResult DeleteAnnualLeaveTransaction(DeleteAnnualLeaveTransactionCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = this.Repository.Delete(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult UpdateAnnualLeaveTransaction(UpdateAnnualLeaveTransactionCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult InsertAnnualLeaveTransaction(InsertAnnualLeaveTransactionCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Insert(criteria);
-            }
-
-            return result;
-        }
-
         public IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
@@ -475,75 +287,13 @@ namespace Fanex.NexHR.Services
             return unavailableDates;
         }
 
-        /// <summary>
-        /// Method Validate User.
-        /// </summary>
-        /// <param name="code">User code.</param>
-        /// <param name="password">User Password.</param>
-        /// <returns>A code to check user valid.</returns>
         public int ValidateUser(string code, string password)
         {
-            Employee employee = null;
-            int retCode = -1;
             var criteria = new GetEmployeeByCodeCriteria() { Code = code };
-            if (criteria.IsValid())
-            {
-                employee = this.GetEmployeeByCode(criteria);
-                retCode = this.ValidateUser(employee, password);
-            }
+            Employee employee = GetEmployeeByCode(criteria);
+            int retCode = ValidateUser(employee, password);
 
             return retCode;
-        }
-
-        /// <summary>
-        /// Change Password.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult ChangePassword(ChangePasswordCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = criteria.EmpId };
-            Employee employee = this.GetEmployeeById(getEmployeeByIdCriteria);
-            int retCode = this.ValidateUser(employee, criteria.Password);
-            if (retCode == 0)
-            {
-                string hashPassword = Encryptor.ComputeHash(_HashProvider, criteria.NewPassword);
-                if (criteria.IsValid())
-                {
-                    criteria.Password = hashPassword;
-                    result = Repository.Update(criteria);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Reset Password.
-        /// </summary>
-        /// <param name="empId">Employee id.</param>
-        /// <param name="originalPassword">Default Password.</param>
-        /// <returns>Command Result.</returns>
-        public CommandResult ResetPassword(int empId, string originalPassword, int modifiedBy)
-        {
-            CommandResult result = null;
-            string hashPassword = Encryptor.ComputeHash(_HashProvider, originalPassword);
-            var criteria = new ChangePasswordCriteria()
-            {
-                EmpId = empId,
-                Password = hashPassword,
-                PasswordReset = true,
-                ModifiedBy = modifiedBy
-            };
-
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
         }
 
         public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
@@ -566,18 +316,6 @@ namespace Fanex.NexHR.Services
             }
 
             return country;
-        }
-
-        public CommandResult UpdateSupervisor(UpdateSupervisorCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = Repository.Update(criteria);
-            }
-
-            return result;
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
@@ -627,42 +365,6 @@ namespace Fanex.NexHR.Services
             return null;
         }
 
-        public CommandResult InsertEmployeeShiftManager(InsertShiftManagerCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = this.Repository.Insert(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult UpdateOrderShiftArrange(UpdateOrderShiftArrangeCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = this.Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
-        public CommandResult UpdatePasswordResetStatus(UpdatePasswordResetStatusCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = this.Repository.Update(criteria);
-            }
-
-            return result;
-        }
-
         public IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria)
         {
             IList<SupervisorModel> supervisors = GetData<SupervisorModel>(criteria).ToList();
@@ -693,7 +395,7 @@ namespace Fanex.NexHR.Services
                 }
                 else
                 {
-                    if (Encryptor.CompareStringToHash(_HashProvider, password, employee.Password))
+                    if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password))
                     {
                         retCode = 0;
                     }

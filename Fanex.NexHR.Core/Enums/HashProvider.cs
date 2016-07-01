@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="HashProvider.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Kan.Nguyen" date="2013.6.14">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core.Enums
+﻿namespace Fanex.NexHR.Core.Enums
 {
-    /// <summary>
-    /// ENUM Hash Provider.
-    /// </summary>
     public enum HashProvider
     {
         /// <summary>

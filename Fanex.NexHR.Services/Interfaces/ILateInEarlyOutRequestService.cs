@@ -8,8 +8,6 @@
     {
         EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria);
 
-        RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria);
-
         void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria);
 
         void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria);

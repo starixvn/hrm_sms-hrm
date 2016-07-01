@@ -1,15 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
@@ -30,9 +23,16 @@
     using Nexus.RoleManagement.Services;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
     using CommandResult = Models.CommandResult;
 
-    [Authorize]
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Reviewed. Suppression is OK here.")]
     public class EmployeeController : BaseController
     {
@@ -233,14 +233,15 @@
                 MainGroupID = model.TeamId,
                 MonShift = model.MonShift,
                 NickName = model.NickName,
-                Password = model.Password,
+                Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Password),
                 SatShift = model.SatShift,
                 SunShift = model.SunShift,
                 ThuShift = model.ThuShift,
                 TueShift = model.TueShift,
                 WedShift = model.WedShift
             };
-            CommandResult result = employeeService.Insert(insertEmployeeCriteria);
+
+            CommandResult result = commandService.Insert(insertEmployeeCriteria);
             if (result.Code == 0)
             {
                 var criteria = new GetEmployeeByCodeCriteria() { Code = model.Code };
@@ -300,7 +301,7 @@
             if (ModelState.IsValid)
             {
                 UpdateEmployeeCriteria updateEmployeeCriteria = SetUpdateEmployeeCriteria(model);
-                CommandResult result = employeeService.Update(updateEmployeeCriteria);
+                CommandResult result = commandService.Update(updateEmployeeCriteria);
                 ViewBag.Updated = result.Code == 0;
 
                 if (result.Code == 0 && this.CurrentUser.Id == model.Id)
@@ -328,6 +329,20 @@
             ViewBag.Roles = _roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
 
             return View(model);
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Delete, FunctionKey.EmployeeManagement)]
+        public bool Delete(int id, DateTime resignedDate)
+        {
+            var deleteEmployeeCriteria = new DeleteEmployeeCriteria
+            {
+                EmpId = id,
+                ResignedDate = resignedDate
+            };
+            CommandResult result = commandService.Delete(deleteEmployeeCriteria);
+
+            return result.Code == 0;
         }
 
         /// [Authorize(Roles = "HR")]
@@ -370,8 +385,8 @@
                     TueShift = model.TueShiftId,
                     WedShift = model.WedShiftId
                 };
-                CommandResult result = employeeService.UpdateEmployeeShift(updateEmployeeShiftCriteria);
-                ViewBag.Updated = result.Code == 0;
+                CommandResult result = commandService.Update(updateEmployeeShiftCriteria);
+                ViewBag.Updated = result.IsSuccessful;
             }
             else
             {
@@ -530,48 +545,6 @@
         }
 
         [HttpGet]
-        public ActionResult ChangePwd()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePwd(ChangePasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var changePasswordCriteria = new ChangePasswordCriteria()
-                {
-                    EmpId = this.CurrentUser.Id,
-                    Password = model.Password,
-                    NewPassword = model.NewPassword
-                };
-                CommandResult result = employeeService.ChangePassword(changePasswordCriteria);
-                switch (result.Code)
-                {
-                    case 0: // OK
-                        ViewBag.ChangePwdOK = Resources.Messages.ChangePwdOK;
-                        break;
-
-                    case 1: // deleted
-                        ModelState.AddModelError(string.Empty, Resources.Messages.DeletedUser);
-                        break;
-
-                    case 2: // disabled
-                        ModelState.AddModelError(string.Empty, Resources.Messages.DisabledUser);
-                        break;
-
-                    default: // wrong password
-                        ModelState.AddModelError(string.Empty, Resources.Messages.WrongPassword);
-                        break;
-                }
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
         public ActionResult Supervisor(short role, int employeeId)
         {
             var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
@@ -606,10 +579,10 @@
                 EmpIdCheckInOuts = model.RoleCheckInOuts,
                 EmpIdOvertimes = model.RoleOvertimes,
                 EmpIdKeepInViews = model.RoleKeepInViews,
-                ModifiedBy = this.CurrentUser.Id
+                ModifiedBy = CurrentUser.Id
             };
-            CommandResult commandResult = employeeService.UpdateSupervisor(updateSupervisorCriteria);
-            bool updated = commandResult.Code == 0;
+            CommandResult commandResult = commandService.Update(updateSupervisorCriteria);
+            bool updated = commandResult.IsSuccessful;
 
             return Json(new { result = updated }, JsonRequestBehavior.AllowGet);
         }
@@ -647,7 +620,7 @@
                 EmpIdShift = model.RoleShiftArrange,
                 ModifiedBy = this.CurrentUser.Id
             };
-            CommandResult result = employeeService.InsertEmployeeShiftManager(insertShiftMangerCriteria);
+            CommandResult result = commandService.Insert(insertShiftMangerCriteria);
 
             if (result.Code != 0)
             {
@@ -854,7 +827,7 @@
                 PassportExp = model.PassportExp,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = model.Modifier.Id,
-                Password = model.Password,
+                Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Password),
                 GroupId = model.Team.Id,
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
@@ -878,7 +851,7 @@
                 TaxCode = model.TaxCode,
                 SocialInsuranceNo = model.SocialInsuranceNo,
                 RegisteredHospital = model.RegisteredHospital,
-                IsExpatUseHoliday = model.IsExpatUseHoliday
+                IsExpatUseHoliday = model.IsLocal ? false : model.IsExpatUseHoliday
             };
 
             return criteria;

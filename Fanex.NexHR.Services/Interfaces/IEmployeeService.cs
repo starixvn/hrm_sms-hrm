@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System;
-    using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
@@ -14,9 +13,13 @@
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using System;
+    using System.Collections.Generic;
 
     public interface IEmployeeService
     {
+        HashProvider HashProvider { get; }
+
         string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria);
 
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
@@ -43,21 +46,7 @@
 
         Country GetCountryByCode(GetCountryByCodeCriteria criteria);
 
-        CommandResult AdjustAnnualLeaves(AdjustEmployeeAnnualLeaveCriteria criteria);
-
-        CommandResult ResetAnnualLeaves(ResetAnnualLeaveCriteria criteria);
-
-        CommandResult Insert(InsertEmployeeCriteria criteria);
-
-        CommandResult Delete(DeleteEmployeeCriteria criteria);
-
-        CommandResult Update(UpdateEmployeeCriteria criteria);
-
-        CommandResult UpdatePersonalInformation(UpdateEmployeePersonalInformationCriteria criteria);
-
         EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria);
-
-        CommandResult UpdateEmployeeShift(UpdateEmployeeShiftCriteria criteria);
 
         MySpaceModel GetMySpace(GetMySpaceCriteria criteria);
 
@@ -71,12 +60,6 @@
 
         AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria);
 
-        CommandResult DeleteAnnualLeaveTransaction(DeleteAnnualLeaveTransactionCriteria criteria);
-
-        CommandResult UpdateAnnualLeaveTransaction(UpdateAnnualLeaveTransactionCriteria criteria);
-
-        CommandResult InsertAnnualLeaveTransaction(InsertAnnualLeaveTransactionCriteria criteria);
-
         IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria);
 
         IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria);
@@ -86,18 +69,6 @@
         IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria);
 
         int ValidateUser(string code, string password);
-
-        CommandResult ChangePassword(ChangePasswordCriteria criteria);
-
-        CommandResult ResetPassword(int empId, string originalPassword, int modifiedBy);
-
-        CommandResult UpdateSupervisor(UpdateSupervisorCriteria criteria);
-
-        CommandResult InsertEmployeeShiftManager(InsertShiftManagerCriteria criteria);
-
-        CommandResult UpdateOrderShiftArrange(UpdateOrderShiftArrangeCriteria criteria);
-
-        CommandResult UpdatePasswordResetStatus(UpdatePasswordResetStatusCriteria criteria);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 

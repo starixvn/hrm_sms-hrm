@@ -1,51 +1,87 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="AnnualLeaveBalanceController.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-    using System.Web.Security;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
-    /// <summary>
-    /// AnnualLeaveBalance Controller.
-    /// </summary>
     public class AnnualLeaveBalanceController : BaseController
     {
-        private readonly IEmployeeService _employeeService;
-        private readonly ITeamService _teamService;
-        private readonly IReportService _reportService;
+        private readonly IEmployeeService employeeService;
+        private readonly ITeamService teamService;
+        private readonly IReportService reportService;
+        private readonly ICommandService commandService;
 
         public AnnualLeaveBalanceController()
+            : this(null, null, null, null)
         {
-            _employeeService = new EmployeeService();
-            _teamService = new TeamService();
-            _reportService = new ReportService();
         }
 
-        public AnnualLeaveBalanceController(IEmployeeService employeeService, ITeamService teamService, IReportService reportService)
+        public AnnualLeaveBalanceController(IEmployeeService employeeService, ITeamService teamService, IReportService reportService, ICommandService commandService)
         {
-            _employeeService = employeeService;
-            _teamService = teamService;
-            _reportService = reportService ?? new ReportService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.teamService = teamService ?? new TeamService();
+            this.reportService = reportService ?? new ReportService();
+            this.commandService = commandService ?? new CommandService();
+        }
+
+        [HttpPost]
+        public JsonResult Adjust(string annualLeaveJson)
+        {
+            var model = JsonConverter.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
+            var criteria = new AdjustEmployeeAnnualLeaveCriteria
+            {
+                EmpIds = model.EmpIds,
+                Description = model.Description,
+                CreatedBy = CurrentUser.Id,
+                CreatedDate = DateTime.Now,
+                CreditDays = model.CreditDays,
+                DeductDays = model.DeductDays,
+                FromDate = model.AffectedFrom
+            };
+            CommandResult result = commandService.Update(criteria);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult Reset(int minbalance, string descriptionReset)
+        {
+            int lastYear = DateTime.Now.AddYears(-1).Year;
+            DateTime date = new DateTime(lastYear, 12, 31);
+
+            var criteria = new GetAnnualLeaveBalanceCriteria()
+            {
+                Year = lastYear,
+                EmpId = null,
+                GroupIds = null,
+                IsLocal = null,
+                Role = string.Empty,
+                SupervisorID = null
+            };
+            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
+            var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
+            {
+                CreatedBy = CurrentUser.Id,
+                CreatedDate = DateTime.Now,
+                Description = descriptionReset,
+                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
+                FromDate = date,
+                ResetDays = minbalance
+            };
+            CommandResult result = commandService.Update(resetAnnualLeaveCriteria);
+
+            return Json(result);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
@@ -94,13 +130,13 @@ namespace Fanex.NexHR.Controllers
                 Role = string.Empty,
                 SupervisorID = CurrentUser.Id
             };
-            IList<LeaveSummary> entityList = _reportService.GetAnnualLeaveBalanceReport(criteria);
+            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
             var getGroupCriteria = new GetGroupBySupervisorCriteria()
             {
                 SupervisorId = CurrentUser.Id
             };
             IList<Team> teams = new List<Team>();
-            teams = _teamService.GetBySupervisor(getGroupCriteria);
+            teams = teamService.GetBySupervisor(getGroupCriteria);
 
             ViewBag.Groups = teams;
             ViewBag.TeamIds = model.TeamIds;
@@ -108,7 +144,7 @@ namespace Fanex.NexHR.Controllers
             ViewBag.MinAnnualBalance = model.MinAnnualBalance;
             ViewBag.Category = model.Category;
 
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = _reportService.GetLeaveByTeam(entityList, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
@@ -139,7 +175,7 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Employee(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             var model = new AnnualLeaveBalanceViewModel
                {
@@ -155,7 +191,7 @@ namespace Fanex.NexHR.Controllers
                 Year = model.Year
             };
 
-            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
+            ViewBag.Data = employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
 
             return View(model);
         }
@@ -168,14 +204,14 @@ namespace Fanex.NexHR.Controllers
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
             {
                 EmpID = model.EmployeeId,
                 ExcludedRequestTrans = model.ExcludedRequestTrans,
                 Year = model.Year
             };
-            ViewBag.Data = _employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
+            ViewBag.Data = employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
 
             return View(model);
         }
@@ -185,21 +221,20 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Edit(int id)
         {
             var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
-            AnnualLeaveBalanceModel model = _employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
+            AnnualLeaveBalanceModel model = employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Edit, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
             var command = formCollection["command"];
 
@@ -209,16 +244,16 @@ namespace Fanex.NexHR.Controllers
                 {
                     LeaveTransId = model.LeaveTransId,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = this.CurrentUser.Id
+                    ModifiedBy = CurrentUser.Id
                 };
-                CommandResult result = _employeeService.DeleteAnnualLeaveTransaction(deleteAnnualLeaveTransactionCriteria);
-                if (result.Code == 0)
+                CommandResult result = commandService.Delete(deleteAnnualLeaveTransactionCriteria);
+                if (result.IsSuccessful)
                 {
                     return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, Resources.Messages.ErrorTryAgain);
+                    ModelState.AddModelError(string.Empty, result.Message);
                     return View(model);
                 }
             }
@@ -234,30 +269,24 @@ namespace Fanex.NexHR.Controllers
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = this.CurrentUser.Id
+                    ModifiedBy = CurrentUser.Id
                 };
-                CommandResult result = _employeeService.UpdateAnnualLeaveTransaction(updateAnnualLeaveTransactionCriteria);
-                ViewBag.Updated = result.Code == 0;
+                CommandResult result = commandService.Update(updateAnnualLeaveTransactionCriteria);
+                ViewBag.Updated = result.IsSuccessful;
             }
             else
             {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);
         }
 
-        /// <summary>
-        /// Create new annual leave balance.
-        /// </summary>
-        /// <param name="id">The employee Id.</param>
-        /// <returns>The create view.</returns>
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Create, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             return View(new AnnualLeaveBalanceModel
@@ -273,7 +302,7 @@ namespace Fanex.NexHR.Controllers
         public ActionResult Create(AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
-            ViewBag.Employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             if (ModelState.IsValid)
@@ -289,7 +318,7 @@ namespace Fanex.NexHR.Controllers
                     CreatedDate = DateTime.Now,
                     CreatedBy = this.CurrentUser.Id
                 };
-                CommandResult result = _employeeService.InsertAnnualLeaveTransaction(criteria);
+                CommandResult result = commandService.Insert(criteria);
                 ViewBag.Inserted = result.Code == 0;
             }
             else

@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Core
 {
+    using Fanex.NexHR.Core.Enums;
+
     public static class Constants
     {
         public const string JobTitle = "JT";

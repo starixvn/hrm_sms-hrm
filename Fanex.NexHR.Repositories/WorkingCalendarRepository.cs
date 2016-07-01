@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="WorkingCalendarRepository.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.18">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -20,16 +11,8 @@ namespace Fanex.NexHR.Repositories
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
 
-    /// <summary>
-    /// WorkingCalendar Repository.
-    /// </summary>
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
-        /// <summary>
-        /// Function to get working calendars by date range.
-        /// </summary>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>List working calendars.</returns>
         public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -49,11 +32,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Function to get WorkingCalendars By Date Range, groups and employee.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB..</param>
-        /// <returns>List WorkingCalendarModel.</returns>
         public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -75,12 +53,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Method get working schedule.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <param name="workingDate">Report Date.</param>
-        /// <returns>A list of working schedule model.</returns>
         public IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
@@ -109,11 +81,6 @@ namespace Fanex.NexHR.Repositories
             }
         }
 
-        /// <summary>
-        /// Gets the working calendars.
-        /// </summary>
-        /// <param name="criteria">Criteria to query DB.</param>
-        /// <returns>IList WorkingCalendarsViewModel.</returns>
         public IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

@@ -30,9 +30,10 @@
         private readonly IShiftService _shiftService;
         private readonly ILookupDataService _lookupDataService;
         private readonly IEmployeeService _employeeService;
+        private readonly ICommandService commandService;
 
         public CalendarController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
@@ -40,14 +41,16 @@
             IWorkingCalendarService workingCalendarService,
             ITeamService teamService,
             IShiftService shiftService,
-            ILookupDataService lookupDataService = null,
-            IEmployeeService employeeService = null)
+            ILookupDataService lookupDataService,
+            IEmployeeService employeeService,
+            ICommandService commandService)
         {
             _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             _teamService = teamService ?? new TeamService();
             _shiftService = shiftService ?? new ShiftService();
             _lookupDataService = lookupDataService ?? new LookupDataService();
             _employeeService = employeeService ?? new EmployeeService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         /// [Authorize(Roles = "ShiftManager")]
@@ -355,14 +358,14 @@
         {
             var criteria = new GetEmployeeByShiftManagementCriteria()
             {
-                EmpId = this.CurrentUser.Id,
+                EmpId = CurrentUser.Id,
             };
             IList<SupervisorModel> shiftManagerModel = _workingCalendarService.GetEmployeeByShiftManagement(criteria);
 
             var model = new ShiftManagerViewModel
             {
                 ShiftManagerList = shiftManagerModel,
-                EmployeeId = this.CurrentUser.Id,
+                EmployeeId = CurrentUser.Id,
                 SupervisorRole = (short)RoleSystem.ShiftManager
             };
 
@@ -377,9 +380,9 @@
             var criteria = new UpdateOrderShiftArrangeCriteria()
             {
                 MemberOrders = employeeOrdersDetail,
-                SupervisorId = this.CurrentUser.Id
+                SupervisorId = CurrentUser.Id
             };
-            CommandResult result = _employeeService.UpdateOrderShiftArrange(criteria);
+            CommandResult result = commandService.Update(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

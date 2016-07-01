@@ -24,7 +24,7 @@ $(document).ready(function () {
                 if (status) {
                     $.ajax({
                         type: 'POST',
-                        url: _global.root + 'ajax/UpdatePasswordResetStatus',
+                        url: _global.root + 'Account/UpdatePasswordResetStatus',
                         data: { status: false },
                         success: function () {
                         }

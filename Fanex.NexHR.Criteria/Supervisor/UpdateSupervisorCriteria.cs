@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateSupervisorCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.30">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Supervisor
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Update Supervisor Criteria.
-    /// </summary>
     public class UpdateSupervisorCriteria : CriteriaBase
     {
         public int EmpId { get; set; }

@@ -30,17 +30,6 @@
             this.checkInOutRequestRepository = checkInOutRequestRepository ?? new CheckInOutRequestRepository();
         }
 
-        public RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria)
-        {
-            RequestEntity request = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                request = checkInOutRequestRepository.GetCheckInOutRequestToIgnoreById(criteria);
-            }
-
-            return request;
-        }
-
         public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
