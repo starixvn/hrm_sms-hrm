@@ -16,7 +16,7 @@
 }
 
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("ChangePwd", "Employee", FormMethod.Post))
+@using (Html.BeginForm("ChangePwd", "Account", FormMethod.Post))
 {
 	@Html.AntiForgeryToken();
 	@Html.ValidationSummary();

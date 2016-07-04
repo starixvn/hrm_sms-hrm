@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ChangePasswordCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.30">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Employee
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Change Password Criteria.
-    /// </summary>
     public class ChangePasswordCriteria : CriteriaBase
     {
         public int EmpId { get; set; }

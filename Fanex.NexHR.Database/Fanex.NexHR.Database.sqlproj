@@ -461,20 +461,8 @@
     <Build Include="dbo\Stored Procedures\Log_WriteLog.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetVerifierAndApprover.sql" />
     <Build Include="dbo\Stored Procedures\Lookup_GetLookupData.sql" />
-    <Build Include="Security\HRM.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\TimeRecord_Get_xpre.sql" />
     <Build Include="dbo\Stored Procedures\Support_TimeSheetInput.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Update_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Insert_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenusById_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenus_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenuById_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Delete_1.sql" />
-    <Build Include="dbo\Stored Procedures\GroupSupervisor_Get_xtest.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get_xtest.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetDetail_xtest.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

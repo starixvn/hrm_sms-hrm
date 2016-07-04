@@ -187,7 +187,7 @@
                         }
                         else
                         {
-                            @ViewBag.CountryName;
+                            @Model.CountryName;
                         }
                     </div>
                     <div class="clear">
@@ -474,7 +474,7 @@
                         Job Title:
                     </div>
                     <div class="pcontent role">
-                        @ViewBag.JobTitle
+                        @Model.JobTitle
                     </div>
                     <div class="clear">
                     </div>
@@ -579,7 +579,7 @@
                         Annual Leave Balance:
                     </div>
                     <div class="pcontent">
-                        @ViewBag.Working.AnnualLeaveBalance day(s)
+                        @Model.AnnualLeaveBalance day(s)
                     </div>
                     <div class="clear">
                     </div>
@@ -589,13 +589,13 @@
                         Keep In View Balance:
                     </div>
                     <div class="pcontent">
-                        @ViewBag.Working.KeepInViewBalance day(s)
+                        @Model.KeepInViewBalance day(s)
                     </div>
                     <div class="clear">
                     </div>
                 </div>
                 @{
-    if ((bool)ViewBag.DefaultCalendar)
+    if (Model.IsDefaultSchedule)
     {
         <div class="line">
             <div class="label2">

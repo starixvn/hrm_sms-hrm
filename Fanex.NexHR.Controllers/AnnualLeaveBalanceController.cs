@@ -174,7 +174,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             var model = new AnnualLeaveBalanceViewModel
@@ -203,7 +203,7 @@
         {
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmployeeId };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
             {
@@ -222,7 +222,7 @@
         {
             var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
             AnnualLeaveBalanceModel model = employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
@@ -233,7 +233,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveBalanceModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
             var command = formCollection["command"];
@@ -285,7 +285,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
@@ -301,7 +301,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(AnnualLeaveBalanceModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 

@@ -254,7 +254,7 @@
 
         private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmployeeId };
             var employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             if (employee.IsTopManager)
             {

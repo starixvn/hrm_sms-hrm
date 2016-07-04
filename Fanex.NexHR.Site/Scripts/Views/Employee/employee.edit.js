@@ -71,7 +71,14 @@ function resetPassword() {
     var id = $("#Id").val();
     var nickName = $("#NickName").val();
     confirm("Are you sure you want to reset " + nickName + "'s password?", function () {
-        $.post(_global.root + 'ajax/ResetPassword', { id: id }, function () {
+        $.post(_global.root + 'Account/ResetPassword', { id: id }, function (response) {
+            if (response.IsSuccessful) {
+
+            }
+            else {
+                alert(response.Message);
+                return;
+            }
         });
     });
 }

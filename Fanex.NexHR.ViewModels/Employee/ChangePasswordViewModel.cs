@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ChangePasswordViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.6.17">Created</change>
-// </history>
-namespace Fanex.NexHR.ViewModels.Employee
+﻿namespace Fanex.NexHR.ViewModels.Employee
 {
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
-    /// <summary>
-    /// ChangePassword ViewModel.
-    /// </summary>
     public class ChangePasswordViewModel
     {
         [Required]

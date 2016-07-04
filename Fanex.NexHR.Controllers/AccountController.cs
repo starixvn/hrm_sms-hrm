@@ -40,24 +40,16 @@
 
         public ActionResult Index()
         {
-            var id = CurrentUser.Id;
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            var model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
+            Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
-            ViewBag.JobTitle = model.JobTitleId == null
-            ? Resources.Labels.Unknown
-            : lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, model.JobTitleId.Value).Name;
-            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
-            ViewBag.Working = employeeService.GetMySpace(getMySpaceCriteria);
-            ViewBag.DefaultCalendar = model.IsDefaultSchedule;
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
-            var workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
-            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
-            var countryName = employeeService.GetCountryByCode(getCountryByCodeCriteria);
-            ViewBag.CountryName = countryName.CountryName;
+
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = CurrentUser.Id };
+            EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
+
             ViewBag.IsUpdated = false;
-            this.DisplayDefaultValuesOfDropDownListsForPersonalInformation();
-            this.DisplayShiftForPersonalInformation(workingCalendar);
+            DisplayDefaultValuesOfDropDownListsForPersonalInformation();
+            DisplayShiftForPersonalInformation(employeeShift);
 
             return View(model);
         }
@@ -65,38 +57,27 @@
         [HttpPost]
         public ActionResult Index(Employee employeeModel)
         {
-            var id = CurrentUser.Id;
-            employeeModel.Id = id;
-            employeeModel.Modifier = new Employee { Id = id };
+            employeeModel.Id = CurrentUser.Id;
+            employeeModel.Modifier = new Employee { Id = CurrentUser.Id };
             ModelState.Clear();
             UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
             CommandResult result = commandService.Update(criteria);
-            if (result.Code != 0)
+            if (result.IsSuccessful)
+            {
+                ViewBag.IsUpdated = true;
+            }
+            else
             {
                 ModelState.AddModelError(result.Code.ToString(), result.Message);
                 ViewBag.IsUpdated = false;
             }
-            else
-            {
-                ViewBag.IsUpdated = true;
-            }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
-            var displayModel = this.employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
+            Employee displayModel = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
-            ViewBag.JobTitle = displayModel.JobTitleId == null
-            ? Resources.Labels.Unknown
-            : lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, displayModel.JobTitleId.Value).Name;
 
-            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
-            ViewBag.Working = employeeService.GetMySpace(getMySpaceCriteria);
-            ViewBag.DefaultCalendar = displayModel.IsDefaultSchedule;
-
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = CurrentUser.Id };
             var workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
-            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = displayModel.CountryCode };
-            var countryName = employeeService.GetCountryByCode(getCountryByCodeCriteria);
-            ViewBag.CountryName = countryName.CountryName;
 
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
             DisplayShiftForPersonalInformation(workingCalendar);
@@ -104,7 +85,7 @@
             return View(displayModel);
         }
 
-        public int UpdatePasswordResetStatus(bool status)
+        public ActionResult UpdatePasswordResetStatus(bool status)
         {
             var criteria = new UpdatePasswordResetStatusCriteria()
             {
@@ -113,12 +94,12 @@
             };
             CommandResult result = commandService.Update(criteria);
 
-            return result.Code;
+            return Json(result);
         }
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
-        public int ResetPassword(int id)
+        public ActionResult ResetPassword(int id)
         {
             string hashPassword = Encryptor.ComputeHash(employeeService.HashProvider, "123456");
             var criteria = new ChangePasswordCriteria()
@@ -130,7 +111,7 @@
             };
 
             CommandResult result = commandService.Update(criteria);
-            return result.Code;
+            return Json(result);
         }
 
         [HttpGet]

@@ -7,7 +7,7 @@ CREATE PROCEDURE [dbo].[AnnualLeave_DeleteTransaction] @LeaveTransId INT
 AS
 /*
 Created: Tom.Vo@2013.10.29
-Task: soft delete leave transaction and calculate annual leave balance for employee
+Task: soft delete leave transaction and calculate annual leave balance for employee a
 DB: HRM
 Original: 
 

@@ -459,8 +459,8 @@
             int processBy,
             string templateEmailPathForRelated)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
-            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { Empid = processBy };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = request.Requester.Id };
+            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = processBy };
             var employee = this.employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             var processUser = this.employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);

@@ -3,6 +3,7 @@
   <Function Name="Employee">
     <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID_razor" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="TeamID" ObjectProperty="Id" />
     </Setting>
     <Setting Key="GetEmployees" SpName="Employee_GetEmployees_razor" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />

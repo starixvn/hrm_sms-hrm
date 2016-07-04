@@ -182,7 +182,7 @@
             
             if (request != null && changeShiftDetail != null)
             {
-                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = request.Requester.Id };
+                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = request.Requester.Id };
                 Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
                 model = new ChangeShiftViewModel
                 {

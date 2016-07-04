@@ -147,7 +147,7 @@
 
         public Employee GetEmployee(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             return employee;

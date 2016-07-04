@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Models
 {
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Attributes;
+    using Fanex.NexHR.Core.Enums;
+    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Attributes;
-    using Fanex.NexHR.Core.Enums;
-    using Nexus.RoleManagement.Services;
 
     public class Employee : EntityBase<int>
     {
@@ -102,9 +102,6 @@
         public DateTime? ModifiedDate { get; set; }
 
         public Employee Modifier { get; set; }
-
-        [Display(Name = "Teams' leaders receive requests")]
-        public string LeaderGroups { get; set; } ////remove
 
         public string JobTitle { get; set; }
 
@@ -225,24 +222,6 @@
             set
             {
                 Roles = Utilities.StringArrayToString(value);
-            }
-        }
-
-        public string[] LeaderGroupsArray
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(LeaderGroups))
-                {
-                    return null;
-                }
-
-                return LeaderGroups.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            set
-            {
-                LeaderGroups = Utilities.StringArrayToString(value);
             }
         }
 

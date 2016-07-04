@@ -268,7 +268,7 @@
 
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
-            var criteria = new GetEmployeeByIdCriteria() { Empid = model.EmployeeId };
+            var criteria = new GetEmployeeByIdCriteria() { EmpId = model.EmployeeId };
             var employee = employeeService.GetEmployeeById(criteria);
             if (employee.IsTopManager)
             {

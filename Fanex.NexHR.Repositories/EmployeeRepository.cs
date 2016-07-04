@@ -20,18 +20,10 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     var employee = new Employee();
-                    employee = multi.Read<Employee, dynamic, Employee>(
+                    employee = multi.Read<Employee, Team, Employee>(
                         (e, t) =>
                         {
-                            e.Team = new Team
-                            {
-                                Id = t.TeamID,
-                                Name = t.Team,
-                                Department = new Department
-                                {
-                                    Id = t.DepartmentId == null ? -1 : t.DepartmentId
-                                }
-                            };
+                            e.Team = t;
                             return e;
                         },
                         splitOn: "TeamID").First();

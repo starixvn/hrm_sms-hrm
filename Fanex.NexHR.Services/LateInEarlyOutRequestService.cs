@@ -43,7 +43,7 @@
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                Empid = criteria.EmpId
+                EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
@@ -73,7 +73,7 @@
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                Empid = criteria.EmpId
+                EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             email.Subject = Messages.UpdatedLateInEarlyOutEmailSubject + " " + employee.NickName

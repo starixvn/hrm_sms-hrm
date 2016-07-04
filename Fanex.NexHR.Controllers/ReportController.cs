@@ -74,7 +74,7 @@
             {
                 SupervisorId = CurrentUser.Id
             };
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = CurrentUser.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
 
             ViewBag.Groups = teamService.GetBySupervisor(getGroupCriteria);
             var model = new EmployeeAttendanceViewModel

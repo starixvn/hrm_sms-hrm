@@ -172,7 +172,7 @@
 
         public ActionResult Detail(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             var model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.JobTitle = (model.JobTitleId == null)
             ? Labels.Unknown
@@ -264,7 +264,7 @@
                 actingSupervisor = string.Empty,
                 disciplinarian = string.Empty;
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             var getAllCountryCriteria = new GetAllCountryCriteria();
             IList<Country> countryList = employeeService.GetAllCountry(getAllCountryCriteria);
@@ -308,7 +308,7 @@
 
                 if (result.Code == 0 && this.CurrentUser.Id == model.Id)
                 {
-                    var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.Id };
+                    var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.Id };
                     UserLoginModel currentUser = employeeService.GetUserLoginByEmployeeId(getEmployeeByIdCriteria);
                     HttpContext.Session["CurrentUser"] = currentUser;
                 }
@@ -351,7 +351,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             ViewBag.Employee = employee;
@@ -395,7 +395,7 @@
                 ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpID };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpID };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             ViewBag.Shifts = shiftService.GetSelectList();
@@ -409,7 +409,7 @@
         public ActionResult MonthSchedule(int id)
         {
             ViewBag.Id = id;
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
             ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             ViewBag.Shifts = shiftService.GetSelectList();
 
@@ -463,7 +463,7 @@
         public ActionResult MySpace()
         {
             var employeeId = this.CurrentUser.Id;
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = employeeId };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = employeeId };
             var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = employeeId, Date = DateTime.Now };
             MySpaceModel model = employeeService.GetMySpace(getMySpaceCriteria);
 

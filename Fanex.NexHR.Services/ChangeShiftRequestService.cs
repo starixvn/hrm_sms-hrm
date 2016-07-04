@@ -43,7 +43,7 @@
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                Empid = criteria.EmpId
+                EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
@@ -64,7 +64,7 @@
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
             {
-                Empid = criteria.EmpId
+                EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);

@@ -12,7 +12,7 @@ $(document).ready(function () {
             modal: true,
             buttons: {
                 "OK": function () {
-                    location.href = _global.root + 'employee/changepwd';
+                    location.href = _global.root + 'Account/changepwd';
                     $(this).dialog("close");
                 },
                 "Cancel": function () {

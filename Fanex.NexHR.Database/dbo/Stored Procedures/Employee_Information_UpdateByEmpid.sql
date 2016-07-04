@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] 
+﻿CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] 
 	@EmpId int
 	,@DOB smalldatetime=NULL
 	,@Phone varchar(50)=NULL
