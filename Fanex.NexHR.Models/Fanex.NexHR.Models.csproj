@@ -113,7 +113,6 @@
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
-    <Compile Include="PoliciesModel.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />
     <Compile Include="Report\ManpowerModel.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />

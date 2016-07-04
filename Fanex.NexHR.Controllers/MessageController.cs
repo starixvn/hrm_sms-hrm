@@ -45,9 +45,7 @@
                 FromDate = DateTime.Now.AddMonths(-3),
                 IsDisabled = 0
             };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Edit)
-               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Create)
-               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Delete);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Host);
 
             return Index(criteria);
         }
@@ -63,15 +61,13 @@
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(criteria);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Edit)
-               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Create)
-               || CurrentUser.HasPermission(FunctionKey.Message, Policy.Delete);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Host);
 
             return View(criteria);
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Create, FunctionKey.Message)]
+        [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public ActionResult Create()
         {
             var getEmployeeCriteria = new GetAllEmployeeCriteria()
@@ -94,7 +90,7 @@
         /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Create, FunctionKey.Message)]
+        [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Create(Message model)
         {
             CommandResult result = new CommandResult();
@@ -120,7 +116,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.Message)]
+        [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public ActionResult Edit(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria
@@ -150,7 +146,7 @@
         /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Edit, FunctionKey.Message)]
+        [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Edit(Message model)
         {
             CommandResult result = new CommandResult();
@@ -177,7 +173,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.Message)]
+        [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteMessageCriteria

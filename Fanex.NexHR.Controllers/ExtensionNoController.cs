@@ -38,22 +38,20 @@
             var model = (from item in lstEntity
                          group item by item.TeamName into g
                          select new ExtensionNumberViewModel() { Name = g.Key, Extensions = g.ToList() }).ToList();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Delete);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Create, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create(ExtensionNoModel model)
         {
             if (model != null)
@@ -87,7 +85,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(bool isInternal, int extensionNoId)
         {
             var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
@@ -117,7 +115,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(ExtensionNoModel model)
         {
             CheckExternalEmployee(model);
@@ -203,7 +201,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExtensionNumber(int extId)
         {
             var criteria = new DeleteExtensionNumberMemberCriteria
@@ -216,7 +214,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult AddNewExternalGroup(string groupName)
         {
             var criteria = new InsertExternalGroupCriteria
@@ -229,7 +227,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExternalGroup(int extId)
         {
             var criteria = new DeleteExternalGroupCriteria
@@ -242,7 +240,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.ExtensionNumber)]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult EditExternalGroup(int extId, string groupName)
         {
             var criteria = new UpdateExternalNumberCriteria

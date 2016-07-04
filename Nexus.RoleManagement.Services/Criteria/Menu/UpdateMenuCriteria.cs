@@ -16,8 +16,6 @@
 
         public int? FunctionId { get; set; }
 
-        public int? Policy { get; set; }
-
         public int DisplayOrder { get; set; }
 
         public bool IsActive { get; set; }

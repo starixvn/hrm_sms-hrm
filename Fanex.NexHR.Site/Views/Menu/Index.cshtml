@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Menu Management";
     var hasPermission = (bool)ViewBag.HasPermission;
-    var totalColumn = hasPermission ? 8 : 6;
+    var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
     @Url.CombresLink("menucss")
@@ -28,7 +28,6 @@
             <th>Order. Name</th>
             <th>Link</th>
             <th>Function</th>
-            <th>Policy</th>
             <th>Parent Menu</th>
             <th>Active</th>
             @if (hasPermission)
@@ -64,9 +63,6 @@
                             @(chilmenu.Function != null ? chilmenu.Function.Name : string.Empty)
                         </td>
                         <td>
-                            @((Policy)chilmenu.Policy)
-                        </td>
-                        <td>
                             @chilmenu.ParentMenu.Text
                         </td>
                         <td>
@@ -90,5 +86,8 @@
             }
         </tbody>
     }
-
+    else
+    {
+        @RazorHelper.DisplayNoInformation(totalColumn)
+    }
 </table>

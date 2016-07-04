@@ -48,15 +48,13 @@
                 model.Departments = GetAllDepartment(model.IsActive);
             }
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Delete);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Host);
 
             return View(model);
         }
 
         /// [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(Policy.Create, FunctionKey.DivisionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create()
         {
             var model = new AddDepartmentViewModel();
@@ -67,7 +65,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.DivisionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create(AddDepartmentViewModel model)
         {
             if (model != null)
@@ -102,7 +100,7 @@
         }
 
         /// [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(Policy.Edit, FunctionKey.DivisionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
         {
             Department department = GetDepartmentById(departmentId);
@@ -123,7 +121,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.DivisionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(EditDepartmentViewModel model)
         {
             if (model != null)
@@ -160,7 +158,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.DivisionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public JsonResult Delete(int departmentId)
         {
             var criteria = new DeleteDepartmentCriteria

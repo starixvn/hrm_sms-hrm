@@ -32,18 +32,13 @@
         {
             var criteria = new GetHolidaysCriteria { Year = year ?? DateTime.Now.Year };
 
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanCreate = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Create),
-                CanEdit = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Edit),
-                CanDelete = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Delete)
-            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Host);
             ViewBag.Year = criteria.Year;
 
             return View(holidayService.GetByYear(criteria));
         }
 
-        [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
+        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Edit(int id)
         {
             var criteria = new GetHolidayByIdCriteria { Id = id };
@@ -52,7 +47,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.Holiday)]
+        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Edit(Holiday model)
         {
             if (ModelState.IsValid)
@@ -87,14 +82,14 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
+        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create()
         {
             return View(new Holiday { Name = string.Empty, FromDate = DateTime.Now, ToDate = DateTime.Now });
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.Holiday)]
+        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create(Holiday model)
         {
             if (ModelState.IsValid)

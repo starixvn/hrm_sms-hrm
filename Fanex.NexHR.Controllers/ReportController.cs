@@ -126,14 +126,14 @@
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Host);
 
             return View(model);
         }
 
         public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
-            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Edit);
+            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Host);
             int? employeeId = null;
             if (!hasPermissionToEdit)
             {
@@ -165,7 +165,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -187,7 +187,7 @@
 
         /// [Authorize(Roles = "HR,Verifier,Approver")]
         [HRAuthorize(
-            Policy.Read,
+            Policy.Host,
             FunctionKey.VerifyRequestOfEmployee,
             FunctionKey.ApproveRequestOfEmployee,
             FunctionKey.VerifyRequestOfMember,
@@ -237,7 +237,7 @@
         }
 
         /// [Authorize(Roles = "Verifier,Approver")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = string.Join(",", CurrentUser.NE_Roles.Select(i => i.RoleId));
@@ -324,8 +324,7 @@
             var totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.VerifyRequestOfEmployee, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.ApproveRequestOfEmployee, Policy.Read);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.VerifyRequestOfEmployee, Policy.Host);
 
             return View(model);
         }
@@ -565,9 +564,7 @@
                 Category = category
             };
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Delete);
+                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
             return UnpaidLeaveSummary(model);
         }

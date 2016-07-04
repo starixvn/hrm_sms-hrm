@@ -143,7 +143,6 @@
     <Compile Include="Request\LeaveController.cs" />
     <Compile Include="Request\OvertimeController.cs" />
     <Compile Include="Request\RequestController.cs" />
-    <Compile Include="RoleFunctionViewModel.cs" />
     <Compile Include="ShiftController.cs" />
     <Compile Include="TeamController.cs" />
     <Compile Include="TimeController.cs" />

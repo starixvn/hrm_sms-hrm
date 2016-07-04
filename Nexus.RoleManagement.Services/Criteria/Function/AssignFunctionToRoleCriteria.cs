@@ -6,12 +6,12 @@
 
     public class AssignFunctionToRoleCriteria : CriteriaBase
     {
-        private const string _FunctionTpl = "<Function FunctionId='{0}' IsRead='{1}' IsEdit='{2}' IsCreate='{3}' IsDelete='{4}'></Function>";
+        private const string _FunctionTpl = "<Function FunctionId='{0}' IsRead='{1}' IsHost='{2}'></Function>";
 
         public int RoleId { get; set; }
 
         [SpParam(Ignored = true)]
-        public List<FunctionModel> Functions { get; set; }
+        public List<FunctionViewModel> Functions { get; set; }
 
         [SpParam(SqlParamName = "Functions")]
         public string FunctionsXml
@@ -25,9 +25,7 @@
                         _FunctionTpl,
                         function.FunctionId,
                         function.IsRead,
-                        function.IsEdit,
-                        function.IsCreate,
-                        function.IsDelete);
+                        function.IsHost);
                 }
 
                 return xml.Append("</ROOT>").ToString();

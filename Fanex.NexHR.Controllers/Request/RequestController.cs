@@ -69,7 +69,7 @@
         }
 
         ///// [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -86,7 +86,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
         public ActionResult HRView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -120,7 +120,7 @@
         }
 
         /// [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(Policy.Edit, FunctionKey.VoidRequest)]
+        [HRAuthorize(Policy.Host, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -187,7 +187,7 @@
         }
 
         [HRAuthorize(
-            Policy.Edit,
+            Policy.Host,
             FunctionKey.VoidRequest,
             FunctionKey.VerifyRequestOfEmployee,
             FunctionKey.VerifyRequestOfMember,
@@ -242,7 +242,7 @@
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(
-            Policy.Edit,
+            Policy.Host,
             FunctionKey.VerifyRequestOfMember,
             FunctionKey.VerifyRequestOfEmployee,
             FunctionKey.ApproveRequestOfMember,

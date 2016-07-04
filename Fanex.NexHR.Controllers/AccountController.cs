@@ -120,7 +120,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public int ResetPassword(int id)
         {
             string hashPassword = Encryptor.ComputeHash(employeeService.HashProvider, "123456");

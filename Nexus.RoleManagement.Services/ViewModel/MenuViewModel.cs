@@ -19,8 +19,6 @@ namespace Nexus.RoleManagement.Services
 
         public bool IsActive { get; set; }
 
-        public int Policy { get; set; }
-
         public FunctionModel Function { get; set; }
 
         public MenuModel ParentMenu { get; set; }

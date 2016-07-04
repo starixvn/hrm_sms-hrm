@@ -5,14 +5,15 @@
  [ModifiedDate] DATETIME NULL
 );
 GO
-CREATE TABLE [dbo].[FunctionKey]
+CREATE TABLE [dbo].[Function]
 ([FunctionId]       INT IDENTITY(1, 1)
                         NOT NULL,
- [FunctionKey]      VARCHAR(50) NOT NULL,
+ [Function]      VARCHAR(50) NOT NULL,
  [Name]             NVARCHAR(200) NOT NULL,
  [ParentFunctionId] INT NULL,
  [IsActive]         BIT NULL,
- CONSTRAINT [PK_FunctionKey] PRIMARY KEY CLUSTERED([FunctionId] ASC)
+ [IsReadOnly]       BIT NULL
+                        CONSTRAINT [PK_FunctionKey] PRIMARY KEY CLUSTERED([FunctionId] ASC)
 );
 GO
 CREATE TABLE [dbo].[Menu]
@@ -32,7 +33,7 @@ CREATE TABLE [dbo].[RoleFunction]
 ([RoleId]       INT NOT NULL,
  [FunctionId]   INT NOT NULL,
  [IsRead]       BIT NOT NULL,
- [IsEdit]       BIT NOT NULL,
+ [IsHost]       BIT NOT NULL,
  [IsCreate]     BIT NOT NULL,
  [IsDelete]     BIT NOT NULL,
  [ModifiedBy]   INT NULL,
@@ -89,11 +90,11 @@ Param's Explanation:
      BEGIN
          SET NOCOUNT ON;
          SELECT [FunctionId],
-                [FunctionKey],
+                [Function],
                 [Name] AS Name,
                 [ParentFunctionId],
                 [IsActive]
-         FROM dbo.[FunctionKey] WITH (NOLOCK)
+         FROM dbo.[Function] WITH (NOLOCK)
          WHERE [IsActive] = 1;
      END;
 GO
@@ -114,21 +115,17 @@ Param's Explanation:
      BEGIN
          SET NOCOUNT ON;
          SELECT fk.[FunctionId],
-                fk.[FunctionKey],
+                fk.[Function],
                 fk.[Name] AS FunctionName,
                 fk.[ParentFunctionId],
                 rf.[IsRead],
-                rf.[IsEdit],
-                rf.[IsCreate],
-                rf.[IsDelete]
-         FROM dbo.[FunctionKey] AS fk WITH (NOLOCK)
+                rf.[IsHost]
+         FROM dbo.[Function] AS fk WITH (NOLOCK)
               LEFT JOIN
          (
              SELECT [FunctionId],
                     [IsRead],
-                    [IsEdit],
-                    [IsCreate],
-                    [IsDelete]
+                    [IsHost]
              FROM dbo.[RoleFunction] WITH (NOLOCK)
              WHERE [RoleId] = @RoleId
          ) AS rf ON fk.[FunctionId] = rf.[FunctionId]
@@ -158,9 +155,7 @@ Param's Explanation:
          CREATE TABLE #Functions
          (FunctionId INT,
           IsRead     BIT,
-          IsEdit     BIT,
-          IsCreate   BIT,
-          IsDelete   BIT
+          IsHost     BIT
          );
          BEGIN TRY
              DECLARE @DocHandler INT;
@@ -170,16 +165,12 @@ Param's Explanation:
              INSERT INTO #Functions
              (FunctionId,
               IsRead,
-              IsEdit,
-              IsCreate,
-              IsDelete
+              IsHost
              )
                     SELECT FunctionId,
                            IsRead,
-                           IsEdit,
-                           IsCreate,
-                           IsDelete
-                    FROM OPENXML(@DocHandler, '/ROOT/Function', 1) WITH(FunctionId INT, IsRead BIT, IsEdit BIT, IsCreate BIT, IsDelete BIT) AS Data;
+                           IsHost
+                    FROM OPENXML(@DocHandler, '/ROOT/Function', 1) WITH(FunctionId INT, IsRead BIT, IsHost BIT) AS Data;
              EXEC sp_xml_removedocument
                   @DocHandler;
          END TRY
@@ -195,9 +186,7 @@ Param's Explanation:
              UPDATE rf
                SET
                    rf.IsRead = f.IsRead,
-                   rf.IsEdit = f.IsEdit,
-                   rf.IsCreate = f.IsCreate,
-                   rf.IsDelete = f.IsDelete
+                   rf.IsHost = f.IsHost
              FROM dbo.[RoleFunction] AS rf WITH (ROWLOCK, UPDLOCK)
                   INNER JOIN #Functions AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
              WHERE rf.RoleId = @RoleId;
@@ -214,18 +203,14 @@ Param's Explanation:
              ([RoleId],
               [FunctionId],
               [IsRead],
-              [IsEdit],
-              [IsCreate],
-              [IsDelete],
+              [IsHost],
               [ModifiedBy],
               [ModifiedDate]
              )
                     SELECT @RoleId,
                            FunctionId,
                            IsRead,
-                           IsEdit,
-                           IsCreate,
-                           IsDelete,
+                           IsHost,
                            @ModifiedBy,
                            @ModifiedDate
                     FROM #Functions;
@@ -340,7 +325,8 @@ Param's Explanation:
 
      BEGIN
          SET NOCOUNT ON;
-         DELETE FROM [dbo].[Menu] WHERE [MenuId] = @MenuId
+         DELETE FROM [dbo].[Menu]
+         WHERE [MenuId] = @MenuId;
      END;
 GO
 CREATE PROCEDURE [dbo].[Menu_Update] @MenuId       INT,
@@ -474,27 +460,27 @@ Param's Explanation:
          SET NOCOUNT ON;
          SELECT f.FunctionId,
                 f.FunctionKey,
+			 f.Name,
                 CAST(MAX(IsRead) AS BIT) AS IsRead,
-                CAST(MAX(IsEdit) AS BIT) AS IsEdit,
-                CAST(MAX(IsCreate) AS BIT) AS IsCreate,
-                CAST(MAX(IsDelete) AS BIT) AS IsDelete
+                CAST(MAX(IsHost) AS BIT) AS IsHost
          FROM
          (
              SELECT RoleId,
                     FunctionId,
                     CAST(IsRead AS INT) AS IsRead,
-                    CAST(IsEdit AS INT) AS IsEdit,
-                    CAST(IsCreate AS INT) AS IsCreate,
-                    CAST(IsDelete AS INT) AS IsDelete
+                    CAST(IsHost AS INT) AS IsEdit
              FROM dbo.RoleFunction WITH (NOLOCK)
          ) AS rf
          INNER JOIN dbo.FunctionKey AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
          INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON rf.RoleId = er.RoleId
          WHERE er.EmployeeId = @UserId
          GROUP BY f.FunctionId,
-                  FunctionKey;
+                  f.FunctionKey,
+			   f.Name
      END;
 GO
+
+
 DECLARE @id INT;
 INSERT INTO [dbo].[Lookup]
 VALUES
@@ -558,190 +544,220 @@ VALUES
  'Discipline Manager',
  8
 );
-INSERT INTO [dbo].[FunctionKey]
+
+
+INSERT INTO [dbo].[Function]
 VALUES
 ('Memo',
  'Memo',
  NULL,
- 1
+ 1,
+ 0
 );
-
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('Discipline',
  'Discipline',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('Message',
  'Message',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('JobTitleManagement',
  'Job Title Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('SectionManagement',
  'Section Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('EmployeeManagement',
  'Employee Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('DivisionManagement',
  'Division Management',
  NULL,
- 1
+ 1,
+ 0
 );
-
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('MenuManagement',
  'Menu Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('FunctionManagement',
  'Function Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('Holiday',
  'Holiday',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ExtensionNumber',
  'Extension Number',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('TimeRecord',
  'Time Record',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('AnnualLeaveBalance',
  'Annual Leave Balance',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ShiftManagement',
  'Shift Management',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ReportHome',
  'Report Home',
  NULL,
+ 1,
  1
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
-('FilterUnpaidLeaveSummary',
- 'Filter Unpaid Leave Summary',
+('CanFilterUnpaidLeaveSummary',
+ 'CanFilter Unpaid Leave Summary',
  NULL,
+ 1,
  1
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('CanOnBehalfOthers',
  'Can On Behalf Others',
  NULL,
+ 1,
  1
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('VerifyRequestOfMember',
  'Verify Request Of Member',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ApproveRequestOfMember',
  'Approve Request Of Member',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('VerifyRequestOfEmployee',
  'Verify Request Of Employee',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ApproveRequestOfEmployee',
  'Approve Request Of Employee',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('VerifyOTMember',
  'Verify OT Member',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ApproveOTMember',
  'Approve OT Member',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('VerifyOTEmployee',
  'Verify OT Employee',
  NULL,
- 1
+ 1,
+ 0
 );
-INSERT INTO [dbo].[FunctionKey]
+INSERT INTO [dbo].[Function]
 VALUES
 ('ApproveOTEmployee',
  'Approve OT Employee',
  NULL,
- 1
+ 1,
+ 0
 );
-insert into FunctionKey values('ScheduleArrange','Schedule Arrange',null,1)
+INSERT INTO [Function]
+VALUES
+('ScheduleArrange',
+ 'Schedule Arrange',
+ NULL,
+ 1,
+ 0
+);
 
 INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
- 1,
- 1,
  1,
  1,
  1,
@@ -754,8 +770,6 @@ VALUES
  2,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -763,8 +777,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  3,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -776,8 +788,6 @@ VALUES
  4,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -785,8 +795,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  5,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -798,8 +806,6 @@ VALUES
  6,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -807,8 +813,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  7,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -820,8 +824,6 @@ VALUES
  8,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -829,8 +831,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  9,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -842,8 +842,6 @@ VALUES
  10,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -851,8 +849,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  11,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -864,8 +860,6 @@ VALUES
  12,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -873,8 +867,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  13,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -886,8 +878,6 @@ VALUES
  14,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -895,8 +885,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  15,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -908,8 +896,6 @@ VALUES
  16,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -917,8 +903,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  17,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -930,8 +914,6 @@ VALUES
  18,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -939,8 +921,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  19,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -952,8 +932,6 @@ VALUES
  20,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -961,8 +939,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  21,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -974,8 +950,6 @@ VALUES
  22,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -983,8 +957,6 @@ INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  23,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -996,8 +968,6 @@ VALUES
  24,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
@@ -1007,30 +977,22 @@ VALUES
  25,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
-
 INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  26,
  1,
  1,
- 1,
- 1,
  NULL,
  GETDATE()
 );
-
 INSERT INTO [dbo].[RoleFunction]
 VALUES
 (7,
  27,
- 1,
- 1,
  1,
  1,
  NULL,
@@ -1207,9 +1169,6 @@ VALUES
  60,
  1
 );
-
-
-
 INSERT INTO [dbo].[Menu]
 VALUES
 ('MembersRequest',
@@ -1240,8 +1199,6 @@ VALUES
  60,
  1
 );
-
-
 INSERT INTO [dbo].[Menu]
 VALUES
 ('ScheduleArrange',
@@ -1527,9 +1484,8 @@ WHILE(EXISTS
                      @ModifiedDate = ModifiedDate,
                      @RoleIds = Roles
         FROM #Employee;
-	   
-	   IF(length(@RoleIds)>1) SET @RoleIds = '1,' + @RoleIds
-
+        IF(length(@RoleIds) > 1)
+            SET @RoleIds = '1,'+@RoleIds;
         INSERT INTO [dbo].[EmployeeRole]
         ([EmployeeId],
          [RoleId],

@@ -18,18 +18,15 @@ Param's Explanation:
                 fk.[FunctionKey],
                 fk.[Name],
                 fk.[ParentFunctionId],
+			 fk.IsReadOnly,
                 rf.[IsRead],
-                rf.[IsEdit],
-			 rf.[IsCreate],
-			 rf.[IsDelete]
-         FROM dbo.[FunctionKey] AS fk WITH (NOLOCK)
+                rf.[IsHost]
+         FROM dbo.[Function] AS fk WITH (NOLOCK)
               LEFT JOIN
          (
              SELECT [FunctionId],
                     [IsRead],
-                    [IsEdit],
-				[IsCreate],
-				[IsDelete]
+                    [IsHost]
              FROM dbo.[RoleFunction] WITH (NOLOCK)
              WHERE [RoleId] = @RoleId
          ) AS rf ON fk.[FunctionId] = rf.[FunctionId]

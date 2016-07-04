@@ -75,16 +75,14 @@
                 JobTitles = jobTitles
             };
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Delete)
-                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return View(scheduleArrangeViewModel);
         }
 
         /// [Authorize(Roles = "ShiftManager")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
         {
             var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
@@ -134,9 +132,7 @@
             };
 
             ViewBag.IsSARole = CurrentUser.NE_Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Delete)
-                || CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return View(scheduleViewModel);
         }

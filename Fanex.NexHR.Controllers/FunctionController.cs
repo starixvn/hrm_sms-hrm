@@ -26,7 +26,7 @@
         public ActionResult Index()
         {
             ViewBag.roles = _roleService.GetRoles();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host);
 
             return View();
         }
@@ -34,13 +34,13 @@
         [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
         public ActionResult GetFunctionByRoleId(int roleId)
         {
-            IEnumerable<FunctionModel> functions = _functionService.GetFunctionsByRoleId(roleId);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Edit);
+            IEnumerable<FunctionViewModel> functions = _functionService.GetFunctionsByRoleId(roleId);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host);
 
             return PartialView("_GetFunctionByRoleId", functions);
         }
 
-        [HRAuthorize(Policy.Edit, FunctionKey.FunctionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.FunctionManagement)]
         public JsonResult AssignFunctionToRole(RoleFunctionViewModel roleFunction)
         {
             var criteria = new AssignFunctionToRoleCriteria

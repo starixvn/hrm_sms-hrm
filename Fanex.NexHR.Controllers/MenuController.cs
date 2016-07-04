@@ -25,15 +25,13 @@
         public ActionResult Index()
         {
             var menus = this._menuService.GetMenus();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Delete)
-                || CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Create);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Host);
 
             return View(menus);
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Create, FunctionKey.MenuManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Create()
         {
             ViewBag.Menus = this._menuService.GetMenus();
@@ -43,7 +41,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.MenuManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Create(MenuModel menu)
         {
             if (ModelState.IsValid)
@@ -55,8 +53,7 @@
                     Link = menu.Link,
                     Name = menu.Name,
                     ParentId = menu.ParentId == 0 ? null : menu.ParentId,
-                    Text = menu.Text,
-                    Policy = menu.Policy
+                    Text = menu.Text
                 };
                 var result = this._menuService.Insert(criteria);
                 if (result.IsSuccessful)
@@ -69,7 +66,7 @@
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Edit, FunctionKey.MenuManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Edit(int id)
         {
             var menu = this._menuService.GetMenusById(id);
@@ -80,7 +77,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.MenuManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Edit(MenuModel menu)
         {
             if (ModelState.IsValid)
@@ -94,8 +91,7 @@
                     ParentId = menu.ParentId == 0 ? null : menu.ParentId,
                     Text = menu.Text,
                     MenuId = menu.MenuId,
-                    IsActive = menu.IsActive,
-                    Policy = menu.Policy
+                    IsActive = menu.IsActive
                 };
                 var result = this._menuService.Update(criteria);
                 if (result.IsSuccessful)
@@ -107,7 +103,7 @@
             return View(menu);
         }
 
-        [HRAuthorize(Policy.Delete, FunctionKey.MenuManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public JsonResult Delete(int id)
         {
             var result = this._menuService.Delete(id);

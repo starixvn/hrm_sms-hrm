@@ -9,9 +9,9 @@ namespace Nexus.RoleManagement.Services
     {
         IEnumerable<FunctionModel> GetFunctions();
 
-        IEnumerable<FunctionModel> GetFunctionsByUserId(int userId);
+        IEnumerable<FunctionViewModel> GetFunctionsByUserId(int userId);
 
-        IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId);
+        IEnumerable<FunctionViewModel> GetFunctionsByRoleId(int roleId);
 
         Result AssignFunctionsToRole(AssignFunctionToRoleCriteria criteria);
     }

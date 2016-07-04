@@ -94,7 +94,7 @@
             int? category = null)
         {
             ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Edit);
+            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Host);
             ViewBag.HasPermissionToEdit = hasPermissionToEdit;
 
             if (!employeeId.HasValue && !hasPermissionToEdit)
@@ -217,7 +217,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.AnnualLeaveBalance)]
+        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
             var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
@@ -230,7 +230,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.AnnualLeaveBalance)]
+        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };
@@ -282,7 +282,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Create, FunctionKey.AnnualLeaveBalance)]
+        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -298,7 +298,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.AnnualLeaveBalance)]
+        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(AnnualLeaveBalanceModel model)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = model.EmpId };

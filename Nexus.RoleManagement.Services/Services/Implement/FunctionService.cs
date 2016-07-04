@@ -14,26 +14,26 @@ namespace Nexus.RoleManagement.Services
             return functions;
         }
 
-        public IEnumerable<FunctionModel> GetFunctionsByUserId(int userId)
+        public IEnumerable<FunctionViewModel> GetFunctionsByUserId(int userId)
         {
             var criteria = new GetFunctionByUserIdCriteria { UserId = userId };
-            IEnumerable<FunctionModel> functions = new List<FunctionModel>();
+            IEnumerable<FunctionViewModel> functions = new List<FunctionViewModel>();
             if (criteria.IsValid())
             {
-                functions = GetData<FunctionModel>(criteria);
+                functions = GetData<FunctionViewModel>(criteria);
             }
 
             return functions;
         }
 
-        public IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId)
+        public IEnumerable<FunctionViewModel> GetFunctionsByRoleId(int roleId)
         {
             var criteria = new GetFunctionsByRoleIdCriteria { RoleId = roleId };
-            IEnumerable<FunctionModel> functions = new List<FunctionModel>();
+            IEnumerable<FunctionViewModel> functions = new List<FunctionViewModel>();
 
             if (criteria.IsValid())
             {
-                functions = GetData<FunctionModel>(criteria);
+                functions = GetData<FunctionViewModel>(criteria);
                 functions = functions.OrderBy(i => i.FunctionKey);
             }
 

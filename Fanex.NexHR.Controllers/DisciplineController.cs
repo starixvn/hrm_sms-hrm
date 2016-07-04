@@ -79,7 +79,7 @@
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
-            ViewBag.HasPermissionToAddOther = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Create);
+            ViewBag.HasPermissionToAddOther = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ListDisciplineSummary", disciplines);
         }
@@ -134,7 +134,7 @@
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
-            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Edit);
+            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ListDisciplineDetail", disciplines);
         }
@@ -150,7 +150,7 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            ViewBag.HasPermissionToDelete = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Delete);
+            ViewBag.HasPermissionToDelete = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
@@ -174,7 +174,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertOtherDisciplineCriteria
@@ -193,7 +193,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
@@ -212,7 +212,7 @@
 
         /// [Authorize(Roles = "Approver")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
             var criteria = new UpdateIgnoredDisciplineCriteria

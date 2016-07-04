@@ -451,9 +451,7 @@
 {
     <select id="@inputId" name="@inputId">
         <option @(selected == (int)Policy.Read ? "selected" : "") value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
-        <option @(selected == (int)Policy.Create ? "selected" : "") value="@((int)Policy.Create)">@Policy.Create.ToString()</option>
-        <option @(selected == (int)Policy.Edit ? "selected" : "") value="@((int)Policy.Edit)">@Policy.Edit.ToString()</option>
-        <option @(selected == (int)Policy.Delete ? "selected" : "") value="@((int)Policy.Delete)">@Policy.Delete.ToString()</option>
+        <option @(selected == (int)Policy.Host ? "selected" : "") value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
     </select>
 }
 
@@ -461,8 +459,6 @@
 {
     <select id="@inputId" name="@inputId">
         <option value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
-        <option value="@((int)Policy.Create)">@Policy.Create.ToString()</option>
-        <option value="@((int)Policy.Edit)">@Policy.Edit.ToString()</option>
-        <option value="@((int)Policy.Delete)">@Policy.Delete.ToString()</option>
+        <option value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
     </select>
 }

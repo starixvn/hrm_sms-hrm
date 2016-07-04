@@ -38,16 +38,12 @@
                 Shifts = shiftService.GetAll(statusId.Value)
             };
 
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanEdit = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Edit),
-                CanCreate = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Create)
-            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
-        [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
             var model = new ShiftViewModel();
@@ -56,7 +52,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -86,7 +82,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int shiftId)
         {
             var criteria = new GetShiftByIdCriteria() { ShiftId = shiftId };
@@ -106,16 +102,13 @@
             };
 
             ViewBag.Successed = false;
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanDelete = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Delete)
-            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -144,16 +137,13 @@
                 }
             }
 
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanDelete = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Delete)
-            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.ShiftManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public bool Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria() { ShiftId = shiftId };

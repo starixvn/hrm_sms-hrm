@@ -66,9 +66,7 @@
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
             ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -111,9 +109,7 @@
 
             ViewBag.IsView = false;
             ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -148,9 +144,7 @@
             model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Edit)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Create)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Delete);
+                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }

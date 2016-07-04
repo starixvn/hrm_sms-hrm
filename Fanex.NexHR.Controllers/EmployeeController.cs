@@ -164,8 +164,8 @@
                 ViewBag.PagerOption = pagerOption;
             }
 
-            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Edit);
-            ViewBag.HasPermissionToSchedule = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Edit);
+            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.HasPermissionToSchedule = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return PartialView("_ListEmployee", employees);
         }
@@ -197,13 +197,13 @@
             ViewBag.Thu = workingCalendar.ThuShiftName;
             ViewBag.Fri = workingCalendar.FriShiftName;
             ViewBag.Sat = workingCalendar.SatShiftName;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Edit);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
 
             return View(model);
         }
 
         /// [Authorize(Roles = "SystemAdmin")]
-        [HRAuthorize(Policy.Create, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
             ViewBag.Shifts = shiftService.GetSelectList();
@@ -215,7 +215,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create(CreateEmployeeViewModel model)
         {
             ViewBag.Shifts = shiftService.GetSelectList();
@@ -255,7 +255,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
             string verifier = string.Empty,
@@ -285,7 +285,7 @@
         /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(Employee model)
         {
             string verifier = string.Empty,
@@ -334,7 +334,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public bool Delete(int id, DateTime resignedDate)
         {
             var deleteEmployeeCriteria = new DeleteEmployeeCriteria
@@ -348,7 +348,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
@@ -371,7 +371,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(EmployeeShift model)
         {
             if (ModelState.IsValid)
@@ -405,7 +405,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult MonthSchedule(int id)
         {
             ViewBag.Id = id;
@@ -438,7 +438,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public JsonResult UploadAvatar(string code, HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
@@ -476,8 +476,7 @@
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (this.CurrentUser.HasPermission(FunctionKey.VerifyRequestOfMember, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.ApproveRequestOfMember, Policy.Read))
+            if (this.CurrentUser.HasPermission(FunctionKey.VerifyRequestOfMember, Policy.Host))
             {
                 var getHRLeaderDashboardCriteria = new GetHRLeaderDashboardCriteria
                 {
@@ -502,7 +501,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Create, FunctionKey.SectionManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult AddTeam(int teamId = -1)
         {
             TeamViewModel model = null;
@@ -662,7 +661,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult UpdateDisciplineSetting(SupervisorViewModel model)
         {
             var criteria = new UpdateSupervisorCriteria

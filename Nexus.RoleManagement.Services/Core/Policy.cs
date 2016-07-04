@@ -6,10 +6,6 @@
 
         Read,
 
-        Edit,
-
-        Create,
-
-        Delete
+        Host
     }
 }

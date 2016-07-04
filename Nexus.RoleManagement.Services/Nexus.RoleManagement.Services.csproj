@@ -101,7 +101,9 @@
     <Compile Include="Services\IRoleService.cs" />
     <Compile Include="Model\MenuModel.cs" />
     <Compile Include="Model\SystemRole.cs" />
+    <Compile Include="ViewModel\FunctionViewModel.cs" />
     <Compile Include="ViewModel\MenuViewModel.cs" />
+    <Compile Include="ViewModel\RoleFunctionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

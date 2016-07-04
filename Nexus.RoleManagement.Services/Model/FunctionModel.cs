@@ -17,12 +17,6 @@ namespace Nexus.RoleManagement.Services
 
         public int? ParentFunctionId { get; set; }
 
-        public bool IsRead { get; set; }
-
-        public bool IsEdit { get; set; }
-
-        public bool IsDelete { get; set; }
-
-        public bool IsCreate { get; set; }
+        public bool IsReadOnly { get; set; }
     }
 }

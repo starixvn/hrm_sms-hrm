@@ -38,6 +38,7 @@
                 CanEdit = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit),
                 CanDelete = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete)
             };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View(jobCategories);
         }
@@ -57,7 +58,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.JobTitleManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteLookupDataCriteria
@@ -69,7 +70,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Create, FunctionKey.JobTitleManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Insert(string name, int categoryId)
         {
             var criteria = new InsertLookupDataCriteria
@@ -83,7 +84,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.JobTitleManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Update(int id, string name, int categoryId)
         {
             var criteria = new UpdateLookupDataCriteria

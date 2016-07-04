@@ -1,7 +1,8 @@
 ﻿@model IList<Holiday>
 @{
     ViewBag.Title = "Holiday";
-    var policies = ViewBag.Policies as PoliciesModel;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
     @Url.CombresLink("holidaycss")
@@ -28,7 +29,7 @@
         <div class="grid_2">
             <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
         </div>
-        @if (policies.CanCreate)
+        @if (hasPermission)
         {
             <div class="grid_2">
                 <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
@@ -44,14 +45,12 @@
             <th>@Labels.Name</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
-            @if (policies.CanEdit)
+            @if (hasPermission)
             {
                 <th>
                     @Labels.Edit
                 </th>
-            }
-            @if (policies.CanDelete)
-            {
+
                 <th>
                     @Labels.Delete
                 </th>
@@ -75,16 +74,13 @@
                     <td class="ddMMyyyy">
                         @item.ToDate.ToDateMonthYearFormatedDate()
                     </td>
-                    @if (policies.CanEdit)
+                    @if (hasPermission)
                     {
                         <td class="cmd">
                             <a href="@Url.Action("Edit", "Holiday", new { Id = item.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
-                    }
-                    @if (policies.CanDelete)
-                    {
                         <td class="cmd">
                             <a href="javascript:;" class="js-link-delete-holiday" data-id="@item.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
@@ -94,19 +90,9 @@
                 </tr>
             }
         </tbody>
-                }
-                else
-                {
-                    var colSpan = 4;
-                    if (policies.CanEdit && policies.CanDelete)
-                    {
-                        colSpan = 6;
-                    }
-                    else if (policies.CanDelete || policies.CanEdit)
-                    {
-                        colSpan = 5;
-                    }
-
-                    @RazorHelper.DisplayNoInformation(colspan: colSpan);
-                }
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: totalColumn);                    
+    }
 </table>

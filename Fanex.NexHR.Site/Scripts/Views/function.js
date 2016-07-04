@@ -42,12 +42,8 @@ function save() {
     $("#list-functions tbody tr").each(function () {
         var record = {
             FunctionId: parseInt($('td #functionId', this).val(), 10),
-            FunctionKey: $('td #functionKey', this).val(),
-            FunctionName: $('td #functionName', this).val(),
             IsRead: $('td #IsRead', this).attr('checked') === 'checked',
-            IsEdit: $('td #IsEdit', this).attr('checked') === 'checked',
-            IsDelete: $('td #IsDelete', this).attr('checked') === 'checked',
-            IsCreate: $('td #IsCreate', this).attr('checked') === 'checked'
+            IsHost: $('td #IsHost', this).attr('checked') === 'checked'
         };
 
         roleFunctions.push(record);
@@ -62,7 +58,6 @@ function save() {
         contentType: 'application/json',
         success: function (response) {
             if (response.success) {
-                //$('form').removeClass("dirty");
                 alert("Data Saved!");
             } else {
                 $("#errordialog").html(response.errors).dialog({

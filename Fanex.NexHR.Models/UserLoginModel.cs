@@ -47,7 +47,7 @@ namespace Fanex.NexHR.Models
 
         public IEnumerable<SystemRoleModel> NE_Roles { get; set; }
 
-        public IEnumerable<FunctionModel> NE_Functions { get; set; }
+        public IEnumerable<FunctionViewModel> NE_Functions { get; set; }
 
         public IEnumerable<MenuModel> NE_Menus { get; set; }
 
@@ -66,12 +66,8 @@ namespace Fanex.NexHR.Models
             {
                 switch (policy)
                 {
-                    case Policy.Create:
-                        return function.First().IsCreate;
-                    case Policy.Edit:
-                        return function.First().IsEdit;
-                    case Policy.Delete:
-                        return function.First().IsDelete;
+                    case Policy.Host:
+                        return function.First().IsHost;
                     default:
                         return function.First().IsRead;
                 }

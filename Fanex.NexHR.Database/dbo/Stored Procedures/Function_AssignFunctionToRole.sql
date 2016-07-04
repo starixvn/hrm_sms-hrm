@@ -13,7 +13,7 @@ Original:
 
 Revisions:  
 Param's Explanation:
-	@Functions = <ROOT><Function FunctionId='{0}' IsRead='{1}' IsEdit='{2}' IsCreate='{3}' IsDelete='{4}'></Function></ROOT>
+	@Functions = <ROOT><Function FunctionId='{0}' IsRead='{1}' IsHost='{2}'></Function></ROOT>
 */
 
      BEGIN
@@ -21,9 +21,7 @@ Param's Explanation:
          CREATE TABLE #Functions
          (FunctionId INT,
           IsRead     BIT,
-          IsEdit     BIT,
-		IsCreate     BIT,
-		IsDelete     BIT
+          IsHost     BIT
          );
          BEGIN TRY
              DECLARE @DocHandler INT;
@@ -34,16 +32,12 @@ Param's Explanation:
              INSERT INTO #Functions
              (FunctionId,
               IsRead,
-              IsEdit,
-		    IsCreate,
-		    IsDelete
+              IsHost
              )
                     SELECT FunctionId,
                            IsRead,
-                           IsEdit,
-					  IsCreate,
-					  IsDelete
-                    FROM OPENXML(@DocHandler, '/ROOT/Function', 1) WITH(FunctionId INT, IsRead BIT, IsEdit BIT, IsCreate BIT, IsDelete BIT) AS Data;
+                           IsHost
+                    FROM OPENXML(@DocHandler, '/ROOT/Function', 1) WITH(FunctionId INT, IsRead BIT, IsHost BIT) AS Data;
 
              EXEC sp_xml_removedocument
                   @DocHandler;
@@ -61,9 +55,7 @@ Param's Explanation:
              UPDATE rf
                SET
                    rf.IsRead = f.IsRead,
-                   rf.IsEdit = f.IsEdit,
-			    rf.IsCreate = f.IsCreate,
-			    rf.IsDelete = f.IsDelete
+                   rf.IsHost = f.IsHost
              FROM dbo.[RoleFunction] AS rf WITH (ROWLOCK, UPDLOCK)
                   INNER JOIN #Functions AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
              WHERE rf.RoleId = @RoleId;
@@ -80,18 +72,14 @@ Param's Explanation:
              ([RoleId],
               [FunctionId],
               [IsRead],
-              [IsEdit],
-		    [IsCreate],
-		    [IsDelete],
+              [IsHost],
               [ModifiedBy],
               [ModifiedDate]
              )
                     SELECT @RoleId,
                            FunctionId,
                            IsRead,
-                           IsEdit,
-					  IsCreate,
-					  IsDelete,
+                           IsHost,
                            @ModifiedBy,
                            @ModifiedDate
                     FROM #Functions;

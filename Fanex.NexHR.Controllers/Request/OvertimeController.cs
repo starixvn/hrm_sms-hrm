@@ -162,7 +162,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
         public JsonResult ProcessSingle(string command, long requestId, int roleId)
         {
             var criteria = new ProcessSingleOvertimeCriteria
@@ -178,7 +178,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTEmployee, FunctionKey.ApproveOTMember)]
         public JsonResult ProcessMultiple(string command, string requestIds)
         {
             var criteria = new ProcessMultipleOvertimeCriteria
@@ -194,7 +194,7 @@
         }
 
         /// [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTMember)]
         public ActionResult MemberOvertime()
         {
             var memberOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -204,7 +204,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult EmployeeOvertime()
         {
             var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -215,7 +215,7 @@
 
         /// [Authorize(Roles = "Verifier, Approver")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTMember, FunctionKey.ApproveOTMember)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -236,15 +236,15 @@
             IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
 
             ViewBag.CurrentUserId = CurrentUser.Id;
-            ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOTMember, Policy.Edit);
-            ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOTMember, Policy.Edit);
+            ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOTMember, Policy.Host);
+            ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOTMember, Policy.Host);
 
             return View(memberOvertimes);
         }
 
         /// [Authorize(Roles = "HR")]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             if (!month.HasValue)
@@ -330,7 +330,7 @@
         }
 
         /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {
             var criteria = new GetOvertimeDailyReportCriteria
@@ -399,7 +399,7 @@
             }
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult OTExcelReport()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -418,7 +418,7 @@
             return View();
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal)
         {
             var criteria = new GetOvertimeExcelReportDetailCriteria
@@ -436,7 +436,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.ApproveOTEmployee)]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
             var criteria = new GetDetailOvertimeByRequestIdsCriteria
@@ -450,7 +450,7 @@
 
         /// [Authorize(Roles = "HR")]
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyOTEmployee, FunctionKey.VerifyOTEmployee)]
         public void ReminderClaimOvertime(string subject, string content)
         {
             Task.Factory.StartNew(() =>
