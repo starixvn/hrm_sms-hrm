@@ -6,17 +6,16 @@ var JobTitle = (function ($) {
     var keyword, jobTitleTableBody, jobTitleTable, jobName, tips, allFields, dialogForm;
     var UPDATE_JOB = 1;
     var INSERT_JOB = 0;
-
-    function updateTips(t) {
-        tips.text(t);
-    }
+    var urlRoot = "/";
+    var messages = {};
 
     function checkLength(obj, objectName, min, max) {
         var valid = true;
 
         if (obj.val().length > max || obj.val().length < min) {
             obj.addClass("ui-state-error");
-            updateTips("Length of " + objectName + " must be between " + min + " and " + max + ".");
+            tips.text("Length of " + objectName + " must be between " + min + " and " + max + ".");
+            tips.addClass("error");
             valid = false;
         }
 
@@ -25,13 +24,13 @@ var JobTitle = (function ($) {
 
     var getJobTitle = function (value) {
         $.get(
-            _global.root + "jobTitle/GetJobTitles",
+            urlRoot + "jobTitle/GetJobTitles",
             { jobTitle: value },
             function (data) {
                 jobTitleTableBody.html(data);
                 floatThead(".js-job-title-table");
             }).error(function () {
-                alert(_messages.errorTryAgain);
+                alert(messages.errorTryAgain);
             });
 
         reloadButtonText('#query');
@@ -56,7 +55,7 @@ var JobTitle = (function ($) {
             var jobTitleId = $(this).attr("data-id");
 
             confirm('Are you sure you want to delete?', function () {
-                $.post(_global.root + 'JobTitle/Delete',
+                $.post(urlRoot + 'JobTitle/Delete',
                 { id: jobTitleId },
                 function (response) {
                     if (response.IsSuccessful) {
@@ -66,7 +65,7 @@ var JobTitle = (function ($) {
                         alert(response.Message);
                     }
                 }).error(function () {
-                    alert(_messages.errorTryAgain);
+                    alert(messages.errorTryAgain);
                 });
             });
         });
@@ -97,7 +96,7 @@ var JobTitle = (function ($) {
             var $this = $(this);
             var jobId = $this.attr("data-id");
 
-            document.location = _global.root + "employee/usermanagement/?jobtitleid=" + jobId;
+            document.location = urlRoot + "employee/usermanagement/?jobtitleid=" + jobId;
         });
 
         dialogForm.dialog({
@@ -113,7 +112,7 @@ var JobTitle = (function ($) {
 
                     if (bValid) {
                         if (parseInt($("#isUpdate").val(), 10) === UPDATE_JOB) {
-                            $.post(_global.root + 'JobTitle/Update',
+                            $.post(urlRoot + 'JobTitle/Update',
                             { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
                             function (response) {
                                 if (response.IsSuccessful) {
@@ -123,13 +122,13 @@ var JobTitle = (function ($) {
                                     alert(response.Message);
                                 }
                             }).error(function () {
-                                alert(_messages.errorTryAgain);
+                                alert(messages.errorTryAgain);
                             }).always(function () {
                                 dialogForm.dialog("close");
                             });
                         }
                         else {
-                            $.post(_global.root + 'JobTitle/Insert',
+                            $.post(urlRoot + 'JobTitle/Insert',
                             { name: $("#name").val(), categoryId: $("#category").val() },
                             function (response) {
                                 if (response.IsSuccessful) {
@@ -139,7 +138,7 @@ var JobTitle = (function ($) {
                                     alert(response.Message);
                                 }
                             }).error(function () {
-                                alert(_messages.errorTryAgain);
+                                alert(messages.errorTryAgain);
                             }).always(function () {
                                 dialogForm.dialog("close");
                             });
@@ -151,7 +150,8 @@ var JobTitle = (function ($) {
                 }
             },
             close: function () {
-                updateTips('');
+                tips.text("");
+                tips.removeClass("error");
                 allFields.val("").removeClass("ui-state-error");
             }
         });
@@ -162,12 +162,15 @@ var JobTitle = (function ($) {
         jobTitleTable = $(".js-job-title-table");
         jobTitleTableBody = $(".js-job-title-table-body");
         jobName = $("#name");
-        tips = $(".validateTips");
+        tips = $(".js-validate-tips");
         allFields = $([]).add(jobName);
         dialogForm = $("#dialog-form");
     };
 
-    me.init = function () {
+    me.init = function (globalRoot, messageList) {
+        urlRoot = globalRoot;
+        messages = messageList;
+
         initDefaultValue();
         initEvent();
 
@@ -178,5 +181,5 @@ var JobTitle = (function ($) {
 })(jQuery);
 
 $(document).ready(function () {
-    JobTitle.init();
+    JobTitle.init(_global.root, _messages);
 });
