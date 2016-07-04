@@ -1,7 +1,7 @@
 ﻿@model IList<SelectListItem>
 @{
     ViewBag.Title = @Labels.JobTitleManagement;
-    var policies = ViewBag.Policies as PoliciesModel;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     @Url.CombresLink("jobtitlecss")
@@ -23,7 +23,7 @@
     <div class="grid_2">
         <input class="js-btn-submit" type="button" value="@Labels.Submit" />
     </div>
-    @if (policies.CanCreate)
+    @if (hasPermission)
     {
         <div class="grid_4">
             <div class="button-icon">
@@ -43,12 +43,9 @@
             <th>@Labels.TotalExpat</th>
             <th>@Labels.TotalLocal</th>
             <th>@Labels.Total</th>
-            @if (policies.CanEdit)
+            @if (hasPermission)
             {
                 <th>@Labels.Edit</th>
-            }
-            @if (policies.CanDelete)
-            {
                 <th>@Labels.Delete</th>
             }
         </tr>

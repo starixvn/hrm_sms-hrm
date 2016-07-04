@@ -7,7 +7,8 @@
 }
 @{
     ViewBag.Title = Labels.ShiftInfo;
-    var policies = ViewBag.Policies as PoliciesModel;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 5 : 4;
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
@@ -27,7 +28,7 @@
         <div class="grid_2">
             <input type="submit" id="submit" value="@Labels.Submit" />
         </div>
-        @if (policies.CanCreate)
+        @if (hasPermission)
         {
             <div class="grid_3">
                 <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
@@ -43,7 +44,7 @@
                 <th class="left">@Labels.Shift</th>
                 <th>@Labels.In</th>
                 <th>@Labels.Out</th>
-                @if (policies.CanEdit)
+                @if (hasPermission)
                 {
                     <th>@Labels.Edit</th>
                 }
@@ -67,7 +68,7 @@
                         <td>
                             @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
                         </td>
-                        @if (policies.CanEdit)
+                        @if (hasPermission)
                         {
                             <td class="cmd">
                                 <a href="@Url.Action("Edit", "Shift", new { shiftId = item.Id })">
@@ -80,9 +81,7 @@
             }
             else
             {
-                var colSpan = policies.CanEdit ? 5 : 4;
-
-                @RazorHelper.DisplayNoInformation(colspan: colSpan);
+                @RazorHelper.DisplayNoInformation(colspan: totalColumn);
             }
         </tbody>
     </table>

@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
-    var policies = ViewBag.Policies as PoliciesModel;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 8 : 6;
 }
 @model IList<LookupData>
 @if (Model.Any())
@@ -36,17 +37,13 @@
                     <span>0</span>
                 }
             </td>
-            @if (policies.CanEdit)
+            @if (hasPermission)
             {
                 <td>
                     <a href="javascript:;" class="js-link-edit-job" data-id=@job.Id data-category-id="@job.CategoryId" data-job-title="@job.Name">
                         <i class="fa fa-pencil fa-lg icon-edit"></i>
                     </a>
                 </td>
-            }
-
-            @if (policies.CanDelete)
-            {
                 <td>
                     @if (job.Value != "0")
                         {
@@ -67,16 +64,5 @@
 }
 else
 {
-    var colSpan = 6;
-
-    if (policies.CanDelete && policies.CanEdit)
-    {
-        colSpan = 8;
-    }
-    else if (policies.CanDelete || policies.CanEdit)
-    {
-        colSpan = 7;
-    }
-
-    RazorHelper.DisplayNoInformation(colspan: colSpan);
+    RazorHelper.DisplayNoInformation(colspan: totalColumn);
 }

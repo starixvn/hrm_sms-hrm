@@ -4,7 +4,7 @@
 
 @{
     ViewBag.Title = @Labels.EditShift;
-    var policies = ViewBag.Policies as PoliciesModel;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 
 @section css{
@@ -82,7 +82,7 @@
         </div>
         <div class="input">
             <input type="submit" value="@Labels.Save"/>
-            @if (!Model.IsUsed && policies.CanDelete)
+            @if (!Model.IsUsed && hasPermission)
             { 
                 <a href="javascript:;" class="button js-link-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
             }

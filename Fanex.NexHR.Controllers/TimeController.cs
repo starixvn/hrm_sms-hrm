@@ -25,7 +25,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Edit, FunctionKey.TimeRecord)]
+        [HRAuthorize(Policy.Host, FunctionKey.TimeRecord)]
         public JsonResult ProcessInOut(UpdateTypeTimeRecordCriteria criteria)
         {
             if (criteria != null)

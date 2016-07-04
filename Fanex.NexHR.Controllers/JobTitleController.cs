@@ -32,12 +32,6 @@
         public ActionResult JobTitleManagement()
         {
             IList<SelectListItem> jobCategories = GetJobCategories();
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanCreate = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Create),
-                CanEdit = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit),
-                CanDelete = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete)
-            };
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View(jobCategories);
@@ -48,11 +42,7 @@
         {
             var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };
             IList<LookupData> jobTitles = lookupDataService.GetJobTitle(criteria);
-            ViewBag.Policies = new PoliciesModel
-            {
-                CanEdit = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Edit),
-                CanDelete = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete)
-            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
         }

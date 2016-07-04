@@ -123,7 +123,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Delete, FunctionKey.Holiday)]
+        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteHolidayCriteria { Id = id, ModifiedBy = CurrentUser.Id, ModifiedDate = DateTime.Now };
