@@ -97,7 +97,6 @@
     <Build Include="dbo\Tables\ChangeShiftRequest.sql" />
     <Build Include="dbo\Tables\ChangeShiftRequestDetail.sql" />
     <Build Include="dbo\Tables\Country.sql" />
-    <Build Include="dbo\Tables\FunctionKey.sql" />
     <Build Include="dbo\Tables\DisciplineType.sql" />
     <Build Include="dbo\Tables\Employee.sql" />
     <Build Include="dbo\Tables\DisciplineSectionRule.sql" />
