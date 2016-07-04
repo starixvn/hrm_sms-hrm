@@ -31,7 +31,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult JobTitleManagement()
         {
-            IList<SelectListItem> JobCategories = GetJobCategories();
+            IList<SelectListItem> jobCategories = GetJobCategories();
             ViewBag.Policies = new PoliciesModel
             {
                 CanCreate = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Create),
@@ -39,7 +39,7 @@
                 CanDelete = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Delete)
             };
 
-            return View(JobCategories);
+            return View(jobCategories);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]

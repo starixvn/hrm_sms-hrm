@@ -550,6 +550,7 @@
       <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />
       <resource path="~/styles/jobtitle.css" />
+      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
     <resourceSet name="jobtitle" type="js">
       <resource reference="sitejs" />

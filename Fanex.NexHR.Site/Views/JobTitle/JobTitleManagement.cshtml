@@ -14,12 +14,21 @@
 }
 <h2>@ViewBag.Title</h2>
 <div class="container_24 bunhat">
-    @Labels.Keyword
-    <input id="keyword" type="text" placeholder="@Messages.JobTitle" />
+    <div class="grid_2">
+        @Labels.Keyword
+    </div>
+    <div class="grid_7">
+        <input id="keyword" type="text" placeholder="@Messages.JobTitle" />
+    </div>
+    <div class="grid_2">
+        <input class="js-btn-submit" type="button" value="@Labels.Submit" />
+    </div>
     @if (policies.CanCreate)
     {
-        <div class="button-icon">
-            <span class="icon plus"></span><a href="javascript:;" id="btnNewJobTitle">@Labels.NewJobTitle</a>
+        <div class="grid_4">
+            <div class="button-icon">
+                <span class="icon plus"></span><a href="javascript:;" id="btnNewJobTitle">@Labels.NewJobTitle</a>
+            </div>
         </div>
     }
 </div>

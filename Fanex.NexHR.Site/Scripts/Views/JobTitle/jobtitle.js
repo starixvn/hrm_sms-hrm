@@ -43,12 +43,14 @@ var JobTitle = (function ($) {
             }
         });
 
-        keyword.keypress(function () {
-            var value = $(this).val();
+        $("#btnNewJobTitle").click(function () {
+            $("span.ui-dialog-title").text('Create an job title');
+            $("#isUpdate").val(INSERT_JOB);
+            $("#dialog-form").dialog("open");
+        });
 
-            if (value.length >= 2) {
-                getJobTitle(value);
-            }
+        $(".js-btn-submit").click(function () {
+            getJobTitle(keyword.val());
         });
 
         jobTitleTableBody.on("click", ".ls-link-delete-job", function () {
@@ -68,12 +70,6 @@ var JobTitle = (function ($) {
                     alert(messages.errorTryAgain);
                 });
             });
-        });
-
-        $("#btnNewJobTitle").click(function () {
-            $("span.ui-dialog-title").text('Create an job title');
-            $("#isUpdate").val(INSERT_JOB);
-            $("#dialog-form").dialog("open");
         });
 
         jobTitleTableBody.on("click", ".js-link-edit-job", function () {
