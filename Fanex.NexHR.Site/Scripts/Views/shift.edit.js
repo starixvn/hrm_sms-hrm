@@ -19,6 +19,10 @@ var editShift = (function ($) {
                 });
             });
         });
+
+        $('form').bind('submit', function () {
+            $(this).find(':input').removeAttr('disabled');
+        });
     };
 
     me.init = function (globalRoot) {

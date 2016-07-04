@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Company Memo";
     var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
     @Url.CombresLink("memoeditcss")
@@ -20,13 +21,13 @@
             @Html.LabelFor(model => model.Content)
             @Html.TextBoxFor(model => model.Content)
         </div>
-        <div class="grid_1 formrow">
+        <div class="grid_1">
             @Html.LabelFor(model => model.Year)
         </div>
         <div class="grid_3">
             @Html.YearPickerFor(model => model.Year, 2010, isShowAll: true)
         </div>
-        <div class="grid_2 formrow">
+        <div class="grid_2">
             @Html.LabelFor(model => model.Category)
         </div>
         <div class="grid_4">
@@ -100,7 +101,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(7)
+            @RazorHelper.DisplayNoInformation(totalColumn)
         }
     </table>
 }

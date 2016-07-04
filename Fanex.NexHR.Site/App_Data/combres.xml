@@ -291,7 +291,7 @@
 
     <resourceSet name="memoeditcss" type="css">
       <resource reference="sitecss" />
-
+      <resource path="~/styles/criteriapanel.css" />
       <resource path="~/styles/memo.edit.css" />
     </resourceSet>
 
