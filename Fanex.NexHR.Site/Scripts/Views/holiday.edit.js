@@ -1,45 +1,52 @@
-﻿'use strict';
+﻿"use strict";
 
-$(document).ready(function () {
-    $("#ActualFromDate, #ActualToDate, #FromDate, #ToDate").datepicker({
-        changeMonth: true,
-        changeYear: true
-    });
-    var holidayName = $("#HolidayName").val();
-    var numday = $("#numDay").val();
-    var fromDate = $("#FromDate").val();
-    var toDate = $("#ToDate").val();
-    var actualFromDate = $("#ActualFromDate").val();
+var editHoliday = (function ($) {
+    var me = {};
+    var $numDay, $fromDate, $toDate;
 
-    $("#numDay").change(function () {
-        setTheDate();
-    });
+    function setToDate() {
+        var inputDay = parseInt($numDay.val(), 10) - 1;
+        var fromDate = $fromDate.val();
+        var toDate = new Date(Date.parse(fromDate));
 
-    $("#numDay").click(function () {
-        setTheDate();
-    });
-
-    function setTheDate() {
-        var numday = $("#numDay").val();
-        var fromDate = $("#FromDate").val();
-        var dat = Date.parse(fromDate);
-        var theDate = new Date(dat);
-        theDate.setDate(theDate.getDate() + parseInt(numday, 10) - 1);
-        $("#ToDate, #ActualToDate").val(theDate.format("dd mmm, yyyy"));
+        toDate.setDate(toDate.getDate() + inputDay);
+        $toDate.val(toDate.format("dd mmm, yyyy"));
     }
 
-    $("#FromDate, #ToDate").change(function () {
-        var fromDate = $("#FromDate").datepicker('getDate');
-        var toDate = $("#ToDate").datepicker('getDate');
-        var dayDiff = (toDate - fromDate) / 1000 / 60 / 60 / 24;
-        $("#numDay").val(dayDiff);
-    });
+    var initEvent = function () {
+        $numDay.change(function () {
+            setToDate();
+        });
 
-    $("#btnClear").click(function () {
-        $("#HolidayName").val(holidayName);
-        $("#ActualFromDate").val(actualFromDate);
-        $("#numDay").val(numday);
-        $("#FromDate").val(fromDate);
-        $("#ToDate").val(toDate);
-    });
+        $numDay.click(function () {
+            setToDate();
+        });
+        
+        $("#FromDate, #ToDate").change(function () {
+            var fromDate = $fromDate.datepicker('getDate');
+            var toDate = $toDate.datepicker('getDate');
+            var dayDiff = (toDate - fromDate) / 1000 / 60 / 60 / 24;
+
+            $numDay.val(dayDiff);
+        });
+    };
+
+    me.init = function () {
+        $numDay = $("#numDay");
+        $fromDate = $("#FromDate");
+        $toDate = $("#ToDate");
+
+        $("#FromDate, #ToDate").datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+
+        initEvent();
+    };
+
+    return me;
+}(jQuery));
+
+$(document).ready(function () {
+    editHoliday.init();
 });

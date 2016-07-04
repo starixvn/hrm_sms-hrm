@@ -67,7 +67,17 @@
                     ModifiedDate = DateTime.Now
                 };
 
-                ViewBag.Updated = commandService.Update(criteria).IsSuccessful;
+                var result = commandService.Update(criteria);
+
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Updated = true;
+                }
+                else
+                {
+                    ViewBag.Updated = false;
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
             else
             {
@@ -106,7 +116,7 @@
                 else
                 {
                     ViewBag.Updated = false;
-                    ModelState.AddModelError(string.Empty, "Duplicate holiday");
+                    ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
             else
@@ -119,11 +129,11 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Delete, FunctionKey.Holiday)]
-        public bool Delete(int id)
+        public JsonResult Delete(int id)
         {
             var criteria = new DeleteHolidayCriteria { Id = id, ModifiedBy = CurrentUser.Id, ModifiedDate = DateTime.Now };
-
-            return commandService.Delete(criteria).IsSuccessful;
+            var result = commandService.Delete(criteria);
+            return Json(result);
         }
     }
 }

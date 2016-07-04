@@ -263,10 +263,12 @@
 
     <resourceSet name="holidayjs" type="js">
       <resource reference="sitejs" />
-
       <resource path="~/scripts/views/holiday.js" />
     </resourceSet>
-
+    <resourceSet name="holidaycss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/criteriapanel.css" />
+    </resourceSet>
     <resourceSet name="holidayeditcss" type="css">
       <resource reference="sitecss" />
     </resourceSet>

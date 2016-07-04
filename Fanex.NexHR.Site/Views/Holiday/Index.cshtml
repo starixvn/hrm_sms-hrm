@@ -4,7 +4,7 @@
     var policies = ViewBag.Policies as PoliciesModel;
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    @Url.CombresLink("holidaycss")
 }
 @section js{
     @Url.CombresLink("holidayjs")
@@ -15,16 +15,28 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
+
 @using (Html.BeginGetForm())
 {
-    <span style="padding-right: 5px;">Year</span>
-    @Html.YearPicker("year", 2010, (int)ViewBag.year)
-    <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-    if (policies.CanCreate)
-    {
-        <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
-    }
+    <div class="bunhat container_24">
+        <div class="grid_1">
+            Year
+        </div>
+        <div class="grid_2">
+            @Html.YearPicker("year", 2010, (int)ViewBag.year)
+        </div>
+        <div class="grid_2">
+            <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
+        </div>
+        @if (policies.CanCreate)
+        {
+            <div class="grid_2">
+                <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
+            </div>
+        }
+    </div>
 }
+
 <table id="data" class="data persist-area">
     <thead>
         <tr class="persist-header">
@@ -74,7 +86,7 @@
                     @if (policies.CanDelete)
                     {
                         <td class="cmd">
-                            <a href="javascript:;" onclick="deleteHoliday(@item.Id);">
+                            <a href="javascript:;" class="js-link-delete-holiday" data-id="@item.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>
@@ -85,6 +97,16 @@
                 }
                 else
                 {
-                    @RazorHelper.DisplayNoInformation(colspan: 7);
+                    var colSpan = 4;
+                    if (policies.CanEdit && policies.CanDelete)
+                    {
+                        colSpan = 6;
+                    }
+                    else if (policies.CanDelete || policies.CanEdit)
+                    {
+                        colSpan = 5;
+                    }
+
+                    @RazorHelper.DisplayNoInformation(colspan: colSpan);
                 }
 </table>

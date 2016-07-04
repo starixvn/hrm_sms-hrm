@@ -17,7 +17,7 @@
 
         public ShiftController(IShiftService shiftService = null)
         {
-            shiftService = shiftService ?? new ShiftService();
+            this.shiftService = shiftService ?? new ShiftService();
         }
 
         public Shift GetShiftByDate(int employeeId, DateTime date)

@@ -67,5 +67,16 @@
 }
 else
 {
-    RazorHelper.DisplayNoInformation(colspan: 8);
+    var colSpan = 6;
+
+    if (policies.CanDelete && policies.CanEdit)
+    {
+        colSpan = 8;
+    }
+    else if (policies.CanDelete || policies.CanEdit)
+    {
+        colSpan = 7;
+    }
+
+    RazorHelper.DisplayNoInformation(colspan: colSpan);
 }
