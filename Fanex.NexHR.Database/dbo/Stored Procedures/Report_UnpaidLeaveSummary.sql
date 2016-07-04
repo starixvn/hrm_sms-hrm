@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
+﻿
+CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
@@ -297,7 +298,7 @@ BEGIN
 		,g.[Rank]
 	ORDER BY [Rank]
 		,g.[Name]
-		,g.Code
+		,Code
 
 	DROP TABLE #EmployeeId
 

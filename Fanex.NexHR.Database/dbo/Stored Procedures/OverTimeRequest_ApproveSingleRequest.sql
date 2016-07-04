@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[OverTimeRequest_ApproveSingleRequest] @RequestID BIGINT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--DROP PROCEDURE [dbo].[OverTimeRequest_ApproveRequest]
+CREATE PROCEDURE [dbo].[OverTimeRequest_ApproveSingleRequest] @RequestID BIGINT
 	,@ProcessedBy INT
 	,@ProcessedDate DATETIME
 	,@RoleID INT

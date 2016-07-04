@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
@@ -66,11 +65,10 @@
         [HttpPost]
         public ActionResult Index(Employee employeeModel)
         {
-            var id = this.CurrentUser.Id;
+            var id = CurrentUser.Id;
             employeeModel.Id = id;
             employeeModel.Modifier = new Employee { Id = id };
             ModelState.Clear();
-
             UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
             CommandResult result = commandService.Update(criteria);
             if (result.Code != 0)
@@ -85,7 +83,6 @@
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { Empid = id };
             var displayModel = this.employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
             ViewBag.JobTitle = displayModel.JobTitleId == null
             ? Resources.Labels.Unknown
@@ -101,8 +98,8 @@
             var countryName = employeeService.GetCountryByCode(getCountryByCodeCriteria);
             ViewBag.CountryName = countryName.CountryName;
 
-            this.DisplayDefaultValuesOfDropDownListsForPersonalInformation();
-            this.DisplayShiftForPersonalInformation(workingCalendar);
+            DisplayDefaultValuesOfDropDownListsForPersonalInformation();
+            DisplayShiftForPersonalInformation(workingCalendar);
 
             return View(displayModel);
         }
@@ -186,10 +183,6 @@
             return View(model);
         }
 
-        /// <summary>
-        /// Displays the shift for personal information.
-        /// </summary>
-        /// <param name="workingCalendar">The working calendar.</param>
         private void DisplayShiftForPersonalInformation(EmployeeShift workingCalendar)
         {
             ViewBag.Sun = workingCalendar.SunShiftName;
@@ -201,9 +194,6 @@
             ViewBag.Sat = workingCalendar.SatShiftName;
         }
 
-        /// <summary>
-        /// Displays the default values of drop down lists for personal information.
-        /// </summary>
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
             var getAllCountryCriteria = new GetAllCountryCriteria();
@@ -227,14 +217,9 @@
             ViewBag.Marriages = Utilities.Marriages;
         }
 
-        /// <summary>
-        /// Set Update Personal Information Criteria.
-        /// </summary>
-        /// <param name="employeeModel">Employee Model.</param>
-        /// <returns>UpdateEmployeePersonalInformation Criteria.</returns>
         private UpdateEmployeePersonalInformationCriteria SetUpdatePersonalInfoCriteria(Employee employeeModel)
         {
-            var updatePersonalInformationCriteria = new UpdateEmployeePersonalInformationCriteria
+            var criteria = new UpdateEmployeePersonalInformationCriteria
             {
                 EmpId = employeeModel.Id,
                 DateOfBirth = employeeModel.DateOfBirth,
@@ -259,11 +244,10 @@
                 PassportNo = employeeModel.PassportNo,
                 PassportExp = employeeModel.PassportExp,
                 ModifiedBy = employeeModel.Modifier.Id,
-                ModifiedDate = DateTime.Now,
                 CountryCode = employeeModel.CountryCode
             };
 
-            return updatePersonalInformationCriteria;
+            return criteria;
         }
     }
 }

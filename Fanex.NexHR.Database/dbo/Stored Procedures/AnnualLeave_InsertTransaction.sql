@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[AnnualLeave_InsertTransaction] @EmpId INT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[AnnualLeave_InsertTransaction] @EmpId INT
 	,@RequestId INT = NULL
 	,@Description NVARCHAR(4000) = ''
 	,@FromDate DATETIME

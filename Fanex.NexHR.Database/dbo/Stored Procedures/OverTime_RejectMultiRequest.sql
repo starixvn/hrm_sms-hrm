@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_RejectMultiRequest]
+﻿
+--DROP PROCEDURE [dbo].OverTime_RejectSingleRequest
+CREATE PROCEDURE [dbo].[OverTime_RejectMultiRequest]
 	--@Month datetime,
 	@ProcessedBy INT
 	,@ProcessedDate DATETIME
@@ -169,12 +171,7 @@ BEGIN
 	SET @now = getdate()
 
 	--Log general info
-	SELECT @LogSPData = '<OverTimeRequest_RejectRequest RequestID="' + coalesce(cast(@ListRequestID AS VARCHAR(1000)), space(1)) + '" '
-		+ 'RoleID="' + coalesce(cast(@RoleID AS VARCHAR(100)), space(1)) + '" '
-		+ 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
-		+ 'ProcessedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
-		+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
-		+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+	SELECT @LogSPData = '<OverTimeRequest_RejectRequest RequestID="' + coalesce(cast(@ListRequestID AS VARCHAR(1000)), space(1)) + '" ' + 'RoleID="' + coalesce(cast(@RoleID AS VARCHAR(100)), space(1)) + '" ' + 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" ' + 'ProcessedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" ' + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" ' + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 	SELECT @Description = 'Reject OT Multi Request:' + coalesce(cast(@ListRequestID AS VARCHAR(1000)), space(1))
 

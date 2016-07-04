@@ -1,10 +1,5 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] 
-	-- Add the parameters for the stored procedure here
+﻿ALTER PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] 
 	@EmpId int
-	--,@FullName nvarchar(50)=''
 	,@DOB smalldatetime=NULL
 	,@Phone varchar(50)=NULL
 	,@Gender tinyint=NULL	
@@ -19,7 +14,6 @@ CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid]
 	,@PassportExp datetime=''
 	,@ChineseName nvarchar(200)=NULL
 	
-	,@ModifiedDate datetime
 	,@ModifiedBy int
 	,@CountryCode varchar(5)=NULL	
 	
@@ -47,7 +41,6 @@ Param's Explanation:
 */
 
 BEGIN
-
 	SET NOCOUNT ON;
 	
 	BEGIN TRY
@@ -60,7 +53,7 @@ BEGIN
 				,Skype =@Skype 
 				,Yahoo =@Yahoo 
 				,Marriage = @Marriage 
-				,ModifiedDate =@ModifiedDate 
+				,ModifiedDate = GETDATE() 
 				,ModifiedBy =@ModifiedBy 
 				,PermanentAddress =@PermanentAddress 
 				,CurrentAddress =@CurrentAddress 
@@ -78,7 +71,7 @@ BEGIN
 				,HomePhone =@HomePhone 
 				,Qualification =@Qualification 
 				,Major =@Major 
-			WHERE EmpId =@EmpId
+			WHERE EmpId = @EmpId
 	
 			UPDATE [dbo].[EmployeeSummary] WITH(ROWLOCK)
 						   SET CountryCode = @CountryCode

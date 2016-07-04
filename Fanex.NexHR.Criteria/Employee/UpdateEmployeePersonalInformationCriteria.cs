@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateEmployeePersonalInformationCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Employee
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Update Employee Personal Information Criteria.
-    /// </summary>
     public class UpdateEmployeePersonalInformationCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
@@ -43,8 +31,6 @@ namespace Fanex.NexHR.Criteria.Employee
         public DateTime? PassportExp { get; set; }
 
         public string ChineseName { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
 

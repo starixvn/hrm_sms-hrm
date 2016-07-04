@@ -50,7 +50,6 @@
             return Index(criteria);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Read, FunctionKey.Message)]
         public ActionResult Index(GetMessageByCreatorCriteria criteria)
@@ -66,7 +65,6 @@
             return View(criteria);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public ActionResult Create()
         {
@@ -87,7 +85,6 @@
             return View();
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
@@ -106,16 +103,10 @@
                     messageService.SendMailToStaff(model);
                 }
             }
-            else
-            {
-                result.Code = 1;
-                result.Message = Messages.InvalidInputData;
-            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public ActionResult Edit(int id)
         {
@@ -143,7 +134,6 @@
             return View();
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
@@ -171,7 +161,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Delete(int id)
@@ -223,7 +212,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.Message)]
         public ActionResult Detail(int id)
         {

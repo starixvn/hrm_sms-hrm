@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_RejectMonthlySingleRequest] @RequestID BIGINT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--DROP PROCEDURE [dbo].OverTimeRequest_RejectMonthlySingleRequest
+CREATE PROCEDURE [dbo].[OverTime_RejectMonthlySingleRequest] @RequestID BIGINT
 	,@ProcessedBy INT
 	,@ProcessedDate DATETIME
 	,@RoleID INT

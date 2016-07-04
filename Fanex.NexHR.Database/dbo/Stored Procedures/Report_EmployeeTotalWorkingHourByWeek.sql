@@ -19,7 +19,7 @@ Revisions:
 Param's Explanation:
 */
 SET NOCOUNT ON
-
+print 'jdjdjdjdj'
 DECLARE @Days varchar(1000), @cols varchar(2000), @totalDays int, @fromDatetmp datetime,
 		@temptbl nvarchar(4000),@updtbl nvarchar(4000) 
 
@@ -61,6 +61,7 @@ declare @LeaveTypeDefaultId as int
 select @LeaveTypeDefaultId = dbo.fnc_getLeaveTypeDefault()
 
 DECLARE	@HolidayLeaveTypeCode varchar(50)
+
 -- get leave type of holiday
 select @HolidayLeaveTypeCode = code
 from dbo.LeaveType (nolock)
@@ -190,8 +191,8 @@ SELECT @query='SELECT EmpCode AS [Staff ID],
 			Team AS Section,
 			fullname AS [Full Name/Nick],
 			nickname AS [Nick],
-			ISNULL(TotalWorkDays,0) AS [Count WorkDay],
-	' + @days
+			ISNULL(TotalWorkDays,0) AS [Count WorkDay],'
+	 + @days
 
  
 SELECT @query= @query +' FROM #tmpCalendar cl WITH(NOLOCK)

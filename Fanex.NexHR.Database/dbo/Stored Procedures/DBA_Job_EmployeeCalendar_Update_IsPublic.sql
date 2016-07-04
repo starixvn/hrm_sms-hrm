@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Update_IsPublic] @empid INT = NULL
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Update_IsPublic] @empid INT = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS

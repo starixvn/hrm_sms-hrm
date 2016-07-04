@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Contract_Update] @EmpID INT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[Employee_Contract_Update] @EmpID INT
 	,@BankAccount NVARCHAR(100) = NULL
 	,@TaxCode NVARCHAR(150) = NULL
 	,@SocialInsuranceNo NVARCHAR(150) = NULL

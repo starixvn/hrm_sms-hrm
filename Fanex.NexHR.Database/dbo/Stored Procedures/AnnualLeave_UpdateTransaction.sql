@@ -1,4 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[AnnualLeave_UpdateTransaction] @LeaveTransId INT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+AnnualLeave_UpdateTransaction 1, NULL, 'CAP NGAY PHEP DAU NAM', '2012/01/01', '2012/01/01',0,12, '2012/04/20', 86
+*/
+CREATE PROCEDURE [dbo].[AnnualLeave_UpdateTransaction] @LeaveTransId INT
 	,@Description NVARCHAR(4000) = ''
 	,@FromDate DATETIME
 	,@DeductDays NUMERIC(18, 1)

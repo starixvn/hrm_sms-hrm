@@ -1,7 +1,4 @@
-﻿
-/****** Object:  StoredProcedure [dbo].[ShiftMng_GetShiftSchedule]    Script Date: 11/13/2014 4:14:10 PM ******/
--- [dbo].[ShiftMng_GetShiftSchedule_xtest] 421, 574, '2015-01-26', '2015-02-01', @isDebug =1
-CREATE PROCEDURE [dbo].[ShiftMng_GetShiftSchedule] @SupervisorID INT
+﻿CREATE PROCEDURE [dbo].[ShiftMng_GetShiftSchedule] @SupervisorID INT
 	,@EmpID INT = NULL
 	,@fromtime DATETIME
 	,@totime DATETIME
@@ -40,8 +37,8 @@ BEGIN
 			,@ErrMsg = N'Parameter not correct.'
 
 		RETURN
-	END
-	
+	END	
+
 	CREATE TABLE #Calendar (
 		WorkDate DATETIME
 		,[Enabled] BIT

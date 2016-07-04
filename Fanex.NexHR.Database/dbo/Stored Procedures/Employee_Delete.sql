@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Delete] @Empid INT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[Employee_Delete] @Empid INT
 	,@ResignedDate SMALLDATETIME
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT

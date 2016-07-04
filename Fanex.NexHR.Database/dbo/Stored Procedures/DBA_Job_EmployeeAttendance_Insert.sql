@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[DBA_Job_EmployeeAttendance_Insert] @ErrCode INT = 0 OUTPUT
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DBA_Job_EmployeeAttendance_Insert] @ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 BEGIN
@@ -19,6 +21,9 @@ BEGIN
 		,@fromtime = @fromdate
 		,@totime = @todate
 		,@onlyUpdate = 0
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
+		,@Debug = 1
 
 	IF @@ERROR <> 0
 		SELECT @ErrCode = 100

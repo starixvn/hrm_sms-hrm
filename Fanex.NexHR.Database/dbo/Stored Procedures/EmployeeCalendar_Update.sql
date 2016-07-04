@@ -47,7 +47,7 @@ Param's Explanation:
  WHERE datediff(d, WorkDate, @date) = 0   AND empId = @EmpId  
   
 	-- update attendance record 
-EXEC EmployeeAttendance_ProcessingAndInsert @empId = @empId, @fromtime=@date, @totime=@date, @onlyUpdate=1
+EXEC EmployeeAttendance_ProcessingAndInsert @empId = @empId, @fromdate=@date, @todate=@date, @onlyUpdate=1 , @ErrCode=@ErrCode output,@ErrMsg=@ErrMsg output
 
 IF @ErrCode <> 0
 	SELECT @ErrCode = 100, @ErrMsg = N'working calendar for an employee failed.'
