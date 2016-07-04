@@ -7,9 +7,10 @@
     [FunctionId]   INT            NULL,
     [DisplayOrder] INT            NULL,
     [IsActive]     BIT            NULL,
-    [Policy]       INT            NULL,
     CONSTRAINT [PK_Menu] PRIMARY KEY CLUSTERED ([MenuId] ASC)
 );
+
+
 
 
 

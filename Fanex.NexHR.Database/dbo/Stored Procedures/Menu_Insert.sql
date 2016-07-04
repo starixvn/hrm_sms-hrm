@@ -4,7 +4,6 @@ CREATE PROCEDURE [dbo].[Menu_Insert] @Name NVARCHAR(50)
 	,@Link NVARCHAR(100) = NULL
 	,@ParentId INT = NULL
 	,@FunctionId INT = NULL
-	,@Policy INT = NULL
 	,@DisplayOrder INT = NULL
 	,@ErrorCode INT = 0 OUTPUT
 	,@ErrorMessage VARCHAR(200) = '' OUTPUT
@@ -34,6 +33,5 @@ BEGIN
 		,@FunctionId
 		,@DisplayOrder
 		,@IsActive
-		,@Policy
 		);
 END;

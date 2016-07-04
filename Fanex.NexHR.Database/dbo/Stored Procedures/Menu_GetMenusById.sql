@@ -21,8 +21,7 @@ Param's Explanation:
                 me.ParentId,
                 me.FunctionId,
                 me.DisplayOrder,
-                me.IsActive,
-                me.Policy
+                me.IsActive
          FROM dbo.Menu AS me WITH (NOLOCK)
          WHERE me.MenuId = @MenuId;
      END;

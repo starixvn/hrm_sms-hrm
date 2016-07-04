@@ -20,7 +20,6 @@ Param's Explanation:
                 me.Link,
                 me.DisplayOrder,
                 me.IsActive,
-                me.Policy,
                 f.FunctionId,
                 f.FunctionKey,
                 f.Name,
@@ -28,6 +27,6 @@ Param's Explanation:
                 meP.Name,
 			 meP.[Text]
          FROM dbo.Menu AS me WITH (NOLOCK)
-         LEFT JOIN dbo.FunctionKey AS f WITH(NOLOCK) ON me.FunctionId = f.FunctionId
+         LEFT JOIN dbo.[Function] AS f WITH(NOLOCK) ON me.FunctionId = f.FunctionId
          LEFT JOIN dbo.Menu AS meP WITH (NOLOCK) ON meP.MenuId = me.ParentId
      END;

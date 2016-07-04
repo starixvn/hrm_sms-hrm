@@ -4,7 +4,6 @@
                                     @Link         NVARCHAR(100) = NULL,
                                     @ParentId     INT = NULL,
                                     @FunctionId   INT = NULL,
-                                    @Policy INT = NULL,
                                     @DisplayOrder INT = NULL,
                                     @IsActive     BIT,
                                     @ErrorCode    INT           = 0 OUTPUT,
@@ -31,7 +30,6 @@ Param's Explanation:
                [ParentId] = @ParentId,
                [FunctionId] = @FunctionId,
                [DisplayOrder] = @DisplayOrder,
-               [IsActive] = @IsActive,
-               [Policy] = @Policy
+               [IsActive] = @IsActive
          WHERE MenuId = @MenuId;
      END;

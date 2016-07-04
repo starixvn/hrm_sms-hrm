@@ -147,7 +147,7 @@ Original:
 
 Revisions:  
 Param's Explanation:
-	@Functions = <ROOT><Function FunctionId='{0}' IsRead='{1}' IsEdit='{2}' IsCreate='{3}' IsDelete='{4}'></Function></ROOT>
+	@Functions = <ROOT><Function FunctionId='{0}' IsRead='{1}' IsHost='{2}'></Function></ROOT>
 */
 
      BEGIN
@@ -468,7 +468,7 @@ Param's Explanation:
              SELECT RoleId,
                     FunctionId,
                     CAST(IsRead AS INT) AS IsRead,
-                    CAST(IsHost AS INT) AS IsEdit
+                    CAST(IsHost AS INT) AS IsHost
              FROM dbo.RoleFunction WITH (NOLOCK)
          ) AS rf
          INNER JOIN dbo.FunctionKey AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId

@@ -19,6 +19,6 @@ Param's Explanation:
                 [Name] AS Name,
                 [ParentFunctionId],
                 [IsActive]
-         FROM dbo.[FunctionKey] WITH (NOLOCK)
+         FROM dbo.[Function] WITH (NOLOCK)
          WHERE [IsActive] = 1;
      END;

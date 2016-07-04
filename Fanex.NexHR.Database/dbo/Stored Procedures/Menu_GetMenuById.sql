@@ -20,7 +20,6 @@ Param's Explanation:
                 me.Link,
                 me.ParentId,
                 me.FunctionId,
-                me.Policy,
                 me.DisplayOrder,
                 me.IsActive
          FROM dbo.Menu AS me WITH (NOLOCK)

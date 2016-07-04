@@ -15,6 +15,7 @@ Param's Explanation:
          SET NOCOUNT ON;
          SELECT f.FunctionId,
                 f.FunctionKey,
+                f.Name,
                 CAST(MAX(IsRead) AS BIT) AS IsRead,
                 CAST(MAX(IsHost) AS BIT) AS IsHost
          FROM
@@ -25,9 +26,10 @@ Param's Explanation:
                     CAST(IsHost AS INT) AS IsHost
              FROM dbo.RoleFunction WITH (NOLOCK)
          ) AS rf
-         INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
+         INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON f.FunctionId = rf.FunctionId
          INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON rf.RoleId = er.RoleId
          WHERE er.EmployeeId = @UserId
          GROUP BY f.FunctionId,
-                  FunctionKey;
+                  f.FunctionKey,
+                  f.Name
      END;
