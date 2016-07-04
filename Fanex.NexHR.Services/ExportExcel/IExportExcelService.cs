@@ -27,9 +27,9 @@
 
         HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar);
 
-        HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees);
+        void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath);
 
-        HSSFWorkbook ExportEmployeeDetailsInfo(IList<Employee> employees);
+        void ExportEmployeeDetailsInfo(IList<Employee> employees, string templatePath);
 
         HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate);
 

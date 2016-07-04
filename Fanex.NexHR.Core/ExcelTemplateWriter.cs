@@ -168,5 +168,10 @@
         }
 
         #endregion Row related methods
+
+        public void CreateFreezePane(int colSplit, int rowSplit)
+        {
+            _sheet.CreateFreezePane(colSplit, rowSplit);
+        }
     }
 }

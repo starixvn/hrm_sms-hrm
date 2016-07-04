@@ -40,8 +40,6 @@
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _OvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\OvertimeReportTemplate.xls";
         private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
-        private const string _EmployeeBasicInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeBasicInfoTemplate.xls";
-        private const string _EmployeeDetailsInfoFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeDetailsInfoTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
         private const string _ManpowerFilePathExcelTemplate = "~\\ExcelTemplates\\ManpowerReportTemplate.xls";
@@ -815,193 +813,38 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeBasicInfo(IList<Employee> employees)
+        public void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath)
         {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeBasicInfoFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
+            string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Basic Info");
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "EmployeeBasicInfo");
-            var rowIndex = _RowStartBodyOvertimeReport;
+            // Fill report title.
+            writer.CopyRows(0, 2);
+            // Fill report header.
+            writer.CopyRows(2, 1);
 
-            var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
-            ICell cellNo = null;
-            ICell cellEmployeeID = null;
-            ICell cellFullName = null;
-            ICell cellNickName = null;
-            ICell cellTeam = null;
-            ICell cellGroupDate = null;
-            ICell cellCompanyDate = null;
-            ICell cellConfirmedDate = null;
-            ICell cellResignedDate = null;
-            ICell cellDOB = null;
-            ICell cellGender = null;
-            ICell cellCellPhone = null;
-            ICell cellEmail = null;
-            ICell cellCurrentAddress = null;
-            ICell cellUnit = null;
-            ICell cellCategory = null;
-            var index = 1;
+            FillContentRowEmployeeBasicInfoReport(employees, ref writer);
+            writer.SyncColumnsWidth(16);
+            writer.CreateFreezePane(0, 3);
 
-            foreach (var item in employees)
-            {
-                var rowCopy = _RowStartBodyOvertimeReport + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-                RenderBodyEmployeeBasicInfo(
-                    rowIndex - 1,
-                    ref cellNo,
-                    ref cellEmployeeID,
-                    ref cellFullName,
-                    ref cellNickName,
-                    ref cellTeam,
-                    ref cellGroupDate,
-                    ref cellCompanyDate,
-                    ref cellConfirmedDate,
-                    ref cellResignedDate,
-                    ref cellDOB,
-                    ref cellGender,
-                    ref cellCellPhone,
-                    ref cellEmail,
-                    ref cellCurrentAddress,
-                    ref cellUnit,
-                    ref cellCategory,
-                    item,
-                    row);
-                rowIndex++;
-                index++;
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
+            writer.Render();
         }
 
-        public HSSFWorkbook ExportEmployeeDetailsInfo(IList<Employee> employees)
+        public void ExportEmployeeDetailsInfo(IList<Employee> employees, string templatePath)
         {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeDetailsInfoFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
+            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Details Info");
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "EmployeeDetailsInfo");
-            var rowIndex = _RowStartBodyOvertimeReport;
-            var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
+            // Fill report title.
+            writer.CopyRows(0, 2);
+            // Fill report header.
+            writer.CopyRows(2, 1);
 
-            ICell cellNo = null;
-            ICell cellEmployeeID = null;
-            ICell cellDomainUserName = null;
-            ICell cellFullName = null;
-            ICell cellNickName = null;
-            ICell cellTeam = null;
-            ICell cellDOB = null;
-            ICell cellPlaceOfBirth = null;
-            ICell cellEthnic = null;
-            ICell cellNative = null;
+            FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
+            writer.SyncColumnsWidth(42);
+            writer.CreateFreezePane(0, 3);
 
-            ICell cellReligion = null;
-            ICell cellGender = null;
-            ICell cellMarriage = null;
-            ICell cellNationality = null;
-            ICell cellIDCardNo = null;
-            ICell cellIDCardIssueDate = null;
-            ICell cellIDCardPlaceIssue = null;
-            ICell cellPassportNo = null;
-            ICell cellPassportExp = null;
-            ICell cellQualification = null;
-
-            ICell cellMajor = null;
-            ICell cellCellPhone = null;
-            ICell cellHomePhone = null;
-            ICell cellEmail = null;
-            ICell cellPermanentAddress = null;
-            ICell cellCurrentAddress = null;
-            ICell cellSkype = null;
-            ICell cellUnit = null;
-            ICell cellJobTitle = null;
-            ICell cellGroupDate = null;
-
-            ICell cellCompanyDate = null;
-            ICell cellConfirmedDate = null;
-            ICell cellResignedDate = null;
-            ICell cellWorkingDays = null;
-            ICell cellWorkingHours = null;
-            ICell cellNumberOffdays = null;
-            ICell cellLeaveBalance = null;
-            ICell cellCategory = null;
-            ICell cellBankAccount = null;
-            ICell cellTaxCode = null;
-            ICell cellSocialInsuranceNo = null;
-            ICell cellRegisteredHospital = null;
-
-            var index = 1;
-            foreach (var item in employees)
-            {
-                var rowCopy = _RowStartBodyOvertimeReport + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-                RenderBodyEmployeeDetailsInfo(
-                    rowIndex - 1,
-                    ref cellNo,
-                    ref cellEmployeeID,
-                    ref cellDomainUserName,
-                    ref cellFullName,
-                    ref cellNickName,
-                    ref cellTeam,
-                    ref cellDOB,
-                    ref cellPlaceOfBirth,
-                    ref cellEthnic,
-                    ref cellNative,
-                    ref cellReligion,
-                    ref cellGender,
-                    ref cellMarriage,
-                    ref cellNationality,
-                    ref cellIDCardNo,
-                    ref cellIDCardIssueDate,
-                    ref cellIDCardPlaceIssue,
-                    ref cellPassportNo,
-                    ref cellPassportExp,
-                    ref cellQualification,
-                    ref cellMajor,
-                    ref cellCellPhone,
-                    ref cellHomePhone,
-                    ref cellEmail,
-                    ref cellPermanentAddress,
-                    ref cellCurrentAddress,
-                    ref cellSkype,
-                    ref cellUnit,
-                    ref cellJobTitle,
-                    ref cellGroupDate,
-                    ref cellCompanyDate,
-                    ref cellConfirmedDate,
-                    ref cellResignedDate,
-                    ref cellWorkingDays,
-                    ref cellWorkingHours,
-                    ref cellNumberOffdays,
-                    ref cellLeaveBalance,
-                    ref cellCategory,
-                    ref cellBankAccount,
-                    ref cellTaxCode,
-                    ref cellSocialInsuranceNo,
-                    ref cellRegisteredHospital,
-                    item,
-                    row);
-                rowIndex++;
-                index++;
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
+            writer.Render();
         }
 
         public HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate)
@@ -1081,6 +924,142 @@
             return hssfworkbook;
         }
 
+        #region Employee Basic Info
+
+        private void FillContentRowEmployeeBasicInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (Employee employee in employees)
+            {
+                FillRowEmployeeBasicInfoReport(employee, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecordEmployeeBasicInfoReport(employee, ref rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(3, record);
+            }
+            else
+            {
+                writer.WriteRow(4, record);
+            }
+
+            rowIndex++;
+        }
+
+        private object CreateRecordEmployeeBasicInfoReport(Employee employee, ref int rowIndex)
+        {
+            var record = new
+            {
+                Count = rowIndex,
+                Code = employee.Code,
+                FullName = employee.FullName,
+                NickName = employee.NickName,
+                Section = employee.Team.Name,
+                GroupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                CompanyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                ConfirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                ResignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
+                Gender = employee.Gender == 0 ? "F" : "M",
+                CellPhone = employee.Phone,
+                Email = employee.Email,
+                CurrentAddress = employee.CurrentAddress,
+                Unit = employee.Unit,
+                Category = employee.IsLocal ? Labels.Local : Labels.Expat
+            };
+
+            return record;
+        }
+
+        #endregion Employee Basic Info
+
+        #region Employee Details Info
+
+        private void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (Employee employee in employees)
+            {
+                FillRowEmployeeDetailsInfoReport(employee, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecordEmployeeDetailsInfoReport(employee, ref rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(3, record);
+            }
+            else
+            {
+                writer.WriteRow(4, record);
+            }
+
+            rowIndex++;
+        }
+
+        private object CreateRecordEmployeeDetailsInfoReport(Employee employee, ref int rowIndex)
+        {
+            var record = new
+            {
+                Count = rowIndex,
+                Code = employee.Code,
+                DomainUsername = employee.DomainUsername,
+                FullName = employee.FullName,
+                NickName = employee.NickName,
+                Section = employee.Team.Name,
+                DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
+                PlaceOfBirth = employee.PlaceOfBirth,
+                Ethnic = employee.Ethnic,
+                Native = employee.Native,
+                Religion = employee.Religion,
+                Gender = employee.Gender == 0 ? "F" : "M",
+                MarriageName = employee.MarriageName,
+                CountryName = employee.CountryName,
+                CardNo = employee.CardNo,
+                DateOfIdCard = employee.DateOfIdCard.HasValue ? employee.DateOfIdCard.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                PlaceOfIdCard = employee.PlaceOfIdCard,
+                PassportNo = employee.PassportNo,
+                PassportExp = employee.PassportExp.HasValue ? employee.PassportExp.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                Qualification = employee.Qualification,
+                Major = employee.Major,
+                Phone = employee.Phone,
+                HomePhone = employee.HomePhone,
+                Email = employee.Email,
+                Address = employee.Address,
+                CurrentAddress = employee.CurrentAddress,
+                Skype = employee.Skype,
+                Unit = employee.Unit,
+                JobTitle = employee.JobTitle,
+                GroupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                CompanyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                ConfirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                ResignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
+                WorkingDays = employee.WorkingDays,
+                WorkingHours = employee.WorkingHours,
+                OffDaysbyWeek = employee.OffDaysbyWeek,
+                AnnualLeaveBalance = employee.AnnualLeaveBalance,
+                Category = employee.IsLocal ? Labels.Local : Labels.Expat,
+                BankAccount = employee.BankAccount,
+                TaxCode = employee.TaxCode,
+                SocialInsuranceNo = employee.SocialInsuranceNo,
+                RegisteredHospital = employee.RegisteredHospital
+            };
+
+            return record;
+        }
+
+        #endregion Employee Details Info
+
+        #region Employee Supervisor
+
         private void FillContentRowEmployeeSupervisorReport(IList<SupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
@@ -1125,6 +1104,10 @@
             return record;
         }
 
+        #endregion Employee Supervisor
+
+        #region Section Supervisor
+
         private void FillContentRowSectionSupervisorReport(IList<SectionSupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
@@ -1166,6 +1149,8 @@
             return record;
         }
 
+        #endregion Section Supervisor
+
         private void SetNumberValue(ICell cell, float value)
         {
             if (value != 0)
@@ -1189,214 +1174,6 @@
             rowFooter.GetCell(14).SetCellValue(requestList.Sum(x => x.Nov));
             rowFooter.GetCell(15).SetCellValue(requestList.Sum(x => x.Dec));
             rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
-        }
-
-        private void RenderBodyEmployeeDetailsInfo(
-            int rowIndex,
-            ref ICell cellNo,
-            ref ICell cellEmployeeID,
-            ref ICell cellDomainUserName,
-            ref ICell cellFullName,
-            ref ICell cellNickName,
-            ref ICell cellTeam,
-            ref ICell cellDOB,
-            ref ICell cellPlaceOfBirth,
-            ref ICell cellEthnic,
-            ref ICell cellNative,
-            ref ICell cellReligion,
-            ref ICell cellGender,
-            ref ICell cellMarriage,
-            ref ICell cellNationality,
-            ref ICell cellIDCardNo,
-            ref ICell cellIDCardIssueDate,
-            ref ICell cellIDCardPlaceIssue,
-            ref ICell cellPassportNo,
-            ref ICell cellPassportExp,
-            ref ICell cellQualification,
-            ref ICell cellMajor,
-            ref ICell cellCellPhone,
-            ref ICell cellHomePhone,
-            ref ICell cellEmail,
-            ref ICell cellPermanentAddress,
-            ref ICell cellCurrentAddress,
-            ref ICell cellSkype,
-            ref ICell cellUnit,
-            ref ICell cellJobTitle,
-            ref ICell cellGroupDate,
-            ref ICell cellCompanyDate,
-            ref ICell cellConfirmedDate,
-            ref ICell cellResignedDate,
-            ref ICell cellWorkingDays,
-            ref ICell cellWorkingHours,
-            ref ICell cellNumberOffdays,
-            ref ICell cellLeaveBalance,
-            ref ICell cellCategory,
-            ref ICell cellBankAccount,
-            ref ICell cellTaxCode,
-            ref ICell cellSocialInsuranceNo,
-            ref ICell cellRegisteredHospital,
-            Employee item,
-            IRow row)
-        {
-            cellNo = row.GetCell(0);
-            cellEmployeeID = row.GetCell(1);
-            cellDomainUserName = row.GetCell(2);
-            cellFullName = row.GetCell(3);
-            cellNickName = row.GetCell(4);
-            cellTeam = row.GetCell(5);
-            cellDOB = row.GetCell(6);
-            cellPlaceOfBirth = row.GetCell(7);
-            cellEthnic = row.GetCell(8);
-            cellNative = row.GetCell(9);
-            cellReligion = row.GetCell(10);
-
-            cellGender = row.GetCell(11);
-            cellMarriage = row.GetCell(12);
-            cellNationality = row.GetCell(13);
-            cellIDCardNo = row.GetCell(14);
-            cellIDCardIssueDate = row.GetCell(15);
-            cellIDCardPlaceIssue = row.GetCell(16);
-            cellPassportNo = row.GetCell(17);
-            cellPassportExp = row.GetCell(18);
-            cellQualification = row.GetCell(19);
-            cellMajor = row.GetCell(20);
-
-            cellCellPhone = row.GetCell(21);
-            cellHomePhone = row.GetCell(22);
-            cellEmail = row.GetCell(23);
-            cellPermanentAddress = row.GetCell(24);
-            cellCurrentAddress = row.GetCell(25);
-            cellSkype = row.GetCell(26);
-            cellUnit = row.GetCell(27);
-            cellJobTitle = row.GetCell(28);
-            cellGroupDate = row.GetCell(29);
-            cellCompanyDate = row.GetCell(30);
-
-            cellConfirmedDate = row.GetCell(31);
-            cellResignedDate = row.GetCell(32);
-            cellWorkingDays = row.GetCell(33);
-            cellWorkingHours = row.GetCell(34);
-            cellNumberOffdays = row.GetCell(35);
-            cellLeaveBalance = row.GetCell(36);
-            cellCategory = row.GetCell(37);
-            cellBankAccount = row.GetCell(38);
-            cellTaxCode = row.GetCell(39);
-            cellSocialInsuranceNo = row.GetCell(40);
-            cellRegisteredHospital = row.GetCell(41);
-
-            string gender = string.Empty,
-                category = string.Empty;
-
-            gender = item.Gender == 0 ? "F" : "M";
-            category = item.IsLocal ? "Local" : "Expat";
-
-            cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
-            cellEmployeeID.SetCellValue(item.Code);
-            cellDomainUserName.SetCellValue(item.DomainUsername);
-            cellFullName.SetCellValue(item.FullName);
-            cellNickName.SetCellValue(item.NickName);
-            cellTeam.SetCellValue(item.Team.Name);
-            cellDOB.SetCellValue(item.DateOfBirth.ToString("dd MMM, yyyy"));
-            cellPlaceOfBirth.SetCellValue(item.PlaceOfBirth);
-            cellEthnic.SetCellValue(item.Ethnic);
-            cellNative.SetCellValue(item.Native);
-            cellReligion.SetCellValue(item.Religion);
-
-            cellGender.SetCellValue(gender);
-            cellMarriage.SetCellValue(item.MarriageName);
-            cellNationality.SetCellValue(item.CountryName);
-            cellIDCardNo.SetCellValue(item.CardNo);
-            cellIDCardIssueDate.SetCellValue(item.DateOfIdCard != null ? item.DateOfIdCard.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellIDCardPlaceIssue.SetCellValue(item.PlaceOfIdCard);
-            cellPassportNo.SetCellValue(item.PassportNo);
-            cellPassportExp.SetCellValue(item.PassportExp != null ? item.PassportExp.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellQualification.SetCellValue(item.Qualification);
-            cellMajor.SetCellValue(item.Major);
-
-            cellCellPhone.SetCellValue(item.Phone);
-            cellHomePhone.SetCellValue(item.HomePhone);
-            cellEmail.SetCellValue(item.Email);
-            cellPermanentAddress.SetCellValue(item.Address);
-            cellCurrentAddress.SetCellValue(item.CurrentAddress);
-            cellSkype.SetCellValue(item.Skype);
-            cellUnit.SetCellValue(item.Unit);
-            cellJobTitle.SetCellValue(item.JobTitle);
-            cellGroupDate.SetCellValue(item.JoinedDate != null ? item.JoinedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellCompanyDate.SetCellValue(item.CompanyDate != null ? item.CompanyDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellConfirmedDate.SetCellValue(item.ConfirmedDate != null ? item.ConfirmedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellResignedDate.SetCellValue(item.ResignedDate != null ? item.ResignedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellWorkingDays.SetCellValue(item.WorkingDays);
-
-            cellWorkingHours.SetCellValue(item.WorkingHours);
-            cellNumberOffdays.SetCellValue(item.OffDaysbyWeek);
-            cellLeaveBalance.SetCellValue(item.AnnualLeaveBalance);
-            cellCategory.SetCellValue(category);
-            cellBankAccount.SetCellValue(item.BankAccount);
-            cellTaxCode.SetCellValue(item.TaxCode);
-            cellSocialInsuranceNo.SetCellValue(item.SocialInsuranceNo);
-            cellRegisteredHospital.SetCellValue(item.RegisteredHospital);
-        }
-
-        private void RenderBodyEmployeeBasicInfo(
-            int rowIndex,
-            ref ICell cellNo,
-            ref ICell cellEmployeeID,
-            ref ICell cellFullName,
-            ref ICell cellNickName,
-            ref ICell cellTeam,
-            ref ICell cellGroupDate,
-            ref ICell cellCompanyDate,
-            ref ICell cellConfirmedDate,
-            ref ICell cellResignedDate,
-            ref ICell cellDOB,
-            ref ICell cellGender,
-            ref ICell cellCellPhone,
-            ref ICell cellEmail,
-            ref ICell cellCurrentAddress,
-            ref ICell cellUnit,
-            ref ICell cellCategory,
-            Employee item,
-            IRow row)
-        {
-            cellNo = row.GetCell(0);
-            cellEmployeeID = row.GetCell(1);
-            cellFullName = row.GetCell(2);
-            cellNickName = row.GetCell(3);
-            cellTeam = row.GetCell(4);
-            cellGroupDate = row.GetCell(5);
-            cellCompanyDate = row.GetCell(6);
-            cellConfirmedDate = row.GetCell(7);
-            cellResignedDate = row.GetCell(8);
-            cellDOB = row.GetCell(9);
-            cellGender = row.GetCell(10);
-            cellCellPhone = row.GetCell(11);
-            cellEmail = row.GetCell(12);
-            cellCurrentAddress = row.GetCell(13);
-            cellUnit = row.GetCell(14);
-            cellCategory = row.GetCell(15);
-
-            string gender = string.Empty,
-                category = string.Empty;
-
-            gender = item.Gender == 0 ? "F" : "M";
-            category = item.IsLocal ? "Local" : "Expat";
-
-            cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
-            cellEmployeeID.SetCellValue(item.Code);
-            cellFullName.SetCellValue(item.FullName);
-            cellNickName.SetCellValue(item.NickName);
-            cellTeam.SetCellValue(item.Team.Name);
-            cellGroupDate.SetCellValue(item.JoinedDate != null ? item.JoinedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellCompanyDate.SetCellValue(item.CompanyDate != null ? item.CompanyDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellConfirmedDate.SetCellValue(item.ConfirmedDate != null ? item.ConfirmedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellResignedDate.SetCellValue(item.ResignedDate != null ? item.ResignedDate.Value.ToString("dd MMM, yyyy") : string.Empty);
-            cellDOB.SetCellValue(item.DateOfBirth.ToString("dd MMM, yyyy"));
-            cellGender.SetCellValue(gender);
-            cellCellPhone.SetCellValue(item.Phone);
-            cellEmail.SetCellValue(item.Email);
-            cellCurrentAddress.SetCellValue(item.CurrentAddress);
-            cellUnit.SetCellValue(item.Unit);
-            cellCategory.SetCellValue(category);
         }
 
         private void RenderBodyOvertimeReport(

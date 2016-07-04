@@ -512,7 +512,6 @@
 
     <resourceSet name="teamsupervisorcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/team.supervisor.css" />
     </resourceSet>
     <resourceSet name="teamsupervisorjs" type="js">
       <resource reference="sitejs" />

@@ -382,7 +382,6 @@
     <Content Include="Styles\overtimereport.css" />
     <Content Include="Styles\report.overtimerequest.css" />
     <Content Include="Styles\shift.css" />
-    <Content Include="Styles\team.supervisor.css" />
     <Content Include="Styles\timerecord.css" />
     <Content Include="Styles\workingcalendardatatable.css" />
     <Content Include="Styles\keepinview.css" />

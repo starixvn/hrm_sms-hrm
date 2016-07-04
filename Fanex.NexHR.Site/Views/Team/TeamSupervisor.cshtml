@@ -17,18 +17,10 @@
 <table class="table table-custom" style="width: auto; min-width: 800px;">
     <thead>
         <tr>
-            <th class="supervisor-team">
-                @Labels.Section
-            </th>
-            <th>
-                @Labels.Roles
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th class="supervisor-action">
-                @Labels.Edit
-            </th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Roles</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Edit</th>
         </tr>
     </thead>
     @if (Model != null)
@@ -45,10 +37,10 @@
                         <td rowspan="5">
                             @item.Code
                         </td>
-                        <td>
+                        <td class="align-left">
                             @item.ActionName
                         </td>
-                        <td class="supervisor-name">
+                        <td class="align-left">
                             @item.Supervisors
                         </td>
                         <td>
@@ -68,10 +60,10 @@
                 else
                 {
                     <tr>
-                        <td>
+                        <td class="align-left">
                             @item.ActionName
                         </td>
-                        <td class="supervisor-name">
+                        <td class="align-left">
                             @item.Supervisors
                         </td>
                         <td>

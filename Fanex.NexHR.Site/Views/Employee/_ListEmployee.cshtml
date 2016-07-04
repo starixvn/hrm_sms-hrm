@@ -4,8 +4,8 @@
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
     var hasPermissionToSchedule = (bool)ViewBag.HasPermissionToSchedule;
     var totalColumn = 11;
-    totalColumn -= hasPermissionToEdit ? 1 : 0;
-    totalColumn -= hasPermissionToSchedule ? 1 : 0;
+    totalColumn -= hasPermissionToEdit ? 0 : 1;
+    totalColumn -= hasPermissionToSchedule ? 0 : 1;
 }
 
 <table id="data" class="table table-custom">

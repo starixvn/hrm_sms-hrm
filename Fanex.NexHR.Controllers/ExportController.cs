@@ -37,6 +37,8 @@
 
     public class ExportController : RequestController
     {
+        private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
+        private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
@@ -241,41 +243,44 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult EmployeeBasicInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
+        public ActionResult EmployeeBasicInfo(UserManagementViewModel model)
         {
             string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+
+            var criteria = new GetAllEmployeeCriteria()
             {
-                Query = query,
-                GroupIds = groupIds,
-                EnableUser = enable,
-                IsDeleteUser = isDelete,
-                TitleId = titleId,
-                IsLocalUser = isLocal
+                Query = model.Keyword,
+                GroupIds = model.GroupIds,
+                EnableUser = model.IsEnable,
+                IsDeleteUser = model.IsDelete,
+                TitleId = model.JobTitleId,
+                IsLocalUser = model.IsLocal
             };
 
-            var entity = _employeeService.GetEmployees(getEmployeeCriteria);
-            var hssfworkbook = _exportService.ExportEmployeeBasicInfo(entity);
+            IList<Employee> employees = _employeeService.GetEmployees(criteria);
+            string templatePath = Server.MapPath(EmployeeBasicInfoTemplatePath);
+            _exportService.ExportEmployeeBasicInfo(employees, templatePath);
 
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
-        public ActionResult EmployeeDetailsInfo(string query, string groupIds, bool? enable, bool? isDelete, int? titleId, bool? isLocal = null)
+        public ActionResult EmployeeDetailsInfo(UserManagementViewModel model)
         {
-            string fileName = "EmployeeDetailsInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            var criteria = new GetAllEmployeeCriteria()
             {
-                Query = query,
-                GroupIds = groupIds,
-                EnableUser = enable,
-                IsDeleteUser = isDelete,
-                TitleId = titleId,
-                IsLocalUser = isLocal
+                Query = model.Keyword,
+                GroupIds = model.GroupIds,
+                EnableUser = model.IsEnable,
+                IsDeleteUser = model.IsDelete,
+                TitleId = model.JobTitleId,
+                IsLocalUser = model.IsLocal
             };
-            var entity = _employeeService.GetEmployees(getEmployeeCriteria);
-            var hssfworkbook = _exportService.ExportEmployeeDetailsInfo(entity);
 
-            return ExcelFile(hssfworkbook, fileName);
+            IList<Employee> employees = _employeeService.GetEmployees(criteria);
+            string templatePath = Server.MapPath(EmployeeDetailsInfoTemplatePath);
+            _exportService.ExportEmployeeDetailsInfo(employees, templatePath);
+
+            return new EmptyResult();
         }
 
         public ActionResult EmployeeWorkingCalendar(DateTime fromDate, DateTime toDate, string group, string title)
