@@ -1,5 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -29,11 +34,6 @@
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class ExportController : RequestController
     {
@@ -41,6 +41,7 @@
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
         private const string EmployeeSupervisorTemplatePath = @"~\ExcelTemplates\EmployeeSupervisorTemplate.xls";
+        private const string SectionSupervisorTemplatePath = @"~\ExcelTemplates\SectionSupervisorTemplate.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -481,12 +482,12 @@
             return new EmptyResult();
         }
 
-        public ActionResult ExportEmployeeSupervisor(EmployeeSupervisorViewModel model)
+        public ActionResult ExportEmployeeSupervisor(EmployeeAndSectionSupervisorViewModel model)
         {
             var criteria = new GetSupervisorReportCriteria()
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.GroupIds,
+                GroupIds = model.SectionIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -494,6 +495,20 @@
 
             string templatePath = Server.MapPath(EmployeeSupervisorTemplatePath);
             _exportService.ExportEmployeeSupervisor(supervisors, templatePath);
+
+            return new EmptyResult();
+        }
+
+        public ActionResult ExportSectionSupervisor(EmployeeAndSectionSupervisorViewModel model)
+        {
+            var criteria = new GetSectionSupervisorCriteria()
+            {
+                GroupIds = model.SectionIds,
+            };
+            IList<SectionSupervisorReportModel> supervisors = _reportService.GetSectionSupervisor(criteria);
+
+            string templatePath = Server.MapPath(SectionSupervisorTemplatePath);
+            _exportService.ExportSectionSupervisor(supervisors, templatePath);
 
             return new EmptyResult();
         }

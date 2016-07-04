@@ -1,0 +1,49 @@
+﻿@model List<SectionSupervisorReportModel>
+<div>
+    <table id="data" class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th class="width-15-percent">@Labels.VerifiedBy</th>
+                <th class="width-15-percent">@Labels.ApprovedBy</th>
+                <th class="width-15-percent">@Labels.ShiftArrangement</th>
+                <th class="width-15-percent">@Labels.OnBehalfRequest</th>
+                <th class="width-15-percent">@Labels.DisciplineManager</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            int index = 0;
+            <tbody>
+                @foreach (SectionSupervisorReportModel item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.Code</td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName))
+                        </td>
+                        <td class="align-left">
+                            @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 4);
+        }
+    </table>
+</div>

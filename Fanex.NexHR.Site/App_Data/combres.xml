@@ -440,14 +440,18 @@
       <resource path="~/scripts/views/report/report.totalworkinghours.js" />
     </resourceSet>
 
-    <resourceSet name="staffrepresentativecss" type="css">
+    <resourceSet name="reportsupervisorcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/report.staffrepresentative.css" />
+      <resource path="~/styles/report.supervisor.css" />
     </resourceSet>
-    <resourceSet name="staffrepresentativjs" type="js">
+    <resourceSet name="employeesupervisorreportjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.search.in.company.js" />
-      <resource path="~/scripts/views/report/report.staffrepresentative.js" />
+      <resource path="~/scripts/views/report/report.employee.supervisor.js" />
+    </resourceSet>
+    <resourceSet name="sectionsupervisorreportjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/report/report.section.supervisor.js" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourmonthlycss" type="css">

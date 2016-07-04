@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Models.Supervisor
-@model IList<SupervisorReportModel>
+﻿@model IList<SupervisorReportModel>
 <div>
     <table id="data" class="table table-custom">
         <thead>
@@ -9,11 +8,11 @@
                 <th>@Labels.FullName</th>
                 <th>@Labels.Team</th>
                 <th>@Labels.AuthorityLevel</th>
-                <th>@Labels.VerifiedBy</th>
-                <th>@Labels.ApprovedBy</th>
-                <th>@Labels.ShiftArrangement</th>
-                <th>@Labels.OnBehalfRequest</th>
-                <th>@Labels.DisciplineManager</th>
+                <th class="width-12-percent">@Labels.VerifiedBy</th>
+                <th class="width-12-percent">@Labels.ApprovedBy</th>
+                <th class="width-12-percent">@Labels.ShiftArrangement</th>
+                <th class="width-12-percent">@Labels.OnBehalfRequest</th>
+                <th class="width-12-percent">@Labels.DisciplineManager</th>
             </tr>
         </thead>
         @if (Model != null && Model.Any())
@@ -27,8 +26,8 @@
                         <td>@index</td>
                         <td>@item.NickName</td>
                         <td class="align-left">@item.FullName</td>
-                        <td>@item.Team.Code</td>
-                        <td class="align-left">@item.NX_Roles2String</td>
+                        <td>@item.Section.Code</td>
+                        <td class="align-left">@item.Roles2String</td>
                         <td class="align-left">
                             @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))
                         </td>

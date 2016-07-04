@@ -1,0 +1,40 @@
+﻿'use strict';
+/*global _global, _messages, floatThead*/
+
+(function () {
+    function query() {
+        $.ajax({
+            url: _global.root + 'report/SectionSupervisorDetails',
+            type: 'POST',
+            dataType: 'html',
+            data: $('form.form-filter').serialize(),
+            success: function (response) {
+                $('#SectionSupervisorDetails').html(response);
+
+                floatThead('table#data');
+            },
+            error: function () {
+                alert(_messages.errorTryAgain);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('form.form-filter #section').multiselect();
+
+        query();
+
+        $('form.form-filter #section').on('change', function () {
+            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#SectionIds').val(sectionIds);
+        });
+
+        $("form.form-filter #btnSubmit").on('click', function () {
+            query();
+        });
+
+        $('form.form-filter #btnExcel').on('click', function () {
+            window.location.href = _global.root + 'Export/ExportSectionSupervisor?' + $('form.form-filter').serialize();
+        });
+    });
+})();

@@ -4,6 +4,8 @@
     {
         public Employee Supervisor { get; set; }
 
+        public SectionModel Section { get; set; }
+
         public int OwnerId { get; set; }
 
         public string NickName { get; set; }

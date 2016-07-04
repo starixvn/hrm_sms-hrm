@@ -629,20 +629,20 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            var model = new EmployeeSupervisorViewModel()
+            var model = new EmployeeAndSectionSupervisorViewModel()
             {
-                Groups = GetAllTeam()
+                Sections = GetAllTeam()
             };
 
             return View(model);
         }
 
-        public ActionResult EmployeeSupervisorDetails(EmployeeSupervisorViewModel model)
+        public ActionResult EmployeeSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
         {
             var criteria = new GetSupervisorReportCriteria()
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.GroupIds,
+                GroupIds = model.SectionIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -651,30 +651,25 @@
             return PartialView("_EmployeeSupervisorDetails", supervisors);
         }
 
-        public ActionResult TeamSupervisor()
+        public ActionResult SectionSupervisor()
         {
-            ViewBag.Groups = GetAllTeam();
-            return View();
+            var model = new EmployeeAndSectionSupervisorViewModel()
+            {
+                Sections = GetAllTeam()
+            };
+
+            return View(model);
         }
 
-        public ActionResult TeamSupervisorDetails(string groups, bool? isExcel)
+        public ActionResult SectionSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
         {
-            var criteria = new GetAllTeamSupervisorCriteria()
+            var criteria = new GetSectionSupervisorCriteria()
             {
-                GroupIds = groups,
+                GroupIds = model.SectionIds,
             };
-            IList<TeamSupervisorReportModel> supervisors = reportService.GetAllTeamSupervisor(criteria);
+            IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
 
-            if (isExcel.Value)
-            {
-                string fileName = "TeamSupervisor_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = exportExcelService.ExportTeamSupervisor(supervisors);
-                return ExcelFile(hssfworkbook, fileName);
-            }
-            else
-            {
-                return PartialView(supervisors);
-            }
+            return PartialView("_SectionSupervisorDetails", supervisors);
         }
 
         [HttpGet]

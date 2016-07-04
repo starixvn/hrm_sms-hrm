@@ -23,7 +23,6 @@
         private const int _RowStartBodyTeamSupervisor = 4;
         private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
-        private const string _TeamSupervisorFilePathExcelTemplate = "~\\ExcelTemplates\\TeamSupervisorTemplate.xls";
 
         public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
@@ -192,52 +191,6 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
-        {
-            HSSFWorkbook hssfworkbook;
-
-            var templatePath = HttpContext.Current.Server.MapPath(_TeamSupervisorFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "Team Supervisor");
-
-            var rowIndex = _RowStartBodyEmployeeSupervisor;
-            var rowCopy = _RowStartBodyEmployeeSupervisor;
-            var height = sheet.GetRow(_RowStartBodyEmployeeSupervisor).Height;
-            var groupIndex = 1;
-
-            foreach (var item in supervisors)
-            {
-                rowCopy = _RowStartBodyEmployeeSupervisor + (groupIndex % 2);
-                var row = sheet.GetRow(rowIndex);
-                foreach (var supervisor in item.SupervisorAction)
-                {
-                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                    row = sheet.GetRow(rowIndex);
-                    row.Height = height;
-                    row.GetCell(0).SetCellValue(groupIndex);
-                    row.GetCell(1).SetCellValue(supervisor.Code);
-                    row.GetCell(2).SetCellValue(supervisor.ActionName);
-                    row.GetCell(3).SetCellValue(supervisor.Supervisors);
-                    rowIndex++;
-                }
-
-                groupIndex++;
-
-                var firstRow = rowIndex - item.SupervisorAction.Count;
-                var lastRow = rowIndex - 1;
-                MergeCellTeam(row, firstRow, lastRow);
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
-
         private void MergeCell(IRow row, int firstRow, int lastRow)
         {
             var cra1 = new CellRangeAddress(firstRow, lastRow, 0, 0);
@@ -250,14 +203,6 @@
             row.Sheet.AddMergedRegion(cra3);
             row.Sheet.AddMergedRegion(cra4);
             row.Sheet.AddMergedRegion(cra5);
-        }
-
-        private void MergeCellTeam(IRow row, int firstRow, int lastRow)
-        {
-            var cra1 = new CellRangeAddress(firstRow, lastRow, 0, 0);
-            var cra2 = new CellRangeAddress(firstRow, lastRow, 1, 1);
-            row.Sheet.AddMergedRegion(cra1);
-            row.Sheet.AddMergedRegion(cra2);
         }
     }
 }

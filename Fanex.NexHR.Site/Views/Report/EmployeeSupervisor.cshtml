@@ -1,13 +1,13 @@
-﻿@model EmployeeSupervisorViewModel
+﻿@model EmployeeAndSectionSupervisorViewModel
 
 @{
     ViewBag.Title = "Employee Supervisor";
 }
 @section css{
-    @Url.CombresLink("staffrepresentativecss")
+    @Url.CombresLink("reportsupervisorcss")
 }
 @section js{
-    @Url.CombresLink("staffrepresentativjs")
+    @Url.CombresLink("employeesupervisorreportjs")
 }
 @section Breadcrumb {
     <a class="step">HR</a>
@@ -18,7 +18,7 @@
 <h2>@ViewBag.Title</h2>
 
 <form class="form-filter">
-    @Html.HiddenFor(model => model.GroupIds)
+    @Html.HiddenFor(model => model.SectionIds)
     @Html.HiddenFor(model => model.IsLocal)
     @Html.HiddenFor(model => model.EmployeeId)
     <div class="container_24 bunhat">
@@ -32,8 +32,8 @@
         </div>
         <div class="grid_1 gridlabel">@Labels.Team</div>
         <div class="grid_6">
-            <select id="group" multiple="multiple" class="team-select">
-                @foreach (Team item in Model.Groups)
+            <select id="section" multiple="multiple" class="team-select">
+                @foreach (Team item in Model.Sections)
                 {
                     <option value="@item.Id">@item.Name</option>
                 }
@@ -55,8 +55,8 @@
         </div>
         <div class="grid_2 gridlabel">&nbsp;</div>
         <div class="grid_5">
-            <input id="submit" type="button" value="@Labels.Submit" />
-            <input id="excel" type="button" value="Excel" />
+            <input id="btnSubmit" type="button" value="@Labels.Submit" />
+            <input id="btnExcel" type="button" value="Excel" />
         </div>
         <div class="clear">
         </div>

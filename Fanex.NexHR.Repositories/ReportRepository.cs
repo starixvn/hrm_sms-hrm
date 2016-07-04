@@ -245,14 +245,14 @@
             {
                 using (GridReader multi = db.QueryMultiple(criteria))
                 {
-                    IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, Team, SupervisorReportModel>(
-                    (su, g) =>
+                    IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, SectionModel, SupervisorReportModel>(
+                    (su, section) =>
                     {
-                        su.Team = g;
+                        su.Section = section;
 
                         return su;
                     },
-                    splitOn: "GroupId").ToList();
+                    splitOn: "SectionId").ToList();
 
                     IList<SupervisorModel> employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
                     (su, e) =>
@@ -273,20 +273,31 @@
             }
         }
 
-        public IList<TeamSupervisorReportModel> GetAllTeamSupervisor(ICriteria criteria)
+        public IList<SectionSupervisorReportModel> GetSectionSupervisor(ICriteria criteria)
         {
-            List<TeamSupervisorModel> entities = null;
-            List<TeamSupervisorReportModel> supervisors = null;
-
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                entities = db.Query<TeamSupervisorModel>(criteria.GetSpParams()).ToList();
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    IList<SectionSupervisorReportModel> supervisors = multi.Read<SectionSupervisorReportModel>().ToList();
+
+                    IList<SupervisorModel> employees = multi.Read<SupervisorModel, SectionModel, SupervisorModel>(
+                    (su, section) =>
+                    {
+                        su.Section = section;
+
+                        return su;
+                    },
+                    splitOn: "SectionId").ToList();
+
+                    foreach (SectionSupervisorReportModel supervisor in supervisors)
+                    {
+                        supervisor.Supervisors = employees.Where(x => x.Section.SectionId == supervisor.SectionId).ToList();
+                    }
+
+                    return supervisors;
+                }
             }
-
-            supervisors = entities.GroupBy(x => x.TeamId)
-                .Select(x => new TeamSupervisorReportModel { GroupId = x.Key, SupervisorAction = x.ToList() }).ToList();
-
-            return supervisors;
         }
 
         private EmployeeAttendanceRequest FillAttendanceRequest(dynamic t)

@@ -1,0 +1,17 @@
+﻿#Supervisor
+{
+	min-width: 100px;
+}
+
+#Employee
+{
+	width: 180px;
+}
+
+table.table .width-12-percent {
+    width: 12%;
+}
+
+table.table .width-15-percent {
+    width: 15%;
+}

@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetAllTeamSupervisorCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Supervisor
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get All Team Supervisor Criteria.
-    /// </summary>
-    public class GetAllTeamSupervisorCriteria : CriteriaBase
+    public class GetSectionSupervisorCriteria : CriteriaBase
     {
         public string GroupIds { get; set; }
 

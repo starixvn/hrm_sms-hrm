@@ -20,22 +20,24 @@
     }
 
     $(document).ready(function () {
-        $('#group').multiselect();
+        $('form.form-filter #section').multiselect();
 
-        $('#group').on('change', function () {
-            var groupIds = $(this).val() !== null ? $(this).val().join(',') : '';
-            $('#GroupIds').val(groupIds);
+        query();
+
+        $('form.form-filter #section').on('change', function () {
+            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#SectionIds').val(sectionIds);
         });
 
-        $('#category').on('change', function () {
-            $('#IsLocal').val($(this).val());
+        $('form.form-filter #category').on('change', function () {
+            $('form.form-filter #IsLocal').val($(this).val());
         });
 
-        $("#submit").on('click', function () {
+        $("form.form-filter #btnSubmit").on('click', function () {
             query();
         });
 
-        $('form.form-filter #excel').on('click', function () {
+        $('form.form-filter #btnExcel').on('click', function () {
             window.location.href = _global.root + 'Export/ExportEmployeeSupervisor?' + $('form.form-filter').serialize();
         });
     });

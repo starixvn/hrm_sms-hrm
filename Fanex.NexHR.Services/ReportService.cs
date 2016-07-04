@@ -195,12 +195,12 @@
             return supervisors;
         }
 
-        public IList<TeamSupervisorReportModel> GetAllTeamSupervisor(GetAllTeamSupervisorCriteria criteria)
+        public IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria)
         {
-            IList<TeamSupervisorReportModel> supervisors = null;
+            IList<SectionSupervisorReportModel> supervisors = null;
             if (criteria.IsValid())
             {
-                supervisors = _reportRepository.GetAllTeamSupervisor(criteria);
+                supervisors = _reportRepository.GetSectionSupervisor(criteria);
             }
 
             return supervisors;

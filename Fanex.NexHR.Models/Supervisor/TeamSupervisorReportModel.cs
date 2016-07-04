@@ -1,23 +1,20 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TeamSupervisorReportModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Supervisor
+﻿namespace Fanex.NexHR.Models.Supervisor
 {
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Team Supervisor ReportModel.
-    /// </summary>
-    public class TeamSupervisorReportModel
+    public class SectionSupervisorReportModel
     {
-        public int GroupId { get; set; }
+        public SectionSupervisorReportModel()
+        {
+            Supervisors = new List<SupervisorModel>();
+        }
 
-        public IList<TeamSupervisorModel> SupervisorAction { get; set; }
+        public int SectionId { get; set; }
+
+        public string Code { get; set; }
+
+        public string Name { get; set; }
+
+        public IList<SupervisorModel> Supervisors { get; set; }
     }
 }

@@ -292,6 +292,7 @@
     <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\function.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
+    <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourdaily.js" />
@@ -300,7 +301,7 @@
     <Content Include="Scripts\Views\message.edit.js" />
     <Content Include="Scripts\Views\Report\report.hrrequestmonitoring.js" />
     <Content Include="Scripts\Views\message.js" />
-    <Content Include="Scripts\Views\Report\report.staffrepresentative.js" />
+    <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.js" />
@@ -374,7 +375,7 @@
     <Content Include="Styles\annualbalance.css" />
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
-    <Content Include="Styles\report.staffrepresentative.css" />
+    <Content Include="Styles\report.supervisor.css" />
     <Content Include="Styles\report.totalworkinghourmonthly.css" />
     <Content Include="Styles\memberovertime.css" />
     <Content Include="Styles\overtimereport.css" />
@@ -1100,9 +1101,9 @@
     <Content Include="Views\Report\_EmployeeSupervisorDetails.cshtml" />
     <Content Include="ExcelTemplates\EmployeeSupervisorTemplate.xls" />
     <Content Include="Views\Team\TeamSupervisor.cshtml" />
-    <Content Include="Views\Report\TeamSupervisor.cshtml" />
-    <Content Include="Views\Report\TeamSupervisorDetails.cshtml" />
-    <Content Include="ExcelTemplates\TeamSupervisorTemplate.xls" />
+    <Content Include="Views\Report\SectionSupervisor.cshtml" />
+    <Content Include="Views\Report\_SectionSupervisorDetails.cshtml" />
+    <Content Include="ExcelTemplates\SectionSupervisorTemplate.xls" />
     <Content Include="Views\Message\DetailByEmployee.cshtml" />
     <Content Include="Views\ChangeShift\Detail.cshtml" />
   </ItemGroup>

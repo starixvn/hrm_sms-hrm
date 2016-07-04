@@ -91,12 +91,20 @@
             writer.Render();
         }
 
-        public HSSFWorkbook ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
+        public void ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors, string templatePath)
         {
-            var exportExcel = new ReportExporting();
-            HSSFWorkbook hssfworkbook = exportExcel.ExportTeamSupervisor(supervisors);
+            string fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
 
-            return hssfworkbook;
+            // Fill report title.
+            writer.CopyRows(0, 2);
+            // Fill report header.
+            writer.CopyRows(2, 1);
+
+            FillContentRowSectionSupervisorReport(supervisors, ref writer);
+            writer.SyncColumnsWidth(10);
+
+            writer.Render();
         }
 
         public HSSFWorkbook ExportAttendance(IList<EmployeeAttendanceModel> attendanceList, DateTime fromDate, DateTime toDate)
@@ -1105,8 +1113,49 @@
                 Count = rowIndex,
                 NickName = supervisor.NickName,
                 FullName = supervisor.FullName,
-                Group = supervisor.Team.Code,
-                Roles = supervisor.NX_Roles2String,
+                Section = supervisor.Section.Code,
+                Roles = supervisor.Roles2String,
+                Verifier = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName)),
+                Approver = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName)),
+                ShiftArrangement = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName)),
+                OnBehalfRequest = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName)),
+                DisciplineManager = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
+            };
+
+            return record;
+        }
+
+        private void FillContentRowSectionSupervisorReport(IList<SectionSupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (SectionSupervisorReportModel supervisor in supervisors)
+            {
+                FillRowSectionSupervisorReport(supervisor, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRowSectionSupervisorReport(SectionSupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecordSectionSupervisorReport(supervisor, ref rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(3, record);
+            }
+            else
+            {
+                writer.WriteRow(4, record);
+            }
+
+            rowIndex++;
+        }
+
+        private object CreateRecordSectionSupervisorReport(SectionSupervisorReportModel supervisor, ref int rowIndex)
+        {
+            var record = new
+            {
+                Count = rowIndex,
+                Section = supervisor.Code,
                 Verifier = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName)),
                 Approver = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName)),
                 ShiftArrangement = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName)),
