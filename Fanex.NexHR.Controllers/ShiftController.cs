@@ -75,6 +75,7 @@
                 }
                 else
                 {
+                    ViewBag.Successed = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
@@ -133,6 +134,7 @@
                 }
                 else
                 {
+                    ViewBag.Successed = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
@@ -144,11 +146,12 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
-        public bool Delete(int shiftId)
+        public JsonResult Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria() { ShiftId = shiftId };
             CommandResult result = commandService.Delete(criteria);
-            return result.IsSuccessful;
+
+            return Json(result);
         }
 
         private static int GetTime(string time, int index = 0)

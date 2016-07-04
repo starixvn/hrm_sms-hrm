@@ -697,11 +697,17 @@
     <resourceSet name="shiftcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/shift.css" />
+      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
-    <resourceSet name="shiftjs" type="js">
+    <resourceSet name="shifteditjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/shift.js" />
+      <resource path="~/scripts/views/shift.edit.js" />
+    </resourceSet>
+
+    <resourceSet name="shiftcreatejs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/shift.create.js" />
     </resourceSet>
 
     <resourceSet name="messagecss" type="css">

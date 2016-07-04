@@ -11,7 +11,7 @@
     @Url.CombresLink("shiftcss")
 }
 @section js{
-    @Url.CombresLink("shiftjs")
+    @Url.CombresLink("shifteditjs")
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
@@ -84,7 +84,7 @@
             <input type="submit" value="@Labels.Save"/>
             @if (!Model.IsUsed && policies.CanDelete)
             { 
-                <a href="javascript:;" onclick="deleteShift(@Model.ShiftId);" class="button">@Labels.Delete</a>
+                <a href="javascript:;" class="button js-link-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
             }
             
             <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>

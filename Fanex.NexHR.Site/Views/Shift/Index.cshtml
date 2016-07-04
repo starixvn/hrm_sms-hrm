@@ -17,22 +17,24 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 {
-    <span style="padding-right: 5px;">@Labels.Status</span>
-    @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
-    <input type="submit" id="submit" value="@Labels.Submit" />
-    if (policies.CanCreate)
-    {
-        <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
-    }
+    <div class="bunhat container_24">
+        <div class="grid_1">
+            @Labels.Status
+        </div>
+        <div class="grid_3">
+            @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
+        </div>
+        <div class="grid_2">
+            <input type="submit" id="submit" value="@Labels.Submit" />
+        </div>
+        @if (policies.CanCreate)
+        {
+            <div class="grid_3">
+                <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
+            </div>
+        }
+    </div>
 }
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
 <div class="grid_24">
     <table id="tblShift" class="data persist-area">
         <thead class="persist-header">
@@ -78,7 +80,9 @@
             }
             else
             {
-                @RazorHelper.DisplayNoInformation(colspan: 7);
+                var colSpan = policies.CanEdit ? 5 : 4;
+
+                @RazorHelper.DisplayNoInformation(colspan: colSpan);
             }
         </tbody>
     </table>
