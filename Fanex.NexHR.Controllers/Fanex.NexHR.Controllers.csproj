@@ -156,7 +156,7 @@
       <Name>Fanex.NexHR.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj">
-      <Project>{089B8314-1793-403B-ADA8-E83E842C275E}</Project>
+      <Project>{089b8314-1793-403b-ada8-e83e842c275e}</Project>
       <Name>Fanex.NexHR.Criteria</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">

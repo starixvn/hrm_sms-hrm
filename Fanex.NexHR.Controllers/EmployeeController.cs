@@ -107,7 +107,6 @@
             return PartialView("_ContactList", employees);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
@@ -173,30 +172,18 @@
         public ActionResult Detail(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
-            var model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            ViewBag.JobTitle = (model.JobTitleId == null)
-            ? Labels.Unknown
-            : lookupDataService.GetLookupByCodeAndId(Constants.JobTitle, model.JobTitleId.Value).Name;
+            Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
-            ViewBag.DefaultCalendar = model.IsDefaultSchedule;
-            var getMySpaceCriteria = new GetMySpaceCriteria() { EmpId = id, Date = DateTime.Now };
-            ViewBag.Working = employeeService.GetMySpace(getMySpaceCriteria);
             var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = id };
-            EmployeeShift workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
-            var getCountryByCodeCriteria = new GetCountryByCodeCriteria() { CountryCode = model.CountryCode };
-            Country countryName = employeeService.GetCountryByCode(getCountryByCodeCriteria);
-            if (countryName != null)
-            {
-                ViewBag.CountryName = countryName.CountryName;
-            }
+            EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
 
-            ViewBag.Sun = workingCalendar.SunShiftName;
-            ViewBag.Mon = workingCalendar.MonShiftName;
-            ViewBag.Tue = workingCalendar.TueShiftName;
-            ViewBag.Wed = workingCalendar.WedShiftName;
-            ViewBag.Thu = workingCalendar.ThuShiftName;
-            ViewBag.Fri = workingCalendar.FriShiftName;
-            ViewBag.Sat = workingCalendar.SatShiftName;
+            ViewBag.Sun = employeeShift.SunShiftName;
+            ViewBag.Mon = employeeShift.MonShiftName;
+            ViewBag.Tue = employeeShift.TueShiftName;
+            ViewBag.Wed = employeeShift.WedShiftName;
+            ViewBag.Thu = employeeShift.ThuShiftName;
+            ViewBag.Fri = employeeShift.FriShiftName;
+            ViewBag.Sat = employeeShift.SatShiftName;
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
 
             return View(model);
@@ -244,7 +231,7 @@
             };
 
             CommandResult result = commandService.Insert(insertEmployeeCriteria);
-            if (result.Code == 0)
+            if (result.IsSuccessful)
             {
                 var criteria = new GetEmployeeByCodeCriteria() { Code = model.Code };
                 Employee employee = employeeService.GetEmployeeByCode(criteria);
