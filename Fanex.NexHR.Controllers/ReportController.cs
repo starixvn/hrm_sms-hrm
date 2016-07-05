@@ -428,61 +428,42 @@
             return View(model);
         }
 
-        public ActionResult TotalWorkingHourWeekly(
-            DateTime? startDate,
-            DateTime? endDate,
-            string employee,
-            string teamIds,
-            int? employeeId,
-            byte? isLocal = null,
-            bool requestData = false,
-            bool isExcel = false)
+        [HttpGet]
+        public ActionResult TotalWorkingHourWeekly()
         {
-            if (startDate == null && endDate == null)
-            {
-                var dayDiff = DayOfWeek.Monday - DateTime.Now.DayOfWeek;
-                startDate = DateTime.Now.AddDays(dayDiff);
-                endDate = startDate.Value.AddDays(6);
-            }
-
-            ViewBag.Groups = GetAllTeam();
-            ViewBag.TeamIds = teamIds;
-
+            var dayDiff = DayOfWeek.Monday - DateTime.Now.DayOfWeek;
             var model = new TotalWorkingHourWeeklyViewModel
             {
-                EmployeeId = employeeId,
-                Employee = employee,
-                StartDate = startDate.Value.ToString("dd MMM, yyyy"),
-                EndDate = endDate.Value.ToString("dd MMM, yyyy"),
-                IsLocal = isLocal,
-                TeamIds = teamIds
+                FromDate = DateTime.Now.AddDays(dayDiff).ToDateMonthYearFormatedDate(),
+                ToDate = DateTime.Now.AddDays(dayDiff).AddDays(6).ToDateMonthYearFormatedDate(),
+                Sections = GetAllTeam()
             };
 
-            if (requestData)
-            {
-                var getTotalWorkingHourWeeklyCriteria = new GetTotalWorkingHourWeeklyCriteria()
-                {
-                    EmpId = employeeId,
-                    Fromdate = startDate.Value,
-                    Todate = endDate.Value,
-                    GroupIds = teamIds,
-                    IsLocal = isLocal
-                };
-                IList<TotalWorkingHourMonthly> totalWorkingHourWeekly = reportService.GetTotalWorkingHourWeekly(getTotalWorkingHourWeeklyCriteria);
-                TotalWorkingHourMonthly firstRecord = totalWorkingHourWeekly != null && totalWorkingHourWeekly.Any() ? totalWorkingHourWeekly[0] : null;
-                ViewBag.EntityList = totalWorkingHourWeekly;
-                ViewBag.FirstRecord = firstRecord;
+            return View(model);
+        }
 
-                if (isExcel)
-                {
-                    string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                    exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHourWeekly);
-                    HSSFWorkbook hssfworkbook = exportService.Export();
-                    return ExcelFile(hssfworkbook, fileName);
-                }
+        [HttpPost]
+        public ActionResult TotalWorkingHourWeeklyDetails(TotalWorkingHourWeeklyViewModel model)
+        {
+            var criteria = new GetTotalWorkingHourWeeklyCriteria()
+            {
+                EmpId = model.EmployeeId,
+                FromDate = DateTime.Parse(model.FromDate),
+                ToDate = DateTime.Parse(model.ToDate),
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal
+            };
+            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourWeekly(criteria);
+            TotalWorkingHourMonthly firstRecord = null;
+            if (totalWorkingHours != null && totalWorkingHours.Any())
+            {
+                firstRecord = totalWorkingHours.First();
+                totalWorkingHours.RemoveAt(0);
             }
 
-            return View(model);
+            ViewBag.FirstRecord = firstRecord;
+
+            return PartialView("_TotalWorkingHourWeeklyDetails", totalWorkingHours);
         }
 
         [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules",

@@ -1,37 +1,39 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, _messages*/
 
-$(document).ready(function () {
-    $("#TeamId").multiselect();
-    $("#StartDate, #EndDate").attr('readonly', true);
+(function () {
+    function query() {
+        $.ajax({
+            url: _global.root + 'report/TotalWorkingHourWeeklyDetails',
+            type: 'POST',
+            dataType: 'html',
+            data: $('form.form-filter').serialize(),
+            success: function (response) {
+                $('#TotalWorkingHourWeeklyDetails').html(response);
 
-    $("#btnSubmit").click(function (e) {
-        e.preventDefault();
-        submitForm(false);
-    }).focus();
-
-    $("#btnExcel").click(function (e) {
-        e.preventDefault();
-        submitForm(true);
-    });
-    
-    function submitForm(isExcel) {
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var employeeId = $("#EmployeeId").val();
-        var isLocal = $("#IsLocal").val();
-        var startDate = $("#StartDate").val();
-        var endDate = $("#EndDate").val();
-        var employee = $("#Employee").val();
-
-        var url = _global.root + "report/TotalWorkingHourWeekly?startDate=" + startDate +
-		"&endDate=" + endDate +
-		"&Employee=" + employee +
-		"&TeamIds=" + teams +
-		"&EmployeeId=" + employeeId +
-		"&isLocal=" + isLocal +
-		"&requestData=" + true + 
-		"&isExcel=" + isExcel;
-
-        location.href = url;
+                floatThead('table#data');
+            },
+            error: function () {
+                alert(_messages.errorTryAgain);
+            }
+        });
     }
-});
+
+    $(document).ready(function () {
+        $("#section").multiselect();
+        $("#FromDate, #ToDate").attr('readonly', true);
+
+        $('form.form-filter #section').on('change', function () {
+            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#SectionIds').val(sectionIds);
+        });
+
+        $("#btnSubmit").on('click', function () {
+            query();
+        });
+
+        $("#btnExcel").on('click', function () {
+            window.location.href = _global.root + 'Export/ExportTotalWorkingHourWeekly?' + $('form.form-filter').serialize();
+        });
+    });
+})();

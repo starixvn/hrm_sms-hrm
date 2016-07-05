@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Report
-@model TotalWorkingHourWeeklyViewModel
+﻿@model TotalWorkingHourWeeklyViewModel
 @{
     ViewBag.Title = "Total Working Hour Weekly";
 }
@@ -15,21 +14,20 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
+<form class="form-filter">
+    @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
         <div class="grid_1">
             @Html.Label("Week")
         </div>
         <div class="grid_6">
-            @Html.TextBoxFor(model => model.StartDate, new { @class = "startDateOfWeek" })
-            @Html.TextBoxFor(model => model.EndDate, new { @class = "endDateOfWeek" })
+            @Html.TextBoxFor(model => model.FromDate, new { @class = "startDateOfWeek" })
+            @Html.TextBoxFor(model => model.ToDate, new { @class = "endDateOfWeek" })
             <img class="weekPickerImg" src="~/images/calendar.png" />
-            <div class="week-picker">
-            </div>
+            <div class="week-picker"></div>
         </div>
         <div class="grid_2 gridlabel">
-            Category
+            @Labels.Category
         </div>
         <div class="grid_4">
             @{
@@ -47,28 +45,10 @@
         <div class="space">
         </div>
         <div class="grid_1">
-            @Html.Label("Team", new { @class = "lableteam" })
+            @Labels.Section
         </div>
         <div class="grid_6">
-            <select id="TeamId" multiple="multiple" name="TeamId">
-                @{
-                    var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
-                    var selected = string.Empty;
-                    foreach (Team team in ViewBag.Groups)
-                    {
-                        selected = string.Empty;
-                        if (teamIds != null)
-                        {
-                            int pos = Array.IndexOf(teamIds, team.Id.ToString());
-                            if (pos > -1)
-                            {
-                                selected = "selected";
-                            }
-                        }
-                        <option @selected value="@team.Id">@team.Name</option>
-                    }
-                }
-            </select>
+            @Html.DropDownList("section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.Employee)
@@ -78,66 +58,12 @@
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
         <div class="grid_5">
-            <input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit" />
-            <input id="btnExcel" type="submit" value="Excel" />
+            <input id="btnSubmit" type="button" value="@Labels.Submit" />
+            <input id="btnExcel" type="button" value="Excel" />
         </div>
         <div class="clear">
         </div>
     </div>
-}
-@if (ViewBag.EntityList != null && ViewBag.EntityList.Count > 0)
-{
-    var firstRecord = (TotalWorkingHourMonthly)ViewBag.FirstRecord;
-    <table class="table table-custom persist-area">
-        <thead>
-            <tr class="persist-header">
-                <th>@Labels.SymbolCount</th>
-                <th>@Labels.StaffId</th>
-                <th>@Labels.Section</th>
-                <th>@Labels.FullNameNick</th>
-                <th>@Labels.Nick</th>
-                <th>@Labels.CountWorkDay</th>
-                @{
-                    for (int i = 0; i < firstRecord.WorkingHours.Count; i++)
-                    {
-                        <th>@firstRecord.WorkingHours[i]</th>
-                    }
-                }
-            </tr>
-        </thead>
-        @if (ViewBag.EntityList.Count > 1)
-        {
-            <tbody>
-                @{int index = 0;}
-                @foreach (TotalWorkingHourMonthly item in ViewBag.EntityList)
-                {
-                    if (index == 0)
-                    {
-                        index++;
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>
-                                @(index++)
-                            </td>
-                            <td class="align-left">@item.StaffId</td>
-                            <td class="align-left">@item.Section</td>
-                            <td class="align-left">@item.FullNameNick</td>
-                            <td class="align-left">@item.Nick</td>
-                            <td>@item.CountWorkDay.ToString("0.0")</td>
-                            @for (int i = 0; i < item.WorkingHours.Count; i++)
-                            {
-                                <td>@item.WorkingHours[i]</td>
-                            }
-                        </tr>
-                    }
-                }
-            </tbody>
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: firstRecord.WorkingHours.Count + 6);
-        }
-    </table>
-}
+</form>
+<div id="TotalWorkingHourWeeklyDetails">
+</div>

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TotalWorkingHourMonthlyExporting.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2014.1.15">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services.ExportExcel
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
@@ -17,9 +8,6 @@ namespace Fanex.NexHR.Services.ExportExcel
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
 
-    /// <summary>
-    /// TotalWorkingHourMonthlyExporting Service.
-    /// </summary>
     public class TotalWorkingHourMonthlyExporting : ITotalWorkingHourMonthlyExporting
     {
         private const int _RowIndexOfHeaderTitle = 1;
@@ -48,10 +36,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             this._unfreezeHeaderCellStyle = this.CreateHeaderWorkingHourCellStyle();
         }
 
-        /// <summary>
-        /// Exports the total working hour monthly.
-        /// </summary>
-        /// <returns>The instance of HSSFWorkbook supports for exporting excel file.</returns>
         public HSSFWorkbook ExportTotalWorkingHourMonthly()
         {
             this.CreateSheet(Labels.TotalWorkingHourMonthly);
@@ -105,9 +89,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             return totalWorkingHourMonthly != null && totalWorkingHourMonthly.Count > 0;
         }
 
-        /// <summary>
-        /// Exports the table.
-        /// </summary>
         private void ExportTable()
         {
             int rowIndex = _RowIndexOfTablePosition;
@@ -123,9 +104,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             this.SetColumnWidthsForTable();
         }
 
-        /// <summary>
-        /// Sets the column widths for table.
-        /// </summary>
         private void SetColumnWidthsForTable()
         {
             for (var i = 0; i < _sheet.GetRow(_RowIndexOfTablePosition).LastCellNum; i++)
@@ -177,11 +155,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             return cellStyle;
         }
 
-        /// <summary>
-        /// Exports the one row into content region.
-        /// </summary>
-        /// <param name="rowIndex">Index of the row.</param>
-        /// <param name="totalWorkingHourMonthly">The totalWorkingHourMonthly.</param>
         private void ExportOneRowIntoContentRegion(int rowIndex, TotalWorkingHourMonthly totalWorkingHourMonthly)
         {
             var row = _sheet.CreateRow(rowIndex);
@@ -240,10 +213,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             return totalWorkingHourMonthly.Count > 1;
         }
 
-        /// <summary>
-        /// Exports the header.
-        /// </summary>
-        /// <param name="rowIndex">Index of the row.</param>
         private void ExportHeader(int rowIndex)
         {
             var row = _sheet.CreateRow(rowIndex);
@@ -266,12 +235,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             cell1.SetCellValue(content);
         }
 
-        /// <summary>
-        /// Method Create UnFreezeHeaderCell.
-        /// </summary>
-        /// <param name="row">Row in sheet.</param>
-        /// <param name="columnIndex">Column Index.</param>
-        /// <param name="content">Content to be filled in column.</param>
         private void CreateUnfreezeHeaderCell(IRow row, int columnIndex, string content)
         {
             string currentHeaderDate = content.Split('(')[1].Split(')')[0];
@@ -303,10 +266,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             return headerWorkingHourFont;
         }
 
-        /// <summary>
-        /// Creates the header working hour cell style.
-        /// </summary>
-        /// <returns>The instance of ICellStyle.</returns>
         private ICellStyle CreateHeaderWorkingHourCellStyle()
         {
             var headerWorkingHourFont = this.CreateHeaderWorkingHourFont();
@@ -321,10 +280,6 @@ namespace Fanex.NexHR.Services.ExportExcel
             return cellStyle;
         }
 
-        /// <summary>
-        /// Creates the header cell style.
-        /// </summary>
-        /// <returns>The instance of ICellStyle.</returns>
         private ICellStyle CreateHeaderCellStyle()
         {
             var headerFont = this.CreateHeaderFont();

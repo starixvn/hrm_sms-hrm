@@ -47,40 +47,39 @@
         private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
         private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
 
-        private readonly IReportService _reportService;
-        private readonly IExportExcelService _exportService;
-        private readonly IRequestService _requestService;
-        private readonly ITeamService _teamService;
-        private readonly IOvertimeRequestService _overtimeService;
-        private readonly IEmployeeService _employeeService;
-        private readonly IWorkingCalendarService _workingCalendarService;
-        private readonly IDisciplineService _disciplineService;
-
-        private IExportService service;
-
-        public ExportController(
-            IReportService reportService = null,
-            IExportExcelService exportService = null,
-            IRequestService requestService = null,
-            ITeamService teamService = null,
-            IOvertimeRequestService overtimeService = null,
-            IEmployeeService employeeService = null,
-            IWorkingCalendarService workingCalendarService = null,
-            IDisciplineService disciplineService = null)
-        {
-            _reportService = reportService ?? new ReportService();
-            _exportService = exportService ?? new ExportExcelService();
-            _requestService = requestService ?? new RequestService();
-            _teamService = teamService ?? new TeamService();
-            _overtimeService = overtimeService ?? new OvertimeRequestService();
-            _employeeService = employeeService ?? new EmployeeService();
-            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            _disciplineService = disciplineService ?? new DisciplineService();
-        }
+        private readonly IReportService reportService;
+        private readonly IExportExcelService exportExcelService;
+        private readonly IRequestService requestService;
+        private readonly ITeamService teamService;
+        private readonly IOvertimeRequestService overtimeService;
+        private readonly IEmployeeService employeeService;
+        private readonly IWorkingCalendarService workingCalendarService;
+        private readonly IDisciplineService disciplineService;
+        private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null)
         {
+        }
+
+        public ExportController(
+            IReportService reportService,
+            IExportExcelService exportExcelService,
+            IRequestService requestService,
+            ITeamService teamService,
+            IOvertimeRequestService overtimeService,
+            IEmployeeService employeeService,
+            IWorkingCalendarService workingCalendarService,
+            IDisciplineService disciplineService)
+        {
+            this.reportService = reportService ?? new ReportService();
+            this.exportExcelService = exportExcelService ?? new ExportExcelService();
+            requestService = requestService ?? new RequestService();
+            teamService = teamService ?? new TeamService();
+            overtimeService = overtimeService ?? new OvertimeRequestService();
+            employeeService = employeeService ?? new EmployeeService();
+            workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            disciplineService = disciplineService ?? new DisciplineService();
         }
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
@@ -108,10 +107,10 @@
                 IsLocal = model.IsLocal
             };
 
-            IList<TotalWorkingHours> totalWorkingHours = _reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
+            IList<TotalWorkingHours> totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
-            service = new TotalWorkingHourExportService(totalWorkingHours, model.FromDate, model.ToDate);
-            HSSFWorkbook hssfworkbook = service.Export();
+            exportService = new TotalWorkingHourExportService(totalWorkingHours, model.FromDate, model.ToDate);
+            HSSFWorkbook hssfworkbook = exportService.Export();
             return ExcelFile(hssfworkbook, fileName);
         }
 
@@ -130,9 +129,9 @@
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal
             };
-            var employeeAttendance = _reportService.GetEmployeeAttendanceReport(criteria);
+            var employeeAttendance = reportService.GetEmployeeAttendanceReport(criteria);
 
-            var hssfworkbook = _exportService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
+            var hssfworkbook = exportExcelService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -155,12 +154,12 @@
                 Role = string.Empty,
                 SupervisorID = null
             };
-            IList<LeaveSummary> leaveSummary = _reportService.GetAnnualLeaveBalanceReport(criteria);
+            IList<LeaveSummary> leaveSummary = reportService.GetAnnualLeaveBalanceReport(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
-            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(leaveSummary, teams);
+            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            var leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
-            var hssfworkbook = _exportService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
+            var hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -182,12 +181,12 @@
                 IsLocal = isLocal,
                 SupervisorId = null
             };
-            IList<LeaveSummary> leaveSummary = _reportService.GetUnpaidLeave(criteria);
+            IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
-            var leaveSummaryByTeamList = _reportService.GetLeaveByTeam(leaveSummary, teams);
+            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            var leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
-            var hssfworkbook = _exportService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
+            var hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -203,8 +202,8 @@
                 JobTitleId = jobTitle,
                 GroupIds = groups
             };
-            IList<OvertimeDaily> entity = _overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
-            var hssfworkbook = _exportService.ExportOvertimeReport(entity, fromDate, toDate);
+            IList<OvertimeDaily> entity = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
+            var hssfworkbook = exportExcelService.ExportOvertimeReport(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -224,7 +223,7 @@
                     Status = null,
                     Role = this.CurrentUser.Roles
                 };
-                entity = this._overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
+                entity = this.overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
             else
             {
@@ -237,10 +236,10 @@
                     Status = null,
                     Role = this.CurrentUser.Roles
                 };
-                entity = this._overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
+                entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
-            var hssfworkbook = _exportService.ExportYearlyOvertimeReport(entity, year, calendar);
+            var hssfworkbook = exportExcelService.ExportYearlyOvertimeReport(entity, year, calendar);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -259,9 +258,9 @@
                 IsLocalUser = model.IsLocal
             };
 
-            IList<Employee> employees = _employeeService.GetEmployees(criteria);
+            IList<Employee> employees = employeeService.GetEmployees(criteria);
             string templatePath = Server.MapPath(EmployeeBasicInfoTemplatePath);
-            _exportService.ExportEmployeeBasicInfo(employees, templatePath);
+            exportExcelService.ExportEmployeeBasicInfo(employees, templatePath);
 
             return new EmptyResult();
         }
@@ -278,9 +277,9 @@
                 IsLocalUser = model.IsLocal
             };
 
-            IList<Employee> employees = _employeeService.GetEmployees(criteria);
+            IList<Employee> employees = employeeService.GetEmployees(criteria);
             string templatePath = Server.MapPath(EmployeeDetailsInfoTemplatePath);
-            _exportService.ExportEmployeeDetailsInfo(employees, templatePath);
+            exportExcelService.ExportEmployeeDetailsInfo(employees, templatePath);
 
             return new EmptyResult();
         }
@@ -297,8 +296,8 @@
                 JobTitleId = title,
                 IsLocal = null
             };
-            var entity = _workingCalendarService.GetWorkingCalendars(criteria);
-            var hssfworkbook = _exportService.ExportEmployeeWorkingCalendar(entity, fromDate, toDate);
+            var entity = workingCalendarService.GetWorkingCalendars(criteria);
+            var hssfworkbook = exportExcelService.ExportEmployeeWorkingCalendar(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -329,9 +328,9 @@
                 EmployeeID = empId,
                 Calendar = calendar.Value
             };
-            List<OvertimeExcelReport> entity = _overtimeService.OvertimeRecord(getOvertimeRecordCriteria).ToList();
+            List<OvertimeExcelReport> entity = overtimeService.OvertimeRecord(getOvertimeRecordCriteria).ToList();
 
-            var hssfworkbook = _exportService.ExportEmployeeOvertimeRecord(entity, calendar, fromDate, toDate);
+            var hssfworkbook = exportExcelService.ExportEmployeeOvertimeRecord(entity, calendar, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -355,8 +354,8 @@
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            _exportService.ExportWorkingTimeRequest(requestList);
+            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
+            exportExcelService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
@@ -381,8 +380,8 @@
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            _exportService.ExportWorkingTimeRequest(requestList);
+            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
+            exportExcelService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
@@ -405,8 +404,8 @@
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
-            IList<RequestEntity> requestList = _requestService.GetRequests(criteria);
-            _exportService.ExportWorkingTimeRequest(requestList);
+            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
+            exportExcelService.ExportWorkingTimeRequest(requestList);
 
             return new EmptyResult();
         }
@@ -418,9 +417,9 @@
                 Year = year
             };
 
-            IList<ManpowerModel> manpowers = _reportService.GetManpower(criteria);
+            IList<ManpowerModel> manpowers = reportService.GetManpower(criteria);
             string templatePath = Server.MapPath(ManpowerTemplatePath);
-            _exportService.ExportManpower(manpowers, year, templatePath);
+            exportExcelService.ExportManpower(manpowers, year, templatePath);
 
             return new EmptyResult();
         }
@@ -432,9 +431,9 @@
                 Year = year
             };
 
-            IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+            IList<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(criteria);
             string templatePath = Server.MapPath(ManpowerCategoryTemplatePath);
-            _exportService.ExportManpowerCategory(manpowers, year, templatePath);
+            exportExcelService.ExportManpowerCategory(manpowers, year, templatePath);
 
             return new EmptyResult();
         }
@@ -454,10 +453,10 @@
                 GroupName = model.TeamName
             };
 
-            IList<DisciplineSummaryModel> disciplines = _disciplineService.GetDisciplineSummary(criteria);
+            IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
             string templatePath = Server.MapPath(DisciplineSummaryTemplatePath);
-            _disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
+            disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
 
             return new EmptyResult();
         }
@@ -477,10 +476,10 @@
                 GroupName = model.TeamName
             };
 
-            IList<DisciplineDetailModel> disciplines = _disciplineService.GetDisciplineDetail(criteria);
+            IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
 
             string templatePath = Server.MapPath(DisciplineDetailTemplatePath);
-            _disciplineService.ExportDisciplineDetailReport(criteria, disciplines, templatePath);
+            disciplineService.ExportDisciplineDetailReport(criteria, disciplines, templatePath);
 
             return new EmptyResult();
         }
@@ -494,10 +493,10 @@
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
-            IList<SupervisorReportModel> supervisors = _reportService.GetSupervisorReport(criteria);
+            IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
 
             string templatePath = Server.MapPath(EmployeeSupervisorTemplatePath);
-            _exportService.ExportEmployeeSupervisor(supervisors, templatePath);
+            exportExcelService.ExportEmployeeSupervisor(supervisors, templatePath);
 
             return new EmptyResult();
         }
@@ -508,12 +507,29 @@
             {
                 GroupIds = model.SectionIds,
             };
-            IList<SectionSupervisorReportModel> supervisors = _reportService.GetSectionSupervisor(criteria);
+            IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
 
             string templatePath = Server.MapPath(SectionSupervisorTemplatePath);
-            _exportService.ExportSectionSupervisor(supervisors, templatePath);
+            exportExcelService.ExportSectionSupervisor(supervisors, templatePath);
 
             return new EmptyResult();
+        }
+
+        public ActionResult ExportTotalWorkingHourWeekly(TotalWorkingHourWeeklyViewModel model)
+        {
+            string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            var criteria = new GetTotalWorkingHourWeeklyCriteria()
+            {
+                EmpId = model.EmployeeId,
+                FromDate = DateTime.Parse(model.FromDate),
+                ToDate = DateTime.Parse(model.ToDate),
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal
+            };
+            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourWeekly(criteria);
+            exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHours);
+            HSSFWorkbook hssfworkbook = exportService.Export();
+            return ExcelFile(hssfworkbook, fileName);
         }
 
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)

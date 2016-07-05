@@ -7,23 +7,22 @@
 
     public class TotalWorkingHourMonthlyExportService : IExportService
     {
-        private readonly IList<TotalWorkingHourMonthly> totalWorkingHourMonthly;
+        private readonly IList<TotalWorkingHourMonthly> totalWorkingHours;
 
-        public TotalWorkingHourMonthlyExportService(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
+        public TotalWorkingHourMonthlyExportService(IList<TotalWorkingHourMonthly> totalWorkingHours)
         {
-            this.totalWorkingHourMonthly = totalWorkingHourMonthly ?? new List<TotalWorkingHourMonthly>();
+            this.totalWorkingHours = totalWorkingHours ?? new List<TotalWorkingHourMonthly>();
         }
 
         public TotalWorkingHourMonthlyExportService()
             : this(null)
-        { 
+        {
         }
 
         public HSSFWorkbook Export()
         {
-            var firstRecord = totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any() ? totalWorkingHourMonthly[0] : null;
-
-            var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourMonthly, firstRecord);
+            var firstRecord = totalWorkingHours != null && totalWorkingHours.Any() ? totalWorkingHours.First() : null;
+            var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHours, firstRecord);
             return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourMonthly();
         }
     }

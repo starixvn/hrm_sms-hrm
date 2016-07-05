@@ -81,9 +81,9 @@ $(document).ready(function () {
         // Allow: backspace, delete, tab, escape, and enter
         if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode === 13 ||
             // Allow: Ctrl+A
-			(event.keyCode === 65 && event.ctrlKey === true) ||
+            (event.keyCode === 65 && event.ctrlKey === true) ||
             // Allow: home, end, left, right
-			(event.keyCode >= 35 && event.keyCode <= 39)) {
+            (event.keyCode >= 35 && event.keyCode <= 39)) {
             // let it happen, don't do anything
             return;
         }
@@ -161,15 +161,15 @@ function floatingHeader() {
     $(".persist-area").each(function () {
         clonedHeaderRow = $(".persist-header", this);
         clonedHeaderRow
-			.before(clonedHeaderRow.clone())
-			.css("width", clonedHeaderRow.width())
-			.addClass("floatingHeader")
-			.removeClass("persist-header");
+            .before(clonedHeaderRow.clone())
+            .css("width", clonedHeaderRow.width())
+            .addClass("floatingHeader")
+            .removeClass("persist-header");
     });
 
     $(".content_scroll")
-		.scroll(updateTableHeaders)
-		.trigger("scroll");
+        .scroll(updateTableHeaders)
+        .trigger("scroll");
     $(window).resize(function () {
         updateTableHeaders();
     });
@@ -432,14 +432,14 @@ function getImage(text) {
 
 var dateFormat = function () {
     var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
-		timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
-		timezoneClip = /[^-+\dA-Z]/g,
-		pad = function (val, len) {
-		    val = String(val);
-		    len = len || 2;
-		    while (val.length < len) val = "0" + val;
-		    return val;
-		};
+        timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
+        timezoneClip = /[^-+\dA-Z]/g,
+        pad = function (val, len) {
+            val = String(val);
+            len = len || 2;
+            while (val.length < len) val = "0" + val;
+            return val;
+        };
 
     // Regexes and supporting functions are cached through closure
     return function (date, mask, utc) {
@@ -464,44 +464,44 @@ var dateFormat = function () {
         }
 
         var _ = utc ? "getUTC" : "get",
-			d = date[_ + "Date"](),
-			D = date[_ + "Day"](),
-			m = date[_ + "Month"](),
-			y = date[_ + "FullYear"](),
-			H = date[_ + "Hours"](),
-			M = date[_ + "Minutes"](),
-			s = date[_ + "Seconds"](),
-			L = date[_ + "Milliseconds"](),
-			o = utc ? 0 : date.getTimezoneOffset(),
-			flags = {
-			    d: d,
-			    dd: pad(d),
-			    ddd: dF.i18n.dayNames[D],
-			    dddd: dF.i18n.dayNames[D + 7],
-			    m: m + 1,
-			    mm: pad(m + 1),
-			    mmm: dF.i18n.monthNames[m],
-			    mmmm: dF.i18n.monthNames[m + 12],
-			    yy: String(y).slice(2),
-			    yyyy: y,
-			    h: H % 12 || 12,
-			    hh: pad(H % 12 || 12),
-			    H: H,
-			    HH: pad(H),
-			    M: M,
-			    MM: pad(M),
-			    s: s,
-			    ss: pad(s),
-			    l: pad(L, 3),
-			    L: pad(L > 99 ? Math.round(L / 10) : L),
-			    t: H < 12 ? "a" : "p",
-			    tt: H < 12 ? "am" : "pm",
-			    T: H < 12 ? "A" : "P",
-			    TT: H < 12 ? "AM" : "PM",
-			    Z: utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
-			    o: (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-			    S: ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
-			};
+            d = date[_ + "Date"](),
+            D = date[_ + "Day"](),
+            m = date[_ + "Month"](),
+            y = date[_ + "FullYear"](),
+            H = date[_ + "Hours"](),
+            M = date[_ + "Minutes"](),
+            s = date[_ + "Seconds"](),
+            L = date[_ + "Milliseconds"](),
+            o = utc ? 0 : date.getTimezoneOffset(),
+            flags = {
+                d: d,
+                dd: pad(d),
+                ddd: dF.i18n.dayNames[D],
+                dddd: dF.i18n.dayNames[D + 7],
+                m: m + 1,
+                mm: pad(m + 1),
+                mmm: dF.i18n.monthNames[m],
+                mmmm: dF.i18n.monthNames[m + 12],
+                yy: String(y).slice(2),
+                yyyy: y,
+                h: H % 12 || 12,
+                hh: pad(H % 12 || 12),
+                H: H,
+                HH: pad(H),
+                M: M,
+                MM: pad(M),
+                s: s,
+                ss: pad(s),
+                l: pad(L, 3),
+                L: pad(L > 99 ? Math.round(L / 10) : L),
+                t: H < 12 ? "a" : "p",
+                tt: H < 12 ? "am" : "pm",
+                T: H < 12 ? "A" : "P",
+                TT: H < 12 ? "AM" : "PM",
+                Z: utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
+                o: (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+                S: ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+            };
 
         return mask.replace(token, function ($0) {
             return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
@@ -528,12 +528,12 @@ dateFormat.masks = {
 // Internationalization strings
 dateFormat.i18n = {
     dayNames: [
-		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
-		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     ],
     monthNames: [
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
     ]
 };
 
@@ -559,12 +559,12 @@ jQuery.cookie = function (key, value, options) {
         value = String(value);
 
         return (document.cookie = [
-			encodeURIComponent(key), '=',
-			options.raw ? value : encodeURIComponent(value),
-			options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-			options.path ? '; path=' + options.path : '',
-			options.domain ? '; domain=' + options.domain : '',
-			options.secure ? '; secure' : ''
+            encodeURIComponent(key), '=',
+            options.raw ? value : encodeURIComponent(value),
+            options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+            options.path ? '; path=' + options.path : '',
+            options.domain ? '; domain=' + options.domain : '',
+            options.secure ? '; secure' : ''
         ].join(''));
     }
 
@@ -590,8 +590,8 @@ $.fn.insertAtCaret = function (myValue) {
             var endPos = this.selectionEnd;
             var scrollTop = this.scrollTop;
             this.value = this.value.substring(0, startPos)
-							+ myValue
-							+ this.value.substring(endPos, this.value.length);
+                            + myValue
+                            + this.value.substring(endPos, this.value.length);
             this.focus();
             this.selectionStart = startPos + myValue.length;
             this.selectionEnd = startPos + myValue.length;
@@ -678,9 +678,9 @@ function updateTableHeaders() {
 
         $(".persist-area").each(function () {
             var el = $(this),
-					offset = el.offset(),
-					scrollTop = $(window).scrollTop(),
-					floatingHeader = $(".floatingHeader", this)
+                    offset = el.offset(),
+                    scrollTop = $(window).scrollTop(),
+                    floatingHeader = $(".floatingHeader", this)
             if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
                 if (!isShowLeftMenu) {
                     floatingHeader.css({
@@ -771,7 +771,7 @@ $(function () {
 
 function floatThead(el) {
     $(el).floatThead({
-        scrollContainer: function($table){
+        scrollContainer: function ($table) {
             return $table.closest('.content_scroll');
         },
         position: 'fixed',

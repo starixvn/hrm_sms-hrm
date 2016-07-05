@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TotalWorkingHourMonthly.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2014.1.7">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Total Working Hour Monthly.
-    /// </summary>
     public class TotalWorkingHourMonthly
     {
         public string StaffId { get; set; }
