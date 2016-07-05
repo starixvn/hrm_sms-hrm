@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, actingButton, jsonToFullDateTime2, noInformation, reloadButtonText, _messages, dontBlock:true*/
+/*global _global, actingButton, noInformation, reloadButtonText, _messages, dontBlock:true*/
 /*exported index*/
 
 var rowIndex = 1;

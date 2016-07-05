@@ -44,6 +44,5 @@ function deleteMemo(id, allFiles, type) {
                 alert(response.Message);
             }
         });
-
     });
 }

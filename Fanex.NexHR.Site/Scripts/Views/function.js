@@ -1,29 +1,11 @@
 ﻿'use strict';
 /*global _global*/
 
-function query() {
-    var roleId = $('#Role').val();
-    $.ajax({
-        url: _global.root + 'Function/GetFunctionByRoleId',
-        type: 'GET',
-        dataType: 'html',
-        data: { roleId: roleId },
-        beforeSend: function () {
-
-        },
-        success: function (response) {
-            $('#list-functions').html(response);
-            $('#save').attr('disabled','disabled');
-            generateEventForCheckbox();
-        },
-        complete: function () {
-
-        }
-    });
+function CheckboxOnChange() {
+    $("#save").removeAttr('disabled');
 }
 
-function generateEventForCheckbox()
-{
+function generateEventForCheckbox() {
     var input = $('input');
     for (var i = 0, len = input.length; i < len; i++) {
         if (input[i].type === 'checkbox') {
@@ -32,9 +14,19 @@ function generateEventForCheckbox()
     }
 }
 
-function CheckboxOnChange()
-{
-    $("#save").removeAttr('disabled');
+function query() {
+    var roleId = $('#Role').val();
+    $.ajax({
+        url: _global.root + 'Function/GetFunctionByRoleId',
+        type: 'GET',
+        dataType: 'html',
+        data: { roleId: roleId },
+        success: function (response) {
+            $('#list-functions').html(response);
+            $('#save').attr('disabled', 'disabled');
+            generateEventForCheckbox();
+        }
+    });
 }
 
 function save() {

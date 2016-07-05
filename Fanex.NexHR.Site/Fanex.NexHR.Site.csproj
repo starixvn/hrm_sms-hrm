@@ -752,7 +752,6 @@
     <Content Include="Scripts\Views\Report\report.attendance.js" />
     <Content Include="Scripts\Views\employee.workingschedule.js" />
     <Content Include="Scripts\Views\Employee\employee.edit.js" />
-    <Content Include="Scripts\Views\employee.js" />
     <Content Include="Scripts\Views\home.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>

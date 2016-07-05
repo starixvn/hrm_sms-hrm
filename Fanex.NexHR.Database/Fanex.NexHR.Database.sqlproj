@@ -462,6 +462,7 @@
     <Build Include="dbo\Stored Procedures\Lookup_GetLookupData.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Support_TimeSheetInput.sql" />
+    <Build Include="dbo\Tables\Function.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

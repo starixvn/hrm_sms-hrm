@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, actingButton, jsonToFullDateTime2, noInformation, reloadButtonText, _messages, dontBlock:true*/
+/*global _global, actingButton, noInformation, reloadButtonText, _messages, dontBlock:true*/
 /*exported index*/
 
 //var nickName;
@@ -13,7 +13,8 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
         url: _global.root + "request/GetMessageDetailRequest",
         async: false,
         type: 'post',
-        data: { "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
+        data: {
+            "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
             "fromtime": fromTime, "totime": toTime,
             "createddate": createdDate, "fromshiftCode": fromShift,
             "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
@@ -128,51 +129,51 @@ function view() {
 
 $(document).ready(function () {
     $("#GroupId").multiselect();
-//    $("#Employee").autocomplete({
-//        source: function (request, response) {
-//            $.ajax({
-//                dataType: 'json',
-//                url: _global.root + 'ajax/getmembersbymanager',
-//                data: {
-//                    query: request.term,
-//                    $top: 10
-//                },
-//                success: function (data) {
-//                    response($.map(data, function (item) {
-//                        return {
-//                            label: item.NickName + ' (' + item.FullName + ')',
-//                            value: item.Id
-//                        };
-//                    }));
-//                }
-//            });
-//        },
-//        minLength: 1,
-//        select: function (event, ui) {
-//            if (ui.item != null) {
-//                nickName = ui.item.label;
-//                $('#EmpId').val(ui.item.value);
-//            }
-//        },
-//        focus: function (event, ui) {
-//            if (ui.item != null) {
-//                nickName = ui.item.label;
-//                $('#Employee').val(nickName);
-//                $('#EmpId').val(ui.item.value);
-//            }
-//            event.preventDefault();
-//        },
-//        change: function (event, ui) {
-//            if (ui.item != null) {
-//                nickName = ui.item.label;
-//                $('#Employee').val(nickName);
-//                $('#EmpId').val(ui.item.value);
-//            }
-//        },
-//        close: function () {
-//            $('#Employee').val(nickName);
-//        }
-//    });
+    //    $("#Employee").autocomplete({
+    //        source: function (request, response) {
+    //            $.ajax({
+    //                dataType: 'json',
+    //                url: _global.root + 'ajax/getmembersbymanager',
+    //                data: {
+    //                    query: request.term,
+    //                    $top: 10
+    //                },
+    //                success: function (data) {
+    //                    response($.map(data, function (item) {
+    //                        return {
+    //                            label: item.NickName + ' (' + item.FullName + ')',
+    //                            value: item.Id
+    //                        };
+    //                    }));
+    //                }
+    //            });
+    //        },
+    //        minLength: 1,
+    //        select: function (event, ui) {
+    //            if (ui.item != null) {
+    //                nickName = ui.item.label;
+    //                $('#EmpId').val(ui.item.value);
+    //            }
+    //        },
+    //        focus: function (event, ui) {
+    //            if (ui.item != null) {
+    //                nickName = ui.item.label;
+    //                $('#Employee').val(nickName);
+    //                $('#EmpId').val(ui.item.value);
+    //            }
+    //            event.preventDefault();
+    //        },
+    //        change: function (event, ui) {
+    //            if (ui.item != null) {
+    //                nickName = ui.item.label;
+    //                $('#Employee').val(nickName);
+    //                $('#EmpId').val(ui.item.value);
+    //            }
+    //        },
+    //        close: function () {
+    //            $('#Employee').val(nickName);
+    //        }
+    //    });
 
     $('input[type=text]').keypress(function (evt) {
         if (evt.keyCode === 13) {
@@ -214,9 +215,6 @@ $(document).ready(function () {
     view();
 });
 
-
-
 function index() {
     return rowIndex++;
 }
-

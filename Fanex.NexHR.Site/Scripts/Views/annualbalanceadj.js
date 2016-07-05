@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, _messages*/
+/*global _global*/
 
 var _checked = false;
 var _totalDays = 0;

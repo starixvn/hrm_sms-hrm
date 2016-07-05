@@ -72,10 +72,7 @@ function resetPassword() {
     var nickName = $("#NickName").val();
     confirm("Are you sure you want to reset " + nickName + "'s password?", function () {
         $.post(_global.root + 'Account/ResetPassword', { id: id }, function (response) {
-            if (response.IsSuccessful) {
-
-            }
-            else {
+            if (!response.IsSuccessful) {
                 alert(response.Message);
                 return;
             }
