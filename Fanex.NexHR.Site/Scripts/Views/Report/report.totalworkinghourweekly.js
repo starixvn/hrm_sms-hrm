@@ -35,5 +35,7 @@
         $("#btnExcel").on('click', function () {
             window.location.href = _global.root + 'Export/ExportTotalWorkingHourWeekly?' + $('form.form-filter').serialize();
         });
+
+        query();
     });
 })();

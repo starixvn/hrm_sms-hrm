@@ -74,12 +74,12 @@
         {
             this.reportService = reportService ?? new ReportService();
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            requestService = requestService ?? new RequestService();
-            teamService = teamService ?? new TeamService();
-            overtimeService = overtimeService ?? new OvertimeRequestService();
-            employeeService = employeeService ?? new EmployeeService();
-            workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            disciplineService = disciplineService ?? new DisciplineService();
+            this.requestService = requestService ?? new RequestService();
+            this.teamService = teamService ?? new TeamService();
+            this.overtimeService = overtimeService ?? new OvertimeRequestService();
+            this.employeeService = employeeService ?? new EmployeeService();
+            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            this.disciplineService = disciplineService ?? new DisciplineService();
         }
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
