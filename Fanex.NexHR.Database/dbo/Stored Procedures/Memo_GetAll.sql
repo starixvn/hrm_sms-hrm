@@ -2,7 +2,6 @@
 
 
 CREATE PROCEDURE [dbo].[Memo_GetAll]
-@content NVARCHAR, 
 @year int,
 @category int
 AS
@@ -24,7 +23,6 @@ FROM dbo.MEMO m WITH(NOLOCK)
 	INNER JOIN dbo.LookupData lk WITH(NOLOCK) on lk.id = m.Category
 WHERE year(m.SentDate) = @year
 AND Enabled = 1
-AND ((@content is NULL) OR (m.Subject LIKE '%'+@content+'%' OR m.Contents LIKE '%'+@content+'%'))
 AND (@category = -1 OR m.Category = @category)
 order by m.SentDate desc
 

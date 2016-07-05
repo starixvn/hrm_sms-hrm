@@ -2626,7 +2626,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to override.
+        ///   Looks up a localized string similar to Override.
         /// </summary>
         public static string Override {
             get {

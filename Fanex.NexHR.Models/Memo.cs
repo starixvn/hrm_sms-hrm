@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Memo.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web;
 
-    /// <summary>
-    /// Memo Class.
-    /// </summary>
     public class Memo : EntityBase<int>
     {
         [Required]

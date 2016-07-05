@@ -64,13 +64,10 @@
 
                 var result = commandService.Update(criteria);
 
-                if (result.IsSuccessful)
+                ViewBag.Updated = result.IsSuccessful;
+
+                if (!result.IsSuccessful)
                 {
-                    ViewBag.Updated = true;
-                }
-                else
-                {
-                    ViewBag.Updated = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
@@ -104,13 +101,11 @@
                 };
 
                 var result = commandService.Insert(criteria);
-                if (result.IsSuccessful)
+
+                ViewBag.Updated = result.IsSuccessful;
+
+                if (!result.IsSuccessful)
                 {
-                    ViewBag.Updated = true;
-                }
-                else
-                {
-                    ViewBag.Updated = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }

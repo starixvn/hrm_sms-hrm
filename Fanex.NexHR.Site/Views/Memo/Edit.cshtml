@@ -9,7 +9,8 @@
     @Url.CombresLink("memoeditjs")
 }
 @section Breadcrumb {
-    <a class="step">Company</a><a class="step" href="@Url.Action("Index", "memo")">Memo</a>
+    <a class="step">Company Space</a>
+    <a class="step" href="@Url.Action("Index", "memo")">Memo</a>
     <span class="step">Edit Memo "@Model.Subject"</span>
 }
 <h2>@Labels.EditMemo</h2>
@@ -29,9 +30,8 @@
         @Html.HiddenFor(model => model.AttachFile)
         @Html.HiddenFor(model => model.MemoType)
         @Html.Hidden("pathName", Model.Contents)
-        <!-- Gets replaced with TinyMCE, remember HTML in a textarea should be encoded -->
-        <div class="grid_19 formrow">
-            <div class="grid_2">
+        <div class="grid_20 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.Subject)
                 </div>
@@ -42,10 +42,8 @@
         </div>
         <div class="clear">
         </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.RefNo)
                 </div>
@@ -54,8 +52,8 @@
                 @Html.EditorFor(model => model.RefNo)
             </div>
         </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.Category)
                 </div>
@@ -66,10 +64,8 @@
         </div>
         <div class="clear">
         </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.ForInfo)
                 </div>
@@ -78,8 +74,8 @@
                 @Html.EditorFor(model => model.ForInfo)
             </div>
         </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.SentDate)
                 </div>
@@ -90,10 +86,8 @@
         </div>
         <div class="clear">
         </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.SentTo)
                 </div>
@@ -102,121 +96,104 @@
                 @Html.EditorFor(model => model.SentTo)
             </div>
         </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="grid_10 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.SentFrom)
                 </div>
             </div>
             <div class="grid_6">
                 @Html.EditorFor(model => model.SentFrom)
-                @Html.ValidationMessageFor(model => model.SentFrom)
             </div>
         </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
+        <div class="clear">
+        </div>
+        <div class="grid_20 formrow">
+            <div class="grid_3">
                 <div class="label">
                     @Html.LabelFor(model => model.SendMail)
                 </div>
             </div>
-            <div class="grid_6">
-                @Html.CheckBoxFor(model => model.SendMail)<label for="SendMail">@Labels.SendToAllEmployee</label>
+            <div class="input">
+                @Html.CheckBoxFor(model => model.SendMail)
                 @Html.ValidationMessageFor(model => model.SendMail)
             </div>
         </div>
         <div class="clear">
         </div>
-        <div class="space">
-        </div>
-        <div class="grid_19">
-            <div class="grid_2">
+        <div class="grid_20 formrow">
+            <div class="grid_3">
                 <br />
             </div>
             <div class="grid_16">
                 @{
                     var types = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "Upload", Value = "1", Selected = true},
-                        new SelectListItem() {Text = "FCK Editor", Value = "0"},
-                    };
+            {
+                new SelectListItem() {Text = "Upload", Value = "1", Selected = true},
+                new SelectListItem() {Text = "FCK Editor", Value = "0"},
+            };
                 }
                 @Html.RadioButtonList(model => model.MemoType, types)
             </div>
         </div>
         <div class="clear">
         </div>
-        <div class="space">
+        <div id="upload" class="formrow">
+            <div class="grid_3">
+                <br />
+            </div>
+            <div class="grid_16">
+                <input type="file" id="fileName" size="55" multiple />
+            </div>
         </div>
-        <div id="upload">
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div id="upload">
-                <div class="clear">
-                </div>
-                <div class="space">
-                </div>
-                <div class="grid_19 formrow">
-                    <div class="grid_2">
-                        <br />
-                    </div>
-                    <div class="grid_11">
-                        <input type="file" id="fileName" size="55" multiple />
-                    </div>
-                    <div class="grid_4">
-                        <input type="checkbox" id="override" size="55" />
-                        <span>override</span>
-                    </div>
+        <div class="clear">
+        </div>
+        <div class="grid_20 formrow js-override-block">
+            <div class="grid_3">
+                <div class="label">
+                    <label for="override">@Labels.Override</label>
                 </div>
             </div>
-            <div class="clear">
+            <div class="input">
+                <input id="override" type="checkbox">
             </div>
-            <div class="space">
+        </div>
+        <div class="clear">
+        </div>
+        <div id="attach" class="grid_20 formrow">
+            <div class="grid_3">
+                <br />
             </div>
-            <div id="attach" class="grid_20 formrow">
-                <div class="grid_2">
-                    <br />
+            <div class="grid_16">
+                <div id="allAttachFile">
                 </div>
-                <div class="grid_17">
-                    <div id="allAttachFile">
-                    </div>
-                </div>
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
+        </div>
+        <div class="clear">
         </div>
         <div id="content">
             <div class="grid_20 formrow">
-                <div class="grid_2">
+                <div class="grid_3">
                     <div class="label">
                         @Html.LabelFor(model => model.Contents)
                     </div>
                 </div>
-                <div class="grid_17">
+                <div class="grid_16">
                     @Html.TextAreaFor(model => model.Contents)
                 </div>
             </div>
         </div>
-        <div class="formrow">
-            <div class="grid_2">
-                <div class="label">
-                    &nbsp
-                </div>
+        <div class="clear">
+        </div>
+        <div class="grid_20 formrow">
+            <div class="grid_3">
+                <br />
             </div>
-            <div class="grid_17">
+            <div class="grid_16">
                 @Html.AntiForgeryToken()
                 <input type="submit" value="Save" id="saveMemo" class="button-primary submit" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-
-    @Html.ActionLink("Back to Memo list", "index")
-}
+                    }

@@ -1,23 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GetAllMemoCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.29">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Memo
+﻿namespace Fanex.NexHR.Criteria.Memo
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get All Memo Criteria.
-    /// </summary>
     public class GetAllMemoCriteria : CriteriaBase
     {
-        public string Content { get; set; }
-
         public int Year { get; set; }
 
         public int Category { get; set; }

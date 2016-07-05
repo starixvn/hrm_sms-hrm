@@ -1,23 +1,25 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="MemoViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Memo
+﻿namespace Fanex.NexHR.ViewModels.Memo
 {
-    /// <summary>
-    /// Memo ViewModel.
-    /// </summary>
+    using Fanex.NexHR.Models;
+    using System;
+    using System.Collections.Generic;
+
     public class MemoViewModel
     {
-        public string Content { get; set; }
+        public MemoViewModel()
+        {
+            MemoCategories = new List<LookupData>();
+            Memos = new List<Memo>();
+            Year = DateTime.Now.Year;
+            Category = -1;
+        }
 
         public int Year { get; set; }
 
         public int Category { get; set; }
+
+        public IList<LookupData> MemoCategories { get; set; }
+
+        public IList<Memo> Memos { get; set; }
     }
 }

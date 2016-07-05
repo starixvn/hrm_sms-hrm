@@ -298,7 +298,6 @@
     <resourceSet name="memoeditjs" type="js">
       <resource reference="sitejs" />
 
-      <resource path="~/scripts/views/memo.js" />
       <resource path="~/scripts/Tiny_mce/tiny_mce_src.js" />
       <resource path="~/scripts/views/memo.edit.js" />
     </resourceSet>

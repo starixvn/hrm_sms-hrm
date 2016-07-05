@@ -1,75 +1,121 @@
 ﻿'use strict';
-/*global _global,deleteMemoFile,initEditor,tinyMCE*/
+/*global _global,initEditor,tinyMCE*/
 /*exported deleteFile*/
 
-function removeAttachFile(filePath) {
-    var attachFiles = $("#AttachFile").val().split(";"),
-		attachFileRemain = "";
+var editMemo = (function ($) {
+    var me = {};
+    var urlRoot = "/";
+    var $attachedFileBlock, $memoType, $uploadBlock, $contentBlock,
+        $hiddenMemoType, $fileList, $overrideBlock, $errorBlock, $fileAttachContent;
 
-    for (var i = 0; i < attachFiles.length; i++) {
-        var attachFileItem = attachFiles[i];
+    var changeMemoType = function (value) {
+        if (value === "1") {
+            $uploadBlock.show();
+            $attachedFileBlock.show();
+            $overrideBlock.show();
+            $contentBlock.hide();
+        } else {
+            $uploadBlock.hide();
+            $attachedFileBlock.hide();
+            $overrideBlock.hide();
+            $contentBlock.show();
 
-        if (attachFileItem !== filePath) {
-            if (attachFileRemain === "") {
-                attachFileRemain = attachFileItem;
-            }
-            else {
-                attachFileRemain += ";" + attachFileItem;
-            }
+            $("#Contents_tbl").css("width", "612");
+            $("#Contents_ifr").css("height", "335");
         }
-    }
 
-    $("#AttachFile").val(attachFileRemain);
-}
+        $hiddenMemoType.val(value);
+    };
 
-function deleteFile(filePath, index) {
-    $("#file_" + index).remove();
-    removeAttachFile(filePath);
-    deleteMemoFile(filePath);
-}
+    var attachFile = function () {
+        $fileList.html("");
 
-function attachFile(attachPath) {
-    var attachFiles = $('#allAttachFile');
+        var attachPath = $fileAttachContent.val();
+        if (attachPath) {
+            var attachPathFiles = attachPath.split(";");
 
-    if (attachPath) {
-        var attachPathFiles = attachPath.split(";");
-
-        for (var i = 0; i < attachPathFiles.length; i++) {
-            var attachLink = attachPathFiles[i],
-				attachLinkSplit = attachLink.split('/'),
-				attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
-				pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
-								<a href="javascript:deleteFile(\'' + attachLink + '\', ' + i + ');">\
+            for (var i = 0; i < attachPathFiles.length; i++) {
+                var attachLink = attachPathFiles[i],
+                    attachLinkSplit = attachLink.split('/'),
+                    attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
+                    pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
+								<a href="javascript:;" class="js-link-delete-file" data-file-name="'+ attachLink + '" data-id="' + i + '">\
 									<span class="icon delete"></span>\
 								</a>\
-							</div>';
+							  </div>';
 
-            attachFiles.append(pattern);
+                $fileList.append(pattern);
+            }
         }
     }
-}
+
+    var initEvent = function () {
+        $memoType.change(function () {
+            var value = $(this).val();
+
+            changeMemoType(value);
+        });
+
+        $attachedFileBlock.on("click", ".js-link-delete-file", function () {
+            var $self = $(this);
+            var fileId = $self.data("id");
+            var fileName = $self.data("file-name");
+
+            $.post(urlRoot + 'file/Delete', { FileName: fileName }, function (response) {
+                if (response) {
+                    var attachFiles = $fileAttachContent.val().split(";"), attachFileRemain = "";
+
+                    for (var i = 0; i < attachFiles.length; i++) {
+                        var attachFileItem = attachFiles[i];
+
+                        if (attachFileItem !== fileName) {
+                            if (attachFileRemain === "") {
+                                attachFileRemain = attachFileItem;
+                            }
+                            else {
+                                attachFileRemain += ";" + attachFileItem;
+                            }
+                        }
+                    }
+
+                    $fileAttachContent.val(attachFileRemain);
+                    attachFile();
+                }
+            }).fail(function () {
+                $errorBlock.html("Fail to remove attached file!");
+            });
+        });
+    };
+
+    var initValue = function () {
+        $attachedFileBlock = $("#attach");
+        $fileList = $("#allAttachFile");
+        $fileAttachContent = $("#AttachFile");
+        $memoType = $("input[name=MemoType");
+        $uploadBlock = $("#upload");
+        $contentBlock = $("#content");
+        $hiddenMemoType = $("#MemoType");
+        $overrideBlock = $(".js-override-block");
+        $errorBlock = $("#error");
+    };
+
+    me.init = function (globalRoot) {
+        urlRoot = globalRoot;
+        initValue();
+        initEvent();
+
+        attachFile();
+        changeMemoType($hiddenMemoType.val());
+    };
+
+    return me;
+}(jQuery));
+
+$(document).ready(function () {
+    editMemo.init(_global.root);
+});
 
 var form;
-
-function changeType() {
-    if ($("#MemoType_1").attr("checked") === "checked") {
-        $("#content").hide();
-        $("#upload").show();
-        $("#MemoType").val("1");
-    }
-    else {
-        $("#content").show();
-        $("#upload").hide();
-        $("#MemoType").val("0");
-        $("#Contents_tbl").css("width", "612");
-        $("#Contents_ifr").css("height", "335");
-
-        if ($("#attachFile").children().length === 0) {
-            $("span.delete").hide();
-        }
-
-    }
-}
 
 function uploadComplete(evt) {
     if (evt.target.status === 200) {
@@ -190,38 +236,6 @@ $(document).ready(function () {
     var sentTo = $("#SentTo").val();
     var sentFrom = $("#SentFrom").val();
     var contents = $("#Contents").val();
-
-    $("#btnClear").click(function () {
-        $("#RefNo").val(refNo);
-        $("#Subject").val(subJect);
-        $("#ForInfo").val(forInfo);
-        $("#SentDate").val(sentDate);
-        $("#SentTo").val(sentTo);
-        $("#SentFrom").val(sentFrom);
-        $("#Contents").val(contents);
-    });
-
-    $("#MemoType_0, #MemoType_1").change(function () {
-        changeType();
-        $("#error").hide();
-    });
-
-    if ($("#MemoType").val() === "1") {
-        $("#MemoType_1").attr("checked", "checked");
-
-        if ($("#AttachFile").val().length > 0) {
-            $('#attach').show();
-            attachFile($("#AttachFile").val());
-        }
-        else {
-            $('#attach').hide();
-        }
-    }
-    else {
-        $("#MemoType_0").attr("checked", "checked");
-    }
-
-    changeType();
 
     $("form").submit(function (e) {
         var validate = validateForm();

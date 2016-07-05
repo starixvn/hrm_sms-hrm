@@ -1,48 +1,38 @@
 ﻿'use strict';
 /*global _global, autoIndex*/
-/*exported deleteMemo*/
 
-function deleteComplete(evt) {
-    if (evt.target.status === 200) {
-        if ($('#allAttachFile').children().length === 0) {
-            $('#attach').hide();
-            $("#AttachFile").val("");
-            $("#Contents").val("");
-        }
-    }
-}
+var Memo = (function ($) {
+    var me = {};
+    var urlRoot = "/";
 
-function uploadFailed() {
-}
+    var initEvent = function () {
+        $(".js-table-memo").on("click", ".js-link-delete-memo", function () {
+            var $self = $(this);
+            var memoId = $self.data("id");
 
-function deleteMemoFile(fileName) {
-    var fd = new FormData();
-    fd.append('fileName', fileName);
-
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", deleteComplete, false);
-    xhr.addEventListener("error", uploadFailed, false);
-    xhr.open("POST", _global.root + "file/Delete");
-    xhr.send(fd);
-}
-
-function deleteMemo(id, allFiles, type) {
-    confirm('Are you sure you want to delete this memo?', function () {
-        $.post(_global.root + 'Memo/deletememo', { id: id }, function (response) {
-            if (response.IsSuccessful) {
-                $('#row_' + id).remove();
-                autoIndex();
-                if (type === 1) {
-                    var attachFiles = allFiles.split(";");
-
-                    for (var i = 0; i < attachFiles.length; i++) {
-                        deleteMemoFile(attachFiles[i]);
+            confirm('Are you sure you want to delete this memo?', function () {
+                $.post(_global.root + 'Memo/deletememo', { id: memoId }, function (response) {
+                    if (response.IsSuccessful) {
+                        $('#row_' + memoId).remove();
+                        autoIndex();
                     }
-                }
-            }
-            else {
-                alert(response.Message);
-            }
+                    else {
+                        alert(response.Message);
+                    }
+                });
+            });
         });
-    });
-}
+    };
+
+    me.init = function (globalUrl) {
+        urlRoot = globalUrl;
+
+        initEvent();
+    };
+
+    return me;
+}(jQuery));
+
+$(document).ready(function () {
+    Memo.init();
+});

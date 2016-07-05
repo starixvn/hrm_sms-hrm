@@ -69,13 +69,11 @@
                 };
 
                 CommandResult result = commandService.Insert(criteria);
-                if (result.IsSuccessful)
+
+                ViewBag.Successed = result.IsSuccessful;
+
+                if (!result.IsSuccessful)
                 {
-                    ViewBag.Successed = true;
-                }
-                else
-                {
-                    ViewBag.Successed = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
@@ -128,13 +126,11 @@
                 };
 
                 CommandResult result = commandService.Update(criteria);
-                if (result.IsSuccessful)
+
+                ViewBag.Successed = result.IsSuccessful;
+
+                if (!result.IsSuccessful)
                 {
-                    ViewBag.Successed = true;
-                }
-                else
-                {
-                    ViewBag.Successed = false;
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
             }
