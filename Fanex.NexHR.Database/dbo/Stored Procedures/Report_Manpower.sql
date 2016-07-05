@@ -1,6 +1,5 @@
 ﻿-- [dbo].[Report_Manpower] 2015
-CREATE PROCEDURE [dbo].[Report_Manpower]
-	@Year INT
+CREATE PROCEDURE [dbo].[Report_Manpower] @Year INT
 AS
 /*
 Created: 20151030@Quinn.Vo
@@ -14,6 +13,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
 	DECLARE @Jan DATETIME
 		,@Feb DATETIME
 		,@Mar DATETIME
@@ -26,8 +26,9 @@ BEGIN
 		,@Oct DATETIME
 		,@Nov DATETIME
 		,@Dec DATETIME
+
 	SELECT @Jan = CAST(@Year AS VARCHAR(4)) + '/01/01'
-	SELECT @Feb = DATEADD(MM, 1, @Jan)
+		,@Feb = DATEADD(MM, 1, @Jan)
 		,@Mar = DATEADD(MM, 2, @Jan)
 		,@Apr = DATEADD(MM, 3, @Jan)
 		,@May = DATEADD(MM, 4, @Jan)
@@ -39,149 +40,304 @@ BEGIN
 		,@Nov = DATEADD(MM, 10, @Jan)
 		,@Dec = DATEADD(MM, 11, @Jan)
 
-	 SELECT 
-		g.GroupId
+	SELECT g.GroupId
 		,g.Code AS GroupCode
-		,g.Name AS GroupName
-		,SUM(CASE WHEN (DATEDIFF(MM, @Jan, e.ResignedDate) >= 0 
-				AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0
-				AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResigned
-		,SUM(CASE WHEN (DATEDIFF(MM, @Jan, e.ResignedDate) >= 0 
-				AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0 
-				AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResigned
-		,SUM(CASE WHEN (DATEDIFF(MM, @Jan, e.JoinedDate) >= 0 
-				AND DATEDIFF(MM, e.JoinedDate, @Dec) >= 0)
-			THEN 1 ELSE 0 END) AS NewHire
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUser
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jan) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedJan
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jan) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedJan
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Jan) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireJan
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Jan) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Jan, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserJan
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Feb) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedFeb
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Feb) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedFeb
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Feb) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireFeb
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Feb) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Feb, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserFeb
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Mar) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedMar
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Mar) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedMar
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Mar) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireMar
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Mar) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Mar, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserMar
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Apr) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedApr
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Apr) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedApr
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Apr) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireApr
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Apr) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Apr, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserApr
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @May) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedMay
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @May) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedMay
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @May) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireMay
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @May) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @May, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserMay
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jun) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedJun
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jun) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedJun
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Jun) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireJun
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Jun) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Jun, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserJun
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jul) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedJul
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Jul) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedJul
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Jul) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireJul
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Jul) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Jul, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserJul
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Aug) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedAug
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Aug) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedAug
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Aug) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireAug
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Aug) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Aug, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserAug
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Sep) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedSep
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Sep) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedSep
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Sep) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireSep
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Sep) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Sep, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserSep
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Oct) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedOct
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Oct) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedOct
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Oct) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireOct
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Oct) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Oct, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserOct
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Nov) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedNov
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Nov) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedNov
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Nov) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireNov
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Nov) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Nov, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserNov
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Dec) = 0 AND e.ConfirmedDate IS NULL) 
-			THEN 1 ELSE 0 END) AS ProbationResignedDec
-		,SUM(CASE WHEN (DATEDIFF(MM, e.ResignedDate, @Dec) = 0 AND e.ConfirmedDate IS NOT NULL) 
-			THEN 1 ELSE 0 END) AS ConfirmedResignedDec
-		,SUM(CASE WHEN (DATEDIFF(MM, e.JoinedDate, @Dec) = 0) 
-			THEN 1 ELSE 0 END) AS NewHireDec
-		,SUM(CASE WHEN (
-				DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
-				AND (e.ResignedDate IS NULL OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0)) 
-			THEN 1 ELSE 0 END) AS ActiveUserDec
+		,g.[Name] AS GroupName
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, @Jan, e.ResignedDate) >= 0
+					AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResigned
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, @Jan, e.ResignedDate) >= 0
+					AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResigned
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, @Jan, e.JoinedDate) >= 0
+					AND DATEDIFF(MM, e.JoinedDate, @Dec) >= 0 THEN 1
+				ELSE 0
+				END) AS NewHire
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUser
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jan) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedJan
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jan) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedJan
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jan) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireJan
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jan) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Jan, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserJan
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Feb) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedFeb
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Feb) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedFeb
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Feb) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireFeb
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Feb) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Feb, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserFeb
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Mar) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedMar
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Mar) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedMar
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Mar) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireMar
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Mar) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Mar, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserMar
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Apr) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedApr
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Apr) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedApr
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Apr) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireApr
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Apr) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Apr, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserApr
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @May) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedMay
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @May) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedMay
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @May) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireMay
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @May) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @May, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserMay
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jun) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedJun
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jun) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedJun
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jun) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireJun
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jun) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Jun, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserJun
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jul) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedJul
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Jul) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedJul
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jul) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireJul
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Jul) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Jul, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserJul
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Aug) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedAug
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Aug) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedAug
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Aug) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireAug
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Aug) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Aug, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserAug
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Sep) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedSep
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Sep) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedSep
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Sep) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireSep
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Sep) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Sep, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserSep
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Oct) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedOct
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Oct) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedOct
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Oct) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireOct
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Oct) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Oct, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserOct
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Nov) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedNov
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Nov) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedNov
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Nov) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireNov
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Nov) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Nov, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserNov
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Dec) = 0
+					AND e.ConfirmedDate IS NULL THEN 1
+				ELSE 0
+				END) AS ProbationResignedDec
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.ResignedDate, @Dec) = 0
+					AND e.ConfirmedDate IS NOT NULL THEN 1
+				ELSE 0
+				END) AS ConfirmedResignedDec
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Dec) = 0 THEN 1
+				ELSE 0
+				END) AS NewHireDec
+		,SUM(CASE 
+				WHEN DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
+					AND (
+						e.ResignedDate IS NULL
+						OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0
+						) THEN 1
+				ELSE 0
+				END) AS ActiveUserDec
 	FROM dbo.Employee AS e WITH (NOLOCK)
-	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	WHERE g.IsDeleted = 0
-	AND e.isDeleted = 0
-	AND e.Enabled = 1
-	GROUP BY g.GroupId, g.Code, g.Name
+		AND e.isDeleted = 0
+		AND e.[Enabled] = 1
+	GROUP BY g.GroupId
+		,g.Code
+		,g.[Name]
 END

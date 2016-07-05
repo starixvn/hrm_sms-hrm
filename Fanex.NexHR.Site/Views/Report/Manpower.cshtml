@@ -1,7 +1,4 @@
-﻿@using Fanex.NexHR.Core;
-@using Fanex.NexHR.ViewModels.Report;
-@using Fanex.NexHR.Models.Report;
-@model ManpowerViewModel
+﻿@model ManpowerViewModel
 @{
     ViewBag.Title = @Labels.ManpowerReport;
 }
@@ -38,51 +35,21 @@
 <table id="data" class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
-            <th rowspan="2">
-                #
-            </th>
-            <th rowspan="2">
-                @Labels.Team
-            </th>
-            <th colspan="4">
-                @Labels.TotalManpower
-            </th>
-            <th colspan="4">
-                Jan
-            </th>
-            <th colspan="4">
-                Feb
-            </th>
-            <th colspan="4">
-                Mar
-            </th>
-            <th colspan="4">
-                Apr
-            </th>
-            <th colspan="4">
-                May
-            </th>
-            <th colspan="4">
-                Jun
-            </th>
-            <th colspan="4">
-                Jul
-            </th>
-            <th colspan="4">
-                Aug
-            </th>
-            <th colspan="4">
-                Sep
-            </th>
-            <th colspan="4">
-                Oct
-            </th>
-            <th colspan="4">
-                Nov
-            </th>
-            <th colspan="4">
-                Dec
-            </th>
+            <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2">@Labels.Team</th>
+            <th colspan="4">@Labels.TotalManpower</th>
+            <th colspan="4">@Labels.Jan</th>
+            <th colspan="4">@Labels.Feb</th>
+            <th colspan="4">@Labels.Mar</th>
+            <th colspan="4">@Labels.Apr</th>
+            <th colspan="4">@Labels.May</th>
+            <th colspan="4">@Labels.Jun</th>
+            <th colspan="4">@Labels.Jul</th>
+            <th colspan="4">@Labels.Aug</th>
+            <th colspan="4">@Labels.Sep</th>
+            <th colspan="4">@Labels.Oct</th>
+            <th colspan="4">@Labels.Nov</th>
+            <th colspan="4">@Labels.Dec</th>
         </tr>
         <tr>
             @for (int i = 0; i <= 12; i++)
@@ -115,16 +82,16 @@
                     <td class="tooltip" title="@manpower.GroupName">
                         @manpower.GroupCode
                     </td>
-                    <td class="right">
+                    <td class="align-right">
                         @manpower.ProbationResigned
                     </td>
-                    <td class="right">
+                    <td class="align-right">
                         @manpower.ConfirmedResigned
                     </td>
-                    <td class="right">
+                    <td class="align-right">
                         @manpower.NewHire
                     </td>
-                    <td class="right">
+                    <td class="align-right">
                         @manpower.ActiveUser
                     </td>
                     @RenderCell(manpower.ProbationResignedJan, Model.Year, 1)
@@ -184,20 +151,20 @@
         }
     </tbody>
     <tfoot>
-        <tr class="footer">
-            <td colspan="2">
+        <tr class="footer summary">
+            <td colspan="2" class="align-right">
                 @Labels.Total
             </td>
-            <td class="right">
+            <td class="align-right">
                 @Model.Manpowers.Sum(t => t.ProbationResigned)
             </td>
-            <td class="right">
+            <td class="align-right">
                 @Model.Manpowers.Sum(t => t.ConfirmedResigned)
             </td>
-            <td class="right">
+            <td class="align-right">
                 @Model.Manpowers.Sum(t => t.NewHire)
             </td>
-            <td class="right">
+            <td class="align-right">
                 @Model.Manpowers.Sum(t => t.ActiveUser)
             </td>
             @RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedJan), Model.Year, 1)
@@ -266,7 +233,7 @@
         }
     }
 
-    <td class="right">
+    <td class="align-right">
         @display
     </td>
 }

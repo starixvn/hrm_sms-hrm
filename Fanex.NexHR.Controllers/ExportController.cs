@@ -8,6 +8,7 @@
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Discipline;
@@ -44,6 +45,7 @@
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
         private const string EmployeeSupervisorTemplatePath = @"~\ExcelTemplates\EmployeeSupervisorTemplate.xls";
         private const string SectionSupervisorTemplatePath = @"~\ExcelTemplates\SectionSupervisorTemplate.xls";
+        private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -411,18 +413,16 @@
 
         public ActionResult Manpower(int year)
         {
-            string fileName = "ManpowerReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
             var criteria = new GetManpowerCriteria()
             {
                 Year = year
             };
 
             IList<ManpowerModel> manpowers = _reportService.GetManpower(criteria);
+            string templatePath = Server.MapPath(ManpowerTemplatePath);
+            _exportService.ExportManpower(manpowers, year, templatePath);
 
-            var hssfworkbook = _exportService.ExportManpower(manpowers, year);
-
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult ManpowerCategory(int year)

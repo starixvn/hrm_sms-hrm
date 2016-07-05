@@ -43,7 +43,7 @@
 
         void ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors, string templatePath);
 
-        HSSFWorkbook ExportManpower(IList<ManpowerModel> manpowers, int year);
+        void ExportManpower(IList<ManpowerModel> manpowers, int year, string templatePath);
 
         HSSFWorkbook ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year);
     }

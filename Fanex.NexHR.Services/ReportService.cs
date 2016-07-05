@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.Common.Helper;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
@@ -15,8 +17,6 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class ReportService : BaseService, IReportService
     {
@@ -27,11 +27,10 @@
             this._reportRepository = new ReportRepository();
         }
 
-        public IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria) 
+        public IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TotalWorkingHours> totalWorkingHours = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 totalWorkingHours = _reportRepository.GetWorkingHoursList(criteria);
             }
@@ -41,9 +40,8 @@
 
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TotalWorkingHourMonthly> totalWorkingHours = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 totalWorkingHours = _reportRepository.GetTotalWorkingHourMonthly(criteria);
             }
@@ -53,9 +51,8 @@
 
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourDaily(GetTotalWorkingHourDailyCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TotalWorkingHourMonthly> totalWorkingHours = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 totalWorkingHours = _reportRepository.GetTotalWorkingHourMonthly(criteria);
             }
@@ -65,9 +62,8 @@
 
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TotalWorkingHourMonthly> totalWorkingHours = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 totalWorkingHours = _reportRepository.GetTotalWorkingHourWeekly(criteria);
             }
@@ -77,9 +73,8 @@
 
         public IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestsMonitoring> requestMonitoring = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 requestMonitoring = _reportRepository.GetRequestMonitoring(criteria);
             }
@@ -89,9 +84,8 @@
 
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<EmployeeAttendanceModel> employeeAttendance = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 employeeAttendance = _reportRepository.GetEmployeeAttendanceReport(criteria);
             }
@@ -101,9 +95,8 @@
 
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<LeaveSummary> annualLeaveBalance = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 annualLeaveBalance = _reportRepository.GetAnnualLeaveBalanceReport(criteria);
             }
@@ -113,9 +106,8 @@
 
         public IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<LeaveSummary> unpaidLeaves = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 unpaidLeaves = _reportRepository.GetUnpaidLeave(criteria);
             }
@@ -162,9 +154,8 @@
 
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<TimeRecordModel> timeRecords = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 timeRecords = _reportRepository.GetTimeRecords(criteria);
             }
@@ -175,7 +166,7 @@
         public IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria)
         {
             IList<WorkingCalendarSummary> calendars = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 calendars = _reportRepository.CalendarSummaryList(criteria);
             }
@@ -185,9 +176,8 @@
 
         public IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<SupervisorReportModel> supervisors = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 supervisors = _reportRepository.GetSupervisorReport(criteria);
             }
@@ -198,7 +188,7 @@
         public IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria)
         {
             IList<SectionSupervisorReportModel> supervisors = null;
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 supervisors = _reportRepository.GetSectionSupervisor(criteria);
             }
@@ -208,10 +198,8 @@
 
         public IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<ManpowerModel> manpowers = null;
-
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 manpowers = GetData<ManpowerModel>(criteria).ToList();
             }
@@ -221,10 +209,8 @@
 
         public IList<ManpowerCategoryModel> GetManpowerCategory(GetManpowerCategoryCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<ManpowerCategoryModel> manpowers = null;
-
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 manpowers = GetData<ManpowerCategoryModel>(criteria).ToList();
             }
@@ -235,7 +221,7 @@
         private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(
             IList<Team> teams)
         {
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList  = new List<LeaveSummaryByTeam>();
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = new List<LeaveSummaryByTeam>();
 
             if (teams.Count > 1 || (teams.Count == 1 && teams[0].Id == 11))
             {

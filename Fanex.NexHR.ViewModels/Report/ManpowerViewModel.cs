@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ManpowerViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.11.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Models;
 
     public class ManpowerViewModel
     {
