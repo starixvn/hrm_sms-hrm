@@ -11,7 +11,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
@@ -31,8 +30,6 @@
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
         private const int _RowStartBodyYearlyOvertimeReport = 5;
-        private const int _RowStartBodyManpower = 4;
-        private const int _RowStartBodyManpowerCategory = 4;
 
         private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
@@ -42,7 +39,6 @@
         private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
-        private const string _ManpowerCategoryFilePathExcelTemplate = "~\\ExcelTemplates\\ManpowerCategoryReportTemplate.xls";
 
         private const string _MsgLeave = "{1} ({0} days)";
         private const string _MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
@@ -93,9 +89,9 @@
             string fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
 
-            // Fill report title.
+            /// Fill report title.
             writer.CopyRows(0, 2);
-            // Fill report header.
+            /// Fill report header.
             writer.CopyRows(2, 1);
 
             FillContentRowSectionSupervisorReport(supervisors, ref writer);
@@ -199,11 +195,11 @@
                 reportTitle = Labels.ManpowerReportTitle + " " + year;
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Manpower Report");
 
-            // Fill report title.
+            /// Fill report title.
             writer.WriteRow(0, new object[] { reportTitle });
             writer.CopyRows(1, 1);
 
-            // Fill report header.
+            /// Fill report header.
             writer.CopyRows(2, 2);
 
             FillContentRowManpowerReport(manpowers, year, ref writer);
@@ -214,53 +210,25 @@
             writer.Render();
         }
 
-        public HSSFWorkbook ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year)
+        public void ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year, string templatePath)
         {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_ManpowerCategoryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
+            string fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd"),
+                reportTitle = Labels.ManpowerCategoryReportTitle + " " + year;
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Manpower Report");
 
-            var title = Labels.ManpowerCategoryReportTitle + " " + year;
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "ManpowerCategoryReport");
+            /// Fill report title.
+            writer.WriteRow(0, new object[] { reportTitle });
+            writer.CopyRows(1, 1);
 
-            var rowTitle = sheet.GetRow(0);
-            var cellTitle = rowTitle.GetCell(1);
-            cellTitle.SetCellValue(title);
+            /// Fill report header.
+            writer.CopyRows(2, 2);
 
-            //// render body
-            var rowIndex = _RowStartBodyManpowerCategory;
-            var index = 1;
-            var height = sheet.GetRow(_RowStartBodyAttendance).Height;
+            FillContentRowManpowerCategoryReport(manpowers, ref writer);
+            FillContentRowFooterManpowerCategoryReport(manpowers, ref writer);
+            writer.SyncColumnsWidth(10);
+            writer.CreateFreezePane(0, 4);
 
-            var totalManpower = new ManpowerCategoryModel();
-
-            foreach (ManpowerCategoryModel item in manpowers)
-            {
-                var rowCopy = _RowStartBodyManpower + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-
-                RenderBodyManpowerCategoryReport(row, item, index);
-                totalManpower = AddTotalManpowerCategory(totalManpower, item);
-                rowIndex++;
-                index++;
-            }
-
-            sheet.CopyRow(templateSheet, _RowStartBodyManpower + 2, rowIndex);
-            var totalrow = sheet.GetRow(rowIndex);
-            totalrow.Height = height;
-
-            RenderFooterManpowerCategoryReport(totalrow, totalManpower);
-
-            //// remove sheet & row template
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
+            writer.Render();
         }
 
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
@@ -788,9 +756,9 @@
             string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Basic Info");
 
-            // Fill report title.
+            /// Fill report title.
             writer.CopyRows(0, 2);
-            // Fill report header.
+            /// Fill report header.
             writer.CopyRows(2, 1);
 
             FillContentRowEmployeeBasicInfoReport(employees, ref writer);
@@ -805,9 +773,9 @@
             string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Details Info");
 
-            // Fill report title.
+            /// Fill report title.
             writer.CopyRows(0, 2);
-            // Fill report header.
+            /// Fill report header.
             writer.CopyRows(2, 1);
 
             FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
@@ -908,7 +876,7 @@
 
         private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            object record = CreateRecordEmployeeBasicInfoReport(employee, ref rowIndex);
+            object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
             if (rowIndex % 2 == 1)
             {
                 writer.WriteRow(3, record);
@@ -921,7 +889,7 @@
             rowIndex++;
         }
 
-        private object CreateRecordEmployeeBasicInfoReport(Employee employee, ref int rowIndex)
+        private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
             var record = new
             {
@@ -962,7 +930,7 @@
 
         private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            object record = CreateRecordEmployeeDetailsInfoReport(employee, ref rowIndex);
+            object record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
             if (rowIndex % 2 == 1)
             {
                 writer.WriteRow(3, record);
@@ -975,7 +943,7 @@
             rowIndex++;
         }
 
-        private object CreateRecordEmployeeDetailsInfoReport(Employee employee, ref int rowIndex)
+        private object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
         {
             var record = new
             {
@@ -1042,7 +1010,7 @@
 
         private void FillRowEmployeeSupervisorReport(SupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            object record = CreateRecordEmployeeSupervisorReport(supervisor, ref rowIndex);
+            object record = CreateRecordEmployeeSupervisorReport(supervisor, rowIndex);
             if (rowIndex % 2 == 1)
             {
                 writer.WriteRow(3, record);
@@ -1055,7 +1023,7 @@
             rowIndex++;
         }
 
-        private object CreateRecordEmployeeSupervisorReport(SupervisorReportModel supervisor, ref int rowIndex)
+        private object CreateRecordEmployeeSupervisorReport(SupervisorReportModel supervisor, int rowIndex)
         {
             var record = new
             {
@@ -1090,7 +1058,7 @@
 
         private void FillRowSectionSupervisorReport(SectionSupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            object record = CreateRecordSectionSupervisorReport(supervisor, ref rowIndex);
+            object record = CreateRecordSectionSupervisorReport(supervisor, rowIndex);
             if (rowIndex % 2 == 1)
             {
                 writer.WriteRow(3, record);
@@ -1103,7 +1071,7 @@
             rowIndex++;
         }
 
-        private object CreateRecordSectionSupervisorReport(SectionSupervisorReportModel supervisor, ref int rowIndex)
+        private object CreateRecordSectionSupervisorReport(SectionSupervisorReportModel supervisor, int rowIndex)
         {
             var record = new
             {
@@ -1135,7 +1103,7 @@
 
         private void FillRowManpowerReport(ManpowerModel manpower, int year, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            object record = CreateRecordManpowerReport(manpower, year, ref rowIndex);
+            object record = CreateRecordManpowerReport(manpower, year, rowIndex);
             if (rowIndex % 2 == 1)
             {
                 writer.WriteRow(4, record);
@@ -1148,7 +1116,36 @@
             rowIndex++;
         }
 
-        private object CreateRecordManpowerReport(ManpowerModel manpower, int year, ref int rowIndex)
+        private dynamic GetValueForCellManpower(int value, int year, int month)
+        {
+            bool isShowValue = false;
+            dynamic result;
+
+            if (DateTime.Now.Year > year)
+            {
+                isShowValue = true;
+            }
+            else if (DateTime.Now.Year == year)
+            {
+                if (DateTime.Now.Month >= month)
+                {
+                    isShowValue = true;
+                }
+            }
+
+            if (isShowValue)
+            {
+                result = value;
+            }
+            else
+            {
+                result = "-";
+            }
+
+            return result;
+        }
+
+        private object CreateRecordManpowerReport(ManpowerModel manpower, int year, int rowIndex)
         {
             int month = 1;
             var record = new
@@ -1277,6 +1274,83 @@
         }
 
         #endregion Manpower
+
+        #region Manpower Category
+
+        private void FillContentRowManpowerCategoryReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (ManpowerCategoryModel manpower in manpowers)
+            {
+                FillRowManpowerCategoryReport(manpower, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRowManpowerCategoryReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecordManpowerCategoryReport(manpower, rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(4, record);
+            }
+            else
+            {
+                writer.WriteRow(5, record);
+            }
+
+            rowIndex++;
+        }
+
+        private object CreateRecordManpowerCategoryReport(ManpowerCategoryModel manpower, int rowIndex)
+        {
+            var record = new
+            {
+                Count = rowIndex,
+                GroupCode = manpower.GroupCode,
+                TotalExpat = manpower.TotalExpat,
+                TotalLocal = manpower.TotalLocal,
+                Total = manpower.Total,
+                Management = manpower.Management,
+                AVGManagement = (manpower.Management * 1.00) / manpower.Total,
+                ExecutiveWithPosition = manpower.ExecutiveWithPosition,
+                AVGExecutiveWithPosition = (manpower.ExecutiveWithPosition * 1.00) / manpower.Total,
+                Executive = manpower.Executive,
+                AVGExecutive = (manpower.Executive * 1.00) / manpower.Total,
+                Staff = manpower.Staff,
+                AVGStaff = (manpower.Staff * 1.00) / manpower.Total,
+                Worker = manpower.Worker,
+                AVGWorker = (manpower.Worker * 1.00) / manpower.Total
+            };
+
+            return record;
+        }
+
+        private void FillContentRowFooterManpowerCategoryReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
+        {
+            var record = new
+            {
+                Count = Labels.Total,
+                GroupCode = string.Empty,
+                TotalExpat = manpowers.Sum(t => t.TotalExpat),
+                TotalLocal = manpowers.Sum(t => t.TotalLocal),
+                Total = manpowers.Sum(t => t.Total),
+                Management = manpowers.Sum(t => t.Management),
+                AVGManagement = (manpowers.Sum(t => t.Management) * 1.00) / manpowers.Sum(t => t.Total),
+                ExecutiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition),
+                AVGExecutiveWithPosition = (manpowers.Sum(t => t.ExecutiveWithPosition) * 1.00) / manpowers.Sum(t => t.Total),
+                Executive = manpowers.Sum(t => t.Executive),
+                AVGExecutive = (manpowers.Sum(t => t.Executive) * 1.00) / manpowers.Sum(t => t.Total),
+                Staff = manpowers.Sum(t => t.Staff),
+                AVGStaff = (manpowers.Sum(t => t.Staff) * 1.00) / manpowers.Sum(t => t.Total),
+                Worker = manpowers.Sum(t => t.Worker),
+                AVGWorker = (manpowers.Sum(t => t.Worker) * 1.00) / manpowers.Sum(t => t.Total)
+            };
+
+            writer.WriteRow(6, record);
+        }
+
+        #endregion Manpower Category
 
         private void SetNumberValue(ICell cell, float value)
         {
@@ -1532,89 +1606,6 @@
             }
 
             return detail;
-        }
-
-        private dynamic GetValueForCellManpower(int value, int year, int month)
-        {
-            bool isShowValue = false;
-            dynamic result;
-
-            if (DateTime.Now.Year > year)
-            {
-                isShowValue = true;
-            }
-            else if (DateTime.Now.Year == year)
-            {
-                if (DateTime.Now.Month >= month)
-                {
-                    isShowValue = true;
-                }
-            }
-
-            if (isShowValue)
-            {
-                result = value;
-            }
-            else
-            {
-                result = "-";
-            }
-
-            return result;
-        }
-
-        private void RenderBodyManpowerCategoryReport(IRow row, ManpowerCategoryModel item, int index)
-        {
-            var columnIndex = 0;
-
-            row.GetCell(columnIndex++).SetCellValue(index);
-            row.GetCell(columnIndex++).SetCellValue(item.GroupCode);
-
-            row.GetCell(columnIndex++).SetCellValue(item.TotalExpat);
-            row.GetCell(columnIndex++).SetCellValue(item.TotalLocal);
-            row.GetCell(columnIndex++).SetCellValue(item.Total);
-            row.GetCell(columnIndex++).SetCellValue(item.Management);
-            row.GetCell(columnIndex++).SetCellValue(item.Management * 1.00 / item.Total);
-            row.GetCell(columnIndex++).SetCellValue(item.ExecutiveWithPosition);
-            row.GetCell(columnIndex++).SetCellValue(item.ExecutiveWithPosition * 1.00 / item.Total);
-            row.GetCell(columnIndex++).SetCellValue(item.Executive);
-            row.GetCell(columnIndex++).SetCellValue(item.Executive * 1.00 / item.Total);
-            row.GetCell(columnIndex++).SetCellValue(item.Staff);
-            row.GetCell(columnIndex++).SetCellValue(item.Staff * 1.00 / item.Total);
-            row.GetCell(columnIndex++).SetCellValue(item.Worker);
-            row.GetCell(columnIndex++).SetCellValue(item.Worker * 1.00 / item.Total);
-        }
-
-        private void RenderFooterManpowerCategoryReport(IRow totalrow, ManpowerCategoryModel totalManpower)
-        {
-            var columnIndex = 2;
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.TotalExpat);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.TotalLocal);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Total);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Management);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Management * 1.00 / totalManpower.Total);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.ExecutiveWithPosition);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.ExecutiveWithPosition * 1.00 / totalManpower.Total);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Executive);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Executive * 1.00 / totalManpower.Total);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Staff);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Staff * 1.00 / totalManpower.Total);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Worker);
-            totalrow.GetCell(columnIndex++).SetCellValue(totalManpower.Worker * 1.00 / totalManpower.Total);
-        }
-
-        private ManpowerCategoryModel AddTotalManpowerCategory(ManpowerCategoryModel totalManpower, ManpowerCategoryModel manpower)
-        {
-            totalManpower.TotalExpat += manpower.TotalExpat;
-            totalManpower.TotalLocal += manpower.TotalLocal;
-            totalManpower.Total += manpower.Total;
-            totalManpower.Management += manpower.Management;
-            totalManpower.ExecutiveWithPosition += manpower.ExecutiveWithPosition;
-            totalManpower.Executive += manpower.Executive;
-            totalManpower.Staff += manpower.Staff;
-            totalManpower.Worker += manpower.Worker;
-
-            return totalManpower;
         }
     }
 }

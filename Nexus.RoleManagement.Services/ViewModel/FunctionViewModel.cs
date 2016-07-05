@@ -1,6 +1,7 @@
-﻿using System;
-namespace Nexus.RoleManagement.Services
+﻿namespace Nexus.RoleManagement.Services
 {
+    using System;
+
     [Serializable]
     public class FunctionViewModel : FunctionModel
     {

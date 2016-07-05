@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ManpowerCategoryModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.11.4">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Report
+﻿namespace Fanex.NexHR.Models
 {
     public class ManpowerCategoryModel
     {

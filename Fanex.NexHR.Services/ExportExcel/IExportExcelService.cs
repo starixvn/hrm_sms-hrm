@@ -5,7 +5,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Calendar;
@@ -45,6 +44,6 @@
 
         void ExportManpower(IList<ManpowerModel> manpowers, int year, string templatePath);
 
-        HSSFWorkbook ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year);
+        void ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year, string templatePath);
     }
 }

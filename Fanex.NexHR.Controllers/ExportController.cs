@@ -21,7 +21,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
@@ -46,6 +45,7 @@
         private const string EmployeeSupervisorTemplatePath = @"~\ExcelTemplates\EmployeeSupervisorTemplate.xls";
         private const string SectionSupervisorTemplatePath = @"~\ExcelTemplates\SectionSupervisorTemplate.xls";
         private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
+        private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
 
         private readonly IReportService _reportService;
         private readonly IExportExcelService _exportService;
@@ -427,18 +427,16 @@
 
         public ActionResult ManpowerCategory(int year)
         {
-            string fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
             var criteria = new GetManpowerCategoryCriteria()
             {
                 Year = year
             };
 
             IList<ManpowerCategoryModel> manpowers = _reportService.GetManpowerCategory(criteria);
+            string templatePath = Server.MapPath(ManpowerCategoryTemplatePath);
+            _exportService.ExportManpowerCategory(manpowers, year, templatePath);
 
-            var hssfworkbook = _exportService.ExportManpowerCategory(manpowers, year);
-
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
