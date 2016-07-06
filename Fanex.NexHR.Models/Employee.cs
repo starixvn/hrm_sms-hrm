@@ -150,7 +150,7 @@
         [Display(Name = "Default Calendar")]
         public bool IsDefaultSchedule { get; set; }
 
-        public List<SelectListItem> ListCountryCode { get; set; }
+        public IList<Country> Coutries { get; set; }
 
         public string CountryCode { get; set; }
 

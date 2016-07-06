@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UpdateEmployeeShiftCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Shift
+﻿namespace Fanex.NexHR.Criteria.Shift
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Update Employee Shift Criteria.
-    /// </summary>
     public class UpdateEmployeeShiftCriteria : CriteriaBase
     {
         public int EmpId { get; set; }

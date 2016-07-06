@@ -182,10 +182,11 @@ $(document).ready(function () {
             $.post(_global.root + 'Employee/Delete',
             { id: $('#Id').val(), resignedDate: resignedDate },
             function (response) {
-                if (response) {
+                if (response.IsSuccessful) {
                     document.location = _global.root + 'employee/usermanagement';
                 } else {
-                    alert(_messages.errorTryAgain);
+                    alert(response.Message);
+                    return;
                 }
             }).error(function () { alert(_messages.errorTryAgain); });
         });

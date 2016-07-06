@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetUserChangedShiftCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.30">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Calendar
+﻿namespace Fanex.NexHR.Criteria.Calendar
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get User Changed Shift Criteria.
-    /// </summary>
     public class GetUserChangedShiftCriteria : CriteriaBase
     {
         public DateTime ReportDate { get; set; }

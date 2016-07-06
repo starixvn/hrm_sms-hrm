@@ -1,6 +1,5 @@
 ﻿
 CREATE PROCEDURE [dbo].[Employee_Information_Insert]
-	-- Add the parameters for the stored procedure here
 	@fullName NVARCHAR(50)
 	,@nickName NVARCHAR(20)
 	,@domainUserName VARCHAR(50) = ''
@@ -17,13 +16,14 @@ CREATE PROCEDURE [dbo].[Employee_Information_Insert]
 	,@createBy INT
 	,@password NVARCHAR(100)
 	,@IsDefaultSchedule BIT
+	,@EmpId INT = 0 OUTPUT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
 /*
-Created: TOM
+Created: 20160705@Quinn.Vo
 Task: Insert an employee Information 
-DB: HRM_SMS
+DB: HRM
 Original: 
 
 Revisions:    
@@ -107,8 +107,6 @@ BEGIN
 		,@MemberRole
 		);
 
-	DECLARE @id INT;
-
 	IF @@ERROR <> 0
 	BEGIN
 		SELECT @ErrCode = 101
@@ -117,25 +115,26 @@ BEGIN
 		RETURN;
 	END;
 	ELSE
-		SET @id = CAST(SCOPE_IDENTITY() AS INT);
+	BEGIN
+		SET @EmpId = CAST(SCOPE_IDENTITY() AS INT);
+	END
 
 	INSERT INTO [dbo].[EmployeeSummary] (
 		[EmpId]
 		,IsDefaultSchedule
 		)
 	VALUES (
-		@id
+		@EmpId
 		,@IsDefaultSchedule
 		);
 
 	INSERT INTO [dbo].[EmployeeContract] ([EmpId])
-	VALUES (@id);
+	VALUES (@EmpId);
 
-	EXEC [EmployeeRole_Insert] @EmployeeId = @id
+	EXEC [EmployeeRole_Insert] @EmployeeId = @EmpId
 		,@RoleIds = @MemberRole
 		,@ModifiedBy = @createBy
 
-	--if @IsDefaultSchedule = 1 
 	BEGIN
 		INSERT INTO dbo.EmployeeDefaultShift (
 			[EmpID]
@@ -148,7 +147,7 @@ BEGIN
 			,[SunShift]
 			)
 		VALUES (
-			@id
+			@EmpId
 			,@monShift
 			,@tueShift
 			,@wedShift
@@ -159,7 +158,6 @@ BEGIN
 			);
 	END;
 
-	--	insert main group for employee
 	INSERT INTO dbo.EmployeeGroup (
 		GroupId
 		,EmpID
@@ -167,7 +165,7 @@ BEGIN
 		)
 	VALUES (
 		@mainGroupID
-		,@id
+		,@EmpId
 		,1
 		);
 
@@ -178,7 +176,7 @@ BEGIN
 	SET @fromdate = GETDATE();
 	SET @todate = DATEADD(DAY, - 1, DATEADD(MONTH, DATEDIFF(MONTH, 0, @fromdate) + 2, 0));
 
-	EXEC EmployeeCalendar_Insert @Empid = @id
+	EXEC EmployeeCalendar_Insert @Empid = @EmpId
 		,@fromdate = @fromdate
 		,@todate = @todate
 		,@ErrCode = @ErrCode OUTPUT
@@ -190,19 +188,19 @@ BEGIN
 			,@ErrMsg = N'Create member code "' + @code + '" failed.';
 
 		DELETE dbo.EmployeeDefaultShift
-		WHERE EmpID = @id;
+		WHERE EmpID = @EmpId;
 
 		DELETE dbo.EmployeeGroup
-		WHERE EmpID = @id;
+		WHERE EmpID = @EmpId;
 
 		DELETE dbo.[EmployeeSummary]
-		WHERE EmpID = @id;
+		WHERE EmpID = @EmpId;
 
 		DELETE [dbo].[EmployeeContract]
-		WHERE EmpID = @id;
+		WHERE EmpID = @EmpId;
 
 		DELETE dbo.Employee
-		WHERE EmpID = @id;
+		WHERE EmpID = @EmpId;
 	END;
 	ELSE
 		SELECT @ErrCode = 0

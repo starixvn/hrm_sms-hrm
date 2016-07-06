@@ -19,7 +19,7 @@
 @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @id = "formEditUser" }))
 {
     <div class="bunhat">
-        @Html.ValidationSummary(false)
+        @Html.ValidationSummary()
         @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
             <div class="success flash">
@@ -195,7 +195,7 @@
                         @Html.Label(Labels.Nationality)
                     </div>
                     <div class="input">
-                        @Html.DropDownListFor(x => x.CountryCode, Model.ListCountryCode, new { @class = "dropdown", @style = "width : 230px;" })
+                        @Html.DropDownListFor(x => x.CountryCode, new SelectList(ViewBag.JobTitles, "CountryCode", "CountryName"), new { @class = "dropdown", @style = "width : 230px;" })
                     </div>
                     <div class="clear">
                     </div>

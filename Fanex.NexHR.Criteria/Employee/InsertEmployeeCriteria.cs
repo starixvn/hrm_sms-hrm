@@ -1,22 +1,14 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertEmployeeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.28">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Employee
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
-    using System;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Attributes;
+    using System;
 
-    /// <summary>
-    /// Insert Employee Criteria.
-    /// </summary>
     public class InsertEmployeeCriteria : CriteriaBase
     {
+        [Output]
+        public int EmpId { get; set; }
+
         public string FullName { get; set; }
 
         public string NickName { get; set; }
@@ -56,7 +48,7 @@ namespace Fanex.NexHR.Criteria.Employee
 
         public override bool IsValid()
         {
-            return true;
+            return !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(NickName);
         }
     }
 }

@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetNewEmployeeCodeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Employee
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get New Employee Code Criteria.
-    /// </summary>
     public class GetNewEmployeeCodeCriteria : CriteriaBase
     {
         public override bool IsValid()

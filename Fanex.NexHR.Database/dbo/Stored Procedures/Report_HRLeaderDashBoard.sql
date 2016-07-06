@@ -288,7 +288,7 @@ GROUP BY
 	SELECT @TotalOvertimePendingByApprover = COUNT(1)
 	FROM dbo.OTMonthlyRequest WITH (NOLOCK)
 	WHERE ApproverId = @Empid
-	AND CurrentStatus = 3
+	AND CurrentStatus = 2
 	AND (ISNULL(NormalHours, 0) <> 0 OR ISNULL(OffHours, 0) <> 0 OR ISNULL(PublicHours, 0) <> 0)
 
 	INSERT INTO #Report(RoleId,RoleTitle,

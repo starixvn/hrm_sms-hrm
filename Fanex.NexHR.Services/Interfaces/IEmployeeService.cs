@@ -26,8 +26,6 @@
 
         IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria);
 
-        UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria);
-
         UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria);
 
         UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria);

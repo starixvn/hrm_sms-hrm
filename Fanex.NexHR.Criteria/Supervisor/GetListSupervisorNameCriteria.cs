@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetListSupervisorNameCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Supervisor
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get List Supervisor Name Criteria.
-    /// </summary>
     public class GetListSupervisorNameCriteria : CriteriaBase
     {
         public int EmpId { get; set; }

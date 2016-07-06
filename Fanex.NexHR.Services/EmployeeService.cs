@@ -73,12 +73,6 @@
             return employee;
         }
 
-        public UserLoginModel GetUserLoginByDomainUserName(GetUserLoginByDomainUserNameCriteria criteria)
-        {
-            UserLoginModel user = GetDataEntity<UserLoginModel>(criteria);
-            return user;
-        }
-
         public UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria)
         {
             UserLoginModel userLogin = GetDataEntity<UserLoginModel>(criteria);
@@ -117,7 +111,7 @@
                 employees = employeeRepository.GetEmployees(criteria);
             }
 
-            return employees;
+            return employees ?? new List<Employee>();
         }
 
         public IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria)
@@ -134,42 +128,24 @@
                 employees = employeeRepository.GetEmployeesByRole(criteria);
             }
 
-            return employees;
+            return employees ?? new List<Employee>();
         }
 
         public EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria)
         {
-            EmployeeShift employeeShift = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                employeeShift = this.GetDataEntity<EmployeeShift>(criteria);
-            }
-
+            EmployeeShift employeeShift = GetDataEntity<EmployeeShift>(criteria);
             return employeeShift;
         }
 
         public MySpaceModel GetMySpace(GetMySpaceCriteria criteria)
         {
-            MySpaceModel space = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                space = this.GetDataEntity<MySpaceModel>(criteria);
-            }
-
+            MySpaceModel space = GetDataEntity<MySpaceModel>(criteria);
             return space;
         }
 
         public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
         {
-            IList<DateTime> offAndHoliday = null;
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                offAndHoliday = this.GetData<DateTime>(criteria).ToList();
-            }
-
+            IList<DateTime> offAndHoliday = GetData<DateTime>(criteria).ToList();
             return offAndHoliday;
         }
 
@@ -180,11 +156,11 @@
 
             if (availableDates != null)
             {
-                for (var dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
+                for (DateTime dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
                 {
                     bool isIncludedToUnvailableDates = true;
 
-                    foreach (var availableDate in availableDates)
+                    foreach (DateTime availableDate in availableDates)
                     {
                         if (dateInRange.IsSameDateWith(availableDate))
                         {
@@ -205,91 +181,52 @@
 
         public IList<HRLeaderDashboardModel> GetHRLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<HRLeaderDashboardModel> dashboard = null;
-            if (criteria.IsValid())
-            {
-                dashboard = this.GetData<HRLeaderDashboardModel>(criteria).ToList();
-            }
-
+            IList<HRLeaderDashboardModel> dashboard = GetData<HRLeaderDashboardModel>(criteria).ToList();
             return dashboard;
         }
 
         public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<AnnualLeaveBalanceModel> annualLeaves = null;
-            if (criteria.IsValid())
-            {
-                annualLeaves = this.GetData<AnnualLeaveBalanceModel>(criteria).ToList();
-            }
-
+            IList<AnnualLeaveBalanceModel> annualLeaves = GetData<AnnualLeaveBalanceModel>(criteria).ToList();
             return annualLeaves;
         }
 
         public AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            AnnualLeaveBalanceModel annualLeave = null;
-            if (criteria.IsValid())
-            {
-                annualLeave = this.GetDataEntity<AnnualLeaveBalanceModel>(criteria);
-            }
-
+            AnnualLeaveBalanceModel annualLeave = GetDataEntity<AnnualLeaveBalanceModel>(criteria);
             return annualLeave;
         }
 
         public IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<UserChangedShift> users = null;
-            if (criteria.IsValid())
-            {
-                users = this.GetData<UserChangedShift>(criteria).ToList();
-            }
-
+            IList<UserChangedShift> users = GetData<UserChangedShift>(criteria).ToList();
             return users;
         }
 
         public IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<HalfDayOff> halfDayOffs = null;
-            if (criteria.IsValid())
-            {
-                halfDayOffs = this.GetData<HalfDayOff>(criteria).ToList();
-            }
-
+            IList<HalfDayOff> halfDayOffs = GetData<HalfDayOff>(criteria).ToList();
             return halfDayOffs;
         }
 
         public int GetDateRange(GetDateRangeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            int dateRange = 0;
-            if (criteria.IsValid())
-            {
-                dateRange = this.GetDataEntity<int>(criteria);
-            }
-
+            int dateRange = GetDataEntity<int>(criteria);
             return dateRange;
         }
 
         public IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<DateTime> unavailableDates = null;
-            if (criteria.IsValid())
-            {
-                unavailableDates = this.GetData<DateTime>(criteria).ToList();
-            }
-
+            IList<DateTime> unavailableDates = GetData<DateTime>(criteria).ToList();
             return unavailableDates;
         }
 
         public int ValidateUser(string code, string password)
         {
-            var criteria = new GetEmployeeByCodeCriteria() { Code = code };
+            var criteria = new GetEmployeeByCodeCriteria() 
+            { 
+                Code = code 
+            };
             Employee employee = GetEmployeeByCode(criteria);
             int retCode = ValidateUser(employee, password);
 
@@ -298,71 +235,37 @@
 
         public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
         {
-            IList<Country> countries = null;
-            if (criteria.IsValid())
-            {
-                countries = this.GetData<Country>(criteria).ToList();
-            }
-
+            IList<Country> countries = GetData<Country>(criteria).ToList();
             return countries;
         }
 
         public Country GetCountryByCode(GetCountryByCodeCriteria criteria)
         {
-            Country country = null;
-            if (criteria.IsValid())
-            {
-                country = this.GetDataEntity<Country>(criteria);
-            }
-
+            Country country = GetDataEntity<Country>(criteria);
             return country;
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<SupervisorModel> supervisors = null;
-            if (criteria.IsValid())
-            {
-                supervisors = this.GetData<SupervisorModel>(criteria).ToList();
-            }
-
+            IList<SupervisorModel> supervisors = GetData<SupervisorModel>(criteria).ToList();
             return supervisors;
         }
 
         public IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<SupervisorNameModel> supervisors = null;
-            if (criteria.IsValid())
-            {
-                supervisors = this.GetData<SupervisorNameModel>(criteria).ToList();
-            }
-
+            IList<SupervisorNameModel> supervisors = GetData<SupervisorNameModel>(criteria).ToList();
             return supervisors;
         }
 
         public IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<SupervisorNameModel> supervisors = null;
-            if (criteria.IsValid())
-            {
-                supervisors = GetData<SupervisorNameModel>(criteria).ToList();
-            }
-
+            IList<SupervisorNameModel> supervisors = GetData<SupervisorNameModel>(criteria).ToList();
             return supervisors;
         }
 
         public IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            if (criteria.IsValid())
-            {
-                return this.GetData<SupervisorNameModel>(criteria).ToList();
-            }
-
-            return null;
+            return GetData<SupervisorNameModel>(criteria).ToList();
         }
 
         public IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria)

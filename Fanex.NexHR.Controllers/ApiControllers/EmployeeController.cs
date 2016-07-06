@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.ApiControllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Web.Http;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
@@ -14,19 +9,24 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Web.Http;
 
     public class EmployeeController : ApiController
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeService employeeService;
 
         public EmployeeController()
             : this(null)
         {
         }
 
-        public EmployeeController(IEmployeeService employeeService = null)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _employeeService = employeeService ?? new EmployeeService();
+            this.employeeService = employeeService ?? new EmployeeService();
         }
 
         public IQueryable<Employee> GetEmployees(
@@ -51,9 +51,9 @@
                 TitleId = titleId,
                 IsLocalUser = isLocal
             };
-            var entityList = _employeeService.GetEmployees(getEmployeeCriteria);
+            IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria);
 
-            return entityList.AsQueryable();
+            return employees.AsQueryable();
         }
 
         public IList<Employee> GetSupervisors(string roleIds, string query, string excludeIds)
@@ -64,7 +64,7 @@
                 Query = query.Trim(),
                 RoleIds = roleIds
             };
-            IList<Employee> employees = _employeeService.GetEmployeesByRole(criteria);
+            IList<Employee> employees = employeeService.GetEmployeesByRole(criteria);
 
             return employees;
         }
@@ -85,7 +85,7 @@
                         FromDate = fromDate,
                         ToDate = toDate
                     };
-                    IEnumerable<DateTime> dates = _employeeService.GetOffDateAndHolidayDate(criteria);
+                    IEnumerable<DateTime> dates = employeeService.GetOffDateAndHolidayDate(criteria);
                     numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
                     break;
                 default:
@@ -95,7 +95,7 @@
                         FromDate = fromDate,
                         ToDate = toDate
                     };
-                    numberDays = _employeeService.GetDateRange(getDateRangeCriteria);
+                    numberDays = employeeService.GetDateRange(getDateRangeCriteria);
                     break;
             }
 
@@ -117,7 +117,7 @@
                     FromDate = fromDate,
                     ToDate = toDate
                 };
-                dates = _employeeService.GetOffDateAndHolidayDate(criteria);
+                dates = employeeService.GetOffDateAndHolidayDate(criteria);
             }
             else
             {
@@ -127,7 +127,7 @@
                     FromDate = fromDate,
                     ToDate = toDate
                 };
-                dates = _employeeService.GetUnavailableDates(getUnavailableDateCriteria);
+                dates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
             }
 
             return dates;
@@ -140,7 +140,7 @@
                 EmpId = empId,
                 Role = role
             };
-            IList<SupervisorModel> supervisors = _employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
+            IList<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisor(getEmployeeSupervisorCriteria);
 
             return supervisors;
         }
@@ -148,7 +148,7 @@
         public Employee GetEmployee(int id)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
-            Employee employee = _employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
 
             return employee;
         }
@@ -157,7 +157,7 @@
         public string GetNewEmployeeCode()
         {
             var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();
-            string newCode = _employeeService.NewEmployeeCode(getNewEmployeeCodeCriteria);
+            string newCode = employeeService.NewEmployeeCode(getNewEmployeeCodeCriteria);
 
             return newCode;
         }

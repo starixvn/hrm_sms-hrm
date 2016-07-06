@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ConfigSettings.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.14">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     using System.Configuration;
     using Fanex.Common;
 
-    /// <summary>
-    /// Config Settings.
-    /// </summary>
     public static class ConfigSettings
     {
         public static string EmailSetting

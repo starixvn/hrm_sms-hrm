@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="CreateEmployeeViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-namespace Fanex.NexHR.ViewModels.Employee
+﻿namespace Fanex.NexHR.ViewModels.Employee
 {
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// CreateEmployee ViewModel.
-    /// </summary>
     public class CreateEmployeeViewModel
     {
         [Required]
