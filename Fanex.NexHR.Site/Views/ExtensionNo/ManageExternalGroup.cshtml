@@ -3,7 +3,7 @@
     @Url.CombresLink("extensionnocss")
 }
 @section js{
-    @Url.CombresLink("extensionnojs")
+    @Url.CombresLink("externalgroupjs")
 }
 @{
     ViewBag.Title = Labels.ExternalGroup;
@@ -17,7 +17,7 @@
 <div class="button-icon">
     <span class="icon plus"></span><a href="#" id="btnNewExternalGroup">New External Group</a>
 </div>
-<table class="data" id="data">
+<table class="data js-external-group-table" id="data">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -40,7 +40,7 @@
                         <span class="groupName"> @item.TeamName</span>
                     </td>
                     <td>
-                        <a href="javascript:;" id="editExternal">
+                        <a href="javascript:;" class="js-link-edit-group" data-id="@item.TeamId" data-name="@item.TeamName">
                             <i class="fa fa-pencil fa-lg icon-edit"></i>
                         </a>
                     </td>
@@ -53,7 +53,7 @@
                         }
                         else
                         {
-                            <a href="javascript:;" id="deleteExternal">
+                            <a href="javascript:;" class="js-link-delete-group" data-id="@item.TeamId">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         }
@@ -75,23 +75,7 @@
                 Group Name
             </div>
             <div class="input">
-                <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-                <div class="clear">
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="dialog-form_edit" title="Update External Group" style="display: none">
-    <p class="validateTips"></p>
-    <form>
-        <div class="formrow">
-            <div class="label">
-                Group Name
-            </div>
-            <div class="input">
-                <input type="text" name="name" id="name_edit" class="text ui-widget-content ui-corner-all" />
+                <input type="text" name="GroupName" id="GroupName" class="text ui-widget-content ui-corner-all" />
                 <div class="clear">
                 </div>
             </div>

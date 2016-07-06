@@ -667,6 +667,11 @@
       <resource path="~/scripts/views/addextensionno.js" />
     </resourceSet>
 
+    <resourceSet name="externalgroupjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/external-group.js" />
+    </resourceSet>
+
     <resourceSet name="reportovertimerequestcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report.overtimerequest.css" />

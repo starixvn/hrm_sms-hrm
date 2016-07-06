@@ -9,7 +9,7 @@ var JobTitle = (function ($) {
     var urlRoot = "/";
     var messages = {};
 
-    function checkLength(obj, objectName, min, max) {
+    var checkLength = function (obj, objectName, min, max) {
         var valid = true;
 
         if (obj.val().length > max || obj.val().length < min) {
@@ -97,7 +97,6 @@ var JobTitle = (function ($) {
 
         dialogForm.dialog({
             autoOpen: false,
-            height: 220,
             width: 400,
             modal: true,
             buttons: {

@@ -281,6 +281,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />

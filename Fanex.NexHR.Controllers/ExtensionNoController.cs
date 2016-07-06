@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -12,6 +8,9 @@
     using Fanex.NexHR.ViewModels.ExtensionNumber;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class ExtensionNoController : BaseController
     {
@@ -35,15 +34,16 @@
         public ActionResult Index()
         {
             IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
-            var model = (from item in lstEntity
-                         group item by item.TeamName into g
-                         select new ExtensionNumberViewModel() { Name = g.Key, Extensions = g.ToList() }).ToList();
+            var model = new List<ExtensionNumberViewModel>();
+
+            model = (from item in lstEntity
+                     group item by item.TeamName into g
+                     select new ExtensionNumberViewModel() { Name = g.Key, Extensions = g.ToList() }).ToList();
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create()
         {
@@ -84,14 +84,13 @@
             return View();
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
-        public ActionResult Edit(bool isInternal, int extensionNoId)
+        public ActionResult Edit(bool isInternal, int employeeExtensionId)
         {
             var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
             {
                 IsInternal = isInternal,
-                EmployeeExtensionNoId = extensionNoId
+                EmployeeExtensionNoId = employeeExtensionId
             };
             ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
             var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
@@ -113,7 +112,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(ExtensionNoModel model)
@@ -156,18 +154,31 @@
             return View(model);
         }
 
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        public JsonResult DeleteExtensionNumber(int extId)
+        {
+            var criteria = new DeleteExtensionNumberMemberCriteria
+            {
+                ExtensionNumberId = extId
+            };
+            CommandResult result = commandService.Delete(criteria);
+            return Json(result);
+        }
+
+        #region External Group
+
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult ManageExternalGroup()
         {
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = false,
-                GroupID = null
-            };
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = false };
             IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
+
             return View(group);
         }
 
         [HttpGet]
+        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult GetGroupExtension(bool isInternal, int? groupId)
         {
             IList<SelectListItem> groups = null;
@@ -199,20 +210,6 @@
             return Json(groups, JsonRequestBehavior.AllowGet);
         }
 
-        /// [Authorize(Roles = "HR")]
-        [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult DeleteExtensionNumber(int extId)
-        {
-            var criteria = new DeleteExtensionNumberMemberCriteria
-            {
-                ExtensionNumberId = extId
-            };
-            CommandResult result = commandService.Delete(criteria);
-            return Json(result);
-        }
-
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult AddNewExternalGroup(string groupName)
@@ -225,32 +222,30 @@
             return Json(result);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult DeleteExternalGroup(int extId)
+        public JsonResult DeleteExternalGroup(int groupId)
         {
-            var criteria = new DeleteExternalGroupCriteria
-            {
-                ExternalId = extId
-            };
+            var criteria = new DeleteExternalGroupCriteria { ExternalId = groupId };
             CommandResult result = commandService.Delete(criteria);
+
             return Json(result);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult EditExternalGroup(int extId, string groupName)
+        public JsonResult EditExternalGroup(int groupId, string groupName)
         {
             var criteria = new UpdateExternalNumberCriteria
             {
-                ExternalId = extId,
+                ExternalId = groupId,
                 FullName = groupName
             };
             CommandResult result = commandService.Update(criteria);
             return Json(result);
         }
+
+        #endregion External Group
 
         private void CheckExternalEmployee(ExtensionNoModel model)
         {

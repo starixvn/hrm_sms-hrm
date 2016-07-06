@@ -20,7 +20,7 @@ SELECT * FROM
 		  ,COALESCE(ee.FullName,exm_1.FullName,exm_2.FullName) FullName
 		  ,COALESCE(ee.NickName,exm_1.NickName,exm_2.NickName) NickName
 		  ,COALESCE(exm_1.ExtensionNo,exm_2.ExtensionNo) [ExtensionNo]
-		  ,COALESCE(exm_1.ExtID,exm_2.ExtID) EmpExtID
+		  ,COALESCE(exm_1.ExtID,exm_2.ExtID) EmployeeExtensionId
 		  ,exg.IsInternal
 		  ,exg.[OrderNo] [OrderNoGroup]
 		  ,ROW_NUMBER() OVER(ORDER BY exg.[ExtID]) AS [OrderNoMember]
@@ -35,5 +35,5 @@ SELECT * FROM
 			ON exg.ExtID = exm_2.GroupID AND exg.IsInternal = 0 AND exm_2.IsGroup =0 AND exg.IsGroup =1
 	 WHERE COALESCE(ee.EmpID,exm_1.EmpID,exm_2.EmpID,-1)> 0 OR (exg.IsInternal = 0 AND  exg.IsGroup =1 )
 	) TBL
-	WHERE EmpExtID IS NOT NULL
+	WHERE EmployeeExtensionId IS NOT NULL
  ORDER BY [OrderNoGroup],[OrderNoMember]

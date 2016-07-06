@@ -17,6 +17,8 @@
 
         public string NickName { get; set; }
 
+        public int EmployeeExtensionId { get; set; }
+
         [Required]
         public string ExtensionNo { get; set; }
 

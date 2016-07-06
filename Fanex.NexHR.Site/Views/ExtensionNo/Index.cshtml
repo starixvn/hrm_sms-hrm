@@ -48,12 +48,12 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null)
+        @if (Model.Any())
         {
             int index = 1;
             foreach (ExtensionNumberViewModel item in Model)
             {
-                if (item.Extensions.Count > 0)
+                if (item.Extensions.Any())
                 {
                     <tr>
                         <td class="rowdivider highlight left" colspan="19">
@@ -79,7 +79,7 @@
                         @if (hasPermission)
                         {
                             <td>
-                                <a href="@Url.Action("Edit", "ExtensionNo", new { isInternal = ext.IsInternal, ExtensionNoId = ext.ExtensionNoId })">
+                                <a href="@Url.Action("Edit", "ExtensionNo", new { isInternal = ext.IsInternal, EmployeeExtensionId = ext.EmployeeExtensionId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                             </td>
