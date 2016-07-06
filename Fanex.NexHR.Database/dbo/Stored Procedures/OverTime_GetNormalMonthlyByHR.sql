@@ -1,14 +1,13 @@
 ﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR]
-	@SupervisorID INT=NULL,
 	@empid int = null,
 	@groupids varchar(max) = '',
 	@fromdate datetime,
 	@todate datetime,
 	@status varchar(max) = null,
 	@excludedEmpID int= null,
-	@role varchar(max) = '',
+	--@role varchar(max) = '',
 
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
@@ -36,53 +35,8 @@ IF ISNULL(@status,'') <>''
 	INSERT INTO #status  (Currentstatus)
 	SELECT val FROM fnc_strSplit (@status, ',')
 
-CREATE TABLE #RolesList (roleid TINYINT)
-DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
 
-IF @SupervisorID IS NOT NULL
-BEGIN 
-	SET @role = ISNULL(@role,'')
-	IF @role <>''
-		INSERT INTO #RolesList  (roleid)
-		SELECT val FROM fnc_strSplit (@role, ',')
-	
-	SET @role = 1
-	SELECT @role = Roles FROM dbo.Employee WITH(NOLOCK) WHERE EmpId = @SupervisorID
-
-	SELECT TOP 1 @role=Roles FROM dbo.Employee ee (NOLOCK) WHERE EmpId = @SupervisorID
-	
-	IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 6)
-		BEGIN 
-			IF @role LIKE '%6%'
-				SET @RoleType=6
-			ELSE
-				BEGIN
-					SELECT @ErrCode=100,@ErrMsg='You don''t have permission on this funcion.'
-					RETURN
-				END
-				--SET @RoleType=1 
-		END	
-	ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (3) )
-		BEGIN 
-			IF @role LIKE '%3%'
-				SET @RoleType=3
-			ELSE
-				BEGIN
-					SELECT @ErrCode=103,@ErrMsg='You don''t have permission on this funcion.'
-					RETURN
-				END
-				--SET @RoleType=1 
-		END
-	ELSE
-		SET @RoleType=1
-END
-ELSE 
-	BEGIN
-		SET @RoleType=1
-	END
-
-IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1)
-	AND EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 3))
+IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1))
 	BEGIN
 		DELETE #status WHERE Currentstatus IN (2,3)
 		INSERT #status (Currentstatus)
@@ -136,13 +90,11 @@ SET @SQL = 'SELECT
 	+'			ORDER BY r.Month DESC'
 	
 	IF @isDebug = 1 PRINT @SQL 
-	IF @isDebug = 1 PRINT @RoleType
 	EXEC (@SQL )
 
 SELECT @ErrCode=0,@ErrMsg=''
 	
 DROP TABLE #GroupsList
-DROP TABLE #RolesList
 DROP TABLE #status
 
 

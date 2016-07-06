@@ -29,14 +29,6 @@ BEGIN
 		,@HRStatus INT
 		,@ProcessedDate DATETIME
 
-	IF @RoleId NOT IN (2, 3, 6)
-	BEGIN
-		SET @ErrCode = 100
-		SET @ErrMsg = 'You don''t have permission on this function.'
-
-		RETURN
-	END
-
 	-- if status is not pending, show error
 	IF @ProcessedBy IS NULL
 	BEGIN

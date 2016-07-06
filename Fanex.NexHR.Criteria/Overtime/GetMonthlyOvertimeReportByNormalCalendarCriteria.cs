@@ -17,8 +17,6 @@ namespace Fanex.NexHR.Criteria.Overtime
     /// </summary>
     public class GetMonthlyOvertimeReportByNormalCalendarCriteria : CriteriaBase
     {
-        public int? SupervisorID { get; set; }
-
         [SpParam(SqlParamName = "empid")]
         public int? EmployeeId { get; set; }
 
@@ -31,8 +29,6 @@ namespace Fanex.NexHR.Criteria.Overtime
         public string Status { get; set; }
 
         public int ExcludedEmpID { get; set; }
-
-        public string Role { get; set; }
 
         public bool IsDebug { get; set; }
 

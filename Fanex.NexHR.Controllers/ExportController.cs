@@ -229,12 +229,10 @@
             {
                 var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
                 {
-                    SupervisorID = this.CurrentUser.Id,
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null,
-                    Role = this.CurrentUser.Roles
+                    Status = null
                 };
                 entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }

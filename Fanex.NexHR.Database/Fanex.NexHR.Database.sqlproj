@@ -281,7 +281,6 @@
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Delete_TmpLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\Country_GetByName.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_Information_update_razor.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_Set.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetAllByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />

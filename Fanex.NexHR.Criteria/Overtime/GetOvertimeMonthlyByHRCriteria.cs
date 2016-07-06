@@ -5,14 +5,10 @@
 
     public class GetOvertimeMonthlyByHRCriteria : CriteriaBase
     {
-        public int SupervisorID { get; set; }
-
         [SpParam(SqlParamName = "EmpID")]
         public int EmployeeId { get; set; }
 
         public DateTime Month { get; set; }
-
-        public string Role { get; set; }
 
         public bool IsDebug { get; set; }
 
@@ -23,7 +19,7 @@
 
         public override bool IsValid()
         {
-            return SupervisorID > 0 && EmployeeId > 0;
+            return EmployeeId > 0;
         }
     }
 }

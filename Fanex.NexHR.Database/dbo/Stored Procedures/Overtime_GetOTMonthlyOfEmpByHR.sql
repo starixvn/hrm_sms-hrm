@@ -1,10 +1,6 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE PROCEDURE [dbo].[Overtime_GetOTMonthlyOfEmpByHR]
-	@SupervisorID INT,
+﻿CREATE PROCEDURE [dbo].[Overtime_GetOTMonthlyOfEmpByHR]
 	@EmpID INT,
 	@Month datetime,
-	@role varchar(max) = '6',
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0
@@ -21,89 +17,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	CREATE TABLE #RolesList (roleid TINYINT)
-	DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
-
-	IF @SupervisorID IS NOT NULL
-	BEGIN 
-
-		SET @role = ISNULL(@role,'')
-		IF @role <>''
-			INSERT INTO #RolesList (roleid)
-			SELECT val FROM fnc_strSplit (@role, ',')
-		
-		SET @role = 1
-		SELECT @role = Roles FROM dbo.Employee WITH(NOLOCK) WHERE EmpId = @SupervisorID
-		
-		IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 6)
-			BEGIN 
-				IF @role LIKE '%6%'
-					SET @RoleType=6
-				ELSE
-					BEGIN
-						SELECT @ErrCode=101,@ErrMsg='You don''t have permission on this funcion.(6)'
-						PRINT @ErrMsg + @role
-						RETURN
-					END
-			END
-		ELSE IF 2=(SELECT COUNT(1) FROM #RolesList WHERE roleid in (2,3))
-			BEGIN 
-				IF @role LIKE '%2%' AND @role LIKE '%3%' 
-					SET @RoleType=23
-				ELSE IF @role LIKE '%2%'
-					SET @RoleType=2
-				ELSE IF @role LIKE '%3%'
-					SET @RoleType=3
-				ELSE
-					BEGIN
-						SELECT @ErrCode=102,@ErrMsg='You don''t have permission on this funcion.(2,3)'
-						PRINT @ErrMsg + @role
-						RETURN
-					END
-					--SET @RoleType=1
-			END
-		ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (2) )
-			BEGIN
-				 IF @role LIKE '%2%'
-					SET @RoleType=2
-				ELSE
-					BEGIN
-						SELECT @ErrCode=103,@ErrMsg='You don''t have permission on this funcion.(2)'
-						PRINT @ErrMsg + @role
-						RETURN
-					END
-					--SET @RoleType=1 
-			END
-		ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (3) )
-			BEGIN 
-				IF @role LIKE '%3%'
-					SET @RoleType=3
-				ELSE
-					BEGIN
-						SELECT @ErrCode=104,@ErrMsg='You don''t have permission on this funcion.(3)'
-						PRINT @ErrMsg
-						RETURN
-					END
-					--SET @RoleType=1 
-			END
-		ELSE
-			BEGIN
-				SET @RoleType=1
-				SELECT @ErrCode=105,@ErrMsg='You don''t have permission on this funcion.'
-				PRINT @ErrMsg + @role
-				RETURN
-			END
-	END
-	ELSE 
-		BEGIN
-			SET @RoleType=1
-			SELECT @ErrCode=106,@ErrMsg='You don''t have permission on this funcion.(1)'
-			PRINT @ErrMsg + @role
-			RETURN
-		END
-
-
+	
 	DECLARE @fromDate NVARCHAR(100),@toDate NVARCHAR(100)
 
 	SELECT @toDate = @Month, @fromDate = DATEADD(month,-1,@Month)

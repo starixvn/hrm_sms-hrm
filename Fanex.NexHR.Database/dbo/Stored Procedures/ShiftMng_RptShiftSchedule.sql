@@ -41,23 +41,6 @@ BEGIN
 		RETURN
 	END
 
-	IF @SupervisorID IS NOT NULL
-		IF NOT EXISTS (
-				SELECT TOP 1 1
-				FROM dbo.Employee ee(NOLOCK)
-				WHERE EmpId = @SupervisorID
-					AND (
-						Roles LIKE '%4%'
-						OR Roles LIKE '%6%'
-						)
-				)
-		BEGIN
-			SELECT @ErrCode = 102
-				,@ErrMsg = N'You don''t have permission on the funcion.'
-
-			RETURN
-		END
-
 	CREATE TABLE #GroupsList (GroupId INT)
 
 	IF ISNULL(@groupids, '') <> ''

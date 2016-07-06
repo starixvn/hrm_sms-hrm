@@ -7,7 +7,6 @@ CREATE PROCEDURE [dbo].[OverTime_GetRequestYearlyByHR]
 	@status varchar(max) = '4,6',
 	@excludedEmpID int= null,
 	@role varchar(max) = '6',
-
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0
@@ -61,12 +60,6 @@ BEGIN
 		BEGIN 
 			IF @role LIKE '%6%'
 				SET @RoleType=6
-			ELSE
-				BEGIN
-					SELECT @ErrCode=101,@ErrMsg='You don''t have permission on this funcion.(6)'
-					PRINT @ErrMsg + @role
-					RETURN
-				END
 		END
 	ELSE IF 2=(SELECT COUNT(1) FROM #RolesList WHERE roleid in (2,3))
 		BEGIN 
@@ -76,53 +69,18 @@ BEGIN
 				SET @RoleType=2
 			ELSE IF @role LIKE '%3%'
 				SET @RoleType=3
-			ELSE
-				BEGIN
-					SELECT @ErrCode=102,@ErrMsg='You don''t have permission on this funcion.(2,3)'
-					PRINT @ErrMsg + @role
-					RETURN
-				END
-				--SET @RoleType=1
 		END
 	ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (2) )
 		BEGIN
 			 IF @role LIKE '%2%'
 				SET @RoleType=2
-			ELSE
-				BEGIN
-					SELECT @ErrCode=103,@ErrMsg='You don''t have permission on this funcion.(2)'
-					PRINT @ErrMsg + @role
-					RETURN
-				END
-				--SET @RoleType=1 
 		END
 	ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (3) )
 		BEGIN 
 			IF @role LIKE '%3%'
 				SET @RoleType=3
-			ELSE
-				BEGIN
-					SELECT @ErrCode=104,@ErrMsg='You don''t have permission on this funcion.(3)'
-					PRINT @ErrMsg
-					RETURN
-				END
-				--SET @RoleType=1 
-		END
-	ELSE
-		BEGIN
-			SET @RoleType=1
-			SELECT @ErrCode=105,@ErrMsg='You don''t have permission on this funcion.'
-			PRINT @ErrMsg + @role
-			RETURN
 		END
 END
-ELSE 
-	BEGIN
-		SET @RoleType=1
-		SELECT @ErrCode=106,@ErrMsg='You don''t have permission on this funcion.(1)'
-		PRINT @ErrMsg + @role
-		RETURN
-	END
 
 IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1)
 	AND EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 3))

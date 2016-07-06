@@ -71,14 +71,6 @@ BEGIN
 		BEGIN
 			IF @role LIKE '%6%'
 				SET @RoleType = 6
-			ELSE
-			BEGIN
-				SELECT @ErrCode = 100
-					,@ErrMsg = 'You don''t have permission on this funcion.'
-
-				RETURN
-			END
-					--SET @RoleType=1 
 		END
 		ELSE IF 2 = (
 				SELECT COUNT(1)
@@ -108,14 +100,6 @@ BEGIN
 				IF ISNULL(@status, '') = ''
 					SET @status = '2,4,5'
 			END
-			ELSE
-			BEGIN
-				SELECT @ErrCode = 101
-					,@ErrMsg = 'You don''t have permission on this funcion.'
-
-				RETURN
-			END
-					--SET @RoleType=1
 		END
 		ELSE IF EXISTS (
 				SELECT TOP 1 1
@@ -130,14 +114,6 @@ BEGIN
 				IF ISNULL(@status, '') = ''
 					SET @status = '1,2,3'
 			END
-			ELSE
-			BEGIN
-				SELECT @ErrCode = 102
-					,@ErrMsg = 'You don''t have permission on this funcion.'
-
-				RETURN
-			END
-					--SET @RoleType=1 
 		END
 		ELSE IF EXISTS (
 				SELECT TOP 1 1
@@ -152,14 +128,6 @@ BEGIN
 				IF ISNULL(@status, '') = ''
 					SET @status = '2,4,5'
 			END
-			ELSE
-			BEGIN
-				SELECT @ErrCode = 103
-					,@ErrMsg = 'You don''t have permission on this funcion.'
-
-				RETURN
-			END
-					--SET @RoleType=1 
 		END
 		ELSE
 			SET @RoleType = 1

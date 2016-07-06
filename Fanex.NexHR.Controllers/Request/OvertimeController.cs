@@ -316,12 +316,10 @@
             {
                 var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
                 {
-                    SupervisorID = CurrentUser.Id,
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null,
-                    Role = CurrentUser.Roles
+                    Status = null
                 };
                 listEntity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
@@ -335,10 +333,8 @@
         {
             var criteria = new GetOvertimeDailyReportCriteria
             {
-                SupervisorID = CurrentUser.Id,
                 EmpId = empId,
                 Month = Convert.ToDateTime(requestDate).Date,
-                Role = CurrentUser.Roles,
                 IsNormal = calendar == 0
             };
 

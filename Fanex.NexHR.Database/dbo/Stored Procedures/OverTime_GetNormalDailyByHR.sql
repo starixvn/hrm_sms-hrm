@@ -1,9 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[OverTime_GetNormalDailyByHR]
-	@SupervisorID INT,
 	@EmpID INT,
 	@Month datetime,
-	@role varchar(max) = '6',
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0
@@ -20,49 +18,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	CREATE TABLE #RolesList (roleid INT)
-	DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
-
-	IF @SupervisorID IS NOT NULL
-	BEGIN 
-
-		SET @role = ISNULL(@role,'')
-		IF @role <>''
-			INSERT INTO #RolesList (roleid)
-			SELECT val FROM fnc_strSplit (@role, ',')
-		
-		SET @role = 1
-		SELECT @role = Roles FROM dbo.Employee WITH(NOLOCK) WHERE EmpId = @SupervisorID
-		
-		IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 6)
-			BEGIN 
-				IF @role LIKE '%6%'
-					SET @RoleType=6
-				ELSE
-					BEGIN
-						SELECT @ErrCode=101,@ErrMsg='You don''t have permission on this funcion.(6)'
-						PRINT @ErrMsg + @role
-						RETURN
-					END
-			END
-		ELSE
-			BEGIN
-				SET @RoleType=1
-				SELECT @ErrCode=105,@ErrMsg='You don''t have permission on this funcion.'
-				PRINT @ErrMsg + @role
-				RETURN
-			END
-	END
-	ELSE 
-		BEGIN
-			SET @RoleType=1
-			SELECT @ErrCode=106,@ErrMsg='You don''t have permission on this funcion.(1)'
-			PRINT @ErrMsg + @role
-			RETURN
-		END
-
-
+	
 	DECLARE @fromDate NVARCHAR(100),@toDate NVARCHAR(100)
 		
 	SELECT @fromDate = CONVERT(VARCHAR(10),YEAR(@Month)) + '/' + CONVERT(VARCHAR(10),MONTH(@Month)) + '/01 00:00:00'

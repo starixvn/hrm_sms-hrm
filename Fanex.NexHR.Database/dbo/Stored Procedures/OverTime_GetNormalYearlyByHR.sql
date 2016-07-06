@@ -1,14 +1,11 @@
 ﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE PROCEDURE [dbo].[OverTime_GetNormalYearlyByHR]
-	@SupervisorID INT,
 	@empid int = null,
 	@groupids varchar(max) = '',
 	@Year int = null,
 	@status varchar(max) = '4,6',
 	@excludedEmpID int= null,
-	@role varchar(max) = '6',
-
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0
@@ -44,48 +41,7 @@ IF ISNULL(@status,'') <>''
 	INSERT INTO #status  (Currentstatus)
 	SELECT val FROM fnc_strSplit (@status, ',')
 
-CREATE TABLE #RolesList (roleid TINYINT)
-DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
-
-IF @SupervisorID IS NOT NULL
-BEGIN 
-	SET @role = ISNULL(@role,'')
-	IF @role <>''
-		INSERT INTO #RolesList (roleid)
-		SELECT val FROM fnc_strSplit (@role, ',')
-	
-	SET @role = 1
-	SELECT @role = Roles FROM dbo.Employee WITH(NOLOCK) WHERE EmpId = @SupervisorID
-
-	IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 6)
-		BEGIN 
-			IF @role LIKE '%6%'
-				SET @RoleType=6
-			ELSE
-				BEGIN
-					SELECT @ErrCode=101,@ErrMsg='You don''t have permission on this funcion.(6)'
-					PRINT @ErrMsg + @role
-					RETURN
-				END
-		END	
-	ELSE
-		BEGIN
-			SET @RoleType=1
-			SELECT @ErrCode=105,@ErrMsg='You don''t have permission on this funcion.'
-			PRINT @ErrMsg + @role
-			RETURN
-		END
-END
-ELSE 
-	BEGIN
-		SET @RoleType=1
-		SELECT @ErrCode=106,@ErrMsg='You don''t have permission on this funcion.(1)'
-		PRINT @ErrMsg + @role
-		RETURN
-	END
-
-IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1)
-	AND EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 3))
+IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1))
 	BEGIN
 		DELETE #status WHERE Currentstatus IN (2,3)
 		INSERT #status (Currentstatus)
@@ -169,13 +125,11 @@ SET @SQL =
 	empID IS NOT NULL '
 	
 	IF @isDebug = 1 PRINT @SQL 
-	IF @isDebug = 1 PRINT @RoleType
 	EXEC (@SQL )
 
 SELECT @ErrCode=0,@ErrMsg=''
 
 DROP TABLE #GroupsList
-DROP TABLE #RolesList
 DROP TABLE #status
 DROP TABLE #Calendar
 DROP TABLE #OTSumaryMonthly
