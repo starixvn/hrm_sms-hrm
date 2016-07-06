@@ -20,7 +20,7 @@ var JobTitle = (function ($) {
         }
 
         return valid;
-    }
+    };
 
     var getJobTitle = function (value) {
         $.get(

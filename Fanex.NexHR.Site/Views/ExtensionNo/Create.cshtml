@@ -20,12 +20,6 @@
     {
         @Html.ValidationSummary()
 
-        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
-        {
-            <div class="success">@Messages.RequestCreated</div>
-            <input type="hidden" id="successed" value="true" />
-        }
-
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.IsInternal)
@@ -80,7 +74,7 @@
                 @Html.Hidden("IsAddForm", "True")
             </div>
             <div class="input">
-                <input type="submit" value="@Fanex.NexHR.Resources.Labels.Add" />
+                <input type="submit" value="@Labels.Add" />
                 <a href="~/ExtensionNo/index" class="button">@Labels.Back</a>
             </div>
         </div>

@@ -39,15 +39,14 @@ var editMemo = (function ($) {
                     attachLinkSplit = attachLink.split('/'),
                     attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
                     pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
-								<a href="javascript:;" class="js-link-delete-file" data-file-name="'+ attachLink + '" data-id="' + i + '">\
+								<a href="javascript:;" class="js-link-delete-file" data-file-name="'+ attachLink + '">\
 									<span class="icon delete"></span>\
-								</a>\
-							  </div>';
+								</a></div>';
 
                 $fileList.append(pattern);
             }
         }
-    }
+    };
 
     var initEvent = function () {
         $memoType.change(function () {
@@ -58,7 +57,6 @@ var editMemo = (function ($) {
 
         $attachedFileBlock.on("click", ".js-link-delete-file", function () {
             var $self = $(this);
-            var fileId = $self.data("id");
             var fileName = $self.data("file-name");
 
             $.post(urlRoot + 'file/Delete', { FileName: fileName }, function (response) {
@@ -229,13 +227,6 @@ $(document).ready(function () {
         changeMonth: true,
         changeYear: true
     });
-    var refNo = $("#RefNo").val();
-    var subJect = $("#Subject").val();
-    var forInfo = $("#ForInfo").val();
-    var sentDate = $("#SentDate").val();
-    var sentTo = $("#SentTo").val();
-    var sentFrom = $("#SentFrom").val();
-    var contents = $("#Contents").val();
 
     $("form").submit(function (e) {
         var validate = validateForm();

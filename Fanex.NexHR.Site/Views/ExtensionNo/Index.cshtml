@@ -9,6 +9,7 @@
 @{
     ViewBag.Title = "Extension Numbers";
     var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 6 : 4;
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
@@ -56,14 +57,14 @@
                 if (item.Extensions.Any())
                 {
                     <tr>
-                        <td class="rowdivider highlight left" colspan="19">
+                        <td class="rowdivider highlight left" colspan="@totalColumn">
                             <b>@item.Name.ToUpper()</b>
                         </td>
                     </tr>
                 }
                 foreach (ExtensionNoModel ext in item.Extensions)
                 {
-                    <tr id="@ext.ExtensionNoId">
+                    <tr id="@ext.EmployeeExtensionId">
                         <td>
                             @(index++)
                         </td>
@@ -97,7 +98,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 5);
+            @RazorHelper.DisplayNoInformation(colspan: totalColumn);
         }
     </tbody>
 </table>

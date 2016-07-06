@@ -72,7 +72,7 @@
                     CommandResult result = commandService.Insert(criteria);
                     if (result.IsSuccessful)
                     {
-                        ViewBag.Requested = true;
+                        return RedirectToAction("Index", "ExtensionNo");
                     }
                     else
                     {
@@ -92,21 +92,14 @@
                 IsInternal = isInternal,
                 EmployeeExtensionNoId = employeeExtensionId
             };
+
             ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = isInternal,
-                GroupID = null
-            };
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = isInternal, GroupID = null };
             IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
 
             if (groups != null)
             {
-                ViewBag.Group = groups.Select(x => new SelectListItem
-                {
-                    Text = x.TeamName,
-                    Value = x.TeamId.ToString()
-                }).ToList();
+                ViewBag.Group = groups.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
             }
 
             return View(model);
@@ -123,11 +116,7 @@
                 GroupID = null
             };
             IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
-            ViewBag.Group = group.Select(x => new SelectListItem
-            {
-                Text = x.TeamName,
-                Value = x.TeamId.ToString()
-            }).ToList();
+            ViewBag.Group = group.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
             if (ModelState.IsValid)
             {
                 var criteria = new UpdateExtensionNumberMemberCriteria
@@ -136,14 +125,14 @@
                     NickName = model.NickName,
                     ExtensionNo = model.ExtensionNo,
                     IsInternal = model.IsInternal,
-                    ExtID = model.ExtensionNoId,
+                    ExtID = model.EmployeeExtensionId,
                     EmpID = model.EmpId,
                     GroupID = model.TeamId
                 };
                 CommandResult result = commandService.Insert(criteria);
                 if (result.IsSuccessful)
                 {
-                    ViewBag.Updated = true;
+                    return RedirectToAction("Index", "ExtensionNo");
                 }
                 else
                 {
@@ -156,12 +145,9 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult DeleteExtensionNumber(int extId)
+        public JsonResult DeleteExtensionNumber(int employeeExtensionId)
         {
-            var criteria = new DeleteExtensionNumberMemberCriteria
-            {
-                ExtensionNumberId = extId
-            };
+            var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = employeeExtensionId };
             CommandResult result = commandService.Delete(criteria);
             return Json(result);
         }
