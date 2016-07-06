@@ -4,7 +4,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -107,35 +106,29 @@
         {
             var msg = new StringBuilder();
             var message = string.Empty;
-
             switch (request.RequestType.Id)
             {
                 case (int)RequestType.Leave:
                     message = GetMessageForLeave(request);
                     msg.Append(message);
                     break;
-
                 case (int)RequestType.ChangeShift:
                     message = GetMessageForChangeShift(request);
                     msg.Append(message);
                     break;
-
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
                     var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
                     msg.AppendFormat(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
-
                 case (int)RequestType.LateIn:
                     var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
                     break;
-
                 case (int)RequestType.EarlyOut:
                     var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
                     break;
-
                 case (int)RequestType.KeepInView:
                     if ((double)request.TotalDays == 0.5)
                     {
@@ -474,7 +467,6 @@
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;
@@ -482,50 +474,52 @@
             {
                 action = (int)SettingsSendMail.Verify;
             }
-
-            if (command == Command.NotAccept.ToString())
+            else if (command == Command.NotAccept.ToString())
             {
                 action = (int)SettingsSendMail.NotVerify;
             }
-
-            if (command == Command.Approve.ToString())
+            else if (command == Command.Approve.ToString())
             {
                 action = (int)SettingsSendMail.Approve;
             }
-
-            if (command == Command.Reject.ToString())
+            else if (command == Command.Reject.ToString())
             {
                 action = (int)SettingsSendMail.Reject;
             }
-
-            if (command == Command.Process.ToString())
+            else if (command == Command.Process.ToString())
             {
                 action = (int)SettingsSendMail.Process;
             }
-
-            if (command == Command.Void.ToString())
+            else if (command == Command.Void.ToString())
             {
                 action = (int)SettingsSendMail.Void;
             }
-
-            if (command == Command.Reset.ToString())
+            else if (command == Command.Reset.ToString())
             {
-                switch (request.Status.Id)
-                {
-                    case (byte)CurrentRequestStatus.Verified:
-                    case (byte)CurrentRequestStatus.NotVerified:
-                        action = (int)SettingsSendMail.Reset1;
-                        break;
+                action = GetActionResetRequest(request.Status.Id);
+            }
 
-                    case (byte)CurrentRequestStatus.Approved:
-                    case (byte)CurrentRequestStatus.Rejected:
-                        action = (int)SettingsSendMail.Reset2;
-                        break;
+            return action;
+        }
 
-                    default:
-                        action = (int)SettingsSendMail.Reset3;
-                        break;
-                }
+        private int GetActionResetRequest(byte statusId)
+        {
+            byte action = 0;
+            switch (statusId)
+            {
+                case (byte)CurrentRequestStatus.Verified:
+                case (byte)CurrentRequestStatus.NotVerified:
+                    action = (int)SettingsSendMail.Reset1;
+                    break;
+
+                case (byte)CurrentRequestStatus.Approved:
+                case (byte)CurrentRequestStatus.Rejected:
+                    action = (int)SettingsSendMail.Reset2;
+                    break;
+
+                default:
+                    action = (int)SettingsSendMail.Reset3;
+                    break;
             }
 
             return action;

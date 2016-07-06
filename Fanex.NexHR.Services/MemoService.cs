@@ -30,7 +30,7 @@
                 memo.AttachFile = memo.Contents;
             }
 
-            return memo?? new Memo();
+            return memo ?? new Memo();
         }
     }
 }
