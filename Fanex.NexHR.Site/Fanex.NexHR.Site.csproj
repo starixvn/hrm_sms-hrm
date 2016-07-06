@@ -254,6 +254,9 @@
     <Content Include="Content\views\employee\employee.detail.min.css">
       <DependentUpon>employee.detail.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\employee\employee.edit.css">
+      <DependentUpon>employee.edit.scss</DependentUpon>
+    </Content>
     <Content Include="Content\views\employee\employee.shift.manager.css">
       <DependentUpon>employee.shift.manager.scss</DependentUpon>
     </Content>
@@ -1200,6 +1203,10 @@
       <DependentUpon>employee.detail.css</DependentUpon>
     </Content>
     <None Include="Content\views\employee\employee.detail.scss" />
+    <Content Include="Content\views\employee\employee.edit.scss" />
+    <Content Include="Content\views\employee\employee.edit.css.map">
+      <DependentUpon>employee.edit.css</DependentUpon>
+    </Content>
     <None Include="Content\views\employee\employee.shift.manager.scss" />
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
