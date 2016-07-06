@@ -92,6 +92,7 @@
             ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             if (model.MemoType == UploadMemoType && string.IsNullOrEmpty(model.AttachFile))
             {
+                ViewBag.Updated = false;
                 return View(model);
             }
 

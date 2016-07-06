@@ -1,12 +1,12 @@
 ﻿'use strict';
-/*global _global,initEditor,tinyMCE*/
-/*exported deleteFile*/
+/*global _global, initEditor, tinyMCE */
 
 var editMemo = (function ($) {
     var me = {};
     var urlRoot = "/";
     var $attachedFileBlock, $memoType, $uploadBlock, $contentBlock,
-        $hiddenMemoType, $fileList, $overrideBlock, $errorBlock, $fileAttachContent;
+        $hiddenMemoType, $fileList, $overrideBlock, $errorBlock, $fileAttachContent,
+        $memoContent, $fileUploader, $form;
 
     var changeMemoType = function (value) {
         if (value === "1") {
@@ -48,6 +48,107 @@ var editMemo = (function ($) {
         }
     };
 
+    var validateForm = function () {
+        var check = true;
+        var errorString = [];
+        var Subject = $("#Subject").val();
+        var RefNo = $("#RefNo").val();
+        var SentTo = $("#SentTo").val();
+        var SentFrom = $("#SentFrom").val();
+        var attachFile = $fileList.children().length;
+        var fileName = $fileUploader.val();
+
+        var editorText = tinyMCE.activeEditor.getContent();
+
+        if (Subject === null || Subject === "") {
+            errorString.push("* The Subject field is required.");
+        }
+        if (RefNo === null || RefNo === "") {
+            errorString.push("* The RefNo field is required.");
+        }
+        if (SentTo === null || SentTo === "") {
+            errorString.push("* The SentTo field is required.");
+        }
+        if (SentFrom === null || SentFrom === "") {
+            errorString.push("* The SentFrom field is required.");
+        }
+
+        if ($memoType.val() === "1") {
+            if (attachFile === 0 && fileName === "") {
+                errorString.push("* The Attached file is required.");
+            }
+        } else {
+            if (editorText === null || editorText === "") {
+                errorString.push("* The Content field is required.");
+            }
+        }
+
+        if (errorString.length > 0) {
+            $errorBlock.show();
+            $errorBlock.html(errorString.join("</br>"));
+            return false;
+        }
+        return check;
+    };
+
+    var uploadFailed = function (response) {
+        $errorBlock.html(response.message);
+    };
+
+    var uploadComplete = function (evt) {
+        if (evt.target.status === 200) {
+            var attachFile = $fileAttachContent.val();
+
+            if (attachFile.indexOf(urlRoot + evt.target.response) === -1) {
+                if (attachFile) {
+                    $fileAttachContent.val(attachFile + ";" + urlRoot + evt.target.response);
+                }
+                else {
+                    $fileAttachContent.val(urlRoot + evt.target.response);
+                }
+            }
+
+            $.ajax({
+                url: $form.action,
+                type: "Post",
+                data: $form.serialize(),
+                async: false,
+                success: function () {
+                    document.location = urlRoot + "Memo/Index";
+                }
+            });
+        }
+    };
+
+    var uploadFile = function () {
+        var files = document.getElementById('fileName').files;
+        if (files === undefined) {
+            return;
+        }
+
+        var fd = new FormData();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            if (file.size / 1024 > 5120) {
+                alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
+                return;
+            }
+
+            fd.append('files[' + i + ']', file);
+        }
+
+        fd.append('categoryID', $("#Category").val());
+        fd.append('overRide', $("#override").attr("checked") === "checked" ? "1" : "0");
+
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", uploadComplete, false);
+        xhr.addEventListener("error", uploadFailed, false);
+        xhr.open("POST", urlRoot + "file/UploadFile");
+        xhr.send(fd);
+    };
+
     var initEvent = function () {
         $memoType.change(function () {
             var value = $(this).val();
@@ -83,6 +184,48 @@ var editMemo = (function ($) {
                 $errorBlock.html("Fail to remove attached file!");
             });
         });
+
+        $("form").submit(function (e) {
+            var isValid = validateForm();
+            $form = $(this);
+
+            if (!isValid) {
+                $errorBlock.show();
+                return false;
+            }
+
+            e.preventDefault();
+
+            if ($memoType.val() === "1") {
+                var attachFile = $fileList.children().length;
+
+                if (attachFile === 0 || (attachFile !== 0 && $fileUploader.val() !== "")) {
+
+                    uploadFile();
+                } else {
+                    $.ajax({
+                        url: $form.action,
+                        type: "Post",
+                        data: $form.serialize(),
+                        success: function () {
+                            document.location = _global.root + "Memo/Index";
+                        }
+                    });
+                }
+            }
+            else {
+                $memoContent.val(tinyMCE.activeEditor.getContent());
+
+                $.ajax({
+                    url: $form.action,
+                    type: "Post",
+                    data: $form.serialize(),
+                    success: function () {
+                        document.location = _global.root + "Memo/Index";
+                    }
+                });
+            }
+        });
     };
 
     var initValue = function () {
@@ -95,6 +238,17 @@ var editMemo = (function ($) {
         $hiddenMemoType = $("#MemoType");
         $overrideBlock = $(".js-override-block");
         $errorBlock = $("#error");
+        $memoContent = $("#Contents");
+        $fileUploader = $("#fileName");
+
+        $errorBlock.hide();
+
+        var $sentDate = $("#SentDate");
+        $sentDate.prop("readonly", true);
+        $sentDate.datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
     };
 
     me.init = function (globalRoot) {
@@ -104,6 +258,7 @@ var editMemo = (function ($) {
 
         attachFile();
         changeMemoType($hiddenMemoType.val());
+        initEditor('Contents', 'basic');
     };
 
     return me;
@@ -112,173 +267,3 @@ var editMemo = (function ($) {
 $(document).ready(function () {
     editMemo.init(_global.root);
 });
-
-var form;
-
-function uploadComplete(evt) {
-    if (evt.target.status === 200) {
-        var attachFile = $("#AttachFile").val();
-
-        if (attachFile.indexOf(_global.root + evt.target.response) === -1) {
-            if (attachFile) {
-                $("#AttachFile").val(attachFile + ";" + _global.root + evt.target.response);
-            }
-            else {
-                $("#AttachFile").val(_global.root + evt.target.response);
-            }
-        }
-
-        $.ajax({
-            url: form.action,
-            type: "Post",
-            data: form.serialize(),
-            async: false,
-            success: function () {
-                document.location = _global.root + "Memo/Index";
-            }
-        });
-    }
-}
-
-function uploadFailed(response) {
-    $("#error").html(response.message);
-}
-
-function upload() {
-    var files = document.getElementById('fileName').files;
-    if (files === undefined) {
-        return;
-    }
-
-    var fd = new FormData();
-
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-
-        if (file.size / 1024 > 5120) {
-            alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
-            return;
-        }
-
-        fd.append('files[' + i + ']', file);
-    }
-
-    fd.append('categoryID', $("#Category").val());
-    fd.append('overRide', $("#override").attr("checked") === "checked" ? "1" : "0");
-
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener("load", uploadComplete, false);
-    xhr.addEventListener("error", uploadFailed, false);
-    xhr.open("POST", _global.root + "file/UploadFile");
-    xhr.send(fd);
-}
-
-function validateForm() {
-    var check = true;
-    var errorString = [];
-    var Subject = $("#Subject").val();
-    var RefNo = $("#RefNo").val();
-    var SentTo = $("#SentTo").val();
-    var SentFrom = $("#SentFrom").val();
-    var attachFile = $("#allAttachFile").children().length;
-    var fileName = $("#fileName").val();
-
-    var editorText = tinyMCE.activeEditor.getContent();
-
-    if (Subject === null || Subject === "") {
-        errorString.push("* The Subject field is required.");
-    }
-    if (RefNo === null || RefNo === "") {
-        errorString.push("* The RefNo field is required.");
-    }
-    if (SentTo === null || SentTo === "") {
-        errorString.push("* The SentTo field is required.");
-    }
-    if (SentFrom === null || SentFrom === "") {
-        errorString.push("* The SentFrom field is required.");
-    }
-
-    if ($("#MemoType").val() === "1") {
-        if (attachFile === 0 && fileName === "") {
-            errorString.push("* The Attached file is required.");
-        }
-    }
-
-    if ($("#MemoType").val() === "0") {
-        if (editorText === null || editorText === "") {
-            errorString.push("* The Content field is required.");
-        }
-    }
-
-    if (errorString.length > 0) {
-        $("#error").show();
-        $("#error").html(errorString.join("</br>"));
-        return false;
-    }
-    return check;
-}
-
-$(document).ready(function () {
-    initEditor('Contents', 'basic');
-    $("#error").hide();
-    $("#SentDate").attr('readonly', 'readonly');
-
-    $("#SentDate").datepicker({
-        changeMonth: true,
-        changeYear: true
-    });
-
-    $("form").submit(function (e) {
-        var validate = validateForm();
-        form = $(this);
-
-        if ($("#MemoType").val() === "1") {
-            var attachFile = $("#allAttachFile").children().length;
-            var fileName = $("#fileName").val();
-
-            if (!validate) {
-                e.preventDefault();
-                $("#error").show();
-            }
-
-            else {
-                if (attachFile === 0 || (attachFile !== 0 && fileName !== "")) {
-                    e.preventDefault();
-                    upload();
-                }
-                else {
-                    e.preventDefault();
-                    $.ajax({
-                        url: form.action,
-                        type: "Post",
-                        data: form.serialize(),
-                        success: function () {
-                            document.location = _global.root + "Memo/Index";
-
-                        }
-                    });
-                }
-            }
-        }
-        else {
-            if (!validate) {
-                $("#error").show();
-                return false;
-            }
-            else {
-                e.preventDefault();
-                $("#Contents").val(tinyMCE.activeEditor.getContent());
-                $.ajax({
-                    url: form.action,
-                    type: "Post",
-                    data: form.serialize(),
-                    success: function () {
-                        document.location = _global.root + "Memo/Index";
-                    }
-                });
-            }
-        }
-    });
-});
-
-
