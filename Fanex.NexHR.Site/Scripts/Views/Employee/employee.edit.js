@@ -192,11 +192,11 @@ $(document).ready(function () {
         });
     });
 
-    var collapse = $(".boxtitle"),
+    var collapse = $(".panel > .collapse"),
         itemContent = collapse.next();
     itemContent.show();
 
-    $(".boxtitle").click(function () {
+    $(".panel > .collapse").click(function () {
         var $header = $(this);
         //getting the next element
         var $content = $header.next();

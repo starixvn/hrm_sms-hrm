@@ -64,7 +64,7 @@
     <resourceSet name="accountcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/account.css" />
-      <resource path="~/styles/employee.detail.css" />
+      <resource path="~/content/views/employee/employee.detail.min.css" />
     </resourceSet>
     <resourceSet name="accountjs" type="js">
       <resource reference="sitejs" />
@@ -100,7 +100,7 @@
 
     <resourceSet name="employeeeditcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/employee.edit.css" />
+      <resource path="~/content/views/employee/employee.edit.min.css" />
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="employeeeditjs" type="js">

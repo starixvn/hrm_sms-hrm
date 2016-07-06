@@ -1,11 +1,11 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Criteria.Memo;
     using Models;
     using Services;
     using Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class MemoService : BaseService, IMemoService
     {

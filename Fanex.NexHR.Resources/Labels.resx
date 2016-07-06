@@ -1413,4 +1413,79 @@
   <data name="StaffInfo" xml:space="preserve">
     <value>Staff Info</value>
   </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="CardNo" xml:space="preserve">
+    <value>Card No</value>
+  </data>
+  <data name="ChineseName" xml:space="preserve">
+    <value>Chinese Name</value>
+  </data>
+  <data name="ConfirmedDate" xml:space="preserve">
+    <value>Confirmed Date</value>
+  </data>
+  <data name="CurrentAddress" xml:space="preserve">
+    <value>Current Address</value>
+  </data>
+  <data name="Ethnic" xml:space="preserve">
+    <value>Ethnic</value>
+  </data>
+  <data name="Fri" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="KeepInViewBalance" xml:space="preserve">
+    <value>Keep In View Balance</value>
+  </data>
+  <data name="Major" xml:space="preserve">
+    <value>Major</value>
+  </data>
+  <data name="Mon" xml:space="preserve">
+    <value>Mon</value>
+  </data>
+  <data name="Native" xml:space="preserve">
+    <value>Native</value>
+  </data>
+  <data name="PassportExp" xml:space="preserve">
+    <value>Passport Exp</value>
+  </data>
+  <data name="PassportNo" xml:space="preserve">
+    <value>Passport No</value>
+  </data>
+  <data name="PlaceOfBirth" xml:space="preserve">
+    <value>Place Of Birth</value>
+  </data>
+  <data name="Qualification" xml:space="preserve">
+    <value>Qualification</value>
+  </data>
+  <data name="Religion" xml:space="preserve">
+    <value>Religion</value>
+  </data>
+  <data name="Sat" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="Sun" xml:space="preserve">
+    <value>Sun</value>
+  </data>
+  <data name="Thu" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="Tue" xml:space="preserve">
+    <value>Tue</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Wed" xml:space="preserve">
+    <value>Wed</value>
+  </data>
+  <data name="WorkingDays" xml:space="preserve">
+    <value>Working Days</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Working Hours</value>
+  </data>
+  <data name="Yahoo" xml:space="preserve">
+    <value>Yahoo</value>
+  </data>
 </root>

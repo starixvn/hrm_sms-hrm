@@ -248,6 +248,12 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\views\employee\employee.detail.css">
+      <DependentUpon>employee.detail.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\employee\employee.detail.min.css">
+      <DependentUpon>employee.detail.css</DependentUpon>
+    </Content>
     <Content Include="Content\views\employee\employee.shift.manager.css">
       <DependentUpon>employee.shift.manager.scss</DependentUpon>
     </Content>
@@ -396,7 +402,6 @@
     <Content Include="Styles\Images\titlebg.png" />
     <Content Include="Styles\Images\uicon.png" />
     <Content Include="Styles\jobtitle.css" />
-    <Content Include="Styles\employee.detail.css" />
     <Content Include="Styles\font.css" />
     <Content Include="Styles\Images\asc.png" />
     <Content Include="Styles\Images\bg.png" />
@@ -1190,6 +1195,11 @@
     <Content Include="Content\views\employee\employee.shift.manager.css.map">
       <DependentUpon>employee.shift.manager.css</DependentUpon>
     </Content>
+    <Content Include="Content\sass\components\_panels.scss" />
+    <Content Include="Content\views\employee\employee.detail.css.map">
+      <DependentUpon>employee.detail.css</DependentUpon>
+    </Content>
+    <None Include="Content\views\employee\employee.detail.scss" />
     <None Include="Content\views\employee\employee.shift.manager.scss" />
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />

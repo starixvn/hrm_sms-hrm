@@ -1,0 +1,130 @@
+﻿.leftpersonal {
+  width: 340px;
+  float: left;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.accinfo {
+  margin: 0;
+}
+
+.rightjob {
+  float: left;
+  padding: 5px;
+  padding-right: 10px;
+}
+
+.avatarbox .avatar {
+  border: 1px solid #848484;
+  width: 65px;
+  height: 65px;
+  float: left;
+  margin-right: 10px;
+  padding: 2px 0 0 2px;
+}
+
+.avatarbox .pinfo {
+  font-family: "Myriad Pro", Tahoma, REZ, Arial;
+  font-size: 14px;
+  color: #666666;
+}
+
+.avatarbox .name {
+  font-size: 20px;
+  color: #ac794c;
+}
+
+.submitWrapper {
+  margin-top: 10px;
+}
+
+.label {
+  float: left;
+  text-align: right;
+  padding-left: 10px;
+  margin-right: 10px;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.label.allowEdit {
+  padding-top: 5px;
+}
+
+.label2 {
+  float: left;
+  text-align: right;
+  padding-left: 10px;
+  margin-right: 10px;
+  min-width: 150px;
+}
+
+.pcontent {
+  float: left;
+  text-align: left;
+  font-weight: bold;
+  max-width: 520px;
+}
+
+.pcontent.allowEdit input {
+  min-width: 180px;
+  max-width: 180px;
+}
+
+.pcontent.allowEdit select {
+  min-width: 180px;
+  max-width: 180px;
+}
+
+.role {
+  float: none;
+  margin-left: 120px;
+}
+
+.schedule {
+  float: left;
+  background: #e9e7e7;
+  padding: 0;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #ddd;
+  margin-right: 2px;
+  border-radius: 3px;
+}
+
+.scheduleoff {
+  float: left;
+  background: #cfcfcf;
+  padding: 0;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #a5a2a2;
+  margin-right: 2px;
+  border-radius: 3px;
+}
+
+.day {
+  padding: 3px 0;
+  border-bottom: 1px solid #ddd;
+  width: 65px;
+}
+
+.shift {
+  padding: 3px 0;
+  border-bottom: 1px solid #ddd;
+  width: 65px;
+  min-height: 30px;
+  text-align: center;
+}
+
+.formrow {
+  padding: 5px 10px 5px 5px;
+  float: left;
+}
+
+.formrow .input {
+  margin-left: 0;
+}
+
+/*# sourceMappingURL=employee.detail.css.map */
