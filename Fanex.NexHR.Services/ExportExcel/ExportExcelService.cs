@@ -770,7 +770,7 @@
 
         public void ExportEmployeeDetailsInfo(IList<Employee> employees, string templatePath)
         {
-            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd");
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Details Info");
 
             /// Fill report title.

@@ -515,7 +515,7 @@
 
         public ActionResult ExportTotalWorkingHourWeekly(TotalWorkingHourWeeklyViewModel model)
         {
-            string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "TotalWorkingHourWeekly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetTotalWorkingHourWeeklyCriteria()
             {
                 EmpId = model.EmployeeId,
@@ -525,6 +525,23 @@
                 IsLocal = model.IsLocal
             };
             IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourWeekly(criteria);
+            exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHours);
+            HSSFWorkbook hssfworkbook = exportService.Export();
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
+        public ActionResult ExportTotalWorkingHourMonthly(TotalWorkingHourMonthlyViewModel model)
+        {
+            string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            var criteria = new GetTotalWorkingHourMonthlyCriteria
+            {
+                EmpId = model.EmployeeId,
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal,
+                ReportMonth = new DateTime(model.Year, model.Month, 1)
+            };
+
+            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourMonthly(criteria);
             exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHours);
             HSSFWorkbook hssfworkbook = exportService.Export();
             return ExcelFile(hssfworkbook, fileName);

@@ -329,60 +329,42 @@
             return View(model);
         }
 
-        public ActionResult TotalWorkingHourMonthly(
-            int? month,
-            int? year,
-            string teamIds,
-            string employee,
-            int? employeeId,
-            bool isExportExcel = false,
-            byte? isLocal = null)
+        [HttpGet]
+        public ActionResult TotalWorkingHourMonthly()
         {
-            if (!month.HasValue)
-            {
-                month = DateTime.Now.Month;
-            }
-
-            if (!year.HasValue)
-            {
-                year = DateTime.Now.Year;
-            }
-
+            var today = DateTime.Today;
             var model = new TotalWorkingHourMonthlyViewModel
             {
-                TeamIds = teamIds == null ? string.Empty : teamIds,
-                Employee = employee,
-                Month = new DateTime(year.Value, month.Value, 1),
-                EmployeeId = string.IsNullOrEmpty(employee) ? null : employeeId,
-                IsExportExcel = isExportExcel,
-                IsLocal = isLocal
+                Month = today.Month,
+                Year = today.Year,
+                Sections = GetAllTeam()
             };
-
-            var getWorkingHourMonthlyCriteria = new GetTotalWorkingHourMonthlyCriteria()
-            {
-                EmpId = string.IsNullOrEmpty(employee) ? null : employeeId,
-                GroupIds = model.TeamIds,
-                IsLocal = isLocal,
-                ReportMonth = model.Month
-            };
-            var totalWorkingHourMonthly = reportService.GetTotalWorkingHourMonthly(getWorkingHourMonthlyCriteria);
-            var firstRecord = totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any() ? totalWorkingHourMonthly[0] : null;
-
-            if (model.IsExportExcel)
-            {
-                string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHourMonthly);
-                HSSFWorkbook hssfworkbook = exportService.Export();
-
-                return ExcelFile(hssfworkbook, fileName);
-            }
-
-            ViewBag.EntityList = totalWorkingHourMonthly;
-            ViewBag.FirstRecord = firstRecord;
-            ViewBag.Groups = GetAllTeam();
-            ViewBag.TeamIds = model.TeamIds;
 
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TotalWorkingHourMonthlyDetails(TotalWorkingHourMonthlyViewModel model)
+        {
+            var criteria = new GetTotalWorkingHourMonthlyCriteria
+            {
+                EmpId = model.EmployeeId,
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal,
+                ReportMonth = new DateTime(model.Year, model.Month, 1)
+            };
+
+            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourMonthly(criteria);
+            TotalWorkingHourMonthly firstRecord = null;
+            if (totalWorkingHours != null && totalWorkingHours.Any())
+            {
+                firstRecord = totalWorkingHours.First();
+                totalWorkingHours.RemoveAt(0);
+            }
+
+            ViewBag.FirstRecord = firstRecord;
+
+            return PartialView("_TotalWorkingHourMonthlyDetails", totalWorkingHours);
         }
 
         public ActionResult TotalWorkingHourDaily(

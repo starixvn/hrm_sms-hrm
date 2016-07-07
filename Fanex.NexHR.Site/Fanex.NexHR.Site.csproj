@@ -1235,6 +1235,7 @@
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
     <Content Include="Views\Report\_TotalWorkingHourWeeklyDetails.cshtml" />
+    <Content Include="Views\Report\_TotalWorkingHourMonthlyDetails.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

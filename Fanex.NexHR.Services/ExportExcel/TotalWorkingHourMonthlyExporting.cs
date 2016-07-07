@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
@@ -16,8 +17,8 @@
         private readonly ICellStyle _oddCellStyleWithLeftAlign;
         private readonly ICellStyle _evenCellStyleWithCenterAlign;
         private readonly ICellStyle _oddCellStyleWithCenterAlign;
-        private readonly ICellStyle _headerCellStyle;
-        private readonly ICellStyle _unfreezeHeaderCellStyle;
+        private readonly ICellStyle _defaultHeaderCellStyle;
+        private readonly ICellStyle _offDayHeaderCellStyle;
         private IList<TotalWorkingHourMonthly> _totalWorkingHourMonthly;
         private TotalWorkingHourMonthly _firstRecord;
         private HSSFWorkbook _workbook;
@@ -32,8 +33,8 @@
             this._oddCellStyleWithLeftAlign = this.CreateOddCellStyleWithLeftAlign();
             this._evenCellStyleWithCenterAlign = this.CreateEvenCellStyleWithCenterAlign();
             this._oddCellStyleWithCenterAlign = this.CreateOddCellStyleWithCenterAlign();
-            this._headerCellStyle = this.CreateHeaderCellStyle();
-            this._unfreezeHeaderCellStyle = this.CreateHeaderWorkingHourCellStyle();
+            this._defaultHeaderCellStyle = this.CreateDefaultHeaderCellStyle();
+            this._offDayHeaderCellStyle = this.CreateOffDayHeaderCellStyle();
         }
 
         public HSSFWorkbook ExportTotalWorkingHourMonthly()
@@ -67,26 +68,22 @@
 
         private void ExportHeaderTitle(string title)
         {
-            var row = _sheet.CreateRow(_RowIndexOfHeaderTitle);
-            var font = CreateHeaderTitleFont();
-            var cell = row.CreateCell(1);
+            IRow row = _sheet.CreateRow(_RowIndexOfHeaderTitle);
+
+            IFont font = this._workbook.CreateFont();
+            font.FontHeightInPoints = 16;
+            font.Boldweight = (short)FontBoldWeight.Bold;
+
+            ICell cell = row.CreateCell(1);
             cell.SetCellValue(title);
             cell.CellStyle = this._workbook.CreateCellStyle();
             cell.CellStyle.SetFont(font);
             _sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 4));
         }
 
-        private IFont CreateHeaderTitleFont()
-        {
-            var font = this._workbook.CreateFont();
-            font.FontHeightInPoints = 14;
-            font.Boldweight = (short)FontBoldWeight.Bold;
-            return font;
-        }
-
         private bool IsHaveTableHeader(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
         {
-            return totalWorkingHourMonthly != null && totalWorkingHourMonthly.Count > 0;
+            return totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any();
         }
 
         private void ExportTable()
@@ -157,7 +154,7 @@
 
         private void ExportOneRowIntoContentRegion(int rowIndex, TotalWorkingHourMonthly totalWorkingHourMonthly)
         {
-            var row = _sheet.CreateRow(rowIndex);
+            IRow row = _sheet.CreateRow(rowIndex);
             this.CreateCellContentWithLeftAlign(row, rowIndex, 0, totalWorkingHourMonthly.StaffId.Trim());
             this.CreateCellContentWithLeftAlign(row, rowIndex, 1, totalWorkingHourMonthly.Section.Trim());
             this.CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.FullNameNick.Trim());
@@ -210,15 +207,15 @@
 
         private bool IsHaveContentRecords(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
         {
-            return totalWorkingHourMonthly.Count > 1;
+            return totalWorkingHourMonthly.Any();
         }
 
         private void ExportHeader(int rowIndex)
         {
-            var row = _sheet.CreateRow(rowIndex);
+            IRow row = _sheet.CreateRow(rowIndex);
             this.CreateFreezeHeaderCell(row, 0, Labels.StaffId);
             this.CreateFreezeHeaderCell(row, 1, Labels.Section);
-            this.CreateFreezeHeaderCell(row, 2, Labels.FullNameNick);
+            this.CreateFreezeHeaderCell(row, 2, Labels.FullName);
             this.CreateFreezeHeaderCell(row, 3, Labels.Nick);
             this.CreateFreezeHeaderCell(row, 4, Labels.CountWorkDay);
 
@@ -230,69 +227,59 @@
 
         private void CreateFreezeHeaderCell(IRow row, int columnIndex, string content)
         {
-            var cell1 = row.CreateCell(columnIndex);
-            cell1.CellStyle = _headerCellStyle;
-            cell1.SetCellValue(content);
+            ICell cell = row.CreateCell(columnIndex);
+            cell.CellStyle = _defaultHeaderCellStyle;
+            cell.SetCellValue(content);
         }
 
         private void CreateUnfreezeHeaderCell(IRow row, int columnIndex, string content)
         {
             string currentHeaderDate = content.Split('(')[1].Split(')')[0];
-            var cell1 = row.CreateCell(columnIndex);
-            cell1.CellStyle = _unfreezeHeaderCellStyle;
-            cell1.SetCellValue(content);
+            ICell cell = row.CreateCell(columnIndex);
+            cell.CellStyle = _defaultHeaderCellStyle;
+            cell.SetCellValue(content);
 
             if (currentHeaderDate == "Sat" || currentHeaderDate == "Sun")
             {
-                cell1.CellStyle = _headerCellStyle;
+                cell.CellStyle = _offDayHeaderCellStyle;
             }
         }
 
-        private IFont CreateHeaderFont()
+        private ICellStyle CreateDefaultHeaderCellStyle()
         {
-            var headerFont = _workbook.CreateFont();
-            headerFont.FontHeightInPoints = 11;
-            headerFont.Boldweight = (short)FontBoldWeight.Bold;
-            headerFont.Color = HSSFColor.White.Index;
-            return headerFont;
-        }
+            IFont font = _workbook.CreateFont();
+            font.FontHeightInPoints = 11;
+            font.Color = HSSFColor.White.Index;
+            font.Boldweight = (short)FontBoldWeight.Bold;
 
-        private IFont CreateHeaderWorkingHourFont()
-        {
-            var headerWorkingHourFont = _workbook.CreateFont();
-            headerWorkingHourFont.FontHeightInPoints = 11;
-            headerWorkingHourFont.Boldweight = (short)FontBoldWeight.Bold;
-            headerWorkingHourFont.Color = HSSFColor.Black.Index;
-            return headerWorkingHourFont;
-        }
-
-        private ICellStyle CreateHeaderWorkingHourCellStyle()
-        {
-            var headerWorkingHourFont = this.CreateHeaderWorkingHourFont();
             ICellStyle cellStyle = _workbook.CreateCellStyle();
-            cellStyle.FillForegroundColor = HSSFColor.Grey40Percent.Index;
+            cellStyle.FillForegroundColor = HSSFColor.Grey80Percent.Index;
             cellStyle.FillPattern = FillPattern.SolidForeground;
-            cellStyle.FillBackgroundColor = HSSFColor.Grey40Percent.Index;
+            cellStyle.FillForegroundColor = HSSFColor.Grey80Percent.Index;
             cellStyle.Alignment = HorizontalAlignment.Center;
             cellStyle.VerticalAlignment = VerticalAlignment.Center;
             cellStyle.WrapText = true;
-            cellStyle.SetFont(headerWorkingHourFont);
+            cellStyle.SetFont(font);
+
             return cellStyle;
         }
 
-        private ICellStyle CreateHeaderCellStyle()
+        private ICellStyle CreateOffDayHeaderCellStyle()
         {
-            var headerFont = this.CreateHeaderFont();
-            var palette = _workbook.GetCustomPalette();
-            var cellStyle = _workbook.CreateCellStyle();
-            var headerColor = palette.FindSimilarColor(192, 80, 77);
-            cellStyle.FillForegroundColor = headerColor.Indexed;
+            IFont font = _workbook.CreateFont();
+            font.FontHeightInPoints = 11;
+            font.Color = HSSFColor.Red.Index;
+            font.Boldweight = (short)FontBoldWeight.Bold;
+
+            ICellStyle cellStyle = _workbook.CreateCellStyle();
+            cellStyle.FillForegroundColor = HSSFColor.Grey80Percent.Index;
             cellStyle.FillPattern = FillPattern.SolidForeground;
-            cellStyle.FillBackgroundColor = headerColor.Indexed;
+            cellStyle.FillForegroundColor = HSSFColor.Grey80Percent.Index;
             cellStyle.Alignment = HorizontalAlignment.Center;
             cellStyle.VerticalAlignment = VerticalAlignment.Center;
             cellStyle.WrapText = true;
-            cellStyle.SetFont(headerFont);
+            cellStyle.SetFont(font);
+
             return cellStyle;
         }
     }

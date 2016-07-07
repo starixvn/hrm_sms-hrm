@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetTotalWorkingHourMonthlyCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.31">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Report
+﻿namespace Fanex.NexHR.Criteria
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Total Working HourMonthlyCriteria.
-    /// </summary>
     public class GetTotalWorkingHourMonthlyCriteria : CriteriaBase
     {
         public DateTime ReportMonth { get; set; }
