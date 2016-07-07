@@ -1,14 +1,14 @@
-﻿namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria
 {
-    using Fanex.Data.Repository;
     using System;
+    using Fanex.Data.Repository;
 
     public class GetOvertimeDailyReportCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
 
         public DateTime Month { get; set; }
-        
+
         public bool IsNormal { get; set; }
 
         public override string GetSettingKey()

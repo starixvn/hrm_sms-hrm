@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels
 {
     public class OvertimeAnnualReportViewModel
     {

@@ -1,7 +1,7 @@
-﻿namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models;
 
     public class OvertimeExcelReportViewModel
     {

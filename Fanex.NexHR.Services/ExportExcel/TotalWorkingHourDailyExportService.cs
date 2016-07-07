@@ -16,12 +16,12 @@
 
         public TotalWorkingHourDailyExportService()
             : this(null)
-        { 
+        {
         }
 
         public HSSFWorkbook Export()
         {
-            var firstRecord = totalWorkingHourDaily != null && totalWorkingHourDaily.Any() ? totalWorkingHourDaily[0] : null;
+            var firstRecord = totalWorkingHourDaily != null && totalWorkingHourDaily.Any() ? totalWorkingHourDaily.First() : null;
 
             var totalWorkingHourMonthlyExporting = new TotalWorkingHourMonthlyExporting(totalWorkingHourDaily, firstRecord);
             return totalWorkingHourMonthlyExporting.ExportTotalWorkingHourDaily();

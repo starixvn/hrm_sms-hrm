@@ -10,12 +10,11 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Calendar;
-    using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -37,7 +36,7 @@
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _OvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\OvertimeReportTemplate.xls";
         private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
-        private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeRecordTemplate.xls";
+        private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
         private const string _MsgLeave = "{1} ({0} days)";
@@ -394,7 +393,7 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeOvertimeRecord(List<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
+        public HSSFWorkbook ExportEmployeeOvertimeRecord(IList<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
         {
             int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;
             HSSFWorkbook hssfworkbook;
@@ -449,7 +448,7 @@
                 }
 
                 //// render Body.
-                overtimes.RemoveAll(i => i == headerRowEntity);
+                overtimes.RemoveAt(0);
                 var model = (from item in overtimes
                              group item by item.Team into g
                              select new OvertimeExcelReportViewModel() { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();

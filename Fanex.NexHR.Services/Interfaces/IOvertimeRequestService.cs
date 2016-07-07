@@ -1,11 +1,10 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Criteria.Overtime;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels.Overtime;
+    using Fanex.NexHR.ViewModels;
 
     public interface IOvertimeRequestService
     {
@@ -39,6 +38,6 @@
 
         IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 
-        IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria); 
+        IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria);
     }
 }

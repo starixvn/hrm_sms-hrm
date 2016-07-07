@@ -1,25 +1,17 @@
 ﻿'use strict';
 /*global _global*/
 
-$(document).ready(function () {
-    $("#TeamId").multiselect();
+(function () {
+    $(document).ready(function () {
+        $("#section").multiselect();
 
-    $("#btnExcel").click(function (e) {
-        e.preventDefault();
+        $('form.form-filter #section').on('change', function () {
+            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#SectionIds').val(sectionIds);
+        });
 
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var employeeId = $("#EmployeeId").val();
-        var isLocal = $("#IsLocal").val();
-        var workDate = $("#WorkDate").val();
-        var employee = $("#Employee").val();
-
-        var url = _global.root + "report/TotalWorkingHourDaily?workDate=" + workDate +
-		"&Employee=" + employee +
-		"&TeamIds=" + teams +
-		"&EmployeeId=" + employeeId +
-		"&isLocal=" + isLocal +
-		"&isExportExcel=" + true;
-
-        location.href = url;
+        $("#btnExcel").on('click', function () {
+            window.location.href = _global.root + 'Export/ExportTotalWorkingHourDaily?' + $('form.form-filter').serialize();
+        });
     });
-});
+})();

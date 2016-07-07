@@ -363,45 +363,13 @@
             return PartialView("_TotalWorkingHourMonthlyDetails", totalWorkingHours);
         }
 
-        public ActionResult TotalWorkingHourDaily(
-            DateTime? workDate,
-            string teamIds,
-            string employee,
-            int? employeeId,
-            bool isExportExcel = false,
-            byte? isLocal = null)
+        public ActionResult TotalWorkingHourDaily()
         {
             var model = new TotalWorkingHourDailyViewModel
             {
-                TeamIds = teamIds == null ? string.Empty : teamIds,
-                Employee = employee,
-                WorkDate = workDate.HasValue ? workDate.Value : DateTime.Now,
-                EmployeeId = string.IsNullOrEmpty(employee) ? null : employeeId,
-                IsExportExcel = isExportExcel,
-                IsLocal = isLocal
+                WorkDate = DateTime.Now,
+                Sections = GetAllTeam()
             };
-
-            if (model.IsExportExcel)
-            {
-                var criteria = new GetTotalWorkingHourDailyCriteria()
-                {
-                    EmpId = string.IsNullOrEmpty(employee) ? null : employeeId,
-                    GroupIds = model.TeamIds,
-                    IsLocal = isLocal,
-                    WorkDate = model.WorkDate
-                };
-                var totalWorkingHourDaily = reportService.GetTotalWorkingHourDaily(criteria);
-                string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
-
-                exportService = new TotalWorkingHourDailyExportService(totalWorkingHourDaily);
-                HSSFWorkbook hssfworkbook = exportService.Export();
-
-                return ExcelFile(hssfworkbook, fileName);
-            }
-            else
-            {
-                ViewBag.Groups = GetAllTeam();
-            }
 
             return View(model);
         }

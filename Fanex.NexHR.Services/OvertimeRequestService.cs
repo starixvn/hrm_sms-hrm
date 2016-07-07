@@ -5,15 +5,15 @@
     using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Overtime;
 
     public class OvertimeRequestService : BaseService, IOvertimeRequestService
@@ -294,6 +294,6 @@
             }
 
             return emails;
-        } 
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, floatThead, _messages*/
 
 (function () {
     function query() {

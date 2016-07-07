@@ -1,11 +1,11 @@
-﻿namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria
 {
     using System;
     using Fanex.Data.Repository;
 
     public class GetOvertimeRecordCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "EmpID")]
+        [SpParam(SqlParamName = "EmpId")]
         public int? EmployeeID { get; set; }
 
         public DateTime Month { get; set; }

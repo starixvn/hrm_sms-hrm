@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, _messages*/
+/*global _global, _messages, floatThead*/
 
 (function () {
     function query() {
@@ -10,7 +10,6 @@
             data: $('form.form-filter').serialize(),
             success: function (response) {
                 $('#TotalWorkingHourWeeklyDetails').html(response);
-
                 floatThead('table#data');
             },
             error: function () {

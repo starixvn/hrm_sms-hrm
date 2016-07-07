@@ -1,10 +1,10 @@
-﻿namespace Fanex.NexHR.ViewModels.Overtime
+﻿namespace Fanex.NexHR.ViewModels
 {
-    using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
 
     public class MyOverTimeViewModel
     {

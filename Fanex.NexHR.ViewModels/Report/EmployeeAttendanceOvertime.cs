@@ -1,7 +1,7 @@
-﻿namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System;
-    using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models;
 
     public class EmployeeAttendanceOvertime
     {

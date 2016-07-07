@@ -1,8 +1,8 @@
-﻿namespace Fanex.NexHR.Models.Overtime
+﻿namespace Fanex.NexHR.Models
 {
-    using Fanex.NexHR.Core;
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core;
 
     public class OvertimeRequest
     {

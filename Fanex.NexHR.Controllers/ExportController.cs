@@ -13,14 +13,12 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
-    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
@@ -30,7 +28,6 @@
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Discipline;
-    using Fanex.NexHR.ViewModels.Overtime;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
@@ -300,7 +297,7 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult EmployeeOvertimeRecord(int? year, int? month, int? calendar, int? empId)
+        public ActionResult EmployeeOvertimeReport(int? year, int? month, int? calendar, int? empId)
         {
             var requestDate = new DateTime(year.Value, month.Value, 1);
             var fromDate = new DateTime();
@@ -320,15 +317,14 @@
             }
 
             string fileName = "EmployeeOvertimeRecord_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var getOvertimeRecordCriteria = new GetOvertimeRecordCriteria
+            var criteria = new GetOvertimeRecordCriteria
             {
                 Month = requestDate,
                 EmployeeID = empId,
                 Calendar = calendar.Value
             };
-            List<OvertimeExcelReport> entity = overtimeService.OvertimeRecord(getOvertimeRecordCriteria).ToList();
-
-            var hssfworkbook = exportExcelService.ExportEmployeeOvertimeRecord(entity, calendar, fromDate, toDate);
+            IList<OvertimeExcelReport> overtimes = overtimeService.OvertimeRecord(criteria);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportEmployeeOvertimeRecord(overtimes, calendar, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -543,6 +539,23 @@
 
             IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourMonthly(criteria);
             exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHours);
+            HSSFWorkbook hssfworkbook = exportService.Export();
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
+        public ActionResult ExportTotalWorkingHourDaily(TotalWorkingHourDailyViewModel model)
+        {
+            string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
+            var criteria = new GetTotalWorkingHourDailyCriteria
+            {
+                EmpId = model.EmployeeId,
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal,
+                WorkDate = model.WorkDate
+            };
+
+            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourDaily(criteria);
+            exportService = new TotalWorkingHourDailyExportService(totalWorkingHours);
             HSSFWorkbook hssfworkbook = exportService.Export();
             return ExcelFile(hssfworkbook, fileName);
         }

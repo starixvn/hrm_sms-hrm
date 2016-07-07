@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NexHR.Criteria.Overtime
 {
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models.Overtime;
     using System.Collections.Generic;
     using System.Text;
+    using Fanex.Data.Repository;
+    using Fanex.NexHR.Models;
 
     public class UpdateOvertimeRequestCriteria : CriteriaBase
     {

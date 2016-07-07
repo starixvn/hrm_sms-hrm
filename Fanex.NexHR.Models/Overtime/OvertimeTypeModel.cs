@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models.Overtime
+﻿namespace Fanex.NexHR.Models
 {
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
@@ -7,9 +7,9 @@
     {
         public short Id { get; set; }
 
-        public string Name 
-        { 
-            get 
+        public string Name
+        {
+            get
             {
                 if (this.Id == (short)OvertimeType.Normal)
                 {
@@ -27,7 +27,7 @@
                 {
                     return string.Empty;
                 }
-            } 
+            }
         }
     }
 }
