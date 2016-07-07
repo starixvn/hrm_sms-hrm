@@ -103,7 +103,6 @@
                         },
                         splitOn: "TeamID");
 
-
                     IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
                             (er, r) =>
                             {
