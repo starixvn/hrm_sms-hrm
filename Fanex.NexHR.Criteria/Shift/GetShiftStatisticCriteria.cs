@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetShiftStatisticCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.5">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Shift
+﻿namespace Fanex.NexHR.Criteria.Shift
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Shift Statistic Criteria.
-    /// </summary>
     public class GetShiftStatisticCriteria : CriteriaBase
     {
         public int SupervisorID { get; set; }

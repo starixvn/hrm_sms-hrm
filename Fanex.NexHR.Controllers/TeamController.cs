@@ -39,7 +39,6 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
@@ -51,7 +50,6 @@
             return View(teams);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create()
         {
@@ -62,7 +60,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create(TeamViewModel model)
@@ -99,7 +96,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Edit(int id)
         {
@@ -127,7 +123,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Edit(TeamViewModel model)
@@ -169,7 +164,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
         public JsonResult Delete(int id)
@@ -184,7 +178,6 @@
             return Json(result);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {

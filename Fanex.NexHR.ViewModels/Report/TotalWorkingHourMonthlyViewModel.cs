@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels
+﻿namespace Fanex.NexHR.ViewModels.Report
 {
     using System;
     using System.Collections.Generic;

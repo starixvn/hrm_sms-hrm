@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.ViewModels.AnnualLeave
 @model AnnualLeaveBalanceViewModel
 @{
-    ViewBag.Title = ViewBag.Employee.NickName + "'s annual leave balance";
+    ViewBag.Title = Model.Employee.NickName + "'s annual leave balance";
 }
 @section css{
     @Url.CombresLink("sitecss")
@@ -27,7 +27,7 @@
     @Html.HiddenFor(model => model.EmployeeId)
     <input type="submit" value="@Labels.View" />
     <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("Adjustment", "Create", new { id = ViewBag.Employee.Id })
+        <span class="icon plus"></span>@Html.ActionLink("Adjustment", "Create", new { id = Model.Employee.Id })
     </div>
 }
 <table class="table table-custom">
@@ -41,11 +41,11 @@
             <th>@Labels.Edit</th>
         </tr>
     </thead>
-    @if (ViewBag.Data.Count > 0)
+    @if (Model.AnnualLeaveBalances.Any())
     {
         <tbody>
             @{int index = 1;}
-            @foreach (AnnualLeaveBalanceModel item in ViewBag.Data)
+            @foreach (AnnualLeaveBalanceModel item in Model.AnnualLeaveBalances)
             {
                 <tr>
                     <td>@(index++)</td>

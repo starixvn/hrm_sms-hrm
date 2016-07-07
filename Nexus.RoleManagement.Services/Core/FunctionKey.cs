@@ -38,22 +38,18 @@
 
         public const string CanOnBehalfOthers = "CanOnBehalfOthers";
 
-        public const string VerifyRequestOfMember = "VerifyRequestOfMember";
+        public const string VerifyRequest = "VerifyRequest";
 
-        public const string ApproveRequestOfMember = "ApproveRequestOfMember";
+        public const string ApproveRequest = "ApproveRequest";
 
-        public const string VerifyRequestOfEmployee = "VerifyRequestOfEmployee";
-
-        public const string ApproveRequestOfEmployee = "ApproveRequestOfEmployee";
-
-        public const string VerifyOTMember = "VerifyOTMember";
-
-        public const string ApproveOTMember = "ApproveOTMember";
-
-        public const string VerifyOTEmployee = "VerifyOTEmployee";
-
-        public const string ApproveOTEmployee = "ApproveOTEmployee";
+        public const string ProcessRequest = "ProcessRequest";
 
         public const string VoidRequest = "VoidRequest";
+
+        public const string VerifyOvertime = "VerifyOvertime";
+
+        public const string ApproveOvertime = "ApproveOvertime";
+
+        public const string ProcessOvertime = "ProcessOvertime";
     }
 }

@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeExcelReport.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.6">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Overtime
+﻿namespace Fanex.NexHR.Models.Overtime
 {
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Overtime Excel Report Model.
-    /// </summary>
     public class OvertimeExcelReport
     {
         public string Team { get; set; }

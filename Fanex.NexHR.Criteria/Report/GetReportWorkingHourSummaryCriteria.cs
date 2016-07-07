@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetReportWorkingHourSummaryCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.31">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Report
+﻿namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Report Working Hour Summary Criteria.
-    /// </summary>
     public class GetReportWorkingHourSummaryCriteria : CriteriaBase
     {
         public DateTime Fromdate { get; set; }

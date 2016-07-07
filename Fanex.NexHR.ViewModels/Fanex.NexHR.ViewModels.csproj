@@ -72,7 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnnualLeave\AnnualLeaveBalanceModel.cs" />
+    <Compile Include="AnnualLeave\AnnualLeaveTransactionViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />

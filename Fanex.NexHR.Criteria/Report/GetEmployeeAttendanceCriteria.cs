@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetEmployeeAttendanceCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.1">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Report
+﻿namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Employee Attendance Criteria.
-    /// </summary>
     public class GetEmployeeAttendanceCriteria : CriteriaBase
     {
         public int? SupervisorId { get; set; }

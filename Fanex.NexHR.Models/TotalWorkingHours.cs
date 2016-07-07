@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TotalWorkingHours.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// Total WorkingHours.
-    /// </summary>
     public class TotalWorkingHours
     {
         public Employee Employee { get; set; }

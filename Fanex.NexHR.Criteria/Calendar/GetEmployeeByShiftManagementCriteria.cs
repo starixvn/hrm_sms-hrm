@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetEmployeeByShiftManagementCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.12.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Calendar
+﻿namespace Fanex.NexHR.Criteria.Calendar
 {
     using Fanex.Data.Repository;
 

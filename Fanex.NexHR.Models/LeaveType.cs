@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="LeaveType.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// Leave Type.
-    /// </summary>
     public class LeaveType : EntityBase<int>
     {        
         public short? IsAnnualQuota { get; set; }

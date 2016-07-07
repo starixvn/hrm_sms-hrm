@@ -127,7 +127,7 @@ var LeaveRequestDetail = (function ($) {
             LeaveRequestDetail.getTotalLeave();
         },
         fillTimeForHalfday: function (trObject) {
-            $.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
+            $.getJSON(_global.root + 'shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
                 function (data) {
                     if (data !== null) {
                         var arrTimeIn = data.BeginCheckInTime.split(":");

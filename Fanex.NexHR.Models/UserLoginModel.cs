@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UserLoginModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.21">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using Nexus.RoleManagement.Services;
     using System;
@@ -15,9 +6,6 @@ namespace Fanex.NexHR.Models
     using System.Linq;
     using System.Web.Security;
 
-    /// <summary>
-    /// UserLogin Model.
-    /// </summary>
     [Serializable]
     public class UserLoginModel
     {

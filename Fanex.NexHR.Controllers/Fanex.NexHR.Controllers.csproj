@@ -115,7 +115,6 @@
     <Compile Include="AnnualLeaveBalanceController.cs" />
     <Compile Include="ApiControllers\EmployeeController.cs" />
     <Compile Include="ApiControllers\ReportController.cs" />
-    <Compile Include="ApiControllers\ShiftController.cs" />
     <Compile Include="AuthController.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="CalendarController.cs" />

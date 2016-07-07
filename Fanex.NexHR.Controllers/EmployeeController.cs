@@ -432,7 +432,8 @@
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (CurrentUser.HasPermission(FunctionKey.VerifyRequestOfMember, Policy.Host))
+            if (CurrentUser.HasPermission(FunctionKey.VerifyRequest, Policy.Host)
+                || CurrentUser.HasPermission(FunctionKey.ApproveRequest, Policy.Host))
             {
                 var criteria = new GetHRLeaderDashboardCriteria
                 {

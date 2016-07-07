@@ -93,7 +93,6 @@
             int? minAnnualBalance = null,
             int? category = null)
         {
-            ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
             bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Host);
             ViewBag.HasPermissionToEdit = hasPermissionToEdit;
 
@@ -109,7 +108,8 @@
                 Employee = employee,
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 MinAnnualBalance = minAnnualBalance.HasValue ? minAnnualBalance.Value : 0,
-                Category = category
+                Category = category,
+                IsShowCloseBalance = ConfigSettings.IsShowCloseBalance
             };
 
             return Index(model);
@@ -119,32 +119,11 @@
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
-            ViewBag.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
+            IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
+            model.Teams = GetBySupervisor();
+            model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
 
-            var criteria = new GetAnnualLeaveBalanceCriteria()
-            {
-                Year = model.Year,
-                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
-                IsLocal = (byte?)model.Category,
-                Role = string.Empty,
-                SupervisorID = CurrentUser.Id
-            };
-            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
-            var getGroupCriteria = new GetGroupBySupervisorCriteria()
-            {
-                SupervisorId = CurrentUser.Id
-            };
-            IList<Team> teams = new List<Team>();
-            teams = teamService.GetBySupervisor(getGroupCriteria);
-
-            ViewBag.Groups = teams;
-            ViewBag.TeamIds = model.TeamIds;
-            ViewBag.EntityList = entityList;
-            ViewBag.MinAnnualBalance = model.MinAnnualBalance;
-            ViewBag.Category = model.Category;
-
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSumaries, model.Teams);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
@@ -154,76 +133,58 @@
         public PartialViewResult MultipleInsert()
         {
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-
-            return PartialView(new AnnualLeaveBalanceMultiViewModel
+            var model = new AnnualLeaveBalanceMultiViewModel
             {
                 AffectedFrom = DateTime.Now
-            });
+            };
+            return PartialView(model);
         }
 
         [ChildActionOnly]
         public PartialViewResult MultipleReset()
         {
-            return PartialView(new AnnualLeaveBalanceMultiViewModel
+            var model = new AnnualLeaveBalanceMultiViewModel
             {
                 AffectedFrom = DateTime.Now
-            });
+            };
+            return PartialView(model);
         }
 
-        //// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-
             var model = new AnnualLeaveBalanceViewModel
                {
                    EmployeeId = id,
                    Year = DateTime.Now.Year,
-                   ExcludedRequestTrans = true
+                   ExcludedRequestTrans = true,
+                   AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, DateTime.Now.Year),
+                   Employee = GetEmployeeById(id)
                };
-
-            var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
-            {
-                EmpID = model.EmployeeId,
-                ExcludedRequestTrans = false,
-                Year = model.Year
-            };
-
-            ViewBag.Data = employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmployeeId };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            var getAnnualLeaveCriteria = new GetAnnualLeaveTransactionCriteria
-            {
-                EmpID = model.EmployeeId,
-                ExcludedRequestTrans = model.ExcludedRequestTrans,
-                Year = model.Year
-            };
-            ViewBag.Data = employeeService.GetAnnualLeaveTransactions(getAnnualLeaveCriteria);
+            model.Employee = GetEmployeeById(model.EmployeeId);
+            model.AnnualLeaveBalances = GetAnnualLeaveTransactions(model.EmployeeId, model.ExcludedRequestTrans, model.Year);
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
-            var getAnnualLeaveTransactionByIdCriteria = new GetAnnualLeaveTransactionByIdCriteria() { LeaveTransId = id };
-            AnnualLeaveBalanceModel model = employeeService.GetAnnualLeaveTransaction(getAnnualLeaveTransactionByIdCriteria);
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            var criteria = new GetAnnualLeaveTransactionByIdCriteria() 
+            { 
+                LeaveTransId = id 
+            };
+            AnnualLeaveTransactionViewModel model = employeeService.GetAnnualLeaveTransaction(criteria);
+            ViewBag.Employee = GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             return View(model);
@@ -231,78 +192,40 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public ActionResult Edit(FormCollection formCollection, AnnualLeaveBalanceModel model)
+        public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-            var command = formCollection["command"];
 
-            if (command == Resources.Labels.Delete)
+            if (formCollection["command"].Equals(Labels.Delete))
             {
-                var deleteAnnualLeaveTransactionCriteria = new DeleteAnnualLeaveTransactionCriteria()
-                {
-                    LeaveTransId = model.LeaveTransId,
-                    ModifiedDate = DateTime.Now,
-                    ModifiedBy = CurrentUser.Id
-                };
-                CommandResult result = commandService.Delete(deleteAnnualLeaveTransactionCriteria);
-                if (result.IsSuccessful)
-                {
-                    return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                    return View(model);
-                }
-            }
-
-            if (ModelState.IsValid)
-            {
-                // update annual leave here
-                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria()
-                {
-                    LeaveTransId = model.LeaveTransId,
-                    Description = model.Description,
-                    FromDate = model.AffectedFrom,
-                    DeductDays = model.DeductDays,
-                    CreditDays = model.CreditDays,
-                    ModifiedDate = DateTime.Now,
-                    ModifiedBy = CurrentUser.Id
-                };
-                CommandResult result = commandService.Update(updateAnnualLeaveTransactionCriteria);
-                ViewBag.Updated = result.IsSuccessful;
+                return Delete(model);
             }
             else
             {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+                return Edit(model);
             }
-
-            return View(model);
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = id };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = GetEmployeeById(id);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
-            return View(new AnnualLeaveBalanceModel
+            var model = new AnnualLeaveTransactionViewModel
             {
                 EmpId = id,
                 AffectedFrom = DateTime.Now,
-            });
+            };
+            return View(model);
         }
 
-        /// [Authorize(Roles = "HR")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public ActionResult Create(AnnualLeaveBalanceModel model)
+        public ActionResult Create(AnnualLeaveTransactionViewModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = model.EmpId };
-            ViewBag.Employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            ViewBag.Employee = GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             if (ModelState.IsValid)
@@ -316,17 +239,121 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = this.CurrentUser.Id
+                    CreatedBy = CurrentUser.Id
                 };
                 CommandResult result = commandService.Insert(criteria);
-                ViewBag.Inserted = result.Code == 0;
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Resources.Messages.InvalidInputData);
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Inserted = true;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
             }
 
             return View(model);
+        }
+
+        private IList<LeaveSummary> GetAnnualLeaveBalance(LeaveSummaryViewModel model)
+        {
+            var criteria = new GetAnnualLeaveBalanceCriteria()
+            {
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.TeamIds,
+                IsLocal = (byte?)model.Category,
+                Role = string.Empty,
+                SupervisorID = CurrentUser.Id
+            };
+            IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
+            return leaveSumaries;
+        }
+
+        private IList<Team> GetBySupervisor()
+        {
+            var criteria = new GetGroupBySupervisorCriteria()
+            {
+                SupervisorId = CurrentUser.Id
+            };
+            IList<Team> teams = teamService.GetBySupervisor(criteria);
+
+            return teams;
+        }
+
+        private Employee GetEmployeeById(int empId) 
+        {
+            var criteria = new GetEmployeeByIdCriteria() 
+            { 
+                EmpId = empId 
+            };
+
+            return employeeService.GetEmployeeById(criteria);
+        }
+
+        private IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(int empId, bool excludedRequest, int year)
+        {
+            var criteria = new GetAnnualLeaveTransactionCriteria
+            {
+                EmpID = empId,
+                ExcludedRequestTrans = false,
+                Year = DateTime.Now.Year
+            };
+
+            return employeeService.GetAnnualLeaveTransactions(criteria);
+        }
+
+        private ActionResult Edit(AnnualLeaveTransactionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria()
+                {
+                    LeaveTransId = model.LeaveTransId,
+                    Description = model.Description,
+                    FromDate = model.AffectedFrom,
+                    DeductDays = model.DeductDays,
+                    CreditDays = model.CreditDays,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = CurrentUser.Id
+                };
+                CommandResult result = commandService.Update(updateAnnualLeaveTransactionCriteria);
+
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Updated = true;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+            }
+
+            return View(model);
+        }
+
+        private ActionResult Delete(AnnualLeaveTransactionViewModel model)
+        {
+            var criteria = new DeleteAnnualLeaveTransactionCriteria()
+            {
+                LeaveTransId = model.LeaveTransId,
+                ModifiedDate = DateTime.Now,
+                ModifiedBy = CurrentUser.Id
+            };
+            CommandResult result = commandService.Delete(criteria);
+            if (result.IsSuccessful)
+            {
+                return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result.Message);
+                return View(model);
+            }
         }
     }
 }

@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="AnnualLeaveBalanceViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.AnnualLeave
+﻿namespace Fanex.NexHR.ViewModels.AnnualLeave
 {
+    using Fanex.NexHR.Models;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// AnnualLeaveBalance ViewModel.
-    /// </summary>
     public class AnnualLeaveBalanceViewModel
     {
         public int EmployeeId { get; set; }
@@ -22,5 +12,9 @@ namespace Fanex.NexHR.ViewModels.AnnualLeave
 
         [Display(Name = "Include employee's request")]
         public bool ExcludedRequestTrans { get; set; }
+
+        public IList<AnnualLeaveTransactionViewModel> AnnualLeaveBalances { get; set; }
+
+        public Employee Employee { get; set; }
     }
 }

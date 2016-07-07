@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AnnualLeaveBalanceModel : BaseAnnualLeaveBalanceViewModel
+    public class AnnualLeaveTransactionViewModel : BaseAnnualLeaveBalanceViewModel
     {
         public long LeaveTransId { get; set; }
 

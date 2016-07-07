@@ -1,20 +1,8 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="UpdateMemoCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.30">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Memo
+﻿namespace Fanex.NexHR.Criteria.Memo
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Update Memo criteria.
-    /// </summary>
     public class UpdateMemoCriteria : CriteriaBase
     {
         public int Id { get; set; }

@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="BaseAnnualLeaveBalanceViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.AnnualLeave
+﻿namespace Fanex.NexHR.ViewModels.AnnualLeave
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// BaseAnnualLeaveBalance ViewModel.
-    /// </summary>
     public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
     {
         [Required]
@@ -47,11 +35,6 @@ namespace Fanex.NexHR.ViewModels.AnnualLeave
 
         public int LocalLeave { get; set; }
 
-        /// <summary>
-        /// Method Validate.
-        /// </summary>
-        /// <param name="validationContext">Validation Context.</param>
-        /// <returns>List ValidationResult.</returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             IList<ValidationResult> result = new List<ValidationResult>();

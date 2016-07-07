@@ -82,7 +82,13 @@
         [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create()
         {
-            return View(new Holiday { Name = string.Empty, FromDate = DateTime.Now, ToDate = DateTime.Now });
+            var holiday = new Holiday 
+            { 
+                FromDate = DateTime.Now, 
+                ToDate = DateTime.Now 
+            };
+
+            return View(holiday);
         }
 
         [HttpPost]
@@ -121,7 +127,12 @@
         [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteHolidayCriteria { Id = id, ModifiedBy = CurrentUser.Id, ModifiedDate = DateTime.Now };
+            var criteria = new DeleteHolidayCriteria 
+            { 
+                Id = id, 
+                ModifiedBy = CurrentUser.Id, 
+                ModifiedDate = DateTime.Now 
+            };
             var result = commandService.Delete(criteria);
             return Json(result);
         }

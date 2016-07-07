@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="InsertNewGroupCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Team
+﻿namespace Fanex.NexHR.Criteria.Team
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Insert new group criteria.
-    /// </summary>
     public class InsertNewGroupCriteria : CriteriaBase
     {
         public string Code { get; set; }
@@ -38,7 +26,7 @@ namespace Fanex.NexHR.Criteria.Team
 
         public override bool IsValid()
         {
-            return true;
+            return !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
         }
     }
 }

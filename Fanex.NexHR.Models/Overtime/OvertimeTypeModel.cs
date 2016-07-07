@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="OvertimeTypeModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.9.5">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Overtime
+﻿namespace Fanex.NexHR.Models.Overtime
 {
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// Overtime Type.
-    /// </summary>
     public class OvertimeTypeModel
     {
         public short Id { get; set; }

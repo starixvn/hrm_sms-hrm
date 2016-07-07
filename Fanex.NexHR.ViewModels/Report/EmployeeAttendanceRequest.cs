@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeAttendanceRequest.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.8.1">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels.Report
 {
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using System;
 
-    /// <summary>
-    /// EmployeeAttendanceRequest Model.
-    /// </summary>
     public class EmployeeAttendanceRequest
     {
         public RequestTypeModel RequestType { get; set; }

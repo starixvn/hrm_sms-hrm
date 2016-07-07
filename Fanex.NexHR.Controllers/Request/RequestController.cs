@@ -68,8 +68,7 @@
             return PartialView(request);
         }
 
-        ///// [Authorize(Roles = "Verifier, Approver")]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -85,8 +84,7 @@
             return View("EmployeeRequest", request);
         }
 
-        /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -119,7 +117,6 @@
             return View();
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Host, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
@@ -186,13 +183,7 @@
             return supervisors;
         }
 
-        [HRAuthorize(
-            Policy.Host,
-            FunctionKey.VoidRequest,
-            FunctionKey.VerifyRequestOfEmployee,
-            FunctionKey.VerifyRequestOfMember,
-            FunctionKey.ApproveRequestOfEmployee,
-            FunctionKey.ApproveRequestOfMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.ApproveRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))
@@ -241,12 +232,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(
-            Policy.Host,
-            FunctionKey.VerifyRequestOfMember,
-            FunctionKey.VerifyRequestOfEmployee,
-            FunctionKey.ApproveRequestOfMember,
-            FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {
             CommandResult result;
@@ -289,12 +275,7 @@
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
-            var getGroupCriteria = new GetGroupBySupervisorCriteria()
-            {
-                SupervisorId = CurrentUser.Id
-            };
-
-            request.TeamCollection = teamService.GetBySupervisor(getGroupCriteria);
+            request.TeamCollection = GetGroupBySupervisor();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
@@ -320,6 +301,17 @@
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             request.CurrentUserId = CurrentUser.Id;
             request.Requests = requestList;
+        }
+
+        private IList<Team> GetGroupBySupervisor()
+        {
+            var criteria = new GetGroupBySupervisorCriteria()
+            {
+                SupervisorId = CurrentUser.Id
+            };
+
+            IList<Team> teams = teamService.GetBySupervisor(criteria);
+            return teams;
         }
 
         private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)

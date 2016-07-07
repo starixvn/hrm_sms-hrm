@@ -150,6 +150,18 @@
             return Json(result);
         }
 
+        public JsonResult GetShiftByDate(int employeeId, DateTime date)
+        {
+            var criteria = new GetEmployeeShiftByDateCriteria()
+            {
+                EmployeeId = employeeId,
+                Date = date
+            };
+
+            Shift shift = shiftService.GetByDate(criteria);
+            return Json(shift, JsonRequestBehavior.AllowGet);
+        }
+
         private static int GetTime(string time, int index = 0)
         {
             var value = 0;

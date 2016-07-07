@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestsMonitoringViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    /// <summary>
-    /// RequestMonitoring ViewModel.
-    /// </summary>
     public class RequestsMonitoringViewModel
     {
         [DataType(DataType.Date)]

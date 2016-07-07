@@ -163,8 +163,7 @@
             return PartialView("_TimeRecordDetail", timeRecords);
         }
 
-        /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfEmployee, FunctionKey.ApproveRequestOfEmployee)]
+        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -184,13 +183,11 @@
             return View("RequestMonitoring", model);
         }
 
-        /// [Authorize(Roles = "HR,Verifier,Approver")]
         [HRAuthorize(
             Policy.Host,
-            FunctionKey.VerifyRequestOfEmployee,
-            FunctionKey.ApproveRequestOfEmployee,
-            FunctionKey.VerifyRequestOfMember,
-            FunctionKey.ApproveRequestOfMember)]
+            FunctionKey.VerifyRequest,
+            FunctionKey.ApproveRequest,
+            FunctionKey.ProcessRequest)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
             DateTime toDate,
@@ -235,8 +232,7 @@
             return PartialView("RequestMonitoringDetails", requests);
         }
 
-        /// [Authorize(Roles = "Verifier,Approver")]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequestOfMember, FunctionKey.ApproveRequestOfMember)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = string.Join(",", CurrentUser.NE_Roles.Select(i => i.RoleId));
@@ -323,7 +319,7 @@
             var totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.VerifyRequestOfEmployee, Policy.Host);
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ProcessRequest, Policy.Host);
 
             return View(model);
         }

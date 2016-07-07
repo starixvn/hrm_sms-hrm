@@ -1,20 +1,8 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="UpdateGroupCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.29">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Team
+﻿namespace Fanex.NexHR.Criteria.Team
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Update Group criteria.
-    /// </summary>
     public class UpdateGroupCriteria : CriteriaBase
     {
         public int GroupId { get; set; }
@@ -40,7 +28,7 @@ namespace Fanex.NexHR.Criteria.Team
 
         public override bool IsValid()
         {
-            return GroupId > 0;
+            return GroupId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
         }
     }
 }

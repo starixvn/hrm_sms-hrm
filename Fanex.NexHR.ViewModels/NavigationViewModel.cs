@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="NavigationViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.15">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
     using System.Web;
 
-    /// <summary>
-    /// Navigation ViewModel.
-    /// </summary>
     public class NavigationViewModel
     {
         private string _controller;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.11">Created</change>
-// </history>
-
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 

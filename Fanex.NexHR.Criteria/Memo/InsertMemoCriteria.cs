@@ -1,20 +1,8 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="InsertMemoCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.30">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Memo
+﻿namespace Fanex.NexHR.Criteria.Memo
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Insert Memo criteria.
-    /// </summary>
     public class InsertMemoCriteria : CriteriaBase
     {
         public string RefNo { get; set; }

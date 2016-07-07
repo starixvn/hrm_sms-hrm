@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeShiftModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.10.22">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Calendar
+﻿namespace Fanex.NexHR.Models.Calendar
 {
     using System;
 

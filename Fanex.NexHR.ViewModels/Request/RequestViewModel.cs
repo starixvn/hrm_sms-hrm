@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Anders.Le" date="2012.5.18">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Request
+﻿namespace Fanex.NexHR.ViewModels.Request
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +12,7 @@ namespace Fanex.NexHR.ViewModels.Request
 
     public class RequestViewModel
     {
-        private bool _isFilterByAffectedDate;
+        private bool isFilterByAffectedDate;
 
         public RequestViewModel()
         {
@@ -110,15 +101,15 @@ namespace Fanex.NexHR.ViewModels.Request
             {
                 if (StatusId == -2)
                 {
-                    _isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
+                    isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
                 }
 
-                return _isFilterByAffectedDate;
+                return isFilterByAffectedDate;
             }
 
             set
             {
-                _isFilterByAffectedDate = value;
+                isFilterByAffectedDate = value;
             }
         }
 

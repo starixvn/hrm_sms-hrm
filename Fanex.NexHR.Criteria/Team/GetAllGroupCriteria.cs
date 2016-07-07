@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetAllGroupCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2015.10.27">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Team
+﻿namespace Fanex.NexHR.Criteria.Team
 {
     using Fanex.Data.Repository;
 

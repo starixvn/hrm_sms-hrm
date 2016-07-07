@@ -193,15 +193,15 @@
             return dashboard;
         }
 
-        public IList<AnnualLeaveBalanceModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
+        public IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
         {
-            IList<AnnualLeaveBalanceModel> annualLeaves = GetData<AnnualLeaveBalanceModel>(criteria).ToList();
+            IList<AnnualLeaveTransactionViewModel> annualLeaves = GetData<AnnualLeaveTransactionViewModel>(criteria).ToList();
             return annualLeaves;
         }
 
-        public AnnualLeaveBalanceModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria)
+        public AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria)
         {
-            AnnualLeaveBalanceModel annualLeave = GetDataEntity<AnnualLeaveBalanceModel>(criteria);
+            AnnualLeaveTransactionViewModel annualLeave = GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
             return annualLeave;
         }
 

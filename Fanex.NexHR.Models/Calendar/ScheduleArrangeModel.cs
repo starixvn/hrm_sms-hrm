@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ScheduleArrangeModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.18">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Calendar
+﻿namespace Fanex.NexHR.Models.Calendar
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    /// <summary>
-    /// Schedule Model.
-    /// </summary>
     public class ScheduleArrangeModel
     {
         private const string _ScheduleModelTpl =

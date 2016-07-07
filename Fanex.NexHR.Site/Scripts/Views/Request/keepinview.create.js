@@ -34,7 +34,7 @@ $(document).ready(function () {
 	});
 
 	$('.datepicker').change(function () {
-		$.getJSON(_global.root + 'api/shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: $("#Date").val() },
+		$.getJSON(_global.root + 'shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: $("#Date").val() },
 	function (data) {
 		if (data != null) {
 			$('#shiftName').text(data.Name);

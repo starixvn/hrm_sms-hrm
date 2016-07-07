@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TimeRecordModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.1.24">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
     using System;
     using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// TimeRecord Model.
-    /// </summary>
     public class TimeRecordModel
     {
         public int RecordTimeId { get; set; }

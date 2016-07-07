@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetWorkingCalendarsForShiftArrangeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.8.5">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Calendar
+﻿namespace Fanex.NexHR.Criteria.Calendar
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Working Calendars For Shift Arrange Criteria.
-    /// </summary>
     public class GetWorkingCalendarsForShiftArrangeCriteria : CriteriaBase
     {
         public int SupervisorID { get; set; }

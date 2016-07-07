@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Random.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Kan.Nguyen" date="2013.6.14">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core.Security
+﻿namespace Fanex.NexHR.Core.Security
 {
     using System.Security.Cryptography;
 
-    /// <summary>
-    /// Class Random.
-    /// </summary>
     public static class Random
     {
         #region Numeric
@@ -54,12 +42,6 @@ namespace Fanex.NexHR.Core.Security
 
         #endregion
 
-        /// <summary>
-        /// Function to random string.
-        /// </summary>
-        /// <param name="allowChars">Allow Chars.</param>
-        /// <param name="size">Size of object.</param>
-        /// <returns>String value.</returns>
         private static string RandomString(string allowChars, int size)
         {
             int length = allowChars.Length;

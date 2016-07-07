@@ -17,7 +17,7 @@
     [Authorize]
     public class UIController : BaseController
     {
-        private readonly IMessageService _messageService;
+        private readonly IMessageService messageService;
 
         public UIController()
             : this(null)
@@ -26,7 +26,7 @@
 
         public UIController(IMessageService messageService)
         {
-            _messageService = messageService ?? new MessageService();
+            this.messageService = messageService ?? new MessageService();
         }
 
         [ChildActionOnly]
@@ -34,19 +34,19 @@
         {
             var criteria = new GetMessageByEmployeeCriteria
             {
-                EmployeeId = this.CurrentUser.Id,
+                EmployeeId = CurrentUser.Id,
                 EffectedDate = DateTime.Today,
                 IsDisabled = 0
             };
 
-            ViewBag.Messages = _messageService.GetMessageByEmployee(criteria);
-            return PartialView(this.CurrentUser);
+            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+            return PartialView(CurrentUser);
         }
 
         [ChildActionOnly]
         public ActionResult GlobalScript()
         {
-            ViewBag.Employee = this.CurrentUser;
+            ViewBag.Employee = CurrentUser;
             return PartialView();
         }
 

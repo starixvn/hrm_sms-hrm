@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmailModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// Email Model.
-    /// </summary>
     public class EmailModel
     {
         public string Subject { get; set; }

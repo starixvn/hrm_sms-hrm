@@ -1,19 +1,7 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GetOvertimeReportInYearCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.7.31">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria.Overtime
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get overtime in year criteria.
-    /// </summary>
     public class GetOvertimeReportInYearCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "EmpId")]

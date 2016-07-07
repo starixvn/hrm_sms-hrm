@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="WorkingCalendarModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.5">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models.Calendar
+﻿namespace Fanex.NexHR.Models.Calendar
 {
     using System;
 
-    /// <summary>
-    /// WorkingCalendar Model.
-    /// </summary>
     public class WorkingCalendarModel
     {
         public Employee Employee { get; set; }

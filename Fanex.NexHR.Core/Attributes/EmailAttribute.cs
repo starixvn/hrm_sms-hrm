@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmailAttribute.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core.Attributes
+﻿namespace Fanex.NexHR.Core.Attributes
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
-    
-    /// <summary>
-    /// Email Attribute.
-    /// </summary>
+
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class EmailAttribute : RegularExpressionAttribute, IClientValidatable
     {

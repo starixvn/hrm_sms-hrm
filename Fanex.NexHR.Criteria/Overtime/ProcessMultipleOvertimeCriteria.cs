@@ -1,21 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ProcessMultipleOvertimeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.8.1">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria.Overtime
 {
     using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// Process multiple overtime criteria.
-    /// </summary>
     public class ProcessMultipleOvertimeCriteria : CriteriaBase
     {
         public int ProcessedBy { get; set; }
@@ -42,11 +30,6 @@ namespace Fanex.NexHR.Criteria.Overtime
             return ProcessedBy > 0;
         }
 
-        /// <summary>
-        /// Gets the role identifier for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The role id of processor.</returns>
         public int GetRoleIdForProcessOvertime(string command)
         {
             int roleId = 0;
@@ -70,11 +53,6 @@ namespace Fanex.NexHR.Criteria.Overtime
             return roleId;
         }
 
-        /// <summary>
-        /// Gets the key for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The key name for processing request.</returns>
         private string GetSpKeyForProcessMultipleOvertime(string command)
         {
             string key = string.Empty;

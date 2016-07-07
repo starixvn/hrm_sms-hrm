@@ -1,21 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ProcessSingleOvertimeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Josh.Phan" date="2014.8.1">Created.</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Overtime
+﻿namespace Fanex.NexHR.Criteria.Overtime
 {
     using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
 
-    /// <summary>
-    /// Process overtime criteria.
-    /// </summary>
     public class ProcessSingleOvertimeCriteria : CriteriaBase
     {
         public long RequestID { get; set; }
@@ -42,11 +30,6 @@ namespace Fanex.NexHR.Criteria.Overtime
             return ProcessedBy > 0 && RequestID > 0;
         }
 
-        /// <summary>
-        /// Gets the key for process request.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <returns>The key name for processing request.</returns>
         private string GetSpKeyForProcessSingleOvertime(string command)
         {
             string key = string.Empty;

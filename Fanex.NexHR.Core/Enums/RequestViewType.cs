@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="RequestViewType.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Paul.Nguyen" date="2013.11.21">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Core.Enums
+﻿namespace Fanex.NexHR.Core.Enums
 {
     using System.Diagnostics.CodeAnalysis;
     using Fanex.Common.Extensions;

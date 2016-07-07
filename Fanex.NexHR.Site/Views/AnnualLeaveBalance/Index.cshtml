@@ -27,8 +27,8 @@
 
                     <select id="Category" name="Category" class="category">
                         <option value="">-- All --</option>
-                        <option selected="@(ViewBag.Category == 1)" value="1">Local</option>
-                        <option selected="@(ViewBag.Category == 0)" value="0">Expat</option>
+                        <option selected="@(Model.Category == 1)" value="1">Local</option>
+                        <option selected="@(Model.Category == 0)" value="0">Expat</option>
                     </select>
                 </div>
                 <div class="grid_1 gridlabel">
@@ -41,18 +41,18 @@
                     @Html.LabelFor(model => model.Employee)
                 </div>
                 <div class="grid_6">
-                    @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark, style = "width:183px;" })
+                    @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, style = "width:183px;" })
                     @Html.HiddenFor(model => model.EmployeeId)
                 </div>
                 <div class="grid_1 gridlabel">
-                    @Html.LabelFor(model => model.Team)
+                    @Labels.Team
                 </div>
                 <div class="grid_6">
                     <select id="TeamId" multiple="multiple" name="TeamId" class="yearpicker">
                         @{
-                            var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
+                            var teamIds = Model.TeamIds != null ? Model.TeamIds.Split(',') : null;
                             var selected = string.Empty;
-                            foreach (Team team in ViewBag.Groups)
+                            foreach (Team team in Model.Teams)
                             {
                                 selected = string.Empty;
                                 if (teamIds != null)
@@ -80,7 +80,7 @@
                         <option value="0">@Labels.None</option>
                         @for (int i = 1; i <= 10; i++)
                         {
-                            <option selected="@(ViewBag.MinAnnualBalance == i)" value="@i">@i</option>
+                            <option selected="@(Model.MinAnnualBalance == i)" value="@i">@i</option>
                         }
                     </select>
                 </div>
@@ -202,7 +202,6 @@
     @if (checkSummaryList)
     {
         <tbody>
-            @{int index = 1;}
             @foreach (LeaveSummaryByTeam item in ViewBag.LeaveSummaryByTeamList)
             {
                 if (item.LeaveSummaryInTeam.Count > 0)

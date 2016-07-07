@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="Extensions.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     using System;
     using System.Collections.Generic;
@@ -23,22 +14,10 @@ namespace Fanex.NexHR.Core
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// Extensions Class.
-    /// </summary>
     public static class Extensions
     {
         private static readonly object _O = new object();
 
-        /// <summary>
-        /// Radio button list.
-        /// </summary>
-        /// <typeparam name="TModel">Input TModel.</typeparam>
-        /// <typeparam name="TProperty">Input TProperty.</typeparam>
-        /// <param name="htmlHelper">Html Helper.</param>
-        /// <param name="expression">Input Expression.</param>
-        /// <param name="listOfValues">SelectListItem List.</param>
-        /// <returns>MVCHtml String.</returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString RadioButtonList<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
@@ -75,17 +54,6 @@ namespace Fanex.NexHR.Core
             return htmlHelper.BeginForm(null, null, FormMethod.Get);
         }
 
-        /// <summary>
-        /// Date Picker.
-        /// </summary>
-        /// <param name="htmlHelper">Html Helper.</param>
-        /// <param name="name">Input name.</param>
-        /// <param name="date">Input The date.</param>
-        /// <param name="minDate">The min date.</param>
-        /// <param name="maxDate">The max date.</param>
-        /// <param name="formatDate">Format date.</param>
-        /// <param name="unavailDates">Unavailable Dates.</param>
-        /// <returns>MVCHtml String.</returns>
         public static MvcHtmlString DatePicker(
             this HtmlHelper htmlHelper,
             string name,
@@ -114,18 +82,6 @@ namespace Fanex.NexHR.Core
             return MvcHtmlString.Create(textbox.ToString());
         }
 
-        /// <summary>
-        /// Date Picker.
-        /// </summary>
-        /// <typeparam name="TModel">Input TModel.</typeparam>
-        /// <typeparam name="TValue">Input TValue.</typeparam>
-        /// <param name="html">Html Helper.</param>
-        /// <param name="expression">Input Expression.</param>
-        /// <param name="minDate">The min date.</param>
-        /// <param name="maxDate">The max date.</param>
-        /// <param name="formatDate">Format date.</param>
-        /// <param name="unavailDates">Unavailable Dates.</param>
-        /// <returns>MVCHtml String.</returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString DatePickerFor<TModel, TValue>(
             this HtmlHelper<TModel> html, 
@@ -160,14 +116,6 @@ namespace Fanex.NexHR.Core
             return date;
         }
 
-        /// <summary>
-        /// Year picker.
-        /// </summary>
-        /// <param name="htmlHelper">Html Helper.</param>
-        /// <param name="name">Input name.</param>
-        /// <param name="fromYear">Default from year 2000.</param>
-        /// <param name="currentYear">Default current year 2000.</param>
-        /// <returns>MVCHtml String.</returns>
         public static MvcHtmlString YearPicker(this HtmlHelper htmlHelper, string name, int fromYear = 2000, int currentYear = 2000, bool isShowAll = false)
         {
             var list = new List<SelectListItem>();
@@ -239,14 +187,6 @@ namespace Fanex.NexHR.Core
             return CheckBoxList(htmlHelper, name, selectList, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
         }
 
-        /// <summary>
-        /// CheckBox List.
-        /// </summary>
-        /// <param name="htmlHelper">Html Helper.</param>
-        /// <param name="name">Input name.</param>
-        /// <param name="selectList">Select List.</param>
-        /// <param name="htmlAttributes">Html Attributes.</param>
-        /// <returns>MVCHtml String.</returns>
         public static MvcHtmlString CheckBoxList(
             this HtmlHelper htmlHelper, 
             string name, 
@@ -329,11 +269,6 @@ namespace Fanex.NexHR.Core
         }
 
         #region Business
-        /// <summary>
-        /// Convert status to display string.
-        /// </summary>
-        /// <param name="status">Status of request.</param>
-        /// <returns>Display string status.</returns>
         public static string ToText(this byte status)
         {
             switch (status)
@@ -349,11 +284,6 @@ namespace Fanex.NexHR.Core
             }
         }
 
-        /// <summary>
-        /// Convert request type to display string.
-        /// </summary>
-        /// <param name="type">Type of request.</param>
-        /// <returns>Text of request.</returns>
         public static string RequestTypeToText(this short type)
         {
             switch (type)
@@ -491,17 +421,6 @@ namespace Fanex.NexHR.Core
             return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day) ? true : false;
         }
 
-        /// <summary>
-        /// DropDown List For.
-        /// </summary>
-        /// <typeparam name="TModel">Input TModel.</typeparam>
-        /// <typeparam name="TProperty">Input TProperty.</typeparam>
-        /// <param name="htmlHelper">Html Helper.</param>
-        /// <param name="expression">Input Expression.</param>
-        /// <param name="selectList">Select List.</param>
-        /// <param name="firstItem">First Item.</param>
-        /// <param name="htmlAttributes">Html Attributes.</param>
-        /// <returns>MVCHtml String.</returns>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString DropDownListFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
@@ -534,15 +453,6 @@ namespace Fanex.NexHR.Core
 
         #endregion
 
-        /// <summary>
-        /// Render CheckBoxList.
-        /// </summary>
-        /// <param name="name">Input name.</param>
-        /// <param name="selectList">Select List.</param>
-        /// <param name="htmlAttributes">Html Attributes.</param>
-        /// <param name="fullHtmlFieldName">Full Html FieldName.</param>
-        /// <param name="values">Input value.</param>
-        /// <returns>String Builder.</returns>
         private static StringBuilder RenderCheckBoxList(
             string name, 
             ref IEnumerable<SelectListItem> selectList, 

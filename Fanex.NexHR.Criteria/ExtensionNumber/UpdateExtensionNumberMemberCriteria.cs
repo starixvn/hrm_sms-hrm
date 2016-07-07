@@ -27,7 +27,7 @@
 
         public override bool IsValid()
         {
-            return true;
+            return ExtID > 0;
         }
     }
 }

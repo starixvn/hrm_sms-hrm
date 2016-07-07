@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetLeaveTypeCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.7.29">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.LeaveType
+﻿namespace Fanex.NexHR.Criteria.LeaveType
 {
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// GetLeaveType Criteria.
-    /// </summary>
     public class GetLeaveTypeCriteria : CriteriaBase
     {
         public bool ExcludeNotShown { get; set; }

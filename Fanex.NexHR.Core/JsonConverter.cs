@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="JsonConverter.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.15">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     using System.Collections.Generic;
     using System.Web.Script.Serialization;
 
-    /// <summary>
-    /// Convert from JSON format to Object and vice versa.
-    /// </summary>
     public static class JsonConverter
     {
         public static string ToJson(object o)

@@ -1,20 +1,8 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="GetEmployeeWorkingCalendarByDateCriteria.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.11">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Criteria.Report
+﻿namespace Fanex.NexHR.Criteria.Report
 {
     using System;
     using Fanex.Data.Repository;
 
-    /// <summary>
-    /// Get Employee Working Calendar By Date Criteria.
-    /// </summary>
     public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     {
         public int? EmployeeId { get; set; }

@@ -270,7 +270,7 @@ var LeaveRequest = (function ($) {
             LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
         },
         getTimeByShift: function () {
-            $.getJSON(_global.root + 'api/shift/getshiftbydate',
+            $.getJSON(_global.root + 'shift/getshiftbydate',
             { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
             function (data) {
                 if (data !== null) {

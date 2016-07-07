@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="TeamSupervisorViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Bradley.Mac" date="2014.7.23">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.EmployeeGroup
+﻿namespace Fanex.NexHR.ViewModels.EmployeeGroup
 {
-    /// <summary>
-    /// Team Supervisor ViewModel.
-    /// </summary>
     public class TeamSupervisorViewModel
     {
         public int GroupId { get; set; }

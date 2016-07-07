@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="UserSession.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.Core
+﻿namespace Fanex.NexHR.Core
 {
     using System;
 
-    /// <summary>
-    /// User Session.
-    /// </summary>
     [Serializable]
     public class UserSession 
     {

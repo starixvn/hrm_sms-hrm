@@ -1,17 +1,5 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmailSettingsModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2014.2.13">Created</change>
-// </history>
-
-namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models
 {
-    /// <summary>
-    /// EmailSettings Model.
-    /// </summary>
     public class EmailSettingsModel
     {
         public int GroupId { get; set; }
