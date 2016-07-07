@@ -369,12 +369,12 @@
 
         private CommandResult Process(ProcessRequestViewModel model)
         {
-            var criteria = new ApproveRequestCriteria()
+            var criteria = new ProcessRequestCriteria()
             {
+                Action = model.Command,
                 RequestId = model.RequestId,
                 RoleId = model.RoleId,
                 Comment = model.Comment,
-                IgnoredDisciplines = model.IgnoredDisciplines,
                 ProcessedBy = CurrentUser.Id
             };
 

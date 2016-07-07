@@ -60,7 +60,7 @@ BEGIN
 			@RequestType IS NULL
 			OR su.RequestType = @RequestType
 			)
-		AND  su.ActionType = 2
+		AND  su.ActionType = 3
 		AND ISNULL(su.IsDeleted, 0) = 0
 
 	IF (
@@ -79,7 +79,7 @@ BEGIN
 				@RequestType IS NULL
 				OR su.RequestType = @RequestType
 				)
-			AND su.ActionType = 2
+			AND su.ActionType = 3
 			AND ISNULL(su.IsDeleted, 0) = 0
 	END
 
