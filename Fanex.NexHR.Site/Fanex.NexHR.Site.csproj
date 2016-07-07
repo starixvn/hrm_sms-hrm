@@ -766,7 +766,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Styles\criteriapanel.css" />
-    <Content Include="Styles\employee.edit.css" />
     <Content Include="Styles\Images\FullCalendar\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Styles\Images\FullCalendar\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Styles\Images\FullCalendar\ui-bg_glass_55_fbf9ee_1x400.png" />
