@@ -28,8 +28,6 @@
                         },
                         splitOn: "TeamID").First();
 
-                    employee.NX_Roles = multi.Read<SystemRoleModel>().ToList();
-
                     return employee;
                 }
             }
@@ -58,7 +56,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    var employees = multi.Read<Employee, dynamic, Employee>(
+                    IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
@@ -66,7 +64,7 @@
                         },
                         splitOn: "TeamID");
 
-                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
                         (er, r) =>
                         {
                             er.Role = r;
@@ -74,19 +72,17 @@
                             return er;
                         },
                         "RoleId");
-                    foreach (var employee in employees)
+
+                    employees = GroupByRoles(employees, roles);
+
+                    PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
+                       prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalrow")).FirstOrDefault();
+
+                    if (totalitem != null)
                     {
-                        employee.NX_Roles = roles.Where(i => i.EmployeeId == employee.Id).Select(i => i.Role).ToList();
+                        var hashParam = db.GetOuputParams();
+                        totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
                     }
-
-                     PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
-                        prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalrow")).FirstOrDefault();
-
-                if (totalitem != null)
-                {
-                    var hashParam = db.GetOuputParams();
-                    totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
-                }
 
                     return employees.ToList();
                 }
@@ -95,19 +91,43 @@
 
         public IList<Employee> GetEmployeesByRole(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<Employee, dynamic, Employee>(
+                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                {
+                    IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
                             return e;
                         },
-                        splitOn: "TeamID",
-                        parameterValues: criteria.GetSpParams()).ToList();
+                        splitOn: "TeamID");
 
-                return entity;
+
+                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                            (er, r) =>
+                            {
+                                er.Role = r;
+
+                                return er;
+                            },
+                            "RoleId");
+                    
+                    employees = GroupByRoles(employees, roles);
+
+                    return employees.ToList();
+                }
             }
+        }
+
+        private IEnumerable<Employee> GroupByRoles(IEnumerable<Employee> employees, IEnumerable<EmployeeRole> roles)
+        {
+            foreach (var employee in employees)
+            {
+                employee.NX_Roles = roles.Where(i => i.EmployeeId == employee.Id).Select(i => i.Role).ToList();
+            }
+
+            return employees;
         }
     }
 }

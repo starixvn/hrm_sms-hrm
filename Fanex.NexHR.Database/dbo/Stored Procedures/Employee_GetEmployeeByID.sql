@@ -35,7 +35,6 @@ BEGIN
 		,e.Gender
 		,e.GroupId
 		,g.DepartmentId
-		,e.Roles
 		,e.ManagerId
 		,e.JoinedDate
 		,e.ConfirmedDate
@@ -110,6 +109,4 @@ BEGIN
 		LEFT JOIN dbo.Country ct WITH (NOLOCK) ON e_s.CountryCode = ct.CountryCode
 		LEFT JOIN dbo.LookupData lk WITH (NOLOCK) ON e.JobTitleId = lk.Id AND lk.LookupId = 1
 	WHERE e.EmpId = @Empid
-	
-	EXEC dbo.[Role_GetRolesByUserId] @Empid
 END

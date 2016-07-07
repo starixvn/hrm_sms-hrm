@@ -207,24 +207,6 @@
 
         #endregion Contract
 
-        public string[] RoleArray
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(Roles))
-                {
-                    return null;
-                }
-
-                return Roles.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            set
-            {
-                Roles = Utilities.StringArrayToString(value);
-            }
-        }
-
         public string DisplayName
         {
             get
@@ -233,11 +215,6 @@
                 ? string.Empty
                 : NickName + " (" + FullName + ")";
             }
-        }
-
-        public bool IsMember()
-        {
-            return NX_Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
         }
     }
 }

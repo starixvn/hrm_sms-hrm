@@ -2,6 +2,7 @@
 @model Fanex.NexHR.ViewModels.Report.EmployeeAttendanceViewModel
 @{
     ViewBag.Title = @Labels.AttendanceReport;
+    bool isMember = (bool)ViewBag.IsMember;
 }
 @section css{
     @Url.CombresLink("attendancereportcss")
@@ -92,7 +93,7 @@
             @Labels.Team
         </div>
         <div class="grid_6">
-            @if (Model.IsMember)
+            @if (isMember)
             {
                 <span class="isMember">@Model.TeamName</span>
                 @Html.Hidden("EmployeeGroupId", Model.GroupIds)
@@ -115,7 +116,7 @@
             @Html.Hidden("EmployeeId", Model.EmpId)
             @Html.ValidationMessageFor(model => model.EmpId)
         </div>
-        @Html.HiddenFor(model => model.IsMember)
+
         <div class="clear">
         </div>
         <div class="space">

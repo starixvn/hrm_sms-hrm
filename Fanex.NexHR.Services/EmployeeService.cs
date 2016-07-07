@@ -68,6 +68,10 @@
             if (criteria != null && criteria.IsValid())
             {
                 employee = employeeRepository.GetEmployeeById(criteria);
+                if (employee != null)
+                {
+                    employee.NX_Roles = roleService.GetRolesByUserId(employee.Id).ToList();
+                }
             }
 
             return employee;
@@ -98,6 +102,10 @@
             if (criteria != null && criteria.IsValid())
             {
                 employee = employeeRepository.GetEmployeeByCode(criteria);
+                if (employee != null)
+                {
+                    employee.NX_Roles = roleService.GetRolesByUserId(employee.Id).ToList();
+                }
             }
 
             return employee;
@@ -223,9 +231,9 @@
 
         public int ValidateUser(string code, string password)
         {
-            var criteria = new GetEmployeeByCodeCriteria() 
-            { 
-                Code = code 
+            var criteria = new GetEmployeeByCodeCriteria()
+            {
+                Code = code
             };
             Employee employee = GetEmployeeByCode(criteria);
             int retCode = ValidateUser(employee, password);

@@ -476,8 +476,7 @@
                 <div class="input" id="userRole">
                     @Html.CheckBox("Member", true, new { disabled = true })
                     @Html.Label("Member", "Member")
-                    @Html.CheckBoxListFor(model => model.RoleArray, roleItemList)
-                    @Html.ValidationMessageFor(model => model.RoleArray)
+                    @Html.CheckBoxList("Roles", roleItemList)
                 </div>
                 <div class="clear"></div>
             </li>

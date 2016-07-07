@@ -92,9 +92,8 @@
             {
                 model.TeamName = employee.Team.Name;
                 model.GroupIds = employee.Team.Id.ToString();
-                model.IsMember = employee.IsMember();
             }
-
+            ViewBag.IsMember = CurrentUser.NE_Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
             return View(model);
         }
 

@@ -26,7 +26,6 @@ BEGIN
 		e.Phone,
 		e.Gender,
 		e.GroupId,
-		e.Roles,
 		e.ManagerId,
 		e.JoinedDate,
 		e.ConfirmedDate,
