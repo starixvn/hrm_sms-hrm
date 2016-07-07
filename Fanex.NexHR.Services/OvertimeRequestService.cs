@@ -14,7 +14,6 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Overtime;
 
     public class OvertimeRequestService : BaseService, IOvertimeRequestService
     {
