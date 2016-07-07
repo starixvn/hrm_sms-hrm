@@ -236,72 +236,62 @@
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllMonday", new { @class = "chkAllMonday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(1).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(1).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllTuesday", new { @class = "chkAllTuesday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(2).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(2).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllWednesday", new { @class = "chkAllWednesday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(3).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(3).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllThursday", new { @class = "chkAllThursday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(4).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(4).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllFriday", new { @class = "chkAllFriday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(5).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(5).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllSaturday", new { @class = "chkAllSaturday" })
                 </th>
-            }
-            <th>
-                @Model.FromDate.AddDays(6).ToDateOfWeek()
-            </th>
-            @if (hasPermission)
-            {
+                <th>
+                    @Model.FromDate.AddDays(6).ToDateOfWeek()
+                </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllSunday", new { @class = "chkAllSunday" })
                 </th>
-
                 <th>
                     <a href="javascript:;" class="lnkPublicAll">@Labels.Public</a>
                 </th>
-
                 <th></th>
             }
+            else
+            {
+                for (var index = 1; index < 7; index++)
+                {
+                    <th>
+                        @Model.FromDate.AddDays(index).ToDateOfWeek()
+                    </th>
+                }
+            }
+            
             <th>@Labels.ModifiedBy</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.ScheduleArranges != null && Model.ScheduleArranges.Any())
+        @if (Model.ScheduleArranges.Any())
         {
             foreach (ScheduleArrangeViewModel scheduleModel in Model.ScheduleArranges)
             {

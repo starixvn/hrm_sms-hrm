@@ -47,14 +47,14 @@
 
         public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingCalendarModel> workingCalendarModels = null;
+
             if (criteria.IsValid())
             {
                 workingCalendarModels = workingCalendarRepository.GetWorkingCalendarsForShiftArrange(criteria);
             }
 
-            return workingCalendarModels;
+            return workingCalendarModels ?? new List<WorkingCalendarModel>();
         }
 
         public CommandResult InsertOrUpdateWorkingCalendars(InsertOrUpdateWorkingCalendarsCriteria criteria)
@@ -65,32 +65,32 @@
             {
                 result = commandService.Insert(criteria);
             }
-            
+
             return result;
         }
 
         public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<ShiftStatisticModel> shiftStatisticModels = null;
+
             if (criteria.IsValid())
             {
                 shiftStatisticModels = this.GetData<ShiftStatisticModel>(criteria).ToList();
             }
 
-            return shiftStatisticModels;
+            return shiftStatisticModels ?? new List<ShiftStatisticModel>();
         }
 
         public IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<EmployeeShiftModel> employeeShifts = null;
+
             if (criteria.IsValid())
             {
                 employeeShifts = workingCalendarRepository.GetEmployeeShift(criteria);
             }
 
-            return employeeShifts;
+            return employeeShifts ?? new List<EmployeeShiftModel>();
         }
 
         public IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)

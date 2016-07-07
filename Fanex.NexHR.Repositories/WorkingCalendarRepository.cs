@@ -1,15 +1,15 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
@@ -64,15 +64,19 @@
                 var list = new List<WorkingScheduleViewModel>();
                 if (dttWorkingSchedule.Rows.Count != 0)
                 {
-                    var loopNum = (dttWorkingSchedule.Columns.Count - 5) / 2;
+                    var totalEmployeeInfoColumn = 5;
+                    var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
+                    var index = totalEmployeeInfoColumn;
+
                     for (int i = 1; i <= loopNum; i++)
                     {
                         var workingDay = new WorkingScheduleViewModel
                         {
-                            Title = dttWorkingSchedule.Rows[0][i == 1 ? (i + 4) : ((i * 2) + 3)].ToString(),
+                            Title = dttWorkingSchedule.Rows[0][index++].ToString(),
                             Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
-                            Color = dttWorkingSchedule.Rows[0][i == 1 ? (i + 5) : ((i * 2) + 4)].ToString(),
+                            Color = dttWorkingSchedule.Rows[0][index++].ToString(),
                         };
+
                         list.Add(workingDay);
                     }
                 }

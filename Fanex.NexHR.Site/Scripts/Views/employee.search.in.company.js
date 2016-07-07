@@ -4,58 +4,61 @@
 
 var nickName;
 $(document).ready(function () {
-	$("#Employee").autocomplete({
-		source: function (request, response) {
-			$.ajax({
-				url: _global.root + 'api/employee/getemployees',
-				data: {
-					query: request.term,
-					$top: 10
-				},
-				success: function (data) {
-					response($.map(data, function (item) {
-						return {
-							label: item.NickName + ' (' + item.FullName + ')',
-							value: item.Id
-						};
-					}));
-				}
-			});
-		},
-		minLength: 1,
-		select: function (event, ui) {
-			if (ui.item != null) {
-				nickName = ui.item.label;
-				$('#Employee').val(nickName);
-				$('#EmployeeId').val(ui.item.value);
-			}
-		},
-		focus: function (event, ui) {
-			if (ui.item != null) {
-				nickName = ui.item.label;
-				$('#Employee').val(nickName);
-				$('#EmployeeId').val(ui.item.value);
-			}
-			event.preventDefault();
-		},
-		change: function (event, ui) {
-			if (ui.item != null) {
-				nickName = ui.item.label;
-				$('#Employee').val(nickName);
-				$('#EmployeeId').val(ui.item.value);
-			}
-		},
-		close: function () {
-			$('#Employee').val(nickName);
-		}
-	});
+    var $employee = $("#Employee");
+    var $employeeId = $('#EmployeeId');
 
-	// when user clear the textbox, we must set employeeId field to -1 for seaching all employees
-	$('form').submit(function () {
-		var employee = $('#Employee').val();
-		if (employee.length === 0) {
-			$('#EmployeeId').val(-1);
-		}
-		return true;
-	});
+    $employee.autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: _global.root + 'api/employee/getemployees',
+                data: {
+                    query: request.term,
+                    $top: 10
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.Id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            if (ui.item != null) {
+                nickName = ui.item.label;
+                $employee.val(nickName);
+                $employeeId.val(ui.item.value);
+            }
+        },
+        focus: function (event, ui) {
+            if (ui.item != null) {
+                nickName = ui.item.label;
+                $employee.val(nickName);
+                $employeeId.val(ui.item.value);
+            }
+            event.preventDefault();
+        },
+        change: function (event, ui) {
+            if (ui.item != null) {
+                nickName = ui.item.label;
+                $employee.val(nickName);
+                $employeeId.val(ui.item.value);
+            }
+        },
+        close: function () {
+            $employee.val(nickName);
+        }
+    });
+
+    // when user clear the textbox, we must set employeeId field to -1 for seaching all employees
+    $('form').submit(function () {
+        var employee = $employee.val();
+        if (employee.length === 0) {
+            $employeeId.val(-1);
+        }
+        return true;
+    });
 });

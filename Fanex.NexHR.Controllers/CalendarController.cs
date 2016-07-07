@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -21,14 +16,18 @@
     using Fanex.NexHR.ViewModels.Supervisor;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class CalendarController : BaseController
     {
-        private readonly IWorkingCalendarService _workingCalendarService;
-        private readonly ITeamService _teamService;
-        private readonly IShiftService _shiftService;
-        private readonly ILookupDataService _lookupDataService;
-        private readonly IEmployeeService _employeeService;
+        private readonly IWorkingCalendarService workingCalendarService;
+        private readonly ITeamService teamService;
+        private readonly IShiftService shiftService;
+        private readonly ILookupDataService lookupDataService;
+        private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
         public CalendarController()
@@ -44,15 +43,14 @@
             IEmployeeService employeeService,
             ICommandService commandService)
         {
-            _workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            _teamService = teamService ?? new TeamService();
-            _shiftService = shiftService ?? new ShiftService();
-            _lookupDataService = lookupDataService ?? new LookupDataService();
-            _employeeService = employeeService ?? new EmployeeService();
+            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            this.teamService = teamService ?? new TeamService();
+            this.shiftService = shiftService ?? new ShiftService();
+            this.lookupDataService = lookupDataService ?? new LookupDataService();
+            this.employeeService = employeeService ?? new EmployeeService();
             this.commandService = commandService ?? new CommandService();
         }
 
-        /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule()
@@ -61,12 +59,12 @@
             var fromDate = GetStartOfWeek(currentDate);
             var toDate = GetEndOfWeek(currentDate);
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
-            IList<LookupData> jobTitles = _lookupDataService.GetAll(getAllJobTitleCriteria);
+            IList<LookupData> jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria);
             var scheduleArrangeViewModel = new ScheduleArrangeFilterViewModel
             {
                 FromDate = fromDate,
@@ -80,7 +78,6 @@
             return View(scheduleArrangeViewModel);
         }
 
-        /// [Authorize(Roles = "ShiftManager")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
@@ -91,7 +88,7 @@
             {
                 ScheduleModels = scheduleArrangeDetail,
                 ShiftMultipleModels = shiftMultipleDetail,
-                ModifiedBy = this.CurrentUser.Id,
+                ModifiedBy = CurrentUser.Id,
                 ModifiedDate = DateTime.Now,
             };
 
@@ -102,27 +99,31 @@
                 ScheduleList = scheduleArrangeModel.ScheduleModelXML,
                 ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
             };
-            CommandResult result = _workingCalendarService.InsertOrUpdateWorkingCalendars(criteria);
+            CommandResult result = workingCalendarService.InsertOrUpdateWorkingCalendars(criteria);
 
             return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
         }
 
-        /// [Authorize(Roles = "ShiftManager")]
         [HttpGet]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
             var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
             {
-                SupervisorID = this.CurrentUser.Id,
+                SupervisorID = CurrentUser.Id,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupIds,
                 JobTitleId = jobTitles,
                 EmpID = employeeId
             };
-            var workingCalendars = _workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
-            var scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars);
+            var workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
+            var scheduleArranges = new List<ScheduleArrangeViewModel>();
+
+            if (workingCalendars.Any())
+            {
+                scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars).ToList();
+            }
 
             var scheduleViewModel = new ScheduleViewModel
             {
@@ -137,7 +138,6 @@
             return View(scheduleViewModel);
         }
 
-        /// [Authorize(Roles = "ShiftManager,HR")]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
@@ -145,7 +145,7 @@
             var fromDate = GetStartOfWeek(currentDate);
             var toDate = GetEndOfWeek(currentDate);
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = _teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
 
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
@@ -157,7 +157,6 @@
             return View(shiftStatisticViewModel);
         }
 
-        /// [Authorize(Roles = "ShiftManager,HR")]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
@@ -170,7 +169,7 @@
                 IsShowWholeCompany = isShowWholeCompany,
                 IsLocal = isLocal
             };
-            var shiftStatisticModels = _workingCalendarService.GetShiftStatistic(getShiftCriteria);
+            var shiftStatisticModels = workingCalendarService.GetShiftStatistic(getShiftCriteria);
 
             var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
             {
@@ -185,7 +184,6 @@
             return View(shiftStatisticContentViewModel);
         }
 
-        /// [Authorize(Roles = "ShiftManager,HR")]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
@@ -201,16 +199,15 @@
                 IsLocal = isLocal,
                 IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
                 ShiftId = shiftId.HasValue ? shiftId.Value : -1,
-                Shifts = _shiftService.GetAll()
+                Shifts = shiftService.GetAll()
             };
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            model.Teams = _teamService.GetAll(getAllGroupCriteria);
+            model.Teams = teamService.GetAll(getAllGroupCriteria);
 
             return View(model);
         }
 
-        /// [Authorize(Roles = "ShiftManager,HR")]
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShiftContent(
             DateTime workDate,
@@ -231,7 +228,7 @@
                 IsLocal = isLocal
             };
 
-            IList<EmployeeShiftModel> employeeShifts = _workingCalendarService.GetEmployeeShift(criteria);
+            IList<EmployeeShiftModel> employeeShifts = workingCalendarService.GetEmployeeShift(criteria);
 
             return View(employeeShifts);
         }
@@ -247,27 +244,20 @@
                 IncludeLoginUser = false
             };
 
-            IList<SupervisorNameModel> employees = _employeeService.GetSupervisorByQuery(criteria);
+            IList<SupervisorNameModel> employees = employeeService.GetSupervisorByQuery(criteria);
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetShift(string query, bool isShowOff = false)
         {
-            var shifts = _shiftService.GetByQuery(query.Trim(), isShowOff);
+            var shifts = shiftService.GetByQuery(query.Trim(), isShowOff);
 
             return Json(shifts, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MyWorkingSchedule()
         {
-            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria()
-            {
-                ReportDate = DateTime.Now,
-                EmpId = this.CurrentUser.Id
-            };
-            IList<WorkingScheduleViewModel> workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
-
-            return View(workingSchedule);
+            return View();
         }
 
         public ActionResult GetWorkingSchedule(DateTime date, int id)
@@ -277,7 +267,7 @@
                 ReportDate = date,
                 EmpId = id
             };
-            var workingSchedule = _workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
+            var workingSchedule = workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
 
             return Json(workingSchedule, JsonRequestBehavior.AllowGet);
         }
@@ -292,12 +282,12 @@
             ViewBag.JobTitleId = string.Empty;
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = _teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
-            IList<LookupData> listJobTitle = _lookupDataService.GetAll(getAllJobTitleCriteria);
+            IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
             ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -329,8 +319,8 @@
             {
                 ReportDate = DateTime.Parse(firstDateInMonth.ToString())
             };
-            var userChangedShift = _employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
-            var userHalfDayOffs = _employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
+            var userChangedShift = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
+            var userHalfDayOffs = employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
 
             ViewBag.FromNewDate = fromDate;
             ViewBag.ToNewDate = toDate;
@@ -344,7 +334,7 @@
                 IsLocal = isLocal
             };
 
-            viewModel = _workingCalendarService.GetWorkingCalendars(criteria).ToList();
+            viewModel = workingCalendarService.GetWorkingCalendars(criteria).ToList();
             CheckChangeShiffAndHalfDayOff(fromDate, viewModel, userChangedShift, userHalfDayOffs);
             ViewBag.UserChangeShift = userChangedShift;
             ViewBag.HalfDayOffs = userHalfDayOffs;
@@ -358,7 +348,7 @@
             {
                 EmpId = CurrentUser.Id,
             };
-            IList<SupervisorModel> shiftManagerModel = _workingCalendarService.GetEmployeeByShiftManagement(criteria);
+            IList<SupervisorModel> shiftManagerModel = workingCalendarService.GetEmployeeByShiftManagement(criteria);
 
             var model = new ShiftManagerViewModel
             {
@@ -390,39 +380,42 @@
         {
             var scheduleModels = new List<ScheduleArrangeViewModel>();
             var numberDays = (toDate - fromDate).Days + 1;
-            IEnumerable<WorkingCalendarModel> tempWokingCalendars = null;
-            WorkingCalendarModel tempWokingCalendar = null;
-            ScheduleArrangeViewModel tempScheduleModel = null;
-            var tempDate = DateTime.Now.Date;
-            var tempEmpId = 0;
+            IEnumerable<WorkingCalendarModel> employeeWorkingCalendars = null;
+            WorkingCalendarModel workingCalendar = null;
+            ScheduleArrangeViewModel scheduleArrangeModel = null;
+            var workingDate = DateTime.Now.Date;
+            var employees = workingCalendars.GroupBy(x => x.Employee.Id).Select(x => x.Key);
 
-            foreach (var workingCalendar in workingCalendars)
+            foreach (var employeeId in employees)
             {
-                if (tempEmpId != workingCalendar.Employee.Id)
+                var scheduleHasInfo = false;
+                for (int i = 0; i < numberDays; i++)
                 {
-                    tempScheduleModel = new ScheduleArrangeViewModel
-                    {
-                        EmployeeId = workingCalendar.Employee.Id,
-                        NickName = workingCalendar.Employee.NickName,
-                        TeamName = workingCalendar.Employee.Team.Name,
-                        TeamCode = workingCalendar.Employee.Team.Code
-                    };
+                    workingDate = fromDate.AddDays(i);
+                    employeeWorkingCalendars = workingCalendars.Where(t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
 
-                    for (int i = 0; i < numberDays; i++)
+                    if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
                     {
-                        tempDate = fromDate.AddDays(i);
-                        tempWokingCalendars = workingCalendars.Where(t => (t.WorkDate.Date == tempDate && t.Employee.Id == workingCalendar.Employee.Id));
+                        workingCalendar = employeeWorkingCalendars.FirstOrDefault();
 
-                        if (tempWokingCalendars != null && tempWokingCalendars.Any())
+                        if (!scheduleHasInfo)
                         {
-                            tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
-                            SetWorkingCalendarForDayOfWeek(tempScheduleModel, tempWokingCalendar);
-                        }
-                    }
+                            scheduleArrangeModel = new ScheduleArrangeViewModel
+                            {
+                                EmployeeId = workingCalendar.Employee.Id,
+                                NickName = workingCalendar.Employee.NickName,
+                                TeamName = workingCalendar.Employee.Team.Name,
+                                TeamCode = workingCalendar.Employee.Team.Code
+                            };
 
-                    scheduleModels.Add(tempScheduleModel);
-                    tempEmpId = workingCalendar.Employee.Id;
+                            scheduleHasInfo = true;
+                        }
+
+                        SetWorkingCalendarForDayOfWeek(scheduleArrangeModel, workingCalendar);
+                    }
                 }
+
+                scheduleModels.Add(scheduleArrangeModel);
             }
 
             return scheduleModels;
