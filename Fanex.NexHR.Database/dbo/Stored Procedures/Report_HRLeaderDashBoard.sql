@@ -38,8 +38,8 @@ FROM [dbo].[Lookup] l WITH(NOLOCK)
 	INNER JOIN dbo.fnc_strSplit(@roles, ',') fn		ON fn.val = ld.Value
 WHERE (l.Code = 'ROLE' AND ld.Code ='AP') OR @roles = '7'
 
-if (@@ROWCOUNT<1)
-	return;
+--if (@@ROWCOUNT<1)
+--	return;
 
 CREATE TABLE #Report (RoleId INT,RoleTitle Nvarchar(100),
 			TotalPendingCheckInOutRequest INT,TotalApprovedCheckInOutRequest INT,TotalRejectCheckInOutRequest INT,

@@ -52,7 +52,7 @@ BEGIN
 				,IsIgnored
 				,IsConfirmed
 			FROM OPENXML(@DocHandler, '/ROOT/Discipline', 1) WITH (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored BIT, IsConfirmed BIT) AS Data
-
+		
 			EXEC sp_xml_removedocument @DocHandler
 		END TRY
 
@@ -68,9 +68,9 @@ BEGIN
 		BEGIN TRANSACTION
 
 		DELETE
-		FROM #IgnoredDisciplineDetail
-		WHERE Ignored = 0
-			AND Confirmed = 0
+			FROM #IgnoredDisciplineDetail
+			WHERE IsIgnored = 0
+				AND IsConfirmed = 0
 
 		IF EXISTS (
 				SELECT 1
@@ -363,3 +363,4 @@ BEGIN
 
 	DROP TABLE #EmployeeDiscipline
 END
+

@@ -432,16 +432,16 @@
         [ChildActionOnly]
         public ActionResult ManagementDashboard()
         {
-            if (CurrentUser.HasPermission(FunctionKey.VerifyRequest, Policy.Host)
-                || CurrentUser.HasPermission(FunctionKey.ApproveRequest, Policy.Host))
+            var criteria = new GetHRLeaderDashboardCriteria
             {
-                var criteria = new GetHRLeaderDashboardCriteria
-                {
-                    Empid = CurrentUser.Id,
-                    Date = DateTime.Now
-                };
-                IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
+                Empid = CurrentUser.Id,
+                Date = DateTime.Now
+            };
+            IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
 
+            if ((CurrentUser.HasPermission(FunctionKey.VerifyRequest, Policy.Host)
+                || CurrentUser.HasPermission(FunctionKey.ApproveRequest, Policy.Host)) && model.Any())
+            {
                 return PartialView("MultiRoleManagementDashboard", model);
             }
 

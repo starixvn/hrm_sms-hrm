@@ -1,358 +1,361 @@
 ﻿@using Fanex.NexHR.ViewModels.Request
 @model List<HRLeaderDashboardModel>
-<h2 class="section">
-    My members' requests
-</h2>
-@foreach (HRLeaderDashboardModel item in Model)
+@if (Model.Any())
 {
-    if (item.RoleId == (int)RoleSystem.Verifier)
+    <h2 class="section">
+        My members' requests
+    </h2>
+    foreach (HRLeaderDashboardModel item in Model)
     {
-        <h4>
-            Verification List
-        </h4>
-        <table class="table table-custom" id="myspace" style="width: 500px;">
-            <thead>
-                <tr>
-                    <th rowspan="2" class="align-left">
-                        @Labels.Request
-                    </th>
-                    <th rowspan="2">
-                        @Labels.Pending
-                    </th>
-                    <th colspan="3" class="center">
-                        @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Labels.Verified
-                    </th>
-                    <th>
-                        @Labels.NotVerified
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var requestModel = new RequestViewModel
-                    {
-                        DateOption = 0,
-                        ToDate = DateTime.Now,
-                        FromDate = DateTime.Now.AddDays(-7),
-                        StatusId = (byte)CurrentRequestStatus.Pending,
-                        TeamIds = string.Empty,
-                        ViewType = RequestViewType.PersonalSpace
-                    };
-                    var minRequestDate = DateTime.Now.AddMonths(-4).Date;
-                }
-                <tr>
-                    <td class="align-left">
-                        @Labels.CheckInOut
-                    </td>
-                    <td>
-                        @if (item.TotalPendingCheckInOutRequest > 0)
-                        {
-                            requestModel.RequestType = 1;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedCheckInOutRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectCheckInOutRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.LateInEarlyOut
-                    </td>
-                    <td>
-                        @if (item.TotalPendingLateInEarlyOutRequest > 0)
-                        {
-                            requestModel.RequestType = 2;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedLateInEarlyOutRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectLateInEarlyOutRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.ChangeShift
-                    </td>
-                    <td>
-                        @if (item.TotalPendingChangeShiftRequest > 0)
-                        {
-                            requestModel.RequestType = 3;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedChangeShiftRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectChangeShiftRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.Leave
-                    </td>
-                    <td>
-                        @if (item.TotalPendingLeaveRequest > 0)
-                        {
-                            requestModel.RequestType = 4;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedLeaveRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectLeaveRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.KeepInView
-                    </td>
-                    <td>
-                        @if (item.TotalPendingKivRequest > 0)
-                        {
-                            requestModel.RequestType = 5;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedKivRequest
-                    </td>
-                    <td>
-                        @item.TotalRejecteKivRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.Overtime
-                    </td>
-                    <td>
-                        @if (item.TotalPendingOvertime > 0)
-                        {
-                            @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-            </tbody>
-        </table>
-    }
-    if (item.RoleId == (int)RoleSystem.Approver)
-    {
-        <h4>
-            Approval List
-        </h4>
-        <table class="table table-custom" id="myspace" style="width: 500px;">
-            <thead>
-                <tr>
-                    <th rowspan="2" class="align-left">
-                        @Labels.Request
-                    </th>
-                    <th rowspan="2">
-                        @Labels.Pending
-                    </th>
-                    <th colspan="3" class="center">
-                        @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        @Labels.Approved
-                    </th>
-                    <th>
-                        @Labels.Rejected
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    var requestModel = new RequestViewModel
-                    {
-                        DateOption = 0,
-                        ToDate = DateTime.Now,
-                        FromDate = DateTime.Now.AddDays(-7),
-                        StatusId = -1,
-                        TeamIds = string.Empty,
-                        ViewType = RequestViewType.PersonalSpace
-                    };
-                    var minRequestDate = DateTime.Now.AddMonths(-4).Date;
-                }
-                <tr>
-                    <td class="align-left">
-                        @Labels.CheckInOut
-                    </td>
-                    <td>
-                        @if (item.TotalPendingCheckInOutRequest > 0)
-                        {
-                            requestModel.RequestType = 1;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedCheckInOutRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectCheckInOutRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.LateInEarlyOut
-                    </td>
-                    <td>
-                        @if (item.TotalPendingLateInEarlyOutRequest > 0)
-                        {
-                            requestModel.RequestType = 2;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedLateInEarlyOutRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectLateInEarlyOutRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.ChangeShift
-                    </td>
-                    <td>
-                        @if (item.TotalPendingChangeShiftRequest > 0)
-                        {
-                            requestModel.RequestType = 3;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedChangeShiftRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectChangeShiftRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.Leave
-                    </td>
-                    <td>
-                        @if (item.TotalPendingLeaveRequest > 0)
-                        {
-                            requestModel.RequestType = 4;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedLeaveRequest
-                    </td>
-                    <td>
-                        @item.TotalRejectLeaveRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.KeepInView
-                    </td>
-                    <td>
-                        @if (item.TotalPendingKivRequest > 0)
-                        {
-                            requestModel.RequestType = 5;
-                            requestModel.FromDate = minRequestDate;
-                            <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>
-                        @item.TotalApprovedKivRequest
-                    </td>
-                    <td>
-                        @item.TotalRejecteKivRequest
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-left">
-                        @Labels.Overtime
-                    </td>
-                    <td>
-                        @if (item.TotalPendingOvertime > 0)
-                        {
-                            @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
-                        }
-                        else
-                        {
-                            <span>0</span>
-                        }
-                    </td>
-                    <td>-</td>
-                    <td>-</td>
-                </tr>
-            </tbody>
-        </table>
+        if (item.RoleId == (int)RoleSystem.Verifier)
+        {
+            <h4>
+                Verification List
+            </h4>
+            <table class="table table-custom" id="myspace" style="width: 500px;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="align-left">
+                            @Labels.Request
+                        </th>
+                        <th rowspan="2">
+                            @Labels.Pending
+                        </th>
+                        <th colspan="3" class="center">
+                            @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Labels.Verified
+                        </th>
+                        <th>
+                            @Labels.NotVerified
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+            var requestModel = new RequestViewModel
+            {
+                DateOption = 0,
+                ToDate = DateTime.Now,
+                FromDate = DateTime.Now.AddDays(-7),
+                StatusId = (byte)CurrentRequestStatus.Pending,
+                TeamIds = string.Empty,
+                ViewType = RequestViewType.PersonalSpace
+            };
+            var minRequestDate = DateTime.Now.AddMonths(-4).Date;
+                    }
+                    <tr>
+                        <td class="align-left">
+                            @Labels.CheckInOut
+                        </td>
+                        <td>
+                            @if (item.TotalPendingCheckInOutRequest > 0)
+                            {
+                                requestModel.RequestType = 1;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedCheckInOutRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectCheckInOutRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.LateInEarlyOut
+                        </td>
+                        <td>
+                            @if (item.TotalPendingLateInEarlyOutRequest > 0)
+                            {
+                                requestModel.RequestType = 2;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedLateInEarlyOutRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectLateInEarlyOutRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.ChangeShift
+                        </td>
+                        <td>
+                            @if (item.TotalPendingChangeShiftRequest > 0)
+                            {
+                                requestModel.RequestType = 3;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedChangeShiftRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectChangeShiftRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.Leave
+                        </td>
+                        <td>
+                            @if (item.TotalPendingLeaveRequest > 0)
+                            {
+                                requestModel.RequestType = 4;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedLeaveRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectLeaveRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.KeepInView
+                        </td>
+                        <td>
+                            @if (item.TotalPendingKivRequest > 0)
+                            {
+                                requestModel.RequestType = 5;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedKivRequest
+                        </td>
+                        <td>
+                            @item.TotalRejecteKivRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.Overtime
+                        </td>
+                        <td>
+                            @if (item.TotalPendingOvertime > 0)
+                            {
+                                @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        if (item.RoleId == (int)RoleSystem.Approver)
+        {
+            <h4>
+                Approval List
+            </h4>
+            <table class="table table-custom" id="myspace" style="width: 500px;">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="align-left">
+                            @Labels.Request
+                        </th>
+                        <th rowspan="2">
+                            @Labels.Pending
+                        </th>
+                        <th colspan="3" class="center">
+                            @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Labels.Approved
+                        </th>
+                        <th>
+                            @Labels.Rejected
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+            var requestModel = new RequestViewModel
+            {
+                DateOption = 0,
+                ToDate = DateTime.Now,
+                FromDate = DateTime.Now.AddDays(-7),
+                StatusId = -1,
+                TeamIds = string.Empty,
+                ViewType = RequestViewType.PersonalSpace
+            };
+            var minRequestDate = DateTime.Now.AddMonths(-4).Date;
+                    }
+                    <tr>
+                        <td class="align-left">
+                            @Labels.CheckInOut
+                        </td>
+                        <td>
+                            @if (item.TotalPendingCheckInOutRequest > 0)
+                            {
+                                requestModel.RequestType = 1;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingCheckInOutRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedCheckInOutRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectCheckInOutRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.LateInEarlyOut
+                        </td>
+                        <td>
+                            @if (item.TotalPendingLateInEarlyOutRequest > 0)
+                            {
+                                requestModel.RequestType = 2;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLateInEarlyOutRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedLateInEarlyOutRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectLateInEarlyOutRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.ChangeShift
+                        </td>
+                        <td>
+                            @if (item.TotalPendingChangeShiftRequest > 0)
+                            {
+                                requestModel.RequestType = 3;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingChangeShiftRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedChangeShiftRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectChangeShiftRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.Leave
+                        </td>
+                        <td>
+                            @if (item.TotalPendingLeaveRequest > 0)
+                            {
+                                requestModel.RequestType = 4;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingLeaveRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedLeaveRequest
+                        </td>
+                        <td>
+                            @item.TotalRejectLeaveRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.KeepInView
+                        </td>
+                        <td>
+                            @if (item.TotalPendingKivRequest > 0)
+                            {
+                                requestModel.RequestType = 5;
+                                requestModel.FromDate = minRequestDate;
+                                <a href="@Url.Action("member", "request", requestModel)">@item.TotalPendingKivRequest.ToString()</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @item.TotalApprovedKivRequest
+                        </td>
+                        <td>
+                            @item.TotalRejecteKivRequest
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-left">
+                            @Labels.Overtime
+                        </td>
+                        <td>
+                            @if (item.TotalPendingOvertime > 0)
+                            {
+                                @Html.ActionLink(item.TotalPendingOvertime.ToString(), "memberovertime", "overtime")
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
     }
 }
