@@ -8,6 +8,8 @@
 
 #dialogProcessRequest form > .formrow > .input textarea {
   margin-left: 10px;
+  min-height: 50px;
+  width: 80%;
 }
 
 /*# sourceMappingURL=employee.request.css.map */

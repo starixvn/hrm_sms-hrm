@@ -6,20 +6,21 @@
     @Html.HiddenFor(model => model.RoleId)
     @Html.HiddenFor(model => model.Command)
     <div class="formrow">
+        <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
         @switch (Model.RequestTypeId)
         {
-            case (int) RequestType.CheckIn:
-            case (int) RequestType.CheckOut:
+            case (int)RequestType.CheckIn:
+            case (int)RequestType.CheckOut:
                 Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetail);
                 break;
-            case (int) RequestType.LateIn:
-            case (int) RequestType.EarlyOut:
+            case (int)RequestType.LateIn:
+            case (int)RequestType.EarlyOut:
                 Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail);
                 break;
-            case (int) RequestType.ChangeShift:
+            case (int)RequestType.ChangeShift:
                 Html.RenderPartial("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails);
                 break;
-            case (int) RequestType.Leave:
+            case (int)RequestType.Leave:
                 Html.RenderPartial("ProcessRequest/_LeaveRequestDetail", Model.LeaveDetails);
                 break;
         }

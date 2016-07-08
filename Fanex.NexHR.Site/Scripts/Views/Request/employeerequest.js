@@ -46,7 +46,7 @@
                     var ignoredDisciplines = [],
                         comment = $(this).find('textarea#Comment').val();
 
-                    $(this).find("table.data tbody tr").each(function () {
+                    $(this).find("table.table tbody tr").each(function () {
                         var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
                             chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
 
@@ -66,8 +66,9 @@
                     });
 
                     if (data && data.length > 0) {
-                        alert('You must ignore or confirm on each type of request.');
+                        $(this).find('.validation-summary-valid').show().append('You must ignore or confirm on each type of request.');
                     } else {
+                        $(this).find('.validation-summary-valid').hide();
                         processRequest(requestId, roleId, command, comment, ignoredDisciplines);
                     }
                 },
@@ -97,7 +98,7 @@
 
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
 
-                $('#dialogProcessRequest').find("table.data tbody tr").each(function () {
+                $('#dialogProcessRequest').find("table.table tbody tr").each(function () {
                     var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
                         chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
 

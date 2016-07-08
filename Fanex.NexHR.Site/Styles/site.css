@@ -11,7 +11,6 @@ label {
     padding-right: 3px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -54,7 +53,7 @@ div.content_scroll > h2 {
     font-family: Abel, Arial,Helvetica, "myriad Pro",tahoma;
     font-size: 1.8em;
     margin-bottom: 10px;
-    text-shadow: 0px 0px 1px #ddd;
+    text-shadow: 0 0 1px #ddd;
 }
 
 h1 {
@@ -121,7 +120,7 @@ h5, h6 {
 
 .error a, .alert a, .notice a, .success a, .info a, .validation-summary-errors a {
     float: none !important;
-    margin: 0px !important;
+    margin: 0 !important;
     color: #FF0000;
 }
 
@@ -171,7 +170,7 @@ input[type="password"].input-validation-error {
 
 /*from*/
 .formrow {
-    margin: 10px 0px;
+    margin: 10px 0;
     font-size: 13px;
     margin-bottom: 5px;
 }
@@ -239,7 +238,7 @@ input[type="number"] {
 }
 
 input[type="radio"] {
-    margin-left: 0px;
+    margin-left: 0;
     cursor: pointer;
 }
 
@@ -261,7 +260,7 @@ select {
     padding: 4px;
     text-align: left;
     vertical-align: bottom;
-    margin-left: 0px;
+    margin-left: 0;
     min-width: 241px;
     max-width: 241px;
 }
@@ -275,7 +274,7 @@ textarea {
     -webkit-box-shadow: 1px 1px 3px 3px #f2f2f2;
     box-shadow: 1px 1px 3px 3px #f2f2f2;
     padding: 0 5px;
-    margin0-left: 0px;
+    margin0-left: 0;
     min-width: 228px;
     min-height: 70px;
     resize: none;
@@ -308,12 +307,12 @@ input[type="submit"], input[type="reset"], input[type="button"], a.button, butto
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5eb2d5', endColorstr='#308fb7', GradientType=0);
     border: 1px solid #256f8e;
     border-bottom-color: #1b5066;
-    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
     -webkit-box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
     -moz-box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
+    border-radius: 3px;
     font-size: 12px !important;
     text-align: center;
     display: inline-block;
@@ -322,7 +321,7 @@ input[type="submit"], input[type="reset"], input[type="button"], a.button, butto
     line-height: 25px;
     color: #fff !important;
     text-decoration: none !important;
-    text-shadow: 0px -1px 0 #256f8e;
+    text-shadow: 0 -1px 0 #256f8e;
     padding-bottom: 4px;
     height: 28px;
     vertical-align: bottom;
@@ -359,11 +358,11 @@ input[type="submit"]:disabled, input[type="button"]:disabled {
     border-color: #888;
     background: #ccc;
     color: #888;
-    text-shadow: 0px -1px 0 #000;
+    text-shadow: 0 -1px 0 #000;
 }
 
 a.back {
-    padding: 0px 20px;
+    padding: 0 20px;
 }
 
 a.button {
@@ -421,13 +420,13 @@ a.button {
 #tooltip {
     position: absolute;
     z-index: 3000;
-    background-color: #FFFFFF;
+    background-color: #fff;
     color: #4F4F4F;
     padding: 5px;
-    xxmin-width: 200px;
     box-shadow: 1px 1px 3px #5F5F5F;
-    xxxmax-width: 350px;
     width: auto;
+    background-color: #fff;
+    border: 1px solid #0789D1;
 }
 
     #tooltip h3 {
@@ -668,15 +667,15 @@ input:-moz-placeholder {
 }
 
     .xicon.ExtensionNumber {
-        background-position: 0px 0px;
+        background-position: 0 0;
     }
 
     .xicon.plus {
-        background-position: 0px -72px;
+        background-position: 0 -72px;
     }
 
     .xicon.MyDashboard {
-        background-position: -168px 0px;
+        background-position: -168px 0;
     }
 
     .xicon.MyProfile {
@@ -716,19 +715,19 @@ input:-moz-placeholder {
     }
 
     .xicon.UserManagement {
-        background-position: -24px 0px;
+        background-position: -24px 0;
     }
 
     .xicon.ContactList {
-        background-position: -24px 0px;
+        background-position: -24px 0;
     }
 
     .xicon.MyCalendar {
-        background-position: -192px 0px;
+        background-position: -192px 0;
     }
 
     .xicon.WorkingCalendars {
-        background-position: -192px 0px;
+        background-position: -192px 0;
     }
 
     .xicon.MyOvertime {
@@ -740,7 +739,7 @@ input:-moz-placeholder {
     }
 
     .xicon.calendar3 {
-        background-position: 0px -240px;
+        background-position: 0 -240px;
     }
 
     .xicon.calendar4 {
@@ -764,7 +763,7 @@ input:-moz-placeholder {
     }
 
     .xicon.MyTimesheet {
-        background-position: 0px -216px;
+        background-position: 0 -216px;
     }
 
     .xicon.holiday {
@@ -780,15 +779,15 @@ input:-moz-placeholder {
     }
 
     .xicon.SectionManagement {
-        background-position: -96px 0px;
+        background-position: -96px 0;
     }
 
     .xicon.FunctionManagement {
-        background-position: -96px 0px;
+        background-position: -96px 0;
     }
 
     .xicon.Division {
-        background-position: -96px 0px;
+        background-position: -96px 0;
     }
 
     .xicon.clock {
@@ -808,20 +807,20 @@ input:-moz-placeholder {
     }
 
     .xicon.RequestStatistic {
-        background-position: 0px -96px;
+        background-position: 0 -96px;
     }
 
     .xicon.RequestsStatistic {
-        background-position: 0px -96px;
+        background-position: 0 -96px;
     }
 
 
     .xicon.Reports {
-        background-position: 0px -96px;
+        background-position: 0 -96px;
     }
 
     .xicon.large-back {
-        background-position: 0px -47px;
+        background-position: 0 -47px;
     }
 
     .xicon.large-next {
@@ -841,11 +840,11 @@ input:-moz-placeholder {
     }
 
     .xicon.MyMessage {
-        background-position: -72px 0px;
+        background-position: -72px 0;
     }
 
     .xicon.Message {
-        background-position: -72px 0px;
+        background-position: -72px 0;
     }
 
     .xicon.ShiftStatistic {
@@ -853,7 +852,7 @@ input:-moz-placeholder {
     }
 
     .xicon.ScheduleArrange {
-        background-position: 0px -240px;
+        background-position: 0 -240px;
     }
 
 #message {
@@ -892,9 +891,9 @@ span.req {
     color: #fff;
     padding: 3px 6px;
     margin: 0 5px 0 0;
-    border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+    border-radius: 2px;
     font-weight: bold;
     font-size: 0.9em;
 }
@@ -932,12 +931,12 @@ span.req.mytimesheet-pending {
     padding: 3px 10px;
 }
 
-span.req.mytimesheet-accepted, span.req.mytimesheet-approved, span.req.mytimesheet-processed {
+span.req.mytimesheet-accepted, span.req.mytimesheet-verified, span.req.mytimesheet-approved, span.req.mytimesheet-processed {
     background-color: #008000;
     padding: 3px 10px;
 }
 
-span.req.mytimesheet-notaccepted, span.req.mytimesheet-rejected, span.req.mytimesheet-void {
+span.req.mytimesheet-notaccepted, span.req.mytimesheet-notverified, span.req.mytimesheet-rejected, span.req.mytimesheet-void {
     background-color: #FF0000;
     padding: 3px 10px;
 }
@@ -955,9 +954,9 @@ a.req {
     background-color: #fff;
     padding: 3px 6px;
     margin: 0 5px 0 0;
-    border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+    border-radius: 2px;
     font-weight: bold;
     font-size: 0.9em;
     border: 1px solid;
@@ -1002,11 +1001,6 @@ table.table-tooltip {
         table.table-tooltip tr td.col2 {
             border-left: 1px solid #0789D1;
         }
-
-#tooltip {
-    background-color: #fff;
-    border: 1px solid #0789D1;
-}
 
 .overtime-tooltip {
     width: 100px;
