@@ -8,6 +8,7 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
+    using Repositories;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -21,7 +22,7 @@
 
         public WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository)
         {
-            this.workingCalendarRepository = workingCalendarRepository;
+            this.workingCalendarRepository = workingCalendarRepository ?? new WorkingCalendarRepository();
         }
 
         public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria)
@@ -30,7 +31,7 @@
             IList<WorkingCalendarModel> calendars = null;
             if (criteria.IsValid())
             {
-                calendars = this.workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
+                calendars = workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
             }
 
             return calendars;
@@ -54,7 +55,7 @@
 
             if (criteria.IsValid())
             {
-                shiftStatisticModels = this.GetData<ShiftStatisticModel>(criteria).ToList();
+                shiftStatisticModels = GetData<ShiftStatisticModel>(criteria).ToList();
             }
 
             return shiftStatisticModels ?? new List<ShiftStatisticModel>();
@@ -78,7 +79,7 @@
             IList<WorkingScheduleViewModel> workingSchedule = null;
             if (criteria.IsValid())
             {
-                workingSchedule = this.workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
+                workingSchedule = workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
             }
 
             return workingSchedule;
@@ -90,7 +91,7 @@
             IList<WorkingCalendarsViewModel> workingCalendarList = null;
             if (criteria.IsValid())
             {
-                workingCalendarList = this.workingCalendarRepository.GetWorkingCalendars(criteria);
+                workingCalendarList = workingCalendarRepository.GetWorkingCalendars(criteria);
             }
 
             return workingCalendarList;
@@ -102,7 +103,7 @@
             IList<SupervisorModel> supervisors = null;
             if (criteria.IsValid())
             {
-                supervisors = this.GetData<SupervisorModel>(criteria).ToList();
+                supervisors = GetData<SupervisorModel>(criteria).ToList();
             }
 
             return supervisors;
