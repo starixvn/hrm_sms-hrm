@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] --@SupervisorID INT
+CREATE PROCEDURE [dbo].[Overtime_GetDailyReport]
 	@EmpID INT
 	,@Month DATETIME
 	,@IsNormal BIT = 0

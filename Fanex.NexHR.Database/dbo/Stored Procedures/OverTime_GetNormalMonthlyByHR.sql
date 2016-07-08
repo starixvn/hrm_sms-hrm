@@ -7,8 +7,6 @@ CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR]
 	@todate datetime,
 	@status varchar(max) = null,
 	@excludedEmpID int= null,
-	--@role varchar(max) = '',
-
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0

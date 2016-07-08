@@ -258,20 +258,12 @@ BEGIN
 			)
 
 	DECLARE @Is_HR_SA BIT
-		,@Roles NVARCHAR(100)
 
 	CREATE TABLE #Roles (RoleId INT)
-
-	SELECT @Roles = emp.Roles
-	FROM dbo.Employee AS emp
-	WHERE emp.EmpId = @ApproverId
-
-	IF ISNULL(@Roles, '') <> ''
-	BEGIN
-		INSERT INTO #Roles
-		SELECT DISTINCT val
-		FROM dbo.fnc_strSplit(@Roles, ',')
-	END
+	INSERT INTO #Roles
+                SELECT RoleId
+                FROM dbo.[EmployeeRole] WITH (NOLOCK)
+                WHERE EmployeeId = @ApproverId;
 
 	SET @Is_HR_SA = CASE 
 			WHEN EXISTS (

@@ -13,20 +13,16 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @Roles VARCHAR(20)
-
+	
 	CREATE TABLE #Groups (GroupId INT)
 
 	IF (
 			EXISTS (
 				SELECT 1
-				FROM dbo.Employee WITH (NOLOCK)
-				WHERE EmpId = @SupervisorId
-					AND (
-						Roles LIKE '%6%'
-						OR Roles LIKE '%7%'
-						)
+				FROM dbo.Employee AS e WITH (NOLOCK)
+				INNER JOIN dbo.EmployeeRole AS er WITH(NOLOCK) ON er.EmployeeId= e.EmpId
+				WHERE e.EmpId = @SupervisorId
+					AND er.RoleId IN (6,7)
 				)
 			)
 	BEGIN

@@ -50,8 +50,9 @@ SET NOCOUNT ON
 	ELSE
 		SELECT TOP 10  6 RoleID,'HR'  [Role],  FullName, NickName, Email  
 			FROM [dbo].Employee ee  WITH(NOLOCK) 
+			INNER JOIN dbo.EmployeeRole AS er WITH(NOLOCK) ON ee.EmpId=er.EmployeeId
 			WHERE (ee.isDeleted IS NULL OR ee.isDeleted = 0)
-				AND ee.Enabled = 1 AND  ee.Roles like '%6%' AND ee.Roles not like '%7%' 
+				AND ee.Enabled = 1 AND  er.RoleId IN (6,7)
 	
 	SELECT @GroupId = GroupId FROM dbo.Employee WHERE EmpId = @EmpId
 

@@ -42,16 +42,10 @@ BEGIN
 
 		IF EXISTS (
 				SELECT 1
-				FROM dbo.Employee
+				FROM dbo.Employee e WITH(NOLOCK)
+				INNER JOIN dbo.EmployeeRole er WITH(NOLOCK) ON e.EmpId =er.EmployeeId
 				WHERE EmpId = @SupervisorId
-					AND (
-						Roles LIKE '%6%'
-						OR Roles LIKE '%7%'
-						OR Roles LIKE '%2%'
-						OR Roles LIKE '%3%'
-						OR Roles LIKE '%4%'
-						OR Roles LIKE '%5%'
-						)
+					AND er.RoleId IN(2,3,4,5,6,7)
 				)
 		BEGIN
 			INSERT INTO #Groups (GroupId)

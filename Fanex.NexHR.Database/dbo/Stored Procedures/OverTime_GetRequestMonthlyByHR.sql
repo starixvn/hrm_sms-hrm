@@ -26,15 +26,67 @@ BEGIN
 
 	CREATE TABLE #status (Currentstatus TINYINT)
 
+	--			FROM #RolesList
+	--			WHERE roleid IN (2, 3)
+	--			)
+	--	BEGIN
+	--		IF @role LIKE '%2%'
+	--			AND @role LIKE '%3%'
+	--		BEGIN
+	--			SET @RoleType = 23
 	IF ISNULL(@status, '') = ''
 	BEGIN
 		SET @status = '1,2,3,4,5,6,7'
-	END
+	--			FROM #RolesList
 	ELSE IF (@status = '-1')
-	BEGIN
+	--			)
 		SET @status = '1,2'
-	END
+	--		IF @role LIKE '%2%'
+	--		BEGIN
+	--			SET @RoleType = 2
 
+	--			IF ISNULL(@status, '') = ''
+	--				SET @status = '1,2,3'
+	--		END
+	--		ELSE
+	--		BEGIN
+	--			SELECT @ErrCode = 102
+	--				,@ErrMsg = 'You don''t have permission on this funcion.'
+
+	--			RETURN
+	--		END
+	--				--SET @RoleType=1 
+	--	END
+	--	ELSE IF EXISTS (
+	--			SELECT TOP 1 1
+	--			FROM #RolesList
+	--			WHERE roleid IN (3)
+	--			)
+	--	BEGIN
+	--		IF @role LIKE '%3%'
+	--		BEGIN
+	--			SET @RoleType = 3
+
+	--			IF ISNULL(@status, '') = ''
+	--				SET @status = '2,4,5'
+	--		END
+	--		ELSE
+	--		BEGIN
+	--			SELECT @ErrCode = 103
+	--				,@ErrMsg = 'You don''t have permission on this funcion.'
+
+	--			RETURN
+	--		END
+	--				--SET @RoleType=1 
+	--	END
+	--	ELSE
+	--		SET @RoleType = 1
+	--END
+	--ELSE
+	--BEGIN
+	--	SET @RoleType = 1
+	--END
+	select 1
 	INSERT INTO #status (Currentstatus)
 		SELECT val
 		FROM fnc_strSplit(@status, ',')

@@ -18,7 +18,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-	
+
 	DECLARE @fromDate NVARCHAR(100),@toDate NVARCHAR(100)
 		
 	SELECT @fromDate = CONVERT(VARCHAR(10),YEAR(@Month)) + '/' + CONVERT(VARCHAR(10),MONTH(@Month)) + '/01 00:00:00'
