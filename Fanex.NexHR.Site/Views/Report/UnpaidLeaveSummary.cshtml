@@ -36,7 +36,7 @@
                 </select>
             </div>
             <div class="grid_1 gridlabel">
-                @Html.LabelFor(model => model.Team)
+                @Html.Label(Labels.Team)
             </div>
             <div class="grid_6">
                 <select id="TeamId" multiple="multiple" name="TeamId">
@@ -67,7 +67,7 @@
                 @Html.LabelFor(model => model.Employee)
             </div>
             <div class="grid_4">
-                @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark })
+                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
             <div class="grid_5 prefix_1">

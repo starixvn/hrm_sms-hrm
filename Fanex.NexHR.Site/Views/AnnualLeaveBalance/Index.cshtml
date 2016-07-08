@@ -88,7 +88,7 @@
                     <div class="grid_12" style="padding-right: 5px">
                         <input type="submit" value="@Labels.Submit" class="processing-submit" />
                         <input type="button" value="Excel" id="btnExcel" />
-                        @if (!(bool)ViewBag.IsShowCloseBalance)
+                        @if (Model.IsShowCloseBalance)
                         {
                             <div class="button-icon">
                                 <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>

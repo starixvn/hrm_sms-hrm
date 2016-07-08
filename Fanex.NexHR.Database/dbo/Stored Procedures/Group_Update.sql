@@ -1,6 +1,4 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE PROCEDURE [dbo].[Group_Update]
+﻿CREATE PROCEDURE [dbo].[Group_Update]
 	@GroupId int,
 	@Code varchar(20),
     @Name nvarchar(50),
@@ -8,7 +6,6 @@ CREATE PROCEDURE [dbo].[Group_Update]
 	@MailGroup VARCHAR(50) = '',  
     @LeaderId int,
     @AssistantLeaderId int = NULL, 
-	@ModifiedDate DATETIME,
     @ModifiedBy int,
 
 	@ErrCode int = 0 OUTPUT,
@@ -43,7 +40,7 @@ SET Code = @Code
 		,[MailGroup] = @MailGroup		  
 		,LeaderId = @LeaderId
 		,AssistantLeaderId = @AssistantLeaderId
-		,ModifiedDate = @ModifiedDate
+		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
 WHERE GroupId=@GroupId
 SELECT @ErrCode = 0, @ErrMsg = ''
