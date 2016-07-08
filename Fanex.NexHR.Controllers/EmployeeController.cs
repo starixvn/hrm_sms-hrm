@@ -811,6 +811,5 @@
                 ((int)RoleSystem.SystemAdmin).ToString(),
                 ((int)RoleSystem.Verifier).ToString());
         }
-
     }
 }
