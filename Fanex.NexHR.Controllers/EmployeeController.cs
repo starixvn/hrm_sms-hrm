@@ -773,7 +773,7 @@
 
         private string BuildRole(IList<SystemRoleModel> roles)
         {
-            var result = BuildDefaultRole();
+            var result = string.Empty;
             if (roles != null)
             {
                 if (roles.Count(i => i.RoleId == (int)RoleSystem.SystemAdmin) == roles.Count())
@@ -790,7 +790,7 @@
                 }
             }
 
-            return result;
+            return string.IsNullOrEmpty(result) ? BuildDefaultRole() : BuildDefaultRole() + "," + result;
         }
 
         private string BuildDefaultRole()
