@@ -43,11 +43,14 @@
             {
                 ToDate = DateTime.Now,
                 FromDate = DateTime.Now.AddMonths(-3),
-                IsDisabled = 0
+                IsDisabled = 0,
+                CreatedBy = CurrentUser.Id
             };
+
+            ViewBag.Messages = messageService.GetMessageByCreator(criteria);
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Host);
 
-            return Index(criteria);
+            return View(criteria);
         }
 
         [HttpPost]
@@ -181,10 +184,13 @@
             var criteria = new GetMessageByEmployeeCriteria
             {
                 EffectedDate = DateTime.Today,
-                IsDisabled = 0
+                IsDisabled = 0,
+                EmployeeId = CurrentUser.Id
             };
 
-            return ViewMessageOfEmployee(criteria);
+            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+
+            return View(criteria);
         }
 
         [HttpPost]
@@ -192,10 +198,11 @@
         {
             if (criteria != null)
             {
-                criteria.EmployeeId = this.CurrentUser.Id;
+                criteria.EmployeeId = CurrentUser.Id;
             }
 
             ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+
             return View(criteria);
         }
 

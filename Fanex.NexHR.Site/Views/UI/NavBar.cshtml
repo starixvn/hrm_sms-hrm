@@ -1,5 +1,5 @@
 ﻿@using Nexus.RoleManagement.Services;
-@model System.Collections.Generic.IEnumerable<MenuModel>
+@model IEnumerable<MenuModel>
 @{
     var selectedMenu = (MenuModel)ViewBag.SelectedMenu;
     var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;

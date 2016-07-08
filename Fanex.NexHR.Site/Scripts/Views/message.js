@@ -31,21 +31,4 @@ var init = function () {
 
 $(document).ready(function () {
 	init();
-
-	$("#submit").click(function () {
-		var form = $(this);
-		$('#IsDisabled').val($('#status').val());
-
-		$.ajax({
-			url: form.action,
-			type: "Post",
-			data: form.serialize(),
-			success: function () {
-				document.location = _global.root + "Message/Index";
-			},
-			error: function (response) {
-				$("#error").html(response.message);
-			}
-		});
-	});
 });

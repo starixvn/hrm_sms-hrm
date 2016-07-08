@@ -84,11 +84,9 @@
                             @message.ToDate.ToDateMonthYearFormatedDate()
                         </td>
                         <td>
-                            @{
-                    if (message.IsRead)
-                    {
-                        <i class="fa fa-check fa-lg icon-check"></i>
-                    }
+                            @if (message.IsRead)
+                            {
+                                <i class="fa fa-check fa-lg icon-check"></i>
                             }
                         </td>
                         <td class="cmd" title="Delete">

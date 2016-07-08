@@ -21,6 +21,8 @@
 
         public string SendToEmail { get; set; }
 
+        public string SendTo { get; set; }
+
         public bool HasSendEmail { get; set; }
 
         public string EmployeeIds { get; set; }

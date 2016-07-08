@@ -1,22 +1,22 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Security;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
 
     [Authorize]
     public class UIController : BaseController
     {
+        private const string MyMessageMenu = "MyMessage";
         private readonly IMessageService messageService;
 
         public UIController()
@@ -58,9 +58,16 @@
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = CurrentUser.NE_Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-
+            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
             ViewBag.SelectedMenu = selectedMenu;
             var menus = GetNagivationData();
+
+            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
+
+            if (unreadMessageCount > 0)
+            {
+                menus.Where(x => x.Name.Equals(MyMessageMenu)).ToList().ForEach(x => x.Text = "My Messsages (" + unreadMessageCount + ") ");
+            }
 
             return PartialView(menus);
         }
