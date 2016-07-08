@@ -174,21 +174,23 @@
 
         public List<SystemRoleModel> NX_Roles { get; set; }
 
+        public string[] NX_Roles2Array
+        {
+            get
+            {
+                return NX_Roles != null ? NX_Roles.Select(i => i.RoleId.ToString()).ToArray() : null;
+            }
+
+            set
+            {
+                NX_Roles = value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList();
+            }
+        }
+
         public string NX_Roles2String
         {
             get
             {
-                if (!string.IsNullOrEmpty(Roles) && (NX_Roles == null || !NX_Roles.Any()))
-                {
-                    IList<string> roles = Roles.Split(',');
-                    NX_Roles = roles.Select(i => new SystemRoleModel
-                    {
-                        RoleId = int.Parse(i),
-                        RoleCode = ((RoleSystem)int.Parse(i)).ToString(),
-                        RoleName = ((RoleSystem)int.Parse(i)).ToString()
-                    }).ToList();
-                }
-
                 return NX_Roles == null ? string.Empty : string.Join(", ", NX_Roles.Select(i => i.RoleName));
             }
         }

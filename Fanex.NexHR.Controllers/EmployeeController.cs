@@ -416,10 +416,10 @@
 
         public ActionResult MySpace()
         {
-            var getMySpaceCriteria = new GetMySpaceCriteria() 
-            { 
-                EmpId = CurrentUser.Id, 
-                Date = DateTime.Now 
+            var getMySpaceCriteria = new GetMySpaceCriteria()
+            {
+                EmpId = CurrentUser.Id,
+                Date = DateTime.Now
             };
             MySpaceModel model = employeeService.GetMySpace(getMySpaceCriteria);
 
@@ -589,9 +589,9 @@
         {
             if (CurrentUser.Id == empId)
             {
-                var criteria = new GetEmployeeByIdCriteria() 
-                { 
-                    EmpId = empId 
+                var criteria = new GetEmployeeByIdCriteria()
+                {
+                    EmpId = empId
                 };
                 UserLoginModel currentUser = employeeService.GetUserLoginByEmployeeId(criteria);
                 HttpContext.Session["CurrentUser"] = currentUser;
@@ -600,11 +600,11 @@
 
         private IList<SupervisorNameModel> GetSupervisors(int empId)
         {
-            var criteria = new GetListSupervisorNameCriteria() 
-            { 
-                EmpId = empId, 
-                Role = null, 
-                RequestType = null 
+            var criteria = new GetListSupervisorNameCriteria()
+            {
+                EmpId = empId,
+                Role = null,
+                RequestType = null
             };
             IList<SupervisorNameModel> supervisors = employeeService.GetListSupervisorName(criteria);
             return supervisors;
@@ -672,9 +672,9 @@
 
         private EmployeeShift GetEmployeeShift(int empId)
         {
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria() 
-            { 
-                EmpId = empId 
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria()
+            {
+                EmpId = empId
             };
 
             EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
@@ -726,7 +726,7 @@
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,
-                Roles = model.Roles,
+                Roles = BuildRole(model.NX_Roles),
                 JoinedDate = model.JoinedDate,
                 CompanyDate = model.CompanyDate,
                 ConfirmedDate = model.ConfirmedDate,
@@ -770,5 +770,51 @@
 
             return criteria;
         }
+
+        private string BuildRole(IList<SystemRoleModel> roles)
+        {
+            var result = BuildDefaultRole();
+            if (roles != null)
+            {
+                if (roles.Count(i => i.RoleId == (int)RoleSystem.SystemAdmin) == roles.Count())
+                {
+                    result = BuildSARole(roles);
+                }
+                else if (roles.Count(i => i.RoleId == (int)RoleSystem.DisciplineManager) == roles.Count())
+                {
+                    result = BuildDisciplineManagerRole(roles);
+                }
+                else
+                {
+                    result = result + "," + string.Join(",", roles.Select(i => i.RoleId));
+                }
+            }
+
+            return result;
+        }
+
+        private string BuildDefaultRole()
+        {
+            return ((int)RoleSystem.Member).ToString();
+        }
+
+        private string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
+        {
+            return string.Format("{0},{1}", ((int)RoleSystem.Approver).ToString(), ((int)RoleSystem.DisciplineManager).ToString());
+        }
+
+        private string BuildSARole(IList<SystemRoleModel> roles)
+        {
+            return string.Format(
+                "{0},{1},{2},{3},{4},{5},{6}",
+                ((int)RoleSystem.ActingSupervisor).ToString(),
+                ((int)RoleSystem.Approver).ToString(),
+                ((int)RoleSystem.DisciplineManager).ToString(),
+                ((int)RoleSystem.HR).ToString(),
+                ((int)RoleSystem.ShiftManager).ToString(),
+                ((int)RoleSystem.SystemAdmin).ToString(),
+                ((int)RoleSystem.Verifier).ToString());
+        }
+
     }
 }

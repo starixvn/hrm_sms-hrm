@@ -150,7 +150,7 @@
                 </div>
                 <div class="input">
                     @{
-                        var gender = new List<SelectListItem>
+    var gender = new List<SelectListItem>
                         {
                             new SelectListItem() {Text = "Unknown", Value = ""},
                             new SelectListItem() {Text = "Female", Value = "0"},
@@ -476,7 +476,8 @@
                 <div class="input" id="userRole">
                     @Html.CheckBox("Member", true, new { disabled = true })
                     @Html.Label("Member", "Member")
-                    @Html.CheckBoxList("Roles", roleItemList)
+
+                    @Html.CheckBoxListFor(model => model.NX_Roles2Array, roleItemList)
                 </div>
                 <div class="clear"></div>
             </li>
