@@ -51,7 +51,7 @@ BEGIN
 				,IsIgnored
 				,IsConfirmed
 			FROM OPENXML(@DocHandler, '/ROOT/Discipline', 1) WITH (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored BIT, IsConfirmed BIT) AS Data
-		
+
 			EXEC sp_xml_removedocument @DocHandler
 		END TRY
 
@@ -78,13 +78,21 @@ BEGIN
 			AND @RoleId = 3 -- Approver
 		BEGIN
 			UPDATE dis
-			SET dis.IsIgnoredChangeShift = (CASE 
+			SET dis.IsChangeShift = (CASE 
+					WHEN ignore.DisciplineTypeId = 1 THEN 1
+					ELSE dis.IsChangeShift END
+					)
+				,dis.IsIgnoredChangeShift = (CASE 
 					WHEN ignore.DisciplineTypeId = 1 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredChangeShift END
 					)
 				,dis.IsConfirmedChangeShift = (CASE 
 					WHEN ignore.DisciplineTypeId = 1 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedChangeShift END
+					)
+				,dis.IsMissingCheckInOut = (CASE 
+					WHEN ignore.DisciplineTypeId = 2 THEN 1
+					ELSE dis.IsMissingCheckInOut END
 					)
 				,dis.IsIgnoredMissingCheckInOut = (CASE 
 					WHEN ignore.DisciplineTypeId = 2 THEN ignore.IsIgnored
@@ -94,6 +102,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 2 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedMissingCheckInOut END
 					)
+				,dis.IsLateIn = (CASE 
+					WHEN ignore.DisciplineTypeId = 3 THEN 1
+					ELSE dis.IsLateIn END
+					)
 				,dis.IsIgnoredLateIn = (CASE 
 					WHEN ignore.DisciplineTypeId = 3 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredLateIn END
@@ -101,6 +113,10 @@ BEGIN
 				,dis.IsConfirmedLateIn = (CASE 
 					WHEN ignore.DisciplineTypeId = 3 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedLateIn END
+					)
+				,dis.IsEarlyOut = (CASE 
+					WHEN ignore.DisciplineTypeId = 4 THEN 1
+					ELSE dis.IsEarlyOut END
 					)
 				,dis.IsIgnoredEarlyOut = (CASE 
 					WHEN ignore.DisciplineTypeId = 4 THEN ignore.IsIgnored
@@ -110,6 +126,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 4 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedEarlyOut END
 					)
+				,dis.IsAbsent = (CASE 
+					WHEN ignore.DisciplineTypeId = 5 THEN 1
+					ELSE dis.IsAbsent END
+					)
 				,dis.IsIgnoredAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 5 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredAbsent END
@@ -117,6 +137,10 @@ BEGIN
 				,dis.IsConfirmedAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 5 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedAbsent END
+					)
+				,dis.IsUnpaidLeave = (CASE 
+					WHEN ignore.DisciplineTypeId = 6 THEN 1
+					ELSE dis.IsUnpaidLeave END
 					)
 				,dis.IsIgnoredUnpaidLeave = (CASE 
 					WHEN ignore.DisciplineTypeId = 6 THEN ignore.IsIgnored
@@ -126,6 +150,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 6 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedUnpaidLeave END
 					)
+				,dis.IsWorkingUnderTime = (CASE 
+					WHEN ignore.DisciplineTypeId = 7 THEN 1
+					ELSE dis.IsWorkingUnderTime END
+					)
 				,dis.IsIgnoredWorkingUnderTime = (CASE 
 					WHEN ignore.DisciplineTypeId = 7 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredWorkingUnderTime END
@@ -133,6 +161,10 @@ BEGIN
 				,dis.IsConfirmedWorkingUnderTime = (CASE 
 					WHEN ignore.DisciplineTypeId = 7 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedWorkingUnderTime END
+					)
+				,dis.IsUnpaidLeaveAbsent = (CASE 
+					WHEN ignore.DisciplineTypeId = 8 THEN 1
+					ELSE dis.IsUnpaidLeaveAbsent END
 					)
 				,dis.IsIgnoredUnpaidLeaveAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 8 THEN ignore.IsIgnored
@@ -218,13 +250,21 @@ BEGIN
 			FROM #IgnoredDisciplineDetail
 
 			UPDATE dis
-			SET dis.IsIgnoredChangeShift = (CASE 
+			SET dis.IsChangeShift = (CASE 
+					WHEN ignore.DisciplineTypeId = 1 THEN 1
+					ELSE dis.IsChangeShift END
+					)
+				,dis.IsIgnoredChangeShift = (CASE 
 					WHEN ignore.DisciplineTypeId = 1 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredChangeShift END
 					)
 				,dis.IsConfirmedChangeShift = (CASE 
 					WHEN ignore.DisciplineTypeId = 1 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedChangeShift END
+					)
+				,dis.IsMissingCheckInOut = (CASE 
+					WHEN ignore.DisciplineTypeId = 2 THEN 1
+					ELSE dis.IsMissingCheckInOut END
 					)
 				,dis.IsIgnoredMissingCheckInOut = (CASE 
 					WHEN ignore.DisciplineTypeId = 2 THEN ignore.IsIgnored
@@ -234,6 +274,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 2 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedMissingCheckInOut END
 					)
+				,dis.IsLateIn = (CASE 
+					WHEN ignore.DisciplineTypeId = 3 THEN 1
+					ELSE dis.IsLateIn END
+					)
 				,dis.IsIgnoredLateIn = (CASE 
 					WHEN ignore.DisciplineTypeId = 3 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredLateIn END
@@ -241,6 +285,10 @@ BEGIN
 				,dis.IsConfirmedLateIn = (CASE 
 					WHEN ignore.DisciplineTypeId = 3 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedLateIn END
+					)
+				,dis.IsEarlyOut = (CASE 
+					WHEN ignore.DisciplineTypeId = 4 THEN 1
+					ELSE dis.IsEarlyOut END
 					)
 				,dis.IsIgnoredEarlyOut = (CASE 
 					WHEN ignore.DisciplineTypeId = 4 THEN ignore.IsIgnored
@@ -250,6 +298,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 4 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedEarlyOut END
 					)
+				,dis.IsAbsent = (CASE 
+					WHEN ignore.DisciplineTypeId = 5 THEN 1
+					ELSE dis.IsAbsent END
+					)
 				,dis.IsIgnoredAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 5 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredAbsent END
@@ -257,6 +309,10 @@ BEGIN
 				,dis.IsConfirmedAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 5 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedAbsent END
+					)
+				,dis.IsUnpaidLeave = (CASE 
+					WHEN ignore.DisciplineTypeId = 6 THEN 1
+					ELSE dis.IsUnpaidLeave END
 					)
 				,dis.IsIgnoredUnpaidLeave = (CASE 
 					WHEN ignore.DisciplineTypeId = 6 THEN ignore.IsIgnored
@@ -266,6 +322,10 @@ BEGIN
 					WHEN ignore.DisciplineTypeId = 6 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedUnpaidLeave END
 					)
+				,dis.IsWorkingUnderTime = (CASE 
+					WHEN ignore.DisciplineTypeId = 7 THEN 1
+					ELSE dis.IsWorkingUnderTime END
+					)
 				,dis.IsIgnoredWorkingUnderTime = (CASE 
 					WHEN ignore.DisciplineTypeId = 7 THEN ignore.IsIgnored
 					ELSE dis.IsIgnoredWorkingUnderTime END
@@ -273,6 +333,10 @@ BEGIN
 				,dis.IsConfirmedWorkingUnderTime = (CASE 
 					WHEN ignore.DisciplineTypeId = 7 THEN ignore.IsConfirmed
 					ELSE dis.IsConfirmedWorkingUnderTime END
+					)
+				,dis.IsUnpaidLeaveAbsent = (CASE 
+					WHEN ignore.DisciplineTypeId = 8 THEN 1
+					ELSE dis.IsUnpaidLeaveAbsent END
 					)
 				,dis.IsIgnoredUnpaidLeaveAbsent = (CASE 
 					WHEN ignore.DisciplineTypeId = 8 THEN ignore.IsIgnored

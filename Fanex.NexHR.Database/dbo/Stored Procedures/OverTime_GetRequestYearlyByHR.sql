@@ -1,15 +1,9 @@
-﻿
-CREATE PROCEDURE [dbo].[OverTime_GetRequestYearlyByHR]
-	@SupervisorID INT,
-	@empid int = null,
-	@groupids varchar(max) = '',
-	@Year int = null,
-	@status varchar(max) = '4,6',
-	@excludedEmpID int= null,
-	@role varchar(max) = '6',
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg nvarchar(200) = '' OUTPUT,
-	@isDebug BIT=0
+﻿CREATE PROCEDURE [dbo].[OverTime_GetRequestYearlyByHR] @SupervisorId INT
+	,@empid INT = NULL
+	,@GroupIds VARCHAR(max) = ''
+	,@Year INT
+	,@status VARCHAR(max) = '4,6'
+	,@ExcludedEmpId INT = NULL
 AS
 /*
 Created: Tom.Vo@2013-11-04
@@ -20,148 +14,187 @@ Original:
 Revisions:    
 Param's Explanation:
 */
-SET NOCOUNT ON;
-
-DECLARE @fromdate VARCHAR(25),	@todate VARCHAR(25)
-
-SELECT @fromdate = CONVERT(VARCHAR(10),@Year) + '/01/01 00:00:00',
-		@todate  = CONVERT(VARCHAR(10),@Year) + '/12/31 23:59:59'
-
-IF (ISDATE(@fromdate) = 0 OR ISDATE(@todate) = 0)
 BEGIN
-	SELECT @ErrCode=100,@ErrMsg='Parameter invalid.'
-	PRINT @ErrMsg
-	RETURN
-END
+	SET NOCOUNT ON;
 
-CREATE TABLE #status (Currentstatus TINYINT)
+	DECLARE @fromdate DATETIME
+		,@todate DATETIME
 
-IF LEN(ISNULL(@status,'')) = 0
-	SET @status =  '4,6'
+	SELECT @fromdate = CONVERT(VARCHAR(10), @Year) + '/01/01 00:00:00'
+		,@todate = CONVERT(VARCHAR(10), @Year) + '/12/31 23:59:59'
 
-IF ISNULL(@status,'') <>''
-	INSERT INTO #status  (Currentstatus)
-	SELECT val FROM fnc_strSplit (@status, ',')
+	CREATE TABLE #Status (Currentstatus TINYINT)
 
-CREATE TABLE #RolesList (roleid TINYINT)
-DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
+	IF LEN(ISNULL(@status, '')) = 0
+		SET @status = '4,6'
 
-IF @SupervisorID IS NOT NULL
-BEGIN 
-	SET @role = ISNULL(@role,'')
-	IF @role <>''
-		INSERT INTO #RolesList (roleid)
-		SELECT val FROM fnc_strSplit (@role, ',')
-	
-	SET @role = 1
-	SELECT @role = Roles FROM dbo.Employee WITH(NOLOCK) WHERE EmpId = @SupervisorID
+	IF ISNULL(@status, '') <> ''
+		INSERT INTO #Status (Currentstatus)
+		SELECT val
+		FROM fnc_strSplit(@status, ',')
 
-	IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 6)
-		BEGIN 
-			IF @role LIKE '%6%'
-				SET @RoleType=6
-		END
-	ELSE IF 2=(SELECT COUNT(1) FROM #RolesList WHERE roleid in (2,3))
-		BEGIN 
-			IF @role LIKE '%2%' AND @role LIKE '%3%' 
-				SET @RoleType=23
-			ELSE IF @role LIKE '%2%'
-				SET @RoleType=2
-			ELSE IF @role LIKE '%3%'
-				SET @RoleType=3
-		END
-	ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (2) )
+	CREATE TABLE #Role (roleid TINYINT)
+
+	DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
+
+	IF @SupervisorId IS NOT NULL
+	BEGIN
+		INSERT INTO #Role
+		SELECT RoleId
+		FROM dbo.EmployeeRole WITH (NOLOCK)
+		WHERE EmployeeId = @SupervisorId
+
+		IF EXISTS (
+				SELECT 1
+				FROM #Role
+				WHERE roleid = 6
+				)
 		BEGIN
-			 IF @role LIKE '%2%'
-				SET @RoleType=2
+			SET @RoleType = 6
 		END
-	ELSE IF EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid in (3) )
-		BEGIN 
-			IF @role LIKE '%3%'
-				SET @RoleType=3
+		ELSE IF 2 = (
+				SELECT COUNT(1)
+				FROM #Role
+				WHERE roleid IN (2, 3)
+				)
+		BEGIN
+			SET @RoleType = 23
 		END
-END
-
-IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1)
-	AND EXISTS(SELECT TOP 1 1 FROM #RolesList WHERE roleid = 3))
-	BEGIN
-		DELETE #status WHERE Currentstatus IN (2,3)
-		INSERT #status (Currentstatus)
-			VALUES (2),
-					(3)
 	END
 
-CREATE TABLE #GroupsList (GroupId INT)
-SET @groupids = ISNULL(@groupids,'')
-
-IF @groupids <>''
-	INSERT INTO #GroupsList (GroupId)
-	SELECT val FROM fnc_strSplit (@groupids, ',')
-ELSE
+	IF EXISTS (
+			SELECT 1
+			FROM #Status
+			WHERE Currentstatus = 1
+			)
+		AND EXISTS (
+			SELECT 1
+			FROM #Role
+			WHERE roleid = 3
+			)
 	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT GRoupID FROM [Group] g WITH (NOLOCK)
+		DELETE #Status
+		WHERE Currentstatus IN (2, 3)
+
+		INSERT #Status (Currentstatus)
+		VALUES (2)
+			,(3)
 	END
 
-CREATE  TABLE #Calendar(_MONTH INT,isDeleted BIT)
-DECLARE @FromMonth INT=1,@ToMonth INT=12
+	CREATE TABLE #Group (GroupId INT)
 
-WHILE (@FromMonth <= @ToMonth )
-BEGIN
-	INSERT INTO #Calendar(_MONTH)
-	VALUES (@FromMonth)
-	SET @FromMonth =@FromMonth +1
+	SET @GroupIds = ISNULL(@GroupIds, '')
+
+	IF @GroupIds <> ''
+		INSERT INTO #Group (GroupId)
+		SELECT val
+		FROM fnc_strSplit(@GroupIds, ',')
+	ELSE
+	BEGIN
+		INSERT INTO #Group (GroupId)
+		SELECT g.GroupId
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+	END
+
+	CREATE TABLE #Calendar (
+		_MONTH INT
+		,isDeleted BIT
+		)
+
+	DECLARE @FromMonth INT = 1
+		,@ToMonth INT = 12
+
+	WHILE (@FromMonth <= @ToMonth)
+	BEGIN
+		INSERT INTO #Calendar (_MONTH)
+		VALUES (@FromMonth)
+
+		SET @FromMonth = @FromMonth + 1
+	END
+
+	SELECT EmpId
+		,Code
+		,NickName
+		,FullName
+		,Team
+		,TeamCode
+		,ISNULL([1], 0) AS Jan
+		,ISNULL([2], 0) AS Feb
+		,ISNULL([3], 0) AS Mar
+		,ISNULL([4], 0) AS Apr
+		,ISNULL([5], 0) AS May
+		,ISNULL([6], 0) AS Jun
+		,ISNULL([7], 0) AS Jul
+		,ISNULL([8], 0) AS Aug
+		,ISNULL([9], 0) AS Sep
+		,ISNULL([10], 0) AS Oct
+		,ISNULL([11], 0) AS Nov
+		,ISNULL([12], 0) AS [DEC]
+		,(ISNULL([1], 0) + ISNULL([2], 0) + ISNULL([3], 0) + ISNULL([4], 0) + ISNULL([5], 0) + ISNULL([6], 0) + ISNULL([7], 0) + ISNULL([8], 0) + ISNULL([9], 0) + ISNULL([10], 0) + ISNULL([11], 0) + ISNULL([12], 0)) AS Total
+	FROM (
+		SELECT e.EmpId
+			,e.Code
+			,e.NickName
+			,e.FullName
+			,g.[Name] AS Team
+			,g.Code AS TeamCode
+			,cl._MONTH AS [Month]
+			,(ot.[NormalHours] + ot.[OffHours] + ot.[PublicHours]) ToTalHours
+		FROM #Calendar AS cl
+			LEFT JOIN [dbo].[OTMonthlyRequest] AS ot WITH (NOLOCK) ON cl._MONTH = Month(Ot.Month)
+			LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = ot.EmpId
+			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		WHERE ot.[Month] BETWEEN @FromDate
+				AND @todate
+			AND (
+				@EmpId IS NULL
+				OR ot.EmpId = @EmpId
+				)
+			AND (
+				@ExcludedEmpId IS NULL
+				OR ot.EmpId <> @ExcludedEmpId
+				)
+			AND (
+				ISNULL(@status, '') = ''
+				OR ot.CurrentStatus IN (
+					SELECT CurrentStatus
+					FROM #Status
+					)
+				)
+			AND (
+				ISNULL(@GroupIds, '') = ''
+				OR e.GroupId IN (
+					SELECT GroupId
+					FROM #Group
+					)
+				)
+			AND (
+				@RoleType = 6
+				OR (
+					@RoleType = 2
+					AND ot.VerifierId = @SupervisorId
+					)
+				OR (
+					@RoleType = 3
+					AND ot.ApproverId = @SupervisorId
+					)
+				OR (
+					@RoleType = 23
+					AND (
+						ot.ApproverId = @SupervisorId
+						OR ot.VerifierId = @SupervisorId
+						)
+					)
+				)
+		) AS tmp
+	Pivot(MAX(ToTalHours) FOR [Month] IN ([1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12])) AS tmp2
+	WHERE EmpId IS NOT NULL
+
+	DROP TABLE #Group
+
+	DROP TABLE #Role
+
+	DROP TABLE #Status
+
+	DROP TABLE #Calendar
 END
-
-DECLARE @SQL VARCHAR(8000)
-SET @SQL = 
-'		SELECT empID,Code,NickName,FullName,Team,TeamCode,
-			[1] Jan,[2] Feb,[3] Mar,[4] Apr,[5] May,[6] Jun,[7] Jul,[8] Aug,[9] Sep,[10] Oct,[11] Nov,[12] Dec,
-			(ISNULL([1],0)+ISNULL([2],0)+ISNULL([3],0)+ISNULL([4],0)
-			+ISNULL([5],0)+ISNULL([6],0)+ISNULL([7],0)+ISNULL([8],0)
-			+ISNULL([9],0)+ISNULL([10],0)+ISNULL([11],0)+ISNULL([12],0)) AS Total
-		FROM
-		(
-		SELECT 
-						e.empID,
-						e.Code AS Code,
-						e.NickName AS NickName,
-						e.FullName AS FullName,
-						g.Name AS Team,
-						g.Code AS TeamCode,
-						cl._MONTH AS [Month],				
-						(ot.[NormalHours]+ot.[OffHours]+ot.[PublicHours])ToTalHours
-
- FROM #Calendar cl 
-	LEFT JOIN [dbo].[OTMonthlyRequest] ot WITH (NOLOCK) ON cl._MONTH = Month(Ot.Month)
-	LEFT JOIN Employee e WITH (NOLOCK) ON e.empID = ot.empID	
-	LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
-		WHERE (ot.Month >= ''' + @FromDate + ''' AND	ot.Month  <= ''' + @todate + ''') '+CHAR(13)
-	+ CASE WHEN @empid is null THEN '' ELSE '   and ot.empid = ' + CONVERT(NVARCHAR(13),@empid)+ '  ' +CHAR(13) END
-	+ CASE WHEN @excludedEmpID is null THEN '' ELSE '   and ot.empid <> ' + CONVERT(NVARCHAR(13),@excludedEmpID)+ '  ' +CHAR(13) END
-	+ CASE WHEN @status is null or @status ='' THEN '' ELSE '			and ot.currentstatus IN (SELECT Currentstatus FROM #status ) ' +CHAR(13) END
-	+ CASE WHEN @groupids ='' THEN '' ELSE '		and e.GroupId IN (SELECT GroupId FROM #GroupsList ) ' +CHAR(13) END
-	+ CASE WHEN @RoleType IN (6) THEN ''
-			WHEN @RoleType = 2 THEN ' AND ot.VerifierId =' + CONVERT(NVARCHAR(13),@SupervisorID) + CHAR(13)
-			WHEN @RoleType = 3 THEN ' AND ot.ApproverId =' + CONVERT(NVARCHAR(13),@SupervisorID) + CHAR(13)
-			WHEN @RoleType = 23 THEN ' AND (ot.ApproverId =' + CONVERT(NVARCHAR(13),@SupervisorID) 
-										+' OR	ot.VerifierId =' + CONVERT(NVARCHAR(13),@SupervisorID) + ')'+ CHAR(13)
-			END
-	+'	) AS tmp
- Pivot
- (
-	MAX(ToTalHours) FOR [Month] IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12])
- )AS tmp2 
- WHERE 
-	empID IS NOT NULL '
-	
-	IF @isDebug = 1 PRINT @SQL 
-	IF @isDebug = 1 PRINT @RoleType
-	EXEC (@SQL )
-
-SELECT @ErrCode=0,@ErrMsg=''
-
-DROP TABLE #GroupsList
-DROP TABLE #RolesList
-DROP TABLE #status
-DROP TABLE #Calendar

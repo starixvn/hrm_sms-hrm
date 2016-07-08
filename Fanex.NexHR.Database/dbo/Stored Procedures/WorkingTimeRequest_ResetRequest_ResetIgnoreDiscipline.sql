@@ -212,7 +212,7 @@ BEGIN
 				AND dis.EmpId = r.EmployeeId
 				AND dis.DisciplineType = 1
 
-			--INSERT INTO #EmployeeDiscipline
+			INSERT INTO #EmployeeDiscipline
 			SELECT DISTINCT dis.WorkDate
 				,dis.EmpId
 				,(
