@@ -349,9 +349,10 @@
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            exportExcelService.ExportWorkingTimeRequest(requestList);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
+            string fileName = "MemberWorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            return new EmptyResult();
+            return ExcelFile(hssfworkbook, fileName);
         }
 
         /// [Authorize(Roles = "HR")]
@@ -375,9 +376,10 @@
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            exportExcelService.ExportWorkingTimeRequest(requestList);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
+            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            return new EmptyResult();
+            return ExcelFile(hssfworkbook, fileName);
         }
 
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)
@@ -399,9 +401,10 @@
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            exportExcelService.ExportWorkingTimeRequest(requestList);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
+            string fileName = "DailyWorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            return new EmptyResult();
+            return ExcelFile(hssfworkbook, fileName);
         }
 
         public ActionResult Manpower(int year)

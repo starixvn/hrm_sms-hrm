@@ -404,16 +404,16 @@
                 hssfworkbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "OvertimeRecord");
+            ISheet templateSheet = hssfworkbook.GetSheet("sheet1");
+            ISheet sheet = hssfworkbook.CloneSheet("sheet1", "OvertimeRecord");
 
             //// render Header
-            var rowHeaderTitle = sheet.GetRow(0);
-            var cellHeader = rowHeaderTitle.GetCell(0);
+            IRow rowHeaderTitle = sheet.GetRow(0);
+            ICell cellHeader = rowHeaderTitle.GetCell(0);
             cellHeader.SetCellValue("OVERTIME RECORD - SMS STAFF Local From "
                 + fromDate.ToString("dd MMM yyyy") + " - " + toDate.ToString("dd MMM yyyy"));
 
-            var rowHeaderDate = sheet.GetRow(1);
+            IRow rowHeaderDate = sheet.GetRow(1);
             int totalHeaderDateCell = totalDay * 2;
             int rowHeaderCount = 0;
             for (int i = 1; i <= totalHeaderDateCell; i++)
@@ -429,8 +429,8 @@
             if (overtimes != null && overtimes.Any())
             {
                 //// render Overtime type Header.
-                var rowHeaderOvertimeType = sheet.GetRow(2);
-                var headerRowEntity = overtimes.FirstOrDefault();
+                IRow rowHeaderOvertimeType = sheet.GetRow(2);
+                OvertimeExcelReport headerRowEntity = overtimes.First();
                 var overtimeTypeIndex = 0;
                 for (int i = 1; i <= totalHeaderDateCell; i++)
                 {
@@ -460,27 +460,27 @@
                 var rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
                 var numberCount = 1;
                 var numberStart = 0;
-                foreach (var overtime in model)
+                foreach (OvertimeExcelReportViewModel overtime in model)
                 {
-                    if (overtime.Name != null && overtime.ListOvertimeEntity.Count > 0)
+                    if (overtime.Name != null && overtime.ListOvertimeEntity.Any())
                     {
                         if (rowIndex <= _RowStartBodyOvertimeRecord)
                         {
                             sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
                         }
 
-                        var rowTeam = sheet.GetRow(rowIndex);
+                        IRow rowTeam = sheet.GetRow(rowIndex);
                         rowTeam.Height = rowTeamHeight;
-                        var cellTeam = rowTeam.GetCell(0);
+                        ICell cellTeam = rowTeam.GetCell(0);
                         cellTeam.SetCellValue(overtime.Name.ToUpper());
                         sheet.MergeCells(rowIndex, 0, rowIndex, 2);
                         rowIndex++;
                         numberStart = rowIndex + 1;
-                        foreach (var item in overtime.ListOvertimeEntity)
+                        foreach (OvertimeExcelReport item in overtime.ListOvertimeEntity)
                         {
                             var rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
                             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                            var row = sheet.GetRow(rowIndex);
+                            IRow row = sheet.GetRow(rowIndex);
                             row.Height = rowHeight;
                             row.GetCell(0).SetCellValue(numberCount);
                             row.GetCell(1).SetCellValue(item.EmpCode);
@@ -489,7 +489,6 @@
                             row.GetCell(4).SetCellValue(item.Team);
                             row.GetCell(5).SetCellValue(item.TotalWorkDays);
                             row.GetCell(6).SetCellValue(item.UnpaidLeave);
-
                             row.GetCell(7).SetCellValue(item.Normal);
                             row.GetCell(8).SetCellValue(item.Offday);
                             row.GetCell(9).SetCellValue(item.Holiday);
@@ -499,7 +498,7 @@
                             double defaultCellValue = 0.0;
                             for (int i = 1; i <= totalHeaderDateCell; i++)
                             {
-                                var data = item.OvertimeDailyReport[indexCount];
+                                OvertimeDailyReport data = item.OvertimeDailyReport[indexCount];
                                 if (i % 2 == 0)
                                 {
                                     var cellValue = data.TotalOvertimeType2;
@@ -520,16 +519,16 @@
                             numberCount++;
                         }
 
-                        var cellCountMemberInTeam = rowTeam.GetCell(3);
+                        ICell cellCountMemberInTeam = rowTeam.GetCell(3);
                         cellCountMemberInTeam.SetCellValue(numberCount - 1);
 
                         sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
-                        var rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
+                        IRow rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
 
-                        var cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
-                        var cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
-                        var cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
-                        var cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
+                        ICell cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
+                        ICell cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
+                        ICell cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
+                        ICell cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
                         string formulaNormal = "SUM(H{0}:H{1})",
                             formulaOff = "SUM(I{0}:I{1})",
                             formulaPH = "SUM(J{0}:J{1})",

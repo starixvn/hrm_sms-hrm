@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest_IgnoreDiscipline] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest_IgnoreDiscipline] @RequestId BIGINT
 	,@RoleId INT
 	,@ModifiedBy INT
 	,@IgnoredDetails NVARCHAR(MAX) = NULL
@@ -68,9 +67,9 @@ BEGIN
 		BEGIN TRANSACTION
 
 		DELETE
-			FROM #IgnoredDisciplineDetail
-			WHERE IsIgnored = 0
-				AND IsConfirmed = 0
+		FROM #IgnoredDisciplineDetail
+		WHERE IsIgnored = 0
+			AND IsConfirmed = 0
 
 		IF EXISTS (
 				SELECT 1
@@ -363,4 +362,3 @@ BEGIN
 
 	DROP TABLE #EmployeeDiscipline
 END
-

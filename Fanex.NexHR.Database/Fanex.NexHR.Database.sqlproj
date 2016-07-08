@@ -378,10 +378,8 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_5.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByID_razor.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_6.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_SetOffDayForAllEmployees.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetEmployees_razor.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_7.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update.sql" />
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />

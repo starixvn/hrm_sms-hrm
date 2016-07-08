@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline] @RequestId BIGINT
 	,@ModifiedBy INT
 	,@RoleId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -139,7 +138,7 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		IF @RoleId = 3 -- SA
+		IF @RoleId IN (2, 3, 6) -- verifier/approver/hr
 		BEGIN
 			UPDATE dis
 			SET dis.IsIgnoredChangeShift = (CASE 
@@ -281,7 +280,7 @@ BEGIN
 		ROLLBACK TRANSACTION
 
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'Ignored discipline score unsuccessfully.'
+			,@ErrMsg = N'Ignore discipline score unsuccessfully.'
 	END CATCH
 
 	DROP TABLE #LeaveRequestDetail

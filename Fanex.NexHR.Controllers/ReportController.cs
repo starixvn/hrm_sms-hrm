@@ -40,7 +40,6 @@
         private readonly IExportExcelService exportExcelService;
         private readonly IEmployeeService employeeService;
         private readonly ILookupDataService lookupDataService;
-        private IExportService exportService;
 
         public ReportController()
             : this(null, null, null, null, null)
