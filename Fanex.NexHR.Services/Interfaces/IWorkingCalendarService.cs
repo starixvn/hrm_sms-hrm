@@ -1,20 +1,17 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Calendar;
+    using System.Collections.Generic;
 
     public interface IWorkingCalendarService
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria);
 
         IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria);
-
-        CommandResult InsertOrUpdateWorkingCalendars(InsertOrUpdateWorkingCalendarsCriteria criteria);
 
         IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
 

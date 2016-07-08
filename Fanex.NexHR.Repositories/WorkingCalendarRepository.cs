@@ -96,7 +96,7 @@
                 var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
                 var totalColumns = dttWorkingCalendars.Columns.Count;
 
-                foreach (System.Data.DataRow row in dttWorkingCalendars.Rows)
+                foreach (DataRow row in dttWorkingCalendars.Rows)
                 {
                     var empWorkingCalendar = new WorkingCalendarsViewModel();
                     empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());
@@ -106,16 +106,17 @@
                     empWorkingCalendar.Positions = row["Positions"].ToString();
                     empWorkingCalendar.EmpCode = row["EmpCode"].ToString();
                     empWorkingCalendar.Days = (totalColumns - 6) / 2;
-                    List<string> days = new List<string>();
-                    List<WorkingScheduleViewModel> workingSchedule = new List<WorkingScheduleViewModel>();
+                    var days = new List<string>();
+                    var workingSchedule = new List<WorkingScheduleViewModel>();
+                    var defaultColumn = 6;
                     for (int i = 1; i <= empWorkingCalendar.Days; i++)
                     {
                         var workingDay = new WorkingScheduleViewModel
                         {
-                            Title = row[i == 1 ? (i + 5) : ((i * 2) + 4)].ToString(),
-                            Color = row[i == 1 ? (i + 6) : ((i * 2) + 5)].ToString()
+                            Title = row[defaultColumn++].ToString(),
+                            Color = row[defaultColumn++].ToString()
                         };
-                        days.Add(row[i == 1 ? (i + 5) : ((i * 2) + 4)].ToString());
+                        days.Add(workingDay.Title);
                         workingSchedule.Add(workingDay);
                     }
 

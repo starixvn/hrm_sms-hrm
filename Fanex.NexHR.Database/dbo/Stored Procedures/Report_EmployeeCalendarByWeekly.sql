@@ -135,8 +135,12 @@ FROM dbo.Employee e WITH(NOLOCK)
 	LEFT JOIN  dbo.LeaveType lv		WITH(NOLOCK) 	ON lv.LeaveTypeId=c.LeaveTypeId
 	LEFT JOIN  dbo.LeaveType lv2	WITH(NOLOCK)	ON lv2.LeaveTypeId=c.LeaveTypeId2
 	LEFT JOIN  dbo.Shift s			WITH(NOLOCK)	ON s.shiftid= c.shiftid
-	LEFT JOIN dbo.EmployeeSummary esum WITH (NOLOCK)  		ON esum.EmpId = e.EmpId AND esum.islocal = 1  
-	LEFT JOIN dbo.Holiday hld WITH (NOLOCK)  			ON (hld.FromDate BETWEEN @fromDate AND @toDate			OR hld.ToDate BETWEEN @fromDate AND @toDate)			AND (tmp.WorkDate BETWEEN hld.FromDate AND hld.ToDate )
+	LEFT JOIN dbo.EmployeeSummary esum WITH (NOLOCK)  
+		ON esum.EmpId = e.EmpId AND esum.islocal = 1  
+	LEFT JOIN dbo.Holiday hld WITH (NOLOCK)  
+			ON (hld.FromDate BETWEEN @fromDate AND @toDate
+			OR hld.ToDate BETWEEN @fromDate AND @toDate)
+			AND (tmp.WorkDate BETWEEN hld.FromDate AND hld.ToDate )
 	--LEFT JOIN  dbo.Shift s_sun		WITH(NOLOCK)	ON s_sun.shiftid= eds.SunShift
 	--LEFT JOIN  dbo.Shift s_mon		WITH(NOLOCK)	ON s_mon.shiftid= eds.MonShift
 	--LEFT JOIN  dbo.Shift s_Tue		WITH(NOLOCK)	ON s_Tue.shiftid= eds.TueShift

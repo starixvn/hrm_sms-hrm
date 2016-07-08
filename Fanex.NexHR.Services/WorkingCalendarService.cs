@@ -3,10 +3,8 @@
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Calendar;
@@ -15,17 +13,10 @@
 
     public class WorkingCalendarService : BaseService, IWorkingCalendarService
     {
-        private readonly ICommandService commandService;
         private readonly IWorkingCalendarRepository workingCalendarRepository;
 
-        public WorkingCalendarService() : this(null, null)
+        public WorkingCalendarService() : this(null)
         {
-        }
-
-        public WorkingCalendarService(ICommandService commandService, IWorkingCalendarRepository workingCalendarRepository)
-        {
-            this.workingCalendarRepository = workingCalendarRepository ?? new WorkingCalendarRepository();
-            this.commandService = commandService ?? new CommandService();
         }
 
         public WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository)
@@ -55,18 +46,6 @@
             }
 
             return workingCalendarModels ?? new List<WorkingCalendarModel>();
-        }
-
-        public CommandResult InsertOrUpdateWorkingCalendars(InsertOrUpdateWorkingCalendarsCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            CommandResult result = null;
-            if (criteria.IsValid())
-            {
-                result = commandService.Insert(criteria);
-            }
-
-            return result;
         }
 
         public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)

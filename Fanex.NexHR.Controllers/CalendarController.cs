@@ -19,6 +19,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Web.Mvc;
 
     public class CalendarController : BaseController
@@ -99,7 +100,7 @@
                 ScheduleList = scheduleArrangeModel.ScheduleModelXML,
                 ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
             };
-            CommandResult result = workingCalendarService.InsertOrUpdateWorkingCalendars(criteria);
+            CommandResult result = commandService.Insert(criteria);
 
             return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
         }
@@ -274,21 +275,9 @@
 
         public ActionResult WorkingCalendars()
         {
-            var currentDate = DateTime.Now;
-            var fromDate = GetStartOfWeek(currentDate);
-            var toDate = GetEndOfWeek(currentDate);
-            ViewBag.FromDate = fromDate;
-            ViewBag.ToDate = toDate;
-            ViewBag.JobTitleId = string.Empty;
-
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
-            ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+            var getAllJobTitleCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.JobTitle };
+            var jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria).Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
@@ -298,32 +287,37 @@
             ViewBag.HasPermissionToViewHoliday = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Read);
 
-            return View();
+            var model = new WorkingCalendarFilterViewModel()
+            {
+                FromDate = GetStartOfWeek(DateTime.Now),
+                ToDate = GetEndOfWeek(DateTime.Now),
+                Groups = teamService.GetAll(getAllGroupCriteria),
+                JobTitles = jobTitles
+            };
+
+            return View(model);
         }
 
         public ActionResult WorkingCalendarDetails(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null)
         {
-            var viewModel = new List<WorkingCalendarsViewModel>();
-            int month = 0;
-            int year = 0;
-            var firstDateInMonth = new System.Text.StringBuilder();
-            ViewBag.Year = year != 0 ? year : DateTime.Now.Year;
-            ViewBag.Month = month != 0 ? month : DateTime.Now.Month;
-            firstDateInMonth.AppendFormat("{0}/{1}/1", ViewBag.Year, ViewBag.Month);
+            var workingCalendars = new List<WorkingCalendarsViewModel>();
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
+            var firstDateInMonth = new StringBuilder();
+
+            firstDateInMonth.AppendFormat("{0}/{1}/1", year, month);
 
             var getUserChangeShiftCriteria = new GetUserChangedShiftCriteria()
             {
-                ReportDate = new DateTime(ViewBag.Year, ViewBag.Month, 1)
+                ReportDate = new DateTime(year, month, 1)
             };
             var getUserHalfDayOffsCriteria = new GetEmployeeHalfDayOffCriteria()
             {
                 ReportDate = DateTime.Parse(firstDateInMonth.ToString())
             };
-            var userChangedShift = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
+            var userChangedShifts = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
             var userHalfDayOffs = employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
 
-            ViewBag.FromNewDate = fromDate;
-            ViewBag.ToNewDate = toDate;
             var criteria = new GetWorkingCalendarWeeklyCriteria()
             {
                 EmpId = empId,
@@ -334,12 +328,20 @@
                 IsLocal = isLocal
             };
 
-            viewModel = workingCalendarService.GetWorkingCalendars(criteria).ToList();
-            CheckChangeShiffAndHalfDayOff(fromDate, viewModel, userChangedShift, userHalfDayOffs);
-            ViewBag.UserChangeShift = userChangedShift;
-            ViewBag.HalfDayOffs = userHalfDayOffs;
+            workingCalendars = workingCalendarService.GetWorkingCalendars(criteria).ToList();
+            CheckChangeShiff(workingCalendars, userChangedShifts, fromDate);
+            CheckHalfDayOff(workingCalendars, userHalfDayOffs, fromDate);
 
-            return PartialView(viewModel);
+            var model = new WorkingCalendarDetailViewModel()
+            {
+                Year = year,
+                Month = month,
+                FromDate = fromDate,
+                ToDate = toDate,
+                WorkingCalendars = workingCalendars
+            };
+
+            return PartialView(model);
         }
 
         public ActionResult MemberScheduleInOrder()
@@ -452,8 +454,7 @@
             return scheduleModel;
         }
 
-        [NonAction]
-        private DateTime GetStartOfWeek(DateTime currentDate)
+        private static DateTime GetStartOfWeek(DateTime currentDate)
         {
             int subDays = currentDate.DayOfWeek - DayOfWeek.Monday;
             if (subDays < 0)
@@ -464,22 +465,16 @@
             return currentDate.AddDays(-1 * subDays).Date;
         }
 
-        [NonAction]
-        private DateTime GetEndOfWeek(DateTime currentDate)
+        private static DateTime GetEndOfWeek(DateTime currentDate)
         {
             return GetStartOfWeek(currentDate).AddDays(6);
         }
 
-        [NonAction]
-        private void CheckChangeShiffAndHalfDayOff(
-            DateTime fromDate,
-            IList<WorkingCalendarsViewModel> viewModel,
-            IList<UserChangedShift> userChangeShift,
-            IList<HalfDayOff> halfDayOff)
+        private static void CheckChangeShiff(IList<WorkingCalendarsViewModel> models, IList<UserChangedShift> userChangeShift, DateTime fromDate)
         {
             foreach (UserChangedShift user in userChangeShift)
             {
-                foreach (WorkingCalendarsViewModel employee in viewModel)
+                foreach (WorkingCalendarsViewModel employee in models)
                 {
                     if (employee.EmpId == user.EmpId)
                     {
@@ -495,10 +490,13 @@
                     }
                 }
             }
+        }
 
+        private static void CheckHalfDayOff(IList<WorkingCalendarsViewModel> models, IList<HalfDayOff> halfDayOff, DateTime fromDate)
+        {
             foreach (HalfDayOff item in halfDayOff)
             {
-                foreach (WorkingCalendarsViewModel employee in viewModel)
+                foreach (WorkingCalendarsViewModel employee in models)
                 {
                     if (employee.EmpId == item.ID)
                     {

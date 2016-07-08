@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Calendar
-@model IList<WorkingCalendarsViewModel>
+﻿@model Fanex.NexHR.ViewModels.Calendar.WorkingCalendarFilterViewModel
 @{
     var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
     var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
@@ -34,8 +33,8 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginGetForm())
 {
-    var displayFrom = ((DateTime)ViewBag.FromDate).ToString("dd MMM, yyyy");
-    var displayTo = ((DateTime)ViewBag.ToDate).ToString("dd MMM, yyyy");
+    var displayFrom = Model.FromDate.ToString("dd MMM, yyyy");
+    var displayTo = Model.ToDate.ToString("dd MMM, yyyy");
     <div class="container_24 bunhat">
         <div class="grid_24">
             <div class="grid_2 gridlabel">
@@ -54,7 +53,7 @@
             </div>
             <div class="grid_6">
                 <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
+                    @foreach (Team item in Model.Groups)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
@@ -65,7 +64,7 @@
                 Position
             </div>
             <div class="grid_6">
-                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+                @Html.DropDownList("title", Model.JobTitles, new { @class = "title-select", multiple = "multiple" })
             </div>
             <div class="clear">
             </div>
@@ -105,8 +104,8 @@
         || <span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
         </span> ||
         <a id="next" class="lnkNext" href="javascript:;">Next &gt;&gt; </a>
-        @Html.Hidden("OriginalFromDate", (DateTime)ViewBag.FromDate)
-        @Html.Hidden("OriginalToDate", (DateTime)ViewBag.ToDate)
+        @Html.Hidden("OriginalFromDate", Model.FromDate)
+        @Html.Hidden("OriginalToDate", Model.ToDate)
     </div>
 
 }
