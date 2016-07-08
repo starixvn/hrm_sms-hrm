@@ -15,7 +15,7 @@
     <span class="step">
         <a href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
     </span>
-    <span class="step">@ViewBag.Employee.NickName's annual leave balance</span>
+    <span class="step">@Model.Employee.NickName's annual leave balance</span>
 }
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm())
@@ -45,7 +45,7 @@
     {
         <tbody>
             @{int index = 1;}
-            @foreach (AnnualLeaveBalanceModel item in Model.AnnualLeaveBalances)
+            @foreach (AnnualLeaveTransactionViewModel item in Model.AnnualLeaveBalances)
             {
                 <tr>
                     <td>@(index++)</td>
