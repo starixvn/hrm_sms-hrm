@@ -45,5 +45,7 @@
         public decimal LateInEarlyOut { get; set; }
 
         public decimal TotalPendingOverTimeRequest { get; set; }
+
+        public bool HasManagementDashboard { get; set; }
     }
 }

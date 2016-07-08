@@ -25,6 +25,7 @@
 
         public int? HRId { get; set; }
 
+        [SpParam(Ignored = true)]
         public IList<OvertimeDaily> OvertimeRequest { get; set; }
 
         public string ListDetail

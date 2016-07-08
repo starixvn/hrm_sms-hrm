@@ -192,6 +192,17 @@
             return memberOvertimes ?? new List<OvertimeRequest>();
         }
 
+        public IList<OvertimeRequest> GetMemberOvertimeByLeader(GetMemberOvertimeByLeaderCriteria criteria)
+        {
+            IList<OvertimeRequest> memberOvertimes = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                memberOvertimes = overtimeRepository.GetMemberOvertime(criteria);
+            }
+
+            return memberOvertimes ?? new List<OvertimeRequest>();
+        }
+
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             IList<SupervisorNameModel> employees = null;

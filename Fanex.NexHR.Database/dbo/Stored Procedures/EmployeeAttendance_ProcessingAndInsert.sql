@@ -169,7 +169,19 @@ BEGIN
 END
 ELSE
 BEGIN
-	EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @EmpId, @fromTime, @toTime, @onlyUpdate
+	IF(NOT EXISTS (SELECT 1 FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
+					INNER JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID
+				WHERE ISNULL(cl.LeaveDay, 0) = 0
+					AND DATEDIFF(DD, @fromTime, WorkDate) >= 0
+					AND DATEDIFF(DD, WorkDate, @toTime) >= 0
+					AND (
+						@empId IS NULL
+						OR cl.EmpId = @empId
+						)
+						))
+	BEGIN 
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @EmpId, @fromTime, @toTime, @onlyUpdate
+	END
 END
 
 DROP TABLE #TimeRecord

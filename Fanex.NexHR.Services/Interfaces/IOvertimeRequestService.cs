@@ -32,6 +32,8 @@
 
         IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria);
 
+        IList<OvertimeRequest> GetMemberOvertimeByLeader(GetMemberOvertimeByLeaderCriteria criteria);
+
         void SendMailToReminderClaimOvertime(string subject, string content);
 
         bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria);

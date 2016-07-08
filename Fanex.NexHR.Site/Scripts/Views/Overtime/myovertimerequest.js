@@ -89,8 +89,8 @@ $(document).ready(function () {
             var OvertimeDetails = [];
             $("#data tbody tr").each(function () {
                 OvertimeDetails.push({
-                    OvertimeDate: $('td:first-child', this).html().split(" (")[0].trim(),
-                    Schedule: $('#request_ShiftId', this).val(),
+                    OvertimeDate: $('td:eq(0)', this).html().split(" (")[0].trim(),
+                    Schedule: $('td:eq(1)', this).attr("data-shiftId"),
                     TimeIn: $('td:eq(2)', this).html().trim(),
                     TimeOut: $('td:eq(3)', this).html().trim(),
                     TotalWorkHours: $('td:eq(4)', this).html().trim() !== "" ? $('td:eq(4)', this).html().trim() : 0,
@@ -106,7 +106,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: 'POST',
-                url: '/Overtime/Update/',
+                url: _global.root +  'Overtime/Update',
                 data: { overtimeJson: OvertimeInfoJson, overtimeDetailsJson: OvertimeDetailsJson },
                 dataType: 'json',
                 success: function (response) {

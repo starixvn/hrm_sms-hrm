@@ -220,17 +220,16 @@
                 month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             }
 
-            var criteria = new GetMemberOvertimeCriteria
+            var criteria = new GetMemberOvertimeByLeaderCriteria
             {
                 SupervisorID = CurrentUser.Id,
-                Role = "2,3",
                 FromDate = month.Value,
                 ToDate = month.Value,
                 EmployeeId = employeeId,
                 GroupIds = teamIds,
                 Status = statusId
             };
-            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
+            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertimeByLeader(criteria);
 
             ViewBag.CurrentUserId = CurrentUser.Id;
             ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Host);

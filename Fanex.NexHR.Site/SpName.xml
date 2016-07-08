@@ -110,6 +110,23 @@
       <Mapping DataField="StatusId" ObjectProperty="Id" />
       <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
     </Setting>
+    <Setting Key="OverTime_GetRequestMonthlyByLeader" SpName="OverTime_GetRequestMonthlyByLeader" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequesterID" ObjectProperty="Id" />
+      <Mapping DataField="Requester" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="Team" ObjectProperty="Name" />
+      <Mapping DataField="TeamCode" ObjectProperty="Code" />
+      <Mapping DataField="VerifierID" ObjectProperty="Id" />
+      <Mapping DataField="NickNameVerifier" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
+      <Mapping DataField="ApproverID" ObjectProperty="Id" />
+      <Mapping DataField="NickNameApprover" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
+      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+      <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
+    </Setting>
     <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestID" ObjectProperty="Id" />
       <Mapping DataField="RequesterID" ObjectProperty="Id" />

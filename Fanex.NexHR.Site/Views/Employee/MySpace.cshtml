@@ -163,4 +163,7 @@
         </label>
     </fieldset>
 </div>
-@Html.Action("ManagementDashboard")
+@if (Model.HasManagementDashboard)
+{
+    @Html.Action("ManagementDashboard")
+}

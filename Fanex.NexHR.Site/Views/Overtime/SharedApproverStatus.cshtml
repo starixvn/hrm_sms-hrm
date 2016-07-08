@@ -21,6 +21,10 @@
                         </a>
                     </td>
                 }
+                else
+                {
+                     <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
+                }
                 break;
             case (byte)CurrentRequestStatus.Approved:
                 <td>
