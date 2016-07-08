@@ -1,5 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -16,11 +21,6 @@
     using Fanex.NexHR.ViewModels.Supervisor;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web.Mvc;
 
     public class CalendarController : BaseController
     {
@@ -315,8 +315,8 @@
             {
                 ReportDate = DateTime.Parse(firstDateInMonth.ToString())
             };
-            var userChangedShifts = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
-            var userHalfDayOffs = employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
+            IList<UserChangedShift> userChangedShifts = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
+            IList<HalfDayOff> userHalfDayOffs = employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
 
             var criteria = new GetWorkingCalendarWeeklyCriteria()
             {
@@ -377,6 +377,60 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        private static DateTime GetStartOfWeek(DateTime currentDate)
+        {
+            int subDays = currentDate.DayOfWeek - DayOfWeek.Monday;
+            if (subDays < 0)
+            {
+                subDays += 7;
+            }
+
+            return currentDate.AddDays(-1 * subDays).Date;
+        }
+
+        private static DateTime GetEndOfWeek(DateTime currentDate)
+        {
+            return GetStartOfWeek(currentDate).AddDays(6);
+        }
+
+        private static void CheckChangeShiff(IList<WorkingCalendarsViewModel> models, IList<UserChangedShift> userChangeShift, DateTime fromDate)
+        {
+            foreach (UserChangedShift user in userChangeShift)
+            {
+                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == user.EmpId))
+                {
+                    for (int i = 0; i < employee.WorkingDays.Count; i++)
+                    {
+                        if (user.Day == fromDate.AddDays(i).Day)
+                        {
+                            var changeShift = "_" + employee.WorkingDays[i];
+                            employee.WorkingDays[i] = changeShift;
+                            employee.WorkingSchedule[i].Title = changeShift;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void CheckHalfDayOff(IList<WorkingCalendarsViewModel> models, IList<HalfDayOff> halfDayOff, DateTime fromDate)
+        {
+            foreach (HalfDayOff item in halfDayOff)
+            {
+                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == item.ID))
+                {
+                    for (int i = 0; i < employee.WorkingDays.Count; i++)
+                    {
+                        if (item.Day == fromDate.AddDays(i).Day)
+                        {
+                            var halfDay = "-" + employee.WorkingDays[i];
+                            employee.WorkingDays[i] = halfDay;
+                            employee.WorkingSchedule[i].Title = halfDay;
+                        }
+                    }
+                }
+            }
+        }
+
         [NonAction]
         private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
         {
@@ -431,87 +485,33 @@
                 case (int)DayOfWeek.Monday:
                     scheduleModel.MondaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Tuesday:
                     scheduleModel.TuesdaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Wednesday:
                     scheduleModel.WednesdaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Thursday:
                     scheduleModel.ThursdaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Friday:
                     scheduleModel.FridaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Saturday:
                     scheduleModel.SaturdaySchedule = workingCalendar;
                     break;
+
                 case (int)DayOfWeek.Sunday:
                     scheduleModel.SundaySchedule = workingCalendar;
                     break;
             }
 
             return scheduleModel;
-        }
-
-        private static DateTime GetStartOfWeek(DateTime currentDate)
-        {
-            int subDays = currentDate.DayOfWeek - DayOfWeek.Monday;
-            if (subDays < 0)
-            {
-                subDays += 7;
-            }
-
-            return currentDate.AddDays(-1 * subDays).Date;
-        }
-
-        private static DateTime GetEndOfWeek(DateTime currentDate)
-        {
-            return GetStartOfWeek(currentDate).AddDays(6);
-        }
-
-        private static void CheckChangeShiff(IList<WorkingCalendarsViewModel> models, IList<UserChangedShift> userChangeShift, DateTime fromDate)
-        {
-            foreach (UserChangedShift user in userChangeShift)
-            {
-                foreach (WorkingCalendarsViewModel employee in models)
-                {
-                    if (employee.EmpId == user.EmpId)
-                    {
-                        for (int i = 0; i < employee.WorkingDays.Count; i++)
-                        {
-                            if (user.Day == fromDate.AddDays(i).Day)
-                            {
-                                var changeShift = "_" + employee.WorkingDays[i];
-                                employee.WorkingDays[i] = changeShift;
-                                employee.WorkingSchedule[i].Title = changeShift;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void CheckHalfDayOff(IList<WorkingCalendarsViewModel> models, IList<HalfDayOff> halfDayOff, DateTime fromDate)
-        {
-            foreach (HalfDayOff item in halfDayOff)
-            {
-                foreach (WorkingCalendarsViewModel employee in models)
-                {
-                    if (employee.EmpId == item.ID)
-                    {
-                        for (int i = 0; i < employee.WorkingDays.Count; i++)
-                        {
-                            if (item.Day == fromDate.AddDays(i).Day)
-                            {
-                                var halfDay = "-" + employee.WorkingDays[i];
-                                employee.WorkingDays[i] = halfDay;
-                                employee.WorkingSchedule[i].Title = halfDay;
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }
