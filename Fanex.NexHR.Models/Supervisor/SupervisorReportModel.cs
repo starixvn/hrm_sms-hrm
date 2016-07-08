@@ -20,26 +20,13 @@
 
         public string Code { get; set; }
 
-        public string Roles { get; set; }
+        public List<SystemRoleModel> Roles { get; set; }
 
         public string Roles2String
         {
             get
             {
-                IList<SystemRoleModel> roleList = new List<SystemRoleModel>();
-
-                if (!string.IsNullOrEmpty(Roles))
-                {
-                    IList<string> roles = Roles.Split(',');
-                    roleList = roles.Select(i => new SystemRoleModel
-                    {
-                        RoleId = int.Parse(i),
-                        RoleCode = ((RoleSystem)int.Parse(i)).ToString(),
-                        RoleName = ((RoleSystem)int.Parse(i)).ToString()
-                    }).ToList();
-                }
-
-                return !roleList.Any() ? string.Empty : string.Join(", ", roleList.Select(i => i.RoleName));
+                return Roles == null ? string.Empty : string.Join(",", Roles.Select(i => i.RoleName));
             }
         }
 

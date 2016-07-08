@@ -14,6 +14,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels.Report;
+    using Nexus.RoleManagement.Services;
 
     public class ReportRepository : IReportRepository
     {
@@ -254,6 +255,15 @@
                     },
                     splitOn: "SectionId").ToList();
 
+                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                        (er, r) =>
+                        {
+                            er.Role = r;
+
+                            return er;
+                        },
+                        "RoleId");
+
                     IList<SupervisorModel> employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
                     (su, e) =>
                     {
@@ -266,6 +276,7 @@
                     foreach (SupervisorReportModel supervisor in supervisors)
                     {
                         supervisor.Supervisors = employees.Where(x => x.Supervisor.Id == supervisor.Id).ToList();
+                        supervisor.Roles = roles.Where(i => i.EmployeeId == supervisor.Id).Select(i => i.Role).ToList();
                     }
 
                     return supervisors;

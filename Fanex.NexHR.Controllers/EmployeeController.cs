@@ -786,7 +786,7 @@
                 }
                 else
                 {
-                    result = result + "," + string.Join(",", roles.Select(i => i.RoleId));
+                    result = string.Join(",", roles.Select(i => i.RoleId));
                 }
             }
 
