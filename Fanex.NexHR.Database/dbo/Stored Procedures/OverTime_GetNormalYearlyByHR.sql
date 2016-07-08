@@ -1,11 +1,14 @@
 ﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE PROCEDURE [dbo].[OverTime_GetNormalYearlyByHR]
+	--@SupervisorID INT,
 	@empid int = null,
 	@groupids varchar(max) = '',
 	@Year int = null,
 	@status varchar(max) = '4,6',
 	@excludedEmpID int= null,
+	--@role varchar(max) = '6',
+
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0

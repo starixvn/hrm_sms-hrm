@@ -217,8 +217,7 @@
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,
-                    Status = null,
-                    Role = this.CurrentUser.Roles
+                    Status = null
                 };
                 entity = this.overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }

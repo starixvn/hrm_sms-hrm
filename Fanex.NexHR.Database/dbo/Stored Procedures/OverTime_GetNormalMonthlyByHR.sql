@@ -1,12 +1,15 @@
 ﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR]
+	--@SupervisorID INT=NULL,
 	@empid int = null,
 	@groupids varchar(max) = '',
 	@fromdate datetime,
 	@todate datetime,
 	@status varchar(max) = null,
 	@excludedEmpID int= null,
+	--@role varchar(max) = '',
+
 	@ErrCode int = 0 OUTPUT,
 	@ErrMsg nvarchar(200) = '' OUTPUT,
 	@isDebug BIT=0

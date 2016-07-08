@@ -1,7 +1,8 @@
 ﻿
-CREATE PROCEDURE [dbo].[Overtime_GetDailyReport]
+CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] --@SupervisorID INT
 	@EmpID INT
 	,@Month DATETIME
+	--,@role VARCHAR(max) = '6'
 	,@IsNormal BIT = 0
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT

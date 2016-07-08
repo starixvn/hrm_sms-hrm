@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_GetRequestYearlyByHR] @SupervisorId INT
+﻿
+CREATE PROCEDURE [dbo].[OverTime_GetRequestYearlyByHR] @SupervisorId INT
 	,@empid INT = NULL
 	,@GroupIds VARCHAR(max) = ''
 	,@Year INT
@@ -35,7 +36,7 @@ BEGIN
 
 	CREATE TABLE #Role (roleid TINYINT)
 
-	DECLARE @RoleType INT --1:Member | 2-Verifier 3-Approver 23 (Verifier+Approver) | 6-HR
+	DECLARE @isHR BIT
 
 	IF @SupervisorId IS NOT NULL
 	BEGIN
@@ -50,15 +51,7 @@ BEGIN
 				WHERE roleid = 6
 				)
 		BEGIN
-			SET @RoleType = 6
-		END
-		ELSE IF 2 = (
-				SELECT COUNT(1)
-				FROM #Role
-				WHERE roleid IN (2, 3)
-				)
-		BEGIN
-			SET @RoleType = 23
+			SET @isHR = 1
 		END
 	END
 
@@ -169,21 +162,10 @@ BEGIN
 					)
 				)
 			AND (
-				@RoleType = 6
+				@isHR = 1
 				OR (
-					@RoleType = 2
-					AND ot.VerifierId = @SupervisorId
-					)
-				OR (
-					@RoleType = 3
-					AND ot.ApproverId = @SupervisorId
-					)
-				OR (
-					@RoleType = 23
-					AND (
-						ot.ApproverId = @SupervisorId
-						OR ot.VerifierId = @SupervisorId
-						)
+					ot.ApproverId = @SupervisorId
+					OR ot.VerifierId = @SupervisorId
 					)
 				)
 		) AS tmp
