@@ -26,7 +26,7 @@ BEGIN
 			,ee.NickName
 			,sd.OrderCode
 			,sd.OrderNo
-			,ISNULL(g.NAME, '') AS [Team]
+			,ISNULL(g.Code, '') AS [Team]
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 			INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
 			INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON ee.GroupId = g.GroupId

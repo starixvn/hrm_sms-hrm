@@ -59,26 +59,14 @@
 
         public Shift GetByDate(GetEmployeeShiftByDateCriteria criteria)
         {
-            Shift shift = null;
-
-            if (criteria.IsValid())
-            {
-                shift = GetDataEntity<Shift>(criteria);
-            }
-
-            return shift ?? new Shift();
+            Shift shift = GetDataEntity<Shift>(criteria);
+            return shift;
         }
 
         public Shift GetById(GetShiftByIdCriteria criteria)
         {
-            Shift shift = null;
-
-            if (criteria.IsValid())
-            {
-                shift = GetDataEntity<Shift>(criteria);
-            }
-
-            return shift ?? new Shift();
+            Shift shift = GetDataEntity<Shift>(criteria);
+            return shift;
         }
     }
 }

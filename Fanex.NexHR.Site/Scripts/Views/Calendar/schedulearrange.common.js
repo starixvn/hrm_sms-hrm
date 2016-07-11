@@ -19,7 +19,7 @@ var ScheduleArrangeCommon = (function () {
 			var workDate = "";
 			var shiftMultipleId = "";
 			var isPublic = false;
-			var trObjects = $(".tabledata tbody tr");
+			var trObjects = $("#tblScheduleArrange tbody tr");
 			var tdObjects = [];
 			if (trObjects.length > 0) {
 				for (var i = 0; i < trObjects.length; i++) {

@@ -552,7 +552,7 @@ var ScheduleArrangeDetail = (function ($) {
             });
         },
         checkWarningAllRow: function () {
-            var trObjects = $("table.tabledata tbody tr");
+            var trObjects = $("#tblScheduleArrange tbody tr");
             for (var i = 0; i < trObjects.length; i++) {
                 ScheduleArrangeDetail.checkWarningRow(trObjects[i]);
             }
