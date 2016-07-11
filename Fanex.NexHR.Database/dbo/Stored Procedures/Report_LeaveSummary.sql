@@ -32,9 +32,6 @@ BEGIN
 		)
 
 	CREATE TABLE #tmpOwner (OwnerId INT)
-
-	CREATE TABLE #RolesList (roleid TINYINT)
-
 	CREATE TABLE #GroupsList (GroupId INT)
 	CREATE TABLE #EmployeeId (EmpId INT)
 
