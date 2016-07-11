@@ -64,8 +64,6 @@
 
         public Team Team { get; set; } ////remove
 
-        public string Roles { get; set; }
-
         public Employee Manager { get; set; }
 
         [DataType(DataType.Date)]
@@ -172,26 +170,26 @@
 
         public bool PasswordReset { get; set; }
 
-        public List<SystemRoleModel> NX_Roles { get; set; }
+        public List<SystemRoleModel> Roles { get; set; }
 
-        public string[] NX_Roles2Array
+        public string[] Roles2Array
         {
             get
             {
-                return NX_Roles != null ? NX_Roles.Select(i => i.RoleId.ToString()).ToArray() : null;
+                return Roles != null ? Roles.Select(i => i.RoleId.ToString()).ToArray() : null;
             }
 
             set
             {
-                NX_Roles = value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList();
+                Roles = value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList();
             }
         }
 
-        public string NX_Roles2String
+        public string Roles2String
         {
             get
             {
-                return NX_Roles == null ? string.Empty : string.Join(", ", NX_Roles.Select(i => i.RoleName));
+                return Roles == null ? string.Empty : string.Join(", ", Roles.Select(i => i.RoleName));
             }
         }
 

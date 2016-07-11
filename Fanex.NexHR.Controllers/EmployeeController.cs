@@ -722,7 +722,7 @@
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,
-                Roles = BuildRole(model.NX_Roles),
+                Roles = BuildRole(model.Roles),
                 JoinedDate = model.JoinedDate,
                 CompanyDate = model.CompanyDate,
                 ConfirmedDate = model.ConfirmedDate,

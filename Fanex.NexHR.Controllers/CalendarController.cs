@@ -133,7 +133,7 @@
                 ScheduleArranges = scheduleArranges
             };
 
-            ViewBag.IsSARole = CurrentUser.NE_Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
+            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return View(scheduleViewModel);

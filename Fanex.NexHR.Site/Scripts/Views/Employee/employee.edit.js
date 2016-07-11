@@ -3,8 +3,8 @@
 /* exported */
 
 function bindSARole(onload) {
-    var combineSARole = $('#NX_Roles2Array2, #NX_Roles2Array3, #NX_Roles2Array4, #NX_Roles2Array5, #NX_Roles2Array6,#NX_Roles2Array8');
-    if ($('#NX_Roles2Array7').prop('checked')) {
+    var combineSARole = $('#Roles2Array2, #Roles2Array3, #Roles2Array4, #Roles2Array5, #Roles2Array6,#Roles2Array8');
+    if ($('#Roles2Array7').prop('checked')) {
         combineSARole.prop('checked', true).prop('disabled', true);
     }
     else if (!onload) {
@@ -13,8 +13,8 @@ function bindSARole(onload) {
 }
 
 function bindDisciplineRole(onload) {
-    var combineDisciplineRole = $('#NX_Roles2Array3');
-    if ($('#NX_Roles2Array8').prop('checked')) {
+    var combineDisciplineRole = $('#Roles2Array3');
+    if ($('#Roles2Array8').prop('checked')) {
         combineDisciplineRole.prop('checked', true).prop('disabled', true);
     }
     else if (!onload) {
@@ -83,7 +83,7 @@ function resetPassword() {
 function checkAuthorizeToGrantAccess() {
     var canEditUserRole = $("#Authorize").val();
     if (canEditUserRole === "False") {
-        $('#NX_Roles2Array').unbind("click");
+        $('#Roles2Array').unbind("click");
         $("#userRole label").attr('onclick', 'return false');
         $("#userRole label").last().hide();
     }
@@ -103,12 +103,12 @@ $(document).ready(function () {
     $('#JobTitleId').chosen();
 
     bindSARole(true);
-    $('#NX_Roles2Array7').click(function () {
+    $('#Roles2Array7').click(function () {
         bindSARole(false);
     });
 
     bindDisciplineRole(true);
-    $('#NX_Roles2Array8').click(function () {
+    $('#Roles2Array8').click(function () {
         bindDisciplineRole(false);
     });
 

@@ -57,7 +57,7 @@
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = CurrentUser.NE_Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            var selectedMenu = CurrentUser.Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
             ViewBag.SelectedMenu = selectedMenu;
             var menus = GetNagivationData();
@@ -76,7 +76,7 @@
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
         public IEnumerable<MenuModel> GetNagivationData()
         {
-            return CurrentUser.NE_Menus;
+            return CurrentUser.Menus;
         }
 
         private static void CheckRoleForDisplayNavigationItem(

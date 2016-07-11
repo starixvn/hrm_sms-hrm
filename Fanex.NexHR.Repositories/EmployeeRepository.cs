@@ -123,7 +123,7 @@
         {
             foreach (var employee in employees)
             {
-                employee.NX_Roles = roles.Where(i => i.EmployeeId == employee.Id).Select(i => i.Role).ToList();
+                employee.Roles = roles.Where(i => i.EmployeeId == employee.Id).Select(i => i.Role).ToList();
             }
 
             return employees;

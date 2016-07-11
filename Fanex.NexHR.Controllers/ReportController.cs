@@ -93,7 +93,7 @@
                 model.GroupIds = employee.Team.Id.ToString();
             }
 
-            ViewBag.IsMember = CurrentUser.NE_Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
+            ViewBag.IsMember = CurrentUser.Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
             return View(model);
         }
 
@@ -235,7 +235,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult LeaderRequestMonitoring()
         {
-            string viewRole = string.Join(",", CurrentUser.NE_Roles.Select(i => i.RoleId));
+            string viewRole = string.Join(",", CurrentUser.Roles.Select(i => i.RoleId));
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             var model = new RequestsMonitoringViewModel

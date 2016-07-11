@@ -23,8 +23,6 @@
 
         public string CountryCode { get; set; }
 
-        public string Roles { get; set; }
-
         public bool IsShowLeftNavigation { get; set; }
 
         public bool IsTopManager { get; set; }
@@ -33,11 +31,11 @@
 
         public bool PasswordReset { get; set; }
 
-        public IEnumerable<SystemRoleModel> NE_Roles { get; set; }
+        public IEnumerable<SystemRoleModel> Roles { get; set; }
 
-        public IEnumerable<FunctionViewModel> NE_Functions { get; set; }
+        public IEnumerable<FunctionViewModel> Functions { get; set; }
 
-        public IEnumerable<MenuModel> NE_Menus { get; set; }
+        public IEnumerable<MenuModel> Menus { get; set; }
 
         public string DisplayName
         {
@@ -49,7 +47,7 @@
 
         public bool HasPermission(string functionKey, Policy policy)
         {
-            var function = NE_Functions.Where(i => i.FunctionKey.Equals(functionKey));
+            var function = Functions.Where(i => i.FunctionKey.Equals(functionKey));
             if (function.Any())
             {
                 switch (policy)

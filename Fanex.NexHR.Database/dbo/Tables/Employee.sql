@@ -11,7 +11,6 @@
     [Phone]            VARCHAR (50)   NULL,
     [Gender]           TINYINT        NULL,
     [GroupId]          INT            NULL,
-    [Roles]            VARCHAR (20)   NULL,
     [ManagerId]        INT            NULL,
     [JoinedDate]       SMALLDATETIME  NULL,
     [ConfirmedDate]    SMALLDATETIME  NULL,
@@ -45,4 +44,6 @@
     [EmployeeCard]     VARCHAR (10)   NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 );
+
+
 

@@ -70,7 +70,7 @@
                 employee = employeeRepository.GetEmployeeById(criteria);
                 if (employee != null)
                 {
-                    employee.NX_Roles = roleService.GetRolesByUserId(employee.Id).ToList();
+                    employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
                 }
             }
 
@@ -82,9 +82,9 @@
             UserLoginModel userLogin = GetDataEntity<UserLoginModel>(criteria);
             if (userLogin != null)
             {
-                userLogin.NE_Functions = functionService.GetFunctionsByUserId(userLogin.Id);
-                userLogin.NE_Menus = menuService.GetMenusByUserId(userLogin.Id);
-                userLogin.NE_Roles = roleService.GetRolesByUserId(userLogin.Id);
+                userLogin.Functions = functionService.GetFunctionsByUserId(userLogin.Id);
+                userLogin.Menus = menuService.GetMenusByUserId(userLogin.Id);
+                userLogin.Roles = roleService.GetRolesByUserId(userLogin.Id);
             }
 
             return userLogin;
@@ -104,7 +104,7 @@
                 employee = employeeRepository.GetEmployeeByCode(criteria);
                 if (employee != null)
                 {
-                    employee.NX_Roles = roleService.GetRolesByUserId(employee.Id).ToList();
+                    employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
                 }
             }
 
