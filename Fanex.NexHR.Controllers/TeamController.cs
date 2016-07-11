@@ -81,7 +81,7 @@
 
                 if (result.IsSuccessful)
                 {
-                    ViewBag.Inserted = true;
+                    return RedirectToAction("Index", "Team");
                 }
                 else
                 {

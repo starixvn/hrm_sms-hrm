@@ -23,11 +23,6 @@
 {
     <div class="bunhat">
         @Html.ValidationSummary(true)
-        @if (ViewBag.Inserted != null && (bool)ViewBag.Inserted)
-        {
-            <div class="success">@Messages.TeamCreated</div>
-        }
-
         @Html.HiddenFor(model => model.CreatedDate)
         @Html.HiddenFor(model => model.CreatedBy)
         <div class="formrow">
