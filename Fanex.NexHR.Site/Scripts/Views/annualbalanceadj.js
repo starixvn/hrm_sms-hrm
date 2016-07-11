@@ -126,7 +126,7 @@ $(document).ready(function () {
         var errorString = [];
         _totalDays = parseFloat($('#TotalDays').val());
 
-        if (_totalDays == null || _totalDays === "") {
+        if (_totalDays == null || _totalDays === "" || isNaN(_totalDays)) {
             errorString.push("* The Total days field is required.");
         }
 
