@@ -159,13 +159,13 @@
         public ActionResult Employee(int id)
         {
             var model = new AnnualLeaveBalanceViewModel
-               {
-                   EmployeeId = id,
-                   Year = DateTime.Now.Year,
-                   ExcludedRequestTrans = true,
-                   AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, DateTime.Now.Year),
-                   Employee = GetEmployeeById(id)
-               };
+            {
+                EmployeeId = id,
+                Year = DateTime.Now.Year,
+                ExcludedRequestTrans = true,
+                AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, DateTime.Now.Year),
+                Employee = GetEmployeeById(id)
+            };
 
             return View(model);
         }
@@ -249,7 +249,7 @@
                 CommandResult result = commandService.Insert(criteria);
                 if (result.IsSuccessful)
                 {
-                    ViewBag.Inserted = true;
+                    return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
                 }
                 else
                 {

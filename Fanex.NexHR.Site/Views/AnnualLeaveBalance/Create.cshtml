@@ -19,13 +19,6 @@
 @using (Html.BeginForm())
 {
 <div class="bunhat" style="min-width: 400px">
-    @Html.ValidationSummary(true)
-
-    @if (ViewBag.Inserted != null && (bool)ViewBag.Inserted)
-    {
-    <div class="success">@Messages.AdjustSuccessfully</div> 
-    }
-
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.TotalDays)
