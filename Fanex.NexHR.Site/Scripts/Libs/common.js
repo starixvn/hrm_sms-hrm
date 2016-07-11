@@ -1,4 +1,5 @@
-﻿/// <reference path="jquery.min.js" />
+﻿/*global _messages*/
+/// <reference path="jquery.min.js" />
 /// <reference path="date.js" />
 
 (function () {
@@ -780,4 +781,23 @@ function floatThead(el) {
     });
 
     $(el).floatThead('reflow');
+}
+
+function verifyDangerousText(value) {
+    var valid = true;
+
+    if (value !== null)
+    {
+        var regex = /<[a-zA-Z]/gi;
+
+        if (value === "&#" || value === "<?" || value === "</" || value === "<!" || regex.test(value)) {
+            valid = false;
+        }
+    }
+
+    if (!valid) {
+        alert(_messages.hostileInput);
+    }
+
+    return valid;
 }

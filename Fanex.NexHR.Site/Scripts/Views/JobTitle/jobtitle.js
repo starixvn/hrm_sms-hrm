@@ -1,4 +1,4 @@
-﻿/*global _global, reloadButtonText, _messages, floatThead*/
+﻿/*global _global, reloadButtonText, _messages, floatThead, verifyDangerousText*/
 "use strict";
 
 var JobTitle = (function ($) {
@@ -23,7 +23,10 @@ var JobTitle = (function ($) {
     };
 
     var getJobTitle = function (value) {
-        $.get(
+        var valid = verifyDangerousText(value);
+
+        if (valid) {
+            $.get(
             urlRoot + "jobTitle/GetJobTitles",
             { jobTitle: value },
             function (data) {
@@ -33,7 +36,8 @@ var JobTitle = (function ($) {
                 alert(messages.errorTryAgain);
             });
 
-        reloadButtonText('#query');
+            reloadButtonText('#query');
+        }
     };
 
     var initEvent = function () {
