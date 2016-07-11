@@ -163,7 +163,7 @@
             return PartialView("_TimeRecordDetail", timeRecords);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticEmployee)]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatisticEmployee)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -183,7 +183,7 @@
             return View("RequestMonitoring", model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticEmployee)]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatisticMember, FunctionKey.RequestStatisticEmployee)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
             DateTime toDate,
@@ -228,7 +228,7 @@
             return PartialView("RequestMonitoringDetails", requests);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticMember)]
+        [HRAuthorize(Policy.Read, FunctionKey.RequestStatisticMember)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = string.Join(",", CurrentUser.Roles.Select(i => i.RoleId));
