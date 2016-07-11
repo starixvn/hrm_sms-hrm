@@ -1,8 +1,4 @@
-﻿/*
---Report_HRLeaderDashBoard 150, '2012/5/15'
-*/
-
-CREATE PROCEDURE [dbo].[Report_HRLeaderDashBoard] -- 300, '2014-07-01'
+﻿CREATE PROCEDURE [dbo].[Report_HRLeaderDashBoard] -- 300, '2014-07-01'
 	@Empid int = null,
 	@date datetime
 AS
@@ -18,26 +14,22 @@ Param's Explanation:
 
 SET NOCOUNT ON
 
-DECLARE @fromDate datetime, @toDate datetime, @role int, @roles varchar(20), @TotalOvertimePendingByVerifier INT, @TotalOvertimePendingByApprover INT
+DECLARE @fromDate datetime, @toDate datetime, @TotalOvertimePendingByVerifier INT, @TotalOvertimePendingByApprover INT
 
 
 SET @date = CONVERT(VARCHAR(10),@date,111)
 SET @fromDate = dateadd(d,-7,@date)
 SET @toDate = dateadd(d,1,@date)
 
-SELECT @roles=roles
-FROM dbo.Employee e WITH (NOLOCK)
-WHERE e.EmpId = @Empid
-
 DECLARE @tblrole TABLE(RoleId INT,Title NVARCHAR(100))
 
-INSERT INTO @tblrole (RoleId,Title)
-SELECT cast(val as int) RoleId,ld.Name AS Title
-FROM [dbo].[Lookup] l WITH(NOLOCK) 
-	INNER JOIN 	[dbo].[LookupData] ld WITH(NOLOCK) ON l.Id = ld.LookupId
-	INNER JOIN dbo.fnc_strSplit(@roles, ',') fn		ON fn.val = ld.Value
-WHERE (l.Code = 'ROLE' AND ld.Code ='AP') OR @roles = '7'
-
+INSERT INTO @tblrole 
+SELECT er.RoleId, loDa.Name
+FROM dbo.EmployeeRole AS er WITH(NOLOCK)
+INNER JOIN dbo.LookupData loDa WITH (NOLOCK) ON er.RoleId = loDa.Value
+              INNER JOIN dbo.[Lookup] look WITH (NOLOCK) ON look.Id = loDa.LookupId
+                                                            AND look.Code = 'SR' -- System Role
+												WHERE er.EmployeeId = @Empid
 --if (@@ROWCOUNT<1)
 --	return;
 
