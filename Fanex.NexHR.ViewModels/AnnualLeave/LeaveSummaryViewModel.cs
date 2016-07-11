@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.AnnualLeave
+﻿namespace Fanex.NexHR.ViewModels
 {
     using Fanex.NexHR.Models;
     using System.Collections.Generic;
@@ -7,9 +7,9 @@
     {
         public int Year { get; set; }
 
-        public IList<Team> Teams { get; set; }
+        public IList<Team> Sections { get; set; }
 
-        public string TeamIds { get; set; }
+        public string SectionIds { get; set; }
 
         public string Employee { get; set; }
 

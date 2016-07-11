@@ -183,7 +183,7 @@
             return supervisors;
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))
@@ -314,7 +314,7 @@
             return teams;
         }
 
-        private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
+        private List<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
         {
             var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria()
             {
@@ -322,10 +322,10 @@
             };
             IList<ChangeShiftDetailModel> changeShiftDetails = requestService.GetChangeShiftDetailToIgnoreById(criteria);
 
-            return changeShiftDetails;
+            return changeShiftDetails.ToList();
         }
 
-        private IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)
+        private List<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)
         {
             var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria()
             {
@@ -334,7 +334,7 @@
 
             IList<LeaveDetailModel> leaveRequestDetail = requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
 
-            return leaveRequestDetail;
+            return leaveRequestDetail.ToList();
         }
 
         private CommandResult ApproveRequest(ProcessRequestViewModel model)

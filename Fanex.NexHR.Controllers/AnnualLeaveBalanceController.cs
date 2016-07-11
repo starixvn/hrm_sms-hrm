@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
@@ -8,13 +12,10 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class AnnualLeaveBalanceController : BaseController
     {
@@ -28,7 +29,11 @@
         {
         }
 
-        public AnnualLeaveBalanceController(IEmployeeService employeeService, ITeamService teamService, IReportService reportService, ICommandService commandService)
+        public AnnualLeaveBalanceController(
+            IEmployeeService employeeService,
+            ITeamService teamService,
+            IReportService reportService,
+            ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.teamService = teamService ?? new TeamService();
@@ -67,7 +72,7 @@
                 GroupIds = null,
                 IsLocal = null,
                 Role = string.Empty,
-                SupervisorID = null
+                SupervisorId = null
             };
             IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
             var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
@@ -86,7 +91,7 @@
 
         [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(
-            string teamIds,
+            string sectionIds,
             string employee,
             int? year = null,
             int? employeeId = null,
@@ -104,7 +109,7 @@
             var model = new LeaveSummaryViewModel
             {
                 Year = year.HasValue ? year.Value : DateTime.Now.Year,
-                TeamIds = teamIds,
+                SectionIds = sectionIds,
                 Employee = employee,
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 MinAnnualBalance = minAnnualBalance.HasValue ? minAnnualBalance.Value : 0,
@@ -120,10 +125,10 @@
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
-            model.Teams = GetBySupervisor();
+            model.Sections = GetBySupervisor();
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
 
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSumaries, model.Teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSumaries, model.Sections);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
@@ -179,9 +184,9 @@
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
-            var criteria = new GetAnnualLeaveTransactionByIdCriteria() 
-            { 
-                LeaveTransId = id 
+            var criteria = new GetAnnualLeaveTransactionByIdCriteria()
+            {
+                LeaveTransId = id
             };
             AnnualLeaveTransactionViewModel model = employeeService.GetAnnualLeaveTransaction(criteria);
             ViewBag.Employee = GetEmployeeById(model.EmpId);
@@ -261,10 +266,10 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
+                GroupIds = model.SectionIds,
                 IsLocal = (byte?)model.Category,
                 Role = string.Empty,
-                SupervisorID = CurrentUser.Id
+                SupervisorId = CurrentUser.Id
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
             return leaveSumaries;
@@ -281,11 +286,11 @@
             return teams;
         }
 
-        private Employee GetEmployeeById(int empId) 
+        private Employee GetEmployeeById(int empId)
         {
-            var criteria = new GetEmployeeByIdCriteria() 
-            { 
-                EmpId = empId 
+            var criteria = new GetEmployeeByIdCriteria()
+            {
+                EmpId = empId
             };
 
             return employeeService.GetEmployeeById(criteria);

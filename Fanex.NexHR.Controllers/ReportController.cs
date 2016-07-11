@@ -475,7 +475,7 @@
         }
 
         public ActionResult UnpaidLeaveSummary(
-            string teamIds,
+            string sectionIds,
             string employee,
             int? year = null,
             int? employeeId = null,
@@ -484,7 +484,7 @@
             var model = new LeaveSummaryViewModel
             {
                 Year = year.HasValue ? year.Value : DateTime.Now.Year,
-                TeamIds = teamIds,
+                SectionIds = sectionIds,
                 Employee = employee,
                 EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
                 Category = category
@@ -511,7 +511,7 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
+                GroupIds = model.SectionIds,
                 IsLocal = (byte?)model.Category,
                 SupervisorId = CurrentUser.Id
             };
@@ -521,12 +521,11 @@
             {
                 SupervisorId = CurrentUser.Id
             };
-            IList<Team> teams = teamService.GetBySupervisor(getGroupCriteria);
-            ViewBag.Groups = teams;
-            ViewBag.TeamIds = model.TeamIds;
+            IList<Team> sections = teamService.GetBySupervisor(getGroupCriteria);
+            model.Sections = sections;
             ViewBag.EntityList = entityList;
 
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);

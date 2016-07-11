@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByHR] @SupervisorID INT = NULL
+﻿CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByHR] @SupervisorID INT = NULL
 	,@empid INT = NULL
 	,@groupids VARCHAR(max) = ''
 	,@fromdate DATETIME
@@ -27,14 +26,9 @@ BEGIN
 	CREATE TABLE #status (Currentstatus TINYINT)
 
 	IF ISNULL(@status, '') = ''
-	BEGIN
 		SET @status = '1,2,3,4,5,6,7'
-	END
 	ELSE IF (@status = '-1')
-	BEGIN
 		SET @status = '1,2'
-	END
-
 	INSERT INTO #status (Currentstatus)
 		SELECT val
 		FROM fnc_strSplit(@status, ',')

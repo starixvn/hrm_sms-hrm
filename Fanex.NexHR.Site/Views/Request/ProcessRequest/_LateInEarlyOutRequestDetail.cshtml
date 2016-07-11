@@ -1,52 +1,48 @@
 ﻿@model RequestEntity
-@if (Model != null)
-{
-    <table class="table table-custom">
-        <thead>
-            <tr>
-                <th>@Labels.Date</th>
-                <th>@Labels.Shift</th>
-                <th>@Labels.Request</th>
-                <th>@Labels.Time</th>
-                <th>@Labels.CreatedDate</th>
-                <th>@Labels.Remark</th>
-                <th>@Labels.Ignored</th>
-                <th>@Labels.Confirmed</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr id="row@(Model.Id)">
-                <td class="ddMMyyyy highlight">@Model.FromDate.ToDateMonthYearFormatedDate()</td>
-                <td>
-                    @if (Model.FromShift != null)
-                    {
-                        @Model.FromShift.Name
-                    }
-                </td>
-                <td class="highlight">@Model.RequestType.ToString()</td>
-                <td class="highlight">@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
-                <td class="ddMMyyyyhhmm">@Model.CreatedDate.ToShortFormatedDate()</td>
-                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.Request</th>
+            <th>@Labels.Time</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.Ignored</th>
+            <th>@Labels.Confirmed</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="row@(Model.Id)">
+            <td>@Model.FromDate.ToDateMonthYearFormatedDate()</td>
+            <td>
+                @if (Model.FromShift != null)
                 {
-                    <td class="tooltip" title="@Model.Remark">
-                        <span class="icon remark" alt="remark"></span>
-                    </td>
+                    @Model.FromShift.Name
                 }
-                else
-                {
-                    <td>-</td>
+            </td>
+            <td>@Model.RequestType.ToString()</td>
+            <td>@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
+            <td>@Model.CreatedDate.ToShortFormatedDate()</td>
+            @if (!string.IsNullOrWhiteSpace(Model.Remark))
+            {
+                <td class="tooltip" title="@Model.Remark">
+                    <span class="icon remark" alt="remark"></span>
+                </td>
+            }
+            else
+            {
+                <td>-</td>
+            }
+            <td class="ignoredDiscipline">
+                @{
+                    var disciplineTypeId = Model.RequestType.Id == (int)RequestType.LateIn ? (int)DisciplineType.LateIn : (int)DisciplineType.EarlyOut;
                 }
-                <td class="ignoredDiscipline">
-                    @{
-                        var disciplineTypeId = Model.RequestType.Id == (int)RequestType.LateIn ? (int)DisciplineType.LateIn : (int)DisciplineType.EarlyOut;
-                    }
-                    <input type="checkbox" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
-                </td>
-                <td class="confirmedDiscipline">
-                    <input type="checkbox" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
-}
+                <input type="checkbox" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+            </td>
+            <td class="confirmedDiscipline">
+                <input type="checkbox" />
+            </td>
+        </tr>
+    </tbody>
+</table>

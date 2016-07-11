@@ -12,7 +12,7 @@
 
         public byte? IsLocal { get; set; }
 
-        public int? SupervisorID { get; set; }
+        public int? SupervisorId { get; set; }
 
         public string Role { get; set; }
 

@@ -8,14 +8,6 @@
 
     public class ProcessRequestViewModel
     {
-        public ProcessRequestViewModel()
-        {
-            CheckInOutDetail = new RequestEntity();
-            LateInEarlyOutDetail = new RequestEntity();
-            ChangeShiftDetails = new List<ChangeShiftDetailModel>();
-            LeaveDetails = new List<LeaveDetailModel>();
-        }
-
         public long RequestId { get; set; }
 
         public int RoleId { get; set; }
@@ -33,13 +25,13 @@
 
         public RequestEntity LateInEarlyOutDetail { get; set; }
 
-        public IList<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
+        public List<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
 
-        public IList<LeaveDetailModel> LeaveDetails { get; set; }
+        public List<LeaveDetailModel> LeaveDetails { get; set; }
 
         public string IgnoredDisciplineDetails { get; set; }
 
-        public IList<IgnoredDisciplineModel> IgnoredDisciplines
+        public List<IgnoredDisciplineModel> IgnoredDisciplines
         {
             get
             {

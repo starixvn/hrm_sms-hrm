@@ -146,17 +146,17 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
+                GroupIds = model.SectionIds,
                 IsLocal = isLocal,
                 Role = string.Empty,
-                SupervisorID = null
+                SupervisorId = null
             };
             IList<LeaveSummary> leaveSummary = reportService.GetAnnualLeaveBalanceReport(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
-            var leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
-            var hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -174,7 +174,7 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
+                GroupIds = model.SectionIds,
                 IsLocal = isLocal,
                 SupervisorId = null
             };
@@ -183,7 +183,7 @@
             IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
             var leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
-            var hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }

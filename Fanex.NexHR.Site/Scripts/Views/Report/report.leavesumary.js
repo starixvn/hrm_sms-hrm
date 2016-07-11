@@ -2,22 +2,22 @@
 /*global _global*/
 
 $(document).ready(function () {
-    $("#TeamId").multiselect();
+    $('#SectionId').multiselect();
 
-    $("form").submit(function (e) {
+    $('form').submit(function (e) {
         e.preventDefault();
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var url = _global.root + "report/UnpaidLeaveSummary?year=" + $("#Year").val() +
-            "&TeamIds=" + teams + "&Employee=" + $("#Employee").val() +
-            "&EmployeeId=" + $("#EmployeeId").val() + "&category=" + $("#Category").val();
+        var sectionIds = $('#SectionId').val() != null ? $('#SectionId').val().join() : '';
+        var url = _global.root + 'report/UnpaidLeaveSummary?year=' + $('#Year').val() +
+            '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
+            '&EmployeeId=' + $('#EmployeeId').val() + '&category=' + $('#Category').val();
         location.href = url;
     });
 
-    $("#btnExcel").click(function () {
-        var teams = $("#TeamId").val() != null ? $("#TeamId").val().join() : "";
-        var url = _global.root + "export/UnpaidLeaveSummary?year=" + $("#Year").val() +
-        "&TeamIds=" + teams + "&Employee=" + $("#Employee").val() +
-        "&EmployeeId=" + $("#EmployeeId").val() + "&category=" + $("#Category").val();
+    $('#btnExcel').click(function () {
+        var sectionIds = $('#SectionId').val() != null ? $('#SectionId').val().join() : '';
+        var url = _global.root + 'export/UnpaidLeaveSummary?year=' + $('#Year').val() +
+            '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
+            '&EmployeeId=' + $('#EmployeeId').val() + '&category=' + $('#Category').val();
         location.href = url;
     });
 });

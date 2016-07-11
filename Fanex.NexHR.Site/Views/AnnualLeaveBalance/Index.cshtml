@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.AnnualLeave
-@model LeaveSummaryViewModel
+﻿@model LeaveSummaryViewModel
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
@@ -24,11 +23,10 @@
                     @Labels.Category
                 </div>
                 <div class="grid_3">
-
                     <select id="Category" name="Category" class="category">
                         <option value="">-- All --</option>
-                        <option selected="@(Model.Category == 1)" value="1">Local</option>
-                        <option selected="@(Model.Category == 0)" value="0">Expat</option>
+                        <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
+                        <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
                     </select>
                 </div>
                 <div class="grid_1 gridlabel">
@@ -45,19 +43,19 @@
                     @Html.HiddenFor(model => model.EmployeeId)
                 </div>
                 <div class="grid_1 gridlabel">
-                    @Labels.Team
+                    @Labels.Section
                 </div>
                 <div class="grid_6">
-                    <select id="TeamId" multiple="multiple" name="TeamId" class="yearpicker">
+                    <select id="SectionId" multiple="multiple" name="SectionId" class="yearpicker">
                         @{
-                            var teamIds = Model.TeamIds != null ? Model.TeamIds.Split(',') : null;
+                            var sectionIds = !string.IsNullOrEmpty(Model.SectionIds) ? Model.SectionIds.Split(',') : null;
                             var selected = string.Empty;
-                            foreach (Team team in Model.Teams)
+                            foreach (Team team in Model.Sections)
                             {
                                 selected = string.Empty;
-                                if (teamIds != null)
+                                if (sectionIds != null)
                                 {
-                                    int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                                    int pos = Array.IndexOf(sectionIds, team.Id.ToString());
                                     if (pos > -1)
                                     {
                                         selected = "selected";
@@ -68,10 +66,8 @@
                         }
                     </select>
                 </div>
-                <div class="clear">
-                </div>
-                <div class="space">
-                </div>
+                <div class="clear"></div>
+                <div class="space"></div>
                 <div class="grid_2 gridlabel">
                     @Html.Label(@Labels.MinBalance)
                 </div>
@@ -103,14 +99,11 @@
                     </div>
                 </div>
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
+            <div class="clear"></div>
+            <div class="space"></div>
         }
     </div>
-    <div class="clear">
-    </div>
+    <div class="clear"></div>
 }
 <table class="table table-custom persist-area">
     <thead class="persist-header">
@@ -144,42 +137,18 @@
             }
         </tr>
         <tr>
-            <th>
-                @Labels.Jan
-            </th>
-            <th>
-                @Labels.Feb
-            </th>
-            <th>
-                @Labels.Mar
-            </th>
-            <th>
-                @Labels.Apr
-            </th>
-            <th>
-                @Labels.May
-            </th>
-            <th>
-                @Labels.Jun
-            </th>
-            <th>
-                @Labels.Jul
-            </th>
-            <th>
-                @Labels.Aug
-            </th>
-            <th>
-                @Labels.Sep
-            </th>
-            <th>
-                @Labels.Oct
-            </th>
-            <th>
-                @Labels.Nov
-            </th>
-            <th>
-                @Labels.Dec
-            </th>
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
+            <th>@Labels.Mar</th>
+            <th>@Labels.Apr</th>
+            <th>@Labels.May</th>
+            <th>@Labels.Jun</th>
+            <th>@Labels.Jul</th>
+            <th>@Labels.Aug</th>
+            <th>@Labels.Sep</th>
+            <th>@Labels.Oct</th>
+            <th>@Labels.Nov</th>
+            <th>@Labels.Dec</th>
         </tr>
     </thead>
     @*Check if exists*@
@@ -196,7 +165,6 @@
             {
                 checkSummaryList = false;
             }
-
         }
     }
     @if (checkSummaryList)
@@ -212,7 +180,6 @@
                         </td>
                     </tr>
                 }
-
                 foreach (LeaveSummary leave in item.LeaveSummaryInTeam)
                 {
                     <tr>

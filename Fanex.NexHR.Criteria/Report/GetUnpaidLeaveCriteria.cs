@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.AnnualLeave
+﻿namespace Fanex.NexHR.Criteria
 {
     using Fanex.Data.Repository;
 

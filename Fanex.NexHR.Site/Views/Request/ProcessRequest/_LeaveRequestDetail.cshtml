@@ -1,130 +1,127 @@
-﻿@model IList<LeaveDetailModel>
-@if (Model != null && Model.Any())
-{
-    <table class="table table-custom">
-        <thead>
+﻿@model List<LeaveDetailModel>
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.ScheduleStatus</th>
+            <th>@Labels.WorkType</th>
+            <th>@Labels.LeaveTypeName</th>
+            <th>@Labels.HalfDay</th>
+            <th>@Labels.LeaveCount</th>
+            <th>@Labels.FromTime</th>
+            <th>@Labels.ToTime</th>
+            <th>@Labels.Ignored</th>
+            <th>@Labels.Confirmed</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (LeaveDetailModel item in Model)
+        {
             <tr>
-                <th>@Labels.Date</th>
-                <th>@Labels.ScheduleStatus</th>
-                <th>@Labels.WorkType</th>
-                <th>@Labels.LeaveTypeName</th>
-                <th>@Labels.HalfDay</th>
-                <th>@Labels.LeaveCount</th>
-                <th>@Labels.FromTime</th>
-                <th>@Labels.ToTime</th>
-                <th>@Labels.Ignored</th>
-                <th>@Labels.Confirmed</th>
+                <td>
+                    @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
+                </td>
+                <td>
+                    @item.ScheduleStatus
+                </td>
+                @if (!item.IsOffOrHoliday)
+                {
+                    <td>
+                        @switch (item.WorkType)
+                        {
+                            case (int)WorkType.Leave:
+                                <span>@Labels.Leave</span>
+                                break;
+                            case (int)WorkType.Off:
+                                <span>@Labels.Off</span>
+                                break;
+                            default:
+                                <span>@Labels.OnDuty</span>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        @{
+                    IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
+                        }
+                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(leaveTypes.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @disabled = false })
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
+                    </td>
+                    <td>
+                        @(item.IsHalfDay ? "0.5" : "1")
+                    </td>
+                    <td>
+                        @if (item.IsHalfDay)
+                        {
+                            <div>
+                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @disabled = "disabled" })
+                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @disabled = "disabled", @title = "Is after day" })
+                            </div>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsHalfDay)
+                        {
+                            <div>
+                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @disabled = "disabled" })
+                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @disabled = "disabled", @title = "Is after day" })
+                            </div>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td class="ignoredDiscipline">
+                        @if (item.IsUnpaidLeaveAbsent)
+                        {
+                            var disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
+                            <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
+                        }
+                        else if (item.IsAbsent)
+                        {
+                            var disciplinetypeId = (int)DisciplineType.Absent;
+                            <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
+                        }
+                        else if (item.LeaveTypeId == 25)//unpaid leave
+                        {
+                            var disciplinetypeId = (int)DisciplineType.UnpaidLeave;
+                            <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td class="confirmedDiscipline">
+                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.LeaveTypeId == 25)
+                        {
+                            <input type="checkbox" />
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                }
             </tr>
-        </thead>
-        <tbody>
-            @foreach (LeaveDetailModel item in Model)
-            {
-                <tr>
-                    <td class="tdleavedate">
-                        @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
-                    </td>
-                    <td class="tdschedulestatus">
-                        @item.ScheduleStatus
-                    </td>
-                    @if (!item.IsOffOrHoliday)
-                    {
-                        <td>
-                            @switch (item.WorkType)
-                            {
-                                case (int)WorkType.Leave:
-                                    <span>@Labels.Leave</span>
-                                    break;
-                                case (int)WorkType.Off:
-                                    <span>@Labels.Off</span>
-                                    break;
-                                default:
-                                    <span>@Labels.OnDuty</span>
-                                    break;
-                            }
-                        </td>
-                        <td>
-                            @{
-                        IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
-                            }
-                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(leaveTypes.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @disabled = false })
-                        </td>
-                        <td>
-                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
-                        </td>
-                        <td>
-                            @(item.IsHalfDay ? "0.5" : "1")
-                        </td>
-                        <td>
-                            @if (item.IsHalfDay)
-                            {
-                                <div>
-                                    @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @disabled = "disabled" })
-                                    @Html.CheckBoxFor(m => item.IsFromAfterday, new { @disabled = "disabled", @title = "Is after day" })
-                                </div>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.IsHalfDay)
-                            {
-                                <div>
-                                    @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @disabled = "disabled" })
-                                    @Html.CheckBoxFor(m => item.IsToAfterday, new { @disabled = "disabled", @title = "Is after day" })
-                                </div>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td class="ignoredDiscipline">
-                            @if (item.IsUnpaidLeaveAbsent)
-                            {
-                                var disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
-                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                            }
-                            else if (item.IsAbsent)
-                            {
-                                var disciplinetypeId = (int)DisciplineType.Absent;
-                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                            }
-                            else if (item.LeaveTypeId == 25)//unpaid leave
-                            {
-                                var disciplinetypeId = (int)DisciplineType.UnpaidLeave;
-                                <input type="checkbox" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        <td class="confirmedDiscipline">
-                            @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.LeaveTypeId == 25)
-                            {
-                                <input type="checkbox" />
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        }
+    </tbody>
+</table>

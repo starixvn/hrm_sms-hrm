@@ -1,5 +1,4 @@
 ﻿@model ProcessRequestViewModel
-
 <form>
     @Html.HiddenFor(model => model.RequestId)
     @Html.HiddenFor(model => model.EmployeeId)
@@ -11,17 +10,29 @@
         {
             case (int)RequestType.CheckIn:
             case (int)RequestType.CheckOut:
-                Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetail);
+                if (Model.CheckInOutDetail != null)
+                {
+                    Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetail);
+                }
                 break;
             case (int)RequestType.LateIn:
             case (int)RequestType.EarlyOut:
-                Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail);
+                if (Model.LateInEarlyOutDetail != null)
+                {
+                    Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail);
+                }
                 break;
             case (int)RequestType.ChangeShift:
-                Html.RenderPartial("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails);
+                if (Model.ChangeShiftDetails != null && Model.ChangeShiftDetails.Any())
+                {
+                    Html.RenderPartial("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails);
+                }
                 break;
             case (int)RequestType.Leave:
-                Html.RenderPartial("ProcessRequest/_LeaveRequestDetail", Model.LeaveDetails);
+                if (Model.LeaveDetails != null && Model.LeaveDetails.Any())
+                {
+                    Html.RenderPartial("ProcessRequest/_LeaveRequestDetail", Model.LeaveDetails);
+                }
                 break;
         }
     </div>
