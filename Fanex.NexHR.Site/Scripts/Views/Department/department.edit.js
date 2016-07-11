@@ -4,12 +4,6 @@
 
 $(document).ready(function () {
     var nickName;
-    var successed = $("#Successed").val();
-    if (successed === "True") {
-        confirm('Successfull!\nPress OK to continue', function () {
-            document.location = _global.root + "department/index";
-        });
-    }
 
     $("#Manager").autocomplete({
         source: function (request, response) {

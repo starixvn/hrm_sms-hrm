@@ -24,11 +24,6 @@
 <div class="bunhat">
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.DeprtamentId)
-    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
-    {
-        <div class="success">@Messages.DepartmentUpdated</div>
-        @Html.Hidden("Successed", true)
-    }
 
     <div class="formrow">
         <div class="label">

@@ -87,7 +87,7 @@
 
                     if (result.IsSuccessful)
                     {
-                        ViewBag.Inserted = true;
+                        return RedirectToAction("Index", "Department");
                     }
                     else
                     {
@@ -99,7 +99,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
         {
@@ -119,7 +118,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(EditDepartmentViewModel model)
@@ -144,7 +142,7 @@
 
                     if (result.IsSuccessful)
                     {
-                        ViewBag.Updated = true;
+                        return RedirectToAction("Index", "Department");
                     }
                     else
                     {
@@ -156,7 +154,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public JsonResult Delete(int departmentId)

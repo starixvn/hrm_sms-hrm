@@ -23,11 +23,6 @@
 {
 <div class="bunhat">
     @Html.ValidationSummary(true)
-    @if (ViewBag.Inserted != null && (bool)ViewBag.Inserted)
-    {
-        <div class="success">@Messages.TeamCreated</div>
-        @Html.Hidden("Successed", true)
-    }
 
     <div class="formrow">
         <div class="label">
