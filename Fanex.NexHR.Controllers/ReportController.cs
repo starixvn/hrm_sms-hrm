@@ -232,7 +232,7 @@
             return PartialView("RequestMonitoringDetails", requests);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
+        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticMember)]
         public ActionResult LeaderRequestMonitoring()
         {
             string viewRole = string.Join(",", CurrentUser.Roles.Select(i => i.RoleId));

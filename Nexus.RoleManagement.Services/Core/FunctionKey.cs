@@ -14,6 +14,8 @@
 
         public const string EmployeeManagement = "EmployeeManagement";
 
+        public const string CreateAccount = "CreateAccount";
+
         public const string DivisionManagement = "DivisionManagement";
 
         public const string MenuManagement = "MenuManagement";
@@ -51,5 +53,9 @@
         public const string ApproveOvertime = "ApproveOvertime";
 
         public const string ProcessOvertime = "ProcessOvertime";
+
+        public const string RequestStatisticMember = "RequestStatisticMember";
+
+        public const string RequestStatisticEmployee = "RequestStatisticEmployee";
     }
 }

@@ -185,7 +185,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
             ViewBag.Shifts = shiftService.GetSelectList();
@@ -196,7 +196,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create(CreateEmployeeViewModel model)
         {
             if (model != null && ModelState.IsValid)
