@@ -15,8 +15,6 @@
 
         public int ExcludedEmpID { get; set; }
 
-        public bool IsDebug { get; set; }
-
         public override string GetSettingKey()
         {
             return "OverTime_GetNormalYearlyByHR";

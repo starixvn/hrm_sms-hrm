@@ -296,7 +296,7 @@
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
-                    SupervisorID = CurrentUser.Id,
+                    SupervisorId = CurrentUser.Id,
                     Year = year,
                     GroupIds = team,
                     EmployeeId = empId,

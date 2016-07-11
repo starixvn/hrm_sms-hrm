@@ -4,7 +4,7 @@
 
     public class GetYearlyOvertimeReportCriteria : CriteriaBase
     {
-        public int SupervisorID { get; set; }
+        public int SupervisorId { get; set; }
 
         [SpParam(SqlParamName = "empid")]
         public int? EmployeeId { get; set; }
@@ -24,7 +24,7 @@
 
         public override bool IsValid()
         {
-            return SupervisorID > 0;
+            return SupervisorId > 0;
         }
     }
 }
