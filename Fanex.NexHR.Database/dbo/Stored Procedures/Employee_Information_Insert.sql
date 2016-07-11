@@ -91,7 +91,6 @@ BEGIN
 		,CreatedDate
 		,CreatedBy
 		,Password
-		,Roles
 		)
 	VALUES (
 		@code
@@ -104,7 +103,6 @@ BEGIN
 		,@CreatedDate
 		,@createBy
 		,@password
-		,@MemberRole
 		);
 
 	IF @@ERROR <> 0

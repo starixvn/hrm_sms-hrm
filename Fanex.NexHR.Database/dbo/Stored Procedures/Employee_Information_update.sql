@@ -222,7 +222,6 @@ BEGIN
 		,@Phone_Old = Phone
 		,@Gender_Old = Gender
 		,@GroupId_Old = GroupId
-		,@Roles_Old = Roles
 		,@ManagerId_Old = ManagerId
 		,@JoinedDate_Old = JoinedDate
 		,@ConfirmedDate_Old = ConfirmedDate
@@ -253,6 +252,10 @@ BEGIN
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpId = @EmpId
 
+	SELECT @Roles_old = COALESCE(@Roles_old + ',', '') + CONVERT(nvarchar(2),RoleId)
+	FROM dbo.EmployeeRole WITH(NOLOCK)
+	WHERE EmployeeId = @EmpId
+
 	SELECT TOP 1 @CanOT_old = [CanOT]
 		,@IsLocal_old = [IsLocal]
 		,@WorkingDays_old = [WorkingDays]
@@ -282,7 +285,6 @@ BEGIN
 			,Phone = @Phone
 			,Gender = @Gender
 			,GroupId = @GroupId
-			,Roles = @Roles
 			,ManagerId = @ManagerId
 			,JoinedDate = @JoinedDate
 			,ConfirmedDate = @ConfirmedDate
@@ -311,6 +313,11 @@ BEGIN
 			,Major = @Major
 			,EmployeeCard = @EmployeeCard
 		WHERE EmpId = @EmpId
+
+		EXEC [dbo].[EmployeeRole_Update]
+                  @EmployeeId = @EmpId,
+                  @RoleIds = @Roles,
+                  @ModifiedBy = @ModifiedBy;
 
 		-- update password
 		IF (
