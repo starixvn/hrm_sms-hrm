@@ -26,7 +26,6 @@
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
@@ -43,6 +42,7 @@
         private const string SectionSupervisorTemplatePath = @"~\ExcelTemplates\SectionSupervisorTemplate.xls";
         private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
         private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
+        private const string OvertimeTemplatePath = @"~\ExcelTemplates\OvertimeReportTemplate.xls";
 
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
@@ -126,9 +126,9 @@
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal
             };
-            var employeeAttendance = reportService.GetEmployeeAttendanceReport(criteria);
+            IList<EmployeeAttendanceModel> employeeAttendance = reportService.GetEmployeeAttendanceReport(criteria);
 
-            var hssfworkbook = exportExcelService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -181,28 +181,28 @@
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
-            var leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
             HSSFWorkbook hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult OvertimeReport(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups)
+        public ActionResult OvertimeReport(OvertimeDetailReportViewModel model)
         {
-            string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetOvertimeExcelReportDetailCriteria
             {
-                FromDate = fromDate,
-                ToDate = toDate,
-                EmployeeID = empId,
-                JobTitleId = jobTitle,
-                GroupIds = groups
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                EmployeeID = model.EmpId,
+                JobTitleId = model.JobTitleIds,
+                GroupIds = model.SectionIds
             };
-            IList<OvertimeDaily> entity = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
-            var hssfworkbook = exportExcelService.ExportOvertimeReport(entity, fromDate, toDate);
+            IList<OvertimeDaily> overtimeDetails = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
+            string templatePath = Server.MapPath(OvertimeTemplatePath);
+            exportExcelService.ExportOvertimeReport(overtimeDetails, model.FromDate, model.ToDate, templatePath);
 
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult YearlyOvertimeReport(int year, string team, int? empId, int? calendar)
@@ -233,7 +233,7 @@
                 entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
-            var hssfworkbook = exportExcelService.ExportYearlyOvertimeReport(entity, year, calendar);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportYearlyOvertimeReport(entity, year, calendar);
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -291,7 +291,7 @@
                 IsLocal = null
             };
             var entity = workingCalendarService.GetWorkingCalendars(criteria);
-            var hssfworkbook = exportExcelService.ExportEmployeeWorkingCalendar(entity, fromDate, toDate);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportEmployeeWorkingCalendar(entity, fromDate, toDate);
 
             return ExcelFile(hssfworkbook, fileName);
         }

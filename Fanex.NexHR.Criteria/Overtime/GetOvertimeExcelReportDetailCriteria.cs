@@ -18,8 +18,6 @@
 
         public byte? IsLocal { get; set; }
 
-        public bool IsDebug { get; set; }
-
         public override string GetSettingKey()
         {
             return "Report_OvertimeDetail";

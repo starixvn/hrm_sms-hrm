@@ -1,116 +1,54 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, _messages, floatThead*/
 
-var nickName = '';
-function getOTReportDetails() {
-	var employee = $('#Employee').val();
-	var empId = $("#EmpId").val();
-	var groupIds = $("#group").val() != null ? $("#group").val().join() : "";
-	var jobTitle = $("#title").val() != null ? $("#title").val().join() : "";
-	var fromDate = $("#fromDate").val();
-	var toDate = $("#toDate").val();
-	var isLocal = $("#category").val();
-	if (isLocal === "0") {
-		isLocal = 0;
-	}
-	if (isLocal === "1") {
-		isLocal = 1;
-	}
+(function () {
+    function query() {
+        $.ajax({
+            url: _global.root + 'overtime/OTExcelReportDetails',
+            type: 'POST',
+            dataType: 'html',
+            data: $('form.form-filter').serialize(),
+            success: function (response) {
+                $('#OTExcelReportDetails').html(response);
 
-	if (employee == null || employee === "") {
-		empId = "";
-	}
+                floatThead('table#data');
+            },
+            error: function () {
+                alert(_messages.errorTryAgain);
+            }
+        });
+    }
 
-	var reportDetails = $("#OTExcelReportDetails");
-	var params = {
-		"fromDate": fromDate,
-		"toDate": toDate,
-		"empId": empId,
-		"jobTitle": jobTitle,
-		"groups": groupIds,
-		"isLocal": isLocal
-	};
+    $(document).ready(function () {
+        $('#section').multiselect();
+        $("#title").multiselect({
+            noneSelectedText: 'Select positions',
+            selectedText: '# selected',
+            selectedList: 0
+        });
 
-	$.ajax({
-		url: _global.root + "overtime/OTExcelReportDetails",
-		data: params,
-		async: false
-	}).done(function (response) {
-		reportDetails.empty();
-		reportDetails.html(response);
-	});
-}
+        $('form.form-filter #section').on('change', function () {
+            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#SectionIds').val(sectionIds);
+        });
 
-$(document).ready(function () {
-	$('#group').multiselect();
-	$("#title").multiselect({
-		noneSelectedText: 'Select positions',
-		selectedText: '# selected',
-		selectedList: 0
-	});
+        $('form.form-filter #title').on('change', function () {
+            var jobTitleIds = $(this).val() !== null ? $(this).val().join(',') : '';
+            $('#JobTitleIds').val(jobTitleIds);
+        });
 
-	getOTReportDetails();
+        $('form.form-filter #category').on('change', function () {
+            $('form.form-filter #IsLocal').val($(this).val());
+        });
 
-	//autocomplete
-	$("#Employee").autocomplete({
-		source: function (request, response) {
-			$.ajax({
-				url: _global.root + 'api/employee/getemployees',
-				data: {
-					query: request.term
-				},
-				success: function (data) {
-					response($.map(data, function (item) {
-						return {
-							label: item.NickName + ' (' + item.FullName + ')',
-							value: item.Id
-						};
-					}));
-				}
-			});
-		},
-		minLength: 1,
-		select: function (event, ui) {
-			nickName = ui.item.label;
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item.value);
-		},
-		focus: function (event, ui) {
-			nickName = ui.item.label;
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item != null ? ui.item.value : "");
-			event.preventDefault();
-		},
-		change: function (event, ui) {
-			nickName = ui.item != null ? ui.item.label : "";
-			$('#Employee').val(nickName);
-			$('#EmpId').val(ui.item != null ? ui.item.value : "");
-		},
-		close: function () {
-			$('#Employee').val(nickName);
-		}
-	});
+        query();
 
-	$("#submitOTDetails").click(function () {
-		getOTReportDetails();
-	});
+        $("#btnSubmit").click(function () {
+            query();
+        });
 
-	$("#excel").click(function () {
-		var employee = $('#Employee').val();
-		var empId = $("#EmpId").val();
-		var groupIds = $("#group").val() != null ? $("#group").val().join() : "";
-		var jobTitle = $("#title").val() != null ? $("#title").val().join() : "";
-		var fromDate = $("#fromDate").val();
-		var toDate = $("#toDate").val();
-		if (employee == null || employee === "") {
-			empId = "";
-		}
-
-		var url = _global.root + "export/OvertimeReport?fromDate=" + fromDate + "&toDate=" + toDate + 
-		"&empId=" + empId + "&jobTitle=" + jobTitle + "&groups=" + groupIds;
-		location.href = url;
-
-	});
-
-});
-
+        $("#btnExcel").click(function () {
+            window.location.href = _global.root + "export/OvertimeReport?" + $('form.form-filter').serialize();
+        });
+    });
+})();

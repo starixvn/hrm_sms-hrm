@@ -1,4 +1,5 @@
-﻿@{
+﻿@model OvertimeDetailReportViewModel
+@{
     ViewBag.Title = "Overtime Report Details";
 }
 @section css{
@@ -13,19 +14,21 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    @Html.Hidden("EmpId")
+<form class="form-filter">
+    @Html.HiddenFor(model => model.EmpId)
+    @Html.HiddenFor(model => model.SectionIds)
+    @Html.HiddenFor(model => model.IsLocal)
+    @Html.HiddenFor(model => model.JobTitleIds)
     <div class="container_24 bunhat">
         <div class="grid_24">
             <div class="grid_2 gridlabel">@Labels.Employee</div>
             <div class="grid_6">
                 @Html.TextBox("Employee")
             </div>
-            <div class="grid_2 gridlabel">@Labels.Team</div>
+            <div class="grid_2 gridlabel">@Labels.Section</div>
             <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
+                <select id="section" multiple="multiple" class="team-select">
+                    @foreach (Team item in Model.Sections)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
@@ -33,56 +36,29 @@
             </div>
             <div class="grid_1 gridlabel">@Labels.Title</div>
             <div class="grid_5">
-                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
+                @Html.DropDownList("title", Model.JobTitles, new { @class = "title-select", multiple = "multiple" })
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="grid_2 gridlabel">
-                Category
-            </div>
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="grid_2 gridlabel">@Labels.Category</div>
             <div class="grid_3">
-                @{
-                    var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"},
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-                }
-                @Html.DropDownList("category", category, new { @class = "category" })
+                @RazorHelper.CategoryDropDownList("category", "category", "")
             </div>
-            <div class="grid_2 gridlabel">
-                From Date
-            </div>
+            <div class="grid_2 gridlabel">@Labels.FromDate</div>
             <div class="grid_4">
-                @Html.DatePicker("fromDate", DateTime.Now.AddMonths(-1))
+                @Html.DatePicker("fromDate", Model.FromDate)
             </div>
-            <div class="grid_2 gridlabel">
-                To Date
-            </div>
+            <div class="grid_2 gridlabel">@Labels.ToDate</div>
             <div class="grid_4">
-                @Html.DatePicker("toDate", DateTime.Now.Date)
+                @Html.DatePicker("toDate", Model.ToDate)
             </div>
             <div class="grid_6">
-                <input type="button" value="Preview" id="submitOTDetails" />
-                <input type="button" id="excel" value="Excel" />
+                <input type="button" value="Preview" id="btnSubmit" />
+                <input type="button" id="btnExcel" value="Excel" />
             </div>
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div id="OTExcelReportDetails">
-    </div>
-}
+</form>
+<div id="OTExcelReportDetails"></div>

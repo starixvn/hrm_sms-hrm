@@ -391,35 +391,43 @@
         public ActionResult OTExcelReport()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
             IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
-            ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+            IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString()
             }).ToList();
 
-            return View();
+            var model = new OvertimeDetailReportViewModel
+            {
+                FromDate = DateTime.Now.AddMonths(-1),
+                ToDate = DateTime.Now,
+                Sections = teamService.GetAll(getAllGroupCriteria),
+                JobTitles = jobTitles
+            };
+
+            return View(model);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
-        public ActionResult OTExcelReportDetails(DateTime fromDate, DateTime toDate, int? empId, string jobTitle, string groups, byte? isLocal)
+        public ActionResult OTExcelReportDetails(OvertimeDetailReportViewModel model)
         {
             var criteria = new GetOvertimeExcelReportDetailCriteria
             {
-                FromDate = fromDate,
-                ToDate = toDate,
-                EmployeeID = empId,
-                JobTitleId = jobTitle,
-                GroupIds = groups,
-                IsLocal = isLocal
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                EmployeeID = model.EmpId,
+                JobTitleId = model.JobTitleIds,
+                GroupIds = model.SectionIds,
+                IsLocal = model.IsLocal
             };
-            var entity = overtimeService.OTExcelReportDetails(criteria);
-            return PartialView(entity);
+            IList<OvertimeDaily> entity = overtimeService.OTExcelReportDetails(criteria);
+
+            return PartialView("_OTExcelReportDetails", entity);
         }
 
         [HttpPost]

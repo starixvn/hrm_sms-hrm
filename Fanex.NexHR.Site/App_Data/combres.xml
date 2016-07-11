@@ -608,6 +608,7 @@
     <resourceSet name="overtimereportdetailsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/views/Overtime/overtimereportdetails.js" />
     </resourceSet>
 
