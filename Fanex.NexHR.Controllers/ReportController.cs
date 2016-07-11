@@ -163,7 +163,7 @@
             return PartialView("_TimeRecordDetail", timeRecords);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticEmployee)]
         public ActionResult HRRequestMonitoring()
         {
             var year = DateTime.Now.Year;
@@ -183,11 +183,7 @@
             return View("RequestMonitoring", model);
         }
 
-        [HRAuthorize(
-            Policy.Host,
-            FunctionKey.VerifyRequest,
-            FunctionKey.ApproveRequest,
-            FunctionKey.ProcessRequest)]
+        [HRAuthorize(Policy.Host, FunctionKey.RequestStatisticEmployee)]
         public ActionResult HRRequestMonitoringDetails(
             DateTime fromDate,
             DateTime toDate,
