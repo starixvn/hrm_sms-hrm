@@ -1,6 +1,7 @@
 ﻿@using Nexus.RoleManagement.Services;
 @model IEnumerable<MenuModel>
 @{
+    var unreadMessage = (int)ViewBag.UnreadMessage;
     var selectedMenu = (MenuModel)ViewBag.SelectedMenu;
     var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;
 }
@@ -18,9 +19,11 @@
                 <div class="navItem">
                     @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
                     {
+                        var menuText = childMenu.Name.Equals("MyMessage") && unreadMessage > 0 ? childMenu.Text + " (" + unreadMessage + ")" : childMenu.Text;
+
                         <div id="@(childMenu.Name + "_"+childMenu.MenuId)" class="el">
                             <span class="xicon @childMenu.Name"></span>
-                            <a href="@childMenu.Link">@childMenu.Text</a>
+                            <a href="@childMenu.Link">@menuText</a>
                         </div>
                     }
                 </div>

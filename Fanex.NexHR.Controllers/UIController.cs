@@ -16,7 +16,6 @@
     [Authorize]
     public class UIController : BaseController
     {
-        private const string MyMessageMenu = "MyMessage";
         private readonly IMessageService messageService;
 
         public UIController()
@@ -59,15 +58,11 @@
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = CurrentUser.Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
-            ViewBag.SelectedMenu = selectedMenu;
             var menus = GetNagivationData();
-
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
 
-            if (unreadMessageCount > 0)
-            {
-                menus.Where(x => x.Name.Equals(MyMessageMenu)).ToList().ForEach(x => x.Text = "My Messsages (" + unreadMessageCount + ") ");
-            }
+            ViewBag.SelectedMenu = selectedMenu;
+            ViewBag.UnreadMessage = unreadMessageCount;
 
             return PartialView(menus);
         }
