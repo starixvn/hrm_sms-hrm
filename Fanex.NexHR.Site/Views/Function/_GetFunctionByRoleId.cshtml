@@ -27,16 +27,32 @@
                         <input id="functionKey" type="hidden" value="@function.FunctionKey" />
                         <input id="functionName" type="hidden" value="@function.Name" />
                     </td>
-                    <td>
-                        @{
-                var attributeRead = !hasPermission ? new { @disabled = "disabled" } : null;
-                var attributeHost = !hasPermission || function.IsReadOnly ? new { @disabled = "disabled" } : null;
-                        }
-                        @Html.CheckBox("IsRead", function.IsRead, attributeRead)
-                    </td>
-                    <td>
-                        @Html.CheckBox("IsHost", function.IsHost, attributeHost)
-                    </td>
+                    @if (!hasPermission || function.IsReadOnly)
+                    {
+                        <td>
+                            @Html.CheckBox("IsRead", function.IsRead, new { @disabled = "disabled" })
+                        </td>
+                        <td>
+                            @Html.CheckBox("IsHost", function.IsHost, new { @disabled = "disabled" })
+                        </td>
+                    }
+                    else
+                    {
+
+                        <td>
+                            @if (function.IsHost)
+                            {
+                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead", @disabled = "disabled"})
+                            }
+                            else
+                            {
+                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead"})
+                            }
+                        </td>
+                        <td>
+                            @Html.CheckBox("IsHost", function.IsHost, new { @id = function.FunctionId + "_IsHost", @data_id = function.FunctionId })
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

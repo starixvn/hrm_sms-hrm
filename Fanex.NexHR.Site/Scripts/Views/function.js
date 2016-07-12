@@ -1,15 +1,26 @@
 ﻿'use strict';
 /*global _global*/
 
-function CheckboxOnChange() {
+function ChangeData() {
     $("#save").removeAttr('disabled');
+}
+function Onclick_IsHost() {
+    var id = $(this).data('id');
+    var checked = $(this).prop('checked');
+    $("#" + id + "_IsRead").prop('disabled', checked);
+    $("#" + id + "_IsRead").prop('checked', checked);
+
+    ChangeData();
 }
 
 function generateEventForCheckbox() {
     var input = $('input');
     for (var i = 0, len = input.length; i < len; i++) {
         if (input[i].type === 'checkbox') {
-            input[i].onclick = CheckboxOnChange;
+            input[i].onclick = ChangeData;
+        }
+        if (input[i].name === 'IsHost') {
+            input[i].onclick = Onclick_IsHost;
         }
     }
 }
@@ -23,7 +34,7 @@ function query() {
         data: { roleId: roleId },
         success: function (response) {
             $('#list-functions').html(response);
-            $('#save').attr('disabled', 'disabled');
+            $('#save').prop('disabled', 'disabled');
             generateEventForCheckbox();
         }
     });
@@ -32,10 +43,11 @@ function query() {
 function save() {
     var roleFunctions = [];
     $("#list-functions tbody tr").each(function () {
+        var functionId = parseInt($('td #functionId', this).val(), 10);
         var record = {
-            FunctionId: parseInt($('td #functionId', this).val(), 10),
-            IsRead: $('td #IsRead', this).attr('checked') === 'checked',
-            IsHost: $('td #IsHost', this).attr('checked') === 'checked'
+            FunctionId: functionId,
+            IsRead: $('#' + functionId + '_IsRead', this).prop('checked') === 'checked',
+            IsHost: $('#' + functionId + '_IsHost').prop('checked') === 'checked'
         };
 
         roleFunctions.push(record);

@@ -24,7 +24,7 @@
                     xml.AppendFormat(
                         _FunctionTpl,
                         function.FunctionId,
-                        function.IsRead,
+                        function.IsHost ? function.IsHost : function.IsRead,
                         function.IsHost);
                 }
 
