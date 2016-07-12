@@ -225,6 +225,7 @@
     <resourceSet name="keepinviewcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/keepinview.css" />
+      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
     <resourceSet name="keepinviewcreatejs" type="js">
@@ -352,7 +353,7 @@
 
     <resourceSet name="myrequestcss" type="css">
       <resource reference="sitecss" />
-
+      <resource path="~/styles/criteriapanel.css" />
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
 
@@ -736,6 +737,11 @@
       <resource path="~/scripts/views/employee.message.js" />
     </resourceSet>
 
+    <resourceSet name="departmentcss" type="css">
+      <resource reference="sitecss" />
+      <resource path="~/styles/criteriapanel.css" />
+    </resourceSet>
+    
     <resourceSet name="departmentjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/department/department.js" />

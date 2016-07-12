@@ -15,12 +15,27 @@
 @using (Html.BeginForm())
 {
     <input type="hidden" value="CheckInOut" id="RequestType" />
-    <span>Year:</span>
-    @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-    <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("Check In/Out Request", "Create")
+
+    <div class="container_24 bunhat">
+        <div class="grid_1">
+            <label for="Year">@Labels.Year</label>
+        </div>
+        <div class="grid_2">
+            @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+        </div>
+        <div class="grid_2">
+            <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
+        </div>
+        <div class="grid_5">
+            <div class="button-icon">
+                <span class="icon plus"></span>@Html.ActionLink("Check In/Out Request", "Create")
+            </div>
+        </div>
     </div>
+
+    <div class="clear">
+    </div>
+
     <table class="table table-custom">
         <thead>
             <tr>
