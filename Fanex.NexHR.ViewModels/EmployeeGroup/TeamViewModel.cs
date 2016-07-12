@@ -6,15 +6,18 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public class TeamViewModel
     {
         public int Id { get; set; }
 
+        [AllowHtml]
         [Required]
         [Display(Name = "Code", ResourceType = typeof(Labels))]
         public string TeamCode { get; set; }
 
+        [AllowHtml]
         [Required]
         [Display(Name = "Name", ResourceType = typeof(Labels))]
         public string TeamName { get; set; }

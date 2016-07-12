@@ -195,6 +195,7 @@
             return View(new CreateEmployeeViewModel());
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create(CreateEmployeeViewModel model)
@@ -258,6 +259,7 @@
             return View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]

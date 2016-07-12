@@ -3,12 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
     {
         [Required]
         public decimal TotalDays { get; set; }
 
+        [AllowHtml]
         public string Description { get; set; }
 
         [Required]

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public class ExtensionNoModel
     {
@@ -13,12 +14,15 @@
 
         public string TeamName { get; set; }
 
+        [AllowHtml]
         public string FullName { get; set; }
 
+        [AllowHtml]
         public string NickName { get; set; }
 
         public int EmployeeExtensionId { get; set; }
 
+        [AllowHtml]
         [Required]
         public string ExtensionNo { get; set; }
 

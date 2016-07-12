@@ -41,6 +41,7 @@
             this.commandService = commandService ?? new CommandService();
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         public JsonResult Adjust(string annualLeaveJson)
         {
@@ -195,6 +196,7 @@
             return View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)

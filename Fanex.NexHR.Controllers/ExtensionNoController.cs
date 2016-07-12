@@ -196,6 +196,7 @@
             return Json(groups, JsonRequestBehavior.AllowGet);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult AddNewExternalGroup(string groupName)
@@ -218,6 +219,7 @@
             return Json(result);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult EditExternalGroup(int groupId, string groupName)

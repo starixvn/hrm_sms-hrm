@@ -6,6 +6,7 @@
 
     public class UserManagementViewModel : PagerOptionModel
     {
+        [AllowHtml]
         public string Keyword { get; set; }
 
         public string GroupIds { get; set; }

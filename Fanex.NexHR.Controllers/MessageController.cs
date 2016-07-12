@@ -89,7 +89,6 @@
         }
 
         [HttpPost]
-        [ValidateInput(false)]
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Create(Message model)
         {

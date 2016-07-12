@@ -2,13 +2,16 @@
 {
     using Fanex.NexHR.Core.Enums;
     using System;
+    using System.Web.Mvc;
 
     public class Message
     {
         public int MessageId { get; set; }
 
+        [AllowHtml]
         public string Subject { get; set; }
 
+        [AllowHtml]
         public string Contents { get; set; }
 
         public int Category { get; set; }
