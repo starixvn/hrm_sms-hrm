@@ -27,7 +27,7 @@
                         <input id="functionKey" type="hidden" value="@function.FunctionKey" />
                         <input id="functionName" type="hidden" value="@function.Name" />
                     </td>
-                    @if (!hasPermission || function.IsReadOnly)
+                    @if (!hasPermission)
                     {
                         <td>
                             @Html.CheckBox("IsRead", function.IsRead, new { @disabled = "disabled" })
@@ -38,20 +38,28 @@
                     }
                     else
                     {
-
                         <td>
                             @if (function.IsHost)
                             {
-                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead", @disabled = "disabled"})
+                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead", @disabled = "disabled" })
                             }
                             else
                             {
-                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead"})
+                                @Html.CheckBox("IsRead", function.IsRead, new { @id = function.FunctionId + "_IsRead" })
                             }
                         </td>
-                        <td>
-                            @Html.CheckBox("IsHost", function.IsHost, new { @id = function.FunctionId + "_IsHost", @data_id = function.FunctionId })
-                        </td>
+                        if (function.IsReadOnly)
+                        {
+                            <td>
+                                @Html.CheckBox("IsHost", function.IsHost, new { @disabled = "disabled" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.CheckBox("IsHost", function.IsHost, new { @id = function.FunctionId + "_IsHost", @data_id = function.FunctionId })
+                            </td>
+                        }
                     }
                 </tr>
             }

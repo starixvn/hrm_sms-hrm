@@ -46,8 +46,8 @@ function save() {
         var functionId = parseInt($('td #functionId', this).val(), 10);
         var record = {
             FunctionId: functionId,
-            IsRead: $('#' + functionId + '_IsRead', this).prop('checked') === 'checked',
-            IsHost: $('#' + functionId + '_IsHost').prop('checked') === 'checked'
+            IsRead: $('#' + functionId + '_IsRead').attr('checked') === 'checked',
+            IsHost: $('#' + functionId + '_IsHost').attr('checked') === 'checked'
         };
 
         roleFunctions.push(record);
