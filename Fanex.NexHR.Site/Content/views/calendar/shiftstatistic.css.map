@@ -1,0 +1,10 @@
+﻿{
+	"version": 3,
+	"file": "shiftstatistic.css",
+	"sources": [
+		"shiftstatistic.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AAAW,SAAS,EAAE,OAAO,CAAV;EACf,KAAK,EAAE,IAAK;CADI;;AAIpB,WAAW,CAAC;EACR,KAAK,EAAE,GAAI;CADF",
+	"names": []
+}

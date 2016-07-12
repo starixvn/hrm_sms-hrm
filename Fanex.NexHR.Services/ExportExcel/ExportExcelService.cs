@@ -1323,7 +1323,7 @@
 
         private object CreateRecordYearlyOvertimeReport(OvertimeAnnualReportViewModel overtimeDetail, int rowIndex)
         {
-            float? nullValue = null,
+            double? nullValue = null,
                 totalHours = overtimeDetail.Jan + overtimeDetail.Feb + overtimeDetail.Mar + overtimeDetail.Apr
                     + overtimeDetail.May + overtimeDetail.Jun + overtimeDetail.Jul + overtimeDetail.Aug
                     + overtimeDetail.Sep + overtimeDetail.Oct + overtimeDetail.Nov + overtimeDetail.Dec;
@@ -1334,19 +1334,19 @@
                 Section = overtimeDetail.Team,
                 FullName = overtimeDetail.FullName,
                 NickName = overtimeDetail.NickName,
-                Jan = overtimeDetail.Jan != 0 ? overtimeDetail.Jan : nullValue,
-                Feb = overtimeDetail.Feb != 0 ? overtimeDetail.Feb : nullValue,
-                Mar = overtimeDetail.Mar != 0 ? overtimeDetail.Mar : nullValue,
-                Apr = overtimeDetail.Apr != 0 ? overtimeDetail.Apr : nullValue,
-                May = overtimeDetail.May != 0 ? overtimeDetail.May : nullValue,
-                Jun = overtimeDetail.Jun != 0 ? overtimeDetail.Jun : nullValue,
-                Jul = overtimeDetail.Jul != 0 ? overtimeDetail.Jul : nullValue,
-                Aug = overtimeDetail.Aug != 0 ? overtimeDetail.Aug : nullValue,
-                Sep = overtimeDetail.Sep != 0 ? overtimeDetail.Sep : nullValue,
-                Oct = overtimeDetail.Oct != 0 ? overtimeDetail.Oct : nullValue,
-                Nov = overtimeDetail.Nov != 0 ? overtimeDetail.Nov : nullValue,
-                Dec = overtimeDetail.Dec != 0 ? overtimeDetail.Dec : nullValue,
-                TotalHours = totalHours != 0 ? totalHours : nullValue
+                Jan = overtimeDetail.Jan != 0 ? (overtimeDetail.Jan * 1.00) : nullValue,
+                Feb = overtimeDetail.Feb != 0 ? (overtimeDetail.Feb * 1.00) : nullValue,
+                Mar = overtimeDetail.Mar != 0 ? (overtimeDetail.Mar * 1.00) : nullValue,
+                Apr = overtimeDetail.Apr != 0 ? (overtimeDetail.Apr * 1.00) : nullValue,
+                May = overtimeDetail.May != 0 ? (overtimeDetail.May * 1.00) : nullValue,
+                Jun = overtimeDetail.Jun != 0 ? (overtimeDetail.Jun * 1.00) : nullValue,
+                Jul = overtimeDetail.Jul != 0 ? (overtimeDetail.Jul * 1.00) : nullValue,
+                Aug = overtimeDetail.Aug != 0 ? (overtimeDetail.Aug * 1.00) : nullValue,
+                Sep = overtimeDetail.Sep != 0 ? (overtimeDetail.Sep * 1.00) : nullValue,
+                Oct = overtimeDetail.Oct != 0 ? (overtimeDetail.Oct * 1.00) : nullValue,
+                Nov = overtimeDetail.Nov != 0 ? (overtimeDetail.Nov * 1.00) : nullValue,
+                Dec = overtimeDetail.Dec != 0 ? (overtimeDetail.Dec * 1.00) : nullValue,
+                TotalHours = totalHours != 0 ? (totalHours * 1.00) : nullValue
             };
 
             return record;
@@ -1373,19 +1373,19 @@
                 Section = string.Empty,
                 FullName = string.Empty,
                 NickName = string.Empty,
-                Jan = jan,
-                Feb = feb,
-                Mar = mar,
-                Apr = apr,
-                May = may,
-                Jun = jun,
-                Jul = jul,
-                Aug = aug,
-                Sep = sep,
-                Oct = oct,
-                Nov = nov,
-                Dec = dec,
-                TotalHours = jan + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec
+                Jan = jan * 1.00,
+                Feb = feb * 1.00,
+                Mar = mar * 1.00,
+                Apr = apr * 1.00,
+                May = may * 1.00,
+                Jun = jun * 1.00,
+                Jul = jul * 1.00,
+                Aug = aug * 1.00,
+                Sep = sep * 1.00,
+                Oct = oct * 1.00,
+                Nov = nov * 1.00,
+                Dec = dec * 1.00,
+                TotalHours = (jan + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec) * 1.00
             };
 
             writer.WriteRow(6, record);

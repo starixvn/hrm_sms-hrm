@@ -77,6 +77,7 @@
             data: $('form.form-filter').serialize(),
             success: function (response) {
                 $('#yearlyReportDetails').html(response);
+                floatThead('table#data');
                 requestToCalculateOTHours();
             },
             error: function () {

@@ -228,7 +228,7 @@
             <th><a href="javascript:;" class="lnkDepartment">Dept.</a></th>
             <th><a href="javascript:;" class="lnkSort">@Labels.Nick</a></th>
             <th><a href="javascript:;" class="lnkmultiple">Shift Multiple</a></th>
-            <th>
+            <th class="nopaddingright">
                 @Model.FromDate.ToDateOfWeek()
             </th>
             @if (hasPermission)
@@ -236,37 +236,37 @@
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllMonday", new { @class = "chkAllMonday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(1).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllTuesday", new { @class = "chkAllTuesday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(2).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllWednesday", new { @class = "chkAllWednesday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(3).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllThursday", new { @class = "chkAllThursday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(4).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllFriday", new { @class = "chkAllFriday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(5).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
                     @Html.CheckBox("chkAllSaturday", new { @class = "chkAllSaturday" })
                 </th>
-                <th>
+                <th class="nopaddingright">
                     @Model.FromDate.AddDays(6).ToDateOfWeek()
                 </th>
                 <th class="noneborderleft">
@@ -286,7 +286,7 @@
                     </th>
                 }
             }
-            
+
             <th>@Labels.ModifiedBy</th>
         </tr>
     </thead>

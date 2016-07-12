@@ -321,8 +321,7 @@
     </resourceSet>
     <resourceSet name="schedulearrangecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/Calendar/schedulearrange.css" />
-      <resource path="~/styles/workingcalendars.css" />
+      <resource path="~/content/views/calendar/schedulearrange.css" />
     </resourceSet>
     <resourceSet name="schedulearrangedetailjs" type="js">
       <resource path="~/scripts/views/Calendar/schedulearrangedetail.js" />
@@ -334,8 +333,7 @@
     </resourceSet>
     <resourceSet name="shiftstatisticcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/Calendar/schedulearrange.css" />
-      <resource path="~/styles/workingcalendars.css" />
+      <resource path="~/content/views/calendar/shiftstatistic.css" />
     </resourceSet>
     <resourceSet name="shiftstatisticcontentjs" type="js">
       <resource path="~/scripts/views/Calendar/report.shiftstatistic.content.js" />
@@ -360,13 +358,13 @@
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />
-      <resource path="~/styles/workingcalendars.css" />
+      <resource path="~/content/views/calendar/workingcalendars.css" />
     </resourceSet>
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.workingcalendars.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
     <resourceSet name="workingcalendarsummaryjs" type="js">
@@ -520,7 +518,7 @@
     <resourceSet name="teamdisciplinesettingcss" type="css">
       <resource reference="sitecss" />
     </resourceSet>
-    
+
     <resourceSet name="teamdisciplinesettingjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/team/team.discipline.setting.js" />
@@ -777,10 +775,10 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee/employee.discipline.setting.js" />
     </resourceSet>
-  <resourceSet name="menujs" type="js">
-    <resource reference="sitejs" />
-    <resource path="~/scripts/views/menu.js" />
-  </resourceSet>
+    <resourceSet name="menujs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/menu.js" />
+    </resourceSet>
     <resourceSet name="menucss" type="css">
       <resource reference="sitecss" />
     </resourceSet>

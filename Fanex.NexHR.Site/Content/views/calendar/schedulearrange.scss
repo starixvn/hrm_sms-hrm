@@ -1,0 +1,114 @@
+﻿#FromDate, #ToDate {
+    width: 80px;
+}
+
+.summary {
+    display: none;
+    text-align: center;
+}
+
+table.table.table-custom {
+    thead tr th, tbody tr td, tfoot tr td {
+        padding: 5px;
+
+        &.noneborderleft {
+            padding-left: 0;
+            border-left: 0;
+        }
+
+        &.nopaddingright {
+            padding-right: 0;
+        }
+
+        .chooseweek {
+            color: red;
+        }
+    }
+
+    tbody {
+        tr {
+            &:hover {
+                background: unset !important;
+            }
+
+            &:nth-child(odd) {
+                background: unset;
+            }
+
+            td {
+                input[type="text"] {
+                    font-size: 0.98em;
+                    width: 75px;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+#colordef {
+    .grid_2 {
+        height: 22px;
+        text-align: center;
+        line-height: 22px;
+        border: solid 1px #555;
+        border-radius: 3px;
+    }
+
+    .grid_4 {
+        height: 22px;
+        text-align: center;
+        line-height: 22px;
+        border: solid 1px #555;
+        border-radius: 3px;
+    }
+}
+
+.offday {
+    background-color: #f8f89c !important;
+}
+
+.keepinviewday, .changeshift, .leaveday {
+    color: #ed4646 !important;
+}
+
+.holiday {
+    background-color: #f3aa4b !important;
+}
+
+.leavehalfday2 {
+    background-color: #d4e5d5 !important;
+}
+
+.annualleave {
+    background-color: #c7f391 !important;
+}
+
+.unpaidleave {
+    background-color: #eacded !important;
+}
+
+.businesstrip {
+    background-color: #c1d6ed !important;
+}
+
+.weddingleave {
+    background-color: #7cd3e9 !important;
+}
+
+.heightcroll {
+    height: 500px;
+    overflow: auto;
+}
+
+input[type="text"].shift {
+    width: 80px;
+}
+
+.overOffdayInWeek {
+    background: #F9CDA2;
+}
+
+.upOffdayInWeek {
+    background: #BFF7F6;
+}

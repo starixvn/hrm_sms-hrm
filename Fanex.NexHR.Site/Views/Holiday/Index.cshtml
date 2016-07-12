@@ -20,9 +20,7 @@
 @using (Html.BeginGetForm())
 {
     <div class="bunhat container_24">
-        <div class="grid_1">
-            Year
-        </div>
+        <div class="grid_1">@Labels.Year:</div>
         <div class="grid_2">
             @Html.YearPicker("year", 2010, (int)ViewBag.year)
         </div>
@@ -37,8 +35,7 @@
         }
     </div>
 }
-
-<table id="data" class="data persist-area">
+<table id="data" class="table table-custom persist-area">
     <thead>
         <tr class="persist-header">
             <th>@Labels.SymbolCount</th>
@@ -50,7 +47,6 @@
                 <th>
                     @Labels.Edit
                 </th>
-
                 <th>
                     @Labels.Delete
                 </th>
@@ -65,13 +61,13 @@
             {
                 <tr id="row@(item.Id)">
                     <td>@(index++)</td>
-                    <td class="left">
+                    <td class="align-left">
                         @item.HolidayName
                     </td>
-                    <td class="ddMMyyyy">
+                    <td>
                         @item.FromDate.ToDateMonthYearFormatedDate()
                     </td>
-                    <td class="ddMMyyyy">
+                    <td>
                         @item.ToDate.ToDateMonthYearFormatedDate()
                     </td>
                     @if (hasPermission)
@@ -93,6 +89,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: totalColumn);                    
+        @RazorHelper.DisplayNoInformation(colspan: totalColumn);
     }
 </table>

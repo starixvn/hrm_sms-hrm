@@ -46,7 +46,7 @@
             <div class="grid_7">
                 <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
                     @foreach (Team team in Model.Teams)
-                    { 
+                    {
                         <option value="@team.Id">@team.Name</option>
                     }
                 </select>
@@ -56,7 +56,7 @@
                 @Html.LabelFor(model => model.IsShowWholeCompany, Labels.ShowWholeSection)
             </div>
             <div class="grid_2">
-                <input type="button" value="@Labels.Submit" id="btnSubmit"/>
+                <input type="button" value="@Labels.Submit" id="btnSubmit" />
             </div>
             <div class="clear">
             </div>

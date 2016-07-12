@@ -44,13 +44,9 @@
                 @Html.TextBox("StartDate", displayFrom, new { @class = "startDateOfWeek" })
                 @Html.TextBox("EndDate", displayTo, new { @class = "endDateOfWeek" })
                 <img class="weekPickerImg" src="~/images/calendar.png" />
-                <div class="week-picker">
-                </div>
+                <div class="week-picker"></div>
             </div>
-
-            <div class="grid_2 gridlabel">
-                Group
-            </div>
+            <div class="grid_2 gridlabel">@Labels.Section</div>
             <div class="grid_6">
                 <select id="group" multiple="multiple" class="team-select">
                     @foreach (Team item in Model.Groups)
@@ -59,29 +55,21 @@
                     }
                 </select>
             </div>
-
             <div class="grid_2 gridlabel">
                 Position
             </div>
             <div class="grid_6">
                 @Html.DropDownList("title", Model.JobTitles, new { @class = "title-select", multiple = "multiple" })
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="clear">
-            </div>
-            <div class="grid_2 gridlabel">
-                Employee
-            </div>
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="clear"></div>
+            <div class="grid_2 gridlabel">@Labels.Employee</div>
             <div class="grid_7">
                 @Html.Editor("Employee")
                 @Html.Hidden("EmployeeId")
             </div>
-            <div class="grid_2 gridlabel">
-                Category
-            </div>
+            <div class="grid_2 gridlabel">@Labels.Category</div>
             <div class="grid_3">
                 @RazorHelper.CategoryDropDownList("category", "category", "")
             </div>
@@ -93,12 +81,9 @@
             </div>
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
+    <div class="clear"></div>
+    <div class="space"></div>
+    <div class="clear"></div>
     <div class="grid_1 gridlabel" style="float: right;">
         <a id="prev" class="lnkPrevious" href="javascript:;">&lt;&lt; Previous</a>
         || <span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
@@ -107,7 +92,6 @@
         @Html.Hidden("OriginalFromDate", Model.FromDate)
         @Html.Hidden("OriginalToDate", Model.ToDate)
     </div>
-
 }
 
 <table id="workingCalendarDetails" class="pretty"></table>

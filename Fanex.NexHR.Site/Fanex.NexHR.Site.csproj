@@ -248,6 +248,24 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\views\calendar\schedulearrange.css">
+      <DependentUpon>schedulearrange.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\schedulearrange.min.css">
+      <DependentUpon>schedulearrange.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\shiftstatistic.css">
+      <DependentUpon>shiftstatistic.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\shiftstatistic.min.css">
+      <DependentUpon>shiftstatistic.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\workingcalendars.css">
+      <DependentUpon>workingcalendars.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\workingcalendars.min.css">
+      <DependentUpon>workingcalendars.css</DependentUpon>
+    </Content>
     <Content Include="Content\views\employee\employee.detail.css">
       <DependentUpon>employee.detail.scss</DependentUpon>
     </Content>
@@ -416,7 +434,6 @@
     <Content Include="Styles\report.requestmonitoring.css" />
     <Content Include="Styles\employee.monthschedule.css" />
     <Content Include="Styles\request.overtime.css" />
-    <Content Include="Styles\Calendar\schedulearrange.css" />
     <Content Include="Styles\style.css" />
     <Content Include="Styles\table.css" />
     <Content Include="Styles\themes\Aristo\index.html" />
@@ -850,7 +867,6 @@
     <Content Include="Styles\jquery.fixedheadertable.css" />
     <Content Include="Styles\jquery.fixedheadertable.theme.css" />
     <Content Include="Styles\tinymce.css" />
-    <Content Include="Styles\workingcalendars.css" />
     <Content Include="Views\AnnualLeaveBalance\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1090,7 +1106,6 @@
     <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
     <Content Include="Views\Report\OvertimeReport.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
-    <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourWeekly.cshtml" />
@@ -1200,6 +1215,19 @@
     <Content Include="Content\views\employee\employee.detail.css.map">
       <DependentUpon>employee.detail.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\calendar\schedulearrange.scss" />
+    <Content Include="Content\views\calendar\schedulearrange.css.map">
+      <DependentUpon>schedulearrange.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\shiftstatistic.scss" />
+    <Content Include="Content\views\calendar\shiftstatistic.css.map">
+      <DependentUpon>shiftstatistic.css</DependentUpon>
+    </Content>
+    <Content Include="Content\views\calendar\workingcalendars.scss" />
+    <Content Include="Content\views\calendar\workingcalendars.css.map">
+      <DependentUpon>workingcalendars.css</DependentUpon>
+    </Content>
+    <Content Include="Content\sass\vendors\_dataTables.scss" />
     <None Include="Content\views\employee\employee.detail.scss" />
     <Content Include="Content\views\employee\employee.edit.scss" />
     <Content Include="Content\views\employee\employee.edit.css.map">
@@ -1209,6 +1237,7 @@
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
+    <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />

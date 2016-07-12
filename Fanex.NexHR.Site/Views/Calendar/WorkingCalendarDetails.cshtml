@@ -3,29 +3,21 @@
 @Html.Hidden("ToPreviousDate", (Model.ToDate).AddDays(-7))
 @Html.Hidden("FromNextDate", (Model.FromDate).AddDays(7))
 @Html.Hidden("ToNextDate", (Model.ToDate).AddDays(7))
-<table id="data">
+<table id="data" class="table table-custom">
     <thead>
         @{
-            int daysInMonth = Model.WorkingCalendars.Any()
-                ? Model.WorkingCalendars[0].Days
-                : DateTime.DaysInMonth(Model.Year, Model.Month);
+            int daysInMonth = Model.WorkingCalendars.Any() ? Model.WorkingCalendars[0].Days : DateTime.DaysInMonth(Model.Year, Model.Month);
 
             var fromDay = Model.FromDate;
             var toDay = Model.ToDate;
             var dayDiff = (toDay - fromDay).TotalDays;
-
             var displayRowDays = fromDay.AddDays(-1);
             <tr>
-                <th rowspan="2">
-                    Nick name
-                </th>
-                <th rowspan="2">
-                    Team
-                </th>
+                <th rowspan="2">@Labels.Nick</th>
+                <th rowspan="2">@Labels.Section</th>
                 @for (int i = 0; i <= dayDiff; i++)
                 {
-                    <th >@fromDay.AddDays(i).ToString("dd MMM, yyyy")
-                    </th>
+                    <th>@fromDay.AddDays(i).ToDateMonthYearFormatedDate()</th>
                 }
             </tr>
             <tr>
@@ -33,15 +25,15 @@
                 {
                     if (i == dayDiff || i == dayDiff - 1)
                     {
-                    <th class="weekend">
-                        @fromDay.AddDays(i).ToString("ddd")
-                    </th>
+                        <th class="weekend">
+                            @fromDay.AddDays(i).ToString("ddd")
+                        </th>
                     }
                     else
                     {
-                    <th>
-                        @fromDay.AddDays(i).ToString("ddd")
-                    </th>
+                        <th>
+                            @fromDay.AddDays(i).ToString("ddd")
+                        </th>
                     }
                 }
             </tr>
@@ -55,9 +47,11 @@
         {
             var day = 1;
             <tr>
-                <th class="row-left">@employee.NickName
+                <th class="align-left">
+                    @employee.NickName
                 </th>
-                <th>@employee.Team
+                <th>
+                    @employee.Team
                 </th>
                 @foreach (var workingday in employee.WorkingSchedule)
                 {
@@ -65,10 +59,10 @@
                     leaves = string.Empty;
 
                     if (!string.IsNullOrEmpty(shift) && shift[0].Equals('_'))
-                    { 
-                    <th class="ChangeShift">
-                        @shift.Substring(1)
-                    </th>
+                    {
+                        <th class="ChangeShift">
+                            @shift.Substring(1)
+                        </th>
                     }
                     else if (!string.IsNullOrEmpty(shift) && shift[0].Equals('-'))
                     {
@@ -87,66 +81,64 @@
 
                         if (arrLeaves.Count() > 1)
                         {
-                    <th class="leaveday leavehalfday2">
-                        @leaves
-                    </th>
+                            <th class="leaveday leavehalfday2">
+                                @leaves
+                            </th>
                         }
                         else
                         {
-                    <th class="leaveday">
-                        @leaves
-                    </th>
+                            <th class="leaveday">
+                                @leaves
+                            </th>
                         }
                     }
                     else if (shift.Equals("AL"))
-                    { 
-                    <th class="leaveday annualleave">
-                        @shift
-                    </th>
+                    {
+                        <th class="leaveday annualleave">
+                            @shift
+                        </th>
                     }
                     else if (shift.Equals("UPL"))
-                    { 
-                    <th class="leaveday unpaidleave">
-                        @shift
-                    </th>
+                    {
+                        <th class="leaveday unpaidleave">
+                            @shift
+                        </th>
                     }
                     else if (shift.Equals("HAL"))
-                    { 
-                    <th class="leaveday">
-                        @shift
-                    </th>
+                    {
+                        <th class="leaveday">
+                            @shift
+                        </th>
                     }
                     else if (shift.Equals("OFF"))
-                    { 
-                    <th class="offday">
-                        @shift
-                    </th>
+                    {
+                        <th class="offday">
+                            @shift
+                        </th>
                     }
-
                     else if (shift.Equals("PH"))
                     {
-                    <th class="holiday">
-                        @shift
-                    </th>
+                        <th class="holiday">
+                            @shift
+                        </th>
                     }
-
                     else if (shift.Equals("BL") || shift.Equals("BL1") || shift.Equals("BL2") || shift.Equals("BL3"))
-                    { 
-                    <th class="leaveday">
-                        @shift
-                    </th>
+                    {
+                        <th class="leaveday">
+                            @shift
+                        </th>
                     }
                     else if (shift.Equals("BT"))
-                    { 
-                    <th class="leaveday businesstrip">
-                        @shift
-                    </th>
+                    {
+                        <th class="leaveday businesstrip">
+                            @shift
+                        </th>
                     }
                     else if (shift.Equals("WL"))
                     {
-                    <th class="leaveday weddingleave">
-                        @shift
-                    </th>
+                        <th class="leaveday weddingleave">
+                            @shift
+                        </th>
                     }
                     else if (shift.IndexOf('/') > -1)
                     {
@@ -161,23 +153,21 @@
                         {
                             leaves = leaves.Substring(0, leaves.Length - 1);
                         }
-                    <th class="leaveday leavehalfday2" title="@leaves">
-                        @leaves
-                    </th>
+                        <th class="leaveday leavehalfday2" title="@leaves">
+                            @leaves
+                        </th>
                     }
-
                     else if (shift.IndexOf("½") != -1)
                     {
-                    <th class="leaveday multitypeleave" style="background-color: @workingday.Color;">
-                        @shift
-                    </th>
+                        <th class="leaveday multitypeleave" style="background-color: @workingday.Color;">
+                            @shift
+                        </th>
                     }
-
                     else
-                    { 
-                    <th style="background-color: @workingday.Color;">
-                        @shift
-                    </th>
+                    {
+                        <th style="background-color: @workingday.Color;">
+                            @shift
+                        </th>
                     }
                     day++;
                 }
