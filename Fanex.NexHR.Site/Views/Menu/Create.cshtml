@@ -21,18 +21,20 @@
 
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Name)
+                @Html.LabelFor(model => model.Name)<span style="color:red">*</span>
             </div>
             <div class="input">
                 @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Text)
+                @Html.LabelFor(model => model.Text)<span style="color:red">*</span>
             </div>
             <div class="input">
                 @Html.EditorFor(model => model.Text)
+                @Html.ValidationMessageFor(model => model.Text)
             </div>
         </div>
         <div class="formrow">

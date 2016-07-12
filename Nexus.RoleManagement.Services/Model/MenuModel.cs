@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -10,8 +11,10 @@ namespace Nexus.RoleManagement.Services
     {
         public int MenuId { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Text { get; set; }
 
         public string Link { get; set; }
@@ -20,7 +23,7 @@ namespace Nexus.RoleManagement.Services
 
         public int? FunctionId { get; set; }
 
-        public int DisplayOrder { get; set; }
+        public int? DisplayOrder { get; set; }
 
         public bool IsActive { get; set; }
     }

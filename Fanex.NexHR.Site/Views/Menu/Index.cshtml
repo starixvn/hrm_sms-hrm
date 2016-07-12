@@ -47,7 +47,9 @@
             {
                 <tr>
                     <td class="rowdivider highlight left" colspan="@totalColumn">
-                        @(menu.DisplayOrder + ". " + menu.Text)
+                        <a href="@Url.Action("edit", "menu", new { Id = menu.MenuId })"> 
+                            @(menu.DisplayOrder + ". " + menu.Text)
+                        </a>
                     </td>
                 </tr>
 

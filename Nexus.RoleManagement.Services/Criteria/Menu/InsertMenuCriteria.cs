@@ -14,7 +14,7 @@
 
         public int? FunctionId { get; set; }
 
-        public int DisplayOrder { get; set; }
+        public int? DisplayOrder { get; set; }
 
         public override string GetSettingKey()
         {
