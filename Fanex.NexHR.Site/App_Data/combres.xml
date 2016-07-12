@@ -711,7 +711,6 @@
 
     <resourceSet name="shiftcreatejs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/shift.create.js" />
     </resourceSet>
 
     <resourceSet name="messagecss" type="css">

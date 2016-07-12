@@ -51,6 +51,7 @@
             return View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create(ShiftViewModel model)
@@ -70,9 +71,11 @@
 
                 CommandResult result = commandService.Insert(criteria);
 
-                ViewBag.Successed = result.IsSuccessful;
-
-                if (!result.IsSuccessful)
+                if (result.IsSuccessful)
+                {
+                    return RedirectToAction("Index", "Shift");
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
@@ -106,6 +109,7 @@
             return View(model);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(ShiftViewModel model)
@@ -127,9 +131,11 @@
 
                 CommandResult result = commandService.Update(criteria);
 
-                ViewBag.Successed = result.IsSuccessful;
-
-                if (!result.IsSuccessful)
+                if (result.IsSuccessful)
+                {
+                    return RedirectToAction("Index", "Shift");
+                }
+                else
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }

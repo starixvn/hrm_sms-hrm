@@ -314,7 +314,6 @@
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
-    <Content Include="Scripts\Views\shift.create.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
     <Content Include="Scripts\Views\Team\team.discipline.setting.js" />

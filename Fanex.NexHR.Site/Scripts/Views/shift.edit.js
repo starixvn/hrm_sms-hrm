@@ -26,13 +26,6 @@ var editShift = (function ($) {
     };
 
     me.init = function (globalRoot) {
-        var successed = $("#Successed").val();
-        if (successed === "True") {
-            confirm('Successfull!\nPress OK to redirect to Shift Management.', function () {
-                document.location = _global.root + "shift/index";
-            });
-        }
-
         if ($("#IsUsed").val() === "True") {
             $("#Name").attr("disabled", "disabled");
             $("#HourTimeIn").attr("disabled", "disabled");

@@ -21,11 +21,6 @@
 {
     <div class="bunhat">
         @Html.ValidationSummary(true)
-        @if ((bool)ViewBag.Successed)
-        {
-            <div class="success">@Messages.ShiftCreated</div>
-        }
-        @Html.Hidden("Successed", (bool)ViewBag.Successed)
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Name)*
