@@ -34,7 +34,6 @@
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _UnpaidLeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\UnpaidLeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
-        private const string _YearlyOvertimeReportFilePathExcelTemplate = "~\\ExcelTemplates\\YearlyOvertimeReportTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
@@ -601,7 +600,7 @@
 
         public void ExportOvertimeReport(IList<OvertimeDaily> overtimeDetails, DateTime fromDate, DateTime toDate, string templatePath)
         {
-            string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls",
+            string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd"),
                 reportTitle = "Overtime Report Details" + " from " + fromDate.ToString("dd-MMM-yyyy") + " to " + toDate.ToString("dd-MMM-yyyy");
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Overtime Detail Report");
 
@@ -619,79 +618,25 @@
             writer.Render();
         }
 
-        public HSSFWorkbook ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar)
+        public void ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> overtimeDetails, int year, int? calendar, string templatePath)
         {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_YearlyOvertimeReportFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
+            string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd"),
+                calendarType = (calendar.HasValue && calendar.Value == 1) ? "Fiscal Calendar" : "Normal Calendar";
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Yearly Overtime Report");
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "YearlyOvertimeReport");
-            var rowIndex = _RowStartBodyYearlyOvertimeReport;
+            /// Fill report title.
+            writer.CopyRows(0, 2);
 
-            string calendarType = string.Empty;
-            int index = 1;
-            float totalYearlyOTHours = 0;
-            var height = sheet.GetRow(_RowStartBodyOvertimeReport).Height;
+            /// Fill report header.
+            writer.CopyRows(2, 2);
+            writer.WriteCellRange(2, 1, 4, 12, "Overtime Summary In " + year + " (" + calendarType + ")");
 
-            calendarType = calendar == 1 ? "Fiscal Calendar" : "Normal Calendar";
+            FillContentRowYearlyOvertimeReport(overtimeDetails, ref writer);
+            FillContentRowFooterYearlyOvertimeReport(overtimeDetails, ref writer);
+            writer.SyncColumnsWidth(17);
+            writer.CreateFreezePane(0, 4);
 
-            // Header
-            var rowHeader = sheet.GetRow(3);
-            rowHeader.Height = height;
-            var cellYear = rowHeader.GetCell(4);
-            cellYear.SetCellValue("Overtime Summary In " + year + " (" + calendarType + ")");
-            sheet.RemoveRow(sheet.GetRow(5));
-            sheet.RemoveRow(sheet.GetRow(6));
-            sheet.RemoveRow(sheet.GetRow(7));
-            foreach (var item in requestList)
-            {
-                var rowCopy = _RowStartBodyYearlyOvertimeReport + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-                float totalHours = 0;
-
-                row.GetCell(0).SetCellValue(index);
-                row.GetCell(1).SetCellValue(item.Team);
-                row.GetCell(2).SetCellValue(item.FullName);
-                row.GetCell(3).SetCellValue(item.NickName);
-
-                SetNumberValue(row.GetCell(4), item.Jan);
-                SetNumberValue(row.GetCell(5), item.Feb);
-                SetNumberValue(row.GetCell(6), item.Mar);
-                SetNumberValue(row.GetCell(7), item.Apr);
-                SetNumberValue(row.GetCell(8), item.May);
-                SetNumberValue(row.GetCell(9), item.Jun);
-                SetNumberValue(row.GetCell(10), item.Jul);
-                SetNumberValue(row.GetCell(11), item.Aug);
-                SetNumberValue(row.GetCell(12), item.Sep);
-                SetNumberValue(row.GetCell(13), item.Oct);
-                SetNumberValue(row.GetCell(14), item.Nov);
-                SetNumberValue(row.GetCell(15), item.Dec);
-
-                totalHours += item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun + item.Jul + item.Aug + item.Sep
-                    + item.Oct + item.Nov + item.Dec;
-
-                row.GetCell(16).SetCellValue(totalHours);
-                totalYearlyOTHours += totalHours;
-                index++;
-                rowIndex++;
-            }
-
-            //// Footer
-            sheet.CopyRow(templateSheet, _RowStartBodyYearlyOvertimeReport + 2, rowIndex);
-            var rowFooter = sheet.GetRow(rowIndex);
-            rowFooter.Height = height;
-
-            RenderFooterForOvertimeReport(requestList, totalYearlyOTHours, rowFooter);
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
+            writer.Render();
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath)
@@ -1349,30 +1294,104 @@
 
         #endregion Overtime Detail
 
-        private void SetNumberValue(ICell cell, float value)
+        #region Yearly Overtime
+
+        private void FillContentRowYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> overtimeDetails, ref ExcelTemplateWriter writer)
         {
-            if (value != 0)
+            int rowIndex = 1;
+
+            foreach (OvertimeAnnualReportViewModel overtimeDetail in overtimeDetails)
             {
-                cell.SetCellValue(value);
+                FillRowYearlyOvertimeReport(overtimeDetail, ref writer, ref rowIndex);
             }
         }
 
-        private void RenderFooterForOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, float totalYearlyOTHours, IRow rowFooter)
+        private void FillRowYearlyOvertimeReport(OvertimeAnnualReportViewModel overtimeDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
-            rowFooter.GetCell(4).SetCellValue(requestList.Sum(x => x.Jan));
-            rowFooter.GetCell(5).SetCellValue(requestList.Sum(x => x.Feb));
-            rowFooter.GetCell(6).SetCellValue(requestList.Sum(x => x.Mar));
-            rowFooter.GetCell(7).SetCellValue(requestList.Sum(x => x.Apr));
-            rowFooter.GetCell(8).SetCellValue(requestList.Sum(x => x.May));
-            rowFooter.GetCell(9).SetCellValue(requestList.Sum(x => x.Jun));
-            rowFooter.GetCell(10).SetCellValue(requestList.Sum(x => x.Jul));
-            rowFooter.GetCell(11).SetCellValue(requestList.Sum(x => x.Aug));
-            rowFooter.GetCell(12).SetCellValue(requestList.Sum(x => x.Sep));
-            rowFooter.GetCell(13).SetCellValue(requestList.Sum(x => x.Oct));
-            rowFooter.GetCell(14).SetCellValue(requestList.Sum(x => x.Nov));
-            rowFooter.GetCell(15).SetCellValue(requestList.Sum(x => x.Dec));
-            rowFooter.GetCell(16).SetCellValue(totalYearlyOTHours);
+            object record = CreateRecordYearlyOvertimeReport(overtimeDetail, rowIndex);
+            if (rowIndex % 2 == 1)
+            {
+                writer.WriteRow(4, record);
+            }
+            else
+            {
+                writer.WriteRow(5, record);
+            }
+
+            rowIndex++;
         }
+
+        private object CreateRecordYearlyOvertimeReport(OvertimeAnnualReportViewModel overtimeDetail, int rowIndex)
+        {
+            float? nullValue = null,
+                totalHours = overtimeDetail.Jan + overtimeDetail.Feb + overtimeDetail.Mar + overtimeDetail.Apr
+                    + overtimeDetail.May + overtimeDetail.Jun + overtimeDetail.Jul + overtimeDetail.Aug
+                    + overtimeDetail.Sep + overtimeDetail.Oct + overtimeDetail.Nov + overtimeDetail.Dec;
+
+            var record = new
+            {
+                Count = rowIndex,
+                Section = overtimeDetail.Team,
+                FullName = overtimeDetail.FullName,
+                NickName = overtimeDetail.NickName,
+                Jan = overtimeDetail.Jan != 0 ? overtimeDetail.Jan : nullValue,
+                Feb = overtimeDetail.Feb != 0 ? overtimeDetail.Feb : nullValue,
+                Mar = overtimeDetail.Mar != 0 ? overtimeDetail.Mar : nullValue,
+                Apr = overtimeDetail.Apr != 0 ? overtimeDetail.Apr : nullValue,
+                May = overtimeDetail.May != 0 ? overtimeDetail.May : nullValue,
+                Jun = overtimeDetail.Jun != 0 ? overtimeDetail.Jun : nullValue,
+                Jul = overtimeDetail.Jul != 0 ? overtimeDetail.Jul : nullValue,
+                Aug = overtimeDetail.Aug != 0 ? overtimeDetail.Aug : nullValue,
+                Sep = overtimeDetail.Sep != 0 ? overtimeDetail.Sep : nullValue,
+                Oct = overtimeDetail.Oct != 0 ? overtimeDetail.Oct : nullValue,
+                Nov = overtimeDetail.Nov != 0 ? overtimeDetail.Nov : nullValue,
+                Dec = overtimeDetail.Dec != 0 ? overtimeDetail.Dec : nullValue,
+                TotalHours = totalHours != 0 ? totalHours : nullValue
+            };
+
+            return record;
+        }
+
+        private void FillContentRowFooterYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> overtimeDetails, ref ExcelTemplateWriter writer)
+        {
+            float jan = overtimeDetails.Sum(x => x.Jan),
+                feb = overtimeDetails.Sum(x => x.Feb),
+                mar = overtimeDetails.Sum(x => x.Mar),
+                apr = overtimeDetails.Sum(x => x.Apr),
+                may = overtimeDetails.Sum(x => x.May),
+                jun = overtimeDetails.Sum(x => x.Jun),
+                jul = overtimeDetails.Sum(x => x.Jul),
+                aug = overtimeDetails.Sum(x => x.Aug),
+                sep = overtimeDetails.Sum(x => x.Sep),
+                oct = overtimeDetails.Sum(x => x.Oct),
+                nov = overtimeDetails.Sum(x => x.Nov),
+                dec = overtimeDetails.Sum(x => x.Dec);
+
+            var record = new
+            {
+                Count = Labels.TotalHours,
+                Section = string.Empty,
+                FullName = string.Empty,
+                NickName = string.Empty,
+                Jan = jan,
+                Feb = feb,
+                Mar = mar,
+                Apr = apr,
+                May = may,
+                Jun = jun,
+                Jul = jul,
+                Aug = aug,
+                Sep = sep,
+                Oct = oct,
+                Nov = nov,
+                Dec = dec,
+                TotalHours = jan + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec
+            };
+
+            writer.WriteRow(6, record);
+        }
+
+        #endregion Yearly Overtime
 
         private void RenderBodyWorkingTimeRequest(
             int rowIndex,

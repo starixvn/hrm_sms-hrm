@@ -43,6 +43,7 @@
         private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
         private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
         private const string OvertimeTemplatePath = @"~\ExcelTemplates\OvertimeReportTemplate.xls";
+        private const string YearlyOvertimeTemplatePath = @"~\ExcelTemplates\YearlyOvertimeReportTemplate.xls";
 
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
@@ -205,18 +206,17 @@
             return new EmptyResult();
         }
 
-        public ActionResult YearlyOvertimeReport(int year, string team, int? empId, int? calendar)
+        public ActionResult YearlyOvertimeReport(YearlyOvertimeReportViewModel model)
         {
-            string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             IList<OvertimeAnnualReportViewModel> entity = null;
-            if (calendar == 1)
+            if (model.Calendar == 1)
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
                     SupervisorId = this.CurrentUser.Id,
-                    Year = year,
-                    GroupIds = team,
-                    EmployeeId = empId,
+                    Year = model.Year,
+                    GroupIds = model.SectionIds,
+                    EmployeeId = model.EmpId,
                     Status = null
                 };
                 entity = this.overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
@@ -225,17 +225,18 @@
             {
                 var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
                 {
-                    Year = year,
-                    GroupIds = team,
-                    EmployeeId = empId,
+                    Year = model.Year,
+                    GroupIds = model.SectionIds,
+                    EmployeeId = model.EmpId,
                     Status = null
                 };
                 entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportYearlyOvertimeReport(entity, year, calendar);
+            string templatePath = Server.MapPath(YearlyOvertimeTemplatePath);
+            exportExcelService.ExportYearlyOvertimeReport(entity, model.Year, model.Calendar, templatePath);
 
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult EmployeeBasicInfo(UserManagementViewModel model)

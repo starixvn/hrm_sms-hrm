@@ -598,10 +598,11 @@
       <resource path="~/styles/monPickr-0.0.3.css" />
       <resource path="~/styles/overtimereport.css" />
     </resourceSet>
-    <resourceSet name="overtimereportjs" type="js">
+    <resourceSet name="yearlyovertimereportjs" type="js">
       <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.company.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/Overtime/overtimereport.js" />
+      <resource path="~/scripts/views/Overtime/yearlyovertimereport.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
     </resourceSet>
 

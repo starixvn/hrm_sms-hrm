@@ -278,28 +278,31 @@
         [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult YearlyReport()
         {
-            ViewBag.Year = DateTime.Now.Year;
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
+            var model = new YearlyOvertimeReportViewModel
+            {
+                Year = DateTime.Now.Year,
+                Sections = sections
+            };
 
-            return View();
+            return View(model);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
-        public ActionResult GetYearlyOvertimeReport(int year, string team, int? empId, int? calendar)
+        public ActionResult YearlyOvertimeReportDetails(YearlyOvertimeReportViewModel model)
         {
-            ViewBag.Year = year;
-            ViewBag.Calendar = calendar;
+            ViewBag.Year = model.Year;
+            ViewBag.Calendar = model.Calendar;
             IList<OvertimeAnnualReportViewModel> listEntity = null;
 
-            if (calendar == 1)
+            if (model.Calendar == 1)
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
                     SupervisorId = CurrentUser.Id,
-                    Year = year,
-                    GroupIds = team,
-                    EmployeeId = empId,
+                    Year = model.Year,
+                    GroupIds = model.SectionIds,
+                    EmployeeId = model.EmpId,
                     Status = null
                 };
                 listEntity = overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
@@ -308,15 +311,15 @@
             {
                 var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
                 {
-                    Year = year,
-                    GroupIds = team,
-                    EmployeeId = empId,
+                    Year = model.Year,
+                    GroupIds = model.SectionIds,
+                    EmployeeId = model.EmpId,
                     Status = null
                 };
                 listEntity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
-            return PartialView("YearlyReportDetails", listEntity);
+            return PartialView("_YearlyReportDetails", listEntity);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]

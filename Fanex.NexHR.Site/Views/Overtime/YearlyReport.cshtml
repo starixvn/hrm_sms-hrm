@@ -1,11 +1,12 @@
-﻿@{
+﻿@model YearlyOvertimeReportViewModel
+@{
     ViewBag.Title = "Yearly Overtime Report";
 }
 @section css{
     @Url.CombresLink("overtimereportcss")
 }
 @section js{
-    @Url.CombresLink("overtimereportjs")
+    @Url.CombresLink("yearlyovertimereportjs")
 }
 @section Breadcrumb {
     <a class="step">HR Space</a>
@@ -13,19 +14,16 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
+<form class="form-filter">
+    @Html.HiddenFor(model => model.EmpId)
+    @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
         <div class="grid_24">
-            <div class="grid_1 gridlabel">
-                Year:
-            </div>
+            <div class="grid_1 gridlabel">@Labels.Year:</div>
             <div class="grid_2">
-                @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+                @Html.YearPicker("Year", 2010, Model.Year)
             </div>
-            <div class="grid_2 gridlabel">
-                Calendar:
-            </div>
+            <div class="grid_2 gridlabel">Calendar:</div>
             <div class="grid_3">
                 @{
                     var calendarType = new List<SelectListItem>
@@ -34,44 +32,30 @@
                         new SelectListItem() {Text = "Normal", Value = "0"},
                     };
                 }
-                @Html.DropDownList("calendar", calendarType)
+                @Html.DropDownList("Calendar", calendarType)
             </div>
-            <div class="grid_1 gridlabel">@Labels.Team</div>
+            <div class="grid_1 gridlabel">@Labels.Section</div>
             <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
+                <select id="section" multiple="multiple" class="team-select">
+                    @foreach (Team item in Model.Sections)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
                 </select>
             </div>
-            <div class="grid_2 gridlabel">
-                Employee
-            </div>
+            <div class="grid_2 gridlabel">@Labels.Employee</div>
             <div class="grid_4">
                 @Html.Editor("Employee")
-                @Html.Hidden("EmpId")
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="clear">
-            </div>
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="clear"></div>
             <div class="grid_5 prefix_1">
-                <input type="button" value="@Labels.Submit" id="submit" />
-                <input type="button" id="excel" value="Excel" />
+                <input type="button" value="@Labels.Submit" id="btnSubmit" />
+                <input type="button" id="btnExcel" value="Excel" />
             </div>
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="clear">
-    </div>
-    <div class="space">
-    </div>
-    <div class="formrow" id="yearlyReportDetails">
-    </div>
-}
+</form>
+<div id="yearlyReportDetails">
+</div>

@@ -18,7 +18,7 @@ table.pretty thead th {
     font-family: Abel, Arial,Helvetica, "myriad Pro", Tahoma;
     font-size: 1.8em;
     margin-bottom: 10px;
-    text-shadow: 0px 0px 1px #ddd;
+    text-shadow: 0 0 1px #ddd;
     color: #000;
     font-weight: bold;
 }
@@ -32,7 +32,7 @@ span.hyperlink {
     color: #0789D1;
 }
 
-select#calendar {
+select#Calendar {
     min-width: 100px;
 }
 

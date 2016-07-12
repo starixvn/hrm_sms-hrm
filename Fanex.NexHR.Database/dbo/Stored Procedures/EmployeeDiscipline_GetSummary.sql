@@ -128,6 +128,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS empSum WITH (NOLOCK) ON emp.EmpId = empSum.EmpId
 		LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE d.DisciplineType NOT IN (- 1, - 2) -- other violation
+		AND ISNULL(d.IsDeleted, 0) = 0
 		AND CAST(WorkDate AS DATE) BETWEEN CAST(@FromDate AS DATE)
 			AND CAST(@ToDate AS DATE)
 		AND (
@@ -169,6 +170,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS empSum WITH (NOLOCK) ON emp.EmpId = empSum.EmpId
 		LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE dis.DisciplineType IN (- 1, - 2) -- other violation
+		AND ISNULL(dis.IsDeleted, 0) = 0
 		AND CAST(WorkDate AS DATE) BETWEEN CAST(@FromDate AS DATE)
 			AND CAST(@ToDate AS DATE)
 		AND (
@@ -260,10 +262,11 @@ BEGIN
 	DECLARE @Is_HR_SA BIT
 
 	CREATE TABLE #Roles (RoleId INT)
+
 	INSERT INTO #Roles
-                SELECT RoleId
-                FROM dbo.[EmployeeRole] WITH (NOLOCK)
-                WHERE EmployeeId = @ApproverId;
+	SELECT RoleId
+	FROM dbo.[EmployeeRole] WITH (NOLOCK)
+	WHERE EmployeeId = @ApproverId;
 
 	SET @Is_HR_SA = CASE 
 			WHEN EXISTS (
