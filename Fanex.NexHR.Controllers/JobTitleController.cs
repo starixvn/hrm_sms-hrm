@@ -37,6 +37,7 @@
             return View(jobCategories);
         }
 
+        [ValidateInput(false)]
         [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult GetJobTitles(string jobTitle)
         {
@@ -59,6 +60,7 @@
             return Json(result);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Insert(string name, int categoryId)
@@ -73,6 +75,7 @@
             return Json(result);
         }
 
+        [ValidateInput(false)]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Update(int id, string name, int categoryId)

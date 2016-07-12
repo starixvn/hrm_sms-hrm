@@ -1,4 +1,4 @@
-﻿/*global _global, reloadButtonText, _messages, floatThead, verifyDangerousText*/
+﻿/*global _global, reloadButtonText, _messages, floatThead */
 "use strict";
 
 var JobTitle = (function ($) {
@@ -23,21 +23,14 @@ var JobTitle = (function ($) {
     };
 
     var getJobTitle = function (value) {
-        var valid = verifyDangerousText(value);
+        $.post(urlRoot + "jobTitle/GetJobTitles", { jobTitle: value }, function (data) {
+            jobTitleTableBody.html(data);
+            floatThead(".js-job-title-table");
+        }).error(function () {
+            alert(messages.errorTryAgain);
+        });
 
-        if (valid) {
-            $.get(
-            urlRoot + "jobTitle/GetJobTitles",
-            { jobTitle: value },
-            function (data) {
-                jobTitleTableBody.html(data);
-                floatThead(".js-job-title-table");
-            }).error(function () {
-                alert(messages.errorTryAgain);
-            });
-
-            reloadButtonText('#query');
-        }
+        reloadButtonText('#query');
     };
 
     var initEvent = function () {
