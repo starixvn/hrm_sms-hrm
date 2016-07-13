@@ -56,8 +56,6 @@
             }
         }
 
-        public bool IsDebug { get; set; }
-
         public override string GetSettingKey()
         {
             return "Overtime_SET_OTRequest";

@@ -114,7 +114,7 @@ $(document).ready(function () {
                         $('form').removeClass("dirty");
                         alert("Data Saved!");
                     } else {
-                        $("#errordialog").html(response.errors).dialog({
+                        $("#errordialog").html(response.Message).dialog({
                             modal: true,
                             buttons: {
                                 "OK": function () {

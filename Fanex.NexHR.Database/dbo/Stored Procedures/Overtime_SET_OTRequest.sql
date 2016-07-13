@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Overtime_SET_OTRequest] @EmpId INT
+﻿CREATE PROCEDURE [dbo].[Overtime_SET_OTRequest] @EmpId INT
 	,@RequestType SMALLINT = 8
 	,@Remark VARCHAR(8000) = ''
 	,@ProcessedBy INT
@@ -9,7 +8,6 @@ CREATE PROCEDURE [dbo].[Overtime_SET_OTRequest] @EmpId INT
 	,@ListDetail VARCHAR(8000)
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
-	,@IsDebug BIT = 0
 AS
 /*
 Created: Tom.Vo@2013-11-04
@@ -59,12 +57,10 @@ BEGIN
 	END
 
 	IF (
-			(
-				@ApproverId IS NULL
-				OR @VerifierId IS NULL
-				)
-			AND @IsTopManager = 0
+			@ApproverId IS NULL
+			OR @VerifierId IS NULL
 			)
+		AND @IsTopManager = 0
 	BEGIN
 		SET @ErrCode = 102
 		SET @ErrMsg = 'Invalid parameter'
@@ -129,7 +125,7 @@ BEGIN
 	END CATCH;
 
 	IF NOT EXISTS (
-			SELECT TOP 1 1
+			SELECT 1
 			FROM #Calendar
 			)
 	BEGIN
@@ -143,8 +139,8 @@ BEGIN
 	BEGIN
 		IF (
 				NOT EXISTS (
-					SELECT TOP 1 1
-					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
+					SELECT 1
+					FROM [dbo].[EmployeeSupervisor] AS sp WITH (NOLOCK)
 					WHERE sp.OwnerId = @VerifierId
 						AND sp.EmpId = @EmpId
 						AND sp.ActionType = 2
@@ -171,8 +167,8 @@ BEGIN
 
 		IF (
 				NOT EXISTS (
-					SELECT TOP 1 1
-					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
+					SELECT 1
+					FROM [dbo].[EmployeeSupervisor] AS sp WITH (NOLOCK)
 					WHERE sp.OwnerId = @ApproverId
 						AND sp.EmpId = @EmpId
 						AND sp.ActionType = 3
@@ -201,17 +197,17 @@ BEGIN
 	UPDATE cl
 	SET cl.TotalShiftHours = ISNULL(s.TotalHours, 0)
 		,cl.TotalWorkHours = ISNULL(at.TotalWorkHours, 0)
-		,cl.IsOffDay = CASE 
+		,cl.IsOffDay = (CASE 
 			WHEN ec.IsHoliday = 1 THEN 1
 			WHEN ec.IsOffDay = 1
 				AND ec.IsKeepInView = 0 THEN 1
-			ELSE 0
-			END
-	FROM #Calendar cl
-		INNER JOIN dbo.Shift s WITH (NOLOCK) ON cl.ShiftID = s.ShiftID
-		INNER JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = cl.OnDate
+			ELSE 0 END
+			)
+	FROM #Calendar AS cl
+		INNER JOIN dbo.Shift AS s WITH (NOLOCK) ON cl.ShiftID = s.ShiftID
+		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = cl.OnDate
 		AND ec.EmpId = @EmpId
-		INNER JOIN dbo.EmployeeAttendance at WITH (NOLOCK) ON at.AttendanceDate = cl.OnDate
+		INNER JOIN dbo.EmployeeAttendance AS at WITH (NOLOCK) ON at.AttendanceDate = cl.OnDate
 		AND ec.EmpId = @EmpId
 
 	SELECT TOP 1 @ErrMsg = CONVERT(NVARCHAR(10), ONDATE, 111)
@@ -234,11 +230,11 @@ BEGIN
 	SELECT TOP 1 @Month = MAX(ot.OnDate)
 	FROM #Calendar ot
 
-	SELECT @Month = CASE 
+	SELECT @Month = (CASE 
 			WHEN DAY(@Month) BETWEEN 10
 					AND 31 THEN DATEADD(MONTH, 1, @Month)
-			ELSE @Month
-			END
+			ELSE @Month END
+			)
 
 	SELECT @Month = CONVERT(VARCHAR(10), YEAR(@Month)) + '/' + CONVERT(VARCHAR(10), MONTH(@Month)) + '/01 00:00:00'
 
@@ -283,21 +279,18 @@ BEGIN
 			,@VerifierId
 			,@ApproverId
 			,@HRId
-			,CASE 
+			,(CASE 
 				WHEN @IsTopManager = 1
 					AND @ApproverId IS NULL THEN 2
-				ELSE 1
-				END
-			,-- pending [VerifiedStatus] as default
-			CASE 
+				ELSE 1 END
+				) AS [VerifiedStatus]
+			,(CASE 
 				WHEN @IsTopManager = 1
 					AND @VerifierId IS NULL THEN 2
-				ELSE 1
-				END
-			,-- pending [ApprovedStatus] as default
-			1
-			,-- pending [HRStatus] as default
-			@ProcessedBy
+				ELSE 1 END
+				) AS [ApprovedStatus]
+			,1 AS [HRStatus]
+			,@ProcessedBy
 			,@ProcessedDate
 		FROM #Calendar rd
 
@@ -306,42 +299,40 @@ BEGIN
 	ELSE
 	BEGIN
 		UPDATE OT
-		SET OT.[CurrentStatus] = CASE 
+		SET OT.[CurrentStatus] = (CASE 
 				WHEN @IsTopManager = 1
 					AND @VerifierId IS NOT NULL THEN 1
 				WHEN @IsTopManager = 1
 					AND @ApproverId IS NOT NULL THEN 2
 				WHEN @IsTopManager = 1
 					AND @ApproverId IS NULL THEN 4
-				ELSE 1
-				END
+				ELSE 1 END
+				)
 			,OT.VerifierId = @VerifierId
-			,OT.[VerifiedStatus] = CASE 
+			,OT.[VerifiedStatus] = (CASE 
 				WHEN @IsTopManager = 1
 					AND @VerifierId IS NULL THEN 2
-				ELSE 1
-				END
-			,-- pending [VerifiedStatus] as default
-			OT.ApproverId = @ApproverId
-			,OT.[ApprovedStatus] = CASE 
+				ELSE 1 END
+				)
+			,OT.ApproverId = @ApproverId
+			,OT.[ApprovedStatus] = (CASE 
 				WHEN @IsTopManager = 1
 					AND @ApproverId IS NULL THEN 2
-				ELSE 1
-				END
-			,-- pending [ApprovedStatus] as default
-			OT.HRId = @HRId
+				ELSE 1 END
+				)
+			,OT.HRId = @HRId
 			,OT.ModifiedBy = @ProcessedBy
 			,OT.ModifiedDate = @ProcessedDate
 			,OT.[NormalHours] = rd.[NormalHours]
 			,OT.[OffHours] = rd.[OffHours]
 			,OT.[PublicHours] = rd.[PublicHours]
-		FROM [OTMonthlyRequest] OT WITH (ROWLOCK, UPDLOCK)
+		FROM [OTMonthlyRequest] AS OT WITH (ROWLOCK, UPDLOCK)
 			,(
 				SELECT SUM(ISNULL(rd.[NormalHours], 0)) [NormalHours]
 					,SUM(ISNULL(rd.[OffHours], 0)) [OffHours]
 					,SUM(ISNULL(rd.[PublicHours], 0)) [PublicHours]
-				FROM #Calendar rd
-				) rd
+				FROM #Calendar AS rd
+				) AS rd
 		WHERE RequestId = @RequestId
 
 		DELETE dbo.[OTDailyRequest] WITH (ROWLOCK, UPDLOCK)
@@ -366,22 +357,22 @@ BEGIN
 		,[CreatedDate]
 		,[IsUpdated]
 		)
-	SELECT OnDate [OvertimeDate]
-		,@EmpId [EmpId]
-		,@RequestId [RequestId]
-		,ShiftID [Schedule]
-		,CONVERT(NVARCHAR(100), OnDate, 111) + ' ' + [TimeIn] + ':00' [TimeIn]
-		,CONVERT(NVARCHAR(100), OnDate, 111) + ' ' + [TimeOut] + ':00' [TimeOut]
+	SELECT OnDate AS [OvertimeDate]
+		,@EmpId AS [EmpId]
+		,@RequestId AS [RequestId]
+		,ShiftID AS [Schedule]
+		,CONVERT(NVARCHAR(100), OnDate, 111) + ' ' + [TimeIn] + ':00' AS [TimeIn]
+		,CONVERT(NVARCHAR(100), OnDate, 111) + ' ' + [TimeOut] + ':00' AS [TimeOut]
 		,[TotalHours]
 		,[NormalHours]
 		,[OffHours]
 		,[PublicHours]
 		,[Remark]
-		,1 [Status]
-		,@ProcessedBy [CreatedBy]
-		,@ProcessedDate [CreatedDate]
-		,0 [IsUpdated]
-	FROM #Calendar rd
+		,1 AS [Status]
+		,@ProcessedBy AS [CreatedBy]
+		,@ProcessedDate AS [CreatedDate]
+		,0 AS [IsUpdated]
+	FROM #Calendar AS rd
 	WHERE OnDate IS NOT NULL
 		AND [TimeIn] IS NOT NULL
 		AND [TimeOut] IS NOT NULL
