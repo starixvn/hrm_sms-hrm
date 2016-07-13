@@ -75,8 +75,8 @@
             {
                 Query = null,
                 GroupIds = null,
-                EnableUser = false,
-                IsDeleteUser = false,
+                EnableUser = true,
+                IsDeleteUser = null,
                 TitleId = null,
                 IsLocalUser = null
             };

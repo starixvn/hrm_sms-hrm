@@ -11,7 +11,8 @@
     @Url.CombresLink("messagejs")
 }
 @section Breadcrumb {
-    <a class="step">@Labels.Message</a> <span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.HRSpace</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <h2>@ViewBag.Title</h2>
@@ -116,10 +117,10 @@
                     </tr>
                 }
             </tbody>
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(7)
-        }
+                    }
+                    else
+                    {
+                        @RazorHelper.DisplayNoInformation(7)
+                    }
     </table>
-}
+                    }

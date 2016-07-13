@@ -19,14 +19,14 @@
         @Html.HiddenFor(model => model.IsLocal)
         @Html.HiddenFor(model => model.CurrentPage)
         @Html.HiddenFor(model => model.ItemsPerPage)
-        <div class="grid_24">
+        <div class="grid_26">
             <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.Keyword, Labels.Keyword)
             </div>
             <div class="grid_7">
                 @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark })
             </div>
-            <div class="grid_1 gridlabel">
+            <div class="grid_2 gridlabel">
                 @Labels.Team
             </div>
             <div class="grid_6">
@@ -51,7 +51,9 @@
                 }
                 @Html.DropDownList("category", category, new { @class = "category" })
             </div>
-            <input id="query" type="button" value="@Labels.Submit" />
+            <div class="grid_2">
+                <input id="query" type="button" value="@Labels.Submit" />
+            </div>
         </div>
     </form>
 </div>

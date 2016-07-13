@@ -20,8 +20,12 @@
 <div class="container_24 bunhat">
     @using (Html.BeginForm())
     {
-        <span>Role</span>
-        @Html.DropDownList("Role", new SelectList(roles, "RoleId", "RoleName"))
+        <div class="grid_1 gridlabel">
+            @Labels.Role
+        </div>
+        <div class="grid_2">
+            @Html.DropDownList("Role", new SelectList(roles, "RoleId", "RoleName"))
+        </div>
     }
 </div>
 <div class="clear">

@@ -22,26 +22,24 @@
         @Html.HiddenFor(model => model.IsLocal)
         @Html.HiddenFor(model => model.CurrentPage)
         @Html.HiddenFor(model => model.ItemsPerPage)
-        <div class="grid_24">
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.Keyword, Labels.Keyword)
-            </div>
-            <div class="grid_7">
-                @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark })
-            </div>
-            <div class="grid_1 gridlabel">@Labels.Team</div>
-            <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in Model.Groups)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="grid_1 gridlabel">@Labels.Title</div>
-            <div class="grid_5">
-                @Html.DropDownList("title", Model.JobTitles, Labels.AllTitles, new { @class = "title-select" })
-            </div>
+        <div class="grid_2 gridlabel">
+            @Html.LabelFor(model => model.Keyword, Labels.Keyword)
+        </div>
+        <div class="grid_7">
+            @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark })
+        </div>
+        <div class="grid_2 gridlabel">@Labels.Team</div>
+        <div class="grid_6">
+            <select id="group" multiple="multiple" class="team-select">
+                @foreach (Team item in Model.Groups)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="grid_1 gridlabel">@Labels.Title</div>
+        <div class="grid_7">
+            @Html.DropDownList("title", Model.JobTitles, Labels.AllTitles, new { @class = "title-select" })
         </div>
         <div class="clear">
         </div>
@@ -51,44 +49,42 @@
         </div>
         <div class="space">
         </div>
-        <div class="grid_24">
-            <div class="grid_2 gridlabel">
-                @Labels.Category
-            </div>
-            <div class="grid_3">
-                @{
-                    var category = new List<SelectListItem>
+        <div class="grid_2 gridlabel">
+            @Labels.Category
+        </div>
+        <div class="grid_3">
+            @{
+                var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"},
                         new SelectListItem() {Text = "Local", Value = "1"},
                     };
-                }
-                @Html.DropDownList("category", category, new { @class = "category" })
-            </div>
-            <div class="grid_8 gridlabel usertype" id="usertype">
-                <input type="radio" id="enabled" checked="checked" />
-                <label for="enabled">
-                    @Labels.ActiveUsers
-                </label>
-                <input type="radio" id="disabled" />
-                <label for="disabled">
-                    @Labels.DisabledUsers
-                </label>
-                <input type="radio" id="deleted" />
-                <label for="deleted">
-                    @Labels.DeletedUsers
-                </label>
-            </div>
-            <div class="grid_2 gridlabel">
-                <input id="query" type="button" value="@Labels.Submit" />
-            </div>
-            <div class="grid_3 gridlabel">
-                <input type="button" id="basicExcel" value="Excel - Basic Info" style="width: 115px;" />
-            </div>
-            <div class="grid_1 gridlabel">
-                <input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px;" />
-            </div>
+            }
+            @Html.DropDownList("category", category, new { @class = "category" })
+        </div>
+        <div class="grid_8 usertype" id="usertype">
+            <input type="radio" id="enabled" checked="checked" />
+            <label for="enabled">
+                @Labels.ActiveUsers
+            </label>
+            <input type="radio" id="disabled" />
+            <label for="disabled">
+                @Labels.DisabledUsers
+            </label>
+            <input type="radio" id="deleted" />
+            <label for="deleted">
+                @Labels.DeletedUsers
+            </label>
+        </div>
+        <div class="grid_2">
+            <input id="query" type="button" value="@Labels.Submit" />
+        </div>
+        <div class="grid_3">
+            <input type="button" id="basicExcel" value="Excel - Basic Info" style="width: 115px" />
+        </div>
+        <div class="grid_3">
+            <input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px" />
         </div>
     </form>
 </div>
