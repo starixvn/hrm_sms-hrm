@@ -1,22 +1,23 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.Calendar;
+    using Fanex.NexHR.ViewModels;
     using Repositories;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class WorkingCalendarService : BaseService, IWorkingCalendarService
     {
         private readonly IWorkingCalendarRepository workingCalendarRepository;
 
-        public WorkingCalendarService() : this(null)
+        public WorkingCalendarService()
+            : this(null)
         {
         }
 

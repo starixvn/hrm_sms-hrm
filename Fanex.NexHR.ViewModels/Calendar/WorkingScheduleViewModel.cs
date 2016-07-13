@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.Calendar
+﻿namespace Fanex.NexHR.ViewModels
 {
     public class WorkingScheduleViewModel
     {

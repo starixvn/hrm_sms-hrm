@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Report;
@@ -18,14 +17,11 @@
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.AnnualLeave;
-    using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using Fanex.NexHR.Web.Providers;

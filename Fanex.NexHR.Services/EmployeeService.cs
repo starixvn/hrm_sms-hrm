@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.Common.Helper;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
@@ -13,16 +15,12 @@
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class EmployeeService : BaseService, IEmployeeService
     {

@@ -8,8 +8,6 @@
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
-    using Fanex.NexHR.Models.Supervisor;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;

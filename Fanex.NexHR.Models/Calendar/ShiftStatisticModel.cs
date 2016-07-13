@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models.Calendar
+﻿namespace Fanex.NexHR.Models
 {
     public class ShiftStatisticModel
     {

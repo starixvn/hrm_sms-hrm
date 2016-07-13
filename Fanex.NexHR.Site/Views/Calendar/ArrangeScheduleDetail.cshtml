@@ -1,6 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Supervisor
-@using Fanex.NexHR.Models.Calendar
-@model ScheduleViewModel
+﻿@model ScheduleViewModel
 @{
     Layout = null;
     var isSARole = (bool)ViewBag.IsSARole;
@@ -167,8 +165,14 @@
         disabledAttribute = "disabled";
     }
 
+    if (!hasPermission)
+    {
+        disabledAttribute = "disabled";
+    }
+
     <td class="shiftdate">
-        <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)" data-date="@workingCalendarModel.WorkDate.ToDateMonthYearFormatedDate()" @dataShiftId @disabledAttribute />
+        <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)" 
+               data-date="@workingCalendarModel.WorkDate.ToDateMonthYearFormatedDate()" @dataShiftId @disabledAttribute />
     </td>
     if (hasPermission)
     {
@@ -226,8 +230,16 @@
                 <th></th>
             }
             <th><a href="javascript:;" class="lnkDepartment">Dept.</a></th>
-            <th><a href="javascript:;" class="lnkSort">@Labels.Nick</a></th>
-            <th><a href="javascript:;" class="lnkmultiple">Shift Multiple</a></th>
+            @if (hasPermission)
+            {
+                <th><a href="javascript:;" class="lnkSort">@Labels.Nick</a></th>
+                <th><a href="javascript:;" class="lnkmultiple">@Labels.ShiftMultiple</a></th>
+            }
+            else
+            {
+                <th>@Labels.Nick</th>
+                <th>@Labels.ShiftMultiple</th>
+            }
             <th class="nopaddingright">
                 @Model.FromDate.ToDateOfWeek()
             </th>
@@ -286,7 +298,6 @@
                     </th>
                 }
             }
-
             <th>@Labels.ModifiedBy</th>
         </tr>
     </thead>
@@ -300,9 +311,7 @@
                     @if (hasPermission)
                     {
                         <td>
-                            <a class="lnkremove" href="javascript:;">
-                                <i class="fa fa-times fa-lg icon-delete"></i>
-                            </a>
+                            <a class="lnkremove" href="javascript:;"></a>
                         </td>
                     }
                     <td class="tooltip" title="@scheduleModel.TeamName">@scheduleModel.TeamCode</td>
@@ -311,12 +320,17 @@
                     </td>
                     <td>
                         <input type="text" class="shift multipleShift"
+                               @(!hasPermission ? "disabled" : string.Empty)
                                value="@scheduleModel.MondaySchedule.ShiftMultipleCode"
                                data-numberoffbyweek="@scheduleModel.MondaySchedule.OffDaysbyWeek"
                                data-shiftid="@scheduleModel.MondaySchedule.ShiftMultipleID"
                                data-date="@scheduleModel.MondaySchedule.WorkDate.ToDateMonthYearFormatedDate()" />
-                        <a class="copyrow" href="javascript:;"> >> </a>
+                        @if (hasPermission)
+                        {
+                            <a class="copyrow" href="javascript:;"> >> </a>
+                        }
                     </td>
+
                     @RenderShiftInput(scheduleModel.MondaySchedule, "chkMonday multiple", isSARole, hasPermission)
                     @RenderShiftInput(scheduleModel.TuesdaySchedule, "chkTuesday multiple", isSARole, hasPermission)
                     @RenderShiftInput(scheduleModel.WednesdaySchedule, "chkWednesday multiple", isSARole, hasPermission)

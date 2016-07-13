@@ -10,7 +10,6 @@
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;

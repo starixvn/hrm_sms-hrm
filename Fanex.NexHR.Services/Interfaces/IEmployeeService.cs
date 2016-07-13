@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
+    using System;
+    using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
@@ -10,11 +12,8 @@
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.AnnualLeave;
-    using System;
-    using System.Collections.Generic;
 
     public interface IEmployeeService
     {

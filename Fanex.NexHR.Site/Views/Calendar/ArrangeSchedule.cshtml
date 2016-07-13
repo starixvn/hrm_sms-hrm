@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Supervisor
-@model ScheduleArrangeFilterViewModel
+﻿@model ScheduleArrangeFilterViewModel
 @{
     ViewBag.Title = @Labels.ScheduleArrange;
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -41,7 +40,6 @@
     <div class="space"></div>
     <div class="clear"></div>
     <div class="space"></div>
-
     <div class="row">
         <div class="grid_2">
             @Labels.JobTitle
@@ -54,7 +52,6 @@
                 }
             </select>
         </div>
-
         <div class="grid_2">
             @Html.Label("Week")
         </div>
@@ -62,15 +59,13 @@
             @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(), new { @class = "startDateOfWeek", @readonly = "readonly" })
             @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(), new { @class = "endDateOfWeek", @readonly = "readonly" })
             <img class="weekPickerImg" src="~/images/calendar.png" />
-            <div class="week-picker">
-            </div>
+            <div class="week-picker"></div>
         </div>
     </div>
     <div class="clear"></div>
     <div class="space"></div>
     <div class="clear"></div>
     <div class="space"></div>
-
     <div class="row">
         <div class="grid_2 prefix_2">
             <input type="button" value="@Labels.Submit" id="btnSubmit" />

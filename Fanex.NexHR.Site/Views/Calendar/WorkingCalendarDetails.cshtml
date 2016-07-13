@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.ViewModels.Calendar.WorkingCalendarDetailViewModel
+﻿@model WorkingCalendarDetailViewModel
 @Html.Hidden("FromPreviousDate", (Model.FromDate).AddDays(-7))
 @Html.Hidden("ToPreviousDate", (Model.ToDate).AddDays(-7))
 @Html.Hidden("FromNextDate", (Model.FromDate).AddDays(7))

@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -7,17 +11,12 @@
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class ChangeShiftController : BaseController
     {
@@ -34,8 +33,8 @@
         }
 
         public ChangeShiftController(
-            IChangeShiftRequestService changeShiftRequestService, 
-            IRequestService requestService, 
+            IChangeShiftRequestService changeShiftRequestService,
+            IRequestService requestService,
             ICommandService commandService,
             IEmployeeService employeeService,
             IShiftService shiftService,
@@ -179,7 +178,7 @@
                 RequestId = id
             };
             IList<ChangeShiftDetailModel> changeShiftDetail = changeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-            
+
             if (request != null && changeShiftDetail != null)
             {
                 var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = request.Requester.Id };

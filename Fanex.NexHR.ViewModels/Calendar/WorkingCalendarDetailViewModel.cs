@@ -1,7 +1,5 @@
-﻿namespace Fanex.NexHR.ViewModels.Calendar
+﻿namespace Fanex.NexHR.ViewModels
 {
-    using Models;
-    using Models.Calendar;
     using System;
     using System.Collections.Generic;
 

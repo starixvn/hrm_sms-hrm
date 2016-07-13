@@ -1,6 +1,4 @@
-﻿@using Fanex.NexHR.Models.Calendar
-@using Fanex.NexHR.ViewModels.Calendar
-@model ShiftStatisticContentViewModel
+﻿@model ShiftStatisticContentViewModel
 @{
     Layout = null;
 }
@@ -14,8 +12,8 @@
             <th colspan="18">
                 <div style="float:left;">
                     <a id="lnkPrevious" href="javascript:;"> << Previous </a> ||
-                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span> 
-                    || <a id="lnkNext" href="javascript:;"> Next >> </a>  
+                    <span class="chooseweek"> Week: @Model.FromDate.ToDateMonthYearFormatedDate() - @Model.ToDate.ToDateMonthYearFormatedDate() </span>
+                    || <a id="lnkNext" href="javascript:;"> Next >> </a>
                 </div>
             </th>
         </tr>
@@ -46,17 +44,17 @@
             </th>
         </tr>
     </thead>
-        @if (Model.ShiftStatisticModels.Any())
-        {
-            var totalMonday = 0;
-            var totalTuesday = 0;
-            var totalWednesday = 0;
-            var totalThursday = 0;
-            var totalFriday = 0;
-            var totalSaturday = 0;
-            var totalSunday = 0;
-            var url = string.Empty;
-            <tbody>
+    @if (Model.ShiftStatisticModels.Any())
+    {
+        var totalMonday = 0;
+        var totalTuesday = 0;
+        var totalWednesday = 0;
+        var totalThursday = 0;
+        var totalFriday = 0;
+        var totalSaturday = 0;
+        var totalSunday = 0;
+        var url = string.Empty;
+        <tbody>
             @foreach (ShiftStatisticModel shiftStatisticModel in Model.ShiftStatisticModels)
             {
                 totalMonday += shiftStatisticModel.WorkMonday;
@@ -66,7 +64,7 @@
                 totalFriday += shiftStatisticModel.WorkFriday;
                 totalSaturday += shiftStatisticModel.WorkSaturday;
                 totalSunday += shiftStatisticModel.WorkSunday;
-                url = "employeeshift?teamIds=" + @Model.GroupIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany 
+                url = "employeeshift?teamIds=" + @Model.GroupIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany
                     + "&shiftId=" + @shiftStatisticModel.ShiftId + "&workdate=";
                 <tr>
                     <td>@shiftStatisticModel.ShiftCode</td>
@@ -93,23 +91,23 @@
                     </td>
                 </tr>
             }
-            </tbody>
-            <tfoot>
-                <tr class="summary">
-                    <td class="align-right">@Labels.Total:</td>
-                    <td>@totalMonday</td>
-                    <td>@totalTuesday</td>
-                    <td>@totalWednesday</td>
-                    <td>@totalThursday</td>
-                    <td>@totalFriday</td>
-                    <td>@totalSaturday</td>
-                    <td>@totalSunday</td>
-                </tr>
-            </tfoot>
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: 8); 
-        }
+        </tbody>
+        <tfoot>
+            <tr class="summary">
+                <td class="align-right">@Labels.Total:</td>
+                <td>@totalMonday</td>
+                <td>@totalTuesday</td>
+                <td>@totalWednesday</td>
+                <td>@totalThursday</td>
+                <td>@totalFriday</td>
+                <td>@totalSaturday</td>
+                <td>@totalSunday</td>
+            </tr>
+        </tfoot>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 8);
+    }
 </table>
 @Url.CombresLink("shiftstatisticcontentjs")

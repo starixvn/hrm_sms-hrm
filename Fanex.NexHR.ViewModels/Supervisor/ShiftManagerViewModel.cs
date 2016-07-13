@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.Supervisor
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;

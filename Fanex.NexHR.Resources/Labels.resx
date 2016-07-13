@@ -1488,4 +1488,7 @@
   <data name="Yahoo" xml:space="preserve">
     <value>Yahoo</value>
   </data>
+  <data name="ShiftMultiple" xml:space="preserve">
+    <value>Shift Multiple</value>
+  </data>
 </root>

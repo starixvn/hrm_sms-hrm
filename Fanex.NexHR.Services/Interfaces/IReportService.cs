@@ -8,7 +8,6 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.Report;
 

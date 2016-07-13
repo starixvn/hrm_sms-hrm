@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models.Calendar
+﻿namespace Fanex.NexHR.Models
 {
     using System;
     using System.Collections.Generic;

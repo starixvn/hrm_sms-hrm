@@ -1,21 +1,9 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="ScheduleArrangeFilterViewModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.11.19">Created</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Supervisor
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
 
-    /// <summary>
-    /// ScheduleArrange ViewModel.
-    /// </summary>
     public class ScheduleArrangeFilterViewModel
     {
         public int EmployeeId { get; set; }

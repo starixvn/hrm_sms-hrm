@@ -3,11 +3,9 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Calendar;
     using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
 

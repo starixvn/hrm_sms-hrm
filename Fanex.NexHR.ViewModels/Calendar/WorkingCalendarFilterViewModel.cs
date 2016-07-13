@@ -1,9 +1,9 @@
-﻿namespace Fanex.NexHR.ViewModels.Calendar
+﻿namespace Fanex.NexHR.ViewModels
 {
-    using Models;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Models;
 
     public class WorkingCalendarFilterViewModel
     {

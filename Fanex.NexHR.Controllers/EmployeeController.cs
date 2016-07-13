@@ -1,5 +1,13 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
@@ -17,19 +25,10 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
-    using Fanex.NexHR.ViewModels.Supervisor;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
     using CommandResult = Models.CommandResult;
 
     public class EmployeeController : BaseController

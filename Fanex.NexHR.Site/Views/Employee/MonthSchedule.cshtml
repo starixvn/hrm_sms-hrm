@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Calendar
-@model IList<WorkingScheduleViewModel>
+﻿@model IList<WorkingScheduleViewModel>
 @{
     ViewBag.Title = "Monthly Schedule";
 }
@@ -10,25 +9,28 @@
     @Url.CombresLink("monthschedulejs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a> 
+    <a class="step">HR</a>
     <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
 
 <h2>
-@Html.Hidden("currentViewUser", (int)ViewBag.Id)
-    The Monthly Working Schedule of @ViewBag.Employee.NickName</h2>
+    @Html.Hidden("currentViewUser", (int)ViewBag.Id)
+    The Monthly Working Schedule of @ViewBag.Employee.NickName
+</h2>
 @{
     if (((Employee)ViewBag.Employee).IsDefaultSchedule)
     {
-    <div class="section">
-        <input id="scheduledefault" type="radio" name="schedule" />
-        <label for="scheduledefault">
-            Default working schedule</label>
-        <input id="schedulemonth" type="radio" name="schedule" />
-        <label for="schedulemonth">
-            View by month</label>
-    </div>
+        <div class="section">
+            <input id="scheduledefault" type="radio" name="schedule" />
+            <label for="scheduledefault">
+                Default working schedule
+            </label>
+            <input id="schedulemonth" type="radio" name="schedule" />
+            <label for="schedulemonth">
+                View by month
+            </label>
+        </div>
     }
 }
 <div class="clear">

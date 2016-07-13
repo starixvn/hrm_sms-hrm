@@ -1,8 +1,8 @@
-﻿namespace Fanex.NexHR.ViewModels.Calendar
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Models.Calendar;
+    using Fanex.NexHR.Models;
 
     public class ShiftStatisticContentViewModel
     {

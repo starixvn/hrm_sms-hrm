@@ -1,6 +1,4 @@
-﻿@using Fanex.NexHR.Models.Supervisor
-@using Fanex.NexHR.ViewModels.Supervisor
-@model ShiftManagerViewModel
+﻿@model ShiftManagerViewModel
 @{
     Layout = null;
 }
@@ -33,22 +31,24 @@
                 foreach (SupervisorModel item in Model.ShiftManagerList)
                 {
                     index++;
-                <tr>
-                    <td>@index</td>
-                    <td>
-                        <input type="text" class="ordercode" value="@item.OrderCode"/>
-                    </td>
-                    <td>
-                        <a href="javascript:;" class="up">Up |</a> <a href="javascript:;" class="down">Down
-                            |</a> <a href="javascript:;" class="moveTop">Top</a>
-                    </td>
-                    <td class="align-left" data-id="@item.OwnerId">
-                        @item.NickName (@item.FullName)
-                    </td>
-                    <td class="align-left">
-                        @item.Team
-                    </td>
-                </tr>
+                    <tr>
+                        <td>@index</td>
+                        <td>
+                            <input type="text" class="ordercode" value="@item.OrderCode" />
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="up">Up |</a> <a href="javascript:;" class="down">
+                                Down
+                                |
+                            </a> <a href="javascript:;" class="moveTop">Top</a>
+                        </td>
+                        <td class="align-left" data-id="@item.OwnerId">
+                            @item.NickName (@item.FullName)
+                        </td>
+                        <td class="align-left">
+                            @item.Team
+                        </td>
+                    </tr>
                 }
             }
         </tbody>

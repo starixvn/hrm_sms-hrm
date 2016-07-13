@@ -13,12 +13,10 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Calendar;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.Calendar;
-    using Fanex.NexHR.ViewModels.Supervisor;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
 
@@ -57,16 +55,16 @@
         public ActionResult ArrangeSchedule()
         {
             var currentDate = DateTime.Now;
-            var fromDate = GetStartOfWeek(currentDate);
-            var toDate = GetEndOfWeek(currentDate);
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            DateTime fromDate = GetStartOfWeek(currentDate),
+                toDate = GetEndOfWeek(currentDate);
+
+            IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
             IList<LookupData> jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria);
-            var scheduleArrangeViewModel = new ScheduleArrangeFilterViewModel
+            var model = new ScheduleArrangeFilterViewModel
             {
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -76,7 +74,7 @@
 
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
-            return View(scheduleArrangeViewModel);
+            return View(model);
         }
 
         [HttpPost]
@@ -118,7 +116,7 @@
                 JobTitleId = jobTitles,
                 EmpID = employeeId
             };
-            var workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
+            IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
             var scheduleArranges = new List<ScheduleArrangeViewModel>();
 
             if (workingCalendars.Any())

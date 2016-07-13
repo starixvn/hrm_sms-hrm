@@ -3427,6 +3427,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Multiple.
+        /// </summary>
+        public static string ShiftMultiple {
+            get {
+                return ResourceManager.GetString("ShiftMultiple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift statistic report.
         /// </summary>
         public static string ShiftStatisticReport {
