@@ -1,14 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByHR] @SupervisorID INT = NULL
-	,@empid INT = NULL
-	,@groupids VARCHAR(max) = ''
+	,@EmpId INT = NULL
+	,@GroupIds VARCHAR(max) = ''
 	,@fromdate DATETIME
 	,@todate DATETIME
 	,@status VARCHAR(max) = NULL
 	,@excludedEmpID INT = NULL
-	,@role VARCHAR(max) = ''
-	,@ErrCode INT = 0 OUTPUT
-	,@ErrMsg NVARCHAR(200) = '' OUTPUT
-	,@isDebug BIT = 0
 AS
 /*
 Created: Tom.Vo@2013-11-04
@@ -26,31 +22,39 @@ BEGIN
 	CREATE TABLE #status (Currentstatus TINYINT)
 
 	IF ISNULL(@status, '') = ''
+	BEGIN
 		SET @status = '1,2,3,4,5,6,7'
+	END
 	ELSE IF (@status = '-1')
+	BEGIN
 		SET @status = '1,2'
+	END
+
 	INSERT INTO #status (Currentstatus)
-		SELECT val
-		FROM fnc_strSplit(@status, ',')
+	SELECT DISTINCT val
+	FROM dbo.fnc_strSplit(@status, ',')
 
-	CREATE TABLE #GroupsList (GroupId INT)
+	CREATE TABLE #Group (GroupId INT)
 
-	SET @groupids = ISNULL(@groupids, '')
+	SET @GroupIds = ISNULL(@GroupIds, '')
 
-	IF @groupids <> ''
-		INSERT INTO #GroupsList (GroupId)
-		SELECT val
-		FROM fnc_strSplit(@groupids, ',')
+	IF @GroupIds <> ''
+	BEGIN
+		INSERT INTO #Group (GroupId)
+		SELECT DISTINCT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	END
 	ELSE
 	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT GRoupID
-		FROM [Group] g WITH (NOLOCK)
+		INSERT INTO #Group (GroupId)
+		SELECT g.GroupId
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+		WHERE ISNULL(g.IsDeleted, 0) = 0
 	END
 
 	SELECT r.RequestId
-		,r.empID
-		,r.Month AS RequestDate
+		,r.EmpId
+		,r.[Month] AS RequestDate
 		,r.CreatedDate
 		,r.VerifiedDate
 		,r.currentstatus
@@ -73,7 +77,7 @@ BEGIN
 		,e.NickName AS Requester
 		,e.FullName AS FullNameRequester
 		,g.GroupId AS GroupId
-		,g.NAME AS Team
+		,g.[Name] AS Team
 		,g.Code AS TeamCode
 		,ap_V.EmpId AS VerifierID
 		,ap_V.NickName AS VerifierBy
@@ -87,55 +91,51 @@ BEGIN
 		,r.ModifiedBy ModifiedByID
 		,e_m.NickName AS ModifiedBy
 		,e_m.FullName AS FullNameModified
-	FROM [dbo].[OTMonthlyRequest] r WITH (NOLOCK)
-		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
-		LEFT JOIN [dbo].Employee ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
-		LEFT JOIN [dbo].Employee ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
-		LEFT JOIN Employee e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
-		LEFT JOIN Employee e WITH (NOLOCK) ON e.empID = r.empID
-		LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
+	FROM [dbo].[OTMonthlyRequest] AS r WITH (NOLOCK)
+		LEFT JOIN [dbo].Employee AS ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
+		LEFT JOIN [dbo].Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
+		LEFT JOIN [dbo].Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
+		LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = r.empID
+		AND ISNULL(e.isDeleted, 0) = 0
+		AND ISNULL(e.[Enabled], 1) = 1
+		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID
+		AND ISNULL(g.IsDeleted, 0) = 0
 		LEFT JOIN (
 		SELECT DISTINCT ot.RequestId
-		FROM dbo.OTDailyRequest ot WITH (NOLOCK)
-			LEFT JOIN dbo.Shift s WITH (NOLOCK) ON ot.Schedule = s.ShiftID
-			LEFT JOIN dbo.EmployeeAttendance at WITH (NOLOCK) ON at.AttendanceDate = ot.OvertimeDate
+		FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
+			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ot.Schedule = s.ShiftID
+			LEFT JOIN dbo.EmployeeAttendance AS at WITH (NOLOCK) ON at.AttendanceDate = ot.OvertimeDate
 			AND at.EmpId = ot.EmpId
 		WHERE ot.TotalHours - ISNULL(at.LateIn, 0) / 60 >= s.TotalHours + 1
-		) OTD ON OTD.RequestId = r.RequestId
-	WHERE (
-			e.isDeleted IS NULL
-			OR e.isDeleted = 0
-			)
-		AND r.Month >= @fromdate
-		AND r.Month <= @todate
+		) AS OTD ON OTD.RequestId = r.RequestId
+	WHERE r.[Month] BETWEEN @fromdate
+			AND @todate
 		AND (
-			@empid IS NULL
-			OR r.EmpId = @empid
+			@EmpId IS NULL
+			OR r.EmpId = @EmpId
 			)
 		AND (
 			@excludedEmpID IS NULL
 			OR r.EmpId <> @excludedEmpID
 			)
 		AND r.currentstatus IN (
-			SELECT Currentstatus
+			SELECT DISTINCT Currentstatus
 			FROM #status
 			)
 		AND (
-			ISNULL(@groupids, '') = ''
+			ISNULL(@GroupIds, '') = ''
 			OR e.GroupId IN (
-				SELECT GroupId
-				FROM #GroupsList
+				SELECT DISTINCT GroupId
+				FROM #Group
 				)
 			)
 		--AND (
 		--	r.VerifierId = @SupervisorID
 		--	OR r.ApproverId = @SupervisorID
 		--	)
-
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
-
-	DROP TABLE #GroupsList
+	
+	DROP TABLE #Group
 
 	DROP TABLE #status
 END

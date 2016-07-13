@@ -14,11 +14,7 @@
 
         public DateTime ToDate { get; set; }
 
-        public string Status { get; set; }
-
         public int ExcludedEmpID { get; set; }
-
-        public bool IsDebug { get; set; }
 
         public override string GetSettingKey()
         {

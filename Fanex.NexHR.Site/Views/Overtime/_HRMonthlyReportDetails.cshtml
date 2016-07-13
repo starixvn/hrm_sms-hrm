@@ -1,17 +1,4 @@
 ﻿@model IList<RequestEntity>
-@{
-    ViewBag.Title = Labels.OvertimeReport;
-}
-@section css{
-    @Url.CombresLink("overtimereportcss")
-}
-@section js{
-    @Url.CombresLink("monthlyovertimehrreportjs")
-}
-@section Breadcrumb {
-    <a class="step">HR Space</a> <a class="step" href="@Url.Action("yearlyreport", "overtime")">@Labels.OvertimeReport</a>
-    <a class="step">@ViewBag.Title Summary in @ViewBag.Date</a>
-}
 <table class="pretty" id="hrMonthlyReport">
     <thead>
         <tr>
@@ -29,15 +16,15 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null)
+        @if (Model != null && Model.Any())
         {
-            foreach (var item in Model)
+            foreach (RequestEntity item in Model)
             {
                 <tr>
                     <td>
                         @item.RequestedDate.ToString("dd MMM, yyyy")
                     </td>
-                    <td>
+                    <td class="align-left">
                         @item.Requester.FullName
                     </td>
                     <td>
@@ -81,12 +68,10 @@
         }
     </tbody>
     <tfoot>
-        <tr class="sum">
-            <th class="sumhours">
+        <tr class="summary">
+            <th colspan="3" class="sumhours align-right">
                 @Labels.TotalOvertimeHours:
             </th>
-            <th></th>
-            <th></th>
             <th id="sumnormal"></th>
             <th id="sumoff"></th>
             <th id="sumpublic"></th>

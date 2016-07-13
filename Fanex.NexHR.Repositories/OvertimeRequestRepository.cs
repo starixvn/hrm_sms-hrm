@@ -102,18 +102,16 @@
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
-                    (re, reter, gr, ver, appr, rety, stt) =>
+                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestEntity>(
+                    (re, reter, gr, ver, appr) =>
                     {
                         reter.Team = gr;
                         re.Requester = reter;
                         re.VerifiedBy = ver;
                         re.ApprovedBy = appr;
-                        re.RequestType = rety;
-                        re.Status = stt;
                         return re;
                     },
-                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
+                    "RequesterID,GroupId,VerifierID,ApproverID",
                     criteria.GetSpParams()).ToList();
             }
         }

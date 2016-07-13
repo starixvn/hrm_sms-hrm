@@ -250,7 +250,6 @@
             var criteria = new GetMemberOvertimeCriteria
             {
                 SupervisorID = CurrentUser.Id,
-                Role = "6",
                 FromDate = month.Value,
                 ToDate = month.Value,
                 EmployeeId = employeeId,
@@ -367,6 +366,7 @@
         public ActionResult HRMonthlyReportDetails(DateTime fromDate, DateTime toDate, int? calendar)
         {
             ViewBag.Calendar = calendar;
+            IList<RequestEntity> entityList;
             if (calendar == 0)
             {
                 var criteria = new GetMonthlyOvertimeReportByNormalCalendarCriteria
@@ -374,8 +374,7 @@
                     FromDate = fromDate,
                     ToDate = toDate
                 };
-                var entityList = overtimeService.GetMonthlyOvertimeReportByNormalCalendar(criteria);
-                return PartialView(entityList);
+                entityList = overtimeService.GetMonthlyOvertimeReportByNormalCalendar(criteria);
             }
             else
             {
@@ -385,15 +384,17 @@
                     FromDate = date,
                     ToDate = date
                 };
-                IList<RequestEntity> entityList = overtimeService.GetMonthlyOvertimeReport(criteria);
-                return PartialView(entityList);
+                entityList = overtimeService.GetMonthlyOvertimeReport(criteria);
             }
+
+            return PartialView("_HRMonthlyReportDetails", entityList);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
+
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
@@ -409,7 +410,7 @@
             {
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now,
-                Sections = teamService.GetAll(getAllGroupCriteria),
+                Sections = sections,
                 JobTitles = jobTitles
             };
 

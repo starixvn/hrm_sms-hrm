@@ -410,7 +410,6 @@
     <Content Include="Styles\report.overtimerequest.css" />
     <Content Include="Styles\shift.css" />
     <Content Include="Styles\timerecord.css" />
-    <Content Include="Styles\workingcalendardatatable.css" />
     <Content Include="Styles\keepinview.css" />
     <Content Include="Styles\employeechangeshift.css" />
     <Content Include="Styles\Images\bgLogin.png" />
@@ -1088,7 +1087,7 @@
     <Content Include="Views\Overtime\MemberOvertimeViewByHR.cshtml" />
     <Content Include="Views\Overtime\SharedHrStatus.cshtml" />
     <Content Include="Views\Overtime\MemberOvertimeViewByLeader.cshtml" />
-    <Content Include="Views\Overtime\HRMonthlyReportDetails.cshtml" />
+    <Content Include="Views\Overtime\_HRMonthlyReportDetails.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\_OTExcelReportDetails.cshtml" />

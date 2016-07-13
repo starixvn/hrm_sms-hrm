@@ -1,18 +1,8 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR]
-	--@SupervisorID INT=NULL,
-	@empid int = null,
-	@groupids varchar(max) = '',
-	@fromdate datetime,
-	@todate datetime,
-	@status varchar(max) = null,
-	@excludedEmpID int= null,
-	--@role varchar(max) = '',
-
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg nvarchar(200) = '' OUTPUT,
-	@isDebug BIT=0
+﻿CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR] @EmpId INT = NULL
+	,@GroupIds VARCHAR(max) = ''
+	,@fromdate DATETIME
+	,@todate DATETIME
+	,@excludedEmpID INT = NULL
 AS
 /*
 Created: Tom.Vo@2013-11-04
@@ -23,79 +13,66 @@ Original:
 Revisions:    
 Param's Explanation:
 */
-SET NOCOUNT ON;
+BEGIN
+	SET NOCOUNT ON;
 
-SELECT @fromdate = CONVERT(VARCHAR(10),@fromDate,111) + ' 00:00:00',
-		@todate = CONVERT(VARCHAR(10),@toDate,111) + ' 23:59:59'
+	SELECT @fromdate = CONVERT(VARCHAR(10), @fromDate, 111) + ' 00:00:00'
+		,@todate = CONVERT(VARCHAR(10), @toDate, 111) + ' 23:59:59'
 
-CREATE TABLE #status (Currentstatus TINYINT)
-IF LEN(ISNULL(@status,'')) = 0
-	SET @status =  '4,6'
+	CREATE TABLE #Group (GroupId INT)
 
-IF ISNULL(@status,'') <>''
-	INSERT INTO #status  (Currentstatus)
-	SELECT val FROM fnc_strSplit (@status, ',')
+	SET @GroupIds = ISNULL(@GroupIds, '')
 
-
-IF (EXISTS(SELECT TOP 1 1 FROM #status WHERE Currentstatus = 1))
+	IF @GroupIds <> ''
+		INSERT INTO #Group (GroupId)
+		SELECT DISTINCT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	ELSE
 	BEGIN
-		DELETE #status WHERE Currentstatus IN (2,3)
-		INSERT #status (Currentstatus)
-			VALUES (2),
-					(3)
+		INSERT INTO #Group (GroupId)
+		SELECT g.GroupId
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+		WHERE ISNULL(g.IsDeleted, 0) = 0
 	END
 
-CREATE TABLE #GroupsList (GroupId INT)
-SET @groupids = ISNULL(@groupids,'')
+	DECLARE @SQL VARCHAR(8000)
 
-IF @groupids <>''
-	INSERT INTO #GroupsList (GroupId)
-	SELECT val FROM fnc_strSplit (@groupids, ',')
-ELSE
-	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT GRoupID FROM [Group] g WITH (NOLOCK)
-	END
+	SELECT r.EmpId
+		,r.[Month] AS RequestedDate
+		,r.NormalHours
+		,r.OffHours
+		,r.PublicHours
+		,(r.[NormalHours] + r.[OffHours] + r.[PublicHours]) AS ToTalHours
+		,e.EmpId AS RequesterID
+		,e.NickName AS Requester
+		,e.FullName AS FullNameRequester
+		,g.GroupId AS GroupId
+		,g.[Name] AS Team
+		,g.Code AS TeamCode
+	FROM dbo.OTMonthlySum AS r WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON r.EmpId = e.EmpId
+		AND ISNULL(e.isDeleted, 0) = 0
+		AND ISNULL(e.[Enabled], 1) = 1
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		AND ISNULL(g.IsDeleted, 0) = 0
+	WHERE r.[Month] BETWEEN @FromDate
+			AND @ToDate
+		AND (
+			@EmpId IS NULL
+			OR r.EmpId = @EmpId
+			)
+		AND (
+			@excludedEmpID IS NULL
+			OR r.EmpId <> @excludedEmpID
+			)
+		AND (
+			ISNULL(@GroupIds, '') = ''
+			OR e.GroupId IN (
+				SELECT DISTINCT GroupId
+				FROM #Group
+				)
+			)
+	ORDER BY r.[Month] DESC
 
-
-DECLARE @SQL VARCHAR(8000)
-SET @SQL = 'SELECT 
-				r.empID,
-				r.Month AS RequestDate,
-
-				r.[NormalHours],
-			    r.[OffHours],
-			    r.[PublicHours],
-				(r.[NormalHours]+r.[OffHours]+r.[PublicHours]) ToTalHours,
-				
-				e.EmpId AS RequesterID,
-				e.NickName AS Requester,
-				e.FullName AS FullNameRequester,
-				
-				g.GroupId As GroupId,
-				g.Name AS Team,
-				g.Code AS TeamCode
-				
- FROM  [dbo].[OTMonthlySum] r WITH (NOLOCK)
-				LEFT JOIN Employee e WITH (NOLOCK) ON e.empID = r.empID	
-				
-				LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
-
-		WHERE (e.isDeleted is null or e.isDeleted = 0)'+CHAR(13)
-	+'   AND	r.Month >= ''' + CONVERT(NVARCHAR(20),@fromdate)+ ''' 
-				and r.Month  <= ''' + CONVERT(NVARCHAR(20),@todate)+ ''''+CHAR(13)
-	+ CASE WHEN @empid is null THEN '' ELSE '   and r.empid = ' + CONVERT(NVARCHAR(13),@empid)+ '  ' +CHAR(13) END
-	+ CASE WHEN @excludedEmpID is null THEN '' ELSE '   and r.empid <> ' + CONVERT(NVARCHAR(13),@excludedEmpID)+ '  ' +CHAR(13) END
-	--+ CASE WHEN @status is null or @status ='' THEN '' ELSE '			and r.currentstatus IN (SELECT Currentstatus FROM #status ) ' +CHAR(13) END
-	+ CASE WHEN @groupids ='' THEN '' ELSE '		and e.GroupId IN (SELECT GroupId FROM #GroupsList ) ' +CHAR(13) END
-	+'			ORDER BY r.Month DESC'
-	
-	IF @isDebug = 1 PRINT @SQL 
-	EXEC (@SQL )
-
-SELECT @ErrCode=0,@ErrMsg=''
-	
-DROP TABLE #GroupsList
-DROP TABLE #status
-
-
+	DROP TABLE #Group
+END

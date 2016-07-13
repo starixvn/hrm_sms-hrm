@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, _messages*/
+/*global _global, _messages, floatThead*/
 
 (function () {
     function calculateTotalOTHours(selector) {

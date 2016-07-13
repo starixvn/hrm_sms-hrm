@@ -1,26 +1,26 @@
 ﻿'use strict';
 /*global _global*/
 
-function ChangeData() {
+function changeData() {
     $("#save").removeAttr('disabled');
 }
-function Onclick_IsHost() {
+function onclickIsHost() {
     var id = $(this).data('id');
     var checked = $(this).prop('checked');
     $("#" + id + "_IsRead").prop('disabled', checked);
     $("#" + id + "_IsRead").prop('checked', checked);
 
-    ChangeData();
+    changeData();
 }
 
 function generateEventForCheckbox() {
     var input = $('input');
     for (var i = 0, len = input.length; i < len; i++) {
         if (input[i].type === 'checkbox') {
-            input[i].onclick = ChangeData;
+            input[i].onclick = changeData;
         }
         if (input[i].name === 'IsHost') {
-            input[i].onclick = Onclick_IsHost;
+            input[i].onclick = onclickIsHost;
         }
     }
 }
@@ -57,7 +57,7 @@ function save() {
 
     $.ajax({
         type: 'POST',
-        url: '/Function/AssignFunctionToRole/',
+        url: _global.root + 'Function/AssignFunctionToRole/',
         data: JSON.stringify({ Functions: roleFunctions, RoleId: roleId }),
         contentType: 'application/json',
         success: function (response) {

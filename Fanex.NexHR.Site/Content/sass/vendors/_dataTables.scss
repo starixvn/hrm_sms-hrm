@@ -93,4 +93,24 @@
             }
         }
     }
+
+    .dataTables_scrollFoot {
+        table {
+            tfoot tr {
+                &.summary {
+                    th {
+                        background: #bbf8f2;
+
+                        &.align-left {
+                            text-align: left;
+                        }
+
+                        &.align-right {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
