@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web;
+    using System.Web.Mvc;
 
     public class Memo : EntityBase<int>
     {
@@ -14,18 +15,23 @@
             set;
         }
 
+        [AllowHtml]
         [Required]
         public string RefNo { get; set; }
 
+        [AllowHtml]
         [Required]
         public string Subject { get; set; }
 
+        [AllowHtml]
         [Required]
         public string SentTo { get; set; }
 
+        [AllowHtml]
         [Required]
         public string SentFrom { get; set; }
 
+        [AllowHtml]
         public string ForInfo { get; set; }
 
         public int TotalPages { get; set; }

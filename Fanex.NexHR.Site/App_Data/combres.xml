@@ -177,7 +177,6 @@
 
     <resourceSet name="timesheetcss" type="css">
       <resource reference="sitecss" />
-
       <resource path="~/styles/report.timesheet.css" />
       <resource path="~/styles/monPickr-0.0.3.css" />
     </resourceSet>
@@ -225,7 +224,6 @@
     <resourceSet name="keepinviewcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/keepinview.css" />
-      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
     <resourceSet name="keepinviewcreatejs" type="js">
@@ -268,7 +266,6 @@
     </resourceSet>
     <resourceSet name="holidaycss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
     <resourceSet name="holidayeditcss" type="css">
       <resource reference="sitecss" />
@@ -292,7 +289,6 @@
 
     <resourceSet name="memoeditcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
       <resource path="~/styles/memo.edit.css" />
     </resourceSet>
 
@@ -351,7 +347,6 @@
 
     <resourceSet name="myrequestcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
 
@@ -484,7 +479,6 @@
 
     <resourceSet name="employeerequestcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
       <resource path="~/content/views/request/employee.request.css" />
     </resourceSet>
 
@@ -547,7 +541,6 @@
       <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />
       <resource path="~/styles/jobtitle.css" />
-      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
     <resourceSet name="jobtitle" type="js">
       <resource reference="sitejs" />
@@ -618,10 +611,6 @@
       <resource path="~/scripts/views/Overtime/hrovertimereport.js" />
     </resourceSet>
 
-    <resourceSet name="managerequestscss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
-    </resourceSet>
     <resourceSet name="monthlyovertimememberjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
@@ -700,7 +689,6 @@
     <resourceSet name="shiftcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/shift.css" />
-      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
 
     <resourceSet name="shifteditjs" type="js">
@@ -732,11 +720,6 @@
     <resourceSet name="employeemessagejs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.message.js" />
-    </resourceSet>
-
-    <resourceSet name="departmentcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/criteriapanel.css" />
     </resourceSet>
     
     <resourceSet name="departmentjs" type="js">

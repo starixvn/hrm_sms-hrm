@@ -18,18 +18,29 @@
     <span class="step">@Model.Employee.NickName's annual leave balance</span>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    <span>@Html.LabelFor(model => model.Year)</span>
-    @Html.YearPickerFor(model => model.Year, 2010)
-    @Html.CheckBoxFor(model => model.ExcludedRequestTrans)
-    @Html.LabelFor(model => model.ExcludedRequestTrans)
-    @Html.HiddenFor(model => model.EmployeeId)
-    <input type="submit" value="@Labels.View" />
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("Adjustment", "Create", new { id = Model.Employee.Id })
-    </div>
-}
+<div class="container_24 bunhat">
+    @using (Html.BeginForm())
+    {
+        <div class="grid_1 gridlabel">
+            @Html.LabelFor(model => model.Year)
+        </div>
+        <div class="grid_2">
+            @Html.YearPickerFor(model => model.Year, 2010)
+        </div>
+        <div class="grid_5">
+            @Html.CheckBoxFor(model => model.ExcludedRequestTrans)
+            @Html.LabelFor(model => model.ExcludedRequestTrans)
+            @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+        <div class="grid_6">
+            <input type="submit" value="@Labels.View" />
+            <div class="button-icon">
+                <span class="icon plus"></span>@Html.ActionLink("Adjustment", "Create", new { id = Model.Employee.Id })
+            </div>
+        </div>
+    }
+</div>
+<div class="clear"></div>
 <table class="table table-custom">
     <thead>
         <tr>
@@ -73,9 +84,9 @@
             }
         </tbody>
 
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(6)
-    }
+                }
+                else
+                {
+                    @RazorHelper.DisplayNoInformation(6)
+                }
 </table>

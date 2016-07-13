@@ -4,7 +4,7 @@
 }
 @section css{
     @Url.CombresLink("totalworkinghourmonthlycss")
-    @Url.CombresLink("managerequestscss")
+    @Url.CombresLink("sitecss")
 }
 @section js{
     @Url.CombresLink("totalworkinghourmonthlyjs")
@@ -21,7 +21,7 @@
     @Html.HiddenFor(model => model.Month)
     @Html.HiddenFor(model => model.Year)
     <div class="container_24 bunhat">
-        <div class="grid_2">@Labels.Month</div>
+        <div class="grid_2 gridlabel">@Labels.Month</div>
         <div class="grid_6">
             <div id="DateControl"></div>
             @Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
@@ -45,7 +45,7 @@
         <div class="grid_6">
             @Html.DropDownList("section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_4">

@@ -4,7 +4,7 @@
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    @Url.CombresLink("managerequestscss")
+    @Url.CombresLink("sitecss")
 }
 @section js{
     @Url.CombresLink("leavesummaryjs")
@@ -34,7 +34,7 @@
                     <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
                 </select>
             </div>
-            <div class="grid_1 gridlabel">
+            <div class="grid_2 gridlabel">
                 @Labels.Section
             </div>
             <div class="grid_6">
@@ -63,7 +63,7 @@
             <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.Employee)
             </div>
-            <div class="grid_4">
+            <div class="grid_7">
                 @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>

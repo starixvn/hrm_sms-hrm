@@ -26,7 +26,6 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(bool? isActive)
         {
@@ -38,7 +37,6 @@
             return Index(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(DepartmentViewModel model)
@@ -53,7 +51,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create()
         {
@@ -63,7 +60,6 @@
             return View(model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create(AddDepartmentViewModel model)

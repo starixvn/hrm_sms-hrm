@@ -4,7 +4,7 @@
 }
 @section css{
     @Url.CombresLink("totalworkinghourmonthlycss")
-    @Url.CombresLink("managerequestscss")
+    @Url.CombresLink("sitecss")
 }
 @section js{
     @Url.CombresLink("totalworkinghourdailyjs")
@@ -19,7 +19,7 @@
 <form class="form-filter">
     @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
-        <div class="grid_2">@Labels.Date</div>
+        <div class="grid_2 gridlabel">@Labels.Date</div>
         <div class="grid_6">
             @Html.DatePicker("WorkDate", Model.WorkDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
@@ -41,7 +41,7 @@
         <div class="grid_6">
             @Html.DropDownList("section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_4">

@@ -20,7 +20,9 @@
 @using (Html.BeginGetForm())
 {
     <div class="bunhat container_24">
-        <div class="grid_1">@Labels.Year:</div>
+        <div class="grid_1 gridlabel">
+            @Labels.Year
+        </div>
         <div class="grid_2">
             @Html.YearPicker("year", 2010, (int)ViewBag.year)
         </div>

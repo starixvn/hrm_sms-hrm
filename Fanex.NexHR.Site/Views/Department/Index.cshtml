@@ -6,7 +6,7 @@
 
 }
 @section css{
-    @Url.CombresLink("departmentcss")
+    @Url.CombresLink("sitecss")
 }
 @section js{
     @Url.CombresLink("departmentjs")
@@ -25,8 +25,8 @@
         new SelectListItem() {Text = "Inactive", Value = "1"}
     };
 
-    <div class="container_24 bunhat" style="width: auto; min-width: 480px;">
-        <div class="grid_1">
+    <div class="container_24 bunhat" style="width: auto; min-width: 490px;">
+        <div class="grid_1 gridlabel">
             @Html.LabelFor(model => model.IsActive, @Labels.Status)
         </div>
         <div class="grid_2">

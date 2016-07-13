@@ -18,10 +18,9 @@
     <div class="container_24 bunhat">
         @using (Html.BeginForm())
         {
-            <div>
-                <div class="grid_2 gridlabel">
-                    @Labels.Category
-                </div>
+            <div class="grid_3 gridlabel">
+                @Labels.Category
+            </div>
                 <div class="grid_3">
                     <select id="Category" name="Category" class="category">
                         <option value="">-- All --</option>
@@ -42,7 +41,7 @@
                     @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, style = "width:183px;" })
                     @Html.HiddenFor(model => model.EmployeeId)
                 </div>
-                <div class="grid_1 gridlabel">
+                <div class="grid_2 gridlabel">
                     @Labels.Section
                 </div>
                 <div class="grid_6">
@@ -68,7 +67,7 @@
                 </div>
                 <div class="clear"></div>
                 <div class="space"></div>
-                <div class="grid_2 gridlabel">
+                <div class="grid_3 gridlabel">
                     @Html.Label(@Labels.MinBalance)
                 </div>
                 <div class="grid_3">
@@ -80,31 +79,28 @@
                         }
                     </select>
                 </div>
-                <div class="grid_6">
-                    <div class="grid_12" style="padding-right: 5px">
-                        <input type="submit" value="@Labels.Submit" class="processing-submit" />
-                        <input type="button" value="Excel" id="btnExcel" />
-                        @if (Model.IsShowCloseBalance)
-                        {
-                            <div class="button-icon">
-                                <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>
-                            </div>
-                        }
-                        @if (hasPermissionToEdit)
-                        {
-                            <div class="button-icon">
-                                <span class="icon plus"></span><a href="javascript:;" id="addadj">Adjustment</a>
-                            </div>
-                        }
-                    </div>
+                <div class="grid_12">
+                    <input type="submit" value="@Labels.Submit" class="processing-submit" />
+                    <input type="button" value="Excel" id="btnExcel" />
+                    @if (Model.IsShowCloseBalance)
+                    {
+                        <div class="button-icon">
+                            <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>
+                        </div>
+                    }
+                    @if (hasPermissionToEdit)
+                    {
+                        <div class="button-icon">
+                            <span class="icon plus"></span><a href="javascript:;" id="addadj">Adjustment</a>
+                        </div>
+                    }
                 </div>
-            </div>
-            <div class="clear"></div>
-            <div class="space"></div>
-        }
+                <div class="clear"></div>
+                <div class="space"></div>
+                            }
     </div>
     <div class="clear"></div>
-}
+                            }
 <table class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
@@ -384,14 +380,14 @@
                             </td>
                         }
                     </tr>
-                }
-            }
+                                    }
+                                }
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(19)
-    }
+                                }
+                                else
+                                {
+                                    @RazorHelper.DisplayNoInformation(19)
+                                }
 </table>
 <div class="hide">
     <div id="insertform" title="Adjust annual leave balance">

@@ -17,13 +17,13 @@
 @using (Html.BeginForm())
 {
     <div class="container_24 bunhat" style="width: 878px;">
-        <div class="grid_1">
+        <div class="grid_1 gridlabel">
             @Html.LabelFor(model => model.Year)
         </div>
         <div class="grid_3">
             @Html.YearPickerFor(model => model.Year, 2010, isShowAll: true)
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Category)
         </div>
         <div class="grid_4">

@@ -8,7 +8,7 @@
 }
 @section css{
     @Url.CombresLink("totalworkinghourcss")
-    @Url.CombresLink("managerequestscss")
+    @Url.CombresLink("sitecss")
 }
 @section js{
     @Url.CombresLink("totalworkinghourjs")
@@ -27,7 +27,7 @@
         <div class="grid_2 gridlabel">
             @Labels.DateRange
         </div>
-        <div class="grid_4">
+        <div class="grid_7">
             <select id="Date" name="Date">
                 <option value="0">
                     @Labels.DateRange
@@ -73,7 +73,7 @@
         <div class="grid_2 gridlabel">
             <label for="IsLocal">Category</label>
         </div>
-        <div class="grid_4">
+        <div class="grid_7">
             @RazorHelper.CategoryDropDownList("IsLocal", Model.IsLocal.ToString())
         </div>
         <div class="grid_2 gridlabel">
@@ -101,7 +101,7 @@
             </select>
         </div>
 
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_4">

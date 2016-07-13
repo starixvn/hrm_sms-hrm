@@ -3,15 +3,18 @@
     using Fanex.NexHR.Models;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public class EditDepartmentViewModel
     {
         [Required]
         public int DeprtamentId { get; set; }
 
+        [AllowHtml]
         [Required]
         public string Code { get; set; }
 
+        [AllowHtml]
         [Required]
         public string Name { get; set; }
 

@@ -4,10 +4,10 @@
 @using (Html.BeginGetForm())
 { 
     <div class="container_24 bunhat">
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Labels.DateRange
         </div>
-        <div class="grid_4">
+        <div class="grid_7">
             <select id="Date" name="Date">
                 <option value="0" selected= "@(Model.DateOption == 0)">
                     @Labels.DateRange</option>
@@ -28,22 +28,22 @@
             </select>
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.FromDate)
         </div>
-        <div class="grid_6">
+        <div class="grid_4">
             @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.ToDate)
         </div>
         <div class="grid_4">
             @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
         </div>
-        <div class="grid_1">
+        <div class="grid_1 gridlabel">
             @Labels.On
         </div>
-         <div class="grid_4">
+         <div class="grid_7">
             @{
                 var filteringDateType = new List<SelectListItem>
                     {
@@ -57,19 +57,22 @@
         </div>
         <div class="space">
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.StatusId)
         </div>
-        <div class="grid_4">
+        <div class="grid_7">
             @RazorHelper.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: (Model.ViewType == RequestViewType.PersonalSpace), controlName: "statusId")
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.TeamCollection)
         </div>
         <div class="grid_6">
             @Html.DropDownList("TeamId", Model.GetSelecListItemTeam, new { @multiple = "multiple" })
         </div>
-        <div class="grid_2">
+        <div class="grid_3">
+            <br />
+        </div>
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_4">
@@ -80,10 +83,10 @@
         </div>
         <div class="space">
         </div>
-        <div class="grid_2">
-            Category
+        <div class="grid_2 gridlabel">
+            @Labels.Category
         </div>
-         <div class="grid_4">
+         <div class="grid_7 gridlabel">
             @{
                 var category = new List<SelectListItem>
                     {
@@ -95,7 +98,7 @@
             @Html.DropDownListFor(model => model.IsLocal, category)
         </div>
 
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
         @Html.LabelFor(model => model.RequestType, "Request")
         </div>
         <div class="grid_15">
