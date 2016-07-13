@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------
-// <copyright file="EmployeeAttendanceModel.cs" company=".">
-// Copyright (c) .. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------
-// <history>
-//   <change who="Quinn.Vo" date="2013.1.16">Apply StyleCop</change>
-// </history>
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    /// <summary>
-    /// EmployeeAttendance Model.
-    /// </summary>
     public class EmployeeAttendanceModel
     {
         public long Id { get; set; }
@@ -93,18 +81,25 @@ namespace Fanex.NexHR.ViewModels.Report
                     {
                         case (byte)CurrentRequestStatus.Pending:
                             return Labels.Pending.ToLower();
+
                         case (byte)CurrentRequestStatus.Verified:
                             return Labels.Verified.ToLower();
+
                         case (byte)CurrentRequestStatus.NotVerified:
                             return Labels.NotVerified.ToLower();
+
                         case (byte)CurrentRequestStatus.Approved:
                             return Labels.Approved.ToLower();
+
                         case (byte)CurrentRequestStatus.Rejected:
                             return Labels.Rejected.ToLower();
+
                         case (byte)CurrentRequestStatus.Processed:
                             return Labels.Processed.ToLower();
+
                         case (byte)CurrentRequestStatus.Void:
                             return Labels.Void.ToLower();
+
                         default:
                             return string.Empty;
                     }
@@ -114,7 +109,7 @@ namespace Fanex.NexHR.ViewModels.Report
             }
         }
 
-        public bool IsWeekend 
+        public bool IsWeekend
         {
             get
             {

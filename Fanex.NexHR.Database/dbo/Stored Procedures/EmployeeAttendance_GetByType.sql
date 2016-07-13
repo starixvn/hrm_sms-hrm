@@ -1,9 +1,8 @@
-﻿
--- [EmployeeAttendance_GetByType] '2015-10-01', '2015-10-01',337, @type = 0
+﻿-- [EmployeeAttendance_GetByType] '2015-10-01', '2015-10-01',337, @type = 0
 CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType] @fromtime DATETIME
 	,@totime DATETIME
 	,@empid INT = NULL
-	,@groupids VARCHAR(MAX) = ''
+	,@GroupIds VARCHAR(MAX) = ''
 	,@excludeUserDelete INT = 1
 	,@isLocal BIT = NULL
 	,@SupervisorId INT = NULL
@@ -31,27 +30,28 @@ BEGIN
 
 	SELECT @LeaveTypeDefaultId = dbo.fnc_getLeaveTypeDefault()
 
-	CREATE TABLE #GroupsList (GroupId INT)
+	CREATE TABLE #Group (GroupId INT)
 
 	CREATE TABLE #EmployeeId (EmpId INT)
 
-	IF ISNULL(@groupids, '') <> ''
+	IF ISNULL(@GroupIds, '') <> ''
 	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT val
-		FROM fnc_strSplit(@groupids, ',')
+		INSERT INTO #Group (GroupId)
+		SELECT DISTINCT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
 	END
 	ELSE
 	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT GroupID
-		FROM [Group] g WITH (NOLOCK)
+		INSERT INTO #Group (GroupId)
+		SELECT DISTINCT g.GroupId
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+		WHERE ISNULL(g.IsDeleted, 0) = 0
 	END
 
 	IF (@empid IS NULL)
 	BEGIN
 		INSERT INTO #EmployeeId (EmpId)
-		SELECT EmpId
+		SELECT DISTINCT EmpId
 		FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, @excludeUserDelete, 1)
 	END
 	ELSE
@@ -92,17 +92,17 @@ BEGIN
 		,wt.RequestID
 		,wt.EmpId
 		,wt.RequestType
-		,CASE 
+		,(CASE 
 			WHEN DATEDIFF(d, inout.OnDate, inout.CheckTime) = 0 THEN inout.CheckTime
-			ELSE DATEADD(d, - 1, inout.CheckTime)
-			END
-		,CASE 
+			ELSE DATEADD(d, - 1, inout.CheckTime) END
+			)
+		,(CASE 
 			WHEN DATEDIFF(d, inout.OnDate, inout.CheckTime) = 0 THEN inout.CheckTime
-			ELSE DATEADD(d, - 1, inout.CheckTime)
-			END
+			ELSE DATEADD(d, - 1, inout.CheckTime) END
+			)
 		,0
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].InoutMissRequest inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN [dbo].InoutMissRequest AS inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
 	WHERE wt.RequestType IN (1, 2)
 		AND inout.OnDate >= @fromtime
 		AND inout.OnDate <= @totime
@@ -129,12 +129,12 @@ BEGIN
 		,inout.FromDate
 		,inout.ToDate
 		,0
-		,CASE 
+		,(CASE 
 			WHEN wt.RequestType = 3 THEN inout.LateInMins
-			ELSE inout.EarlyOutMins
-			END
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InOutRequest] inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
+			ELSE inout.EarlyOutMins END
+			)
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN [dbo].[InOutRequest] AS inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
 	WHERE wt.RequestType IN (3, 4)
 		AND (
 			(
@@ -176,10 +176,10 @@ BEGIN
 		,lr.ToDate
 		,lr.FromTime
 		,lr.ToTime
-		,CASE 
+		,(CASE 
 			WHEN lr.IsHalfDay = 1 THEN 0.5
-			ELSE 1
-			END
+			ELSE 1 END
+			)
 	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
 		INNER JOIN [dbo].KeepInViewRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 	WHERE (
@@ -432,9 +432,7 @@ BEGIN
 		,T.[Rank]
 		,T.AttendanceDate
 		,T.ShiftId
-		,COALESCE(T.ShiftCode,
-			--case when ISNULL(T.IsHoliday,0)=0 and T.ShiftId is null and isOffday=1 AND (T.InFixed is null and	T.OutFixed is not null) THEN 'Off day' 
-			CASE 
+		,COALESCE(T.ShiftCode, CASE 
 				WHEN ISNULL(T.IsHoliday, 0) = 0
 					AND T.ShiftId IS NULL
 					AND isOffday = 1 THEN 'Off day'
@@ -487,74 +485,74 @@ BEGIN
 		,T.IsOvertime
 		,T.OvertimeHours
 		,T.OvertimeStatus
-		,ISNULL(stuff(CASE 
+		,ISNULL(stuff((CASE 
 					WHEN AttendanceDate1 IS NOT NULL
 						AND (
 							isLateIn = 1
 							AND LateIn > 0
 							) THEN (', Late In')
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN AttendanceDate1 IS NOT NULL
 						AND (
 							isEarlyOut = 1
 							AND EarlyOut > 0
 							) THEN ', Early Out'
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN AttendanceDate1 IS NOT NULL
 						AND isMissingCheckin = 1 THEN ', Missing Check-in'
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN AttendanceDate1 IS NOT NULL
 						AND isMissingCheckOut = 1
 						AND CONVERT(NVARCHAR(20), T.AttendanceDate1, 111) < CONVERT(NVARCHAR(20), GETDATE(), 111) THEN ', Missing Check-out'
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN AttendanceDate1 IS NOT NULL
 						AND IsKeepInView = 1 THEN ', KIV day' + CASE 
 							WHEN LeaveDay = 0.5 THEN ' (Half day)'
 							ELSE ''
 							END
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN ISNULL(T.IsHoliday, 0) = 0
 						AND isOffday = 1
 						AND ShiftId IS NULL THEN (CASE 
 							WHEN od.EmpId IS NULL THEN ', Off day'
 							ELSE ', Off day no match' END
 							)
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN ISNULL(T.IsHoliday, 0) = 0
 						AND isOffday = 1
 						AND ShiftId IS NOT NULL
 						AND od.EmpId IS NOT NULL THEN ', Off day no match'
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN ISNULL(T.IsHoliday, 0) = 1
 						AND ShiftId IS NULL THEN ', PH'
-					ELSE ''
-					END + CASE 
+					ELSE '' END
+					) + (CASE 
 					WHEN isNotWork = 1
 						AND r.LeaveType IS NULL THEN ', Absent'
-					ELSE CASE 
+					ELSE (CASE 
 							WHEN lv.NAME IS NULL
 								OR r.LeaveTypeId = @LeaveTypeDefaultId THEN ''
-							ELSE ', ' + lv.NAME + CASE 
+							ELSE ', ' + lv.NAME + (CASE 
 									WHEN lv2.NAME IS NULL THEN ''
-									ELSE ' & ' + lv2.NAME
-									END + CASE 
+									ELSE ' & ' + lv2.NAME END
+									) + (CASE 
 									WHEN LeaveDay = 0.5 THEN ' (Half day)'
-									ELSE ''
-									END
-							END
-					END, 1, 2, ''), CASE 
+									ELSE '' END
+									) END
+							) END
+					), 1, 2, ''), CASE 
 				WHEN AttendanceDate1 IS NULL THEN 'No Data'
 				ELSE NULL
 				END) AS Notes
 		,r.RequestType
-		,r.RequestDate CreatedDate
+		,r.RequestDate AS CreatedDate
 		,r.FromDate
 		,r.ToDate
 		,r.TotalDays
@@ -567,17 +565,15 @@ BEGIN
 		,r.FromTime
 		,r.ToTime
 	FROM (
-		SELECT
-			--a.EmpId,	
-			e.Code
+		SELECT e.Code
 			,e.EmpId
 			,FullName
 			,NickName
-			,g.NAME [Team]
+			,g.[Name] [Team]
 			,g.Code [TeamCode]
 			,g.[Rank]
-			,CalendarDF.AttendanceDate AttendanceDate
-			,a.AttendanceDate AttendanceDate1
+			,CalendarDF.AttendanceDate AS AttendanceDate
+			,a.AttendanceDate AS AttendanceDate1
 			,c.ShiftId
 			,s.code AS ShiftCode
 			,s.BeginCheckInTime AS ExpectedInTime
@@ -588,22 +584,17 @@ BEGIN
 			,a.EarlyOut
 			,TotalWorkHours
 			,Absence
-			,
-			--a.LeaveTypeId,
-			--a.LeaveTypeId2,
-			--LeaveDay,
-			--Notes,
-			CASE 
+			,(CASE 
 				WHEN isnull(Absence, 0) = 0
 					AND isnull(a.LateIn, 0) > 0 THEN 1
-				ELSE 0
-				END isLateIn
-			,CASE 
+				ELSE 0 END
+				) AS isLateIn
+			,(CASE 
 				WHEN isnull(Absence, 0) = 0
 					AND isnull(a.EarlyOut, 0) > 15 THEN 1
-				ELSE 0
-				END isEarlyOut
-			,CASE 
+				ELSE 0 END
+				) AS isEarlyOut
+			,(CASE 
 				WHEN (
 						isnull(Absence, 0) = 0
 						AND InFixed IS NULL
@@ -614,9 +605,9 @@ BEGIN
 								) + ' ' + s.EndCheckInTime
 							)
 						) THEN 1
-				ELSE 0
-				END isMissingCheckin
-			,CASE 
+				ELSE 0 END
+				) AS isMissingCheckin
+			,(CASE 
 				WHEN (
 						isnull(Absence, 0) = 0
 						AND OutFixed IS NULL
@@ -627,13 +618,9 @@ BEGIN
 								) + ' ' + s.EndCheckOutTime
 							)
 						) THEN 1
-				ELSE 0
-				END isMissingCheckOut
-			,
-			--case when isnull(Absence,0)=1 and a.LeaveTypeId = @LeaveTypeDefaultId --and @now> (AttendanceDate + ' ' + s.EndCheckInTime) -- over the check in time
-			--case when isnull(Absence,0)=1 and a.ShiftId	is not null and a.InFixed is null and a.OutFixed is null
-			--		then 1 else 0 end isNotWork,
-			CASE 
+				ELSE 0 END
+				) AS isMissingCheckOut
+			,(CASE 
 				WHEN (
 						a.ShiftId IS NOT NULL
 						AND a.InFixed IS NULL
@@ -646,8 +633,8 @@ BEGIN
 								) + ' ' + s.EndCheckInTime
 							)
 						) THEN 1
-				ELSE 0
-				END isNotWork
+				ELSE 0 END
+				) AS isNotWork
 			,c.isOffday
 			,CONVERT(BIT, CASE 
 					WHEN ot.EmpId IS NULL THEN 0
@@ -656,13 +643,12 @@ BEGIN
 			,(OT.NormalHours + OT.OffHours + OT.PublicHours) OvertimeHours
 			,ot.STATUS OvertimeStatus
 			,c.IsHoliday
-			,CASE 
-				WHEN --ISNULL(s_CrossDay.IsInAfterDay,0)=1 AND 
-					ISNULL(s_CrossDay.IsOutAfterDay, 0) = 1 THEN 1
-				ELSE 0
-				END IsShiftCrossDay
-		FROM #CalendarDF CalendarDF WITH (NOLOCK)
-			LEFT JOIN dbo.Employee e WITH (NOLOCK) ON (
+			,(CASE 
+				WHEN ISNULL(s_CrossDay.IsOutAfterDay, 0) = 1 THEN 1
+				ELSE 0 END
+				) AS IsShiftCrossDay
+		FROM #CalendarDF AS CalendarDF WITH (NOLOCK)
+			LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON (
 				(
 					e.isDeleted IS NULL
 					OR e.isDeleted = 0
@@ -677,34 +663,34 @@ BEGIN
 					)
 				OR e.empid = @empid
 				)
-			LEFT JOIN dbo.EmployeeSummary e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
-			LEFT JOIN dbo.EmployeeAttendance a WITH (NOLOCK) ON CalendarDF.AttendanceDate = a.AttendanceDate
+			LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
+			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON CalendarDF.AttendanceDate = a.AttendanceDate
 			AND a.empid = e.empid
 			AND (
 				@empid IS NULL
 				OR a.empid = @empid
 				)
-			LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON (c.WorkDate = CalendarDF.AttendanceDate)
+			LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON (c.WorkDate = CalendarDF.AttendanceDate)
 			AND c.EmpId = e.EmpId
 			AND (
 				@empid IS NULL
 				OR c.empid = @empid
 				)
-			LEFT JOIN dbo.[Shift] s WITH (NOLOCK) ON s.ShiftId = c.ShiftId
-			LEFT JOIN dbo.EmployeeCalendar c_CrossDay WITH (NOLOCK) ON (c_CrossDay.WorkDate = (CalendarDF.AttendanceDate - 1))
+			LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = c.ShiftId
+			LEFT JOIN dbo.EmployeeCalendar AS c_CrossDay WITH (NOLOCK) ON (c_CrossDay.WorkDate = (CalendarDF.AttendanceDate - 1))
 			AND c_CrossDay.EmpId = e.EmpId
 			AND (
 				@empid IS NULL
 				OR c_CrossDay.empid = @empid
 				)
-			LEFT JOIN dbo.[Shift] s_CrossDay WITH (NOLOCK) ON s_CrossDay.ShiftId = c_CrossDay.ShiftId
-			LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON e.groupid = g.groupid
-			LEFT JOIN dbo.OTDailyRequest ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
+			LEFT JOIN dbo.[Shift] AS s_CrossDay WITH (NOLOCK) ON s_CrossDay.ShiftId = c_CrossDay.ShiftId
+			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.groupid = g.groupid
+			LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
 			AND a.EmpId = ot.EmpId
 		WHERE (
 				g.groupid IN (
 					SELECT GroupId
-					FROM #GroupsList
+					FROM #Group
 					)
 				)
 			AND (
@@ -715,7 +701,7 @@ BEGIN
 				SELECT EmpId
 				FROM #EmployeeId
 				)
-		) T
+		) AS T
 		LEFT JOIN (
 		SELECT c.WorkDate
 			,a.EmpId
@@ -727,7 +713,7 @@ BEGIN
 			,rd.ToTime
 			,rd.TotalDays
 			,a.Remark
-			,l.NAME AS LeaveType
+			,l.[Name] AS LeaveType
 			,(CASE 
 				WHEN a.RequestType = 5
 					OR a.RequestType = 7 THEN (CASE 
@@ -744,23 +730,23 @@ BEGIN
 			,c.LeaveTypeId
 			,c.LeaveTypeId2
 			,c.LeaveDay
-			,CASE 
+			,(CASE 
 				WHEN a.RequestType = 3 THEN inout.LateInMins
-				ELSE inout.EarlyOutMins
-				END AS [Time]
-		FROM WorkingTimeRequest a WITH (NOLOCK)
-			INNER JOIN #RequestInDaily rd ON a.RequestId = rd.RequestID
-			LEFT JOIN [dbo].LeaveRequest lr WITH (NOLOCK) ON a.RequestId = lr.RequestId
-			LEFT JOIN [dbo].[InOutRequest] inout WITH (NOLOCK) ON a.RequestId = inout.RequestId
-			LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON (
+				ELSE inout.EarlyOutMins END
+				) AS [Time]
+		FROM dbo.WorkingTimeRequest AS a WITH (NOLOCK)
+			INNER JOIN #RequestInDaily AS rd ON a.RequestId = rd.RequestID
+			LEFT JOIN [dbo].LeaveRequest AS lr WITH (NOLOCK) ON a.RequestId = lr.RequestId
+			LEFT JOIN [dbo].[InOutRequest] AS inout WITH (NOLOCK) ON a.RequestId = inout.RequestId
+			LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON (
 				c.WorkDate BETWEEN CONVERT(VARCHAR(10), rd.FromDate, 101)
 					AND CONVERT(VARCHAR(10), rd.ToDate, 101)
 				)
 			AND c.EmpId = rd.EmpId
-			LEFT JOIN dbo.LeaveType l WITH (NOLOCK) ON l.LeaveTypeID = lr.LeaveType
-			LEFT JOIN dbo.Shift s1 WITH (NOLOCK) ON s1.ShiftId = rd.FromShift
-			LEFT JOIN dbo.Shift s2 WITH (NOLOCK) ON s2.ShiftId = rd.ToShift
-			LEFT JOIN dbo.Shift s3 WITH (NOLOCK) ON s3.ShiftId = c.ShiftID
+			LEFT JOIN dbo.LeaveType AS l WITH (NOLOCK) ON l.LeaveTypeID = lr.LeaveType
+			LEFT JOIN dbo.Shift AS s1 WITH (NOLOCK) ON s1.ShiftId = rd.FromShift
+			LEFT JOIN dbo.Shift AS s2 WITH (NOLOCK) ON s2.ShiftId = rd.ToShift
+			LEFT JOIN dbo.Shift AS s3 WITH (NOLOCK) ON s3.ShiftId = c.ShiftID
 		WHERE a.CurrentStatus IN (4, 6)
 			AND (
 				(
@@ -769,41 +755,41 @@ BEGIN
 					)
 				OR rd.RequestType <> 6
 				)
-		) r ON (
+		) AS r ON (
 			T.EmpId = r.EmpId
 			AND T.AttendanceDate = r.WorkDate
 			)
-		LEFT JOIN LeaveType lv WITH (NOLOCK) ON lv.LeaveTypeId = r.LeaveTypeId
-		LEFT JOIN LeaveType lv2 WITH (NOLOCK) ON lv2.LeaveTypeId = r.LeaveTypeId2
+		LEFT JOIN LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeId = r.LeaveTypeId
+		LEFT JOIN LeaveType AS lv2 WITH (NOLOCK) ON lv2.LeaveTypeId = r.LeaveTypeId2
 		LEFT JOIN @OutOffDay AS od ON t.AttendanceDate = od.WorkDate
 		AND t.EmpId = od.EmpId
 	WHERE @type = 0
 		OR (
 			@type = 1
-			AND isMissingCheckin = 1
+			AND ISNULL(T.isMissingCheckin, 1) = 1
 			)
 		OR (
 			@type = 2
-			AND isMissingCheckout = 1
+			AND T.isMissingCheckout = 1
 			)
 		OR (
 			@type = 3
-			AND isLateIn = 1
+			AND T.isLateIn = 1
 			)
 		OR (
 			@type = 4
-			AND isEarlyOut = 1
+			AND T.isEarlyOut = 1
 			)
 		OR (
 			@type = 5
-			AND isNotWork = 1
+			AND T.isNotWork = 1
 			)
 	ORDER BY attendancedate DESC
 		,[Rank]
 		,TeamCode
 		,T.code
 
-	DROP TABLE #GroupsList
+	DROP TABLE #Group
 
 	DROP TABLE #EmployeeId
 

@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Report
-@using Fanex.NexHR.ViewModels.Request
+﻿@using Fanex.NexHR.ViewModels.Request
 @model TotalWorkingHoursViewModel
 
 @{
@@ -82,21 +81,21 @@
         <div class="grid_6">
             <select id="TeamId" multiple="multiple" name="TeamId">
                 @{
-                    var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
-                    var selected = string.Empty;
-                    foreach (Team team in ViewBag.Groups)
-                    {
-                        selected = string.Empty;
-                        if (teamIds != null)
-                        {
-                            int pos = Array.IndexOf(teamIds, team.Id.ToString());
-                            if (pos > -1)
-                            {
-                                selected = "selected";
-                            }
-                        }
-                        <option @selected value="@team.Id">@team.Name</option>
-                    }
+    var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
+    var selected = string.Empty;
+    foreach (Team team in ViewBag.Groups)
+    {
+        selected = string.Empty;
+        if (teamIds != null)
+        {
+            int pos = Array.IndexOf(teamIds, team.Id.ToString());
+            if (pos > -1)
+            {
+                selected = "selected";
+            }
+        }
+        <option @selected value="@team.Id">@team.Name</option>
+    }
                 }
             </select>
         </div>

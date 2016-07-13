@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.ViewModels.Report
-@model TimeRecordViewModel
+﻿@model TimeRecordViewModel
 @{
     ViewBag.Title = @Labels.TimeRecord;
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -62,7 +61,7 @@
             </div>
             <div class="grid_3">
                 @{
-                    var category = new List<SelectListItem>
+            var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"},

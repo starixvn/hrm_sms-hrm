@@ -1,0 +1,143 @@
+﻿@model IList<EmployeeAttendanceModel>
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Date</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.CheckIn</th>
+            <th>@Labels.CheckOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.LateIn</th>
+            <th>@Labels.EarlyOut</th>
+            <th>@Labels.Request</th>
+            <th>@Labels.Overtime</th>
+            <th>@Labels.Note</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            int index = 0;
+
+            foreach (EmployeeAttendanceModel item in Model)
+            {
+                index++;
+                var trClass = string.Empty;
+                if (item.IsNotWork != 0)
+                {
+                    trClass = "offdate";
+                }
+                else if (item.ShiftId != 0)
+                {
+                }
+                else
+                {
+                    trClass = "noshift";
+                }
+
+                <tr class="@trClass">
+                    <td>@index</td>
+                    <td class="@(item.IsWeekend ? "weekend" : string.Empty)">
+                        <a href="@Url.Action("timerecord", "report", new { FromDate = item.AttendanceDate, ToDate = item.AttendanceDate.Value.AddDays(1) })"
+                           title="Link to time records">
+                            @item.AttendanceDate.ToDateMonthYearFormatedDate()
+                        </a>
+                    </td>
+                    <td class="tooltip" title="@item.FullName">@item.NickName</td>
+                    <td class="tooltip" title="@item.Team">@item.TeamCode</td>
+                    @if (item.IsOffDay != 0 && item.ShiftId.HasValue)
+                    {
+                        <td class="mytimesheet-workinginoffday">@item.ShiftCode</td>
+                    }
+                    else
+                    {
+                        <td>@item.ShiftCode</td>
+                    }
+                    @if (item.InFixed.HasValue)
+                    {
+                        <td class="tooltip" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                            @item.InFixed.Value.ToString("HH:mm")
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (item.OutFixed.HasValue)
+                    {
+                        <td class="tooltip" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                            @item.OutFixed.Value.ToString("HH:mm")
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td>
+                        @if (item.TotalWorkHours > 0)
+                        {
+                            @RazorHelper.TotalHoursToTime(item.TotalWorkHours)
+                        }
+                    </td>
+                    <td>
+                        @if (item.LateIn > 0)
+                        {
+                            @RazorHelper.DisplayMinute(item.LateIn)
+                        }
+                    </td>
+                    <td>
+                        @if (item.EarlyOut > 0)
+                        {
+                            @RazorHelper.DisplayMinute(item.EarlyOut)
+                        }
+                    </td>
+                    <td>
+                        @if (item.RequestList != null && item.RequestList.Any())
+                        {
+                            foreach (EmployeeAttendanceRequest request in item.RequestList)
+                            {
+                                <a href='#' class="tooltip-request req"
+                                   data-requesttype="@request.RequestType.Id"
+                                   data-fromdate="@request.FromDate.ToFormatedDate()"
+                                   data-todate="@request.ToDate.ToFormatedDate()"
+                                   data-createddate="@request.CreatedDateTime"
+                                   data-fromshift="@request.FromShift"
+                                   data-toshift="@request.ToShift"
+                                   data-fromtime="@request.FromTime"
+                                   data-totime="@request.ToTime"
+                                   data-totaldays="@request.TotalDays"
+                                   data-totalmins="@request.TotalMins"
+                                   data-remark='@request.Remark'>
+                                    @request.RequestType.Name
+                                </a>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsOvertime)
+                        {
+                            <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip">
+                                @item.OvertimeHours
+                            </span>
+                        }
+                    </td>
+                    <td class="align-left">@item.Notes</td>
+                    <td class="td-warning">
+                        @if (item.IsWarning)
+                        {
+                            <span class="icon-warning" />
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 14);
+        }
+    </tbody>
+</table>

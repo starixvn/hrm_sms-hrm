@@ -9,7 +9,7 @@
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.ViewModels.Report;
+    using Fanex.NexHR.ViewModels;
 
     public interface IReportService
     {

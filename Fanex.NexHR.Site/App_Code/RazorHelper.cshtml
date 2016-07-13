@@ -462,3 +462,36 @@
         <option value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
     </select>
 }
+
+@helper DisplayMinute(double minutes)
+{
+    var hour = Math.Floor(minutes / 60);
+    var minute = minutes % 60;
+    var display = string.Empty;
+
+    if (hour == 0)
+    {
+        display = minute > 9 ? "00:" + minute : "00:0" + minute;
+    }
+    else
+    {
+        display = (hour > 9 ? hour.ToString() : "0" + hour) + ":" + (minute > 9 ? minute.ToString() : "0" + minute);
+    }
+
+    <span>@display</span>
+}
+
+@helper TotalHoursToTime(decimal value)
+{
+    var display = string.Empty;
+    var hour = Math.Floor(value);
+
+    if (hour > 0)
+    {
+        display = hour < 10 ? "0" + hour + "h" : hour + "h";
+    }
+
+    var minute = Math.Round((value - hour) * 60);
+
+    <span>@(minute < 10 ? display + "0" + minute + "\'" : display + minute + "\'")</span>
+}

@@ -13,7 +13,6 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 

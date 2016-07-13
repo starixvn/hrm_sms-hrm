@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels
 {
     using System.ComponentModel.DataAnnotations;
 

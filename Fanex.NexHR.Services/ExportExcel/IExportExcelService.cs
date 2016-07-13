@@ -6,7 +6,6 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
 
     public interface IExportExcelService

@@ -6,7 +6,7 @@
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.Report;
+    using Fanex.NexHR.ViewModels;
 
     public class ReportController : ApiController
     {
@@ -38,35 +38,6 @@
             var employeeAttendance = _reportService.GetEmployeeAttendanceReport(criteria);
 
             return employeeAttendance;
-        }
-
-        [HttpGet]
-        public IList<EmployeeAttendanceModel> Timesheet([FromUri]TimesheetViewModel model)
-        {
-            var fromDate = new DateTime(model.Year, model.Month, 1);
-            var toDate = new DateTime();
-            
-            if (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year)
-            {
-                toDate = DateTime.Now.Date;
-            }
-            else
-            {
-                toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
-            }
-
-            var criteria = new GetEmployeeAttendanceCriteria()
-            {
-                Fromtime = fromDate,
-                Totime = toDate,
-                AttendanceType = model.TimeSheetType,
-                EmpId = model.EmpId,
-                Groupids = string.Empty,
-                ExcludeUserDelete = 1,
-                IsLocal = null
-            };
-            var timesheets = _reportService.GetEmployeeAttendanceReport(criteria);
-            return timesheets;
         }
     }
 }

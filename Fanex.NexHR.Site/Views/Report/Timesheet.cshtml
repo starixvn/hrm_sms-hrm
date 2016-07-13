@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Core;
-@model Fanex.NexHR.ViewModels.Report.TimesheetViewModel
+﻿@model TimesheetViewModel
 @{
     ViewBag.Title = "My timesheet";
 }
@@ -13,16 +12,12 @@
     <a class="step">Personal</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginGetForm())
-{
-    @Html.ValidationSummary(true)
+
+<form class="form-filter" action="" novalidate="novalidate">
     <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            @Labels.Month
-        </div>
+        <div class="grid_1 gridlabel">@Labels.Month</div>
         <div class="grid_4">
-            <div id="monthPickr">
-            </div>
+            <div id="monthPickr"></div>
             <input type="hidden" id="Year" name="Year" value="@DateTime.Now.Year" />
             <input type="hidden" id="Month" name="Month" value="@DateTime.Now.Month" />
             <input type="hidden" id="maxDate" value="@DateTime.Now.GetMaxDate().ToString("yyyy/MM/dd")" />
@@ -47,141 +42,10 @@
             @Html.ValidationMessageFor(model => model.TimeSheetType)
         </div>
         <div class="grid_3 pull_1">
-            <input type="submit" id="view" value="Submit" name="@Labels.View" />
+            <input type="submit" id="btnSubmit" value="@Labels.Submit" />
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
-}
-<div class="clear">
+</form>
+<div id="timesheetDetails">
 </div>
-<table id="data" class="table table-custom persist-area">
-    <thead>
-        <tr class="persist-header">
-            <th>@Labels.SymbolCount</th>
-            <th>
-                @Labels.Date
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>
-                @Labels.Shift
-            </th>
-            <th>
-                @Labels.CheckIn
-            </th>
-            <th>
-                @Labels.CheckOut
-            </th>
-            <th>
-                @Labels.TotalHours
-            </th>
-            <th>
-                @Labels.LateIn
-            </th>
-            <th>
-                @Labels.EarlyOut
-            </th>
-            <th>
-                @Labels.Request
-            </th>
-            <th>
-                @Labels.Overtime
-            </th>
-            <th>
-                @Labels.Note
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-<script id="itemTemplate" type="text/x-jquery-tmpl">
-    <tr {{if IsNotWork != 0}} class="offdate" {{else ShiftId }} {{else}} class="noshift" {{/if}}>
-        <td>${index()}</td>
-        {{if IsWeekend == true}}
-        <td class="weekend">
-            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-                ${jsonToDetailsDate(AttendanceDate)}
-            </a>
-        </td>
-        {{else}}
-        <td>
-            <a href="timerecord?fromDate=${jsonToShortDate(AttendanceDate)}&toDate=${addDays(AttendanceDate, 1)}" title="link to time records">
-                ${jsonToDetailsDate(AttendanceDate)}
-            </a>
-        </td>
-        {{/if}}
-
-        <td title="${FullName}" class="tooltip">
-            ${NickName}
-        </td>
-        <td class="tooltip" title="${Team}">
-            ${TeamCode}
-        </td>
-        {{if IsOffDay != 0 && ShiftId != null}}
-        <td class="mytimesheet-workinginoffday">${ShiftCode}</td>
-        {{else}}
-        <td>${ShiftCode}</td>
-        {{/if}}
-        <td class="tooltip" title="${jsonToFullDateTime(InFixed)}">
-            {{if InFixed}} ${jsonTojsDate(InFixed).format("HH:MM")}{{/if}}
-        </td>
-        <td class="tooltip" title="${jsonToFullDateTime(OutFixed)}">
-            {{if OutFixed }} ${jsonTojsDate(OutFixed).format("HH:MM")}{{/if}}
-        </td>
-        <td>
-            {{if TotalWorkHours > 0}}
-            ${totalHoursToTime(TotalWorkHours)}
-            {{/if}}
-        </td>
-        <td>
-            {{if LateIn > 0}}
-            ${displayMinute(LateIn)}
-            {{/if}}
-        </td>
-        <td>
-            {{if EarlyOut > 0}}
-            ${displayMinute(EarlyOut)}
-            {{/if}}
-        </td>
-        <td>
-            {{if RequestList != null > 0}}
-            {{each RequestList}}
-            <a href='#' class="tooltip-request req"
-               data-requesttype="${RequestType.Id}"
-               data-fromdate="${FromDate}"
-               data-todate="${ToDate}"
-               data-createddate="${CreatedDateTime}"
-               data-fromshift="${FromShift}"
-               data-toshift="${ToShift}"
-               data-fromtime="${FromTime}"
-               data-totime="${ToTime}"
-               data-totaldays="${TotalDays}"
-               data-totalmins="${TotalMins}"
-               data-remark='${Remark}'>
-                ${RequestType.Name}
-            </a>
-            {{/each}}
-
-            {{/if}}
-        </td>
-        <td>
-            {{if IsOvertime != 0}}
-            <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
-            {{/if}}
-        </td>
-        <td class="left">
-            ${Notes}
-        </td>
-        <td class="td-warning">
-            {{if IsWarning == true}}
-            <span class="icon-warning" />
-            {{/if}}
-        </td>
-    </tr>
-</script>

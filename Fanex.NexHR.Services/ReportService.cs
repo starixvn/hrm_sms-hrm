@@ -14,7 +14,7 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.Report;
+    using Fanex.NexHR.ViewModels;
 
     public class ReportService : BaseService, IReportService
     {

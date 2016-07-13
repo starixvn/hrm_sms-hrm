@@ -22,7 +22,6 @@
     using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Report;
     using Fanex.NexHR.ViewModels.Request;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
@@ -93,6 +92,7 @@
             return View(model);
         }
 
+        [HttpGet]
         public ActionResult Timesheet()
         {
             var model = new TimesheetViewModel
@@ -100,7 +100,37 @@
                 Year = DateTime.Now.Year,
                 EmpId = CurrentUser.Id
             };
+
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult TimesheetDetails(TimesheetViewModel model)
+        {
+            var fromDate = new DateTime(model.Year, model.Month, 1);
+            var toDate = new DateTime();
+
+            if (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year)
+            {
+                toDate = DateTime.Now.Date;
+            }
+            else
+            {
+                toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
+            }
+
+            var criteria = new GetEmployeeAttendanceCriteria()
+            {
+                Fromtime = fromDate,
+                Totime = toDate,
+                AttendanceType = model.TimeSheetType,
+                EmpId = model.EmpId,
+                ExcludeUserDelete = 1
+            };
+
+            IList<EmployeeAttendanceModel> timesheets = reportService.GetEmployeeAttendanceReport(criteria);
+
+            return PartialView("_TimesheetDetails", timesheets);
         }
 
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)

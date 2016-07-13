@@ -1,9 +1,9 @@
-﻿namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels
 {
+    using System;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using System;
 
     public class EmployeeAttendanceRequest
     {
