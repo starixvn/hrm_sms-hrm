@@ -89,7 +89,7 @@
     }
 
     $(document).ready(function () {
-        var jobTitleId = $('#JobtitleId').val();
+        var jobTitleId = $('#JobTitleId').val();
         var dropDownTittle = $('#title');
         $("#group").multiselect();
 
@@ -114,7 +114,7 @@
         });
 
         $('#title').on('change', function () {
-            $('#JobtitleId').val($(this).val());
+            $('#JobTitleId').val($(this).val());
         });
 
         $('#category').on('change', function () {

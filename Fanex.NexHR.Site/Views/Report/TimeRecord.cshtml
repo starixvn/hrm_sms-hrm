@@ -22,7 +22,7 @@
             <div class="grid_2">
                 @Html.LabelFor(model => model.FromDate)
             </div>
-            <div class="grid_6">
+            <div class="grid_4">
                 @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
             </div>
             <div class="grid_2">
@@ -44,13 +44,9 @@
             <div class="grid_2">
                 @Html.LabelFor(model => model.Employee)
             </div>
-            <div class="grid_4">
+            <div class="grid_7">
                 @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
-            </div>
-            <div class="clear">
-            </div>
-            <div class="space">
             </div>
             <div class="clear">
             </div>
@@ -70,28 +66,31 @@
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
             </div>
-            <div class="grid_12">
-                <input id="btnSubmit" type="button" value="@Labels.Submit" />
-            </div>
-        }
-        else
-        {
-            <div class="grid_2">
-                @Html.LabelFor(model => model.FromDate)
-            </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
-            </div>
-            <div class="grid_2">
-                @Html.LabelFor(model => model.ToDate)
-            </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+            <div class="grid_3">
+                <br />
             </div>
             <div class="grid_2">
                 <input id="btnSubmit" type="button" value="@Labels.Submit" />
             </div>
-        }
+                    }
+                    else
+                    {
+                        <div class="grid_2">
+                            @Html.LabelFor(model => model.FromDate)
+                        </div>
+                        <div class="grid_4">
+                            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+                        </div>
+                        <div class="grid_2">
+                            @Html.LabelFor(model => model.ToDate)
+                        </div>
+                        <div class="grid_4">
+                            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+                        </div>
+                        <div class="grid_2">
+                            <input id="btnSubmit" type="button" value="@Labels.Submit" />
+                        </div>
+                    }
         @Html.HiddenFor(model => model.ItemsPerPage)
         @Html.HiddenFor(model => model.CurrentPage)
     </form>
