@@ -131,9 +131,9 @@ h5, h6 {
 }
 
 .success {
-    background: none repeat scroll 0 0 #E6EFC2;
-    border-color: #C6D880;
-    color: #264409;
+    background: none repeat scroll 0 0 #cae3bf !important;
+    border: 1px solid #9DB886 !important;
+    color: #3C763D !important;
     padding: 0.8em 0.8em 0.8em 1.8em !important;
 }
 

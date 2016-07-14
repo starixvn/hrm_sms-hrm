@@ -1,34 +1,29 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] 
-	@EmpId int
-	,@DOB smalldatetime=NULL
-	,@Phone varchar(50)=NULL
-	,@Gender tinyint=NULL	
-	,@Skype varchar(100)=''
-	,@Yahoo varchar(100)=''
-	,@Marriage tinyint = 1
-
-	,@PermanentAddress nvarchar(250)=''
-	,@CurrentAddress nvarchar(250)=''
-	,@IdCardNumber varchar(20)=''
-	,@PassportNo varchar(35)=''
-	,@PassportExp datetime=''
-	,@ChineseName nvarchar(200)=NULL
-	
-	,@ModifiedBy int
-	,@CountryCode varchar(5)=NULL	
-	
-	,@PlaceOfbirth nvarchar(250)=''
-	,@Ethnic nvarchar(250)=''
-	,@Native nvarchar(250)=''
-	,@Religion nvarchar(250)=''
-	,@DateOfIDCard datetime=NULL
-	,@PlaceOfIDCard nvarchar(250)=''
-	,@HomePhone nvarchar(250)=''
-	,@Qualification nvarchar(300)=''
-	,@Major nvarchar(300)=''
-
-	,@ErrCode int = 0 OUTPUT
-	,@ErrMsg varchar(200) = '' OUTPUT	
+﻿CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
+	,@DOB SMALLDATETIME = NULL
+	,@Phone VARCHAR(50) = NULL
+	,@Gender TINYINT = NULL
+	,@Skype VARCHAR(100) = ''
+	,@Yahoo VARCHAR(100) = ''
+	,@Marriage TINYINT = 1
+	,@PermanentAddress NVARCHAR(250) = ''
+	,@CurrentAddress NVARCHAR(250) = ''
+	,@IdCardNumber VARCHAR(20) = ''
+	,@PassportNo VARCHAR(35) = ''
+	,@PassportExp DATETIME = NULL
+	,@ChineseName NVARCHAR(200) = NULL
+	,@ModifiedBy INT
+	,@CountryCode VARCHAR(5) = NULL
+	,@PlaceOfbirth NVARCHAR(250) = ''
+	,@Ethnic NVARCHAR(250) = ''
+	,@Native NVARCHAR(250) = ''
+	,@Religion NVARCHAR(250) = ''
+	,@DateOfIDCard DATETIME = NULL
+	,@PlaceOfIDCard NVARCHAR(250) = ''
+	,@HomePhone NVARCHAR(250) = ''
+	,@Qualification NVARCHAR(300) = ''
+	,@Major NVARCHAR(300) = ''
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: TOM
@@ -39,51 +34,52 @@ Original:
 Revisions:    
 Param's Explanation:
 */
-
 BEGIN
 	SET NOCOUNT ON;
-	
+
 	BEGIN TRY
-		BEGIN TRANSACTION;	
-			UPDATE dbo.Employee WITH(ROWLOCK)
-		   SET --FullName =@FullName 
-				DOB =@DOB 
-				,Phone =@Phone 
-				,Gender = @Gender 
-				,Skype =@Skype 
-				,Yahoo =@Yahoo 
-				,Marriage = @Marriage 
-				,ModifiedDate = GETDATE() 
-				,ModifiedBy =@ModifiedBy 
-				,PermanentAddress =@PermanentAddress 
-				,CurrentAddress =@CurrentAddress 
-				,IdCardNumber =@IdCardNumber 
-				,PassportNo =@PassportNo 
-				,PassportExp =@PassportExp
+		BEGIN TRANSACTION;
 
-				,ChineseName=@ChineseName
-				,PlaceOfbirth =@PlaceOfbirth
-				,Ethnic =@Ethnic 
-				,[Native] =@Native 
-				,Religion =@Religion 
-				,DateOfIDCard =@DateOfIDCard 
-				,PlaceOfIDCard =@PlaceOfIDCard 
-				,HomePhone =@HomePhone 
-				,Qualification =@Qualification 
-				,Major =@Major 
-			WHERE EmpId = @EmpId
-	
-			UPDATE [dbo].[EmployeeSummary] WITH(ROWLOCK)
-						   SET CountryCode = @CountryCode
-			WHERE [EmpId]=@EmpId
+		UPDATE dbo.Employee WITH (ROWLOCK)
+		SET DOB = @DOB
+			,Phone = @Phone
+			,Gender = @Gender
+			,Skype = @Skype
+			,Yahoo = @Yahoo
+			,Marriage = @Marriage
+			,ModifiedDate = GETDATE()
+			,ModifiedBy = @ModifiedBy
+			,PermanentAddress = @PermanentAddress
+			,CurrentAddress = @CurrentAddress
+			,IdCardNumber = @IdCardNumber
+			,PassportNo = @PassportNo
+			,PassportExp = @PassportExp
+			,ChineseName = @ChineseName
+			,PlaceOfbirth = @PlaceOfbirth
+			,Ethnic = @Ethnic
+			,[Native] = @Native
+			,Religion = @Religion
+			,DateOfIDCard = @DateOfIDCard
+			,PlaceOfIDCard = @PlaceOfIDCard
+			,HomePhone = @HomePhone
+			,Qualification = @Qualification
+			,Major = @Major
+		WHERE EmpId = @EmpId
 
-			COMMIT TRANSACTION;
-		SELECT @ErrCode=0,@ErrCode=''
+		UPDATE [dbo].[EmployeeSummary] WITH (ROWLOCK)
+		SET CountryCode = @CountryCode
+		WHERE [EmpId] = @EmpId
+
+		COMMIT TRANSACTION;
+
+		SELECT @ErrCode = 0
+			,@ErrCode = ''
 	END TRY
+
 	BEGIN CATCH
 		ROLLBACK TRANSACTION
-		SELECT @ErrCode=100,@ErrMsg=N'Update failed';
+
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Update Unsuccessfully!';
 	END CATCH
 END
-
-
