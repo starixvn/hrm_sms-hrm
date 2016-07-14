@@ -36,8 +36,8 @@
             var sheet = hssfworkbook.CloneSheet("sheet1", "Request Statistic");
 
             var rowDate = sheet.GetRow(1);
-            rowDate.GetCell(4).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            rowDate.GetCell(6).SetCellValue(toDate.ToString("dd MMM, yyyy"));
+            rowDate.GetCell(3).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
+            rowDate.GetCell(5).SetCellValue(toDate.ToString("dd MMM, yyyy"));
 
             var rowIndex = _RowStartBodyHrRequestStatistic;
             var rowCopy = _RowStartBodyHrRequestStatistic;

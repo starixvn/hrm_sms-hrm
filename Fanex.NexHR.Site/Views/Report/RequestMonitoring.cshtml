@@ -73,21 +73,8 @@
                 @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
-            <div class="grid_3 gridlabel">@Labels.Team</div>
-            <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in ViewBag.Groups)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="grid_2 gridlabel">
-                Category
+            <div class="grid_3 gridlabel">
+                @Labels.Category
             </div>
             <div class="grid_6">
                 @{
@@ -100,17 +87,31 @@
                 }
                 @Html.DropDownList("category", category, new { @class = "category" })
             </div>
+            <div class="clear">
+            </div>
+            <div class="space">
+            </div>
+            <div class="grid_2 gridlabel">@Labels.Team</div>
+            <div class="grid_6">
+                <select id="group" multiple="multiple" class="team-select">
+                    @foreach (Team item in ViewBag.Groups)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
             <div class="grid_3 gridlabel">@Html.LabelFor(model => model.MaxRequest)</div>
             <div class="grid_2">
                 @RazorHelper.MaxRequestDropDownList(Model.MaxRequest)
             </div>
+            <div class="grid_2"><br /></div>
             <div>
                 <input type="button" value="@Labels.Submit" id="queryData" />
                 <input type="button" value="Excel" id="excel" />
             </div>
         </div>
     </div>
-}
+                    }
 <div class="clear">
 </div>
 <div id="HrRequestMonitoringTemplate">
