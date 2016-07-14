@@ -152,6 +152,16 @@
   text-align: right;
 }
 
+.ui-multiselect-menu .ui-multiselect-checkboxes {
+  height: auto !important;
+  max-height: 250px;
+}
+
+.ui-autocomplete {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 table.table.table-custom {
   width: 100%;
   margin: 10px 0;

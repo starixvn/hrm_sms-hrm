@@ -287,6 +287,12 @@
     <Content Include="Content\views\employee\employee.shift.manger.min.css">
       <DependentUpon>employee.shift.manger.css</DependentUpon>
     </Content>
+    <Content Include="Content\views\report\report.attendance.css">
+      <DependentUpon>report.attendance.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\views\report\report.attendance.min.css">
+      <DependentUpon>report.attendance.css</DependentUpon>
+    </Content>
     <Content Include="Content\views\request\employee.request.css">
       <DependentUpon>employee.request.scss</DependentUpon>
     </Content>
@@ -807,7 +813,6 @@
     <Content Include="Styles\Images\close.png" />
     <Content Include="Styles\Images\reject.png" />
     <Content Include="Styles\report.timesheet.css" />
-    <Content Include="Styles\report.attendance.css" />
     <Content Include="Styles\Images\bg-demo-docs-param.gif" />
     <Content Include="Styles\Images\demo-spindown-closed.gif" />
     <Content Include="Styles\Images\demo-spindown-open.gif" />
@@ -1226,12 +1231,17 @@
       <DependentUpon>workingcalendars.css</DependentUpon>
     </Content>
     <Content Include="Content\sass\vendors\_dataTables.scss" />
+    <Content Include="Content\sass\vendors\_jqueryUI.scss" />
     <None Include="Content\views\employee\employee.detail.scss" />
     <Content Include="Content\views\employee\employee.edit.scss" />
     <Content Include="Content\views\employee\employee.edit.css.map">
       <DependentUpon>employee.edit.css</DependentUpon>
     </Content>
     <None Include="Content\views\employee\employee.shift.manager.scss" />
+    <Content Include="Content\views\report\report.attendance.scss" />
+    <Content Include="Content\views\report\report.attendance.css.map">
+      <DependentUpon>report.attendance.css</DependentUpon>
+    </Content>
     <None Include="Content\views\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
@@ -1262,6 +1272,7 @@
     <Content Include="Views\Report\_TotalWorkingHourWeeklyDetails.cshtml" />
     <Content Include="Views\Report\_TotalWorkingHourMonthlyDetails.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
+    <Content Include="Views\Report\_AttendanceDetails.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

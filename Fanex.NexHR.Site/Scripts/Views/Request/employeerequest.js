@@ -61,7 +61,7 @@
                         }
                     });
 
-                    var data = jQuery.grep(ignoredDisciplines, function (item, index) {
+                    var data = jQuery.grep(ignoredDisciplines, function (item) {
                         return item.IsIgnored === false && item.IsConfirmed === false;
                     });
 

@@ -3,13 +3,13 @@
 
 var bindingDataIfEditMode = function () {
     var messageId = $('#messageId').val(),
-		messageSubject = $('#messageSubject').val(),
-		messageContents = $('#messageContents').val(),
-		messageFromDate = $('#messageFromDate').val(),
-		messageToDate = $('#messageToDate').val(),
-		messageEmployeeIds = $('#messageEmployeeIds').val(),
-		messageGroupIds = $('#messageGroupIds').val(),
-		messageCategory = $('#messageCategory').val();
+        messageSubject = $('#messageSubject').val(),
+        messageContents = $('#messageContents').val(),
+        messageFromDate = $('#messageFromDate').val(),
+        messageToDate = $('#messageToDate').val(),
+        messageEmployeeIds = $('#messageEmployeeIds').val(),
+        messageGroupIds = $('#messageGroupIds').val(),
+        messageCategory = $('#messageCategory').val();
 
     $('#Subject').val(messageSubject);
     $('#Contents').val(messageContents);
@@ -44,7 +44,7 @@ var init = function () {
 
 var validateForm = function () {
     var errorString = [],
-		check = true;
+        check = true;
 
     if (!$('#Subject').val()) {
         errorString.push('The Subject field is required!');
@@ -86,11 +86,10 @@ var createStringResult = function (items) {
 };
 
 var getEmail = function (result, items) {
-
     if (items) {
         for (var i = 0; i < items.length; i++) {
             var item = items[i],
-				email = $(item).attr('email');
+                email = $(item).attr('email');
 
             if (email) {
                 if (!result) {
@@ -120,12 +119,11 @@ $(document).ready(function () {
             event.preventDefault();
 
             var form = $(this),
-				employees = createStringResult($('#employee').val()),
-				groups = createStringResult($('#group').val()),
-				sendToEmails = getEmail("", $('#employee option:selected'));
+                employees = createStringResult($('#employee').val()),
+                groups = createStringResult($('#group').val()),
+                sendToEmails = getEmail("", $('#employee option:selected'));
 
-            sendToEmails = sendToEmails !== undefined ? getEmail(sendToEmails, $('#group option:selected'))
-													: getEmail("", $('#group option:selected'));
+            sendToEmails = sendToEmails !== undefined ? getEmail(sendToEmails, $('#group option:selected')) : getEmail("", $('#group option:selected'));
 
             $('#EmployeeIds').val(employees);
             $('#GroupIds').val(groups);

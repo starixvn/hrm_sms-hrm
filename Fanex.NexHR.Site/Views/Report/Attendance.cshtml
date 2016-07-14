@@ -15,67 +15,44 @@
 <h2>
     @ViewBag.Title
 </h2>
-<div class="container_24 bunhat">
-    @using (Html.BeginGetForm())
-    {
-        @Html.ValidationSummary(true)
+<form class="form-filter">
+    <div class="container_24 bunhat">
         @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
         @Html.HiddenFor(model => model.SupervisorId)
+        @Html.HiddenFor(model => model.GroupIds)
+        @Html.HiddenFor(model => model.IsLocal)
         <div class="grid_2 gridlabel">
             @Labels.DateRange
         </div>
         <div class="grid_4">
             <select id="Date" name="Date">
-                <option value="0">
-                    @Labels.DateRange
-                </option>
-                <option value="1">
-                    @Labels.ToDay
-                </option>
-                <option value="2">
-                    @Labels.Yesterday
-                </option>
-                <option value="3">
-                    @Labels.CurrentWeek
-                </option>
-                <option value="4">
-                    @Labels.LastWeek
-                </option>
-                <option value="5">
-                    @Labels.CurrentMonth
-                </option>
-                <option value="6">
-                    @Labels.LastMonth
-                </option>
-                <option value="7">
-                    @Labels.SinceLastMonth
-                </option>
+                <option value="0">@Labels.DateRange</option>
+                <option value="1">@Labels.ToDay</option>
+                <option value="2">@Labels.Yesterday</option>
+                <option value="3">@Labels.CurrentWeek</option>
+                <option value="4">@Labels.LastWeek</option>
+                <option value="5">@Labels.CurrentMonth</option>
+                <option value="6">@Labels.LastMonth</option>
+                <option value="7">@Labels.SinceLastMonth</option>
             </select>
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
-
-        <div class="grid_2">
-            @Labels.FromDate
-        </div>
+        <div class="grid_2">@Labels.FromDate</div>
         <div class="grid_6">
             @Html.DatePicker("FromDate", Model.FromDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
-        <div class="grid_2">
-            @Labels.ToDate
-        </div>
+        <div class="grid_2">@Labels.ToDate</div>
         <div class="grid_4">
             @Html.DatePicker("ToDate", Model.ToDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
         <div class="grid_2">
             @Html.LabelFor(model => model.AttendanceType, "Request")
         </div>
         <div class="grid_4">
             @{
-        var types = new List<SelectListItem>
+                var types = new List<SelectListItem>
                 {
                     new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
                     new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
@@ -87,10 +64,7 @@
             }
             @Html.DropDownListFor(model => model.AttendanceType, types)
         </div>
-
-        <div class="grid_2">
-            @Labels.Team
-        </div>
+        <div class="grid_2">@Labels.Section</div>
         <div class="grid_6">
             @if (isMember)
             {
@@ -99,7 +73,7 @@
             }
             else
             {
-                <select id="GroupId" multiple="multiple" name="GroupId" title="@Labels.Team">
+                <select id="group" multiple="multiple">
                     @foreach (Team item in ViewBag.Groups)
                     {
                         <option value="@item.Id">@item.Name</option>
@@ -113,176 +87,27 @@
         <div class="grid_4">
             @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark })
             @Html.Hidden("EmployeeId", Model.EmpId)
-            @Html.ValidationMessageFor(model => model.EmpId)
         </div>
-
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="clear"></div>
+        <div class="space"></div>
         <div class="grid_2 gridlabel">
             @Labels.Category
         </div>
         <div class="grid_4">
-            @{
-        var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"},
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
-            }
-            @Html.DropDownList("category", category, new { @class = "category" })
+            @RazorHelper.CategoryDropDownList("category", "category")
         </div>
-
-        <div class="grid_4" style="margin-top: 5px;">
+        <div class="grid_6" style="margin-top: 5px;">
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
-        <div class="grid_2">
-            &nbsp;
-        </div>
+        <div class="grid_2">&nbsp;</div>
         <div class="grid_6">
-            <input type="submit" value="@Labels.Submit" id="view" />
+            <input type="button" value="@Labels.Submit" id="btnSubmit" />
             <input type="button" value="Excel" id="btnExcel" />
         </div>
-        <div class="clear">
-        </div>
-    }
-</div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<table id="data" class="table table-custom persist-area">
-    <thead>
-        <tr class="persist-header">
-            <th>@Labels.SymbolCount</th>
-            <th>
-                @Labels.Date
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>
-                @Labels.Shift
-            </th>
-            <th>
-                @Labels.CheckIn
-            </th>
-            <th>
-                @Labels.CheckOut
-            </th>
-            <th>
-                @Labels.TotalHours
-            </th>
-            <th>
-                @Labels.LateIn
-            </th>
-            <th>
-                @Labels.EarlyOut
-            </th>
-            <th>
-                @Labels.Request
-            </th>
-            <th>
-                @Labels.Overtime
-            </th>
-            <th>
-                @Labels.Note
-            </th>
-            <th>
-            </th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-<script id="itemTemplate" type="text/x-jquery-tmpl">
-    <tr {{if LateIn > 30 || EarlyOut > 30}} class="highlight-row" {{/if}}>
-        <td>${index()}</td>
-
-        {{if IsWeekend == true}}
-        <td class="weekend">${jsonToDetailsDate(AttendanceDate)}</td>
-        {{else}}
-        <td>${jsonToDetailsDate(AttendanceDate)}</td>
-        {{/if}}
-
-        <td title="${FullName}" class="left tooltip">
-            ${NickName}
-        </td>
-        <td class="tooltip" title="${Team}">
-            ${TeamCode}
-        </td>
-        {{if IsOffDay != 0 && ShiftId != null}}
-        <td class=" mytimesheet-workinginoffday tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
-            ${ShiftCode}
-        </td>
-        {{else}}
-        <td class="tooltip" {{if ShiftCode != null}} title="${ExpectedInTime}-${ExpectedOutTime}" {{/if}}>
-            ${ShiftCode}
-        </td>
-        {{/if}}
-        <td class="tooltip" title="${jsonToFullDateTime(InFixed)}">
-            {{if InFixed}}${jsonTojsDate(InFixed).format("HH:MM")}{{/if}}
-        </td>
-        <td class="tooltip" title="${jsonToFullDateTime(OutFixed)}">
-            {{if OutFixed}}${jsonTojsDate(OutFixed).format("HH:MM")}{{/if}}
-        </td>
-        <td>
-            {{if TotalWorkHours > 0}}
-            ${totalHoursToTime(TotalWorkHours)}
-            {{/if}}
-        </td>
-        <td>
-            {{if LateIn > 0}}
-            ${displayMinute(LateIn)}
-            {{/if}}
-        </td>
-        <td>
-            {{if EarlyOut > 0}}
-            ${displayMinute(EarlyOut)}
-            {{/if}}
-        </td>
-        <td>
-            {{if RequestList != null > 0}}
-            {{each RequestList}}
-            <a href='#' class="tooltip-request req"
-               data-requesttype="${RequestType.Id}"
-               data-fromdate="${FromDate}"
-               data-todate="${ToDate}"
-               data-createddate="${CreatedDateTime}"
-               data-fromshift="${FromShift}"
-               data-toshift="${ToShift}"
-               data-fromtime="${FromTime}"
-               data-totime="${ToTime}"
-               data-totaldays="${TotalDays}"
-               data-totalmins="${TotalMins}"
-               data-remark='${Remark}'>
-                ${RequestType.Name}
-            </a>
-            {{/each}}
-
-            {{/if}}
-        </td>
-        <td>
-            {{if IsOvertime != 0}}
-            <span title="${FormattedOvertimeStatus}" class="req mytimesheet-${FormattedOvertimeStatus} tooltip">${OvertimeHours}</span>
-            {{/if}}
-        </td>
-        <td class="left">
-            ${Notes}
-        </td>
-        <td class="td-warning">
-            {{if IsWarning == true}}
-            <span class="icon-warning" />
-            {{/if}}
-        </td>
-    </tr>
-</script>
+        <div class="clear"></div>
+    </div>
+</form>
+<div id="attendanceDetails"></div>

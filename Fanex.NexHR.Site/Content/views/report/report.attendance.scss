@@ -1,0 +1,40 @@
+﻿form.form-filter {
+    .grid_2 {
+        line-height: 26px;
+    }
+
+    select {
+        min-width: 130px;
+        max-width: 130px;
+    }
+
+    #Employee {
+        width: 140px;
+    }
+
+    .isMember {
+        line-height: 26px;
+    }
+}
+
+.overtimetype1 {
+    color: #1B50C0;
+}
+
+.overtimetype2 {
+    color: #E70B04;
+}
+
+table.table.table-custom {
+    tr.offdate {
+        background: #ccc !important;
+    }
+
+    tr.noshift {
+        background: #ccc !important;
+    }
+
+    tr.highlight {
+        background: #edeac7 !important;
+    }
+}

@@ -162,7 +162,7 @@
 
     <resourceSet name="attendancereportcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/report.attendance.css" />
+      <resource path="~/content/views/report/report.attendance.css" />
     </resourceSet>
     <resourceSet name="attendancereportjs" type="js">
       <resource reference="sitejs" />

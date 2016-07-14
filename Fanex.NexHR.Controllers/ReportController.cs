@@ -92,6 +92,26 @@
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult AttendanceDetails(EmployeeAttendanceViewModel model)
+        {
+            var criteria = new GetEmployeeAttendanceCriteria()
+            {
+                SupervisorId = model.SupervisorId,
+                Fromtime = model.FromDate,
+                Totime = model.ToDate,
+                AttendanceType = model.AttendanceType,
+                EmpId = model.EmpId,
+                Groupids = model.GroupIds,
+                ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
+                IsLocal = model.IsLocal
+            };
+
+            IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
+
+            return PartialView("_AttendanceDetails", employeeAttendances);
+        }
+
         [HttpGet]
         public ActionResult Timesheet()
         {
