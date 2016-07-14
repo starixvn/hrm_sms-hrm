@@ -742,6 +742,7 @@
                 index++;
             }
 
+            sheet.CreateFreezePane(0, 5);
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;

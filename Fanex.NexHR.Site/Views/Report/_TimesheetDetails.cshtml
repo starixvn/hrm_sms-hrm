@@ -42,7 +42,9 @@
                 <tr class="@trClass">
                     <td>@index</td>
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">
-                        <a href="@Url.Action("timerecord", "report", new { FromDate = item.AttendanceDate, ToDate = item.AttendanceDate.Value.AddDays(1) })"
+                        <a href="@Url.Action("timerecord", "report", new { 
+                                FromDate = item.AttendanceDate.ToDateMonthYearFormatedDate(),
+                                ToDate = item.AttendanceDate.Value.AddDays(1).ToDateMonthYearFormatedDate() })"
                            title="Link to time records">
                             @item.AttendanceDate.ToDateMonthYearFormatedDate()
                         </a>

@@ -1064,7 +1064,7 @@
     <Content Include="Views\KeepInView\Update.cshtml" />
     <Content Include="Views\KeepInView\EmployeeView.cshtml" />
     <Content Include="Views\Leave\Detail.cshtml" />
-    <Content Include="Views\Calendar\WorkingCalendarDetails.cshtml" />
+    <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
     <Content Include="Views\Calendar\ArrangeSchedule.cshtml" />
     <Content Include="Views\Calendar\ArrangeScheduleDetail.cshtml" />
     <Content Include="Views\Calendar\ShiftStatistic.cshtml" />

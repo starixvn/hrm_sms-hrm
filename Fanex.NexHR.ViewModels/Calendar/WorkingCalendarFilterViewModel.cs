@@ -10,7 +10,7 @@
         public WorkingCalendarFilterViewModel()
         {
             JobTitles = new List<SelectListItem>();
-            Groups = new List<Team>();
+            Sections = new List<Team>();
         }
 
         public DateTime FromDate { get; set; }
@@ -19,6 +19,14 @@
 
         public IList<SelectListItem> JobTitles { get; set; }
 
-        public IList<Team> Groups { get; set; }
+        public IList<Team> Sections { get; set; }
+
+        public int? EmployeeId { get; set; }
+
+        public byte? IsLocal { get; set; }
+
+        public string SectionIds { get; set; }
+
+        public string JobTitleIds { get; set; }
     }
 }

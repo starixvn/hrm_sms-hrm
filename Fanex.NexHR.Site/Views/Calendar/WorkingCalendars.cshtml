@@ -10,7 +10,7 @@
     @Url.CombresLink("workingcalendarsjs")
 }
 @{
-    ViewBag.Title = "Working calendars";
+    ViewBag.Title = "Working Calendars";
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
@@ -31,10 +31,14 @@
     }
 </div>
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginGetForm())
-{
-    var displayFrom = Model.FromDate.ToString("dd MMM, yyyy");
-    var displayTo = Model.ToDate.ToString("dd MMM, yyyy");
+<form class="form-filter">
+    @{
+        var displayFrom = Model.FromDate.ToDateMonthYearFormatedDate();
+        var displayTo = Model.ToDate.ToDateMonthYearFormatedDate();
+    }
+    @Html.HiddenFor(model => model.SectionIds)
+    @Html.HiddenFor(model => model.JobTitleIds)
+    @Html.HiddenFor(model => model.IsLocal)
     <div class="container_24 bunhat">
         <div class="grid_24">
             <div class="grid_2 gridlabel">
@@ -49,15 +53,13 @@
             <div class="grid_2 gridlabel">@Labels.Section</div>
             <div class="grid_6">
                 <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in Model.Groups)
+                    @foreach (Team item in Model.Sections)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
                 </select>
             </div>
-            <div class="grid_2 gridlabel">
-                Position
-            </div>
+            <div class="grid_2 gridlabel">@Labels.JobTitle</div>
             <div class="grid_6">
                 @Html.DropDownList("title", Model.JobTitles, new { @class = "title-select", multiple = "multiple" })
             </div>
@@ -67,7 +69,7 @@
             <div class="grid_2 gridlabel">@Labels.Employee</div>
             <div class="grid_7">
                 @Html.Editor("Employee")
-                @Html.Hidden("EmployeeId")
+                @Html.HiddenFor(model => model.EmployeeId)
             </div>
             <div class="grid_2 gridlabel">@Labels.Category</div>
             <div class="grid_3">
@@ -92,7 +94,7 @@
         @Html.Hidden("OriginalFromDate", Model.FromDate)
         @Html.Hidden("OriginalToDate", Model.ToDate)
     </div>
-}
+</form>
 
 <table id="workingCalendarDetails" class="pretty"></table>
 <br />

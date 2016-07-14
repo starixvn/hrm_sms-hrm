@@ -273,9 +273,10 @@
 
         public ActionResult WorkingCalendars()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
+            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
+
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.JobTitle };
-            var jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria).Select(j => new SelectListItem
+            IList<SelectListItem> jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria).Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
@@ -289,18 +290,18 @@
             {
                 FromDate = GetStartOfWeek(DateTime.Now),
                 ToDate = GetEndOfWeek(DateTime.Now),
-                Groups = teamService.GetAll(getAllGroupCriteria),
+                Sections = sections,
                 JobTitles = jobTitles
             };
 
             return View(model);
         }
 
-        public ActionResult WorkingCalendarDetails(int? empId, DateTime fromDate, DateTime toDate, string groupId, string jobTitleId, byte? isLocal = null)
+        public ActionResult WorkingCalendarDetails(WorkingCalendarFilterViewModel model)
         {
-            var workingCalendars = new List<WorkingCalendarsViewModel>();
-            int month = DateTime.Now.Month;
-            int year = DateTime.Now.Year;
+            IList<WorkingCalendarsViewModel> workingCalendars = new List<WorkingCalendarsViewModel>();
+            int month = DateTime.Now.Month,
+                year = DateTime.Now.Year;
             var firstDateInMonth = new StringBuilder();
 
             firstDateInMonth.AppendFormat("{0}/{1}/1", year, month);
@@ -318,28 +319,28 @@
 
             var criteria = new GetWorkingCalendarWeeklyCriteria()
             {
-                EmpId = empId,
-                Fromtime = fromDate,
-                Totime = toDate,
-                GroupIds = groupId,
-                JobTitleId = jobTitleId,
-                IsLocal = isLocal
+                EmpId = model.EmployeeId,
+                Fromtime = model.FromDate,
+                Totime = model.ToDate,
+                GroupIds = model.SectionIds,
+                JobTitleId = model.JobTitleIds,
+                IsLocal = model.IsLocal
             };
 
-            workingCalendars = workingCalendarService.GetWorkingCalendars(criteria).ToList();
-            CheckChangeShiff(workingCalendars, userChangedShifts, fromDate);
-            CheckHalfDayOff(workingCalendars, userHalfDayOffs, fromDate);
+            workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            CheckChangeShiff(workingCalendars, userChangedShifts, model.FromDate);
+            CheckHalfDayOff(workingCalendars, userHalfDayOffs, model.FromDate);
 
-            var model = new WorkingCalendarDetailViewModel()
+            var workingCalendarDetails = new WorkingCalendarDetailViewModel()
             {
                 Year = year,
                 Month = month,
-                FromDate = fromDate,
-                ToDate = toDate,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
                 WorkingCalendars = workingCalendars
             };
 
-            return PartialView(model);
+            return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
         }
 
         public ActionResult MemberScheduleInOrder()
