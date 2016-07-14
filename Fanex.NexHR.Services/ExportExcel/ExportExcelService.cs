@@ -19,7 +19,6 @@
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelService : IExportExcelService
     {
-        private const int _RowStartBodyAttendance = 3;
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;
         private const int _RowStartBodyOvertimeReport = 4;
@@ -27,7 +26,6 @@
         private const int _RowStartBodyWorkingCalendar = 5;
         private const int _RowStartBodyYearlyOvertimeReport = 5;
 
-        private const string _AttendanceFilePathExcelTemplate = "~\\ExcelTemplates\\AttendanceReportTemplate.xls";
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _UnpaidLeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\UnpaidLeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
@@ -92,95 +90,6 @@
             writer.SyncColumnsWidth(10);
 
             writer.Render();
-        }
-
-        public HSSFWorkbook ExportAttendance(IList<EmployeeAttendanceModel> attendanceList, DateTime fromDate, DateTime toDate)
-        {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_AttendanceFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "AttendanceReport");
-
-            //// render body
-            var rowIndex = _RowStartBodyAttendance;
-            var index = 1;
-            var height = sheet.GetRow(_RowStartBodyAttendance).Height;
-
-            foreach (var item in attendanceList)
-            {
-                var requests = string.Empty;
-                var rowCopy = _RowStartBodyAttendance + (index % 2);
-                if (item.LateIn > 30 || item.EarlyOut > 30)
-                {
-                    rowCopy = _RowStartBodyAttendance + 2;
-                }
-                else
-                {
-                    if (item.IsWeekend)
-                    {
-                        rowCopy = 6 + (index % 2);
-                    }
-                    else
-                    {
-                        rowCopy = _RowStartBodyAttendance + (index % 2);
-                    }
-                }
-
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-
-                row.GetCell(0).SetCellValue(index);
-                row.GetCell(1).SetCellValue(item.AttendanceDate.Value.ToDayOfWeekFormatedDate());
-                row.GetCell(2).SetCellValue(item.Code);
-                row.GetCell(3).SetCellValue(item.NickName);
-                row.GetCell(4).SetCellValue(item.FullName);
-                row.GetCell(5).SetCellValue(item.TeamCode);
-                row.GetCell(6).SetCellValue(string.IsNullOrEmpty(item.ShiftCode) ? string.Empty : item.ShiftCode);
-                row.GetCell(7).SetCellValue(item.InFixed.HasValue ? item.InFixed.Value.ToShortTime() : string.Empty);
-                row.GetCell(8).SetCellValue(item.OutFixed.HasValue ? item.OutFixed.Value.ToShortTime() : string.Empty);
-                row.GetCell(9).SetCellValue(item.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)item.TotalWorkHours) : string.Empty);
-                row.GetCell(10).SetCellValue(Utilities.MinuteToTime(item.LateIn));
-                row.GetCell(11).SetCellValue(Utilities.MinuteToTime(item.EarlyOut));
-                row.GetCell(14).SetCellValue(item.Notes);
-
-                if (item.RequestList.Count > 0)
-                {
-                    row.Height = (short)(height * item.RequestList.Count);
-
-                    foreach (var request in item.RequestList)
-                    {
-                        requests += "- " + request.RequestType.Name + ": " + this.GetRequestDetail(request)
-                            + "\r\n- Create date: " + request.CreatedDate.ToDateMonthYearFormatedDate()
-                            + (string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark) + "\r\n";
-                    }
-
-                    requests = requests.Substring(0, requests.Length - 2);
-                    row.GetCell(12).SetCellValue(requests);
-                }
-                else
-                {
-                    row.Height = height;
-                }
-
-                if (item.IsOvertime)
-                {
-                    row.GetCell(13).SetCellValue(item.FormattedOvertimeStatus + " (" + item.OvertimeHours.ToString() + ")");
-                }
-
-                rowIndex++;
-                index++;
-            }
-
-            //// remove sheet & row template
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
         }
 
         public void ExportManpower(IList<ManpowerModel> manpowers, int year, string templatePath)
@@ -1425,69 +1334,6 @@
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
             cellStatus.SetCellValue(item.Status.Name);
-        }
-
-        private string GetRequestDetail(EmployeeAttendanceRequest request)
-        {
-            var detail = string.Empty;
-            var date = string.Empty;
-
-            if (request.FromDate.HasValue && request.ToDate.HasValue)
-            {
-                date = RequestService.GetMessageDateString(request.FromDate.Value, request.ToDate.Value);
-            }
-
-            switch (request.RequestType.Id)
-            {
-                case (int)RequestType.Leave:
-                    if (request.TotalDays > 1)
-                    {
-                        detail = string.Format(_MsgLeave, Convert.ToInt32(request.TotalDays), date);
-                    }
-                    else if (request.TotalDays == 1)
-                    {
-                        detail = string.Format(_MsgLeaveOneDay, date);
-                    }
-                    else if ((request.TotalDays - (decimal)0.5) == 0)
-                    {
-                        // 0.5 day
-                        detail = string.Format(_MsgLeaveHalfDay, date, request.FromDate.Value.ToString("HH:mm"), request.ToDate.Value.ToString("HH:mm"));
-                    }
-                    else
-                    {
-                        detail = string.Format(
-                            _MsgLeaveDuringWorking,
-                            date,
-                            request.FromDate.Value.ToString("HH:mm"),
-                            request.ToDate.Value.ToString("HH:mm"),
-                            (request.ToDate.Value - request.FromDate.Value).TotalMinutes);
-                    }
-
-                    break;
-
-                case (int)RequestType.ChangeShift:
-                    detail = string.Format(_MsgChangeShift, request.FromShift, request.ToShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.CheckIn:
-                case (int)RequestType.CheckOut:
-                    detail = string.Format(_MsgCheckInOut, request.FromDate.Value.ToString("HH:mm"), request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.LateIn:
-                    detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift, date);
-                    break;
-
-                case (int)RequestType.EarlyOut:
-                    detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift, date);
-                    break;
-
-                case (int)RequestType.KeepInView:
-                    detail = string.Format(_MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-            }
-
-            return detail;
         }
 
         private string GetRequestDetail(RequestEntity request)

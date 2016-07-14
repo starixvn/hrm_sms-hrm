@@ -165,6 +165,8 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="CommandService.cs" />
     <Compile Include="DepartmentService.cs" />
+    <Compile Include="ExportExcel\Attendance\ExportExcelAttendanceReportService.cs" />
+    <Compile Include="ExportExcel\Attendance\IExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\IExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourDailyExportService.cs" />

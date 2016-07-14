@@ -82,19 +82,19 @@
                     <td>
                         @if (item.TotalWorkHours > 0)
                         {
-                            @RazorHelper.TotalHoursToTime(item.TotalWorkHours)
+                            @Utilities.TotalHoursToTime((float)item.TotalWorkHours)
                         }
                     </td>
                     <td>
                         @if (item.LateIn > 0)
                         {
-                            @RazorHelper.DisplayMinute(item.LateIn)
+                            @Utilities.MinuteToTime(item.LateIn)
                         }
                     </td>
                     <td>
                         @if (item.EarlyOut > 0)
                         {
-                            @RazorHelper.DisplayMinute(item.EarlyOut)
+                            @Utilities.MinuteToTime(item.EarlyOut)
                         }
                     </td>
                     <td>

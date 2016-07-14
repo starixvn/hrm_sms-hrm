@@ -52,10 +52,11 @@
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IDisciplineService disciplineService;
+        private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -67,7 +68,8 @@
             IOvertimeRequestService overtimeService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
-            IDisciplineService disciplineService)
+            IDisciplineService disciplineService,
+            IExportExcelAttendanceReportService exportExcelAttendanceReportService)
         {
             this.reportService = reportService ?? new ReportService();
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
@@ -77,6 +79,7 @@
             this.employeeService = employeeService ?? new EmployeeService();
             this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             this.disciplineService = disciplineService ?? new DisciplineService();
+            this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
         }
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
@@ -126,11 +129,10 @@
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal
             };
-            IList<EmployeeAttendanceModel> employeeAttendance = reportService.GetEmployeeAttendanceReport(criteria);
+            IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
+            exportExcelAttendanceReportService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportAttendance(employeeAttendance, model.FromDate, model.ToDate);
-
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult LeaveSummary(LeaveSummaryViewModel model)

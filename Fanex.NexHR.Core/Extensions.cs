@@ -29,19 +29,19 @@
 
             if (listOfValues != null)
             {
-                // Create a radio button for each item in the list 
+                // Create a radio button for each item in the list
                 foreach (SelectListItem item in listOfValues)
                 {
-                    // Generate an id to be given to the radio button field 
+                    // Generate an id to be given to the radio button field
                     var id = string.Format("{0}_{1}", metaData.PropertyName, item.Value);
 
-                    // Create and populate a radio button using the existing html helpers 
+                    // Create and populate a radio button using the existing html helpers
                     var label = htmlHelper.Label(id, HttpUtility.HtmlEncode(item.Text));
                     var radio = htmlHelper.RadioButtonFor(expression, item.Value, new { id = id }).ToHtmlString();
 
-                    // Create the html string that will be returned to the client 
+                    // Create the html string that will be returned to the client
                     // e.g. <input data-val="true" data-val-required="You must select an option" id="TestRadio_1" name="TestRadio" type="radio" value="1" />
-                    // <label for="TestRadio_1">Line1</label> 
+                    // <label for="TestRadio_1">Line1</label>
                     sb.AppendFormat("<div class=\"radioButton\">{0}{1}</div>", radio, label);
                 }
             }
@@ -67,13 +67,13 @@
                 ? string.Join(",", unavailDates.Select(d => d.ToString("dd MMM yyyy")))
                 : string.Empty;
 
-            var htmlAttribute = new 
+            var htmlAttribute = new
                 {
-                @class = "datepicker",
-                mindate = minDate != null && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
-                maxdate = maxDate != null && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
-                disabledDate = disabledDate
-            };
+                    @class = "datepicker",
+                    mindate = minDate != null && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
+                    maxdate = maxDate != null && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
+                    disabledDate = disabledDate
+                };
 
             var dateValue = date.HasValue ? date.Value.ToString(formatDate) : string.Empty;
 
@@ -84,8 +84,8 @@
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString DatePickerFor<TModel, TValue>(
-            this HtmlHelper<TModel> html, 
-            Expression<Func<TModel, TValue>> expression, 
+            this HtmlHelper<TModel> html,
+            Expression<Func<TModel, TValue>> expression,
             DateTime? minDate = null,
             DateTime? maxDate = null,
             string formatDate = "dd MMM, yyyy",
@@ -188,9 +188,9 @@
         }
 
         public static MvcHtmlString CheckBoxList(
-            this HtmlHelper htmlHelper, 
-            string name, 
-            IEnumerable<SelectListItem> selectList, 
+            this HtmlHelper htmlHelper,
+            string name,
+            IEnumerable<SelectListItem> selectList,
             IDictionary<string, object> htmlAttributes)
         {
             string fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(name);
@@ -240,8 +240,8 @@
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
-            this HtmlHelper<TModel> htmlHelper, 
-            Expression<Func<TModel, TProperty>> expression, 
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression,
             IEnumerable<SelectListItem> selectList)
         {
             return CheckBoxListFor(htmlHelper, expression, selectList, (IDictionary<string, object>)null);
@@ -249,9 +249,9 @@
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
-            this HtmlHelper<TModel> htmlHelper, 
-            Expression<Func<TModel, TProperty>> expression, 
-            IEnumerable<SelectListItem> selectList, 
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> selectList,
             object htmlAttributes)
         {
             return CheckBoxListFor(htmlHelper, expression, selectList, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
@@ -260,25 +260,29 @@
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Reviewed. Suppression is OK here.")]
         public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(
-            this HtmlHelper<TModel> htmlHelper, 
-            Expression<Func<TModel, TProperty>> expression, 
-            IEnumerable<SelectListItem> selectList, 
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> selectList,
             IDictionary<string, object> htmlAttributes)
         {
             return CheckBoxList(htmlHelper, ExpressionHelper.GetExpressionText(expression), selectList, htmlAttributes);
         }
 
         #region Business
+
         public static string ToText(this byte status)
         {
             switch (status)
             {
                 case 1:
                     return Labels.Pending;
+
                 case 2:
                     return Labels.Approved;
+
                 case 3:
                     return Labels.Rejected;
+
                 default:
                     return string.Empty;
             }
@@ -290,20 +294,28 @@
             {
                 case (int)RequestType.CheckIn:
                     return Labels.CheckIn;
+
                 case (int)RequestType.CheckOut:
                     return Labels.CheckOut;
+
                 case (int)RequestType.LateIn:
                     return Labels.LateIn;
+
                 case (int)RequestType.EarlyOut:
                     return Labels.EarlyOut;
+
                 case (int)RequestType.ChangeShift:
                     return Labels.ChangeShift;
+
                 case (int)RequestType.Leave:
                     return Labels.Leave;
+
                 case (int)RequestType.KeepInView:
                     return Labels.KeepInView;
+
                 case (int)RequestType.Overtime:
                     return Labels.Overtime;
+
                 default:
                     return string.Empty;
             }
@@ -451,13 +463,13 @@
             return SelectExtensions.DropDownListFor(htmlHelper, expression, selectList, htmlAttributes);
         }
 
-        #endregion
+        #endregion Business
 
         private static StringBuilder RenderCheckBoxList(
-            string name, 
-            ref IEnumerable<SelectListItem> selectList, 
-            ref IDictionary<string, object> htmlAttributes, 
-            string fullHtmlFieldName, 
+            string name,
+            ref IEnumerable<SelectListItem> selectList,
+            ref IDictionary<string, object> htmlAttributes,
+            string fullHtmlFieldName,
             object values)
         {
             if (values != null)
