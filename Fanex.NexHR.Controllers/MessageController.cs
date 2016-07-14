@@ -84,8 +84,9 @@
 
             var getAllGroupCriteria = new GetAllGroupCriteria();
             ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            var model = new Message { FromDate = DateTime.Now, ToDate = DateTime.Now };
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]

@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, _messages*/
 
 var bindingDataIfEditMode = function () {
 	var messageId = $('#messageId').val(),
@@ -38,6 +38,8 @@ var init = function () {
 	$('#employee').chosen();
 	$('#employee').trigger("chosen:updated");
 	$("#group").multiselect();
+	$("#FromDate").prop("readonly", true);
+	$("#ToDate").prop("readonly", true);
 };
 
 var validateForm = function () {
@@ -105,14 +107,16 @@ var getEmail = function (result, items) {
 };
 
 $(document).ready(function () {
-	init();
+    init();
+
+    var $error = $("#error");
 
 	$("form").submit(function (event) {
 		var validate = validateForm();
 
 		if (validate) {
-			$("#error").hide();
-			$("#error").html('');
+		    $error.hide();
+		    $error.html('');
 			event.preventDefault();
 
 			var form = $(this),
@@ -141,11 +145,13 @@ $(document).ready(function () {
 						}, 2500);
 					}
 					else {
-						$("#error").html(commandResult.message);
+					    $error.html(commandResult.Message);
+					    $error.show();
 					}
 				},
-				error: function (response) {
-					$("#error").html(response.message);
+				error: function () {
+				    $error.html(_messages.errorTryAgain);
+				    $error.show();
 				}
 			});
 		}
