@@ -21,7 +21,7 @@ SET NOCOUNT ON
 SELECT m.*, lk.[Name] as CategoryName 
 FROM dbo.MEMO m WITH(NOLOCK) 
 	INNER JOIN dbo.LookupData lk WITH(NOLOCK) on lk.id = m.Category
-WHERE year(m.SentDate) = @year
+WHERE (@year = 0 OR year(m.SentDate) = @year)
 AND Enabled = 1
 AND (@category = -1 OR m.Category = @category)
 order by m.SentDate desc
