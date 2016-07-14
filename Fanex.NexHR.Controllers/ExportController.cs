@@ -164,23 +164,17 @@
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
             string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            byte? isLocal = null;
-            if (model.Category != null)
-            {
-                isLocal = (byte)model.Category;
-            }
 
             var criteria = new GetUnpaidLeaveCriteria()
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 GroupIds = model.SectionIds,
-                IsLocal = isLocal,
-                SupervisorId = null
+                IsLocal = (byte?)model.Category,
+                SupervisorId = CurrentUser.Id
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
             HSSFWorkbook hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
