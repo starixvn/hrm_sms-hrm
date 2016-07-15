@@ -27,7 +27,6 @@
         private const int _RowStartBodyYearlyOvertimeReport = 5;
 
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
-        private const string _UnpaidLeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\UnpaidLeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
@@ -204,85 +203,6 @@
                         row.GetCell(16).SetCellValue(leaveSummary.Dec);
                         row.GetCell(17).SetCellValue(leaveSummary.LeaveBalance);
                         row.GetCell(18).SetCellValue(leaveSummary.KIVBalance);
-
-                        index++;
-                        rowIndex++;
-                    }
-                }
-            }
-            //// end render body
-
-            //// remove sheet & row template
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
-
-        public HSSFWorkbook ExportUnpaidLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
-        {
-            HSSFWorkbook hssfworkbook;
-
-            var templatePath = HttpContext.Current.Server.MapPath(_UnpaidLeaveSummaryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "UnpaidLeaveSummary");
-
-            //// render hearder
-            var rowTakeLeave = sheet.GetRow(2);
-            var cellTakeLeave = rowTakeLeave.GetCell(3);
-            cellTakeLeave.SetCellValue("Unpaid Leave's Report " + year);
-
-            var rowAnnualBalance = sheet.GetRow(2);
-            var cellAnnualBalance = rowAnnualBalance.GetCell(15);
-            cellAnnualBalance.SetCellValue("Total Of UPL " + year);
-
-            //// render body
-            var rowIndex = _RowStartBodyLeaveSummary;
-            var rowCopy = _RowStartBodyLeaveSummary;
-            var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
-            var index = 1;
-
-            foreach (var item in leaveSummaryList)
-            {
-                if (item.Team != null && item.LeaveSummaryInTeam.Count > 0)
-                {
-                    //// add row team
-                    rowCopy = _RowStartBodyLeaveSummary + 2;
-                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                    var rowTeam = sheet.GetRow(rowIndex);
-                    var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(item.Team.Name.ToUpper());
-                    sheet.MergeCells(rowIndex, 0, rowIndex, 15);
-                    rowTeam.Height = height;
-
-                    rowIndex++;
-                    foreach (var leaveSummary in item.LeaveSummaryInTeam)
-                    {
-                        rowCopy = _RowStartBodyLeaveSummary + (index % 2);
-                        sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                        var row = sheet.GetRow(rowIndex);
-                        row.Height = height;
-
-                        row.GetCell(0).SetCellValue(index);
-                        row.GetCell(1).SetCellValue(leaveSummary.Employee.NickName);
-                        row.GetCell(2).SetCellValue(leaveSummary.Employee.FullName);
-                        row.GetCell(3).SetCellValue(leaveSummary.Jan);
-                        row.GetCell(4).SetCellValue(leaveSummary.Feb);
-                        row.GetCell(5).SetCellValue(leaveSummary.Mar);
-                        row.GetCell(6).SetCellValue(leaveSummary.Apr);
-                        row.GetCell(7).SetCellValue(leaveSummary.May);
-                        row.GetCell(8).SetCellValue(leaveSummary.Jun);
-                        row.GetCell(9).SetCellValue(leaveSummary.Jul);
-                        row.GetCell(10).SetCellValue(leaveSummary.Aug);
-                        row.GetCell(11).SetCellValue(leaveSummary.Sep);
-                        row.GetCell(12).SetCellValue(leaveSummary.Oct);
-                        row.GetCell(13).SetCellValue(leaveSummary.Nov);
-                        row.GetCell(14).SetCellValue(leaveSummary.Dec);
-                        row.GetCell(15).SetCellValue(leaveSummary.LeaveBalance);
 
                         index++;
                         rowIndex++;

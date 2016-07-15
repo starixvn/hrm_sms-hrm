@@ -53,10 +53,11 @@
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IDisciplineService disciplineService;
         private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
+        private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -69,7 +70,8 @@
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
             IDisciplineService disciplineService,
-            IExportExcelAttendanceReportService exportExcelAttendanceReportService)
+            IExportExcelAttendanceReportService exportExcelAttendanceReportService,
+            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService)
         {
             this.reportService = reportService ?? new ReportService();
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
@@ -80,6 +82,7 @@
             this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             this.disciplineService = disciplineService ?? new DisciplineService();
             this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
+            this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService ?? new ExportExcelUnpaidLeaveSummaryReportService();
         }
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
@@ -165,8 +168,6 @@
 
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
-            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
             var criteria = new GetUnpaidLeaveCriteria()
             {
                 Year = model.Year,
@@ -178,10 +179,9 @@
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
             IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
+            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year);
 
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportUnpaidLeaveSummary(leaveSummaryByTeamList, model.Year);
-
-            return ExcelFile(hssfworkbook, fileName);
+            return new EmptyResult();
         }
 
         public ActionResult OvertimeReport(OvertimeDetailReportViewModel model)
@@ -236,8 +236,6 @@
 
         public ActionResult EmployeeBasicInfo(UserManagementViewModel model)
         {
-            string fileName = "EmployeeBasicInformation_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
             var criteria = new GetAllEmployeeCriteria()
             {
                 Query = model.Keyword,

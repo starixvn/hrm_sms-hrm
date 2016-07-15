@@ -13,7 +13,6 @@
     {
         private const int RowStartHeader = 2;
         private const int RowStartBody = 3;
-        private const int Row = 5;
         private const int RowHighlight = 5;
         private const int RowOffdate = 6;
         private const string MsgLeave = "{1} ({0} days)";

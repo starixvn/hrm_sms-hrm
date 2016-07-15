@@ -171,6 +171,8 @@
     <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourDailyExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourMonthlyExportService.cs" />
+    <Compile Include="ExportExcel\UnpaidLeaveSummary\ExportExcelUnpaidLeaveSummaryReportService.cs" />
+    <Compile Include="ExportExcel\UnpaidLeaveSummary\IExportExcelUnpaidLeaveSummaryReportService.cs" />
     <Compile Include="ExtensionNumberService.cs" />
     <Compile Include="ExportExcel\ITotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="ExportExcel\ReportExporting.cs" />
