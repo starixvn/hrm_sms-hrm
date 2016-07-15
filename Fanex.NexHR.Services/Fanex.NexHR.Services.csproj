@@ -172,6 +172,10 @@
     <Compile Include="ExportExcel\Manpower\ExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerCategoryService.cs" />
+    <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
+    <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
+    <Compile Include="ExportExcel\Supervisor\IExportExcelEmployeeSupervisor.cs" />
+    <Compile Include="ExportExcel\Supervisor\IExportExcelSectionSupervisorService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourDailyExportService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourMonthlyExportService.cs" />

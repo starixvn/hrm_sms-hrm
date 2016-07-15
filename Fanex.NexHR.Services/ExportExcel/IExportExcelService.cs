@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
 
@@ -29,9 +28,5 @@
         HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate);
 
         HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate);
-
-        void ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors, string templatePath);
-
-        void ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors, string templatePath);
     }
 }

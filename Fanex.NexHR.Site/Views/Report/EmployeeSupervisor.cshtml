@@ -23,14 +23,12 @@
     @Html.HiddenFor(model => model.EmployeeId)
     <div class="container_24 bunhat">
         <div class="grid_2 gridlabel">
-            <label for="Employee">
-                @Labels.Employee
-            </label>
+            <label for="Employee">@Labels.Employee</label>
         </div>
         <div class="grid_6">
             @Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
         </div>
-        <div class="grid_1 gridlabel">@Labels.Team</div>
+        <div class="grid_2 gridlabel">@Labels.Section</div>
         <div class="grid_6">
             <select id="section" multiple="multiple" class="team-select">
                 @foreach (Team item in Model.Sections)

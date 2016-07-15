@@ -13,6 +13,7 @@ $(document).ready(function () {
                 url: _global.root + 'api/employee/getemployees',
                 data: {
                     query: request.term,
+                    isDelete: false,
                     $top: 10
                 },
                 success: function (data) {

@@ -17,7 +17,7 @@
 <form class="form-filter">
     @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">@Labels.Team</div>
+        <div class="grid_2 gridlabel">@Labels.Section</div>
         <div class="grid_6">
             <select id="section" multiple="multiple" class="team-select">
                 @foreach (Team item in Model.Sections)

@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
@@ -57,38 +56,6 @@
             HSSFWorkbook hssfworkbook = exportExcel.ExportHRRequestStatistic(requests, fromDate, toDate);
 
             return hssfworkbook;
-        }
-
-        public void ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors, string templatePath)
-        {
-            string fileName = "EmployeeSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Supervisor");
-
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
-            writer.CopyRows(2, 1);
-
-            FillContentRowEmployeeSupervisorReport(supervisors, ref writer);
-            writer.SyncColumnsWidth(10);
-
-            writer.Render();
-        }
-
-        public void ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors, string templatePath)
-        {
-            string fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
-
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
-            writer.CopyRows(2, 1);
-
-            FillContentRowSectionSupervisorReport(supervisors, ref writer);
-            writer.SyncColumnsWidth(10);
-
-            writer.Render();
         }
 
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
@@ -668,99 +635,6 @@
         }
 
         #endregion Employee Details Info
-
-        #region Employee Supervisor
-
-        private void FillContentRowEmployeeSupervisorReport(IList<SupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (SupervisorReportModel supervisor in supervisors)
-            {
-                FillRowEmployeeSupervisorReport(supervisor, ref writer, ref rowIndex);
-            }
-        }
-
-        private void FillRowEmployeeSupervisorReport(SupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = CreateRecordEmployeeSupervisorReport(supervisor, rowIndex);
-            if (rowIndex % 2 == 1)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
-
-            rowIndex++;
-        }
-
-        private object CreateRecordEmployeeSupervisorReport(SupervisorReportModel supervisor, int rowIndex)
-        {
-            var record = new
-            {
-                Count = rowIndex,
-                NickName = supervisor.NickName,
-                FullName = supervisor.FullName,
-                Section = supervisor.Section.Code,
-                Roles = supervisor.Roles2String,
-                Verifier = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName)),
-                Approver = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName)),
-                ShiftArrangement = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName)),
-                OnBehalfRequest = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName)),
-                DisciplineManager = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
-            };
-
-            return record;
-        }
-
-        #endregion Employee Supervisor
-
-        #region Section Supervisor
-
-        private void FillContentRowSectionSupervisorReport(IList<SectionSupervisorReportModel> supervisors, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (SectionSupervisorReportModel supervisor in supervisors)
-            {
-                FillRowSectionSupervisorReport(supervisor, ref writer, ref rowIndex);
-            }
-        }
-
-        private void FillRowSectionSupervisorReport(SectionSupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = CreateRecordSectionSupervisorReport(supervisor, rowIndex);
-            if (rowIndex % 2 == 1)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
-
-            rowIndex++;
-        }
-
-        private object CreateRecordSectionSupervisorReport(SectionSupervisorReportModel supervisor, int rowIndex)
-        {
-            var record = new
-            {
-                Count = rowIndex,
-                Section = supervisor.Code,
-                Verifier = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName)),
-                Approver = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Approver).Select(x => x.NickName)),
-                ShiftArrangement = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.ShiftArrangement).Select(x => x.NickName)),
-                OnBehalfRequest = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.OnBehalfRequest).Select(x => x.NickName)),
-                DisciplineManager = string.Join(", ", supervisor.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.DisciplineManager).Select(x => x.NickName))
-            };
-
-            return record;
-        }
-
-        #endregion Section Supervisor
 
         #region Overtime Detail
 

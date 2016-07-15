@@ -37,8 +37,6 @@
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
-        private const string EmployeeSupervisorTemplatePath = @"~\ExcelTemplates\EmployeeSupervisorTemplate.xls";
-        private const string SectionSupervisorTemplatePath = @"~\ExcelTemplates\SectionSupervisorTemplate.xls";
         private const string OvertimeTemplatePath = @"~\ExcelTemplates\OvertimeReportTemplate.xls";
         private const string YearlyOvertimeTemplatePath = @"~\ExcelTemplates\YearlyOvertimeReportTemplate.xls";
 
@@ -51,13 +49,15 @@
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IDisciplineService disciplineService;
         private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
-        private readonly IExportExcelManpowerService exportExcelManpowerService;
+        private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
         private readonly IExportExcelManpowerCategoryService exportExcelManpowerCategoryService;
+        private readonly IExportExcelManpowerService exportExcelManpowerService;
+        private readonly IExportExcelSectionSupervisorService exportExcelSectionSupervisorService;
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -71,8 +71,10 @@
             IWorkingCalendarService workingCalendarService,
             IDisciplineService disciplineService,
             IExportExcelAttendanceReportService exportExcelAttendanceReportService,
-            IExportExcelManpowerService exportExcelManpowerService,
+            IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
             IExportExcelManpowerCategoryService exportExcelManpowerCategoryService,
+            IExportExcelManpowerService exportExcelManpowerService,
+            IExportExcelSectionSupervisorService exportExcelSectionSupervisorService,
             IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService)
         {
             this.reportService = reportService ?? new ReportService();
@@ -84,8 +86,10 @@
             this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             this.disciplineService = disciplineService ?? new DisciplineService();
             this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
-            this.exportExcelManpowerService = exportExcelManpowerService ?? new ExportExcelManpowerService();
+            this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor ?? new ExportExcelEmployeeSupervisor();
             this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService ?? new ExportExcelManpowerCategoryService();
+            this.exportExcelManpowerService = exportExcelManpowerService ?? new ExportExcelManpowerService();
+            this.exportExcelSectionSupervisorService = exportExcelSectionSupervisorService ?? new ExportExcelSectionSupervisorService();
             this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService ?? new ExportExcelUnpaidLeaveSummaryReportService();
         }
 
@@ -487,9 +491,7 @@
                 ActionType = model.ActionType
             };
             IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
-
-            string templatePath = Server.MapPath(EmployeeSupervisorTemplatePath);
-            exportExcelService.ExportEmployeeSupervisor(supervisors, templatePath);
+            exportExcelEmployeeSupervisor.Export(supervisors);
 
             return new EmptyResult();
         }
@@ -501,9 +503,7 @@
                 GroupIds = model.SectionIds,
             };
             IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
-
-            string templatePath = Server.MapPath(SectionSupervisorTemplatePath);
-            exportExcelService.ExportSectionSupervisor(supervisors, templatePath);
+            exportExcelSectionSupervisorService.Export(supervisors);
 
             return new EmptyResult();
         }
