@@ -89,19 +89,24 @@
         {
             var criteria = new GetShiftByIdCriteria() { ShiftId = shiftId };
             var shift = shiftService.GetById(criteria);
-            var model = new ShiftViewModel
+            ShiftViewModel model = null;
+
+            if (shift != null)
             {
-                Name = shift.Name,
-                HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
-                MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
-                HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
-                MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
-                IsDisabled = shift.IsDisabled,
-                ShiftId = shift.Id,
-                IsInAfterDay = shift.IsInAfterDay,
-                IsOutAfterDay = shift.IsOutAfterDay,
-                IsUsed = shift.IsUsed
-            };
+                model = new ShiftViewModel
+                {
+                    Name = shift.Name,
+                    HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
+                    MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
+                    HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
+                    MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
+                    IsDisabled = shift.IsDisabled,
+                    ShiftId = shift.Id,
+                    IsInAfterDay = shift.IsInAfterDay,
+                    IsOutAfterDay = shift.IsOutAfterDay,
+                    IsUsed = shift.IsUsed
+                };
+            }
 
             ViewBag.Successed = false;
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);

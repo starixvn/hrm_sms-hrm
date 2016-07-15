@@ -21,70 +21,78 @@
 
 <h2>@Labels.Edit</h2>
 
-@using (Html.BeginForm())
+@if (Model == null)
 {
-<div class="bunhat">
-    @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.ShiftId)
-    @Html.HiddenFor(model => model.IsUsed)
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Name)*
-        </div>
-        <div class="input">
-            @Html.EditorFor(model => model.Name, new { maxlength = "20"})
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn)*
-        </div>
-        <div class="input">
-            @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn" })
-            :
-            @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MinuteTimeIn", MaxLength = "2", id = "MinuteTimeIn" })
-            @Html.CheckBoxFor(model => model.IsInAfterDay)
-            @Html.LabelFor(model => model.IsInAfterDay)
-        </div>
-    </div>
+    <div class="error">The shift you are looking for does not exsist!</div>
+    <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        <div class="bunhat">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.ShiftId)
+            @Html.HiddenFor(model => model.IsUsed)
+            <div class="formrow">
+                <div class="label">
+                    @Html.LabelFor(model => model.Name)*
+                </div>
+                <div class="input">
+                    @Html.EditorFor(model => model.Name, new { maxlength = "20" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
 
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut)*
-        </div>
-        <div class="input">
-            @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut" })
-            :
-            @Html.Html5Number(0, 59, 1, Model.MinuteTimeOut, new { Name = "MinuteTimeOut", MaxLength = "2", id = "MinuteTimeOut" })
-            @Html.CheckBoxFor(model => model.IsOutAfterDay)
-            @Html.LabelFor(model => model.IsOutAfterDay)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.IsDisabled, "Disabled")*
-        </div>
-        <div class="input">
-             @Html.CheckBoxFor(model => model.IsDisabled)
-        </div>
-    </div>
+            <div class="formrow">
+                <div class="label">
+                    @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn)*
+                </div>
+                <div class="input">
+                    @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn" })
+                    :
+                    @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MinuteTimeIn", MaxLength = "2", id = "MinuteTimeIn" })
+                    @Html.CheckBoxFor(model => model.IsInAfterDay)
+                    @Html.LabelFor(model => model.IsInAfterDay)
+                </div>
+            </div>
 
-    <div class="formrow">
-        <div class="label">
-        </div>
-        <div class="input">
-            <input type="submit" value="@Labels.Save"/>
-            @if (!Model.IsUsed && hasPermission)
-            { 
-                <a href="javascript:;" class="button js-link-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
-            }
-            
-            <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>
-        </div>
-    </div>
+            <div class="formrow">
+                <div class="label">
+                    @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut)*
+                </div>
+                <div class="input">
+                    @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut" })
+                    :
+                    @Html.Html5Number(0, 59, 1, Model.MinuteTimeOut, new { Name = "MinuteTimeOut", MaxLength = "2", id = "MinuteTimeOut" })
+                    @Html.CheckBoxFor(model => model.IsOutAfterDay)
+                    @Html.LabelFor(model => model.IsOutAfterDay)
+                </div>
+            </div>
 
-</div>
+            <div class="formrow">
+                <div class="label">
+                    @Html.LabelFor(model => model.IsDisabled, "Disabled")*
+                </div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.IsDisabled)
+                </div>
+            </div>
+
+            <div class="formrow">
+                <div class="label">
+                </div>
+                <div class="input">
+                    <input type="submit" value="@Labels.Save" />
+                    @if (!Model.IsUsed && hasPermission)
+                    {
+                        <a href="javascript:;" class="button js-link-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
+                    }
+
+                    <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>
+                </div>
+            </div>
+
+        </div>
+    }
 }
