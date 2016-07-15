@@ -335,8 +335,11 @@ BEGIN
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	WHERE g.IsDeleted = 0
-		AND e.isDeleted = 0
-		AND e.[Enabled] = 1
+		--AND e.isDeleted = 0
+		--AND e.[Enabled] = 1
+		AND (e.ResignedDate IS NULL 
+			OR
+			YEAR(e.ResignedDate) >= @Year) 
 	GROUP BY g.GroupId
 		,g.Code
 		,g.[Name]

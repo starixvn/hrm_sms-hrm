@@ -99,8 +99,9 @@ BEGIN
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 		LEFT JOIN dbo.LookupData AS job WITH (NOLOCK) ON e.JobTitleId = job.Id
 	WHERE g.IsDeleted = 0
-		AND e.isDeleted = 0
-		AND e.[Enabled] = 1
+		AND (e.ResignedDate IS NULL 
+			OR
+			YEAR(e.ResignedDate) >= @Year)
 	GROUP BY g.GroupId
 		,g.Code
 		,g.[Name]

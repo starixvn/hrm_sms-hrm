@@ -113,7 +113,8 @@ BEGIN
 			ModifiedById,
 			ModifiedByNickName,
 			ModifiedByFullName,
-			ModifiedDate
+			ModifiedDate,
+			InsertedDate
 		)
 	SELECT 
 		r.RequestId,
@@ -151,7 +152,8 @@ BEGIN
 		r.ModifiedBy ModifiedById,
 		e_m.NickName,
 		e_m.FullName,
-		r.ModifiedDate
+		r.ModifiedDate,
+		r.InsertedDate
 	FROM  dbo.WorkingTimeRequestHistory r WITH (NOLOCK)
 		LEFT JOIN dbo.InoutMissRequest inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
 		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
@@ -204,7 +206,8 @@ BEGIN
 		ModifiedById,
 		ModifiedByNickName,
 		ModifiedByFullName,
-		ModifiedDate
+		ModifiedDate,
+		InsertedDate
 	)
 	SELECT 
 		r.RequestId,
@@ -243,7 +246,8 @@ BEGIN
 		r.ModifiedBy AS ModifiedById,
 		e_m.NickName,
 		e_m.FullName,
-		r.ModifiedDate
+		r.ModifiedDate,
+		r.InsertedDate
 	FROM  dbo.WorkingTimeRequestHistory r WITH (NOLOCK)
 		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
 		LEFT JOIN [dbo].Employee ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
@@ -292,7 +296,8 @@ BEGIN
 		ModifiedById,
 		ModifiedByNickName,
 		ModifiedByFullName,
-		ModifiedDate
+		ModifiedDate,
+		InsertedDate
 	)
 	SELECT 
 		r.RequestId,
@@ -327,7 +332,8 @@ BEGIN
 		r.ModifiedBy ModifiedById,
 		e_m.NickName,
 		e_m.FullName,
-		r.ModifiedDate
+		r.ModifiedDate,
+		r.InsertedDate
 	FROM  dbo.WorkingTimeRequestHistory r WITH (NOLOCK) 
 		LEFT JOIN [dbo].ChangeShiftRequest cs WITH (NOLOCK) ON r.RequestId = cs.RequestId
 		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId

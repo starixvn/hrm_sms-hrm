@@ -35,6 +35,8 @@ BEGIN
 		WHERE su.EmpId = @EmpId
 			AND su.ActionType = 4
 			AND ISNULL(su.IsDeleted, 0) = 0
+			AND ee.Enabled = 1
+			AND ISNULL(ee.isDeleted, 0) = 0
 	UNION ALL
 	SELECT e.EmpId
 		,e.FullName
