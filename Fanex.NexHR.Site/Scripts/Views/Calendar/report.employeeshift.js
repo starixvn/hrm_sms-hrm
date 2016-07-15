@@ -21,6 +21,8 @@ var EmployeeShift = (function ($) {
             EmployeeShift.isShowWholeCompany = $("#IsShowWholeCompany");
             EmployeeShift.submit = $("#btnSubmit");
 
+            EmployeeShift.workDate.inputReadonly();
+
             EmployeeShift.teamId.multiselect();
 
             EmployeeShift.bindEmployeeShiftContent();

@@ -73,7 +73,4 @@ $(document).ready(function () {
     $("#excel").click(function () {
         queryDataHrRequestMonitoring(true);
     });
-
-    $("#FromDate").prop("readonly", true);
-    $("#ToDate").prop("readonly", true);
 });

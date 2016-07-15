@@ -102,6 +102,19 @@ $(document).ready(function () {
     $(".dropdown").chosen();
     $('#JobTitleId').chosen();
     var $uploadButton = $("#upload");
+    var $dateOfIdCard = $("#DateOfIdCard");
+    var $passportExp = $("#PassportExp");
+    var $joinedDate = $("#JoinedDate");
+    var $companyDate = $("#CompanyDate");
+    var $comfirmDate = $("#ConfirmedDate");
+    var $resignedDate = $("#ResignedDate");
+
+    $dateOfIdCard.inputReadonly();
+    $passportExp.inputReadonly();
+    $joinedDate.inputReadonly();
+    $companyDate.inputReadonly();
+    $comfirmDate.inputReadonly();
+    $resignedDate.inputReadonly();
 
     $uploadButton.hide();
 

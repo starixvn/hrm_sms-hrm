@@ -786,8 +786,7 @@ function floatThead(el) {
 function verifyDangerousText(value) {
     var valid = true;
 
-    if (value !== null)
-    {
+    if (value !== null) {
         var regex = /<[a-zA-Z]/gi;
 
         if (value === "&#" || value === "<?" || value === "</" || value === "<!" || regex.test(value)) {
@@ -801,3 +800,15 @@ function verifyDangerousText(value) {
 
     return valid;
 }
+
+$.fn.extend({
+    inputReadonly: function () {
+        this.keypress(function (e) {
+            var tab = 9, enter = 13;
+            if (e.keyCode === tab || e.keyCode === enter) {
+                return true;
+            }
+            return false;
+        });
+    }
+});

@@ -20,12 +20,17 @@ var init = function () {
 		toDate = new Date(),
 		fromDate = new Date();
     fromDate.setMonth(fromDate.getMonth() - 3);
+    var $fromDate = $("#FromDate");
+    var $toDate = $("#ToDate");
+
+    $fromDate.inputReadonly();
+    $toDate.inputReadonly();
 
     if (!fromDateModel) {
-        $('#FromDate').val($.datepicker.formatDate('d M, yy', fromDate));
+        $fromDate.val($.datepicker.formatDate('d M, yy', fromDate));
     }
     if (!toDateModel) {
-        $('#ToDate').val($.datepicker.formatDate('d M, yy', toDate));
+        $toDate.val($.datepicker.formatDate('d M, yy', toDate));
     }
 
     $status.val(status);

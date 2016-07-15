@@ -19,6 +19,9 @@ var ShiftStatistic = (function ($) {
             ShiftStatistic.groupId.multiselect();
             ShiftStatistic.isLocal = $("#IsLocal");
 
+            ShiftStatistic.fromDate.inputReadonly();
+            ShiftStatistic.toDate.inputReadonly();
+
             ShiftStatistic.bindShiftStatisticContent(ShiftStatistic.fromDate.val(), ShiftStatistic.toDate.val(), '',
 				(ShiftStatistic.isShowWholeCompany.attr("checked") === "checked"), ShiftStatistic.isLocal.val());
 
