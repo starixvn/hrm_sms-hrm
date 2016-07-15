@@ -17,24 +17,14 @@
 <table class="table table-custom" id="data">
     <thead>
         <tr>
-            <th rowspan="2">
-                #
-            </th>
-            <th rowspan="2">
-                @Labels.Department
-            </th>
-            <th rowspan="2">
-                @Labels.FullName
-            </th>
-            <th rowspan="2">
-                @Labels.Nick
-            </th>
+            <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2">@Labels.Section</th>
+            <th rowspan="2">@Labels.FullName</th>
+            <th rowspan="2">@Labels.NickName</th>
             <th colspan="12">
                 Overtime Summary in @ViewBag.Year
             </th>
-            <th rowspan="2">
-                @Labels.Total
-            </th>
+            <th rowspan="2">@Labels.Total</th>
         </tr>
         @*Fiscal Calendar*@
         @if (ViewBag.Calendar == 1)
@@ -190,7 +180,7 @@
                         <td>
                             @request.NickName
                         </td>
-                        <td class="sumjan">
+                        <td class="sumjan align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jan != 0)
                             {
@@ -200,7 +190,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumfeb">
+                        <td class="sumfeb align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Feb != 0)
                             {
@@ -210,7 +200,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="summar">
+                        <td class="summar align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Mar != 0)
                             {
@@ -220,7 +210,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumapr">
+                        <td class="sumapr align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Apr != 0)
                             {
@@ -230,7 +220,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="summay">
+                        <td class="summay align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.May != 0)
                             {
@@ -240,7 +230,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumjun">
+                        <td class="sumjun align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jun != 0)
                             {
@@ -250,7 +240,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumjul">
+                        <td class="sumjul align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jul != 0)
                             {
@@ -260,7 +250,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumaug">
+                        <td class="sumaug align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Aug != 0)
                             {
@@ -270,7 +260,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumsep">
+                        <td class="sumsep align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Sep != 0)
                             {
@@ -280,7 +270,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumoct">
+                        <td class="sumoct align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Oct != 0)
                             {
@@ -290,7 +280,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumnov">
+                        <td class="sumnov align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Nov != 0)
                             {
@@ -300,7 +290,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumdec">
+                        <td class="sumdec align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Dec != 0)
                             {
@@ -311,8 +301,8 @@
 
                             }
                         </td>
-                        <td class="total">
-                            @request.Total.ToString("F")
+                        <td class="total align-right">
+                            @request.Total
                         </td>
                     </tr>
                 }
@@ -325,13 +315,13 @@
                         <td>
                             @request.Team
                         </td>
-                        <td>
+                        <td class="align-left">
                             @request.FullName
                         </td>
                         <td>
                             @request.NickName
                         </td>
-                        <td class="sumjan">
+                        <td class="sumjan align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jan != 0)
                             {
@@ -341,7 +331,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumfeb">
+                        <td class="sumfeb align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Feb != 0)
                             {
@@ -351,7 +341,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="summar">
+                        <td class="summar align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Mar != 0)
                             {
@@ -361,7 +351,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumapr">
+                        <td class="sumapr align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Apr != 0)
                             {
@@ -371,7 +361,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="summay">
+                        <td class="summay align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.May != 0)
                             {
@@ -381,7 +371,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumjun">
+                        <td class="sumjun align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jun != 0)
                             {
@@ -391,7 +381,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumjul">
+                        <td class="sumjul align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Jul != 0)
                             {
@@ -401,7 +391,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumaug">
+                        <td class="sumaug align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Aug != 0)
                             {
@@ -411,7 +401,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumsep">
+                        <td class="sumsep align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Sep != 0)
                             {
@@ -421,7 +411,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumoct">
+                        <td class="sumoct align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Oct != 0)
                             {
@@ -431,7 +421,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumnov">
+                        <td class="sumnov align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Nov != 0)
                             {
@@ -441,7 +431,7 @@
                                 </a>
                             }
                         </td>
-                        <td class="sumdec">
+                        <td class="sumdec align-right">
                             @Html.HiddenFor(model => request.EmpId)
                             @if (request.Dec != 0)
                             {
@@ -452,8 +442,8 @@
 
                             }
                         </td>
-                        <td class="total">
-                            @request.Total.ToString("F")
+                        <td class="total align-right">
+                            @request.Total
                         </td>
                     </tr>
                 }
@@ -466,19 +456,19 @@
                 <td colspan="4" class="sumhours align-right">
                     @Labels.TotalHours:
                 </td>
-                <td id="sumjan"></td>
-                <td id="sumfeb"></td>
-                <td id="summar"></td>
-                <td id="sumapr"></td>
-                <td id="summay"></td>
-                <td id="sumjun"></td>
-                <td id="sumjul"></td>
-                <td id="sumaug"></td>
-                <td id="sumsep"></td>
-                <td id="sumoct"></td>
-                <td id="sumnov"></td>
-                <td id="sumdec"></td>
-                <td id="sumtotal"></td>
+                <td class="align-right" id="sumjan"></td>
+                <td class="align-right" id="sumfeb"></td>
+                <td class="align-right" id="summar"></td>
+                <td class="align-right" id="sumapr"></td>
+                <td class="align-right" id="summay"></td>
+                <td class="align-right" id="sumjun"></td>
+                <td class="align-right" id="sumjul"></td>
+                <td class="align-right" id="sumaug"></td>
+                <td class="align-right" id="sumsep"></td>
+                <td class="align-right" id="sumoct"></td>
+                <td class="align-right" id="sumnov"></td>
+                <td class="align-right" id="sumdec"></td>
+                <td class="align-right" id="sumtotal"></td>
             </tr>
         </tfoot>
     }

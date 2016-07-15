@@ -13,10 +13,6 @@
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList);
 
-        void ExportOvertimeReport(IList<OvertimeDaily> requestList, DateTime fromDate, DateTime toDate, string templatePath);
-
-        void ExportYearlyOvertimeReport(IList<OvertimeAnnualReportViewModel> requestList, int year, int? calendar, string templatePath);
-
         void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath);
 
         void ExportEmployeeDetailsInfo(IList<Employee> employees, string templatePath);

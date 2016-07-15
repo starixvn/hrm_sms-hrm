@@ -37,8 +37,6 @@
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
-        private const string OvertimeTemplatePath = @"~\ExcelTemplates\OvertimeReportTemplate.xls";
-        private const string YearlyOvertimeTemplatePath = @"~\ExcelTemplates\YearlyOvertimeReportTemplate.xls";
 
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
@@ -52,12 +50,14 @@
         private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
         private readonly IExportExcelManpowerCategoryService exportExcelManpowerCategoryService;
         private readonly IExportExcelManpowerService exportExcelManpowerService;
+        private readonly IExportExcelOvertimeReportService exportExcelOvertimeReportService;
         private readonly IExportExcelSectionSupervisorService exportExcelSectionSupervisorService;
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
+        private readonly IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService;
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -74,8 +74,10 @@
             IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
             IExportExcelManpowerCategoryService exportExcelManpowerCategoryService,
             IExportExcelManpowerService exportExcelManpowerService,
+            IExportExcelOvertimeReportService exportExcelOvertimeReportService,
             IExportExcelSectionSupervisorService exportExcelSectionSupervisorService,
-            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService)
+            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService,
+            IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService)
         {
             this.reportService = reportService ?? new ReportService();
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
@@ -89,8 +91,10 @@
             this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor ?? new ExportExcelEmployeeSupervisor();
             this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService ?? new ExportExcelManpowerCategoryService();
             this.exportExcelManpowerService = exportExcelManpowerService ?? new ExportExcelManpowerService();
+            this.exportExcelOvertimeReportService = exportExcelOvertimeReportService ?? new ExportExcelOvertimeReportService();
             this.exportExcelSectionSupervisorService = exportExcelSectionSupervisorService ?? new ExportExcelSectionSupervisorService();
             this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService ?? new ExportExcelUnpaidLeaveSummaryReportService();
+            this.exportExcelYearlyOvertimeReportService = exportExcelYearlyOvertimeReportService ?? new ExportExcelYearlyOvertimeReportService();
         }
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
@@ -203,8 +207,7 @@
                 GroupIds = model.SectionIds
             };
             IList<OvertimeDaily> overtimeDetails = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
-            string templatePath = Server.MapPath(OvertimeTemplatePath);
-            exportExcelService.ExportOvertimeReport(overtimeDetails, model.FromDate, model.ToDate, templatePath);
+            exportExcelOvertimeReportService.Export(overtimeDetails, model.FromDate, model.ToDate);
 
             return new EmptyResult();
         }
@@ -236,8 +239,7 @@
                 entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
-            string templatePath = Server.MapPath(YearlyOvertimeTemplatePath);
-            exportExcelService.ExportYearlyOvertimeReport(entity, model.Year, model.Calendar, templatePath);
+            exportExcelYearlyOvertimeReportService.Export(entity, model.Year, model.Calendar);
 
             return new EmptyResult();
         }

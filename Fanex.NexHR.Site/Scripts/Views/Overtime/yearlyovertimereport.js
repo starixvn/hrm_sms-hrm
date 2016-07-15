@@ -18,55 +18,55 @@
     function requestToCalculateOTHours() {
         //Total
         var sumTotal = calculateTotalOTHours($(".total"));
-        $("#sumtotal").text(sumTotal.toFixed(2));
+        $("#sumtotal").text(sumTotal);
 
         //Jan
         var sumJan = calculateTotalOTHours($(".sumjan"));
-        $("#sumjan").text(sumJan.toFixed(2));
+        $("#sumjan").text(sumJan);
 
         //Feb
         var sumFeb = calculateTotalOTHours($(".sumfeb"));
-        $("#sumfeb").text(sumFeb.toFixed(2));
+        $("#sumfeb").text(sumFeb);
 
         //Mar
         var sumMar = calculateTotalOTHours($(".summar"));
-        $("#summar").text(sumMar.toFixed(2));
+        $("#summar").text(sumMar);
 
         //Apr
         var sumApr = calculateTotalOTHours($(".sumapr"));
-        $("#sumapr").text(sumApr.toFixed(2));
+        $("#sumapr").text(sumApr);
 
         //May
         var sumMay = calculateTotalOTHours($(".summay"));
-        $("#summay").text(sumMay.toFixed(2));
+        $("#summay").text(sumMay);
 
         //Jun
         var sumJun = calculateTotalOTHours($(".sumjun"));
-        $("#sumjun").text(sumJun.toFixed(2));
+        $("#sumjun").text(sumJun);
 
         //Jul
         var sumJul = calculateTotalOTHours($(".sumjul"));
-        $("#sumjul").text(sumJul.toFixed(2));
+        $("#sumjul").text(sumJul);
 
         //Jul
         var sumAug = calculateTotalOTHours($(".sumaug"));
-        $("#sumaug").text(sumAug.toFixed(2));
+        $("#sumaug").text(sumAug);
 
         //Sep
         var sumSep = calculateTotalOTHours($(".sumsep"));
-        $("#sumsep").text(sumSep.toFixed(2));
+        $("#sumsep").text(sumSep);
 
         //Oct
         var sumOct = calculateTotalOTHours($(".sumoct"));
-        $("#sumoct").text(sumOct.toFixed(2));
+        $("#sumoct").text(sumOct);
 
         //Nov
         var sumNov = calculateTotalOTHours($(".sumnov"));
-        $("#sumnov").text(sumNov.toFixed(2));
+        $("#sumnov").text(sumNov);
 
         //Dec
         var sumDec = calculateTotalOTHours($(".sumdec"));
-        $("#sumdec").text(sumDec.toFixed(2));
+        $("#sumdec").text(sumDec);
     }
 
     function query() {
