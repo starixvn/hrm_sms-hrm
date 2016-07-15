@@ -55,7 +55,6 @@
             this.lookupDataService = lookupDataService ?? new LookupDataService();
         }
 
-        /// [Authorize(Roles = "HR")]
         [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult Index()
         {
