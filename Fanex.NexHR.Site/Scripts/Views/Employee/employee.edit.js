@@ -101,6 +101,9 @@ function showExpatApplicableHoliday() {
 $(document).ready(function () {
     $(".dropdown").chosen();
     $('#JobTitleId').chosen();
+    var $uploadButton = $("#upload");
+
+    $uploadButton.hide();
 
     bindSARole(true);
     $('#Roles2Array7').click(function () {
@@ -110,6 +113,16 @@ $(document).ready(function () {
     bindDisciplineRole(true);
     $('#Roles2Array8').click(function () {
         bindDisciplineRole(false);
+    });
+
+    $("#file").change(function () {
+        var filePath = $(this).val();
+
+        if (filePath) {
+            $uploadButton.show();
+        } else {
+            $uploadButton.hide();
+        }
     });
 
     //checkUserIsSystemAdmin
@@ -166,7 +179,7 @@ $(document).ready(function () {
         $("#DateOfBirth").val(date.format("dd mmm yyyy"));
     });
 
-    $('#upload').click(function () {
+    $uploadButton.click(function () {
         upload();
     });
 

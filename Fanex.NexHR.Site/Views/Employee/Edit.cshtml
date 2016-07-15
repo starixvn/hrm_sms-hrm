@@ -18,7 +18,7 @@
 }
 @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @id = "formEditUser", @class = "form-edit-user" }))
 {
-    @Html.ValidationSummary()
+    @Html.ValidationSummary(true)
     if (ViewBag.Updated != null && (bool)ViewBag.Updated)
     {
         <div class="success flash">
