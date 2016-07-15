@@ -17,21 +17,21 @@
 </h2>
 @using (Html.BeginGetForm())
 {
-    <div class="grid_1 gridlabel">
-        @Labels.Year
-    </div>
-    <div class="grid_2">
-        @Html.YearPicker("Year", 2010, Model.Year)
-    </div>
-    <div class="grid_6">
-        <input type="submit" value="@Labels.Submit" id="btnSubmit" />
-        <input type="button" value="Excel" id="btnExcel" />
+    <div class="container_24 bunhat">
+        <div class="grid_1 gridlabel">
+            @Labels.Year
+        </div>
+        <div class="grid_2">
+            @Html.YearPicker("Year", 2010, Model.Year)
+        </div>
+        <div class="grid_6">
+            <input type="submit" value="@Labels.Submit" id="btnSubmit" />
+            <input type="button" value="Excel" id="btnExcel" />
+        </div>
     </div>
 }
-<div class="clear">
-</div>
-<div class="space">
-</div>
+<div class="clear"></div>
+<div class="space"></div>
 <table id="data" class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
@@ -75,23 +75,68 @@
                     <td class="align-right">
                         @manpower.Management
                     </td>
-                    <td class="align-right">@((manpower.Management * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                    <td class="align-right">
+                        @if (manpower.Total != 0)
+                        {
+                            @((manpower.Management * 100.00 / manpower.Total).ToString("0.0") + "%")
+                        }
+                        else
+                        {
+                            @("0.0%")
+                        }
+                    </td>
                     <td class="align-right">
                         @manpower.ExecutiveWithPosition
                     </td>
-                    <td class="align-right">@((manpower.ExecutiveWithPosition * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                    <td class="align-right">
+                        @if (manpower.Total != 0)
+                        {
+                            @((manpower.ExecutiveWithPosition * 100.00 / manpower.Total).ToString("0.0") + "%")
+                        }
+                        else
+                        {
+                            @("0.0%")
+                        }
+                    </td>
                     <td class="align-right">
                         @manpower.Executive
                     </td>
-                    <td class="align-right">@((manpower.Executive * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                    <td class="align-right">
+                        @if (manpower.Total != 0)
+                        {
+                            @((manpower.Executive * 100.00 / manpower.Total).ToString("0.0") + "%")
+                        }
+                        else
+                        {
+                            @("0.0%")
+                        }
+                    </td>
                     <td class="align-right">
                         @manpower.Staff
                     </td>
-                    <td class="align-right">@((manpower.Staff * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                    <td class="align-right">
+                        @if (manpower.Total != 0)
+                        {
+                            @((manpower.Staff * 100.00 / manpower.Total).ToString("0.0") + "%")
+                        }
+                        else
+                        {
+                            @("0.0%")
+                        }
+                    </td>
                     <td class="align-right">
                         @manpower.Worker
                     </td>
-                    <td class="align-right">@((manpower.Worker * 100.00 / manpower.Total).ToString("0.0"))%</td>
+                    <td class="align-right">
+                        @if (manpower.Total != 0)
+                        {
+                            @((manpower.Worker * 100.00 / manpower.Total).ToString("0.0") + "%")
+                        }
+                        else
+                        {
+                            @("0.0%")
+                        }
+                    </td>
                 </tr>
             }
         }
@@ -102,22 +147,75 @@
     </tbody>
     <tfoot>
         <tr class="summary">
+            @{
+                int total = Model.Manpowers.Sum(t => t.Total),
+                    management = Model.Manpowers.Sum(t => t.Management),
+                    executiveWithPosition = Model.Manpowers.Sum(t => t.ExecutiveWithPosition),
+                    executive = Model.Manpowers.Sum(t => t.Executive),
+                    staff = Model.Manpowers.Sum(t => t.Staff),
+                    worker = Model.Manpowers.Sum(t => t.Worker);
+            }
             <td colspan="2" class="align-right">
                 @Labels.Total
             </td>
             <td class="align-right">@Model.Manpowers.Sum(t => t.TotalExpat)</td>
             <td class="align-right">@Model.Manpowers.Sum(t => t.TotalLocal)</td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.Total) </td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.Management)</td>
-            <td class="align-right">@((Model.Manpowers.Sum(t => t.Management) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.ExecutiveWithPosition)</td>
-            <td class="align-right">@((Model.Manpowers.Sum(t => t.ExecutiveWithPosition) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.Executive)</td>
-            <td class="align-right">@((Model.Manpowers.Sum(t => t.Executive) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.Staff)</td>
-            <td class="align-right">@((Model.Manpowers.Sum(t => t.Staff) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
-            <td class="align-right">@Model.Manpowers.Sum(t => t.Worker)</td>
-            <td class="align-right">@((Model.Manpowers.Sum(t => t.Worker) * 100.00 / Model.Manpowers.Sum(t => t.Total)).ToString("0.0"))%</td>
+            <td class="align-right">@Model.Manpowers.Sum(t => t.Total)</td>
+            <td class="align-right">@management</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                @((management * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                @("0.0%")
+                }
+            </td>
+            <td class="align-right">@executiveWithPosition</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                @((executiveWithPosition * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                @("0.0%")
+                }
+            </td>
+            <td class="align-right">@executive</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                @((executive * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                @("0.0%")
+                }
+            </td>
+            <td class="align-right">@staff</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((staff * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+            <td class="align-right">@worker</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((worker * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
         </tr>
     </tfoot>
 </table>

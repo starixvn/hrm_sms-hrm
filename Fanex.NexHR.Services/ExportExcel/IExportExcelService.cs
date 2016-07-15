@@ -33,9 +33,5 @@
         void ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors, string templatePath);
 
         void ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors, string templatePath);
-
-        void ExportManpower(IList<ManpowerModel> manpowers, int year, string templatePath);
-
-        void ExportManpowerCategory(IList<ManpowerCategoryModel> manpowers, int year, string templatePath);
     }
 }

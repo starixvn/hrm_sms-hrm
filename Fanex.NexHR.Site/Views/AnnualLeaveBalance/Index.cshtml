@@ -47,21 +47,21 @@
             <div class="grid_6">
                 <select id="SectionId" multiple="multiple" name="SectionId" class="yearpicker">
                     @{
-            var sectionIds = !string.IsNullOrEmpty(Model.SectionIds) ? Model.SectionIds.Split(',') : null;
-            var selected = string.Empty;
-            foreach (Team team in Model.Sections)
-            {
-                selected = string.Empty;
-                if (sectionIds != null)
-                {
-                    int pos = Array.IndexOf(sectionIds, team.Id.ToString());
-                    if (pos > -1)
-                    {
-                        selected = "selected";
-                    }
-                }
-                <option @selected value="@team.Id">@team.Name</option>
-            }
+                        var sectionIds = !string.IsNullOrEmpty(Model.SectionIds) ? Model.SectionIds.Split(',') : null;
+                        var selected = string.Empty;
+                        foreach (Team team in Model.Sections)
+                        {
+                            selected = string.Empty;
+                            if (sectionIds != null)
+                            {
+                                int pos = Array.IndexOf(sectionIds, team.Id.ToString());
+                                if (pos > -1)
+                                {
+                                    selected = "selected";
+                                }
+                            }
+                            <option @selected value="@team.Id">@team.Name</option>
+                        }
                     }
                 </select>
             </div>
@@ -111,7 +111,7 @@
                 </th>
             }
             <th rowspan="2">
-                @Labels.Nick
+                @Labels.NickName
             </th>
             <th rowspan="2">
                 @Labels.KeepInView
@@ -120,7 +120,7 @@
                 @Labels.AnnualLeave
             </th>
             <th colspan="12">
-                Leave's Report @Model.Year
+                Leave in @Model.Year
             </th>
             <th rowspan="2">
                 Balance of AL @Model.Year
