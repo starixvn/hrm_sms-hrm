@@ -429,9 +429,9 @@
                 GroupIds = model.SectionIds,
                 IsLocal = model.IsLocal
             };
-            IList<OvertimeDaily> entity = overtimeService.OTExcelReportDetails(criteria);
+            IList<OvertimeDaily> overtimeDetails = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
 
-            return PartialView("_OTExcelReportDetails", entity);
+            return PartialView("_OTExcelReportDetails", overtimeDetails);
         }
 
         [HttpPost]

@@ -22,10 +22,11 @@
     $(document).ready(function () {
         $('#section').multiselect();
         $("#title").multiselect({
-            noneSelectedText: 'Select positions',
             selectedText: '# selected',
             selectedList: 0
         });
+
+        $('#fromDate, #toDate').attr('readonly', 'readonly');
 
         $('form.form-filter #section').on('change', function () {
             var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';

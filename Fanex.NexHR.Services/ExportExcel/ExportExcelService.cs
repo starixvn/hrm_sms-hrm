@@ -678,9 +678,9 @@
                 TimeIn = overtimeDetail.TimeIn,
                 TimeOut = overtimeDetail.TimeOut,
                 TotalHours = Math.Round(overtimeDetail.TotalWorkHours, 2),
-                NormalDay = overtimeDetail.NormalHours,
-                OffDay = overtimeDetail.OffHours,
-                PublicHoliday = overtimeDetail.PublicHours,
+                NormalDay = (double)overtimeDetail.NormalHours,
+                OffDay = (double)overtimeDetail.OffHours,
+                PublicHoliday = (double)overtimeDetail.PublicHours,
                 Remark = overtimeDetail.Remark,
                 Status = status.ToString()
             };
