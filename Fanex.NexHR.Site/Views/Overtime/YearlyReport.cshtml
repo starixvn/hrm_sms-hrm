@@ -23,7 +23,7 @@
             <div class="grid_2">
                 @Html.YearPicker("Year", 2010, Model.Year)
             </div>
-            <div class="grid_2 gridlabel">Calendar:</div>
+            <div class="grid_2 gridlabel">Calendar</div>
             <div class="grid_3">
                 @{
                     var calendarType = new List<SelectListItem>
@@ -34,7 +34,7 @@
                 }
                 @Html.DropDownList("Calendar", calendarType)
             </div>
-            <div class="grid_1 gridlabel">@Labels.Section</div>
+            <div class="grid_2 gridlabel">@Labels.Section</div>
             <div class="grid_6">
                 <select id="section" multiple="multiple" class="team-select">
                     @foreach (Team item in Model.Sections)
@@ -45,7 +45,7 @@
             </div>
             <div class="grid_2 gridlabel">@Labels.Employee</div>
             <div class="grid_4">
-                @Html.Editor("Employee")
+                @Html.TextBox("Employee", string.Empty, new { @placeholder = Messages.SearchEmployeeWatermark })
             </div>
             <div class="clear"></div>
             <div class="space"></div>

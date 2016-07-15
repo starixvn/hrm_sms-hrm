@@ -18,6 +18,9 @@
     <thead>
         <tr>
             <th rowspan="2">
+                #
+            </th>
+            <th rowspan="2">
                 @Labels.Department
             </th>
             <th rowspan="2">
@@ -168,12 +171,16 @@
     </thead>
     @if (Model != null)
     {
+        var index = 1;
         <tbody>
             @foreach (var request in Model)
             {
                 if (ViewBag.Calendar == 1)
                 {
                     <tr id="row@(request.EmpId)">
+                        <td>
+                            @index
+                        </td>
                         <td>
                             @request.Team
                         </td>
@@ -313,6 +320,9 @@
                 {
                     <tr id="row@(request.EmpId)">
                         <td>
+                            @index
+                        </td>
+                        <td>
                             @request.Team
                         </td>
                         <td>
@@ -447,11 +457,13 @@
                         </td>
                     </tr>
                 }
+
+                index++;
             }
         </tbody>
         <tfoot>
             <tr class="summary">
-                <td colspan="3" class="sumhours align-right">
+                <td colspan="4" class="sumhours align-right">
                     @Labels.TotalHours:
                 </td>
                 <td id="sumjan"></td>

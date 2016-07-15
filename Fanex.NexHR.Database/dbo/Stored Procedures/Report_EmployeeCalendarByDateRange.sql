@@ -35,7 +35,7 @@ BEGIN
 	FROM [Group] g WITH (NOLOCK)
 END
 
-CREATE TABLE #JobTitleList (JobTitleId TINYINT)
+CREATE TABLE #JobTitleList (JobTitleId INT)
 
 IF ISNULL(@JobTitleId, '') <> ''
 	INSERT INTO #JobTitleList (JobTitleId)
