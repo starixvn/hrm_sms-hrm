@@ -4,7 +4,7 @@
 
     public enum MarriageStatus
     {
-        [StringValue("Default")]
+        [StringValue("Unknown")]
         Default = 0,
 
         [StringValue("Married")]

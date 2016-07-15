@@ -252,14 +252,14 @@ var ScheduleArrangeDetail = (function ($) {
             });
 
             $(".lnkUnCheckAll").on("click", function () {
-                $("input[type='checkbox']:not(.chkIsPublic)").removeAttr("checked");
+                $("#tblScheduleArrange input[type='checkbox']:not(.chkIsPublic)").removeAttr("checked");
                 ScheduleArrangeCommon.hasChangeValue = true;
 
                 return false;
             });
 
             $(".lnkCheckAll").on("click", function () {
-                $("input[type='checkbox']:not(.chkIsPublic)").attr("checked", true);
+                $("#tblScheduleArrange input[type='checkbox']:not(.chkIsPublic)").attr("checked", true);
                 ScheduleArrangeCommon.hasChangeValue = true;
 
                 return false;
