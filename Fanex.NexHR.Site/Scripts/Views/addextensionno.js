@@ -28,7 +28,7 @@ var modifiedExtensionNo = (function ($) {
         var isInternal = $checkboxInternal.is(":checked");
 
         $.getJSON(urlRoot + 'extensionno/GetGroupExtension', { isInternal: isInternal, groupId: null }, function (data) {
-            if (data[0] != null) {
+            if (data[0] !== null) {
                 $ddlTeam.empty();
 
                 var options = "";
@@ -73,15 +73,15 @@ var modifiedExtensionNo = (function ($) {
             focus: function (event, ui) {
                 nickName = ui.item.label;
                 $employee.val(nickName);
-                $empId.val(ui.item != null ? ui.item.value : "");
+                $empId.val(ui.item !== null ? ui.item.value : "");
                 $fullName.val(ui.item.fullname);
                 $nickName.val(ui.item.nickname);
                 event.preventDefault();
             },
             change: function (event, ui) {
-                nickName = ui.item != null ? ui.item.label : "";
+                nickName = ui.item !== null ? ui.item.label : "";
                 $employee.val(nickName);
-                $empId.val(ui.item != null ? ui.item.value : "");
+                $empId.val(ui.item !== null ? ui.item.value : "");
                 $fullName.val(ui.item.fullname);
                 $nickName.val(ui.item.nickname);
             },

@@ -1,9 +1,10 @@
 ﻿'use strict';
+/*global _global*/
 /*exported deleteMessage, detailMessage*/
 
 var init = function () {
     var $effectedDate = $('#EffectedDate'),
-		status = $('#IsDisabled').val(),
+        status = $('#IsDisabled').val(),
         $status = $("#status");
 
     $effectedDate.val($.datepicker.formatDate('d M, yy', new Date()));
