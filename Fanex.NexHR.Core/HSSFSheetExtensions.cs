@@ -60,7 +60,6 @@
 
         public static ICell CopyCell(ICell sourceCell, ICell destCell)
         {
-            //// If the old cell is null jump to next cell
             if (sourceCell == null)
             {
                 return null;
@@ -86,6 +85,7 @@
                 case CellType.Blank:
                     destCell.SetCellValue(sourceCell.StringCellValue);
                     break;
+
                 case CellType.Boolean:
                     destCell.SetCellValue(sourceCell.BooleanCellValue);
                     break;
@@ -123,47 +123,50 @@
 
         public static void SetCellValue(this ICell cell, object value)
         {
-            var valueType = value.GetType();
-
-            if (valueType == typeof(bool))
+            if (value != null)
             {
-                cell.SetCellValue(Convert.ToBoolean(value));
-                return;
-            }
+                var valueType = value.GetType();
 
-            if (valueType == typeof(DateTime))
-            {
-                cell.SetCellValue(Convert.ToDateTime(value));
-                return;
-            }
+                if (valueType == typeof(bool))
+                {
+                    cell.SetCellValue(Convert.ToBoolean(value));
+                    return;
+                }
 
-            if (valueType == typeof(decimal))
-            {
-                cell.SetCellValue(Convert.ToDecimal(value));
-                return;
-            }
+                if (valueType == typeof(DateTime))
+                {
+                    cell.SetCellValue(Convert.ToDateTime(value));
+                    return;
+                }
 
-            if (valueType == typeof(double))
-            {
-                cell.SetCellValue(Convert.ToDouble(value));
-                return;
-            }
+                if (valueType == typeof(decimal))
+                {
+                    cell.SetCellValue(Convert.ToDecimal(value));
+                    return;
+                }
 
-            if (valueType == typeof(int))
-            {
-                cell.SetCellValue(Convert.ToInt32(value));
-                return;
-            }
+                if (valueType == typeof(double))
+                {
+                    cell.SetCellValue(Convert.ToDouble(value));
+                    return;
+                }
 
-            if (valueType == typeof(long))
-            {
-                cell.SetCellValue(Convert.ToInt64(value));
-                return;
-            }
+                if (valueType == typeof(int))
+                {
+                    cell.SetCellValue(Convert.ToInt32(value));
+                    return;
+                }
 
-            if (valueType == typeof(string))
-            {
-                cell.SetCellValue(Convert.ToString(value));
+                if (valueType == typeof(long))
+                {
+                    cell.SetCellValue(Convert.ToInt64(value));
+                    return;
+                }
+
+                if (valueType == typeof(string))
+                {
+                    cell.SetCellValue(Convert.ToString(value));
+                }
             }
         }
     }

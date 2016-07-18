@@ -1,4 +1,92 @@
-﻿.dataTables_wrapper {
+﻿table.dataTable {
+    thead {
+        tr {
+            &:nth-child(n + 1) {
+                background: #343c4e;
+            }
+
+            &:nth-child(n + 2) {
+                background: #3b4254;
+            }
+
+            th {
+                color: #fff;
+                font-weight: normal;
+                vertical-align: middle;
+                padding: 3px 5px;
+                line-height: 1.42857143;
+                border-right-width: 0;
+                border-top-width: 0;
+                border-left: 1px solid #646d80;
+                border-bottom: 1px solid #646d80;
+                text-align: center;
+                box-shadow: unset;
+                cursor: default;
+                background: unset;
+
+                &.weekend {
+                    color: red;
+                }
+
+                &:last-child {
+                    border-right: 1px solid #646d80;
+                }
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            &:nth-child(odd) {
+                background: #ececec;
+            }
+
+            th, td {
+                font-weight: normal;
+                vertical-align: middle;
+                padding: 5px 7px;
+                line-height: 1.42857143;
+                border-right-width: 0;
+                border-top-width: 0;
+                border-left: 1px solid #d2d2d2;
+                border-bottom: 1px solid #d2d2d2;
+                text-align: center;
+
+                &.align-left {
+                    text-align: left;
+                }
+
+                &.align-right {
+                    text-align: right;
+                }
+
+                &:last-child {
+                    border-right: 1px solid #d2d2d2;
+                }
+            }
+        }
+    }
+
+    tfoot {
+        tr {
+            &.summary {
+                th {
+                    background: #bbf8f2;
+
+                    &.align-left {
+                        text-align: left;
+                    }
+
+                    &.align-right {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dataTables_wrapper {
     .ui-widget-header {
         background: #343c4e;
         color: #fff;
@@ -22,95 +110,23 @@
     }
 
     .dataTables_scroll {
-        .dataTables_scrollHead, .dataTables_scrollBody {
+        .dataTables_scrollHead, .dataTables_scrollBody, .dataTables_scrollFoot {
             box-shadow: unset;
+            background: unset;
 
             table.dataTable {
-                thead tr th {
-                    color: #fff;
-                    font-weight: normal;
-                    vertical-align: middle;
-                    padding: 3px 5px;
-                    line-height: 1.42857143;
-                    border-right-width: 0;
-                    border-top-width: 0;
-                    border-left: 1px solid #646d80;
-                    border-bottom: 1px solid #646d80;
-                    text-align: center;
-                    box-shadow: unset;
-                    cursor: default;
-
-                    &.weekend {
-                        color: red;
-                    }
-
-                    &:last-child {
-                        border-right: 1px solid #646d80;
-                    }
-
-                    &:nth-child(n + 1) {
-                        background: #343c4e;
-                    }
-
-                    &:nth-child(n + 2) {
-                        background: #3b4254;
-                    }
-                }
+                margin: 0;
             }
         }
     }
 
     .dataTables_scrollBody {
         table.dataTable {
-            tbody tr {
-                &:nth-child(odd) {
-                    background: #ececec;
-                }
-
-                th, td {
-                    font-weight: normal;
-                    vertical-align: middle;
-                    padding: 5px 7px;
-                    line-height: 1.42857143;
-                    border-right-width: 0;
-                    border-top-width: 0;
-                    border-left: 1px solid #d2d2d2;
-                    border-bottom: 1px solid #d2d2d2;
-                    text-align: center;
-
-                    &.align-left {
-                        text-align: left;
-                    }
-
-                    &.align-right {
-                        text-align: right;
-                    }
-
-                    &:last-child {
-                        border-right: 1px solid #d2d2d2;
-                    }
-                }
-            }
         }
     }
 
     .dataTables_scrollFoot {
-        table {
-            tfoot tr {
-                &.summary {
-                    th {
-                        background: #bbf8f2;
-
-                        &.align-left {
-                            text-align: left;
-                        }
-
-                        &.align-right {
-                            text-align: right;
-                        }
-                    }
-                }
-            }
+        table.dataTable {
         }
     }
 }

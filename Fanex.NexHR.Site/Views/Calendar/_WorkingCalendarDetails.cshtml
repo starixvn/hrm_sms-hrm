@@ -3,7 +3,7 @@
 @Html.Hidden("ToPreviousDate", (Model.ToDate).AddDays(-7))
 @Html.Hidden("FromNextDate", (Model.FromDate).AddDays(7))
 @Html.Hidden("ToNextDate", (Model.ToDate).AddDays(7))
-<table id="data" class="table table-custom">
+<table id="data" class="table table-custom pretty">
     <thead>
         @{
             int daysInMonth = Model.WorkingCalendars.Any() ? Model.WorkingCalendars[0].Days : DateTime.DaysInMonth(Model.Year, Model.Month);

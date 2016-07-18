@@ -1,12 +1,6 @@
-﻿
-CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] --@SupervisorID INT
-	@EmpID INT
+﻿CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] @EmpID INT
 	,@Month DATETIME
-	--,@role VARCHAR(max) = '6'
 	,@IsNormal BIT = 0
-	,@ErrCode INT = 0 OUTPUT
-	,@ErrMsg NVARCHAR(200) = '' OUTPUT
-	,@isDebug BIT = 0
 AS
 /*
 Created: 20160614@Quinn.Vo
@@ -20,7 +14,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-		
+
 	DECLARE @fromDate DATETIME
 		,@toDate DATETIME
 		,@tempDate DATETIME
@@ -28,11 +22,7 @@ BEGIN
 	IF OBJECT_ID('tempdb..#Calendar') IS NOT NULL
 		DROP TABLE #Calendar
 
-	CREATE TABLE #Calendar (
-		WorkDate DATETIME
-		,[Enabled] BIT
-		,IsDeleted BIT
-		)
+	CREATE TABLE #Calendar (WorkDate DATETIME)
 
 	IF (@IsNormal = 0)
 	BEGIN
@@ -46,16 +36,8 @@ BEGIN
 
 		WHILE (DATEDIFF(DD, @tempDate, @toDate) >= 0)
 		BEGIN
-			INSERT INTO #Calendar (
-				WorkDate
-				,[Enabled]
-				,IsDeleted
-				)
-			VALUES (
-				@tempDate
-				,1
-				,0
-				)
+			INSERT INTO #Calendar (WorkDate)
+			VALUES (@tempDate)
 
 			SET @tempDate = DATEADD(DD, 1, @tempDate)
 		END
@@ -70,16 +52,8 @@ BEGIN
 
 		WHILE (DATEDIFF(DD, @tempDate, @toDate) >= 0)
 		BEGIN
-			INSERT INTO #Calendar (
-				WorkDate
-				,[Enabled]
-				,IsDeleted
-				)
-			VALUES (
-				@tempDate
-				,1
-				,0
-				)
+			INSERT INTO #Calendar (WorkDate)
+			VALUES (@tempDate)
 
 			SET @tempDate = DATEADD(DD, 1, @tempDate)
 		END
@@ -91,9 +65,9 @@ BEGIN
 		,CAST(0 AS DECIMAL(18, 2)) AS OffHours
 		,CAST(0 AS DECIMAL(18, 2)) AS PublicHours
 		,CAST(0 AS TINYINT) AS CurrentStatus
-		,CAST(NULL AS DATETIME) VerifiedDate
-		,CAST(NULL AS DATETIME) ApprovedDate
-		,CAST(NULL AS DATETIME) HRDate
+		,CAST(NULL AS DATETIME) AS VerifiedDate
+		,CAST(NULL AS DATETIME) AS ApprovedDate
+		,CAST(NULL AS DATETIME) AS HRDate
 		,CAST(0 AS TINYINT) AS VerifiedStatus
 		,CAST(0 AS TINYINT) AS ApprovedStatus
 		,CAST(0 AS TINYINT) AS HRStatus
@@ -114,34 +88,34 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE e.EmpId = @EmpId
 
-	SELECT tmp.WorkDate [OvertimeDate]
+	SELECT tmp.WorkDate AS [OvertimeDate]
 		,ISNULL(ot.[EmpId], @EmpID) AS [EmpId]
 		,ot.[RequestId]
-		,ISNULL(s.ShiftId, sc.ShiftId) [ShiftId]
-		,ISNULL(s.TotalHours, sc.TotalHours) [TotalShiftHours]
-		,ISNULL(s.Code, sc.Code) [Schedule]
-		,CASE 
+		,ISNULL(s.ShiftId, sc.ShiftId) AS [ShiftId]
+		,ISNULL(s.TotalHours, sc.TotalHours) AS [TotalShiftHours]
+		,ISNULL(s.Code, sc.Code) AS [Schedule]
+		,(CASE 
 			WHEN ot.[TimeIn] IS NULL
 				OR s.ShiftId IS NULL THEN CASE 
 					WHEN ec.InFixed IS NULL
 						OR sc.ShiftId IS NULL THEN NULL
 					ELSE CONVERT(VARCHAR(5), ec.InFixed, 108)
 					END
-			ELSE CONVERT(VARCHAR(5), ot.[TimeIn], 108)
-			END [TimeIn]
-		,CASE 
+			ELSE CONVERT(VARCHAR(5), ot.[TimeIn], 108) END
+			) AS [TimeIn]
+		,(CASE 
 			WHEN ot.[TimeOut] IS NULL
 				OR s.ShiftId IS NULL THEN CASE 
 					WHEN ec.OutFixed IS NULL
 						OR sc.ShiftId IS NULL THEN NULL
 					ELSE CONVERT(VARCHAR(5), ec.OutFixed, 108)
 					END
-			ELSE CONVERT(VARCHAR(5), ot.[TimeOut], 108)
-			END [TimeOut]
+			ELSE CONVERT(VARCHAR(5), ot.[TimeOut], 108) END
+			) AS [TimeOut]
 		,ISNULL(ot.[TotalHours], CASE 
 				WHEN sc.ShiftId IS NULL THEN NULL
 				ELSE ec.TotalWorkHours
-				END) [TotalWorkHours]
+				END) AS [TotalWorkHours]
 		,ot.[NormalHours]
 		,ot.[OffHours]
 		,ot.[PublicHours]
@@ -151,22 +125,18 @@ BEGIN
 		,ecl.IsHoliday
 		,ecl.IsOffDay
 		,ecl.IsKeepInView
-	FROM dbo.Employee e WITH (NOLOCK)
-		INNER JOIN #Calendar tmp ON e.[Enabled] = tmp.[Enabled]
-		AND e.[IsDeleted] = tmp.[IsDeleted]
-		LEFT JOIN [dbo].[OTDailyRequest] ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
+	FROM dbo.Employee AS e WITH (NOLOCK)
+		INNER JOIN #Calendar AS tmp ON 1 = 1
+		LEFT JOIN [dbo].[OTDailyRequest] AS ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
 		AND ot.EmpID = @EmpID
-		LEFT JOIN dbo.[Shift] s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
-		LEFT JOIN dbo.EmployeeAttendance ec WITH (NOLOCK) ON ec.AttendanceDate = tmp.WorkDate
+		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
+		LEFT JOIN dbo.EmployeeAttendance AS ec WITH (NOLOCK) ON ec.AttendanceDate = tmp.WorkDate
 		AND ec.EmpId = @EmpID
-		LEFT JOIN dbo.EmployeeCalendar ecl WITH (NOLOCK) ON ecl.WorkDate = tmp.WorkDate
+		LEFT JOIN dbo.EmployeeCalendar AS ecl WITH (NOLOCK) ON ecl.WorkDate = tmp.WorkDate
 		AND ecl.EmpId = @EmpId
-		LEFT JOIN dbo.[Shift] sc WITH (NOLOCK) ON sc.ShiftId = ec.ShiftId
+		LEFT JOIN dbo.[Shift] AS sc WITH (NOLOCK) ON sc.ShiftId = ec.ShiftId
 	WHERE e.EmpId = @EmpId
 	ORDER BY tmp.WorkDate
 
 	DROP TABLE #Calendar
-
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
 END

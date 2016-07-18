@@ -3,7 +3,7 @@
     margin: 10px 0;
     border-collapse: separate !important;
 
-    thead tr th, tbody tr td, tfoot tr td {
+    thead tr th, tbody tr td, tbody tr th, tfoot tr td, tfoot tr th {
         font-weight: normal;
         vertical-align: middle;
         padding: 5px 7px;
