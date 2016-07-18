@@ -1,14 +1,20 @@
 ﻿'use strict';
-/*global _global*/
 /*exported deleteMessage, detailMessage*/
 
 var init = function () {
     var $effectedDate = $('#EffectedDate'),
-		status = $('#IsDisabled').val();
+		status = $('#IsDisabled').val(),
+        $status = $("#status");
 
     $effectedDate.val($.datepicker.formatDate('d M, yy', new Date()));
     $effectedDate.prop("readonly", true);
-    $('#status').val(status);
+    $status.val(status);
+
+    $status.change(function () {
+        var value = $(this).val();
+
+        $('#IsDisabled').val(value);
+    });
 };
 
 var deleteMessage = function (messageId) {
@@ -28,21 +34,4 @@ var detailMessage = function (messageId) {
 
 $(document).ready(function () {
     init();
-
-    $("#submit").click(function () {
-        var form = $(this);
-        $('#IsDisabled').val($('#status').val());
-
-        $.ajax({
-            url: form.action,
-            type: "Post",
-            data: form.serialize(),
-            success: function () {
-                document.location = _global.root + "Message/viewMessageOfEmployee";
-            },
-            error: function (response) {
-                $("#error").html(response.message);
-            }
-        });
-    });
 });
