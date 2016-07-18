@@ -648,21 +648,14 @@ BEGIN
 				ELSE 0 END
 				) AS IsShiftCrossDay
 		FROM #CalendarDF AS CalendarDF WITH (NOLOCK)
-			LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON (
+			LEFT JOIN #EmployeeId AS empId ON (
 				(
-					e.isDeleted IS NULL
-					OR e.isDeleted = 0
+					@empId IS NULL
+					AND 1 = 1
 					)
-				OR @excludeUserDelete = 0
+				OR (empId.EmpId = @empId)
 				)
-			AND (
-				(
-					@empid IS NULL
-					AND e.[Enabled] = CalendarDF.[Enabled]
-					AND e.[IsDeleted] = CalendarDF.[IsDeleted]
-					)
-				OR e.empid = @empid
-				)
+			LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON empId.EmpId = e.EmpId
 			LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
 			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON CalendarDF.AttendanceDate = a.AttendanceDate
 			AND a.empid = e.empid
@@ -685,22 +678,11 @@ BEGIN
 				)
 			LEFT JOIN dbo.[Shift] AS s_CrossDay WITH (NOLOCK) ON s_CrossDay.ShiftId = c_CrossDay.ShiftId
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.groupid = g.groupid
+			LEFT JOIN #Group AS gId ON g.GroupId = gId.GroupId
 			LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
 			AND a.EmpId = ot.EmpId
-		WHERE (
-				g.groupid IN (
-					SELECT GroupId
-					FROM #Group
-					)
-				)
-			AND (
-				@isLocal IS NULL
-				OR e_s.IsLocal = @isLocal
-				)
-			AND e.EmpId IN (
-				SELECT EmpId
-				FROM #EmployeeId
-				)
+		WHERE @isLocal IS NULL
+			OR e_s.IsLocal = @isLocal
 		) AS T
 		LEFT JOIN (
 		SELECT c.WorkDate
