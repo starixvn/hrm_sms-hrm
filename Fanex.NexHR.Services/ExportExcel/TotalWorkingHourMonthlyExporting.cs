@@ -122,7 +122,7 @@
 
         private void CreateFreezePane()
         {
-            _sheet.CreateFreezePane(5, 4);
+            _sheet.CreateFreezePane(6, 4);
         }
 
         private void ExportContent(int rowIndex)
@@ -155,15 +155,16 @@
         private void ExportOneRowIntoContentRegion(int rowIndex, TotalWorkingHourMonthly totalWorkingHourMonthly)
         {
             IRow row = _sheet.CreateRow(rowIndex);
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 0, totalWorkingHourMonthly.StaffId.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 1, totalWorkingHourMonthly.Section.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.FullNameNick.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 3, totalWorkingHourMonthly.Nick.Trim());
-            this.CreateCellContentWithCenterAlign(row, rowIndex, 4, totalWorkingHourMonthly.CountWorkDay.ToString("0.0"));
+            this.CreateCellContentWithCenterAlign(row, rowIndex, 0, (rowIndex - _RowIndexOfTablePosition).ToString());
+            this.CreateCellContentWithLeftAlign(row, rowIndex, 1, totalWorkingHourMonthly.StaffId.Trim());
+            this.CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.Section.Trim());
+            this.CreateCellContentWithLeftAlign(row, rowIndex, 3, totalWorkingHourMonthly.FullNameNick.Trim());
+            this.CreateCellContentWithLeftAlign(row, rowIndex, 4, totalWorkingHourMonthly.Nick.Trim());
+            this.CreateCellContentWithCenterAlign(row, rowIndex, 5, totalWorkingHourMonthly.CountWorkDay.ToString("0.0"));
 
             for (int i = 0; i < totalWorkingHourMonthly.WorkingHours.Count; i++)
             {
-                this.CreateCellContentWithCenterAlign(row, rowIndex, 5 + i, totalWorkingHourMonthly.WorkingHours[i]);
+                this.CreateCellContentWithCenterAlign(row, rowIndex, 6 + i, totalWorkingHourMonthly.WorkingHours[i]);
             }
         }
 
@@ -213,15 +214,16 @@
         private void ExportHeader(int rowIndex)
         {
             IRow row = _sheet.CreateRow(rowIndex);
-            this.CreateFreezeHeaderCell(row, 0, Labels.StaffId);
-            this.CreateFreezeHeaderCell(row, 1, Labels.Section);
-            this.CreateFreezeHeaderCell(row, 2, Labels.FullName);
-            this.CreateFreezeHeaderCell(row, 3, Labels.Nick);
-            this.CreateFreezeHeaderCell(row, 4, Labels.CountWorkDay);
+            this.CreateFreezeHeaderCell(row, 0, Labels.SymbolCount);
+            this.CreateFreezeHeaderCell(row, 1, Labels.Code);
+            this.CreateFreezeHeaderCell(row, 2, Labels.Section);
+            this.CreateFreezeHeaderCell(row, 3, Labels.FullName);
+            this.CreateFreezeHeaderCell(row, 4, Labels.NickName);
+            this.CreateFreezeHeaderCell(row, 5, Labels.CountWorkDay);
 
             for (int i = 0; i < _firstRecord.WorkingHours.Count; i++)
             {
-                this.CreateUnfreezeHeaderCell(row, 5 + i, _firstRecord.WorkingHours[i]);
+                this.CreateUnfreezeHeaderCell(row, 6 + i, _firstRecord.WorkingHours[i]);
             }
         }
 

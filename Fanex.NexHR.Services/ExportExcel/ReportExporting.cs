@@ -8,6 +8,7 @@
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
@@ -140,11 +141,11 @@
                     }
 
                     // Row Header Date
-                    rowHeaderDate.GetCell(0).SetCellValue("#");
-                    rowHeaderDate.GetCell(1).SetCellValue("ID");
-                    rowHeaderDate.GetCell(2).SetCellValue("Full Name");
-                    rowHeaderDate.GetCell(3).SetCellValue("Nick Name");
-                    rowHeaderDate.GetCell(4).SetCellValue("Team");
+                    rowHeaderDate.GetCell(0).SetCellValue(Labels.SymbolCount);
+                    rowHeaderDate.GetCell(1).SetCellValue(Labels.Code);
+                    rowHeaderDate.GetCell(2).SetCellValue(Labels.FullName);
+                    rowHeaderDate.GetCell(3).SetCellValue(Labels.NickName);
+                    rowHeaderDate.GetCell(4).SetCellValue(Labels.Section);
 
                     foreach (var item in firstItemInGroup.Calendar)
                     {

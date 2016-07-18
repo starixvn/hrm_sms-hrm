@@ -466,6 +466,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average Hours.
+        /// </summary>
+        public static string AverageHours {
+            get {
+                return ResourceManager.GetString("AverageHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Back {
@@ -2023,7 +2032,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leave taken.
+        ///   Looks up a localized string similar to Leave Taken.
         /// </summary>
         public static string LeaveTaken {
             get {

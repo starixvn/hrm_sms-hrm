@@ -17,7 +17,7 @@
 <form class="form-filter">
     @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
-        <div class="grid_1">
+        <div class="grid_2">
             @Html.Label("Week")
         </div>
         <div class="grid_6">
@@ -40,17 +40,13 @@
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_1">
-            @Labels.Section
-        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="grid_2 gridlabel">@Labels.Section</div>
         <div class="grid_6">
             @Html.DropDownList("section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_4">
@@ -61,9 +57,7 @@
             <input id="btnSubmit" type="button" value="@Labels.Submit" />
             <input id="btnExcel" type="button" value="Excel" />
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
 </form>
-<div id="TotalWorkingHourWeeklyDetails">
-</div>
+<div id="TotalWorkingHourWeeklyDetails"></div>

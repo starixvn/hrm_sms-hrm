@@ -63,7 +63,7 @@
 
             var cell1 = row.CreateCell(0);
             cell1.CellStyle = cellStyle;
-            cell1.SetCellValue("No.");
+            cell1.SetCellValue(Labels.SymbolCount);
 
             var cell2 = row.CreateCell(1);
             cell2.CellStyle = cellStyle;
@@ -71,15 +71,15 @@
 
             var cell3 = row.CreateCell(2);
             cell3.CellStyle = cellStyle;
-            cell3.SetCellValue(Labels.Name);
+            cell3.SetCellValue(Labels.FullName);
 
             var cell4 = row.CreateCell(3);
             cell4.CellStyle = cellStyle;
-            cell4.SetCellValue(Labels.Nick);
+            cell4.SetCellValue(Labels.NickName);
 
             var cell5 = row.CreateCell(4);
             cell5.CellStyle = cellStyle;
-            cell5.SetCellValue(Labels.Team);
+            cell5.SetCellValue(Labels.Section);
 
             var cell6 = row.CreateCell(5);
             cell6.CellStyle = cellStyle;
@@ -91,11 +91,11 @@
 
             var cell8 = row.CreateCell(7);
             cell8.CellStyle = cellStyle;
-            cell8.SetCellValue("Leave Taken");
+            cell8.SetCellValue(Labels.LeaveTaken);
 
             var cell9 = row.CreateCell(8);
             cell9.CellStyle = cellStyle;
-            cell9.SetCellValue("Unpaid Leave");
+            cell9.SetCellValue(Labels.UnpaidLeave);
 
             var cell10 = row.CreateCell(9);
             cell10.CellStyle = cellStyle;
@@ -111,7 +111,7 @@
 
             var cell13 = row.CreateCell(12);
             cell13.CellStyle = cellStyle;
-            cell13.SetCellValue("Average Hours");
+            cell13.SetCellValue(Labels.AverageHours);
 
             rowIndex++;
 

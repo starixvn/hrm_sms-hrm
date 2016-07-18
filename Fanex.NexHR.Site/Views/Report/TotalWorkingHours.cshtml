@@ -70,36 +70,35 @@
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2 gridlabel">
-            <label for="IsLocal">Category</label>
+            <label for="IsLocal">@Labels.Category</label>
         </div>
         <div class="grid_7">
             @RazorHelper.CategoryDropDownList("IsLocal", Model.IsLocal.ToString())
         </div>
         <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.Team)
+            @Labels.Section
         </div>
         <div class="grid_6">
             <select id="TeamId" multiple="multiple" name="TeamId">
                 @{
-    var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
-    var selected = string.Empty;
-    foreach (Team team in ViewBag.Groups)
-    {
-        selected = string.Empty;
-        if (teamIds != null)
-        {
-            int pos = Array.IndexOf(teamIds, team.Id.ToString());
-            if (pos > -1)
-            {
-                selected = "selected";
-            }
-        }
-        <option @selected value="@team.Id">@team.Name</option>
-    }
+                    var teamIds = ViewBag.TeamIds != null ? ((string)ViewBag.TeamIds).Split(',') : null;
+                    var selected = string.Empty;
+                    foreach (Team team in ViewBag.Groups)
+                    {
+                        selected = string.Empty;
+                        if (teamIds != null)
+                        {
+                            int pos = Array.IndexOf(teamIds, team.Id.ToString());
+                            if (pos > -1)
+                            {
+                                selected = "selected";
+                            }
+                        }
+                        <option @selected value="@team.Id">@team.Name</option>
+                    }
                 }
             </select>
         </div>
-
         <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
@@ -124,9 +123,9 @@
         <tr class="persist-header">
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.Name</th>
-            <th>@Labels.Nick</th>
-            <th>@Labels.Team</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.Section</th>
             <th>@Labels.WorkigDay</th>
             <th>@Labels.ActualWorkingDay</th>
             <th>@Labels.LeaveTaken</th>

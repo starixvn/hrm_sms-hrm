@@ -490,7 +490,7 @@
     <value>Actual working day</value>
   </data>
   <data name="LeaveTaken" xml:space="preserve">
-    <value>Leave taken</value>
+    <value>Leave Taken</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Notes</value>
@@ -1496,5 +1496,8 @@
   </data>
   <data name="NickName" xml:space="preserve">
     <value>Nick Name</value>
+  </data>
+  <data name="AverageHours" xml:space="preserve">
+    <value>Average Hours</value>
   </data>
 </root>
