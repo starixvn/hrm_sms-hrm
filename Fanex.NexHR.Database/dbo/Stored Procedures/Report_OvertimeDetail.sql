@@ -22,20 +22,20 @@ BEGIN
 
 	SELECT @toDate = CONVERT(VARCHAR(50), @toDate, 111)
 
-	CREATE TABLE #Group (GroupId TINYINT)
+	CREATE TABLE #GroupsList (GroupId INT)
 
 	IF ISNULL(@groupids, '') <> ''
 	BEGIN
-		INSERT INTO #Group (GroupId)
+		INSERT INTO #GroupsList (GroupId)
 		SELECT g.val
 		FROM fnc_strSplit(@groupids, ',') AS g
 	END
 
-	CREATE TABLE #JobTitle (JobTitleId TINYINT)
+	CREATE TABLE #JobTitleList (JobTitleId INT)
 
 	IF ISNULL(@JobTitleId, '') <> ''
 	BEGIN
-		INSERT INTO #JobTitle (JobTitleId)
+		INSERT INTO #JobTitleList (JobTitleId)
 		SELECT val
 		FROM fnc_strSplit(@JobTitleId, ',')
 	END
@@ -81,21 +81,21 @@ BEGIN
 			ISNULL(@groupids, '') = ''
 			OR ee.GroupId IN (
 				SELECT GroupId
-				FROM #Group
+				FROM #GroupsList
 				)
 			)
 		AND (
 			ISNULL(@JobTitleId, '') = ''
 			OR ee.JobTitleId IN (
 				SELECT JobTitleId
-				FROM #JobTitle
+				FROM #JobTitleList
 				)
 			)
 	ORDER BY gg.Code
 		,ee.NickName
 		,ot.OvertimeDate
 
-	DROP TABLE #Group
+	DROP TABLE #GroupsList
 
-	DROP TABLE #JobTitle
+	DROP TABLE #JobTitleList
 END

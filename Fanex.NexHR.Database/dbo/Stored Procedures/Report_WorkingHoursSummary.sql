@@ -32,7 +32,7 @@ SELECT @UnpaidLeaveType = LeaveTypeId
 FROM dbo.LeaveType WITH (NOLOCK)
 WHERE Code = 'UPL'
 
-CREATE TABLE #GroupsList (GroupId TINYINT)
+CREATE TABLE #GroupsList (GroupId INT)
 
 INSERT INTO #GroupsList (GroupId)
 SELECT val

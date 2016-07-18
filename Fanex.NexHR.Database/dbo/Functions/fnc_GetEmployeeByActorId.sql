@@ -119,17 +119,6 @@ BEGIN
 			AND ISNULL(gs.IsDeleted, 0) = 0
 			AND gs.ActionType IN (4, 5)
 
-		--IF(NOT EXISTS(SELECT 1 FROM @tbl_EmpIds))
-		--BEGIN
-		--	INSERT INTO @tbl_EmpIds(EmpId)
-		--	SELECT DISTINCT e.EmpId 
-		--	FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-		--	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-		--	LEFT JOIN @tbl_EmpIds tmpe ON e.EmpId = tmpe.EmpId
-		--	WHERE OwnerId = @EmpId
-		--		AND ((ISNULL(e.isDeleted, 0) = 0 AND ISNULL(e.[Enabled], 0) = 1) OR @ExcludeUserDelete = 0)
-		--		AND tmpe.EmpId IS NULL
-		--END
 		IF (@IsShowUserInTeam = 1)
 		BEGIN
 			INSERT INTO @tbl_EmpIds (EmpId)
@@ -147,6 +136,11 @@ BEGIN
 					OR @ExcludeUserDelete = 0
 					)
 				AND tmpe.EmpId IS NULL
+		END
+
+		IF(NOT EXISTS(SELECT 1 FROM @tbl_EmpIds WHERE EmpID = @EmpId))
+		BEGIN
+			INSERT INTO @tbl_EmpIds(EmpID) VALUES(@EmpId)
 		END
 	END
 

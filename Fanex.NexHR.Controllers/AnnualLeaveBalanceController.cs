@@ -102,11 +102,6 @@
             bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Host);
             ViewBag.HasPermissionToEdit = hasPermissionToEdit;
 
-            if (!employeeId.HasValue && !hasPermissionToEdit)
-            {
-                employeeId = CurrentUser.Id;
-            }
-
             var model = new LeaveSummaryViewModel
             {
                 Year = year.HasValue ? year.Value : DateTime.Now.Year,

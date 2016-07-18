@@ -50,6 +50,9 @@
                         @switch (item.ActionType)
                         {
                             case (short)RoleSystem.ShiftManager:
+                                <a href="@Url.Action("ShiftManager", "Team", new { TeamId = ViewBag.TeamId })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
                                 break;
                             case (short)RoleSystem.Verifier:
                             case (short)RoleSystem.Approver:

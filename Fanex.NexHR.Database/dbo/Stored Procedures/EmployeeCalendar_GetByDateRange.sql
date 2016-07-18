@@ -19,7 +19,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 	
-	CREATE TABLE #GroupsList (GroupId TINYINT)
+	CREATE TABLE #GroupsList (GroupId INT)
 
 	INSERT INTO #GroupsList (GroupId)
 	SELECT val FROM fnc_strSplit (@groupids, ',')
