@@ -58,7 +58,7 @@ BEGIN
 			SET @tempDate = DATEADD(DD, 1, @tempDate)
 		END
 	END
-
+	
 	SELECT CAST(0 AS BIGINT) RequestId
 		,@Month [Month]
 		,CAST(0 AS DECIMAL(18, 2)) AS NormalHours

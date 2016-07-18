@@ -11,7 +11,7 @@
     {
         HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year);
 
-        HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList);
+        HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
 
         void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath);
 

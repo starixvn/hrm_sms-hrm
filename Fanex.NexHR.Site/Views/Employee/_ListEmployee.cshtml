@@ -46,7 +46,7 @@
                     </td>
                     <td class="align-left">@employee.FullName</td>
                     <td>@employee.Team.Code</td>
-                    <td class="align-right">
+                    <td>
                         @if (employee.JoinedDate.HasValue)
                         {
                             @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
@@ -54,7 +54,7 @@
                     </td>
                     <td class="align-left">@employee.JobTitle</td>
                     <td class="align-left">@employee.Roles2String</td>
-                    <td class="align-right resignedDate">
+                    <td class="resignedDate">
                         @if (employee.ResignedDate.HasValue)
                         {
                             @employee.ResignedDate.Value.ToDateMonthYearFormatedDate()

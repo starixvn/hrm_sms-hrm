@@ -301,7 +301,7 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList)
+        public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_WorkingTimeRequestFilePathExcelTemplate);
@@ -311,7 +311,7 @@
             }
 
             var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingTimeRequest");
+            var sheet = hssfworkbook.CloneSheet("sheet1", title);
             var rowIndex = _RowStartBodyWorkingTimeRequest;
             var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
             ICell cellNo = null;
@@ -324,6 +324,9 @@
             ICell cellCreateDate = null;
             ICell cellStatus = null;
 
+            var rowTitle = sheet.GetRow(0);
+            var cellTitle = rowTitle.GetCell(0);
+            cellTitle.SetCellValue(title);
             foreach (var item in requestList)
             {
                 var rowCopy = _RowStartBodyWorkingTimeRequest + (rowIndex % 2);
@@ -627,7 +630,7 @@
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (int)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
 
-            cellDetails.SetCellValue(this.GetRequestDetail(item));
+            cellDetails.SetCellValue(GetRequestDetail(item));
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
             cellStatus.SetCellValue(item.Status.Name);

@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -28,7 +23,14 @@
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.ViewModels.Request;
+    using Fanex.NexHR.Web.Providers;
+    using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class ExportController : RequestController
     {
@@ -225,7 +227,7 @@
                     EmployeeId = model.EmpId,
                     Status = null
                 };
-                entity = this.overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
+                entity = overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
             }
             else
             {
@@ -236,7 +238,7 @@
                     EmployeeId = model.EmpId,
                     Status = null
                 };
-                entity = this.overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
+                entity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
             }
 
             exportExcelYearlyOvertimeReportService.Export(entity, model.Year, model.Calendar);
@@ -333,12 +335,11 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// [Authorize(Roles = "Verifier, Approver")]
-        /// [CustomAuthorize,FunctionKey.ExportMemberWorkingTimeRequest Policy.Read)]
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
-
+            model.ViewType = RequestViewType.PersonalSpace;
             var criteria = new GetRequestCriteria()
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
@@ -348,22 +349,23 @@
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
+                RequestViewType = model.ViewType,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
-            string fileName = "MemberWorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+            string fileName = "MemberRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        /// [Authorize(Roles = "HR")]
-        /// [CustomAuthorize,FunctionKey.ExportHRWorkingTimeRequest Policy.Read)]
+        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
+            model.ViewType = RequestViewType.HRSpace;
 
             var criteria = new GetRequestCriteria()
             {
@@ -375,13 +377,13 @@
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                RequestViewType = RequestViewType.HRSpace,
+                RequestViewType = model.ViewType,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
-            string fileName = "WorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+            string fileName = "EmployeeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -389,7 +391,7 @@
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
-
+            model.ViewType = RequestViewType.CompanySpace;
             var criteria = new GetRequestCriteria()
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
@@ -399,14 +401,14 @@
                 Status = GetStatus(model.StatusId),
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                RequestViewType = RequestViewType.CompanySpace,
+                RequestViewType = model.ViewType,
                 SupervisorId = CurrentUser.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList);
-            string fileName = "DailyWorkingTimeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+            string fileName = "DailyRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }
