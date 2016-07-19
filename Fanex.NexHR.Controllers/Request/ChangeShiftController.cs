@@ -96,6 +96,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Create(string shiftJson, string shiftDetailJson)
         {
             var criteria = JsonConverter.FromJson<InsertChangeShiftRequestCriteria>(shiftJson);
@@ -149,6 +150,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Update(string shiftJson, string shiftDetailJson)
         {
             var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);

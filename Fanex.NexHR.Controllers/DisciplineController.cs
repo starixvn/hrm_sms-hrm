@@ -174,6 +174,7 @@
 
         /// [Authorize(Roles = "SystemAdmin")]
         [HttpPost]
+        [ValidateInput(false)]
         [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {

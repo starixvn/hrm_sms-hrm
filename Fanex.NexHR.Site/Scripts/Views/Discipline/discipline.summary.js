@@ -272,8 +272,8 @@
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
-                    if ($('#dialogViewOtherDiscipline table.data tbody > tr').length === 0) {
-                        $(noInformation(6)).appendTo('#dialogViewOtherDiscipline table.data');
+                    if ($('#dialogViewOtherDiscipline table.table tbody > tr').length === 0) {
+                        $(noInformation(6)).appendTo('#dialogViewOtherDiscipline table.table');
                     }
                 });
             });

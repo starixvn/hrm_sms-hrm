@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''
@@ -359,9 +358,12 @@ BEGIN
 			RETURN
 		END
 
-		-- write log
 		IF @ErrCode = 0
 		BEGIN
+			-- update IsConfirmed
+			EXEC dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline
+
+			-- write log
 			DECLARE @LogSPData VARCHAR(4000)
 				,@now DATETIME
 				,@Description VARCHAR(200)
@@ -369,7 +371,12 @@ BEGIN
 			SET @now = getdate()
 
 			--Log general info
-			SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" ' + 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" ' + 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" ' + 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" ' + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" ' + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+			SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" '
+			     + 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
+			     + 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
+			     + 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
+			     + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
+			     + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 			SELECT @Description = 'Approve Request:' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1))
 

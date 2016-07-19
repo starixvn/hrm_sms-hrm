@@ -173,6 +173,9 @@ BEGIN
 
 		IF @ErrCode = 0
 		BEGIN
+			-- update IsConfirmed
+			EXEC dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline
+			
 			-- write to history
 			EXEC [WorkingTimeRequest_WriteHistory] @RequestId
 
@@ -185,11 +188,11 @@ BEGIN
 
 			--Log general info
 			SELECT @LogSPData = '<WorkingTimeRequest_ResetRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" '
-				+ 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
-				+ 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
-				+ 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
-				+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
-				+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+			     + 'ApprovedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
+			     + 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
+			     + 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
+			     + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
+			     + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 			SELECT @Description = 'Reset Status Request:' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1))
 
