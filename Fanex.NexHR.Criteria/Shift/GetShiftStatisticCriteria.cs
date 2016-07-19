@@ -17,8 +17,6 @@
 
         public byte? IsLocal { get; set; }
 
-        public bool? IsDebug { get; set; }
-
         public override string GetSettingKey()
         {
             return "ShiftMng_RptShiftSchedule";

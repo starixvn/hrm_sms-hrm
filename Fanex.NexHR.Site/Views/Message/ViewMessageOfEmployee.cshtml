@@ -20,11 +20,17 @@
 {
     <div class="container_24 bunhat" style="width: 878px;">
         @Html.HiddenFor(model => model.IsDisabled)
-        <div class="grid_3 formrow message-label">
-            @Html.LabelFor(model => model.EffectedDate)
+        <div class="grid_2 formrow message-label">
+            @Html.LabelFor(model => model.FromDate)
         </div>
         <div class="grid_4">
-            @Html.DatePickerFor(model => model.EffectedDate)
+            @Html.DatePickerFor(model => model.FromDate)
+        </div>
+        <div class="grid_2 formrow message-label">
+            @Html.LabelFor(model => model.ToDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.ToDate)
         </div>
         <div class="grid_2 formrow message-label">
             <label>@Labels.Status</label>

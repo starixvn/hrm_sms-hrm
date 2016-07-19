@@ -35,9 +35,14 @@ BEGIN
 					OR ms.IsDisabled = @IsDisabled
 				)
 		AND (
+			@IsDisabled IS NULL
+			OR mse.IsDisabled IS NULL
+			OR mse.IsDisabled = @IsDisabled
+		)
+		AND (
 			ms.FromDate IS NULL
 			OR ms.ToDate IS NULL
-			--OR ISNULL(mse.IsRead, 0) = 0
+			OR ISNULL(mse.IsRead, 0) = 0
 			OR (
 				@EffectedDate BETWEEN ms.FromDate
 					AND ms.ToDate
