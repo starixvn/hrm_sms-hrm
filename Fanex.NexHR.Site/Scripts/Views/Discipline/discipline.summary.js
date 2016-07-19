@@ -311,9 +311,6 @@
     }
 
     $(document).ready(function () {
-        $("#FromDate").inputReadonly();
-        $("#ToDate").inputReadonly();
-
         initEventForTeamDropdown();
 
         $('form.form-filter #submit').on('click', function (event) {

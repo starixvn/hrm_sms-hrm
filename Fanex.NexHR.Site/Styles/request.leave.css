@@ -1,46 +1,45 @@
 ﻿#TotalDays {
-	width:30px;
-	text-align:center;
+    width: 30px;
+    text-align: center;
 }
+
 #FromTime, #ToTime {
-	min-width:60px;
+    min-width: 60px;
 }
-.ddlfromtime, .ddltotime
-{
-    min-width:60px;
-    }
-table.tabledata tfoot.footleavedetail tr td
-{
+
+.ddlfromtime, .ddltotime {
+    min-width: 60px;
+}
+
+table.tabledata tfoot.footleavedetail tr td {
     font-weight: bold;
     background: #EDF1DC;
     text-align: right;
-    }
-table.tabledata tfoot.footleavedetail tr td#totalAnnualLeave
-{
-    text-align: center;
-    border-right: 1px solid #EDF1DC;
 }
-table.tabledata tfoot.footleavedetail tr td#totalUnpaidLeave
-{
-    text-align: center;
-    border-right: 1px solid #EDF1DC;
-}
-.ddlWorkType
-{
-    min-width:100px; 
-    width:100px;
-    }
-.infobalance
-{
-    color: #3A3AEF;
-    }
-    
-.numberbalance
-{
-    color: Red;
+
+    table.tabledata tfoot.footleavedetail tr td#totalAnnualLeave {
+        text-align: center;
+        border-right: 1px solid #EDF1DC;
     }
 
-table.tabledata td.tdleavedate
-{
-    text-align: left;
+    table.tabledata tfoot.footleavedetail tr td#totalUnpaidLeave {
+        text-align: center;
+        border-right: 1px solid #EDF1DC;
     }
+
+.ddlWorkType {
+    min-width: 100px;
+    width: 100px;
+}
+
+.infobalance {
+    color: #3A3AEF;
+}
+
+.numberbalance {
+    color: Red;
+}
+
+table.tabledata td.tdleavedate {
+    text-align: left;
+}

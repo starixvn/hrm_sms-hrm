@@ -282,10 +282,6 @@
                         ModelState.AddModelError(string.Empty, result.Message);
                     }
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-                }
 
                 model.Coutries = GetCountries();
 

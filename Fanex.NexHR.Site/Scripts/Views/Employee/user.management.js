@@ -105,7 +105,8 @@
 
         var q = getParam('query');
         if (q !== null) {
-            $('#Keyword').val(q);
+            var decode = decodeURIComponent(q);
+            $('#Keyword').val(decode);
         }
 
         $('#group').on('change', function () {

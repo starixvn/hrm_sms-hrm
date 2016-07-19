@@ -6,10 +6,6 @@ var _totalDays = 0;
 var _ids;
 
 $(document).ready(function () {
-    var $affectFrom = $("#AffectedFrom");
-
-    $affectFrom.inputReadonly();
-
     $('.checkuncheckall').click(function () {
         _checked = !_checked;
         $('.aba').prop('checked', _checked);

@@ -99,26 +99,13 @@ function showExpatApplicableHoliday() {
 }
 
 $(document).ready(function () {
+    var $uploadButton = $("#upload");
     $(".dropdown").chosen();
     $('#JobTitleId').chosen();
-    var $uploadButton = $("#upload");
-    var $dateOfIdCard = $("#DateOfIdCard");
-    var $passportExp = $("#PassportExp");
-    var $joinedDate = $("#JoinedDate");
-    var $companyDate = $("#CompanyDate");
-    var $comfirmDate = $("#ConfirmedDate");
-    var $resignedDate = $("#ResignedDate");
-
-    $dateOfIdCard.inputReadonly();
-    $passportExp.inputReadonly();
-    $joinedDate.inputReadonly();
-    $companyDate.inputReadonly();
-    $comfirmDate.inputReadonly();
-    $resignedDate.inputReadonly();
 
     $uploadButton.hide();
-
     bindSARole(true);
+
     $('#Roles2Array7').click(function () {
         bindSARole(false);
     });

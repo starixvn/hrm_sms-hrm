@@ -15,16 +15,13 @@ var init = function () {
     var $status = $('#status');
 
     var fromDateModel = $('#FromDate').val(),
-		toDateModel = $('#ToDate').val(),
-		status = $('#IsDisabled').val(),
-		toDate = new Date(),
-		fromDate = new Date();
+        toDateModel = $('#ToDate').val(),
+        status = $('#IsDisabled').val(),
+        toDate = new Date(),
+        fromDate = new Date();
     fromDate.setMonth(fromDate.getMonth() - 3);
-    var $fromDate = $("#FromDate");
-    var $toDate = $("#ToDate");
-
-    $fromDate.inputReadonly();
-    $toDate.inputReadonly();
+    var $fromDate = $("#FromDate"),
+        $toDate = $("#ToDate");
 
     if (!fromDateModel) {
         $fromDate.val($.datepicker.formatDate('d M, yy', fromDate));

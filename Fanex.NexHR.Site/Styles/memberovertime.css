@@ -6,26 +6,6 @@
 {
     padding-top: 3px !important;
 }
-.labelforemployee
-{
-    padding-left: 18px;
-}
-.lablemonth
-{
-    padding-left: 34px;
-}
-.lableteam
-{
-    padding-left: 36px;
-}
-table.tabledata
-{
-    min-width: 983px;
-}
-table.tabledata thead tr.headermenu th
-{
-    background: #EDEFE5;
-}
 .status
 {
     padding-right: 12px;
@@ -48,18 +28,4 @@ table.tabledata thead tr.headermenu th
 {
     width: 350px;
     height: 118px;
-}
-
-table.data tfoot tr.sum
-{
-    background-color: #b0cc7f;
-    text-align: center;
-    font-weight: bold;
-}
-
-table.tabledata tfoot tr.sum
-{
-    background-color: #b0cc7f;
-    text-align: center;
-    font-weight: bold;
 }

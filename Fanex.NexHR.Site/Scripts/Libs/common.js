@@ -1,11 +1,14 @@
-﻿/*global _messages*/
+﻿'use strict';
+/*global _global, _messages*/
 /// <reference path="jquery.min.js" />
 /// <reference path="date.js" />
 
 (function () {
     var proxied = window.alert;
     window.alert = function () {
-        $('<div class="dialogcontent">' + arguments[0] + '<input class="dialogokbutton" type="button" value="OK" onclick="$(\'.ui-dialog-content\').dialog(\'close\');" /></div>').dialog({
+        $('<div class="dialogcontent">' + arguments[0]
+            + '<input class="dialogokbutton" type="button" value="OK" onclick="$(\'.ui-dialog-content\').dialog(\'close\');" /></div>')
+        .dialog({
             title: 'SMSHRM',
             height: 120,
             show: 'fade',
@@ -33,7 +36,7 @@ function confirm(message, callback, options) {
         buttons: {
             OK: function () {
                 $(this).dialog('close');
-                if (callback != null) {
+                if (callback !== null) {
                     callback();
                 }
                 return true;
@@ -47,9 +50,9 @@ function confirm(message, callback, options) {
         hide: 'fade',
         minHeight: 50,
         dialogClass: 'modal-shadow'
-    }
+    };
 
-    $confirm = $.getOrCreateDialog('confirm');
+    var $confirm = $.getOrCreateDialog('confirm');
     // set message
     $("p", $confirm).html(message);
     // init dialog
@@ -80,7 +83,7 @@ $(document).ready(function () {
 
     $("input[type=number]").keydown(function (event) {
         // Allow: backspace, delete, tab, escape, and enter
-        if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode === 13 ||
+        if (event.keyCode === 46 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 27 || event.keyCode === 13 ||
             // Allow: Ctrl+A
             (event.keyCode === 65 && event.ctrlKey === true) ||
             // Allow: home, end, left, right
@@ -124,22 +127,32 @@ $(document).ready(function () {
             });
         }
 
-        if (typeof (initDatePicker) != "function") //check if (isExit include date.filter.js) then (mindate, maxdate include after function initDatePicker)
+        if (typeof (initDatePicker) !== "function") //check if (isExit include date.filter.js) then (mindate, maxdate include after function initDatePicker)
         {
-            if (mindate != 'null') {
+            if (mindate !== 'null') {
                 mindate = mindate.split("/");
                 $('.datepicker').datepicker("option", "minDate", new Date(mindate[0], mindate[1] - 1, mindate[2]));
             }
-            if (maxdate != 'null') {
+            if (maxdate !== 'null') {
                 maxdate = maxdate.split("/");
                 $('.datepicker').datepicker("option", "maxDate", new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
             }
         }
+
+        $('.datepicker').attr('readonly', 'readonly');
+        $('.datepicker').keydown(function (e) {
+            var tab = 9, enter = 13;
+            if (e.keyCode === tab || e.keyCode === enter) {
+                return true;
+            }
+
+            return false;
+        });
     }
 
     floatingHeader();
 
-    $('.processing-submit').click(function (evt) {
+    $('.processing-submit').click(function () {
         actingButton('.processing-submit', true);
     });
 
@@ -184,7 +197,7 @@ function checkBadDates(mydate) {
     var checkdate = new Date(mydate).format("dd mmm, yyyy");
     for (var i = 0; i < myBadDates.length; i++) {
         var date = new Date(myBadDates[i]).format("dd mmm, yyyy");
-        if (date == checkdate) {
+        if (date === checkdate) {
             isEnable = false;
         }
     }
@@ -210,7 +223,7 @@ function getParam(name) {
     var regexS = "[\\?&]" + name + "=([^&#]*)";
     var regex = new RegExp(regexS);
     var results = regex.exec(window.location.href);
-    if (results == null)
+    if (results === null)
         return null;
     else
         return results[1];
@@ -265,12 +278,12 @@ function getDomain(url) {
     return url.match(/:\/\/(www\.)?(.[^/:]+)/)[2];
 }
 function getPlainText(text) {
-    if (text == null || typeof (text) != "string") return null;
+    if (text === null || typeof (text) !== "string") return null;
     return text.replace(/<[^>]*>/g, '');
 }
 
 function getEncodePlainText(text) {
-    if (text == null || typeof (text) != "string") return null;
+    if (text === null || typeof (text) !== "string") return null;
     return encodeURIComponent(text.replace(/<[^>]*>/g, ''));
 }
 function jsonToDate(jsonDate) {
@@ -280,7 +293,7 @@ function jsonToDate(jsonDate) {
 
 function jsonToFullDateTime(jsonDate) {
     var date = Date.parse(jsonDate);
-    if (date != null) {
+    if (date !== null) {
         return date.format("ddd, dd mmm, yyyy HH:MM:ss");
     }
     else {
@@ -290,7 +303,7 @@ function jsonToFullDateTime(jsonDate) {
 
 function jsonToFullDateTime2(jsonDate) {
     var date = new Date(jsonDate);
-    if (date != null) {
+    if (date !== null) {
         return date.format("dd mmm, yyyy HH:MM:ss");
     }
     else {
@@ -409,7 +422,7 @@ function enableEmotion(str) {
 function getImage(text) {
     text = text.replace(/\)|\(|&quot;/g, "");
     var img = $(text).find("img:first").attr("src");
-    if (img != null && img != undefined) {
+    if (img !== null && img !== undefined) {
         return "<img alt='' src='" + img + "' />";
     }
     else {
@@ -447,19 +460,19 @@ var dateFormat = function () {
         var dF = dateFormat;
 
         // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
-        if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+        if (arguments.length === 1 && Object.prototype.toString.call(date) === "[object String]" && !/\d/.test(date)) {
             mask = date;
             date = undefined;
         }
 
         // Passing date through Date applies Date.parse, if necessary
-        date = date ? new Date(date) : new Date;
+        date = date ? new Date(date) : new Date();
         if (isNaN(date)) throw SyntaxError("invalid date");
 
         mask = String(dF.masks[mask] || mask || dF.masks["default"]);
 
         // Allow setting the utc argument via the mask
-        if (mask.slice(0, 4) == "UTC:") {
+        if (mask.slice(0, 4) === "UTC:") {
             mask = mask.slice(4);
             utc = true;
         }
@@ -501,7 +514,7 @@ var dateFormat = function () {
                 TT: H < 12 ? "AM" : "PM",
                 Z: utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
                 o: (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-                S: ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+                S: ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 !== 10) * d % 10]
             };
 
         return mask.replace(token, function ($0) {
@@ -586,7 +599,7 @@ $.fn.insertAtCaret = function (myValue) {
             this.focus();
         }
             //MOZILLA/NETSCAPE support
-        else if (this.selectionStart || this.selectionStart == '0') {
+        else if (this.selectionStart || this.selectionStart === '0') {
             var startPos = this.selectionStart;
             var endPos = this.selectionEnd;
             var scrollTop = this.scrollTop;
@@ -607,9 +620,9 @@ $.fn.insertAtCaret = function (myValue) {
 function changeNumber(element, amount) {
     var text = $(element).text();
     var r = text.match(/[\d\.]+/g);
-    if (text.length == 0 || r == null) return;
+    if (text.length === 0 || r === null) return;
 
-    var next = parseInt(r[0]) + amount;
+    var next = parseInt(r[0], 10) + amount;
     $(element).text(text.replace(r[0], next));
 }
 
@@ -620,7 +633,7 @@ function isInteger(str) {
 function displayMinute(minutes) {
     var hour = Math.floor(minutes / 60);
     var minute = minutes % 60;
-    if (hour == 0) {
+    if (hour === 0) {
         return minute > 9 ? '00:' + minute : '00:0' + minute;
     }
     return (hour > 9 ? hour : '0' + hour) + ':' + (minute > 9 ? minute : '0' + minute);
@@ -639,7 +652,7 @@ function autoIndex() {
 }
 
 function zeroPrefix(value) {
-    if (parseInt(value) < 10) return "0" + parseInt(value);
+    if (parseInt(value, 10) < 10) return "0" + parseInt(value, 10);
     return value;
 }
 
@@ -656,7 +669,7 @@ function totalHoursToTime(value) {
 }
 
 function updateTableHeaders() {
-    if ($(".persist-area").val() != undefined) {
+    if ($(".persist-area").val() !== undefined) {
         var leftspace = 191;
         var widthspace = $(".persist-area").width() + 18;
         if ($.browser.safari) {
@@ -681,7 +694,7 @@ function updateTableHeaders() {
             var el = $(this),
                     offset = el.offset(),
                     scrollTop = $(window).scrollTop(),
-                    floatingHeader = $(".floatingHeader", this)
+                    floatingHeader = $(".floatingHeader", this);
             if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
                 if (!isShowLeftMenu) {
                     floatingHeader.css({
@@ -699,7 +712,7 @@ function updateTableHeaders() {
                 floatingHeader.css({
                     "visibility": "hidden"
                 });
-            };
+            }
         });
 
         var i = 0;
@@ -708,20 +721,17 @@ function updateTableHeaders() {
             $($("table .floatingHeader th")[i]).width(x);
             i++;
         });
-        //        if($.browser.mozilla)
-        //            $("table .floatingHeader th:first").height(30);
     }
 }
 
 $(function () {
-    var startDate;
-    var endDate;
+    var startDate, endDate;
 
     var selectCurrentWeek = function () {
         window.setTimeout(function () {
-            $('.week-picker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
+            $('.week-picker').find('.ui-datepicker-current-day a').addClass('ui-state-active');
         }, 1);
-    }
+    };
 
     $('.week-picker').datepicker({
         showOtherMonths: true,
@@ -755,6 +765,16 @@ $(function () {
     $('.week-picker .ui-datepicker-calendar tr').live('mouseleave', function () { $(this).find('td a').removeClass('ui-state-hover'); });
     $('.week-picker .ui-datepicker').addClass('custom-weekpicker');
     $('.week-picker').hide();
+
+    $('.startDateOfWeek, .endDateOfWeek').attr('readonly', 'readonly');
+    $('.startDateOfWeek, .endDateOfWeek').keydown(function (e) {
+        var tab = 9, enter = 13;
+        if (e.keyCode === tab || e.keyCode === enter) {
+            return true;
+        }
+
+        return false;
+    });
 
     $(document).click(function (e) {
         var ele = $(e.target) ? $(e.target) : $(e.toElement);
@@ -800,15 +820,3 @@ function verifyDangerousText(value) {
 
     return valid;
 }
-
-$.fn.extend({
-    inputReadonly: function () {
-        this.keypress(function (e) {
-            var tab = 9, enter = 13;
-            if (e.keyCode === tab || e.keyCode === enter) {
-                return true;
-            }
-            return false;
-        });
-    }
-});

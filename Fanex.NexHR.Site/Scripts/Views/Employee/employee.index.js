@@ -88,8 +88,16 @@
 
         var q = getParam('query');
         if (q !== null) {
-            $('#Keyword').val(q);
+            var decode = decodeURIComponent(q);
+            $('#Keyword').val(decode);
         }
+
+        $('#Keyword').keydown(function (event) {
+            // enter
+            if (event.keyCode === 13) {
+                return false;
+            }
+        });
 
         query();
 
