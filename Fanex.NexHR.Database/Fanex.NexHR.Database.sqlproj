@@ -306,7 +306,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByCode.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetOtherDisciplineType.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByDomain.sql" />
     <Build Include="dbo\Stored Procedures\Message_EmployeeDelete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByID.sql" />
