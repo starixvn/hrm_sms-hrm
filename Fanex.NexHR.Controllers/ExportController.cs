@@ -1,5 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Controllers.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -26,16 +31,9 @@
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class ExportController : RequestController
     {
-        private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
-        private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
         private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
         private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
@@ -49,6 +47,7 @@
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IDisciplineService disciplineService;
         private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
+        private readonly IExportExcelEmployeeInfoService exportExcelEmployeeInfoService;
         private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
         private readonly IExportExcelManpowerCategoryService exportExcelManpowerCategoryService;
         private readonly IExportExcelManpowerService exportExcelManpowerService;
@@ -59,7 +58,7 @@
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -73,6 +72,7 @@
             IWorkingCalendarService workingCalendarService,
             IDisciplineService disciplineService,
             IExportExcelAttendanceReportService exportExcelAttendanceReportService,
+            IExportExcelEmployeeInfoService exportExcelEmployeeInfoService,
             IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
             IExportExcelManpowerCategoryService exportExcelManpowerCategoryService,
             IExportExcelManpowerService exportExcelManpowerService,
@@ -90,6 +90,7 @@
             this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
             this.disciplineService = disciplineService ?? new DisciplineService();
             this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
+            this.exportExcelEmployeeInfoService = exportExcelEmployeeInfoService ?? new ExportExcelEmployeeInfoService();
             this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor ?? new ExportExcelEmployeeSupervisor();
             this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService ?? new ExportExcelManpowerCategoryService();
             this.exportExcelManpowerService = exportExcelManpowerService ?? new ExportExcelManpowerService();
@@ -259,8 +260,7 @@
             };
 
             IList<Employee> employees = employeeService.GetEmployees(criteria);
-            string templatePath = Server.MapPath(EmployeeBasicInfoTemplatePath);
-            exportExcelService.ExportEmployeeBasicInfo(employees, templatePath);
+            exportExcelEmployeeInfoService.ExportEmployeeBasicInfo(employees);
 
             return new EmptyResult();
         }
@@ -278,8 +278,7 @@
             };
 
             IList<Employee> employees = employeeService.GetEmployees(criteria);
-            string templatePath = Server.MapPath(EmployeeDetailsInfoTemplatePath);
-            exportExcelService.ExportEmployeeDetailsInfo(employees, templatePath);
+            exportExcelEmployeeInfoService.ExportEmployeeDetailsInfo(employees);
 
             return new EmptyResult();
         }

@@ -10,11 +10,11 @@
 
     public class ExportExcelManpowerCategoryService : IExportExcelManpowerCategoryService
     {
-        public const int RowStartHeader = 2;
-        public const int RowStartBody = 4;
-        public const int RowFooter = 6;
-        public const int TotalColumns = 10;
-        public const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
+        private const int RowStartHeader = 2;
+        private const int RowStartBody = 4;
+        private const int RowFooter = 6;
+        private const int TotalColumns = 10;
+        private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
 
         public void Export(IList<ManpowerCategoryModel> manpowers, int year)
         {

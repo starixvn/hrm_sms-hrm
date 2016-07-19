@@ -1,5 +1,4 @@
-﻿
-CREATE FUNCTION [dbo].[fncCheckPermissionIgnoreDisciplineInReport] (
+﻿CREATE FUNCTION [dbo].[fncCheckPermissionIgnoreDisciplineInReport] (
 	@OwnerId INT
 	,@GroupId INT
 	,@EmpId INT
@@ -31,6 +30,7 @@ BEGIN
 					AND empS.EmpId = @EmpId
 					AND empS.ActionType = 8 -- edit discipline
 					AND empS.EmpId <> @OwnerId
+					AND empS.IsDeleted = 0
 				)
 			OR EXISTS (
 				SELECT 1
@@ -38,13 +38,15 @@ BEGIN
 				WHERE grS.GroupId = @GroupId
 					AND grS.OwnerId = @OwnerId
 					AND grS.ActionType = 8 -- edit discipline
-					AND @EmpId <> @OwnerId
+					-- AND @EmpId <> @OwnerId
+					AND grS.IsDeleted = 0
 					AND NOT EXISTS (
 						SELECT 1
 						FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
 						WHERE empS.OwnerId <> @OwnerId
 							AND empS.EmpId = @EmpId
 							AND empS.ActionType = 8
+							AND empS.IsDeleted = 0
 						)
 				)
 			)
@@ -55,6 +57,7 @@ BEGIN
 				WHERE empS.OwnerId = @OwnerId
 					AND empS.EmpId = @EmpId
 					AND empS.ActionType = @ActionType
+					AND empS.IsDeleted = 0
 					AND (
 						ISNULL(@RequestType, '') = ''
 						OR empS.RequestType = @RequestType
@@ -66,17 +69,19 @@ BEGIN
 				WHERE grS.GroupId = @GroupId
 					AND grS.OwnerId = @OwnerId
 					AND grS.ActionType = @ActionType
+					AND grS.IsDeleted = 0
 					AND (
 						ISNULL(@RequestType, '') = ''
 						OR grS.RequestType = @RequestType
 						)
-					AND @EmpId <> @OwnerId
+					-- AND @EmpId <> @OwnerId
 					AND NOT EXISTS (
 						SELECT 1
 						FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
 						WHERE empS.OwnerId <> @OwnerId
 							AND empS.EmpId = @EmpId
 							AND empS.ActionType = @ActionType
+							AND empS.IsDeleted = 0
 							AND (
 								ISNULL(@RequestType, '') = ''
 								OR empS.RequestType = @RequestType

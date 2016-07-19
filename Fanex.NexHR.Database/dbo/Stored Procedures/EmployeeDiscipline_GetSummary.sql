@@ -302,6 +302,7 @@ BEGIN
 							AND empS.EmpId = emp.EmpId
 							AND empS.ActionType = 8 -- edit discipline
 							AND empS.EmpId <> @ApproverId
+							AND empS.IsDeleted = 0
 						)
 					OR EXISTS (
 						SELECT 1
@@ -309,13 +310,15 @@ BEGIN
 						WHERE gr.GroupId = grS.GroupId
 							AND @ApproverId = grS.OwnerId
 							AND grS.ActionType = 8 -- edit discipline
-							AND emp.EmpId <> @ApproverId
+							-- AND emp.EmpId <> @ApproverId
+							AND grS.IsDeleted = 0
 							AND NOT EXISTS (
 								SELECT 1
 								FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
 								WHERE empS.OwnerId <> @ApproverId
 									AND empS.EmpId = emp.EmpId
 									AND empS.ActionType = 8
+									AND empS.IsDeleted = 0
 								)
 						)
 					)
@@ -334,7 +337,7 @@ BEGIN
 						WHERE gr.GroupId = grS.GroupId
 							AND @ApproverId = grS.OwnerId
 							AND grS.ActionType = 3 -- approver
-							AND emp.EmpId <> @ApproverId
+							-- AND emp.EmpId <> @ApproverId
 							AND NOT EXISTS (
 								SELECT 1
 								FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)

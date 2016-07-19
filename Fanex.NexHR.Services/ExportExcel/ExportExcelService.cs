@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
@@ -354,40 +353,6 @@
             return hssfworkbook;
         }
 
-        public void ExportEmployeeBasicInfo(IList<Employee> employees, string templatePath)
-        {
-            string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Basic Info");
-
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
-            writer.CopyRows(2, 1);
-
-            FillContentRowEmployeeBasicInfoReport(employees, ref writer);
-            writer.SyncColumnsWidth(16);
-            writer.CreateFreezePane(0, 3);
-
-            writer.Render();
-        }
-
-        public void ExportEmployeeDetailsInfo(IList<Employee> employees, string templatePath)
-        {
-            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd");
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "Employee Details Info");
-
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
-            writer.CopyRows(2, 1);
-
-            FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
-            writer.SyncColumnsWidth(42);
-            writer.CreateFreezePane(0, 3);
-
-            writer.Render();
-        }
-
         public HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
@@ -465,140 +430,6 @@
 
             return hssfworkbook;
         }
-
-        #region Employee Basic Info
-
-        private void FillContentRowEmployeeBasicInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (Employee employee in employees)
-            {
-                FillRowEmployeeBasicInfoReport(employee, ref writer, ref rowIndex);
-            }
-        }
-
-        private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
-            if (rowIndex % 2 == 1)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
-
-            rowIndex++;
-        }
-
-        private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
-        {
-            var record = new
-            {
-                Count = rowIndex,
-                Code = employee.Code,
-                FullName = employee.FullName,
-                NickName = employee.NickName,
-                Section = employee.Team.Name,
-                GroupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                CompanyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                ConfirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                ResignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
-                Gender = employee.Gender == 0 ? "F" : "M",
-                CellPhone = employee.Phone,
-                Email = employee.Email,
-                CurrentAddress = employee.CurrentAddress,
-                Unit = employee.Unit,
-                Category = employee.IsLocal ? Labels.Local : Labels.Expat
-            };
-
-            return record;
-        }
-
-        #endregion Employee Basic Info
-
-        #region Employee Details Info
-
-        private void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (Employee employee in employees)
-            {
-                FillRowEmployeeDetailsInfoReport(employee, ref writer, ref rowIndex);
-            }
-        }
-
-        private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
-            if (rowIndex % 2 == 1)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
-
-            rowIndex++;
-        }
-
-        private object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
-        {
-            var record = new
-            {
-                Count = rowIndex,
-                Code = employee.Code,
-                DomainUsername = employee.DomainUsername,
-                FullName = employee.FullName,
-                NickName = employee.NickName,
-                Section = employee.Team.Name,
-                DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
-                PlaceOfBirth = employee.PlaceOfBirth,
-                Ethnic = employee.Ethnic,
-                Native = employee.Native,
-                Religion = employee.Religion,
-                Gender = employee.Gender == 0 ? "F" : "M",
-                MarriageName = employee.MarriageName,
-                CountryName = employee.CountryName,
-                CardNo = employee.CardNo,
-                DateOfIdCard = employee.DateOfIdCard.HasValue ? employee.DateOfIdCard.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                PlaceOfIdCard = employee.PlaceOfIdCard,
-                PassportNo = employee.PassportNo,
-                PassportExp = employee.PassportExp.HasValue ? employee.PassportExp.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                Qualification = employee.Qualification,
-                Major = employee.Major,
-                Phone = employee.Phone,
-                HomePhone = employee.HomePhone,
-                Email = employee.Email,
-                Address = employee.Address,
-                CurrentAddress = employee.CurrentAddress,
-                Skype = employee.Skype,
-                Unit = employee.Unit,
-                JobTitle = employee.JobTitle,
-                GroupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                CompanyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                ConfirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                ResignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty,
-                WorkingDays = employee.WorkingDays,
-                WorkingHours = employee.WorkingHours,
-                OffDaysbyWeek = employee.OffDaysbyWeek,
-                AnnualLeaveBalance = employee.AnnualLeaveBalance,
-                Category = employee.IsLocal ? Labels.Local : Labels.Expat,
-                BankAccount = employee.BankAccount,
-                TaxCode = employee.TaxCode,
-                SocialInsuranceNo = employee.SocialInsuranceNo,
-                RegisteredHospital = employee.RegisteredHospital
-            };
-
-            return record;
-        }
-
-        #endregion Employee Details Info
 
         private void RenderBodyWorkingTimeRequest(
             int rowIndex,
