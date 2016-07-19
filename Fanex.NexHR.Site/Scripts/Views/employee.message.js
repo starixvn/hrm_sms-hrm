@@ -7,7 +7,6 @@ var init = function () {
         status = $('#IsDisabled').val(),
         $status = $("#status");
 
-    $effectedDate.val($.datepicker.formatDate('d M, yy', new Date()));
     $effectedDate.prop("readonly", true);
     $status.val(status);
 
