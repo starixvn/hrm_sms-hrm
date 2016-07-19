@@ -99,8 +99,15 @@
                 ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
             };
             CommandResult result = commandService.Insert(criteria);
+            object response = new 
+            { 
+                IsSuccessful = result.IsSuccessful, 
+                Message = result.Message, 
+                ModifiedBy = CurrentUser.NickName,
+                ModifiedDate = DateTime.Now.ToShortFormatedDate()
+            };
 
-            return Json(new { errorCode = result.Code, message = result.Message }, JsonRequestBehavior.AllowGet);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

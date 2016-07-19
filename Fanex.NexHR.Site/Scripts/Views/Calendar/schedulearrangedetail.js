@@ -561,16 +561,13 @@ var ScheduleArrangeDetail = (function ($) {
             var numberOffDefault = $(trObject).find(".multipleShift").first().attr("data-numberoffbyweek");
             var numberOffCurrent = $(trObject).find("td.shiftdate input.offday").length;
             if (numberOffDefault < numberOffCurrent) {
-                $(trObject).find("td a.lnkremove").parent().addClass("overOffdayInWeek").removeClass("upOffdayInWeek");
-                $(trObject).find("td a.lnkremove").parent().html('<span class="icon-warning"></span>');
+                $(trObject).find("td.checkNumberOffday").removeClass("upOffdayInWeek").removeClass("offdayInWeek").addClass("overOffdayInWeek").html('<span class="icon-warning"></span>');
             }
             else if (numberOffDefault > numberOffCurrent) {
-                $(trObject).find("td a.lnkremove").parent().addClass("upOffdayInWeek").removeClass("overOffdayInWeek");
-                $(trObject).find("td a.lnkremove").parent().html('<a class="lnkremove" href="javascript:;">-</a>');
+                $(trObject).find("td.checkNumberOffday").removeClass("overOffdayInWeek").removeClass("offdayInWeek").addClass("upOffdayInWeek").html('<a class="lnkremove" href="javascript:;">-</a>');
             }
             else {
-                $(trObject).find("td a.lnkremove").parent().removeClass("overOffdayInWeek").removeClass("upOffdayInWeek");
-                $(trObject).find("td a.lnkremove").parent().html('<a class="lnkremove" href="javascript:;">-</a>');
+                $(trObject).find("td.checkNumberOffday").removeClass("overOffdayInWeek").removeClass("upOffdayInWeek").html('<a class="lnkremove" href="javascript:;">-</a>');
             }
         },
         getAllShift: function () {
@@ -670,11 +667,12 @@ var ScheduleArrangeDetail = (function ($) {
                     url: '/Calendar/ArrangeSchedule',
                     data: { scheduleArranges: JSON.stringify(scheduleArranges), shiftMultiples: JSON.stringify(shiftMultiples) },
                     success: function (response) {
-                        if (response.errorCode === 0) {
+                        if (response.IsSuccessful) {
                             ScheduleArrangeCommon.showSuccessMsgInRow();
+                            $("td.modifiedBy", trObject).html(response.ModifiedBy).attr("title", response.ModifiedDate);
                         }
                         else {
-                            ScheduleArrangeCommon.showErrorMsgInRow(response.message);
+                            ScheduleArrangeCommon.showErrorMsgInRow(response.Message);
                         }
                     }
                 });

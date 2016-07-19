@@ -50,12 +50,12 @@ var ScheduleArrangeCommon = (function () {
 					url: '/Calendar/ArrangeSchedule',
 					data: { scheduleArranges: JSON.stringify(scheduleArranges), shiftMultiples: JSON.stringify(shiftMultiples) },
 					success: function (response) {
-						if (response.errorCode === 0) {
+					    if (response.IsSuccessful) {
 							ScheduleArrangeCommon.showSuccessMsg();
 							ScheduleArrangeCommon.hasChangeValue = false;
 						}
 						else {
-							ScheduleArrangeCommon.showErrorMsg(response.message);
+					        ScheduleArrangeCommon.showErrorMsg(response.Message);
 						}
 					}
 				});

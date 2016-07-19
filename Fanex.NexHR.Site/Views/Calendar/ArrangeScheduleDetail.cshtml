@@ -310,7 +310,7 @@
                 <tr>
                     @if (hasPermission)
                     {
-                        <td>
+                        <td class="checkNumberOffday">
                             <a class="lnkremove" href="javascript:;"></a>
                         </td>
                     }
@@ -353,7 +353,7 @@
                     }
                     else
                     {
-                        <td class="tooltip" title="@scheduleModel.MondaySchedule.ModifiedDate.ToShortFormatedDate()">@scheduleModel.MondaySchedule.ModifierName</td>
+                        <td class="tooltip modifiedBy" title="@scheduleModel.MondaySchedule.ModifiedDate.ToShortFormatedDate()">@scheduleModel.MondaySchedule.ModifierName</td>
                     }
                 </tr>
             }
