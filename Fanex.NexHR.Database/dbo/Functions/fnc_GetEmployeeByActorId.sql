@@ -118,6 +118,15 @@ BEGIN
 			AND tmpe.EmpId IS NULL
 			AND ISNULL(gs.IsDeleted, 0) = 0
 			AND gs.ActionType IN (4, 5)
+			AND (
+				NOT EXISTS (
+					SELECT 1
+					FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+					WHERE OwnerId = e.EmpId
+						AND ActionType IN (4, 5)
+						AND ISNULL(IsDeleted, 0) = 0
+					)
+				)
 
 		IF (@IsShowUserInTeam = 1)
 		BEGIN

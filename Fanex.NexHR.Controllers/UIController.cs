@@ -34,7 +34,8 @@
             var criteria = new GetMessageByEmployeeCriteria
             {
                 EmployeeId = CurrentUser.Id,
-                EffectedDate = DateTime.Today,
+                FromDate = DateTime.Today,
+                ToDate = DateTime.Today,
                 IsDisabled = 0
             };
 

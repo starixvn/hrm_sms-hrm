@@ -7,7 +7,9 @@
     {
         public int EmployeeId { get; set; }
 
-        public DateTime EffectedDate { get; set; }
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
 
         public int? IsDisabled { get; set; }
 

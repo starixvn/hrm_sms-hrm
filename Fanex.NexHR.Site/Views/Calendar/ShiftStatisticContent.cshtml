@@ -95,13 +95,17 @@
         <tfoot>
             <tr class="summary">
                 <td class="align-right">@Labels.Total:</td>
-                <td>@totalMonday</td>
-                <td>@totalTuesday</td>
-                <td>@totalWednesday</td>
-                <td>@totalThursday</td>
-                <td>@totalFriday</td>
-                <td>@totalSaturday</td>
-                <td>@totalSunday</td>
+                @{
+                    url = "employeeshift?teamIds=" + @Model.GroupIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany
+                        + "&shiftId=&workdate=" ;
+                    <td><a href="@(url + Model.FromDate.ToDateMonthYearFormatedDate())">@totalMonday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(1).ToDateMonthYearFormatedDate())">@totalTuesday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(2).ToDateMonthYearFormatedDate())">@totalWednesday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(3).ToDateMonthYearFormatedDate())">@totalThursday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(4).ToDateMonthYearFormatedDate())">@totalFriday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(5).ToDateMonthYearFormatedDate())">@totalSaturday</a></td>
+                    <td><a href="@(url + Model.FromDate.AddDays(6).ToDateMonthYearFormatedDate())">@totalSunday</a></td>
+                }
             </tr>
         </tfoot>
     }

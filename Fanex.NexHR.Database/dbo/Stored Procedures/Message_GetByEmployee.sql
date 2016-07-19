@@ -1,7 +1,8 @@
 ﻿
 CREATE PROCEDURE [dbo].[Message_GetByEmployee] --375, '2013-01-01'
 	@EmployeeId INT
-	,@EffectedDate DATETIME
+	,@FromDate DATETIME
+	,@ToDate DATETIME
 	,@IsDisabled BIT = NULL
 AS
 /*
@@ -44,8 +45,12 @@ BEGIN
 			OR ms.ToDate IS NULL
 			OR ISNULL(mse.IsRead, 0) = 0
 			OR (
-				@EffectedDate BETWEEN ms.FromDate
+				@FromDate BETWEEN ms.FromDate
 					AND ms.ToDate
+				)
+			OR (
+					ms.FromDate BETWEEN @FromDate
+					AND @ToDate
 				)
 			)
 	
@@ -70,8 +75,12 @@ BEGIN
 			OR m.ToDate IS NULL
 			OR me.IsRead = 0
 			OR (
-				@EffectedDate BETWEEN m.FromDate
+				@FromDate BETWEEN m.FromDate
 					AND m.ToDate
+				)
+			OR (
+					m.FromDate BETWEEN @FromDate
+					AND @ToDate
 				)
 			)
 END
