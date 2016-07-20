@@ -29,8 +29,8 @@ var ScheduleArrangeDetail = (function ($) {
         init: function () {
             floatingHeader();
             ScheduleArrangeDetail.messageComfirm = "Are you sure to refresh the screen based on your filter condition? " +
-				"Data you have entered may not be saved." +
-				" </br></br>  Click OK to proceed or Cancel to come back and save first";
+                "Data you have entered may not be saved." +
+                " </br></br>  Click OK to proceed or Cancel to come back and save first";
             ScheduleArrangeDetail.previous = $(".lnkPrevious");
             ScheduleArrangeDetail.next = $(".lnkNext");
             ScheduleArrangeDetail.previousFromDate = $("#PreviousFromDate");
@@ -124,7 +124,6 @@ var ScheduleArrangeDetail = (function ($) {
                 ScheduleArrangeDetail.shiftChange($(this));
                 return false;
             });
-
 
             $(".lnkDepartment").on("click", function (event) {
                 event.preventDefault();
@@ -235,7 +234,6 @@ var ScheduleArrangeDetail = (function ($) {
                     $("#chkIsShiftInOffday").removeAttr("checked");
 
                     $("#dialog-multiple").dialog("open");
-
                 }
                 else {
                     alert('Please choose at least one day to continue!');
@@ -561,13 +559,24 @@ var ScheduleArrangeDetail = (function ($) {
             var numberOffDefault = $(trObject).find(".multipleShift").first().attr("data-numberoffbyweek");
             var numberOffCurrent = $(trObject).find("td.shiftdate input.offday").length;
             if (numberOffDefault < numberOffCurrent) {
-                $(trObject).find("td.checkNumberOffday").removeClass("upOffdayInWeek").removeClass("offdayInWeek").addClass("overOffdayInWeek").html('<span class="icon-warning"></span>');
+                $(trObject).find("td.checkNumberOffday")
+                    .removeClass("upOffdayInWeek")
+                    .removeClass("offdayInWeek")
+                    .addClass("overOffdayInWeek")
+                    .html('<span class="icon-warning"></span>');
             }
             else if (numberOffDefault > numberOffCurrent) {
-                $(trObject).find("td.checkNumberOffday").removeClass("overOffdayInWeek").removeClass("offdayInWeek").addClass("upOffdayInWeek").html('<a class="lnkremove" href="javascript:;">-</a>');
+                $(trObject).find("td.checkNumberOffday")
+                    .removeClass("overOffdayInWeek")
+                    .removeClass("offdayInWeek")
+                    .addClass("upOffdayInWeek")
+                    .html('<a class="lnkremove" href="javascript:;">-</a>');
             }
             else {
-                $(trObject).find("td.checkNumberOffday").removeClass("overOffdayInWeek").removeClass("upOffdayInWeek").html('<a class="lnkremove" href="javascript:;">-</a>');
+                $(trObject).find("td.checkNumberOffday")
+                    .removeClass("overOffdayInWeek")
+                    .removeClass("upOffdayInWeek")
+                    .html('<a class="lnkremove" href="javascript:;">-</a>');
             }
         },
         getAllShift: function () {
@@ -589,9 +598,9 @@ var ScheduleArrangeDetail = (function ($) {
             $("#ToDate").val(ScheduleArrangeDetail.nextToDate.val());
 
             var groups = ScheduleArrangeDetail.groupId.val();
-            var groupIds = groups != null ? groups.join() : "";
+            var groupIds = groups !== null ? groups.join() : "";
             var jobTitle = ScheduleArrangeDetail.jobTitle.val();
-            var jobTitles = jobTitle != null ? jobTitle.join() : "";
+            var jobTitles = jobTitle !== null ? jobTitle.join() : "";
 
             ScheduleArrange.bindScheduleArrangeByDate(ScheduleArrangeDetail.nextFromDate.val(),
                         ScheduleArrangeDetail.nextToDate.val(), ScheduleArrangeDetail.employeeId.val(), groupIds, jobTitles);
@@ -601,9 +610,9 @@ var ScheduleArrangeDetail = (function ($) {
             $("#ToDate").val(ScheduleArrangeDetail.previousToDate.val());
 
             var groups = ScheduleArrangeDetail.groupId.val();
-            var groupIds = groups != null ? groups.join() : "";
+            var groupIds = groups !== null ? groups.join() : "";
             var jobTitle = ScheduleArrangeDetail.jobTitle.val();
-            var jobTitles = jobTitle != null ? jobTitle.join() : "";
+            var jobTitles = jobTitle !== null ? jobTitle.join() : "";
 
             ScheduleArrange.bindScheduleArrangeByDate(ScheduleArrangeDetail.previousFromDate.val(),
                         ScheduleArrangeDetail.previousToDate.val(), ScheduleArrangeDetail.employeeId.val(), groupIds, jobTitles);
@@ -722,7 +731,7 @@ var ScheduleArrangeDetail = (function ($) {
             });
         }
     };
-} (jQuery));
+}(jQuery));
 
 $(document).ready(function () {
     ScheduleArrangeDetail.init();

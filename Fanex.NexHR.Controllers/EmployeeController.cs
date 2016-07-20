@@ -20,7 +20,6 @@
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -769,11 +768,11 @@
             var result = string.Empty;
             if (roles != null)
             {
-                if (roles.Count(i => i.RoleId == (int)RoleSystem.SystemAdmin) == roles.Count())
+                if (roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin))
                 {
                     result = BuildSARole(roles);
                 }
-                else if (roles.Count(i => i.RoleId == (int)RoleSystem.DisciplineManager) == roles.Count())
+                else if (roles.Any(i => i.RoleId == (int)RoleSystem.DisciplineManager))
                 {
                     result = BuildDisciplineManagerRole(roles);
                 }
@@ -793,7 +792,12 @@
 
         private string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
         {
-            return string.Format("{0},{1}", ((int)RoleSystem.Approver).ToString(), ((int)RoleSystem.DisciplineManager).ToString());
+            IList<int> roleIds = roles.Where(x => x.RoleId != (int)RoleSystem.Approver || x.RoleId != (int)RoleSystem.DisciplineManager)
+                .Select(x => x.RoleId).ToList();
+            roleIds.Add((int)RoleSystem.Approver);
+            roleIds.Add((int)RoleSystem.DisciplineManager);
+
+            return string.Join(",", roleIds);
         }
 
         private string BuildSARole(IList<SystemRoleModel> roles)
