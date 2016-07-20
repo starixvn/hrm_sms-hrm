@@ -69,11 +69,6 @@ function initTooltip() {
 }
 
 function query() {
-    var isMember = $("#IsMember").val();
-    if (isMember === "True") {
-        $('#GroupIds').val($("#EmployeeGroupId").val());
-    }
-
     $.ajax({
         url: _global.root + 'report/AttendanceDetails',
         type: 'POST',
@@ -109,11 +104,6 @@ $(document).ready(function () {
     });
 
     $("#btnExcel").click(function () {
-        var isMember = $("#IsMember").val();
-        if (isMember === "True") {
-            $('#GroupIds').val($("#EmployeeGroupId").val());
-        }
-
         location.href = _global.root + "export/Attendance?" + $('.form-filter').serialize();
     });
 

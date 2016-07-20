@@ -577,6 +577,33 @@
             return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetEmployees(
+            string query,
+            string groupIds = "",
+            bool? enable = null,
+            bool? isDelete = null,
+            int? titleId = null,
+            bool? isLocal = null)
+        {
+            if (groupIds == null)
+            {
+                groupIds = string.Empty;
+            }
+
+            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            {
+                Query = query,
+                GroupIds = groupIds,
+                EnableUser = enable,
+                IsDeleteUser = isDelete,
+                TitleId = titleId,
+                IsLocalUser = isLocal
+            };
+            IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria);
+
+            return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
         private void UpdateUserSession(int empId)
         {
             if (CurrentUser.Id == empId)

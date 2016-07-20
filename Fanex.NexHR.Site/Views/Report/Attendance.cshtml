@@ -1,7 +1,6 @@
 ﻿@model EmployeeAttendanceViewModel
 @{
     ViewBag.Title = @Labels.AttendanceReport;
-    bool isMember = (bool)ViewBag.IsMember;
 }
 @section css{
     @Url.CombresLink("attendancereportcss")
@@ -66,26 +65,18 @@
         </div>
         <div class="grid_2">@Labels.Section</div>
         <div class="grid_6">
-            @if (isMember)
-            {
-                <span class="isMember">@Model.TeamName</span>
-                @Html.Hidden("EmployeeGroupId", Model.GroupIds)
-            }
-            else
-            {
-                <select id="group" multiple="multiple">
-                    @foreach (Team item in ViewBag.Groups)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            }
+            <select id="group" multiple="multiple">
+                @foreach (Team item in ViewBag.Groups)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
         </div>
         <div class="grid_2">
             @Html.LabelFor(model => model.EmpId)
         </div>
         <div class="grid_4">
-            @Html.TextBox("Employee", Model.Employee, new { placeholder = @Fanex.NexHR.Resources.Messages.SearchEmployeeWatermark })
+            @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.Hidden("EmployeeId", Model.EmpId)
         </div>
         <div class="clear"></div>

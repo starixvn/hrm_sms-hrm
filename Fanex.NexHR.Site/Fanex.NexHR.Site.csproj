@@ -403,7 +403,6 @@
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\Team\team.edit.js" />
-    <Content Include="Scripts\Views\employee.search.in.company.js" />
     <Content Include="Scripts\Views\timesheetrecord\timesheetrecord.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\annualbalance.css" />

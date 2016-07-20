@@ -634,8 +634,6 @@ BEGIN
 			@isLocal IS NULL
 			OR e_s.IsLocal = @isLocal
 			)
-		AND r.CurrentStatus <> 7
-
 
 	ORDER BY r.CreatedDate DESC
 

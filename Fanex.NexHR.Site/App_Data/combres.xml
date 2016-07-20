@@ -328,7 +328,7 @@
 
     <resourceSet name="employeeshiftjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/Calendar/report.employeeshift.js" />
     </resourceSet>
     <resourceSet name="employeeshiftcss" type="css">
@@ -349,13 +349,13 @@
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
     <resourceSet name="workingcalendarsummaryjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendarsummary.js" />
     </resourceSet>
 
@@ -417,7 +417,7 @@
     </resourceSet>
     <resourceSet name="totalworkinghourjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.totalworkinghours.js" />
@@ -429,7 +429,7 @@
     </resourceSet>
     <resourceSet name="employeesupervisorreportjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.employee.supervisor.js" />
     </resourceSet>
     <resourceSet name="sectionsupervisorreportjs" type="js">
@@ -445,13 +445,13 @@
     <resourceSet name="totalworkinghourmonthlyjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourdailyjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourdaily.js" />
     </resourceSet>
 
@@ -461,7 +461,7 @@
     </resourceSet>
     <resourceSet name="totalworkinghourweeklyjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourweekly.js" />
     </resourceSet>
 
@@ -520,7 +520,7 @@
     <resourceSet name="requestmonitoringjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/date.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
     </resourceSet>
@@ -579,7 +579,7 @@
     </resourceSet>
     <resourceSet name="yearlyovertimereportjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/yearlyovertimereport.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
@@ -588,7 +588,7 @@
     <resourceSet name="overtimereportdetailsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/Overtime/overtimereportdetails.js" />
     </resourceSet>
 
@@ -603,7 +603,7 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/overtime/monthlyovertime.member.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
     </resourceSet>
     <resourceSet name="memberovertimecss" type="css">
       <resource reference="sitecss" />
@@ -657,7 +657,7 @@
     <resourceSet name="reportovertimerequestjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/reportovertimerequest.js" />
     </resourceSet>
 
@@ -668,7 +668,7 @@
     <resourceSet name="timerecordjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/employee.search.in.company.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.timerecord.js" />

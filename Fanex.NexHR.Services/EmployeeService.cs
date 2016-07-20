@@ -91,6 +91,12 @@
         public UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria)
         {
             UserLoginModel userLogin = GetDataEntity<UserLoginModel>(criteria);
+            if (userLogin != null)
+            {
+                userLogin.Functions = functionService.GetFunctionsByUserId(userLogin.Id);
+                userLogin.Menus = menuService.GetMenusByUserId(userLogin.Id);
+                userLogin.Roles = roleService.GetRolesByUserId(userLogin.Id);
+            }
             return userLogin;
         }
 

@@ -67,7 +67,6 @@
             {
                 SupervisorId = CurrentUser.Id
             };
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
 
             ViewBag.Groups = teamService.GetBySupervisor(getGroupCriteria);
             var model = new EmployeeAttendanceViewModel
@@ -80,14 +79,6 @@
                 SupervisorId = CurrentUser.Id
             };
 
-            Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
-            if (employee != null)
-            {
-                model.TeamName = employee.Team.Name;
-                model.GroupIds = employee.Team.Id.ToString();
-            }
-
-            ViewBag.IsMember = CurrentUser.Roles.Any(i => i.RoleCode.Equals(RoleSystem.Member));
             return View(model);
         }
 

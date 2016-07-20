@@ -5,7 +5,7 @@
 	,@isLocal BIT = NULL
 	,@pageNumber INT = 1
 	,@pageSize INT = 2000
-	,@totalRow INT OUTPUT
+	,@totalRow INT = NULL OUTPUT
 	,@titleId INT = NULL
 AS
 /*
@@ -99,7 +99,49 @@ BEGIN
 		,N'@totalRow INT OUTPUT'
 		,@totalRow = @totalRow OUTPUT;
 
-	SELECT @SQL = 'SELECT e.* ' + CHAR(13)
+	SELECT @SQL = 'SELECT e.[EmpId]
+      ,e.[Code]
+      ,[DomainUsername]
+      ,[FullName]
+      ,[NickName]
+      ,[DOB]
+      ,[Email]
+      ,[JobTitleId]
+      ,[Enabled]
+      ,[Phone]
+      ,[Gender]
+      ,e.[GroupId]
+      ,[ManagerId]
+      ,[JoinedDate]
+      ,[ConfirmedDate]
+      ,[ResignedDate]
+      ,[Skype]
+      ,[Yahoo]
+      ,[Marriage]
+      ,[LastLogin]
+      ,e.[CreatedDate]
+      ,e.[CreatedBy]
+      ,e.[ModifiedDate]
+      ,e.[ModifiedBy]
+      ,e.[isDeleted]
+      ,[PermanentAddress]
+      ,[CurrentAddress]
+      ,[IdCardNumber]
+      ,[PassportNo]
+      ,[PassportExp]
+      ,[Password]
+      ,[ChineseName]
+      ,[PlaceOfbirth]
+      ,[Ethnic]
+      ,[Native]
+      ,[Religion]
+      ,[DateOfIDCard]
+      ,[PlaceOfIDCard]
+      ,[HomePhone]
+      ,[Qualification]
+      ,[Major]
+      ,[PasswordReset]
+      ,[EmployeeCard] ' + CHAR(13)
 	         + ',s.[AnnualLeaveBalance] ' + CHAR(13)
 	         + ',s.[KeepInViewBalance] ' + CHAR(13)
 	         + ',s.[CanOT] ' + CHAR(13)

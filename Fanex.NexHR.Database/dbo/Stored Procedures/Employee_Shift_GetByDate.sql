@@ -44,39 +44,26 @@ BEGIN
 		SELECT es.OwnerId
 		FROM dbo.EmployeeSupervisor es WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON es.OwnerId = e.EmpId
-			INNER JOIN dbo.EmployeeSummary AS esu WITH (NOLOCK) ON e.EmpId = esu.EmpId
-			INNER JOIN #GroupIds AS g ON e.GroupId = g.GroupId
 		WHERE es.ActionType = 4
 			AND es.EmpID = @SupervisorID
 			AND e.Enabled = 1
-			AND (
-				@EmployeeId IS NULL
-				OR e.EmpId = @EmployeeId
-				)
-			AND (
-				@IsLocal IS NULL
-				OR esu.IsLocal = @IsLocal
-				)
 			AND ISNULL(es.IsDeleted, 0) = 0
 		
 		UNION
 		SELECT e.EmpId
 		FROM dbo.GroupSupervisor AS gsp WITH (NOLOCK)
-			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gsp.GroupId = gsp.GroupId
-			INNER JOIN dbo.EmployeeSummary AS esu WITH (NOLOCK) ON e.EmpId = esu.EmpId
-			INNER JOIN #GroupIds AS g ON e.GroupId = g.GroupId
+			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gsp.GroupId = e.GroupId
 		WHERE gsp.OwnerId = @SupervisorID
 			AND gsp.ActionType = 4
 			AND e.Enabled = 1
-			AND (
-				@EmployeeId IS NULL
-				OR e.EmpId = @EmployeeId
-				)
-			AND (
-				@IsLocal IS NULL
-				OR esu.IsLocal = @IsLocal
-				)
 			AND ISNULL(gsp.IsDeleted, 0) = 0
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE e.EmpId = OwnerId
+					AND ActionType = 4
+					AND ISNULL(IsDeleted, 0) = 0
+				)
 	END
 	ELSE
 	BEGIN
