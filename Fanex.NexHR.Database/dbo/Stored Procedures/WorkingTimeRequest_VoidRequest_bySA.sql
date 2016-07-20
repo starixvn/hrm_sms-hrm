@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_bySA] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_bySA] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''
@@ -88,6 +87,9 @@ BEGIN
 
 	IF @ErrCode = 0
 	BEGIN
+		-- update IsConfirmed
+		EXEC dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline
+
 		-- write to history
 		INSERT dbo.WorkingTimeRequestHistory (
 			EmpId
@@ -142,7 +144,11 @@ BEGIN
 		SET @now = getdate()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + coalesce(cast(@RequestID AS VARCHAR(50)), space(1)) + '" ' + 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" ' + 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" ' + 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" ' + 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + coalesce(cast(@RequestID AS VARCHAR(50)), space(1)) + '" '
+			+ 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
+			+ 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
+			+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
+			+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
 
 		SELECT @Description = 'Void Status Request by SA:' + coalesce(cast(@RequestID AS VARCHAR(50)), space(1))
 

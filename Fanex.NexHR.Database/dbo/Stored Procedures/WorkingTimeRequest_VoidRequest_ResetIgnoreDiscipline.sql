@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline] @RequestId BIGINT
 	,@ModifiedBy INT
 	,@RoleId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -134,7 +133,73 @@ BEGIN
 
 		IF @RoleId = 7 -- SA
 		BEGIN
-			DELETE dis
+			UPDATE dis
+			SET dis.IsIgnoredChangeShift = (CASE 
+					WHEN r.DisciplineTypeId = 1 THEN 0
+					ELSE dis.IsIgnoredChangeShift END
+					)
+				,dis.IsConfirmedChangeShift = (CASE 
+					WHEN r.DisciplineTypeId = 1 THEN 0
+					ELSE dis.IsConfirmedChangeShift END
+					)
+				,dis.IsIgnoredMissingCheckInOut = (CASE 
+					WHEN r.DisciplineTypeId = 2 THEN 0
+					ELSE dis.IsIgnoredMissingCheckInOut END
+					)
+				,dis.IsConfirmedMissingCheckInOut = (CASE 
+					WHEN r.DisciplineTypeId = 2 THEN 0
+					ELSE dis.IsConfirmedMissingCheckInOut END
+					)
+				,dis.IsIgnoredLateIn = (CASE 
+					WHEN r.DisciplineTypeId = 3 THEN 0
+					ELSE dis.IsIgnoredLateIn END
+					)
+				,dis.IsConfirmedLateIn = (CASE 
+					WHEN r.DisciplineTypeId = 3 THEN 0
+					ELSE dis.IsConfirmedLateIn END
+					)
+				,dis.IsIgnoredEarlyOut = (CASE 
+					WHEN r.DisciplineTypeId = 4 THEN 0
+					ELSE dis.IsIgnoredEarlyOut END
+					)
+				,dis.IsConfirmedEarlyOut = (CASE 
+					WHEN r.DisciplineTypeId = 4 THEN 0
+					ELSE dis.IsConfirmedEarlyOut END
+					)
+				,dis.IsIgnoredAbsent = (CASE 
+					WHEN r.DisciplineTypeId = 5 THEN 0
+					ELSE dis.IsIgnoredAbsent END
+					)
+				,dis.IsConfirmedAbsent = (CASE 
+					WHEN r.DisciplineTypeId = 5 THEN 0
+					ELSE dis.IsConfirmedAbsent END
+					)
+				,dis.IsIgnoredUnpaidLeave = (CASE 
+					WHEN r.DisciplineTypeId = 6 THEN 0
+					ELSE dis.IsIgnoredUnpaidLeave END
+					)
+				,dis.IsConfirmedUnpaidLeave = (CASE 
+					WHEN r.DisciplineTypeId = 6 THEN 0
+					ELSE dis.IsConfirmedUnpaidLeave END
+					)
+				,dis.IsIgnoredWorkingUnderTime = (CASE 
+					WHEN r.DisciplineTypeId = 7 THEN 0
+					ELSE dis.IsIgnoredWorkingUnderTime END
+					)
+				,dis.IsConfirmedWorkingUnderTime = (CASE 
+					WHEN r.DisciplineTypeId = 7 THEN 0
+					ELSE dis.IsConfirmedWorkingUnderTime END
+					)
+				,dis.IsIgnoredUnpaidLeaveAbsent = (CASE 
+					WHEN r.DisciplineTypeId = 8 THEN 0
+					ELSE dis.IsIgnoredUnpaidLeaveAbsent END
+					)
+				,dis.IsConfirmedUnpaidLeaveAbsent = (CASE 
+					WHEN r.DisciplineTypeId = 8 THEN 0
+					ELSE dis.IsConfirmedUnpaidLeaveAbsent END
+					)
+				,ModifiedBy = @ModifiedBy
+				,ModifiedDate = GETDATE()
 			FROM dbo.EmployeeDiscipline AS dis
 				INNER JOIN #RequestDetail AS r ON dis.WorkDate = r.WorkDate
 				AND dis.EmpId = r.EmployeeId
