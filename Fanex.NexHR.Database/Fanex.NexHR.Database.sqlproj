@@ -275,7 +275,6 @@
     <Build Include="dbo\Stored Procedures\Country_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetById.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Delete_TmpKIVLeaveBalance.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_SET_TmpLeaveBalance_xtest.sql" />
     <Build Include="dbo\Stored Procedures\Country_GetByCode.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Insert.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
@@ -321,25 +320,19 @@
     <Build Include="dbo\Stored Procedures\Employee_Information_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetDetailByEmployee.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLateInEarlyOutRequestToIgnoreById.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByRequestDate_AllType_xpre.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Information_update.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByCreateDate_AllType_xpre.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Information_UpdateByEmpid.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetUnreadMessageByEmployee.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByCreateDate_AllType_xtest.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_Get.sql" />
     <Build Include="dbo\Stored Procedures\Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftDetailToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeCalendar_Update_IsPublic.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByRequestDate_AllType_xtest.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestHistory.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType_xpre.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Summary_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Report_WorkingHoursSummary_xpre.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_ChangeShift.sql" />
@@ -400,7 +393,6 @@
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAboveOffDayForShiftManager.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorRequestID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_6.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_AvaibleBalanceLeave_xtest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetRequestByEmpID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_7.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetMissingCheckinOut.sql" />
@@ -435,7 +427,6 @@
     <Build Include="dbo\Stored Procedures\Group_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Group_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetDisciplineSettingById.sql" />
-    <Build Include="dbo\Stored Procedures\Report_LeaveSummary_xtest.sql" />
     <Build Include="dbo\Stored Procedures\Group_Select.sql" />
     <Build Include="dbo\Stored Procedures\Group_Update.sql" />
     <Build Include="dbo\Stored Procedures\Employee_UpdatePasswordResetStatusByEmpId.sql" />
@@ -449,7 +440,6 @@
     <Build Include="dbo\Stored Procedures\Holiday_Update.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_byMember.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetAll.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_AvaibleBalanceLeave_xpre.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetByCode.sql" />
     <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_CreateByGroupDate.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetById.sql" />
