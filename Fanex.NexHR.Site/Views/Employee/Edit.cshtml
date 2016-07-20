@@ -472,7 +472,7 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item role-system">
-                <div class="label marginlable">@Labels.AuthorityLevel</div>
+                <div class="label marginlable">@Labels.Roles</div>
                 <div class="input" id="userRole">
                     @Html.CheckBox("Member", true, new { disabled = true })
                     @Html.Label("Member", "Member")
@@ -510,7 +510,7 @@
                 <div class="label">@Labels.Category</div>
                 <div class="input">
                     @{
-    var empType = new List<SelectListItem>
+                        var empType = new List<SelectListItem>
                         {
                             new SelectListItem() {Text = "Local", Value = "true"},
                             new SelectListItem() {Text = "Expat", Value = "false"},

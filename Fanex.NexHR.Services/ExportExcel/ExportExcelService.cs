@@ -271,13 +271,10 @@
                         ICell cellCountMemberInTeam = rowTeam.GetCell(3);
                         cellCountMemberInTeam.SetCellValue(numberCount - 1);
 
-                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
-                        IRow rowCalculateTotalOTOfTeam = sheet.GetRow(rowIndex);
-
-                        ICell cellSumNormal = rowCalculateTotalOTOfTeam.GetCell(7);
-                        ICell cellSumOff = rowCalculateTotalOTOfTeam.GetCell(8);
-                        ICell cellSumPH = rowCalculateTotalOTOfTeam.GetCell(9);
-                        ICell cellSumTax = rowCalculateTotalOTOfTeam.GetCell(10);
+                        ICell cellSumNormal = rowTeam.GetCell(7);
+                        ICell cellSumOff = rowTeam.GetCell(8);
+                        ICell cellSumPH = rowTeam.GetCell(9);
+                        ICell cellSumTax = rowTeam.GetCell(10);
                         string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")",
                             formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")",
                             formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")",
@@ -289,6 +286,8 @@
                         cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
                         cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
                         cellSumTax.CellFormula = string.Format(formulaTax, data1, data2);
+
+                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
                         numberCount = 1;
                     }
                 }

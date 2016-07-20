@@ -1,12 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeCalendar_Insert]
-	@empid int,
-	@fromdate datetime, 
-	@todate datetime	,
-
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg varchar(200) = '' OUTPUT	
-AS	
-
+﻿CREATE PROCEDURE [dbo].[EmployeeCalendar_Insert] @empid INT
+	,@fromdate DATETIME
+	,@todate DATETIME
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
+AS
 /*
 Created: Tom.Vo@2013-10-21
 Task: Insert default working calendar for employee
@@ -17,66 +14,100 @@ Revisions:
 Param's Explanation:
 
 */
-SET NOCOUNT ON
--- cut off time
-set @fromdate = convert(varchar(10),@fromdate,111)
-set @todate = convert(varchar(10),@todate,111)
+BEGIN
+	SET NOCOUNT ON
+	-- cut off time
+	SET @fromdate = convert(VARCHAR(10), @fromdate, 111)
+	SET @todate = convert(VARCHAR(10), @todate, 111)
 
-declare @dw int, @isHoliday bit
+	DECLARE @dw INT
+		,@isHoliday BIT
 
-while @fromdate<=@todate
-begin 
-	set @isHoliday=0
-	set @dw=datepart(dw, @fromdate)
-	--print @dw
-		
-	-- kiem tra @fromdate co phai la ngay nghi
-	if (exists(select TOP 1 1 
-				from dbo.Holiday WITH(NOLOCK)
-				where @fromdate between FromDate and ToDate))
-		set @isHoliday=1
+	WHILE @fromdate <= @todate
+	BEGIN
+		SET @isHoliday = 0
+		SET @dw = datepart(dw, @fromdate)
 
-	-- se xu ly leave request o day neu can
+		--print @dw
+		-- kiem tra @fromdate co phai la ngay nghi
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.Holiday WITH (NOLOCK)
+				WHERE @fromdate BETWEEN FromDate
+						AND ToDate
+				)
+			SET @isHoliday = 1
 
-	-- insert vao working calendar
-	insert into dbo.EmployeeCalendar (EmpID, WorkDate, ShiftID, isOffDay, IsHoliday, ModifiedDate)
-	select s.empid,
-			@fromdate as WorkDate,
-			case when @dw=1 then SunShift
-				when @dw=2 then MonShift
-				when @dw=3 then TueShift
-				when @dw=4 then WedShift
-				when @dw=5 then ThuShift
-				when @dw=6 then FriShift
-				when @dw=7 then SatShift
-			end as ShiftID,
-			case when es.IsLocal =1 AND @isHoliday = 1 then 0 
-				when @dw=1 and SunShift is null then 1 
-				when @dw=2 and MonShift is null then 1
-				when @dw=3 and TueShift is null then 1
-				when @dw=4 and WedShift is null then 1
-				when @dw=5 and ThuShift is null then 1
-				when @dw=6 and FriShift is null then 1
-				when @dw=7 and SatShift is null then 1
-				else 0
-			end as isOffDay,
-			case when es.IsLocal =1 AND @isHoliday = 1 then 1 else 0 end as isHoliday,
-			GETDATE()
-		
-	from dbo.EmployeeDefaultShift s WITH(NOLOCK) 
-		join dbo.Employee e WITH(NOLOCK) on e.empid=s.empid
-		left join dbo.EmployeeSummary es WITH(NOLOCK) on es.empid=s.empid
-	where isnull(IsDeleted,0)=0 
-		and(@empid is null or s.empid=@empid)
-		and es.IsDefaultSchedule = 1
-		and isnull(ResignedDate,'2079/01/01' )>@fromdate
-		and  not exists (SELECT TOP 1 1 FROM EmployeeCalendar c WITH(NOLOCK)
-				WHERE WorkDate = @fromdate AND s.empid=c.empid)
-			
-	set @fromdate=dateadd(d,1,@fromdate)
-end
+		-- se xu ly leave request o day neu can
+		-- insert vao working calendar
+		INSERT INTO dbo.EmployeeCalendar (
+			EmpID
+			,WorkDate
+			,ShiftID
+			,isOffDay
+			,IsHoliday
+			,ModifiedDate
+			)
+		SELECT s.empid
+			,@fromdate AS WorkDate
+			,(CASE 
+				WHEN @dw = 1 THEN SunShift
+				WHEN @dw = 2 THEN MonShift
+				WHEN @dw = 3 THEN TueShift
+				WHEN @dw = 4 THEN WedShift
+				WHEN @dw = 5 THEN ThuShift
+				WHEN @dw = 6 THEN FriShift
+				WHEN @dw = 7 THEN SatShift END
+				) AS ShiftID
+			,(CASE 
+				WHEN es.IsLocal = 1
+					AND @isHoliday = 1 THEN 0
+				WHEN @dw = 1
+					AND SunShift IS NULL THEN 1
+				WHEN @dw = 2
+					AND MonShift IS NULL THEN 1
+				WHEN @dw = 3
+					AND TueShift IS NULL THEN 1
+				WHEN @dw = 4
+					AND WedShift IS NULL THEN 1
+				WHEN @dw = 5
+					AND ThuShift IS NULL THEN 1
+				WHEN @dw = 6
+					AND FriShift IS NULL THEN 1
+				WHEN @dw = 7
+					AND SatShift IS NULL THEN 1
+				ELSE 0 END
+				) AS isOffDay
+			,(CASE 
+				WHEN es.IsLocal = 1
+					AND @isHoliday = 1 THEN 1
+				ELSE 0 END
+				) AS isHoliday
+			,GETDATE()
+		FROM dbo.EmployeeDefaultShift AS s WITH (NOLOCK)
+			JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empid = s.empid
+			LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON es.empid = s.empid
+		WHERE isnull(e.IsDeleted, 0) = 0
+			AND (
+				@empid IS NULL
+				OR s.empid = @empid
+				)
+			AND es.IsDefaultSchedule = 1
+			AND isnull(e.ResignedDate, '2079/01/01') > @fromdate
+			AND NOT EXISTS (
+				SELECT 1
+				FROM EmployeeCalendar AS c WITH (NOLOCK)
+				WHERE c.WorkDate = @fromdate
+					AND s.empid = c.empid
+				)
 
- IF @@ERROR <> 0 
-	SELECT @ErrCode=100,@ErrMsg=N'Create Default Calendar for employee failed'
-ELSE 
-	SELECT @ErrCode=0,@ErrMsg=''
+		SET @fromdate = dateadd(d, 1, @fromdate)
+	END
+
+	IF @@ERROR <> 0
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Create Default Calendar for employee failed'
+	ELSE
+		SELECT @ErrCode = 0
+			,@ErrMsg = ''
+END

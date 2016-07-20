@@ -50,7 +50,7 @@
 
         public int RequestType { get; set; }
 
-        [Display(Name = "Team")]
+        [Display(Name = "Section")]
         public IList<Team> TeamCollection { get; set; }
 
         public byte? IsLocal { get; set; }

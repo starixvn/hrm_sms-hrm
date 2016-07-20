@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core.Enums;
     using Nexus.RoleManagement.Services;
 
     public class SupervisorReportModel
@@ -26,7 +25,7 @@
         {
             get
             {
-                return Roles == null ? string.Empty : string.Join(",", Roles.Select(i => i.RoleName));
+                return (Roles == null || !Roles.Any()) ? string.Empty : string.Join(", ", Roles.Select(i => i.RoleName));
             }
         }
 
