@@ -612,7 +612,9 @@
                 {
                     EmpId = empId
                 };
+
                 UserLoginModel currentUser = employeeService.GetUserLoginByEmployeeId(criteria);
+                currentUser.IsShowLeftNavigation = CurrentUser.IsShowLeftNavigation;
                 HttpContext.Session["CurrentUser"] = currentUser;
             }
         }

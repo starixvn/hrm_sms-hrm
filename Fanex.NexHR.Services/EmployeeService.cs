@@ -97,6 +97,7 @@
                 userLogin.Menus = menuService.GetMenusByUserId(userLogin.Id);
                 userLogin.Roles = roleService.GetRolesByUserId(userLogin.Id);
             }
+
             return userLogin;
         }
 

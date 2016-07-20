@@ -52,7 +52,7 @@
                 }
                 else
                 {
-                    model.FromDate = new DateTime(today.Year, 6, 1);
+                    model.FromDate = new DateTime(today.Year, 7, 1);
                     model.ToDate = new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
                 }
 

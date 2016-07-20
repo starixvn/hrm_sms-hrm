@@ -319,18 +319,6 @@ BEGIN
                   @RoleIds = @Roles,
                   @ModifiedBy = @ModifiedBy;
 
-		-- update password
-		IF (
-				@password IS NOT NULL
-				AND @password <> ''
-				)
-		BEGIN
-			EXEC [dbo].Employee_ChangePassword @EmpId
-				,@password
-				,@PasswordReset
-		END
-
-		--
 		EXEC [dbo].[Employee_Summary_Update] @EmpID = @EmpID
 			,@AnnualLeaveBalance = @AnnualLeaveBalance
 			,@KeepInViewBalance = @KeepInViewBalance
