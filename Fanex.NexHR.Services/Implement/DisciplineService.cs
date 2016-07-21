@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models;
@@ -8,8 +10,6 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class DisciplineService : BaseService, IDisciplineService
     {
@@ -32,7 +32,6 @@
             if (criteria != null && criteria.IsValid())
             {
                 disciplines = disciplineRepository.GetDisciplineSummary(criteria);
-                disciplines = disciplines.OrderByDescending(x => x.Permission).ToList();
             }
 
             return disciplines;

@@ -196,7 +196,14 @@ BEGIN
 	INSERT INTO #EmployeeDisciplineFinalScore
 	SELECT empD.WorkDate
 		,empD.EmpId
-		,(empD.ChangeShift * dbo.fncGetDisciplineScoreById(1) + empD.MissingCheckInOut * dbo.fncGetDisciplineScoreById(2) + empD.LateIn * dbo.fncGetDisciplineScoreById(3) + empD.EarlyOut * dbo.fncGetDisciplineScoreById(4) + empD.[Absent] * dbo.fncGetDisciplineScoreById(5) + empD.UnpaidLeave * dbo.fncGetDisciplineScoreById(6) + empD.WorkingUnderTime * dbo.fncGetDisciplineScoreById(7) + empD.UnpaidLeaveAbsent * dbo.fncGetDisciplineScoreById(8)) AS SystemSubtractScore
+		,(empD.ChangeShift * dbo.fncGetDisciplineScoreById(1)
+			+ empD.MissingCheckInOut * dbo.fncGetDisciplineScoreById(2)
+			+ empD.LateIn * dbo.fncGetDisciplineScoreById(3)
+			+ empD.EarlyOut * dbo.fncGetDisciplineScoreById(4)
+			+ empD.[Absent] * dbo.fncGetDisciplineScoreById(5)
+			+ empD.UnpaidLeave * dbo.fncGetDisciplineScoreById(6)
+			+ empD.WorkingUnderTime * dbo.fncGetDisciplineScoreById(7)
+			+ empD.UnpaidLeaveAbsent * dbo.fncGetDisciplineScoreById(8)) AS SystemSubtractScore
 		,CASE 
 			WHEN ignored.ApproverIgnoredScore IS NOT NULL THEN ignored.ApproverIgnoredScore
 			ELSE 0
@@ -288,7 +295,7 @@ BEGIN
 		,SUM(empD.OtherDisciplineScore) AS OtherDisciplineScore
 		,SUM(empF.SystemSubtractScore + empD.OtherDisciplineScore) AS SystemSubtractScore
 		,SUM(empF.ApproverSubtractScore + empD.OtherDisciplineScore) AS ApproverSubtractScore
-		,Permission = CASE 
+		,Permission = (CASE 
 			WHEN EXISTS (
 					SELECT 1
 					FROM #Roles
@@ -347,8 +354,8 @@ BEGIN
 								)
 						)
 					) THEN 2 -- Host				
-			ELSE 1
-			END
+			ELSE 1 END
+			)
 		,empD.EmpId AS EmployeeId
 		,emp.NickName
 		,emp.FullName
@@ -534,8 +541,9 @@ BEGIN
 		,gr.GroupId
 		,gr.[Name]
 		,gr.Code
-	ORDER BY gr.GroupId
-		,emp.Code
+	ORDER BY Permission DESC
+		,gr.[Name] ASC
+		,emp.Code ASC
 
 	DROP TABLE #EmployeeDiscipline
 

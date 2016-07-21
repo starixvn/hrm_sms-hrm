@@ -74,8 +74,8 @@
                 var ignoredStatus = new List<SelectListItem>
                 {
                     new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Ignored, Value = "false"},
-                    new SelectListItem() {Text = Labels.NotIgnored, Value = "true"},
+                    new SelectListItem() {Text = Labels.Ignored, Value = "true"},
+                    new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
                 };
             }
             @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus)

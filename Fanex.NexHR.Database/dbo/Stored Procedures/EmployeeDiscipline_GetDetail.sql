@@ -525,36 +525,85 @@ BEGIN
 		AND (
 			@HasIgnored IS NULL
 			OR (
-				@HasIgnored = 0
+				@HasIgnored = 1
 				AND (
-					dis.IsIgnoredChangeShift = 1
-					OR dis.IsIgnoredMissingCheckInOut = 1
-					OR dis.IsIgnoredLateIn = 1
-					OR dis.IsIgnoredEarlyOut = 1
-					OR dis.IsIgnoredAbsent = 1
-					OR dis.IsIgnoredUnpaidLeave = 1
-					OR dis.IsIgnoredWorkingUndertime = 1
-					OR dis.IsIgnoredUnpaidLeaveAbsent = 1
+					(
+						dis.IsChangeShift = 1
+						AND dis.IsIgnoredChangeShift = 1
+						)
+					OR (
+						dis.IsMissingCheckInOut = 1
+						AND dis.IsIgnoredMissingCheckInOut = 1
+						)
+					OR (
+						dis.IsLateIn = 1
+						AND dis.IsIgnoredLateIn = 1
+						)
+					OR (
+						dis.IsEarlyOut = 1
+						AND dis.IsIgnoredEarlyOut = 1
+						)
+					OR (
+						dis.IsAbsent = 1
+						AND dis.IsIgnoredAbsent = 1
+						)
+					OR (
+						dis.IsUnpaidLeave = 1
+						AND dis.IsIgnoredUnpaidLeave = 1
+						)
+					OR (
+						dis.IsWorkingUnderTime = 1
+						AND dis.IsIgnoredWorkingUndertime = 1
+						)
+					OR (
+						dis.IsUnpaidLeaveAbsent = 1
+						AND dis.IsIgnoredUnpaidLeaveAbsent = 1
+						)
 					)
 				)
 			OR (
-				@HasIgnored = 1
+				@HasIgnored = 0
 				AND (
-					dis.IsIgnoredChangeShift = 0
-					OR dis.IsIgnoredMissingCheckInOut = 0
-					OR dis.IsIgnoredLateIn = 0
-					OR dis.IsIgnoredEarlyOut = 0
-					OR dis.IsIgnoredAbsent = 0
-					OR dis.IsIgnoredUnpaidLeave = 0
-					OR dis.IsIgnoredWorkingUndertime = 0
-					OR dis.IsIgnoredUnpaidLeaveAbsent = 0
+					(
+						dis.IsChangeShift = 1
+						AND dis.IsIgnoredChangeShift = 0
+						)
+					OR (
+						dis.IsMissingCheckInOut = 1
+						AND dis.IsIgnoredMissingCheckInOut = 0
+						)
+					OR (
+						dis.IsLateIn = 1
+						AND dis.IsIgnoredLateIn = 0
+						)
+					OR (
+						dis.IsEarlyOut = 1
+						AND dis.IsIgnoredEarlyOut = 0
+						)
+					OR (
+						dis.IsAbsent = 1
+						AND dis.IsIgnoredAbsent = 0
+						)
+					OR (
+						dis.IsUnpaidLeave = 1
+						AND dis.IsIgnoredUnpaidLeave = 0
+						)
+					OR (
+						dis.IsWorkingUnderTime = 1
+						AND dis.IsIgnoredWorkingUndertime = 0
+						)
+					OR (
+						dis.IsUnpaidLeaveAbsent = 1
+						AND dis.IsIgnoredUnpaidLeaveAbsent = 0
+						)
 					)
 				)
 			)
 	ORDER BY dis.WorkDate DESC;
 
 	SELECT dis.*
-	FROM #DisciplineDetail AS dis;
+	FROM #DisciplineDetail AS dis
+	ORDER BY dis.WorkDate DESC;
 
 	DROP TABLE #Roles;
 
