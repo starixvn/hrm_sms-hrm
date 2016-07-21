@@ -3184,7 +3184,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reseted.
+        ///   Looks up a localized string similar to Resetted.
         /// </summary>
         public static string Reseted {
             get {
