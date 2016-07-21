@@ -308,8 +308,6 @@ BEGIN
 	WHERE (
 			wt.CreatedDate BETWEEN @fromdate
 				AND @todate
-			OR wt.ModifiedDate BETWEEN @fromdate
-				AND @todate
 			)
 		AND lr.TotalDays = 0.5
 		AND ldt.IsHalfDay = 1
@@ -339,8 +337,6 @@ BEGIN
 		INNER JOIN [dbo].LeaveRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 	WHERE (
 			wt.CreatedDate BETWEEN @fromdate
-				AND @todate
-			OR wt.ModifiedDate BETWEEN @fromdate
 				AND @todate
 			)
 		AND lr.TotalDays <> 0.5
