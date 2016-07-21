@@ -52,7 +52,10 @@ SET NOCOUNT ON
 			FROM [dbo].Employee ee  WITH(NOLOCK) 
 			INNER JOIN dbo.EmployeeRole AS er WITH(NOLOCK) ON ee.EmpId=er.EmployeeId
 			WHERE (ee.isDeleted IS NULL OR ee.isDeleted = 0)
-				AND ee.Enabled = 1 AND  er.RoleId IN (6,7)
+				AND ee.Enabled = 1 AND  er.RoleId = 6
+				AND NOT EXISTS (SELECT 1 FROM  dbo.EmployeeRole WHERE ee.EmpId = EmployeeId
+					AND RoleId = 7
+					)
 	
 	SELECT @GroupId = GroupId FROM dbo.Employee WHERE EmpId = @EmpId
 
@@ -66,6 +69,4 @@ SET NOCOUNT ON
 		SELECT GroupId, Action, AllowSendUser, AllowSendVerifier, AllowSendApprover, AllowSendHR, AllowSendMailGroup
 		FROM dbo.MailSettings WHERE GroupId = 0 AND Action = @Action
 	END
-
-
 
