@@ -52,11 +52,11 @@ else
     <div class="grid_2">
         @Html.LabelFor(model => model.Employee)
     </div>
-    <div class="grid_4">
+    <div class="grid_6">
         @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
         @Html.HiddenFor(model => model.EmployeeId)
     </div>
-    <div class="grid_2 prefix_3">
+    <div class="grid_2 prefix_1">
         <input id="btnSubmit" type="button" value="@Labels.Submit" />
     </div>
 </div>

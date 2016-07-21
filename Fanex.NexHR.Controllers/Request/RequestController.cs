@@ -360,7 +360,7 @@
                 result = commandService.Update(criteria);
                 if (result != null && result.IsSuccessful)
                 {
-                    requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
+                    requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
                 }
             }
 
