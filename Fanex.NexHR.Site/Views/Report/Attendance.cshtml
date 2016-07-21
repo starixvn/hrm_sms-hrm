@@ -73,11 +73,11 @@
             </select>
         </div>
         <div class="grid_2">
-            @Html.LabelFor(model => model.EmpId)
+            @Html.LabelFor(model => model.EmployeeId)
         </div>
         <div class="grid_4">
             @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-            @Html.Hidden("EmployeeId", Model.EmpId)
+            @Html.Hidden("EmployeeId", Model.EmployeeId)
         </div>
         <div class="clear"></div>
         <div class="space"></div>

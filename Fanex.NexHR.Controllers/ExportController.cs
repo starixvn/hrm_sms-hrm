@@ -142,7 +142,7 @@
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
                 AttendanceType = model.AttendanceType,
-                EmpId = model.EmpId,
+                EmpId = model.EmployeeId,
                 Groupids = model.GroupIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal
