@@ -385,6 +385,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approver Deduction.
+        /// </summary>
+        public static string ApproverDeduction {
+            get {
+                return ResourceManager.GetString("ApproverDeduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apr.
         /// </summary>
         public static string Apr {
@@ -3598,6 +3607,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System Deduction.
+        /// </summary>
+        public static string SystemDeduction {
+            get {
+                return ResourceManager.GetString("SystemDeduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Section.
         /// </summary>
         public static string Team {
@@ -4017,6 +4035,24 @@ namespace Fanex.NexHR.Resources {
         public static string Violation {
             get {
                 return ResourceManager.GetString("Violation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Violation Ignored.
+        /// </summary>
+        public static string ViolationIgnored {
+            get {
+                return ResourceManager.GetString("ViolationIgnored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Violation Recorded.
+        /// </summary>
+        public static string ViolationRecorded {
+            get {
+                return ResourceManager.GetString("ViolationRecorded", resourceCulture);
             }
         }
         

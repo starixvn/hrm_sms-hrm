@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.LeaveType;
@@ -11,16 +15,11 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class RequestController : BaseController
     {
@@ -341,27 +340,19 @@
         {
             CommandResult result = new CommandResult();
 
-            if (model.IgnoredDisciplines != null && model.IgnoredDisciplines.Any(x => x.IsIgnored == false && x.IsConfirmed == false))
+            var criteria = new ApproveRequestCriteria()
             {
-                result.Code = 1;
-                result.Message = Messages.ProcessRequestWarning;
-            }
-            else
-            {
-                var criteria = new ApproveRequestCriteria()
-                {
-                    RequestId = model.RequestId,
-                    RoleId = model.RoleId,
-                    Comment = model.Comment,
-                    IgnoredDisciplines = model.IgnoredDisciplines,
-                    ProcessedBy = CurrentUser.Id
-                };
+                RequestId = model.RequestId,
+                RoleId = model.RoleId,
+                Comment = model.Comment,
+                IgnoredDisciplines = model.IgnoredDisciplines,
+                ProcessedBy = CurrentUser.Id
+            };
 
-                result = commandService.Update(criteria);
-                if (result != null && result.IsSuccessful)
-                {
-                    requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
-                }
+            result = commandService.Update(criteria);
+            if (result != null && result.IsSuccessful)
+            {
+                requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
             }
 
             return result;

@@ -1500,4 +1500,16 @@
   <data name="AverageHours" xml:space="preserve">
     <value>Average Hours</value>
   </data>
+  <data name="ApproverDeduction" xml:space="preserve">
+    <value>Approver Deduction</value>
+  </data>
+  <data name="SystemDeduction" xml:space="preserve">
+    <value>System Deduction</value>
+  </data>
+  <data name="ViolationIgnored" xml:space="preserve">
+    <value>Violation Ignored</value>
+  </data>
+  <data name="ViolationRecorded" xml:space="preserve">
+    <value>Violation Recorded</value>
+  </data>
 </root>

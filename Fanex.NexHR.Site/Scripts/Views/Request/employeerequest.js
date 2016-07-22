@@ -42,31 +42,32 @@
             width: 'auto',
             modal: true,
             buttons: {
-                'OK': function () {
+                'Confirm': function () {
                     var ignoredDisciplines = [],
-                        comment = $(this).find('textarea#Comment').val();
+                        comment = $(this).find('textarea#Comment').val(),
+                        isValid = true;
 
                     $(this).find("table.table tbody tr").each(function () {
-                        var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
-                            chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
+                        var chkIgnored = $(this).find('td.violationIgnored input:radio'),
+                            chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
                         if (chkIgnored.length === 1) {
-                            ignoredDisciplines.push({
-                                WorkDate: chkIgnored.data('workdate'),
-                                EmployeeId: employeeId,
-                                DisciplineTypeId: chkIgnored.data('disciplinetypeid'),
-                                IsIgnored: chkIgnored.prop('checked'),
-                                IsConfirmed: chkConfirmed.prop('checked')
-                            });
+                            if (!chkIgnored.prop('checked') && !chkNotIgnored.prop('checked')) {
+                                isValid = false;
+                            } else {
+                                ignoredDisciplines.push({
+                                    WorkDate: chkIgnored.data('workdate'),
+                                    EmployeeId: employeeId,
+                                    DisciplineTypeId: chkIgnored.data('disciplinetypeid'),
+                                    IsIgnored: chkIgnored.prop('checked')
+                                });
+                            }
                         }
                     });
 
-                    var data = jQuery.grep(ignoredDisciplines, function (item) {
-                        return item.IsIgnored === false && item.IsConfirmed === false;
-                    });
-
-                    if (data && data.length > 0) {
-                        $(this).find('.validation-summary-valid').show().append('You must ignore or confirm on each type of request.');
+                    if (!isValid) {
+                        $(this).find('.validation-summary-valid').show()
+                            .html('You must select <b>Vioaltion Ignored</b> or <b>Vioaltion Recorded</b> on each type of request.');
                     } else {
                         $(this).find('.validation-summary-valid').hide();
                         processRequest(requestId, roleId, command, comment, ignoredDisciplines);
@@ -99,16 +100,18 @@
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
 
                 $('#dialogProcessRequest').find("table.table tbody tr").each(function () {
-                    var chkIgnored = $(this).find('td.ignoredDiscipline input:checkbox'),
-                        chkConfirmed = $(this).find('td.confirmedDiscipline input:checkbox');
+                    var chkIgnored = $(this).find('td.violationIgnored input:radio'),
+                        chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
                     chkIgnored.on('click', function () {
                         if ($(this).prop('checked')) {
-                            chkConfirmed.prop('checked', true);
-                            chkConfirmed.prop('disabled', true);
-                        } else {
-                            chkConfirmed.prop('checked', false);
-                            chkConfirmed.prop('disabled', false);
+                            chkNotIgnored.prop('checked', false);
+                        }
+                    });
+
+                    chkNotIgnored.on('click', function () {
+                        if ($(this).prop('checked')) {
+                            chkIgnored.prop('checked', false);
                         }
                     });
                 });

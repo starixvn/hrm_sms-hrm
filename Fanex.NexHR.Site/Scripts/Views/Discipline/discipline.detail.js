@@ -40,7 +40,7 @@
             }
         });
 
-        $('#discipline-detail table.discipline-detail td input.confirmedDiscipline:checkbox')
+        $('#discipline-detail table.discipline-detail td input.violationRecorded:checkbox')
         .on('click', function () {
             var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
 
@@ -57,15 +57,7 @@
 
         $('#discipline-detail table.discipline-detail').find('tbody tr').each(function () {
             var approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text()),
-                isChanged = false,
-                isConfirmed = false;
-
-            $(this).find('td input.confirmedDiscipline').each(function () {
-                if ($(this).data('changed')) {
-                    isChanged = true;
-                    isConfirmed = $(this).prop('checked');
-                }
-            });
+                isChanged = false;
 
             $(this).find('td input.ignoredDiscipline').each(function () {
                 if ($(this).data('changed')) {
@@ -85,7 +77,6 @@
                     IsIgnoredUnpaidLeave: false,
                     IsIgnoredWorkingUnderTime: false,
                     IsIgnoredUnpaidLeaveAbsent: false,
-                    IsConfirmed: isConfirmed,
                     ApproverSubtractScore: Math.abs(approverSubstractScore)
                 };
 

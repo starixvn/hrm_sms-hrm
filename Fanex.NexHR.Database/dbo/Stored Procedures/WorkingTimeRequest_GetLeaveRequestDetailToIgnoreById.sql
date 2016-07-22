@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById] @RequestId BIGINT
 AS
 /*
 Created: 20160511@Tim.Trinh
@@ -44,7 +43,7 @@ BEGIN
 	FROM dbo.EmployeeCalendar AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 8
 		INNER JOIN (
@@ -68,7 +67,7 @@ BEGIN
 	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 8
 		INNER JOIN (
@@ -103,7 +102,7 @@ BEGIN
 	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
 		INNER JOIN (
@@ -127,7 +126,7 @@ BEGIN
 	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
 		INNER JOIN (
@@ -168,7 +167,7 @@ BEGIN
 	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 6
 		INNER JOIN (
@@ -192,7 +191,7 @@ BEGIN
 	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 6
 		INNER JOIN (
@@ -265,6 +264,7 @@ BEGIN
 				)
 	END
 	ELSE IF @LeaveType = 0
+		OR @LeaveType = 2
 	BEGIN
 		SELECT ldt.OnDate AS LeaveDate
 			,lt.LeaveTypeId
@@ -302,8 +302,8 @@ BEGIN
 				) AS IsAbsent
 		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
-			LEFT JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
-			LEFT JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON CAST(ldt.OnDate AS DATE) = CAST(ca.WorkDate AS DATE)
+			INNER JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
+			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON CAST(ldt.OnDate AS DATE) = CAST(ca.WorkDate AS DATE)
 			AND ldt.EmpId = ca.EmpId
 			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
 			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = ldt.LeaveType
@@ -314,6 +314,19 @@ BEGIN
 			LEFT JOIN #UnpaidLeave AS up ON ldt.EmpId = up.EmpId
 			AND CAST(ldt.OnDate AS DATE) = up.WorkDate
 		WHERE wk.RequestId = @RequestId
+			AND EXISTS (
+				SELECT 1
+				FROM #UnpaidLeaveAbsent
+				
+				UNION
+				SELECT 1
+				FROM #Absent
+				
+				UNION
+				SELECT 1
+				FROM #UnpaidLeave
+				)
+		ORDER BY ldt.OnDate
 	END
 
 	DROP TABLE #Absent

@@ -7,8 +7,8 @@
             <th>@Labels.Request</th>
             <th>@Labels.CreatedDate</th>
             <th>@Labels.Remark</th>
-            <th>@Labels.Ignored</th>
-            <th>@Labels.Confirmed</th>
+            <th>@Labels.ViolationIgnored</th>
+            <th>@Labels.ViolationRecorded</th>
         </tr>
     </thead>
     <tbody>
@@ -38,14 +38,14 @@
             {
                 <td>-</td>
             }
-            <td class="ignoredDiscipline">
+            <td class="violationIgnored">
                 @{
                     var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
                 }
-                <input type="checkbox" data-workdate="@Model.RequestedDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                <input type="radio" data-workdate="@Model.RequestedDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
             </td>
-            <td class="confirmedDiscipline">
-                <input type="checkbox" />
+            <td class="violationRecorded">
+                <input type="radio" />
             </td>
         </tr>
     </tbody>

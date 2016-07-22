@@ -28,8 +28,8 @@
             <th>@Labels.UPL</th>
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
-            <th class="width-80">@Labels.MinusScoringSystem</th>
-            <th class="width-80">@Labels.MinusScoringApprover</th>
+            <th class="width-80">@Labels.SystemDeduction</th>
+            <th class="width-80">@Labels.ApproverDeduction</th>
             <th class="width-80">@Labels.ApproverComment</th>
             <th class="width-80">@Labels.EmployeeComment</th>
         </tr>
@@ -253,8 +253,6 @@
                         {
                             <span class="float-left">@item.ApproverSubtractScore.ToString("0.0")</span>
                         }
-                        <input class="float-right confirmedDiscipline" type="checkbox" disabled="@item.HasConfirmed.Equals(false)" checked="@item.Confirmed"
-                               data-confirmed="@item.Confirmed" data-changed="false" />
                     </td>
                     @if (!string.IsNullOrEmpty(item.ApproverComment))
                     {
