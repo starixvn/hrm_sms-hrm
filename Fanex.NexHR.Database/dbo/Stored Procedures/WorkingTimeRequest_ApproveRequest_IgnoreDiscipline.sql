@@ -59,11 +59,6 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		DELETE
-		FROM #IgnoredDisciplineDetail
-		WHERE IsIgnored = 0
-			AND IsConfirmed = 0
-
 		IF EXISTS (
 				SELECT 1
 				FROM #IgnoredDisciplineDetail

@@ -86,6 +86,7 @@ BEGIN
 					AND empS.EmpId = emp.EmpId
 					AND empS.ActionType = 8 -- edit discipline
 					AND empS.EmpId <> @ModifiedBy
+					AND empS.IsDeleted = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
@@ -93,13 +94,15 @@ BEGIN
 				WHERE gr.GroupId = grS.GroupId
 					AND grS.OwnerId = @ModifiedBy
 					AND grS.ActionType = 8 -- edit discipline
-					AND emp.EmpId <> @ModifiedBy
+					-- AND emp.EmpId <> @ModifiedBy
+					AND grS.IsDeleted = 0
 					AND NOT EXISTS (
 						SELECT 1
 						FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
 						WHERE empS.OwnerId <> @ModifiedBy
 							AND empS.EmpId = emp.EmpId
 							AND empS.ActionType = 8
+							AND empS.IsDeleted = 0
 						)
 				)
 
@@ -113,7 +116,7 @@ BEGIN
 				,dis.IsIgnoredChangeShift = ignore.IsIgnoredChangeShift
 				,dis.IsIgnoredMissingCheckInOut = ignore.IsIgnoredMissingCheckInOut
 				,dis.IsIgnoredLateIn = ignore.IsIgnoredLateIn
-				,dis.IsIgnoredEarlyOut = ignore.IsIgnoredAbsent
+				,dis.IsIgnoredEarlyOut = ignore.IsIgnoredEarlyOut
 				,dis.IsIgnoredAbsent = ignore.IsIgnoredAbsent
 				,dis.IsIgnoredUnpaidLeave = ignore.IsIgnoredUnpaidLeave
 				,dis.IsIgnoredWorkingUndertime = ignore.IsIgnoredWorkingUnderTime

@@ -328,31 +328,6 @@ BEGIN
 									AND empS.IsDeleted = 0
 								)
 						)
-					)
-				AND (
-					EXISTS (
-						SELECT 1
-						FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
-						WHERE empS.OwnerId = @ApproverId
-							AND empS.EmpId = emp.EmpId
-							AND empS.ActionType = 3 -- approver
-							AND empS.EmpId <> @ApproverId
-						)
-					OR EXISTS (
-						SELECT 1
-						FROM dbo.GroupSupervisor AS grS WITH (NOLOCK)
-						WHERE gr.GroupId = grS.GroupId
-							AND @ApproverId = grS.OwnerId
-							AND grS.ActionType = 3 -- approver
-							-- AND emp.EmpId <> @ApproverId
-							AND NOT EXISTS (
-								SELECT 1
-								FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
-								WHERE empS.OwnerId <> @ApproverId
-									AND empS.EmpId = emp.EmpId
-									AND empS.ActionType = 3
-								)
-						)
 					) THEN 2 -- Host				
 			ELSE 1 END
 			)
