@@ -328,6 +328,11 @@ BEGIN
 				)
 		ORDER BY ldt.OnDate
 	END
+	ELSE
+	BEGIN
+		SELECT 1
+		WHERE 0 = 1
+	END
 
 	DROP TABLE #Absent
 
