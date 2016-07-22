@@ -2,8 +2,6 @@
 	@OwnerId INT
 	,@GroupId INT
 	,@EmpId INT
-	,@ActionType INT
-	,@RequestType INT = NULL
 	)
 RETURNS BIT
 AS
@@ -38,7 +36,6 @@ BEGIN
 				WHERE grS.GroupId = @GroupId
 					AND grS.OwnerId = @OwnerId
 					AND grS.ActionType = 8 -- edit discipline
-					-- AND @EmpId <> @OwnerId
 					AND grS.IsDeleted = 0
 					AND NOT EXISTS (
 						SELECT 1
@@ -47,45 +44,6 @@ BEGIN
 							AND empS.EmpId = @EmpId
 							AND empS.ActionType = 8
 							AND empS.IsDeleted = 0
-						)
-				)
-			)
-		AND (
-			EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
-				WHERE empS.OwnerId = @OwnerId
-					AND empS.EmpId = @EmpId
-					AND empS.ActionType = @ActionType
-					AND empS.IsDeleted = 0
-					AND (
-						ISNULL(@RequestType, '') = ''
-						OR empS.RequestType = @RequestType
-						)
-				)
-			OR EXISTS (
-				SELECT 1
-				FROM dbo.GroupSupervisor AS grS WITH (NOLOCK)
-				WHERE grS.GroupId = @GroupId
-					AND grS.OwnerId = @OwnerId
-					AND grS.ActionType = @ActionType
-					AND grS.IsDeleted = 0
-					AND (
-						ISNULL(@RequestType, '') = ''
-						OR grS.RequestType = @RequestType
-						)
-					-- AND @EmpId <> @OwnerId
-					AND NOT EXISTS (
-						SELECT 1
-						FROM dbo.EmployeeSupervisor AS empS WITH (NOLOCK)
-						WHERE empS.OwnerId <> @OwnerId
-							AND empS.EmpId = @EmpId
-							AND empS.ActionType = @ActionType
-							AND empS.IsDeleted = 0
-							AND (
-								ISNULL(@RequestType, '') = ''
-								OR empS.RequestType = @RequestType
-								)
 						)
 				)
 			)

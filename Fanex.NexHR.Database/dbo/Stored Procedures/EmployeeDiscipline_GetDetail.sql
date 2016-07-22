@@ -38,11 +38,6 @@ BEGIN
 	SET @ChangeShift = 5;
 	SET @Leave = 6;
 
-	--action type
-	DECLARE @Approved INT;
-
-	SET @Approved = 3;
-
 	CREATE TABLE #Roles (RoleId INT);
 
 	CREATE TABLE #DisciplineDetail (
@@ -158,7 +153,7 @@ BEGIN
 		,dis.IsIgnoredChangeShift AS ChangeShiftHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @ChangeShift) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS ChangeShiftHasApprovedBy
 		,2 AS MissingCheckInOutId
@@ -179,10 +174,7 @@ BEGIN
 		,dis.IsIgnoredMissingCheckInOut AS MissingCheckInOutHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND (
-					dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @CheckIn) = 1
-					OR dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @CheckOut) = 1
-					) THEN 1
+				AND (dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1) THEN 1
 			ELSE 0 END
 			) AS MissingCheckInOutHasApprovedBy
 		,3 AS LateInId
@@ -203,7 +195,7 @@ BEGIN
 		,dis.IsIgnoredLateIn AS LateInHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @LateIn) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS LateInHasApprovedBy
 		,4 AS EarlyOutId
@@ -224,7 +216,7 @@ BEGIN
 		,dis.IsIgnoredEarlyOut AS EarlyOutHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @EarlyOut) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS EarlyOutHasApprovedBy
 		,5 AS AbsentId
@@ -245,7 +237,7 @@ BEGIN
 		,dis.IsIgnoredAbsent AS AbsentHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS AbsentHasApprovedBy
 		,6 AS UnpaidLeaveId
@@ -266,7 +258,7 @@ BEGIN
 		,dis.IsIgnoredUnpaidLeave AS UnpaidLeaveHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS UnpaidLeaveHasApprovedBy
 		,7 AS WorkingUnderTimeId
@@ -287,7 +279,7 @@ BEGIN
 		,dis.IsIgnoredWorkingUndertime AS WorkingUnderTimeHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, NULL) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS WorkingUnderTimeHasApprovedBy
 		,8 AS UnpaidLeaveAbsentId
@@ -308,7 +300,7 @@ BEGIN
 		,dis.IsIgnoredUnpaidLeaveAbsent AS UnpaidLeaveAbsentHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS UnpaidLeaveAbsentHasApprovedBy
 		,dis.EmployeeComment
@@ -319,17 +311,7 @@ BEGIN
 			) AS IsConfirmed
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @ChangeShift) = 1
-				AND (
-					dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @CheckIn) = 1
-					OR dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @CheckOut) = 1
-					)
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @LateIn) = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @EarlyOut) = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, NULL) = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId, @Approved, @Leave) = 1 THEN 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS HasConfirmed
 	FROM dbo.EmployeeDiscipline AS dis WITH (NOLOCK)
