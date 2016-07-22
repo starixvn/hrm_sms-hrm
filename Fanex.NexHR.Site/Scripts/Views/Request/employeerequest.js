@@ -67,7 +67,7 @@
 
                     if (!isValid) {
                         $(this).find('.validation-summary-valid').show()
-                            .html('You must select <b>Vioaltion Ignored</b> or <b>Vioaltion Recorded</b> on each type of request.');
+                            .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b> on each type of request.');
                     } else {
                         $(this).find('.validation-summary-valid').hide();
                         processRequest(requestId, roleId, command, comment, ignoredDisciplines);
