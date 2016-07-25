@@ -147,6 +147,7 @@ BEGIN
 				END
 				IF(@IsLeaveDay = 1 and @LeaveDay = 0.5)
 				BEGIN 
+
 					SELECT @RequestLeaveTimeBegin = FromTime, @RequestLeaveTimeEnd = ToTime
 					FROM #LeaveRequestHalfDay
 					WHERE EmpId = @empId AND OnDate = @attendaceDate
@@ -155,6 +156,7 @@ BEGIN
 					BEGIN
 						IF(DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) < 5 AND DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) > -5)
 						BEGIN
+						select 1
 							SET @adjustLateIn = DATEDIFF(mi, @RequestLeaveTimeBegin, @RequestLeaveTimeEnd)
 							SET @ActualLateIn = @ActualLateIn - @adjustLateIn
 							IF @ActualLateIn < 0
@@ -164,6 +166,7 @@ BEGIN
 						END
 						ELSE IF (DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) < 5 AND DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) > -5)
 						BEGIN
+						select 2
 							SET @adjustEarlyOut = DATEDIFF(mi, @RequestLeaveTimeBegin, @RequestLeaveTimeEnd)
 							SET @ActualEarlyOut = @ActualEarlyOut - @adjustEarlyOut
 							IF @ActualEarlyOut < 0
@@ -295,8 +298,6 @@ BEGIN
 			BEGIN
 				DELETE FROM dbo.EmployeeAttendance WHERE EmpId = @empId and DATEDIFF(d, AttendanceDate, @attendaceDate) = 0
 			END
-
-			--EXECUTE [dbo].[EmployeeAttendanceViolation_Insert] @empId, @attendaceDate
 		END
 		SET @i = @i + 1
 		SET @attendaceDate = DATEADD(d, @i, @fromTime)

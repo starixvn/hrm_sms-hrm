@@ -16,13 +16,6 @@ Param's Explanation:
 */
 
 SET NOCOUNT ON
-INSERT INTO dbo.tmpLogAttendance([Name]
-		  ,[EmpId]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[IsOnlyUpdate]
-		  ,[InsertDate])
-		VALUES('TimeRecord_ImportFromBioAdmin', NULL, @fromDate, @toDate, 0, GETDATE())
 
 -- get data from BioAdmin
 SELECT dtDateTime, nDeviceID, nEvent, nTNAEvent, nUserID 
@@ -51,22 +44,17 @@ WHERE NOT EXISTS (select TOP 1 1 from dbo.TimeRecord t
 	)
 ORDER BY dtDateTime			
 
-IF @@ROWCOUNT = 0 
-	RETURN 
-
-DECLARE @iDay INT
-
 DROP TABLE #tempFinger
 
-SET @iDay = DATEDIFF (DD,@fromDate,@toDate)
+--While @iDay >0 
+--BEGIN
+--	SELECT @iDay,@fromDate,@toDate
 
-While @iDay >0 
-BEGIN
-	SELECT @iDay,@fromDate,@toDate
-
-	EXEC EmployeeAttendance_ProcessingAndInsert null, @fromDate, @toDate
+--	EXEC EmployeeAttendance_ProcessingAndInsert null, @fromDate, @toDate
 	
-	Set @fromDate=DATEADD(DD,1,@fromDate)	
+--	Set @fromDate=DATEADD(DD,1,@fromDate)	
 
-	Set @iDay=@iDay-1
-END
+--	Set @iDay=@iDay-1
+--END
+
+EXEC EmployeeAttendance_ProcessingAndInsert null, @fromDate, @toDate

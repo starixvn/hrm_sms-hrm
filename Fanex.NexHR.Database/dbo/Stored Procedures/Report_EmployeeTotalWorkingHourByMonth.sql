@@ -158,11 +158,11 @@ BEGIN
 			WHEN e_att.AttendanceDate < getdate() - 1
 				AND (
 					(
-						e_att.ShiftId IS NOT NULL
+						c.ShiftId IS NOT NULL
 						AND e_s.IsDefaultSchedule = 0
 						)
 					OR (
-						e_att.ShiftId IS NOT NULL
+						c.ShiftId IS NOT NULL
 						AND e_s.IsLocal = 1
 						AND e_s.IsDefaultSchedule = 1
 						AND NOT (
@@ -305,8 +305,8 @@ BEGIN
 			ISNULL(TotalWorkDays,0) AS [Count WorkDay],' + @days
 
 	SELECT @query = @query + ' FROM #tmpCalendar AS cl
-			LEFT JOIN #Calendar_TotalWorkDays AS ttd WITH(NOLOCK) ON cl.EmpId = ttd.EmpId
-		ORDER BY Team, [Positions], FullName'
+	          LEFT JOIN #Calendar_TotalWorkDays AS ttd WITH(NOLOCK) ON cl.EmpId = ttd.EmpId
+          ORDER BY Team, [Positions], FullName'
 
 	IF @isDebug = 1
 		PRINT @query

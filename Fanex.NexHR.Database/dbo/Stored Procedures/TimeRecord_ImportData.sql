@@ -30,6 +30,4 @@ BEGIN
 	EXEC dbo.TimeRecord_ImportFromBioAdmin @fromdate, @todate
 	
 	EXEC [dbo].[EmployeeAttendance_ForWaitingCase]
-
-	EXEC [dbo].[EmployeeAttendanceViolation_Insert] NULL, NULL, @fromdate
 END

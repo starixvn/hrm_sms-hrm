@@ -146,16 +146,13 @@ BEGIN
 	INSERT INTO @Employee (EmpId)
 	SELECT e.EmpId FROM dbo.Employee AS e WITH (NOLOCK)
 	WHERE isDeleted IS NULL OR isDeleted = 0
-	AND NOT EXISTS (SELECT 1 FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-					INNER JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID
-				WHERE ISNULL(cl.LeaveDay, 0) = 0
+	AND EXISTS (SELECT 1 FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
+				WHERE (ISNULL(cl.LeaveDay, 0) <> 0
+					OR cl.ShiftId IS NULL
+					) 
 					AND DATEDIFF(DD, @fromTime, WorkDate) >= 0
 					AND DATEDIFF(DD, WorkDate, @toTime) >= 0
-					AND (
-						@empId IS NULL
-						OR cl.EmpId = @empId
-						)
-						AND e.EmpId = cl.EmpId
+					AND e.EmpId = cl.EmpId
 						)
 
 	SET @i = 1
@@ -183,6 +180,8 @@ BEGIN
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @EmpId, @fromTime, @toTime, @onlyUpdate
 	END
 END
+
+EXEC dbo.Discipline_Insert @fromTime, @toTime, @EmpId
 
 DROP TABLE #TimeRecord
 DROP TABLE #EmpCalendar

@@ -1,12 +1,7 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByEmpId]
-	@Empid int,
-	@Year INT,
-
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg nvarchar(200) = '' OUTPUT,
-	@isDebug BIT=0
+﻿
+CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByEmpId] @Empid INT
+	,@Year INT
+	,@isDebug BIT = 0
 AS
 /*
 Created: Tom.Vo@2013-11-04
@@ -17,108 +12,111 @@ Original:
 Revisions:    
 Param's Explanation:
 */
-SET NOCOUNT ON;
-
-DECLARE @CanOT BIT
-SELECT TOP 1 @CanOT =CanOT  from dbo.EmployeeSummary WITH(NOLOCK) WHERE EmpId = @EmpId
-
-IF (@CanOT = 0)
 BEGIN
-	SELECT @ErrCode = 100,@ErrMsg = 'You don''t have permission on this function.'
-	RETURN
-END
+	SET NOCOUNT ON;
 
-DECLARE @fromdate datetime,@todate datetime,@Month datetime
+	DECLARE @fromdate DATETIME
+		,@todate DATETIME
+		,@Month DATETIME
 
-IF YEAR(GETDATE())=@Year
-	SELECT @Month = CONVERT(VARCHAR(10),@Year) + '/' + CONVERT(VARCHAR(10),MONTH(GETDATE())) + + '/' + CONVERT(VARCHAR(10),DAY(GETDATE())) +' 00:00:00'
-ELSE 
-	SELECT @Month = CONVERT(VARCHAR(10),@Year) + '/12/01 00:00:00'
+	IF YEAR(GETDATE()) = @Year
+		SELECT @Month = CONVERT(VARCHAR(10), @Year) + '/' + CONVERT(VARCHAR(10), MONTH(GETDATE())) + + '/' + CONVERT(VARCHAR(10), DAY(GETDATE())) + ' 00:00:00'
+	ELSE
+		SELECT @Month = CONVERT(VARCHAR(10), @Year) + '/12/01 00:00:00'
 
-SELECT @Month = CASE WHEN DAY(GETDATE()) BETWEEN 10 AND 31 THEN DATEADD(MONTH,1,@Month) ELSE @Month  END
+	SELECT @Month = CASE 
+			WHEN DAY(GETDATE()) BETWEEN 10
+					AND 31 THEN DATEADD(MONTH, 1, @Month)
+			ELSE @Month
+			END
 
-IF YEAR(@Month)>@Year
-	SELECT @Month = CONVERT(VARCHAR(10),@Year) + '/12/01 00:00:00'
+	IF YEAR(@Month) > @Year
+		SELECT @Month = CONVERT(VARCHAR(10), @Year) + '/12/01 00:00:00'
 
-SELECT @fromDate = CONVERT(VARCHAR(10),@Year) + '/01/01 00:00:00'
+	SELECT @fromDate = CONVERT(VARCHAR(10), @Year) + '/01/01 00:00:00'
 		,@toDate = @Month
 
-CREATE TABLE #Calendar([Month] datetime,[Enabled] BIT,IsDeleted BIT)
+	CREATE TABLE #Calendar (
+		[Month] DATETIME
+		,[Enabled] BIT
+		,IsDeleted BIT
+		)
 
-WHILE (CONVERT(DATETIME,@fromDate)<=CONVERT(DATETIME,@toDate)) 
+	WHILE (CONVERT(DATETIME, @fromDate) <= CONVERT(DATETIME, @toDate))
 	BEGIN
-		INSERT INTO #Calendar([Month],[Enabled],IsDeleted) VALUES(@fromDate,1,0)
-		SET @fromDate=DATEADD(MONTH,1,@fromDate)
+		INSERT INTO #Calendar (
+			[Month]
+			,[Enabled]
+			,IsDeleted
+			)
+		VALUES (
+			@fromDate
+			,1
+			,0
+			)
+
+		SET @fromDate = DATEADD(MONTH, 1, @fromDate)
 	END
 
-SELECT @fromDate = CONVERT(VARCHAR(10),@Year) + '/01/01 00:00:00'
+	SELECT @fromDate = CONVERT(VARCHAR(10), @Year) + '/01/01 00:00:00'
 
-DECLARE @SQL VARCHAR(8000)
-SET @SQL = 'SELECT 
-				r.RequestId,
-				r.empID,
-				cl.Month AS RequestDate,		
-				r.CreatedDate,
-				r.VerifiedDate,
-				r.VerifiedStatus,
-				r.ApprovedDate,
-				r.ApprovedStatus,
-				r.HRDate,
-				r.HRStatus,
-				r.[NormalHours],
-			    r.[OffHours],
-			    r.[PublicHours],
-				(r.[NormalHours]+r.[OffHours]+r.[PublicHours]) ToTalHours,
-				NULL Remark,
-				
-				' + CONVERT(NVARCHAR(13),@empid)+ ' AS RequesterID,
-				e.NickName AS Requester,
-				e.FullName AS FullNameRequester,
-				
-				g.GroupId AS GroupId,
-				g.Name AS Team,
-				g.Code AS TeamCode,
+	SELECT r.RequestId
+		,r.empID
+		,cl.Month AS RequestDate
+		,r.CreatedDate
+		,r.VerifiedDate
+		,r.VerifiedStatus
+		,r.ApprovedDate
+		,r.ApprovedStatus
+		,r.HRDate
+		,r.HRStatus
+		,r.[NormalHours]
+		,r.[OffHours]
+		,r.[PublicHours]
+		,(r.[NormalHours] + r.[OffHours] + r.[PublicHours]) ToTalHours
+		,NULL Remark
+		,@empid AS RequesterID
+		,e.NickName AS Requester
+		,e.FullName AS FullNameRequester
+		,g.GroupId AS GroupId
+		,g.NAME AS Team
+		,g.Code AS TeamCode
+		,ap_V.EmpId AS VerifierID
+		,ap_V.NickName AS NickNameVerifier
+		,ap_V.FullName AS FullNameVerifierBy
+		,ap_A.EmpId AS ApproverID
+		,ap_A.NickName AS NickNameApprover
+		,ap_A.FullName AS FullNameApproverBy
+		,8 RequestTypeId
+		,r.currentstatus StatusId
+		,ap_H.EmpId AS HRID
+		,ap_H.NickName AS HRBy
+		,ap_H.FullName AS FullNameHRBy
+		,r.ModifiedBy ModifiedByID
+		,e_m.NickName AS NickNameModified
+		,e_m.FullName AS FullNameModified
+		,r.ModifiedDate
+	FROM #Calendar cl
+		LEFT JOIN [dbo].[OTMonthlyRequest] r WITH (NOLOCK) ON r.Month = cl.[Month]
+		AND r.Month >= @fromdate
+		AND r.Month <= @todate
+		AND r.empid = @empid
+		LEFT JOIN dbo.Employee e WITH (NOLOCK) ON e.empID = r.empID
+		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
+		LEFT JOIN [dbo].Employee ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
+		LEFT JOIN [dbo].Employee ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
+		LEFT JOIN Employee e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
+		LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
+	WHERE EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = @Empid
+				AND CanOT = 1
+			)
+	ORDER BY cl.Month DESC
 
-				ap_V.EmpId AS VerifierID,
-				ap_V.NickName as NickNameVerifier,
-				ap_V.FullName as FullNameVerifierBy,
+	DROP TABLE #Calendar
+END
 
-				ap_A.EmpId AS ApproverID,
-				ap_A.NickName as NickNameApprover,
-				ap_A.FullName as FullNameApproverBy,
-
-				8 RequestTypeId,
-				
-				r.currentstatus StatusId,
-								
-				ap_H.EmpId AS HRID,
-				ap_H.NickName as HRBy,
-				ap_H.FullName as FullNameHRBy,
-				
-				r.ModifiedBy ModifiedByID,
-				e_m.NickName as NickNameModified,
-				e_m.FullName as FullNameModified,
-				r.ModifiedDate
- FROM  #Calendar cl 
-				LEFT JOIN [dbo].[OTMonthlyRequest] r WITH (NOLOCK) ON r.Month = cl.[Month]
-					AND r.Month >= ''' + CONVERT(NVARCHAR(20),@fromdate)+ ''' 
-					AND r.Month  <= ''' + CONVERT(NVARCHAR(20),@todate)+ ''''+CHAR(13)
-+'					AND r.empid = ' + CONVERT(NVARCHAR(13),@empid)+ '  ' +CHAR(13) 
-+'				LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
-				LEFT JOIN [dbo].Employee ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
-				LEFT JOIN [dbo].Employee ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
-				LEFT JOIN Employee e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
-
-				LEFT JOIN Employee e WITH (NOLOCK) ON e.empID = r.empID	
-				
-				LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
-				ORDER BY cl.Month DESC'
-	
-	IF @isDebug = 1 PRINT @SQL 
-	EXEC (@SQL )
-
-SELECT @ErrCode=0,@ErrMsg=''
-	
-DROP TABLE #Calendar
 
 

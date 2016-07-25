@@ -326,5 +326,4 @@ BEGIN
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON c.EmpId = att.EmpId
 		AND c.WorkDate = att.AttendanceDate
 	WHERE att.EmpId IS NULL
-
 END
