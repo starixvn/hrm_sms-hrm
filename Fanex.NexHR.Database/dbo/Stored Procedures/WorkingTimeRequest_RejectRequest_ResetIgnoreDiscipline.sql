@@ -27,10 +27,10 @@ BEGIN
 	CREATE TABLE #LeaveRequestDetail (
 		WorkDate DATE
 		,LeaveTypeId INT
+		,LeaveTypeName NVARCHAR(200)
 		,IsHalfDay BIT
 		,FromTime DATETIME
 		,ToTime DATETIME
-		,WorkType INT
 		,IsOffOrHoliday BIT
 		,ScheduleStatus NVARCHAR(MAX)
 		,IsFromAfterday BIT
@@ -111,7 +111,20 @@ BEGIN
 	END
 	ELSE IF @RequestType = 6 -- leave
 	BEGIN
-		INSERT INTO #LeaveRequestDetail
+		INSERT INTO #LeaveRequestDetail (
+			WorkDate
+			,LeaveTypeId
+			,LeaveTypeName
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,IsOffOrHoliday
+			,ScheduleStatus
+			,IsFromAfterday
+			,IsToAfterday
+			,IsUnpaidLeaveAbsent
+			,IsAbsent
+			)
 		EXEC dbo.WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById @RequestId = @RequestId
 
 		INSERT INTO #RequestDetail

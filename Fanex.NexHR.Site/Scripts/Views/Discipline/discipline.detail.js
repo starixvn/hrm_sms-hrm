@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, floatThead*/
 
 (function () {
     function initEventForTeamDropdown() {
@@ -158,6 +158,8 @@
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#discipline-detail').html(data);
+
+                floatThead("table#data");
                 initEventForIgnoreDiscipline();
                 initEventForSaveChange();
             },

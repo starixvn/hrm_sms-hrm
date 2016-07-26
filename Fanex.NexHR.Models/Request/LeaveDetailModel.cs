@@ -12,6 +12,8 @@
 
         public int LeaveTypeId { get; set; }
 
+        public string LeaveTypeName { get; set; }
+
         public bool IsHalfDay { get; set; }
 
         public DateTime FromTime { get; set; }

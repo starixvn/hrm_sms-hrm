@@ -4,7 +4,6 @@
         <tr>
             <th>@Labels.Date</th>
             <th>@Labels.ScheduleStatus</th>
-            <th>@Labels.WorkType</th>
             <th>@Labels.LeaveTypeName</th>
             <th>@Labels.HalfDay</th>
             <th>@Labels.LeaveCount</th>
@@ -27,30 +26,16 @@
                 @if (!item.IsOffOrHoliday)
                 {
                     <td>
-                        @switch (item.WorkType)
-                        {
-                            case (int)WorkType.Leave:
-                                <span>@Labels.Leave</span>
-                                break;
-                            case (int)WorkType.Off:
-                                <span>@Labels.Off</span>
-                                break;
-                            default:
-                                <span>@Labels.OnDuty</span>
-                                break;
-                        }
-                    </td>
-                    <td>
-                        @{
-                            IList<LeaveType> leaveTypes = (IList<LeaveType>)ViewBag.LeaveTypes;
-                        }
-                        @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(leaveTypes.Where(t => t.Id != 0).ToList(), "Id", "Name", item.LeaveTypeId), new { @disabled = false })
+                        @item.LeaveTypeName
                     </td>
                     <td>
                         @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
                     </td>
                     <td>
-                        @(item.IsHalfDay ? "0.5" : "1")
+                        @{
+                            double totalDays = item.ToTime.Subtract(item.FromTime).TotalDays + 1;
+                        }
+                        @(item.IsHalfDay ? "0.5" : totalDays.ToString())
                     </td>
                     <td>
                         @if (item.IsHalfDay)
@@ -62,7 +47,7 @@
                         }
                         else
                         {
-                            <span>-</span>
+                            @item.FromTime.ToDateMonthYearFormatedDate()
                         }
                     </td>
                     <td>
@@ -75,7 +60,7 @@
                         }
                         else
                         {
-                            <span>-</span>
+                            @item.ToTime.ToDateMonthYearFormatedDate()
                         }
                     </td>
                     <td class="violationIgnored">
@@ -112,7 +97,6 @@
                 }
                 else
                 {
-                    <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>

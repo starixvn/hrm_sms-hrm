@@ -219,7 +219,6 @@
                             {
                                 ExcludeNotShown = true
                             };
-                            ViewBag.LeaveTypes = leaveTypeService.GetAll(criteria);
                             model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                             break;
                     }

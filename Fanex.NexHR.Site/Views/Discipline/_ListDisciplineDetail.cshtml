@@ -2,7 +2,7 @@
 @{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
-<table class="table table-custom discipline-detail">
+<table id="data" class="table table-custom discipline-detail">
     <thead>
         @if (Model != null & Model.Any() && hasPermissionToEdit)
         {
@@ -242,16 +242,16 @@
                         {
                             if (item.ApproverSubtractScore <= item.SystemSubtractScore)
                             {
-                                <span class="float-left" style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
+                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
                             }
                             else
                             {
-                                <span class="float-left" style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
                             }
                         }
                         else
                         {
-                            <span class="float-left">@item.ApproverSubtractScore.ToString("0.0")</span>
+                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
                         }
                     </td>
                     @if (!string.IsNullOrEmpty(item.ApproverComment))

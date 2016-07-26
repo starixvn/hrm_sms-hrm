@@ -136,7 +136,7 @@
     <value>Approved date</value>
   </data>
   <data name="ChangeShift" xml:space="preserve">
-    <value>Change shift</value>
+    <value>Change Shift</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Created date</value>
@@ -670,7 +670,7 @@
     <value>Cross day</value>
   </data>
   <data name="FromTime" xml:space="preserve">
-    <value>From time</value>
+    <value>From Time</value>
   </data>
   <data name="Hours" xml:space="preserve">
     <value>Hours</value>
@@ -685,7 +685,7 @@
     <value>Off day</value>
   </data>
   <data name="ToTime" xml:space="preserve">
-    <value>To time</value>
+    <value>To Time</value>
   </data>
   <data name="Overtime" xml:space="preserve">
     <value>Overtime</value>

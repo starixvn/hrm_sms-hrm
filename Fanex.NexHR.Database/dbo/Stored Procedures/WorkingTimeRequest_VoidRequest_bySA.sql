@@ -22,7 +22,7 @@ BEGIN
 
 	SELECT @RequestType = wk.RequestType
 		,@ProcessedDate = GETDATE()
-	FROM dbo.WorkingTimeRequest wk WITH (NOLOCK)
+	FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 	WHERE wk.RequestID = @RequestID
 
 	-- reset ignore
@@ -84,12 +84,13 @@ BEGIN
 				,@ErrMsg OUTPUT
 		END
 	END
+	ELSE
+	BEGIN
+		RETURN
+	END
 
 	IF @ErrCode = 0
 	BEGIN
-		-- update IsConfirmed
-		EXEC dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline
-
 		-- write to history
 		INSERT dbo.WorkingTimeRequestHistory (
 			EmpId
@@ -141,16 +142,16 @@ BEGIN
 			,@now DATETIME
 			,@Description VARCHAR(200)
 
-		SET @now = getdate()
+		SET @now = GETDATE()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + coalesce(cast(@RequestID AS VARCHAR(50)), space(1)) + '" '
-			+ 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
-			+ 'ApprovedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
-			+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
-			+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + COALESCE(CAST(@RequestID AS VARCHAR(50)), SPACE(1)) + '" '
+		+ 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" '
+		+ 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" '
+		+ 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" '
+		+ 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
 
-		SELECT @Description = 'Void Status Request by SA:' + coalesce(cast(@RequestID AS VARCHAR(50)), space(1))
+		SELECT @Description = 'Void Status Request by SA:' + COALESCE(CAST(@RequestID AS VARCHAR(50)), SPACE(1))
 
 		EXEC dbo.Log_WriteLog @LogActionID = 4
 			,@LogDate = @now

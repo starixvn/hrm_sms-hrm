@@ -1,5 +1,5 @@
 ﻿'use strict';
-/*global _global, autoIndex, noInformation*/
+/*global _global, autoIndex, noInformation, floatThead*/
 
 (function () {
     function showSuccessMsg(msg) {
@@ -287,6 +287,7 @@
             success: function (data) {
                 $('#discipline-summary').html(data);
 
+                floatThead("table#data");
                 initEventViewOtherDiscipline();
                 initEventForViewDisciplineDetail();
 

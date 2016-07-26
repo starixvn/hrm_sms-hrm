@@ -209,69 +209,14 @@ BEGIN
 		AND empC.[WorkDate] = lea.OnDate
 	WHERE ISNULL(rul.Value, 0) = 1
 
-	IF @LeaveType = 25 -- unpaid leave
-	BEGIN
-		SELECT (CASE 
-				WHEN upa.WorkDate IS NOT NULL THEN upa.WorkDate
-				ELSE up.WorkDate END
-				) AS LeaveDate
-			,lt.LeaveTypeId
-			,(CASE 
-				WHEN lr.TotalDays = 0.5
-					AND lr.LeaveType <> 0 THEN 1
-				ELSE 0 END
-				) AS IsHalfDay
-			,lr.FromDate
-			,lr.ToDate
-			,NULL AS WorkType
-			,(CASE 
-				WHEN ca.IsOffDay = 1
-					OR ca.IsHoliday = 1 THEN 1
-				ELSE 0 END
-				) AS IsOffOrHoliDay
-			,(CASE 
-				WHEN ca.IsOffDay = 1 THEN 'Off Day'
-				WHEN ca.IsHoliday = 1 THEN 'Holiday'
-				WHEN s.ShiftID IS NOT NULL THEN s.[Name]
-				WHEN ca.IsLeaveDay = 0 THEN 'N/A' END
-				) AS ScheduleStatus
-			,(CASE 
-				WHEN CAST(lr.FromDate AS DATE) > CAST(upa.WorkDate AS DATE) THEN 1
-				ELSE 0 END
-				) AS IsFromAfterday
-			,(CASE 
-				WHEN CAST(lr.ToDate AS DATE) > CAST(upa.WorkDate AS DATE) THEN 1
-				ELSE 0 END
-				) AS IsToAfterday
-			,(CASE 
-				WHEN upa.WorkDate IS NOT NULL THEN 1
-				ELSE 0 END
-				) AS IsUnpaidLeaveAbsent
-			,0 AS IsAbsent
-		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
-			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
-			LEFT JOIN #UnpaidLeaveAbsent AS upa ON ca.EmpId = upa.EmpId
-			AND upa.WorkDate = CAST(ca.WorkDate AS DATE)
-			LEFT JOIN #UnpaidLeave AS up ON ca.EmpId = up.EmpId
-			AND up.WorkDate = CAST(ca.WorkDate AS DATE)
-			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
-			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
-		WHERE wk.RequestId = @RequestId
-			AND (
-				upa.WorkDate IS NOT NULL
-				OR up.WorkDate IS NOT NULL
-				)
-	END
-	ELSE IF @LeaveType = 0
-		OR @LeaveType = 2
+	IF @LeaveType = 0 -- General Leave
 	BEGIN
 		SELECT ldt.OnDate AS LeaveDate
 			,lt.LeaveTypeId
+			,lt.[Name] AS LeaveTypeName
 			,ldt.IsHalfDay
 			,ldt.FromTime
 			,ldt.ToTime
-			,ldt.WorkType
 			,(CASE 
 				WHEN ca.IsOffDay = 1
 					OR ca.IsHoliday = 1 THEN 1
@@ -327,6 +272,96 @@ BEGIN
 				FROM #UnpaidLeave
 				)
 		ORDER BY ldt.OnDate
+	END
+	ELSE IF @LeaveType = 2 -- Annual Leave
+	BEGIN
+		SELECT ab.WorkDate AS LeaveDate
+			,lt.LeaveTypeId
+			,lt.[Name] AS LeaveTypeName
+			,(CASE 
+				WHEN lr.TotalDays = 0.5
+					AND lr.LeaveType <> 0 THEN 1
+				ELSE 0 END
+				) AS IsHalfDay
+			,lr.FromDate AS FromTime
+			,lr.ToDate AS ToTime
+			,(CASE 
+				WHEN ca.IsOffDay = 1
+					OR ca.IsHoliday = 1 THEN 1
+				ELSE 0 END
+				) AS IsOffOrHoliDay
+			,(CASE 
+				WHEN ca.IsOffDay = 1 THEN 'Off Day'
+				WHEN ca.IsHoliday = 1 THEN 'Holiday'
+				WHEN s.ShiftID IS NOT NULL THEN s.[Name]
+				WHEN ca.IsLeaveDay = 0 THEN 'N/A' END
+				) AS ScheduleStatus
+			,(CASE 
+				WHEN ab.WorkDate IS NOT NULL THEN 1
+				ELSE 0 END
+				) AS IsAbsent
+		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
+			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
+			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
+			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
+			INNER JOIN #Absent AS ab ON ca.EmpId = ab.EmpId
+			AND CAST(ca.WorkDate AS DATE) = ab.WorkDate
+		WHERE wk.RequestId = @RequestId
+	END
+	ELSE IF @LeaveType = 25 -- unpaid leave
+	BEGIN
+		SELECT (CASE 
+				WHEN upa.WorkDate IS NOT NULL THEN upa.WorkDate
+				ELSE up.WorkDate END
+				) AS LeaveDate
+			,lt.LeaveTypeId
+			,lt.[Name] AS LeaveTypeName
+			,(CASE 
+				WHEN lr.TotalDays = 0.5
+					AND lr.LeaveType <> 0 THEN 1
+				ELSE 0 END
+				) AS IsHalfDay
+			,lr.FromDate AS FromTime
+			,lr.ToDate AS ToTime
+			,(CASE 
+				WHEN ca.IsOffDay = 1
+					OR ca.IsHoliday = 1 THEN 1
+				ELSE 0 END
+				) AS IsOffOrHoliDay
+			,(CASE 
+				WHEN ca.IsOffDay = 1 THEN 'Off Day'
+				WHEN ca.IsHoliday = 1 THEN 'Holiday'
+				WHEN s.ShiftID IS NOT NULL THEN s.[Name]
+				WHEN ca.IsLeaveDay = 0 THEN 'N/A' END
+				) AS ScheduleStatus
+			,(CASE 
+				WHEN CAST(lr.FromDate AS DATE) > CAST(upa.WorkDate AS DATE) THEN 1
+				ELSE 0 END
+				) AS IsFromAfterday
+			,(CASE 
+				WHEN CAST(lr.ToDate AS DATE) > CAST(upa.WorkDate AS DATE) THEN 1
+				ELSE 0 END
+				) AS IsToAfterday
+			,(CASE 
+				WHEN upa.WorkDate IS NOT NULL THEN 1
+				ELSE 0 END
+				) AS IsUnpaidLeaveAbsent
+			,0 AS IsAbsent
+		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
+			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
+			LEFT JOIN #UnpaidLeaveAbsent AS upa ON ca.EmpId = upa.EmpId
+			AND upa.WorkDate = CAST(ca.WorkDate AS DATE)
+			LEFT JOIN #UnpaidLeave AS up ON ca.EmpId = up.EmpId
+			AND up.WorkDate = CAST(ca.WorkDate AS DATE)
+			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
+			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
+		WHERE wk.RequestId = @RequestId
+			AND (
+				upa.WorkDate IS NOT NULL
+				OR up.WorkDate IS NOT NULL
+				)
 	END
 	ELSE
 	BEGIN

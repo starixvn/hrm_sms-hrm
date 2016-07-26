@@ -556,7 +556,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change shift.
+        ///   Looks up a localized string similar to Change Shift.
         /// </summary>
         public static string ChangeShift {
             get {
@@ -1483,7 +1483,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to From time.
+        ///   Looks up a localized string similar to From Time.
         /// </summary>
         public static string FromTime {
             get {
@@ -3859,7 +3859,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To time.
+        ///   Looks up a localized string similar to To Time.
         /// </summary>
         public static string ToTime {
             get {

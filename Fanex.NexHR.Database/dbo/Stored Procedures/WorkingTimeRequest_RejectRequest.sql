@@ -67,19 +67,19 @@ BEGIN
 		RETURN
 	END
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
+	-- reset ignore
+	EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		,@RoleId = @RoleId
+		,@ModifiedBy = @ProcessedBy
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
-		-- reset ignore
-		EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-			,@RoleId = @RoleId
-			,@ModifiedBy = @ProcessedBy
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-
+	IF @ErrCode = 0
+	BEGIN
 		SET @ProcessedDate = GETDATE()
 
 		IF @RequestType = 1
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_1] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -87,7 +87,9 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
 		ELSE IF @RequestType = 2
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_2] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -95,7 +97,9 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
 		ELSE IF @RequestType = 3
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_3] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -103,7 +107,9 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
 		ELSE IF @RequestType = 4
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_4] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -111,6 +117,7 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
 		ELSE IF @RequestType = 5
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_5] @RequestId = @RequestId
 				,@EmpId = @EmpId
@@ -120,6 +127,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		ELSE IF @RequestType = 6
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_6] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -127,7 +135,9 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
 		ELSE IF @RequestType = 7
+		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_7] @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@ProcessedBy = @ProcessedBy
@@ -135,10 +145,15 @@ BEGIN
 				,@RoleId = @RoleId
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
+	END
+	ELSE
+	BEGIN
+		RETURN
+	END
 
-		-- update IsConfirmed
-		EXEC dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline
-
+	IF @ErrCode = 0
+	BEGIN
 		-- write to history
 		EXEC [WorkingTimeRequest_WriteHistory] @RequestId
 			,@Comment
@@ -148,17 +163,17 @@ BEGIN
 			,@now DATETIME
 			,@Description VARCHAR(200)
 
-		SET @now = getdate()
+		SET @now = GETDATE()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1)) + '" '
-			+ 'RoleID="' + coalesce(cast(@RoleId AS VARCHAR(100)), space(1)) + '" '
-			+ 'ProcessedBy="' + coalesce(cast(@ProcessedBy AS VARCHAR(100)), space(1)) + '" '
-			+ 'ProcessedDate="' + coalesce(convert(VARCHAR(10), @ProcessedDate, 111), space(1)) + '" '
-			+ 'ErrCode="' + coalesce(cast(@ErrCode AS VARCHAR(50)), space(1)) + '" '
-			+ 'ErrMsg="' + coalesce(cast(@ErrMsg AS VARCHAR(4000)), space(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" '
+		+ 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" '
+		+ 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" '
+		+ 'ProcessedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" '
+		+ 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" '
+		+ 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
 
-		SELECT @Description = 'Reject Request:' + coalesce(cast(@RequestId AS VARCHAR(50)), space(1))
+		SELECT @Description = 'Reject Request:' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1))
 
 		EXEC dbo.Log_WriteLog @LogActionID = 2
 			,@LogDate = @now
@@ -166,16 +181,5 @@ BEGIN
 			,@TrackingValue = @LogSPData
 			,@UserID = @ProcessedBy
 			,@EmpID = @EmpID
-
-		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0;
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION;
-
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject process failed'
-	END CATCH;
+	END
 END
