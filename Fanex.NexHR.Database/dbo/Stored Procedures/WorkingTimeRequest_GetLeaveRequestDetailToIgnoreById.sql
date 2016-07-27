@@ -365,7 +365,18 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT 1
+		SELECT NULL AS WorkDate
+			,NULL AS LeaveTypeId
+			,NULL AS LeaveTypeName
+			,NULL AS IsHalfDay
+			,NULL AS FromTime
+			,NULL AS ToTime
+			,NULL AS IsOffOrHoliday
+			,NULL AS ScheduleStatus
+			,NULL AS IsFromAfterday
+			,NULL AS IsToAfterday
+			,NULL AS IsUnpaidLeaveAbsent
+			,NULL AS IsAbsent
 		WHERE 0 = 1
 	END
 
