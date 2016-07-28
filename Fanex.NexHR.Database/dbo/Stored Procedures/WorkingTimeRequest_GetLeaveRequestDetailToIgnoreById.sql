@@ -19,6 +19,21 @@ BEGIN
 		INNER JOIN dbo.LeaveRequest AS lvr WITH (NOLOCK) ON wkr.RequestId = lvr.RequestId
 	WHERE wkr.RequestId = @RequestId
 
+	CREATE TABLE #LeaveRequestDetail (
+		LeaveDate DATE
+		,LeaveTypeId INT
+		,LeaveTypeName NVARCHAR(200)
+		,IsHalfDay BIT
+		,FromTime DATETIME
+		,ToTime DATETIME
+		,IsOffOrHoliday BIT
+		,ScheduleStatus NVARCHAR(MAX)
+		,IsFromAfterday BIT
+		,IsToAfterday BIT
+		,IsUnpaidLeaveAbsent BIT
+		,IsAbsent BIT
+		)
+
 	CREATE TABLE #Absent (
 		WorkDate DATE
 		,EmpId INT
@@ -211,6 +226,20 @@ BEGIN
 
 	IF @LeaveType = 0 -- General Leave
 	BEGIN
+		INSERT INTO #LeaveRequestDetail (
+			LeaveDate
+			,LeaveTypeId
+			,LeaveTypeName
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,IsOffOrHoliday
+			,ScheduleStatus
+			,IsFromAfterday
+			,IsToAfterday
+			,IsUnpaidLeaveAbsent
+			,IsAbsent
+			)
 		SELECT ldt.OnDate AS LeaveDate
 			,lt.LeaveTypeId
 			,lt.[Name] AS LeaveTypeName
@@ -275,6 +304,20 @@ BEGIN
 	END
 	ELSE IF @LeaveType = 2 -- Annual Leave
 	BEGIN
+		INSERT INTO #LeaveRequestDetail (
+			LeaveDate
+			,LeaveTypeId
+			,LeaveTypeName
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,IsOffOrHoliday
+			,ScheduleStatus
+			,IsFromAfterday
+			,IsToAfterday
+			,IsUnpaidLeaveAbsent
+			,IsAbsent
+			)
 		SELECT ab.WorkDate AS LeaveDate
 			,lt.LeaveTypeId
 			,lt.[Name] AS LeaveTypeName
@@ -296,6 +339,9 @@ BEGIN
 				WHEN s.ShiftID IS NOT NULL THEN s.[Name]
 				WHEN ca.IsLeaveDay = 0 THEN 'N/A' END
 				) AS ScheduleStatus
+			,0 AS IsFromAfterday
+			,0 AS IsToAfterday
+			,0 AS IsUnpaidLeaveAbsent
 			,(CASE 
 				WHEN ab.WorkDate IS NOT NULL THEN 1
 				ELSE 0 END
@@ -311,6 +357,20 @@ BEGIN
 	END
 	ELSE IF @LeaveType = 25 -- unpaid leave
 	BEGIN
+		INSERT INTO #LeaveRequestDetail (
+			LeaveDate
+			,LeaveTypeId
+			,LeaveTypeName
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,IsOffOrHoliday
+			,ScheduleStatus
+			,IsFromAfterday
+			,IsToAfterday
+			,IsUnpaidLeaveAbsent
+			,IsAbsent
+			)
 		SELECT (CASE 
 				WHEN upa.WorkDate IS NOT NULL THEN upa.WorkDate
 				ELSE up.WorkDate END
@@ -365,24 +425,43 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT NULL AS WorkDate
+		INSERT INTO #LeaveRequestDetail (
+			LeaveDate
+			,LeaveTypeId
+			,LeaveTypeName
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,IsOffOrHoliday
+			,ScheduleStatus
+			,IsFromAfterday
+			,IsToAfterday
+			,IsUnpaidLeaveAbsent
+			,IsAbsent
+			)
+		SELECT NULL AS LeaveDate
 			,NULL AS LeaveTypeId
 			,NULL AS LeaveTypeName
-			,NULL AS IsHalfDay
+			,0 AS IsHalfDay
 			,NULL AS FromTime
 			,NULL AS ToTime
-			,NULL AS IsOffOrHoliday
+			,0 AS IsOffOrHoliday
 			,NULL AS ScheduleStatus
-			,NULL AS IsFromAfterday
-			,NULL AS IsToAfterday
-			,NULL AS IsUnpaidLeaveAbsent
-			,NULL AS IsAbsent
+			,0 AS IsFromAfterday
+			,0 AS IsToAfterday
+			,0 AS IsUnpaidLeaveAbsent
+			,0 AS IsAbsent
 		WHERE 0 = 1
 	END
+
+	SELECT *
+	FROM #LeaveRequestDetail
 
 	DROP TABLE #Absent
 
 	DROP TABLE #UnpaidLeaveAbsent
 
 	DROP TABLE #UnpaidLeave
+
+	DROP TABLE #LeaveRequestDetail
 END
