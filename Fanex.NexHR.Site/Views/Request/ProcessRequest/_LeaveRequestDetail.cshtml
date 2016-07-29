@@ -26,16 +26,35 @@
                 @if (!item.IsOffOrHoliday)
                 {
                     <td>
-                        @item.LeaveTypeName
-                    </td>
-                    <td>
-                        @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
-                    </td>
-                    <td>
-                        @{
-                            double totalDays = item.ToTime.Subtract(item.FromTime).TotalDays + 1;
+                        @if (item.LeaveTypeId == 0) // general leave
+                        {
+                            <span>-</span>
                         }
-                        @(item.IsHalfDay ? "0.5" : totalDays.ToString())
+                        else
+                        {
+                            @item.LeaveTypeName
+                        }
+                    </td>
+                    <td>
+                        @if (item.LeaveTypeId == 0)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
+                        }
+                    </td>
+                    <td>
+                        @if (item.LeaveTypeId == 0)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            double totalDays = item.ToTime.Subtract(item.FromTime).TotalDays + 1;
+                            @(item.IsHalfDay ? "0.5" : totalDays.ToString())
+                        }
                     </td>
                     <td>
                         @if (item.IsHalfDay)

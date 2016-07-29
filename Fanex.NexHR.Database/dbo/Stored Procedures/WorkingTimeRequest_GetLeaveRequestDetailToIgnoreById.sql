@@ -456,6 +456,7 @@ BEGIN
 
 	SELECT *
 	FROM #LeaveRequestDetail
+	ORDER BY LeaveDate
 
 	DROP TABLE #Absent
 
