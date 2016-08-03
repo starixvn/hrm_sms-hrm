@@ -9,7 +9,7 @@
                     url: _global.root + 'api/employee/getemployees',
                     data: {
                         query: request.term,
-                        enable: false,
+                        enable: true,
                         isDelete: false,
                         $top: 10
                     },

@@ -140,7 +140,7 @@ BEGIN
 		,g.[Name]
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-		LEFT JOIN #EmployeeSupervisor AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
+		INNER JOIN #EmployeeSupervisor AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
 	WHERE ISNULL(e.isDeleted, 0) = 0
 		AND ISNULL(e.[Enabled], 1) = 1
 	ORDER BY e.Code;

@@ -205,7 +205,7 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                EmployeeID = model.EmpId,
+                EmployeeID = model.EmployeeId,
                 JobTitleId = model.JobTitleIds,
                 GroupIds = model.SectionIds
             };
@@ -225,7 +225,7 @@
                     SupervisorId = this.CurrentUser.Id,
                     Year = model.Year,
                     GroupIds = model.SectionIds,
-                    EmployeeId = model.EmpId,
+                    EmployeeId = model.EmployeeId,
                     Status = null
                 };
                 entity = overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
@@ -236,7 +236,7 @@
                 {
                     Year = model.Year,
                     GroupIds = model.SectionIds,
-                    EmployeeId = model.EmpId,
+                    EmployeeId = model.EmployeeId,
                     Status = null
                 };
                 entity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);

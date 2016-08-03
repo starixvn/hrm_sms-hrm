@@ -7,7 +7,7 @@
     {
         public int Year { get; set; }
 
-        public int? EmpId { get; set; }
+        public int? EmployeeId { get; set; }
 
         public IList<Team> Sections { get; set; }
 
