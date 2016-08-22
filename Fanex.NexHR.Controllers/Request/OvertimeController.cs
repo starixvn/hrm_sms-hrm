@@ -121,7 +121,7 @@
                 model.Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus);
                 model.Employee = overtime.Employee.DisplayName;
                 model.Month = requestDate;
-                model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+                model.VerifierAndApprover = GetVerifierApprover(empId);
 
                 ViewBag.WorkingHours = overtime.Employee.WorkingHours;
             }
