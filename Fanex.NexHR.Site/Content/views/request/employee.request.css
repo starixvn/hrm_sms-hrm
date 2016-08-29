@@ -1,4 +1,13 @@
-﻿#dialogProcessRequest form > .formrow > .label {
+﻿#dialogProcessRequest {
+  max-height: 500px;
+}
+
+#dialogProcessRequest form > .formrow select#item_FromTime, #dialogProcessRequest form > .formrow select#item_ToTime {
+  min-width: inherit;
+  max-width: inherit;
+}
+
+#dialogProcessRequest form > .formrow > .label {
   width: auto;
 }
 

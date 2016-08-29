@@ -326,8 +326,14 @@ BEGIN
 					AND lr.LeaveType <> 0 THEN 1
 				ELSE 0 END
 				) AS IsHalfDay
-			,lr.FromDate AS FromTime
-			,lr.ToDate AS ToTime
+			,(CASE 
+				WHEN ldt.FromTime IS NULL THEN lr.FromDate
+				ELSE ldt.FromTime END
+				) AS FromTime
+			,(CASE 
+				WHEN ldt.ToTime IS NULL THEN lr.ToDate
+				ELSE ldt.ToTime END
+				) AS ToTime
 			,(CASE 
 				WHEN ca.IsOffDay = 1
 					OR ca.IsHoliday = 1 THEN 1
@@ -349,6 +355,7 @@ BEGIN
 		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
 			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
+			LEFT JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
 			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
 			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
 			INNER JOIN #Absent AS ab ON ca.EmpId = ab.EmpId
