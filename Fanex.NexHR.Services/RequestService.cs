@@ -811,7 +811,7 @@
 
         private EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (relatedPeople.Requester != null)
+            if (relatedPeople.Requester != null && !emailModel.SendTo.Contains(relatedPeople.Requester.Email))
             {
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
