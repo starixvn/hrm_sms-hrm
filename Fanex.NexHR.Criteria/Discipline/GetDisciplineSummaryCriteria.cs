@@ -19,6 +19,8 @@
 
         public int ApproverId { get; set; }
 
+        public bool IsShowAll { get; set; }
+
         [SpParam(Ignored = true)]
         public string EmployeeName { get; set; }
 

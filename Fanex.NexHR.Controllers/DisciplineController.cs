@@ -74,7 +74,8 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id
+                ApproverId = CurrentUser.Id,
+                IsShowAll = model.IsShowAll
             };
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);

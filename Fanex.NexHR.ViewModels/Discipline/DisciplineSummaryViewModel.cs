@@ -34,5 +34,7 @@
         public bool? HasIgnored { get; set; }
 
         public bool FromSummaryPage { get; set; }
+
+        public bool IsShowAll { get; set; }
     }
 }
