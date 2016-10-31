@@ -156,6 +156,7 @@
                 IsHalfDay = reader.ToBool("IsHalfDay"),
                 FromTime = reader.ToDateTime("FromTime"),
                 ToTime = reader.ToDateTime("ToTime"),
+                LeaveCountDetails = reader.ToString("LeaveCountDetails"),
                 LeaveType = new LeaveType
                 {
                     Id = reader.ToInt("LeaveTypeId"),

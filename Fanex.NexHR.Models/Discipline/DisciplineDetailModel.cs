@@ -47,5 +47,13 @@
         public bool Confirmed { get; set; }
 
         public bool HasConfirmed { get; set; }
+
+        public bool IsWeekend
+        {
+            get
+            {
+                return WorkDate.DayOfWeek == DayOfWeek.Saturday || WorkDate.DayOfWeek == DayOfWeek.Sunday;
+            }
+        }
     }
 }

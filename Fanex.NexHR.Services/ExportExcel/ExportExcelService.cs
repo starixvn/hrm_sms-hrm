@@ -475,29 +475,7 @@
             switch (request.RequestType.Id)
             {
                 case (int)RequestType.Leave:
-                    if (request.TotalDays > 1)
-                    {
-                        detail = string.Format(_MsgLeave, Convert.ToInt32(request.TotalDays), date);
-                    }
-                    else if (request.TotalDays == 1)
-                    {
-                        detail = string.Format(_MsgLeaveOneDay, date);
-                    }
-                    else if ((request.TotalDays - (decimal)0.5) == 0)
-                    {
-                        // 0.5 day
-                        detail = string.Format(_MsgLeaveHalfDay, date, request.FromDate.ToString("HH:mm"), request.ToDate.ToString("HH:mm"));
-                    }
-                    else
-                    {
-                        detail = string.Format(
-                            _MsgLeaveDuringWorking,
-                            date,
-                            request.FromDate.ToString("HH:mm"),
-                            request.ToDate.ToString("HH:mm"),
-                            (request.ToDate - request.FromDate).TotalMinutes);
-                    }
-
+                    detail = GetMessageForLeave(request);
                     break;
 
                 case (int)RequestType.ChangeShift:
@@ -506,7 +484,7 @@
 
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    detail = string.Format(_MsgCheckInOut, request.RequestedDate.ToString("HH:mm"), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    detail = string.Format(_MsgCheckInOut, request.RequestedDate.ToShortTime(), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
 
                 case (int)RequestType.LateIn:
@@ -518,25 +496,7 @@
                     break;
 
                 case (int)RequestType.Overtime:
-                    if (request.IsOvertimeHours)
-                    {
-                        detail = string.Format(
-                            _MsgOvertimeHours,
-                            request.FromDate.ToDateMonthYearFormatedDate(),
-                            request.FromDate.ToString("HH:mm"),
-                            request.ToDate.ToString("HH:mm"),
-                            request.TotalDays.ToString("0.#"),
-                            new OvertimeTypeModel { Id = request.OvertimeType }.Name);
-                    }
-                    else
-                    {
-                        detail = string.Format(
-                            _MsgOvertimeShift,
-                            request.FromDate.ToDateMonthYearFormatedDate(),
-                            request.FromShift != null ? request.FromShift.Name : string.Empty,
-                            new OvertimeTypeModel { Id = request.OvertimeType }.Name);
-                    }
-
+                    GetMessageForOvertime(request);
                     break;
 
                 case (int)RequestType.KeepInView:
@@ -545,6 +505,95 @@
             }
 
             return detail;
+        }
+
+        private string GetMessageForLeave(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+
+            if (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
+            {
+                messageDetail = GetMessageForGeneralLeave(request);
+            }
+            else
+            {
+                messageDetail = GetMessageForOtherLeave(request);
+            }
+
+            return messageDetail;
+        }
+
+        private string GetMessageForGeneralLeave(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
+
+            if (request.TotalDays >= 1)
+            {
+                messageDetail = string.Format("{0} ({1})", leaveDate, request.LeaveCountDetails);
+            }
+            else if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                messageDetail = string.Format(
+                "{0} ({1}-{2}) ({3})",
+                leaveDate,
+                request.FromTime.ToShortTime(),
+                request.ToTime.ToShortTime(),
+                request.LeaveCountDetails);
+            }
+
+            return messageDetail;
+        }
+
+        private string GetMessageForOtherLeave(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
+
+            if (request.TotalDays > 1)
+            {
+                messageDetail = string.Format(_MsgLeave, request.TotalDays, leaveDate);
+            }
+            else if (request.TotalDays == 1)
+            {
+                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
+            }
+            else if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                messageDetail = string.Format(
+                _MsgLeaveHalfDay, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+            }
+            else
+            {
+                messageDetail = string.Format(_MsgLeaveDuringWorking, leaveDate);
+            }
+
+            return messageDetail;
+        }
+
+        private static string GetMessageForOvertime(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            if (request.IsOvertimeHours)
+            {
+                messageDetail = string.Format(
+                    _MsgOvertimeHours,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromDate.ToShortTime(),
+                    request.ToDate.ToShortTime(),
+                    request.TotalDays.ToString("0.#"),
+                    new OvertimeTypeModel { Id = request.OvertimeType }.Name);
+            }
+            else
+            {
+                messageDetail = string.Format(
+                    _MsgOvertimeShift,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromShift != null ? request.FromShift.Name : string.Empty,
+                    new OvertimeTypeModel { Id = request.OvertimeType }.Name);
+            }
+
+            return messageDetail;
         }
     }
 }

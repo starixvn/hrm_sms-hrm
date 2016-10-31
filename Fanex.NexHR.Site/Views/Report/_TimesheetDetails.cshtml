@@ -26,27 +26,15 @@
             foreach (EmployeeAttendanceModel item in Model)
             {
                 index++;
-                var trClass = string.Empty;
-                if (item.IsNotWork != 0)
-                {
-                    trClass = "offdate";
-                }
-                else if (item.ShiftId != 0)
-                {
-                }
-                else
-                {
-                    trClass = "noshift";
-                }
 
-                <tr class="@trClass">
+                <tr>
                     <td>@index</td>
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">
                         <a href="@Url.Action("timerecord", "report", new { 
-                                FromDate = item.AttendanceDate.ToDateMonthYearFormatedDate(),
+                                FromDate = item.AttendanceDate.Value.ToDateMonthYearFormatedDate(),
                                 ToDate = item.AttendanceDate.Value.AddDays(1).ToDateMonthYearFormatedDate() })"
                            title="Link to time records">
-                            @item.AttendanceDate.ToDateMonthYearFormatedDate()
+                            @item.AttendanceDate.Value.ToDayOfWeekFormatedDate()
                         </a>
                     </td>
                     <td class="tooltip" title="@item.FullName">@item.NickName</td>

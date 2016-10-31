@@ -1,5 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -14,14 +22,6 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class RequestService : BaseService, IRequestService
     {
@@ -112,23 +112,28 @@
                     message = GetMessageForLeave(request);
                     msg.Append(message);
                     break;
+
                 case (int)RequestType.ChangeShift:
                     message = GetMessageForChangeShift(request);
                     msg.Append(message);
                     break;
+
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
                     var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
                     msg.AppendFormat(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
                     break;
+
                 case (int)RequestType.LateIn:
                     var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
                     break;
+
                 case (int)RequestType.EarlyOut:
                     var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
                     msg.AppendFormat(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
                     break;
+
                 case (int)RequestType.KeepInView:
                     if ((double)request.TotalDays == 0.5)
                     {
@@ -403,24 +408,14 @@
         private static string GetMessageForLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
-            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
 
-            if (request.TotalDays > 1)
+            if (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
             {
-                messageDetail = string.Format(_MsgLeave, request.TotalDays, leaveDate);
-            }
-            else if (request.TotalDays == 1)
-            {
-                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
-            }
-            else if ((request.TotalDays - (decimal)0.5) == 0)
-            {
-                messageDetail = string.Format(
-                _MsgLeaveHalfDay, GetMessageDateString(request.FromDate, request.ToDate), request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+                messageDetail = GetMessageForGeneralLeave(request);
             }
             else
             {
-                messageDetail = string.Format(_MsgLeavePublicHoliday, leaveDate);
+                messageDetail = GetMessageForOtherLeave(request);
             }
 
             return messageDetail;
@@ -441,6 +436,54 @@
             {
                 var date = GetMessageDateString(request.FromDate, request.ToDate);
                 messageDetail = string.Format(_MsgChangeShift, date);
+            }
+
+            return messageDetail;
+        }
+
+        private static string GetMessageForGeneralLeave(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
+
+            if (request.TotalDays >= 1)
+            {
+                messageDetail = string.Format("<span class='req leave'>{0}</span> {1}", leaveDate, request.LeaveCountDetails);
+            }
+            else if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                messageDetail = string.Format(
+                "<span class='req leave'>{0} ({1}-{2})</span> {3}",
+                leaveDate,
+                request.FromTime.ToShortTime(),
+                request.ToTime.ToShortTime(),
+                request.LeaveCountDetails);
+            }
+
+            return messageDetail;
+        }
+
+        private static string GetMessageForOtherLeave(RequestEntity request)
+        {
+            var messageDetail = string.Empty;
+            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
+
+            if (request.TotalDays > 1)
+            {
+                messageDetail = string.Format(_MsgLeave, request.TotalDays, leaveDate);
+            }
+            else if (request.TotalDays == 1)
+            {
+                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
+            }
+            else if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                messageDetail = string.Format(
+                _MsgLeaveHalfDay, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+            }
+            else
+            {
+                messageDetail = string.Format(_MsgLeavePublicHoliday, leaveDate);
             }
 
             return messageDetail;

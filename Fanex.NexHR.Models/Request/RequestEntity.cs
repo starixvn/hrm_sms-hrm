@@ -59,6 +59,8 @@
 
         public int ReworkCount { get; set; }
 
+        public string LeaveCountDetails { get; set; }
+
         // ChangeShift
         public Shift FromShift { get; set; }
 

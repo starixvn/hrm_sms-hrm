@@ -26,10 +26,6 @@ table.data td.dateColumn
     text-align: left;
 }
 
-table.data td.weekend
-{
-}
-
 .fontbold
 {
     font-weight: bold;

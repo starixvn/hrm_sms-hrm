@@ -43,7 +43,7 @@
                 <tr>
                     <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.Employee.GroupName</td>
-                    <td>@item.WorkDate.ToDateMonthYearFormatedDate()</td>
+                    <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
                     <td>@item.ShiftName</td>
                     <td>
                         @if (item.CheckIn.HasValue)
