@@ -571,7 +571,7 @@
             return messageDetail;
         }
 
-        private static string GetMessageForOvertime(RequestEntity request)
+        private string GetMessageForOvertime(RequestEntity request)
         {
             var messageDetail = string.Empty;
             if (request.IsOvertimeHours)
