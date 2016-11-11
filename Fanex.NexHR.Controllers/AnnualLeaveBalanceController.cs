@@ -299,7 +299,7 @@
             {
                 EmpID = empId,
                 ExcludedRequestTrans = false,
-                Year = DateTime.Now.Year
+                Year = year
             };
 
             return employeeService.GetAnnualLeaveTransactions(criteria);
