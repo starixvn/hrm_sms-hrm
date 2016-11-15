@@ -298,7 +298,7 @@
             var criteria = new GetAnnualLeaveTransactionCriteria
             {
                 EmpID = empId,
-                ExcludedRequestTrans = false,
+                ExcludedRequestTrans = excludedRequest,
                 Year = year
             };
 
