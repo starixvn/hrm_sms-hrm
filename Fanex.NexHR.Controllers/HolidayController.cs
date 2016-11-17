@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
@@ -7,13 +10,16 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Web.Mvc;
 
     public class HolidayController : BaseController
     {
         private readonly IHolidayService holidayService;
         private readonly ICommandService commandService;
+
+        public HolidayController()
+            : this(null, null)
+        {
+        }
 
         public HolidayController(IHolidayService holidayService, ICommandService commandService)
         {
@@ -21,29 +27,26 @@
             this.commandService = commandService ?? new CommandService();
         }
 
-        public HolidayController()
-            : this(null, null)
-        {
-        }
-
         [HttpGet]
         [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
-            var criteria = new GetHolidaysCriteria { Year = year ?? DateTime.Now.Year };
+            year = year.HasValue ? year.Value : DateTime.Now.Year;
 
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Host);
-            ViewBag.Year = criteria.Year;
+            ViewBag.Year = year.Value;
 
-            return View(holidayService.GetByYear(criteria));
+            IList<Holiday> holidays = holidayService.GetByYear(year.Value);
+
+            return View(holidays);
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Edit(int id)
         {
-            var criteria = new GetHolidayByIdCriteria { Id = id };
+            Holiday holiday = holidayService.GetById(id);
 
-            return View(holidayService.GetById(criteria));
+            return View(holiday);
         }
 
         [HttpPost]
@@ -82,10 +85,10 @@
         [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create()
         {
-            var holiday = new Holiday 
-            { 
-                FromDate = DateTime.Now, 
-                ToDate = DateTime.Now 
+            var holiday = new Holiday
+            {
+                FromDate = DateTime.Now,
+                ToDate = DateTime.Now
             };
 
             return View(holiday);
@@ -127,11 +130,11 @@
         [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteHolidayCriteria 
-            { 
-                Id = id, 
-                ModifiedBy = CurrentUser.Id, 
-                ModifiedDate = DateTime.Now 
+            var criteria = new DeleteHolidayCriteria
+            {
+                Id = id,
+                ModifiedBy = CurrentUser.Id,
+                ModifiedDate = DateTime.Now
             };
             var result = commandService.Delete(criteria);
             return Json(result);

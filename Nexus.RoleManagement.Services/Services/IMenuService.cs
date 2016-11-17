@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-
-namespace Nexus.RoleManagement.Services
+﻿namespace Nexus.RoleManagement.Services
 {
+    using System.Collections.Generic;
+
     public interface IMenuService
     {
         IEnumerable<MenuModel> GetMenusByUserId(int userId);
 
         IEnumerable<MenuViewModel> GetMenus();
 
-        Result Insert(InsertMenuCriteria criteria);
-
         MenuModel GetMenusById(int id);
+
+        Result Insert(InsertMenuCriteria criteria);
 
         Result Update(UpdateMenuCriteria criteria);
 

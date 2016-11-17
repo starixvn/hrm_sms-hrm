@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Nexus.RoleManagement.Services
+﻿namespace Nexus.RoleManagement.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class MenuService : BaseService, IMenuService
     {
-        private readonly IMenuRepository _menuRepository;
+        private readonly IMenuRepository menuRepository;
 
         public MenuService()
             : this(null)
@@ -14,7 +14,7 @@ namespace Nexus.RoleManagement.Services
 
         public MenuService(IMenuRepository menuRepository)
         {
-            _menuRepository = menuRepository ?? new MenuRepository();
+            this.menuRepository = menuRepository ?? new MenuRepository();
         }
 
         public IEnumerable<MenuModel> GetMenusByUserId(int userId)
@@ -34,23 +34,12 @@ namespace Nexus.RoleManagement.Services
         {
             var criteria = new GetMenusCriteria();
             IEnumerable<MenuViewModel> menus = new List<MenuViewModel>();
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
-                menus = _menuRepository.GetMenus(criteria);
+                menus = menuRepository.GetMenus(criteria);
             }
 
             return menus;
-        }
-
-        public Result Insert(InsertMenuCriteria criteria)
-        {
-            var result = new Result();
-            if (criteria.IsValid())
-            {
-                result = Repository.Insert(criteria);
-            }
-
-            return result;
         }
 
         public MenuModel GetMenusById(int id)
@@ -59,16 +48,27 @@ namespace Nexus.RoleManagement.Services
             var menu = new MenuModel();
             if (criteria.IsValid())
             {
-                return GetDataEntity<MenuModel>(criteria);
+                menu = GetDataEntity<MenuModel>(criteria);
             }
 
-            return null;
+            return menu;
+        }
+
+        public Result Insert(InsertMenuCriteria criteria)
+        {
+            var result = new Result();
+            if (criteria != null && criteria.IsValid())
+            {
+                result = Repository.Insert(criteria);
+            }
+
+            return result;
         }
 
         public Result Update(UpdateMenuCriteria criteria)
         {
             var result = new Result();
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 result = Repository.Update(criteria);
             }
@@ -80,7 +80,7 @@ namespace Nexus.RoleManagement.Services
         {
             var criteria = new DeleteMenuCriteria { MenuId = id };
             var result = new Result();
-            if (criteria.IsValid())
+            if (criteria != null && criteria.IsValid())
             {
                 result = Repository.Delete(criteria);
             }

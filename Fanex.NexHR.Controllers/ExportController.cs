@@ -134,8 +134,6 @@
 
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
         {
-            string fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
             var criteria = new GetEmployeeAttendanceCriteria()
             {
                 SupervisorId = model.SupervisorId,

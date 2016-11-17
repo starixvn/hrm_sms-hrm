@@ -799,7 +799,7 @@
             {
                 if (roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin))
                 {
-                    result = BuildSARole(roles);
+                    result = BuildSARole();
                 }
                 else if (roles.Any(i => i.RoleId == (int)RoleSystem.DisciplineManager))
                 {
@@ -829,7 +829,7 @@
             return string.Join(",", roleIds);
         }
 
-        private string BuildSARole(IList<SystemRoleModel> roles)
+        private string BuildSARole()
         {
             return string.Format(
                 "{0},{1},{2},{3},{4},{5},{6}",

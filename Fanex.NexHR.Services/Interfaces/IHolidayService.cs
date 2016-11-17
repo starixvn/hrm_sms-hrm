@@ -1,13 +1,12 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using Fanex.NexHR.Criteria.Holidays;
-    using Fanex.NexHR.Models;
     using System.Collections.Generic;
+    using Fanex.NexHR.Models;
 
     public interface IHolidayService
     {
-        Holiday GetById(GetHolidayByIdCriteria holidayId);
+        Holiday GetById(int holidayId);
 
-        IList<Holiday> GetByYear(GetHolidaysCriteria criteria);
+        IList<Holiday> GetByYear(int year);
     }
 }

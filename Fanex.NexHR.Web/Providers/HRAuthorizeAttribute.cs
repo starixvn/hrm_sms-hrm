@@ -1,11 +1,11 @@
-﻿using Fanex.NexHR.Models;
-using Nexus.RoleManagement.Services;
-using System;
-using System.Web;
-using System.Web.Mvc;
-
-namespace Fanex.NexHR.Web.Providers
+﻿namespace Fanex.NexHR.Web.Providers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Models;
+    using Nexus.RoleManagement.Services;
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class HRAuthorizeAttribute : AuthorizeAttribute
     {

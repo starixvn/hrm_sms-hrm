@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -27,11 +26,10 @@
         private readonly IShiftService shiftService;
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
-        private readonly ILeaveTypeService leaveTypeService;
         private readonly ICommandService commandService;
 
         public RequestController()
-            : this(null, null, null, null, null, null)
+            : this(null, null, null, null, null)
         {
         }
 
@@ -40,14 +38,12 @@
             IShiftService shiftService,
             IRequestService requestService,
             ITeamService teamService,
-            ILeaveTypeService leaveTypeService,
             ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.shiftService = shiftService ?? new ShiftService();
             this.requestService = requestService ?? new RequestService();
             this.teamService = teamService ?? new TeamService();
-            this.leaveTypeService = leaveTypeService ?? new LeaveTypeService();
             this.commandService = commandService ?? new CommandService();
         }
 
@@ -215,10 +211,6 @@
                             break;
 
                         case (int)RequestType.Leave:
-                            var criteria = new GetLeaveTypeCriteria()
-                            {
-                                ExcludeNotShown = true
-                            };
                             model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                             break;
                     }

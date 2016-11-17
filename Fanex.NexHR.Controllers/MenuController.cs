@@ -1,13 +1,14 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System.Web.Mvc;
 
     public class MenuController : BaseController
     {
-        private IMenuService _menuService;
-        private IFunctionService _functionService;
+        private IMenuService menuService;
+        private IFunctionService functionService;
 
         public MenuController()
             : this(null, null)
@@ -16,15 +17,15 @@
 
         public MenuController(IMenuService menuService, IFunctionService functionService)
         {
-            _menuService = menuService ?? new MenuService();
-            _functionService = functionService ?? new FunctionService();
+            this.menuService = menuService ?? new MenuService();
+            this.functionService = functionService ?? new FunctionService();
         }
 
         [HttpGet]
         [HRAuthorize(Policy.Read, FunctionKey.MenuManagement)]
         public ActionResult Index()
         {
-            var menus = this._menuService.GetMenus();
+            IEnumerable<MenuViewModel> menus = menuService.GetMenus();
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Host);
 
             return View(menus);
@@ -34,8 +35,8 @@
         [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Create()
         {
-            ViewBag.Menus = this._menuService.GetMenus();
-            ViewBag.Functions = this._functionService.GetFunctions();
+            ViewBag.Menus = menuService.GetMenus();
+            ViewBag.Functions = functionService.GetFunctions();
 
             return View();
         }
@@ -55,7 +56,7 @@
                     ParentId = menu.ParentId == 0 ? null : menu.ParentId,
                     Text = menu.Text
                 };
-                var result = this._menuService.Insert(criteria);
+                var result = menuService.Insert(criteria);
                 if (result.IsSuccessful)
                 {
                     return RedirectToAction("Index");
@@ -69,9 +70,9 @@
         [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Edit(int id)
         {
-            var menu = this._menuService.GetMenusById(id);
-            ViewBag.Menus = this._menuService.GetMenus();
-            ViewBag.Functions = this._functionService.GetFunctions();
+            MenuModel menu = menuService.GetMenusById(id);
+            ViewBag.Menus = menuService.GetMenus();
+            ViewBag.Functions = functionService.GetFunctions();
 
             return View(menu);
         }
@@ -93,7 +94,7 @@
                     MenuId = menu.MenuId,
                     IsActive = menu.IsActive
                 };
-                var result = this._menuService.Update(criteria);
+                var result = menuService.Update(criteria);
                 if (result.IsSuccessful)
                 {
                     return RedirectToAction("Index");
@@ -106,7 +107,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
         public JsonResult Delete(int id)
         {
-            var result = this._menuService.Delete(id);
+            var result = menuService.Delete(id);
 
             return Json(result);
         }

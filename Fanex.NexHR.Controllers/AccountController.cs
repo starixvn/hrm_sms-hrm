@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.Country;
@@ -12,29 +15,22 @@
     using Fanex.NexHR.ViewModels.Employee;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class AccountController : BaseController
     {
-        private readonly ILookupDataService lookupDataService;
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
         public AccountController()
-            : this(null, null, null)
+            : this(null, null)
         {
         }
 
         public AccountController(
             IEmployeeService employeeService,
-            ILookupDataService lookupDataService,
             ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
             this.commandService = commandService ?? new CommandService();
         }
 
@@ -183,14 +179,14 @@
 
             ViewBag.Genders = new List<SelectListItem>()
             {
-                new SelectListItem 
+                new SelectListItem
                 {
                     Text = Labels.Female,
                     Value = "0"
                 },
-                new SelectListItem 
+                new SelectListItem
                 {
-                    Text = Labels.Male, 
+                    Text = Labels.Male,
                     Value = "1"
                 }
             };
