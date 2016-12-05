@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace Fanex.NexHR.Web.Providers
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class HRAuthorizeAttribute : AuthorizeAttribute
+    public sealed class HRAuthorizeAttribute : AuthorizeAttribute
     {
         public HRAuthorizeAttribute(Policy policy, params string[] functionKey)
         {
@@ -15,9 +15,9 @@ namespace Fanex.NexHR.Web.Providers
             FunctionKey = functionKey;
         }
 
-        private Policy Policy { get; set; }
+        public Policy Policy { get; set; }
 
-        private string[] FunctionKey { get; set; }
+        public string[] FunctionKey { get; set; }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {

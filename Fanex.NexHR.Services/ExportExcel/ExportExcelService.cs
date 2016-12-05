@@ -141,6 +141,7 @@
             return hssfworkbook;
         }
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Ok.")]
         public HSSFWorkbook ExportEmployeeOvertimeRecord(IList<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
         {
             int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;

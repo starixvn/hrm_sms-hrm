@@ -189,19 +189,5 @@
 
             return hssfworkbook;
         }
-
-        private void MergeCell(IRow row, int firstRow, int lastRow)
-        {
-            var cra1 = new CellRangeAddress(firstRow, lastRow, 0, 0);
-            var cra2 = new CellRangeAddress(firstRow, lastRow, 1, 1);
-            var cra3 = new CellRangeAddress(firstRow, lastRow, 2, 2);
-            var cra4 = new CellRangeAddress(firstRow, lastRow, 3, 3);
-            var cra5 = new CellRangeAddress(firstRow, lastRow, 4, 4);
-            row.Sheet.AddMergedRegion(cra1);
-            row.Sheet.AddMergedRegion(cra2);
-            row.Sheet.AddMergedRegion(cra3);
-            row.Sheet.AddMergedRegion(cra4);
-            row.Sheet.AddMergedRegion(cra5);
-        }
     }
 }

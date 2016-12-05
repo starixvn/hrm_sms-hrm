@@ -159,6 +159,7 @@
             return record;
         }
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Ok.")]
         private void FillContentRowFooterReport(IList<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
         {
             int month = 1;

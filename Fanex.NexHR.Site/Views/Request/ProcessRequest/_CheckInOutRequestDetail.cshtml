@@ -42,7 +42,7 @@
                 @{
                     var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
                 }
-                <input type="radio" data-workdate="@Model.RequestedDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                <input type="radio" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
             </td>
             <td class="violationRecorded">
                 <input type="radio" />
