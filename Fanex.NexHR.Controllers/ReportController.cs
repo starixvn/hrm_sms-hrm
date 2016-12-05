@@ -34,11 +34,10 @@
         private readonly IReportService reportService;
         private readonly ITeamService teamService;
         private readonly IExportExcelService exportExcelService;
-        private readonly IEmployeeService employeeService;
         private readonly ILookupDataService lookupDataService;
 
         public ReportController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null)
         {
         }
 
@@ -46,13 +45,11 @@
             IReportService reportSevice = null,
             ITeamService teamService = null,
             IExportExcelService exportExcelService = null,
-            IEmployeeService employeeService = null,
             ILookupDataService lookupDataService = null)
         {
             this.reportService = reportSevice ?? new ReportService();
             this.teamService = teamService ?? new TeamService();
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            this.employeeService = employeeService ?? new EmployeeService();
             this.lookupDataService = lookupDataService ?? new LookupDataService();
         }
 

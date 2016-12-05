@@ -9,15 +9,30 @@
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class HRAuthorizeAttribute : AuthorizeAttribute
     {
+        private Policy policy;
+        private string[] functionKey;
+
         public HRAuthorizeAttribute(Policy policy, params string[] functionKey)
         {
-            Policy = policy;
-            FunctionKey = functionKey;
+            this.policy = policy;
+            this.functionKey = functionKey;
         }
 
-        public Policy Policy { get; set; }
+        public Policy Policy
+        {
+            get
+            {
+                return policy;
+            }
+        }
 
-        public string[] FunctionKey { get; set; }
+        public string[] FunctionKey
+        {
+            get
+            {
+                return functionKey;
+            }
+        }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
