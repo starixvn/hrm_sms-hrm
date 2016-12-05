@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
@@ -21,7 +16,14 @@
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
 
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class OvertimeController : BaseController
     {
         private readonly ILookupDataService lookupDataService;

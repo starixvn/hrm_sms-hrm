@@ -30,6 +30,7 @@
     using Simplicode.Imaging.Filters;
     using CommandResult = Models.CommandResult;
 
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class EmployeeController : BaseController
     {
         private readonly ITeamService teamService;

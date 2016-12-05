@@ -28,6 +28,7 @@
     using NPOI.HSSF.UserModel;
 
     [ValidateInput(false)]
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class ReportController : BaseController
     {
         private readonly IReportService reportService;
