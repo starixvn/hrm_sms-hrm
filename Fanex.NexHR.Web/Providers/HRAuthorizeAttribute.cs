@@ -49,9 +49,9 @@
             if (isAuthorized)
             {
                 var user = (UserLoginModel)httpContext.Session["CurrentUser"];
-                foreach (var functionKey in FunctionKey)
+                foreach (var function in FunctionKey)
                 {
-                    var hasPermission = user.HasPermission(functionKey, Policy);
+                    var hasPermission = user.HasPermission(function, Policy);
                     if (hasPermission)
                     {
                         return hasPermission;
