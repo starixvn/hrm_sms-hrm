@@ -409,7 +409,7 @@
         {
             var messageDetail = string.Empty;
 
-            if (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
+            if (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
             {
                 messageDetail = GetMessageForGeneralLeave(request);
             }
