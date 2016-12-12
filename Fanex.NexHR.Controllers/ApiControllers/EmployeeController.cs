@@ -75,6 +75,7 @@
             switch (leaveTypeId)
             {
                 case Constants.MaternityLeave:
+                case Constants.CompensationLeave:
                     numberDays = (toDate - fromDate).Days + 1;
                     break;
                 case Constants.UnpaidLeave:

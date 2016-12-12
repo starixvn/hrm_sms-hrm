@@ -20,6 +20,8 @@
 
         public const int WeddingLeave = 6;
 
+        public const int CompensationLeave = 27;
+
         public const int NumberMonthsInFutureCanLeaveRequest = 4;
 
         public const string PassWordAdmin = "@dm!nhrms";
