@@ -290,7 +290,14 @@
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             request.CurrentUserId = CurrentUser.Id;
-            request.Requests = requestList;
+            request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
+        }
+
+        private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
+        {
+            return requests.OrderByDescending(t => (t.Status.Id == (byte)CurrentRequestStatus.Pending
+                && (t.ApprovedBy.Id == CurrentUser.Id || t.VerifiedBy.Id == CurrentUser.Id))
+                || (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == CurrentUser.Id)).ToList();
         }
 
         private IList<Team> GetGroupBySupervisor()
