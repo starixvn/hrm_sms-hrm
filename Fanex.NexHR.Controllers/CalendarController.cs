@@ -118,12 +118,12 @@
         {
             var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
             {
-                SupervisorID = CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupIds,
                 JobTitleId = jobTitles,
-                EmpID = employeeId
+                EmpId = employeeId
             };
             IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
             var scheduleArranges = new List<ScheduleArrangeViewModel>();
@@ -170,7 +170,7 @@
         {
             var getShiftCriteria = new GetShiftStatisticCriteria()
             {
-                SupervisorID = CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupIds,
@@ -230,7 +230,7 @@
                 WorkDate = workDate,
                 ShiftId = shiftId,
                 EmployeeId = employeeId,
-                SupervisorID = CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
                 TeamIds = teamIds,
                 IsLocal = isLocal
@@ -424,7 +424,7 @@
         {
             foreach (HalfDayOff item in halfDayOff)
             {
-                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == item.ID))
+                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == item.Id))
                 {
                     for (int i = 0; i < employee.WorkingDays.Count; i++)
                     {

@@ -5,9 +5,9 @@
 
     public class GetWorkingCalendarsForShiftArrangeCriteria : CriteriaBase
     {
-        public int SupervisorID { get; set; }
+        public int SupervisorId { get; set; }
 
-        public int? EmpID { get; set; }
+        public int? EmpId { get; set; }
 
         public DateTime Fromtime { get; set; }
 
@@ -26,7 +26,7 @@
 
         public override bool IsValid()
         {
-            return SupervisorID > 0;
+            return SupervisorId > 0;
         }
     }
 }

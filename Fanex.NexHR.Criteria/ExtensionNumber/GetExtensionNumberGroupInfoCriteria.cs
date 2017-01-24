@@ -6,7 +6,7 @@
     {
         public bool? IsInternal { get; set; }
 
-        public int? GroupID { get; set; }
+        public int? GroupId { get; set; }
 
         public override string GetSettingKey()
         {

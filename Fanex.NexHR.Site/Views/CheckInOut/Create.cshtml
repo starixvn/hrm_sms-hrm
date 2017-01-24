@@ -16,11 +16,9 @@
 }
 <h2>@ViewBag.Title</h2>
 <div class="bunhat container_24">
-    @{ Html.EnableClientValidation(false); }
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary()
-
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
         <div class="success">@Messages.RequestCreated</div>
@@ -66,7 +64,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Employee)*
+                @Html.LabelFor(model => model.Employee)
             </div>
             <div class="input">
                 @Html.EditorFor(model => model.Employee)
@@ -115,7 +113,7 @@
 
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierId)*
+                @Html.LabelFor(model => model.VerifierId)
             </div>
             <div class="input">
                 @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
@@ -131,7 +129,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.ApproverId)*
+                @Html.LabelFor(model => model.ApproverId)
             </div>
             <div class="input">
                 @if (Model.VerifierAndApprover.Approvers.Count() > 1)

@@ -25,6 +25,7 @@
         public int EmployeeId { get; set; }
 
         [AllowHtml]
+        [Required(ErrorMessage = "The Remark field is required.")]
         public string Remark { get; set; }
 
         [Required]
@@ -35,11 +36,11 @@
         public short RequestType { get; set; }
 
         [Display(Name = "Verified by")]
-        [Required(ErrorMessage = "The Verifier field is required.")]
+        [Required(ErrorMessage = "The Verified by field is required.")]
         public int? VerifierId { get; set; }
 
         [Display(Name = "Approved by")]
-        [Required(ErrorMessage = "The Approver field is required.")]
+        [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
 
         public decimal TotalRequestInMonth { get; set; }

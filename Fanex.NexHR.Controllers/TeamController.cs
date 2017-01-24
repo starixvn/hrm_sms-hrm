@@ -170,7 +170,7 @@
         {
             var criteria = new DeleteGroupCriteria
             {
-                GroupID = id,
+                GroupId = id,
                 ModifiedBy = CurrentUser.Id
             };
             CommandResult result = commandService.Delete(criteria);

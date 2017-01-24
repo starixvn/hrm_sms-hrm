@@ -566,7 +566,8 @@
             }
             else
             {
-                messageDetail = string.Format(_MsgLeaveDuringWorking, leaveDate);
+                var duration = (request.ToTime - request.FromTime).Hours;
+                messageDetail = string.Format(_MsgLeaveDuringWorking, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime(), duration);
             }
 
             return messageDetail;

@@ -1512,4 +1512,13 @@
   <data name="ViolationRecorded" xml:space="preserve">
     <value>Violation Recorded</value>
   </data>
+  <data name="MinuteFormat" xml:space="preserve">
+    <value>{0}'</value>
+  </data>
+  <data name="SelectMarriageStatus" xml:space="preserve">
+    <value>--Select Marriage Status--</value>
+  </data>
+  <data name="TimeFormat" xml:space="preserve">
+    <value>{0}:{1}</value>
+  </data>
 </root>

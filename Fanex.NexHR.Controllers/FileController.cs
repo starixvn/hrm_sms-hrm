@@ -8,7 +8,7 @@
     public class FileController : BaseController
     {
         [HttpPost]
-        public string UploadFile(IEnumerable<HttpPostedFileBase> files, int categoryID, int overRide)
+        public string UploadFile(IEnumerable<HttpPostedFileBase> files, int categoryId, bool isOverride)
         {
             string pathAttachFiles = string.Empty;
 
@@ -19,10 +19,10 @@
                 if (file.ContentLength > 0)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    var dir = "~/file/uploads/" + categoryID;
+                    var dir = "~/file/uploads/" + categoryId;
                     pathAttach = dir + "/" + fileName;
 
-                    if (overRide == 0)
+                    if (isOverride)
                     {
                         while (System.IO.File.Exists(Server.MapPath(pathAttach)))
                         {

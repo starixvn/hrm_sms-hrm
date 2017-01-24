@@ -11,7 +11,7 @@ $(document).ready(function () {
             }
             else {
                 $("#model-state-error").show();
-                $('input[type=submit]').hide();
+                //$('input[type=submit]').hide();
             }
         });
     }

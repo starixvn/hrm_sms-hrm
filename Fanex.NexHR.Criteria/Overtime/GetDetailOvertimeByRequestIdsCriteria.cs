@@ -4,7 +4,7 @@
 
     public class GetDetailOvertimeByRequestIdsCriteria : CriteriaBase
     {
-        public string ListRequestID { get; set; }
+        public string ListRequestId { get; set; }
 
         public override string GetSettingKey()
         {

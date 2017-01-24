@@ -1,11 +1,13 @@
 ﻿namespace Nexus.RoleManagement.Services
 {
+    using Fanex.NexHR.Resources;
+
     public class Result
     {
         public Result()
         {
             Code = 1;
-            Message = "Invalid Data";
+            Message = Messages.InvalidInputData;
         }
 
         public int Code { get; set; }

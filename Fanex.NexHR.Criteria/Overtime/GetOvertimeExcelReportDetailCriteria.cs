@@ -9,8 +9,8 @@
 
         public DateTime ToDate { get; set; }
 
-        [SpParam(SqlParamName = "EmpID")]
-        public int? EmployeeID { get; set; }
+        [SpParam(SqlParamName = "EmpId")]
+        public int? EmployeeId { get; set; }
 
         public string JobTitleId { get; set; }
 

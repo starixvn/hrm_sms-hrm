@@ -13,7 +13,7 @@
 
         public string Status { get; set; }
 
-        public int ExcludedEmpID { get; set; }
+        public int ExcludedEmpId { get; set; }
 
         public override string GetSettingKey()
         {

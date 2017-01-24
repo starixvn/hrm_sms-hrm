@@ -2275,6 +2275,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}&apos;.
+        /// </summary>
+        public static string MinuteFormat {
+            get {
+                return ResourceManager.GetString("MinuteFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing CheckIn.
         /// </summary>
         public static string MissingCheckIn {
@@ -3355,6 +3364,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to --Select Marriage Status--.
+        /// </summary>
+        public static string SelectMarriageStatus {
+            get {
+                return ResourceManager.GetString("SelectMarriageStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to --Select a Verifier--.
         /// </summary>
         public static string SelectVerifier {
@@ -3639,6 +3657,15 @@ namespace Fanex.NexHR.Resources {
         public static string Time {
             get {
                 return ResourceManager.GetString("Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}:{1}.
+        /// </summary>
+        public static string TimeFormat {
+            get {
+                return ResourceManager.GetString("TimeFormat", resourceCulture);
             }
         }
         

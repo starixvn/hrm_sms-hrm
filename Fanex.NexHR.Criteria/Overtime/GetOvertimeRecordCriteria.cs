@@ -6,7 +6,7 @@
     public class GetOvertimeRecordCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "EmpId")]
-        public int? EmployeeID { get; set; }
+        public int? EmployeeId { get; set; }
 
         public DateTime Month { get; set; }
 

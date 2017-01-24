@@ -85,10 +85,11 @@ $(document).ready(function () {
                 Remark: $('td #item_Remark', this).val()
             });
         });
-        var shiftJson = JSON.stringify(shift);
-        var shiftDetailsJson = JSON.stringify(shiftDetails);
 
-        if (new ValidateForm()) {
+        var validate = validateForm();
+        if (validate) {
+            var shiftJson = JSON.stringify(shift);
+            var shiftDetailsJson = JSON.stringify(shiftDetails);
             $.ajax({
                 type: 'POST',
                 url: '/ChangeShift/Create/',
@@ -133,11 +134,10 @@ $(document).ready(function () {
             });
         });
 
-        var validate = new ValidateForm();
-        var shiftJson = JSON.stringify(shift);
-        var shiftDetailsJson = JSON.stringify(shiftDetails);
-
+        var validate = validateForm();
         if (validate) {
+            var shiftJson = JSON.stringify(shift);
+            var shiftDetailsJson = JSON.stringify(shiftDetails);
             $.ajax({
                 type: 'POST',
                 url: '/ChangeShift/Update/',
@@ -167,8 +167,7 @@ $(document).ready(function () {
         }
     }
 
-    function ValidateForm() {
-
+    function validateForm() {
         var check = true;
         var errorString = [];
         var empName = $("#Employee").val();
@@ -176,6 +175,7 @@ $(document).ready(function () {
         var toDate = $("#ToDate").val();
         var approver = $("#ApproverId").val();
         var verifier = $("#VerifierId").val();
+        var remark = $("#Remark").val();
 
         var start = $("[name='FromDate']").datepicker('getDate');
         var end = $("[name='ToDate']").datepicker('getDate');
@@ -193,19 +193,24 @@ $(document).ready(function () {
 
         if (_checkTopManager === false) {
             if (verifier == null || verifier === "") {
-                errorString.push("Verifier is required.");
+                errorString.push("Verified by field is required.");
             }
             if (approver == null || approver === "") {
-                errorString.push("Approver is required.");
+                errorString.push("Approved by field is required.");
             }
         }
 
         if (days < 0) {
             errorString.push("To Date must be greater than From Date.");
         }
+
+        if ($.trim(remark).length === 0) {
+            errorString.push("The Remark field is required.");
+        }
+
         if (errorString.length > 0) {
-            RequestCommon.showErrorMsg(errorString.join(" - "));
-            return false;
+            RequestCommon.showErrorMsgs(errorString);
+            check = false;
         }
         return check;
     }

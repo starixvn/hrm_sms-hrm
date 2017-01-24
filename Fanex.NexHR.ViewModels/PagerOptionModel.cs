@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.ViewModels
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
 
     public class PagerOptionModel
@@ -11,6 +12,7 @@
 
         public int TotalItem { get; set; }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Ok.")]
         public IList<SelectListItem> ItemsPerPageArray
         {
             get

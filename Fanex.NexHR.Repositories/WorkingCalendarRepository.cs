@@ -56,31 +56,32 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var ds = new DataSet();
-                ds = db.ExecuteDataSet(criteria.GetSpParams());
-                var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
-
-                var list = new List<WorkingScheduleViewModel>();
-                if (dttWorkingSchedule.Rows.Count != 0)
+                using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
                 {
-                    var totalEmployeeInfoColumn = 5;
-                    var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
-                    var index = totalEmployeeInfoColumn;
+                    var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
 
-                    for (int i = 1; i <= loopNum; i++)
+                    var list = new List<WorkingScheduleViewModel>();
+                    if (dttWorkingSchedule.Rows.Count != 0)
                     {
-                        var workingDay = new WorkingScheduleViewModel
+                        var totalEmployeeInfoColumn = 5;
+                        var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
+                        var index = totalEmployeeInfoColumn;
+
+                        for (int i = 1; i <= loopNum; i++)
                         {
-                            Title = dttWorkingSchedule.Rows[0][index++].ToString(),
-                            Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
-                            Color = dttWorkingSchedule.Rows[0][index++].ToString(),
-                        };
+                            var workingDay = new WorkingScheduleViewModel
+                            {
+                                Title = dttWorkingSchedule.Rows[0][index++].ToString(),
+                                Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
+                                Color = dttWorkingSchedule.Rows[0][index++].ToString(),
+                            };
 
-                        list.Add(workingDay);
+                            list.Add(workingDay);
+                        }
                     }
-                }
 
-                return list;
+                    return list;
+                }
             }
         }
 
@@ -89,42 +90,43 @@
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 var list = new List<WorkingCalendarsViewModel>();
-                var ds = new DataSet();
 
-                ds = db.ExecuteDataSet(criteria.GetSpParams());
-                var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
-                var totalColumns = dttWorkingCalendars.Columns.Count;
-
-                foreach (DataRow row in dttWorkingCalendars.Rows)
+                using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
                 {
-                    var empWorkingCalendar = new WorkingCalendarsViewModel();
-                    empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());
-                    empWorkingCalendar.FullName = row["fullname"].ToString();
-                    empWorkingCalendar.NickName = row["nickname"].ToString();
-                    empWorkingCalendar.Team = row["Team"].ToString();
-                    empWorkingCalendar.Positions = row["Positions"].ToString();
-                    empWorkingCalendar.EmpCode = row["EmpCode"].ToString();
-                    empWorkingCalendar.Days = (totalColumns - 6) / 2;
-                    var days = new List<string>();
-                    var workingSchedule = new List<WorkingScheduleViewModel>();
-                    var defaultColumn = 6;
-                    for (int i = 1; i <= empWorkingCalendar.Days; i++)
+                    var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
+                    var totalColumns = dttWorkingCalendars.Columns.Count;
+
+                    foreach (DataRow row in dttWorkingCalendars.Rows)
                     {
-                        var workingDay = new WorkingScheduleViewModel
+                        var empWorkingCalendar = new WorkingCalendarsViewModel();
+                        empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());
+                        empWorkingCalendar.FullName = row["fullname"].ToString();
+                        empWorkingCalendar.NickName = row["nickname"].ToString();
+                        empWorkingCalendar.Team = row["Team"].ToString();
+                        empWorkingCalendar.Positions = row["Positions"].ToString();
+                        empWorkingCalendar.EmpCode = row["EmpCode"].ToString();
+                        empWorkingCalendar.Days = (totalColumns - 6) / 2;
+                        var days = new List<string>();
+                        var workingSchedule = new List<WorkingScheduleViewModel>();
+                        var defaultColumn = 6;
+                        for (int i = 1; i <= empWorkingCalendar.Days; i++)
                         {
-                            Title = row[defaultColumn++].ToString(),
-                            Color = row[defaultColumn++].ToString()
-                        };
-                        days.Add(workingDay.Title);
-                        workingSchedule.Add(workingDay);
+                            var workingDay = new WorkingScheduleViewModel
+                            {
+                                Title = row[defaultColumn++].ToString(),
+                                Color = row[defaultColumn++].ToString()
+                            };
+                            days.Add(workingDay.Title);
+                            workingSchedule.Add(workingDay);
+                        }
+
+                        empWorkingCalendar.WorkingDays = days;
+                        empWorkingCalendar.WorkingSchedule = workingSchedule;
+                        list.Add(empWorkingCalendar);
                     }
 
-                    empWorkingCalendar.WorkingDays = days;
-                    empWorkingCalendar.WorkingSchedule = workingSchedule;
-                    list.Add(empWorkingCalendar);
+                    return list;
                 }
-
-                return list;
             }
         }
 

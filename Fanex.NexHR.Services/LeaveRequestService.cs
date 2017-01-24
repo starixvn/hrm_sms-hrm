@@ -46,15 +46,19 @@
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForInsertSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         private void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
@@ -82,7 +86,7 @@
                 EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
             }
@@ -113,7 +117,7 @@
                 EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
             }

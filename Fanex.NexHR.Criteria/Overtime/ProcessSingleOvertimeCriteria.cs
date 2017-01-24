@@ -6,13 +6,13 @@
 
     public class ProcessSingleOvertimeCriteria : CriteriaBase
     {
-        public long RequestID { get; set; }
+        public long RequestId { get; set; }
 
         public int ProcessedBy { get; set; }
 
         public DateTime ProcessedDate { get; set; }
 
-        public int RoleID { get; set; }
+        public int RoleId { get; set; }
 
         [SpParam(SqlParamName = "bOnbehalf")]
         public bool Onbehalf { get; set; }
@@ -27,7 +27,7 @@
 
         public override bool IsValid()
         {
-            return ProcessedBy > 0 && RequestID > 0;
+            return ProcessedBy > 0 && RequestId > 0;
         }
 
         private string GetSpKeyForProcessSingleOvertime(string command)

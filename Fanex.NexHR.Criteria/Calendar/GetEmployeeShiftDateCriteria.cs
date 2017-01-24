@@ -5,7 +5,7 @@
 
     public class GetEmployeeShiftDateCriteria : CriteriaBase
     {
-        public int SupervisorID { get; set; }
+        public int SupervisorId { get; set; }
 
         public int? ShiftId { get; set; }
 
@@ -26,7 +26,7 @@
 
         public override bool IsValid()
         {
-            return SupervisorID > 0;
+            return SupervisorId > 0;
         }
     }
 }

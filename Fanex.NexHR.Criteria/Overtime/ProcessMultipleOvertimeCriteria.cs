@@ -10,12 +10,12 @@
 
         public DateTime ProcessedDate { get; set; }
 
-        public int RoleID { get; set; }
+        public int RoleId { get; set; }
 
         [SpParam(SqlParamName = "bOnbehalf")]
         public bool Onbehalf { get; set; }
 
-        public string ListRequestID { get; set; }
+        public string ListRequestId { get; set; }
 
         [SpParam(Ignored = true)]
         public string CommandProcess { get; set; }

@@ -58,7 +58,7 @@
                     {
                         new SelectListItem
                         {
-                            Text = "--Select Marriage Status--",
+                            Text = Labels.SelectMarriageStatus,
                             Value = ((byte)MarriageStatus.Default).ToString()
                         },
                         new SelectListItem
@@ -105,7 +105,7 @@
             }
 
             var value = (DateTime)dateTime;
-            return ZeroPrefix(value.Hour) + ":" + ZeroPrefix(value.Minute);
+            return string.Format(Labels.TimeFormat, value.Hour.ToString().PadLeft(2, '0'), value.Minute.ToString().PadLeft(2, '0'));
         }
 
         public static void CopyTo(this object s, object t)
@@ -134,33 +134,34 @@
             var random = new byte[length];
 
             // RNGCryptoServiceProvider is an implementation of a random number generator.
-            var rng = new RNGCryptoServiceProvider();
-            rng.GetBytes(random); // The array is now filled with cryptographically strong random bytes.
-
-            for (var i = 0; i < length; i++)
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                var found = false;
-                var rand = (int)random[i];
-                while (!found)
+                rng.GetBytes(random); // The array is now filled with cryptographically strong random bytes.
+                for (var i = 0; i < length; i++)
                 {
-                    if (((rand >= 48) && (rand <= 57)) || ((rand >= 65) && (rand <= 90)) || ((rand >= 97) && (rand <= 122)))
+                    var found = false;
+                    var rand = (int)random[i];
+                    while (!found)
                     {
-                        found = true;
+                        if (((rand >= 48) && (rand <= 57)) || ((rand >= 65) && (rand <= 90)) || ((rand >= 97) && (rand <= 122)))
+                        {
+                            found = true;
+                        }
+                        else
+                        {
+                            // get a new random int.
+                            var single = new byte[1];
+                            rng.GetBytes(single);
+                            rand = single[0];
+                        }
                     }
-                    else
-                    {
-                        // get a new random int.
-                        var single = new byte[1];
-                        rng.GetBytes(single);
-                        rand = single[0];
-                    }
+
+                    var ci = (char)rand;
+                    ca[i] = ci;
                 }
 
-                var ci = (char)rand;
-                ca[i] = ci;
+                return new string(ca).ToLower();
             }
-
-            return new string(ca).ToLower();
         }
 
         public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo cultureInfo = null)
@@ -193,7 +194,7 @@
             {
                 list.Add(new SelectListItem()
                 {
-                    Text = index + "'",
+                    Text = string.Format(Labels.MinuteFormat, index),
                     Value = index.ToString()
                 });
                 index -= step;
@@ -210,7 +211,7 @@
 
             while (hour < 24)
             {
-                var value = ZeroPrefix(hour) + ":" + ZeroPrefix(minute);
+                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
                 list.Add(new SelectListItem()
                 {
                     Text = value,
@@ -235,7 +236,7 @@
 
             while (hour < 24)
             {
-                var value = ZeroPrefix(hour) + ":" + ZeroPrefix(minute);
+                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
                 list.Add(new SelectListItem()
                 {
                     Text = value,
@@ -261,7 +262,7 @@
 
             while (hour < 1)
             {
-                var value = ZeroPrefix(minute);
+                var value = minute.ToString().PadLeft(2, '0');
                 list.Add(new SelectListItem()
                 {
                     Text = value,
@@ -275,16 +276,6 @@
             }
 
             return list;
-        }
-
-        public static string ZeroPrefix(int value)
-        {
-            return value < 10 ? "0" + value : value.ToString();
-        }
-
-        public static string ZeroPrefix(string value)
-        {
-            return int.Parse(value) < 10 ? "0" + value : value;
         }
 
         public static string StringArrayToString(string[] array)
@@ -321,8 +312,8 @@
                 minute = (int)Math.Round((value - hour) * 60);
 
             return hour > 0
-                ? ZeroPrefix(hour) + "h" + ZeroPrefix(minute) + "'"
-                : ZeroPrefix(minute) + "'";
+                ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
+                : minute.ToString().PadLeft(2, '0') + "'";
         }
 
         public static string MinuteToTime(int value)
@@ -336,8 +327,8 @@
                 minute = value - (hour * 60);
 
             return hour > 0
-                ? ZeroPrefix(hour) + "h" + ZeroPrefix(minute) + "'"
-                : ZeroPrefix(minute) + "'";
+                ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
+                : minute.ToString().PadLeft(2, '0') + "'";
         }
 
         public static string FormatString(string input)

@@ -9,7 +9,16 @@ var RequestCommon = (function ($) {
             var msgWrp = $('.validation-summary-valid').find('ul:first');
             msgWrp.append("<li>" + RequestCommon.htmlDecode(msg) + "</li>");
             htmlObject = htmlObject;
-            //            htmlObject.addClass("input-validation-error");
+        },
+        showErrorMsgs: function (nessages, htmlObject) {
+            $('.validation-summary-valid').show();
+            $('.validation-summary-valid').addClass('validation-summary-errors');
+            var msgWrp = $('.validation-summary-valid').find('ul:first');
+            nessages.forEach(function (msg) {
+                msgWrp.append("<li>" + RequestCommon.htmlDecode(msg) + "</li>");
+            });
+            
+            htmlObject = htmlObject;
         },
         removeErrorMsg: function (isReset) {
             if (isReset) {

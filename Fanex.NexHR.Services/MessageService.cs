@@ -84,8 +84,10 @@
         public void SendMailToStaff(Message model)
         {
             var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(messageEmailTemplate));
-            var taskSendMail = new Task(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate);
+            });
         }
 
         private void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)

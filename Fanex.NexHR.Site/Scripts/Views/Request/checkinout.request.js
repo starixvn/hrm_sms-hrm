@@ -49,7 +49,7 @@ function getShiftByDate() {
             $("#model-state-error").show();
             $('#shiftname').text(_messages.notAvailable);
             $('#Shift').val(_messages.notAvailable);
-            $('input[type=submit]').hide();
+            //$('input[type=submit]').hide();
         }
     });
 }
@@ -153,7 +153,7 @@ $(document).ready(function () {
                 $("#model-state-error").show();
                 $('#shiftname').text(_messages.notAvailable);
                 $('#Shift').val(_messages.notAvailable);
-                $('input[type=submit]').hide();
+               // $('input[type=submit]').hide();
             }
         });
     });

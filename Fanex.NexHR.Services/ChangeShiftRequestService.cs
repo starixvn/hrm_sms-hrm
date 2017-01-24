@@ -26,15 +26,19 @@
         public void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForInsertSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         public void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         private void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)
@@ -53,7 +57,7 @@
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
         }
@@ -75,7 +79,7 @@
             this.EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
         }

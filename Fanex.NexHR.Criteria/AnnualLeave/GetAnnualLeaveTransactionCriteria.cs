@@ -4,7 +4,7 @@
 
     public class GetAnnualLeaveTransactionCriteria : CriteriaBase
     {
-        public int EmpID { get; set; }
+        public int EmpId { get; set; }
 
         public int Year { get; set; }
 
@@ -17,7 +17,7 @@
 
         public override bool IsValid()
         {
-            return EmpID > 0;
+            return EmpId > 0;
         }
     }
 }

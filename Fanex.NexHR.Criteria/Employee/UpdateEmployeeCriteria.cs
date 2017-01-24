@@ -108,9 +108,9 @@
 
         public string Religion { get; set; }
 
-        public DateTime? DateOfIDCard { get; set; }
+        public DateTime? DateOfIdCard { get; set; }
 
-        public string PlaceOfIDCard { get; set; }
+        public string PlaceOfIdCard { get; set; }
 
         public string HomePhone { get; set; }
 

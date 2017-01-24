@@ -2,7 +2,7 @@
 {
     public class EmployeeShift
     {
-        public int EmpID { get; set; }
+        public int EmpId { get; set; }
 
         public int? MonShiftId { get; set; }
 

@@ -14,6 +14,8 @@
 
         public const int UnpaidLeave = 25;
 
+        public const int UnpaidLeaveInsurance = 41;
+
         public const int BusinessTrip = 9;
 
         public const int MaternityLeave = 12;
@@ -22,7 +24,7 @@
 
         public const int CompensationLeave = 27;
 
-        public const int NumberMonthsInFutureCanLeaveRequest = 4;
+        public const int NumberMonthsInFutureCanLeaveRequest = 7;
 
         public const string PassWordAdmin = "@dm!nhrms";
 
@@ -36,7 +38,7 @@
 
         public const int ItemsPerPage = 50;
 
-        public const string WorkingTimeRequestGetAllByRequestID = "WorkingTimeRequest_GetAllByRequestID";
+        public const string WorkingTimeRequestGetAllByRequestId = "WorkingTimeRequest_GetAllByRequestID";
 
         public const string WorkingTimeRequestGetRequestByRequestDateKeepInViewType = "WorkingTimeRequest_GetRequestByRequestDate_KeepInViewType";
 

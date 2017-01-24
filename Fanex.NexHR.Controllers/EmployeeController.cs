@@ -213,7 +213,7 @@
                     FriShift = model.FriShift,
                     FullName = model.FullName,
                     IsDefaultSchedule = model.IsDefaultSchedule,
-                    MainGroupID = model.TeamId,
+                    MainGroupId = model.TeamId,
                     MonShift = model.MonShift,
                     NickName = model.NickName,
                     Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Code),
@@ -338,7 +338,7 @@
             {
                 var criteria = new UpdateEmployeeShiftCriteria()
                 {
-                    EmpId = model.EmpID,
+                    EmpId = model.EmpId,
                     FriShift = model.FriShiftId,
                     MonShift = model.MonShiftId,
                     SatShift = model.SatShiftId,
@@ -351,9 +351,9 @@
                 ViewBag.Updated = result.IsSuccessful;
             }
 
-            ViewBag.Employee = GetEmployeeById(model.EmpID);
+            ViewBag.Employee = GetEmployeeById(model.EmpId);
             ViewBag.Shifts = shiftService.GetSelectList();
-            ViewBag.Id = model.EmpID;
+            ViewBag.Id = model.EmpId;
 
             return View(model);
         }
@@ -394,18 +394,21 @@
         {
             if (file != null && file.ContentLength > 0)
             {
-                var stream = new MemoryStream();
-                var processor = new ImageProcessor();
-                var resizer = new ResizeFilter(64, 64, ResizeMethod.Crop, AnchorLocation.Middle);
-                processor.AddFilter(resizer);
-                processor.OutputFormat = OutputFormat.Jpeg;
-                processor.JpegCompression = 100;
-                processor.ProcessImage(file.InputStream, stream);
+                using (var stream = new MemoryStream())
+                {
+                    using (var processor = new ImageProcessor())
+                    {
+                        var resizer = new ResizeFilter(64, 64, ResizeMethod.Crop, AnchorLocation.Middle);
+                        processor.AddFilter(resizer);
+                        processor.OutputFormat = OutputFormat.Jpeg;
+                        processor.JpegCompression = 100;
+                        processor.ProcessImage(file.InputStream, stream);
+                        var image = Image.FromStream(stream);
+                        image.Save(Server.MapPath("/avatars/") + code + ".jpg");
 
-                var image = Image.FromStream(stream);
-                image.Save(Server.MapPath("/avatars/") + code + ".jpg");
-
-                return Json(true);
+                        return Json(true);
+                    }
+                }
             }
 
             return Json(null);
@@ -778,8 +781,8 @@
                 Ethnic = model.Ethnic,
                 Native = model.Native,
                 Religion = model.Religion,
-                DateOfIDCard = model.DateOfIdCard,
-                PlaceOfIDCard = model.PlaceOfIdCard,
+                DateOfIdCard = model.DateOfIdCard,
+                PlaceOfIdCard = model.PlaceOfIdCard,
                 HomePhone = model.HomePhone,
                 Qualification = model.Qualification,
                 Major = model.Major,

@@ -16,7 +16,6 @@
 }
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
-    @{ Html.EnableClientValidation(false); }
     @using (Html.BeginForm())
     {
         @Html.ValidationSummary()
@@ -66,8 +65,7 @@
             <div class="input">
                 @Html.DatePickerFor(model => model.Date,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1),
-                unavailDates: Model.UnavailDates)
+                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1))
 
                 <span id="lateIn"> ※ Actual Late In: <span id="lateInHours">N/A</span></span>
                 <span id="earlyOut"> ※ Actual Early Out: <span id="earlyOutHours">N/A</span></span>
@@ -85,7 +83,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierId)*
+                @Html.LabelFor(model => model.VerifierId)
             </div>
             <div class="input">
                 @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
@@ -94,7 +92,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.ApproverId)*
+                @Html.LabelFor(model => model.ApproverId)
             </div>
             <div class="input">
                 @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })

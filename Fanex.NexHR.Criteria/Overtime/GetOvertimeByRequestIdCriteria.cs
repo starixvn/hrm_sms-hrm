@@ -4,7 +4,7 @@
 
     public class GetOvertimeByRequestIdCriteria : CriteriaBase
     {
-        public long RequestID { get; set; }
+        public long RequestId { get; set; }
 
         public override string GetSettingKey()
         {
@@ -13,7 +13,7 @@
 
         public override bool IsValid()
         {
-            return RequestID > 0;
+            return RequestId > 0;
         }
     }
 }

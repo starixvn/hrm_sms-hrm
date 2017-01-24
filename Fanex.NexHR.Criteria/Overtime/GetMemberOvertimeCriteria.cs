@@ -5,7 +5,7 @@
 
     public class GetMemberOvertimeCriteria : CriteriaBase
     {
-        public int? SupervisorID { get; set; }
+        public int? SupervisorId { get; set; }
 
         [SpParam(SqlParamName = "empid")]
         public int? EmployeeId { get; set; }
@@ -18,7 +18,7 @@
 
         public string Status { get; set; }
 
-        public int ExcludedEmpID { get; set; }
+        public int ExcludedEmpId { get; set; }
 
         public override string GetSettingKey()
         {

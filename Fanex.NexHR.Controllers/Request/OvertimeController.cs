@@ -170,8 +170,8 @@
             var criteria = new ProcessSingleOvertimeCriteria
             {
                 CommandProcess = command,
-                RequestID = requestId,
-                RoleID = roleId,
+                RequestId = requestId,
+                RoleId = roleId,
                 ProcessedBy = CurrentUser.Id,
                 ProcessedDate = DateTime.Now
             };
@@ -186,11 +186,11 @@
             var criteria = new ProcessMultipleOvertimeCriteria
             {
                 CommandProcess = command,
-                ListRequestID = requestIds,
+                ListRequestId = requestIds,
                 ProcessedBy = this.CurrentUser.Id,
                 ProcessedDate = DateTime.Now
             };
-            criteria.RoleID = criteria.GetRoleIdForProcessOvertime(command);
+            criteria.RoleId = criteria.GetRoleIdForProcessOvertime(command);
             CommandResult result = commandService.Update(criteria);
             return Json(result);
         }
@@ -224,7 +224,7 @@
 
             var criteria = new GetMemberOvertimeByLeaderCriteria
             {
-                SupervisorID = CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 FromDate = month.Value,
                 ToDate = month.Value,
                 EmployeeId = employeeId,
@@ -251,7 +251,7 @@
 
             var criteria = new GetMemberOvertimeCriteria
             {
-                SupervisorID = CurrentUser.Id,
+                SupervisorId = CurrentUser.Id,
                 FromDate = month.Value,
                 ToDate = month.Value,
                 EmployeeId = employeeId,
@@ -426,7 +426,7 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                EmployeeID = model.EmployeeId,
+                EmployeeId = model.EmployeeId,
                 JobTitleId = model.JobTitleIds,
                 GroupIds = model.SectionIds,
                 IsLocal = model.IsLocal
@@ -442,7 +442,7 @@
         {
             var criteria = new GetDetailOvertimeByRequestIdsCriteria
             {
-                ListRequestID = requestIds
+                ListRequestId = requestIds
             };
             bool isInvalid = overtimeService.CheckInvalidOvertimes(criteria);
 

@@ -206,7 +206,7 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                EmployeeID = model.EmployeeId,
+                EmployeeId = model.EmployeeId,
                 JobTitleId = model.JobTitleIds,
                 GroupIds = model.SectionIds
             };
@@ -326,7 +326,7 @@
             var criteria = new GetOvertimeRecordCriteria
             {
                 Month = requestDate,
-                EmployeeID = empId,
+                EmployeeId = empId,
                 Calendar = calendar.Value
             };
             IList<OvertimeExcelReport> overtimes = overtimeService.OvertimeRecord(criteria);
@@ -565,10 +565,12 @@
 
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
         {
-            MemoryStream output = new MemoryStream();
-            hssfworkbook.Write(output);
+            using (var output = new MemoryStream())
+            {
+                hssfworkbook.Write(output);
 
-            return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+                return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+            }
         }
     }
 }

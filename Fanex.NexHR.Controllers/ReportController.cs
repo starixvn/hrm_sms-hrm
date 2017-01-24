@@ -331,8 +331,10 @@
 
             if (model.IsExportExcel)
             {
-                ExportController export = new ExportController();
-                return export.TotalWorkingHours(model);
+                using (var export = new ExportController())
+                {
+                    return export.TotalWorkingHours(model);
+                }
             }
 
             ViewBag.Groups = GetAllTeam();
@@ -664,9 +666,11 @@
 
         private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
         {
-            MemoryStream output = new MemoryStream();
-            hssfworkbook.Write(output);
-            return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+            using (var output = new MemoryStream())
+            {
+                hssfworkbook.Write(output);
+                return File(output.ToArray(), "application/vnd.ms-excel", fileName);
+            }
         }
 
         private IList<Team> GetAllTeam()

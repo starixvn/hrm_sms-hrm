@@ -8,7 +8,7 @@
 
         public string SendTo { get; set; }
 
-        public string SendCc { get; set; }
+        public string SendCC { get; set; }
 
         public string Sender { get; set; }
 

@@ -110,7 +110,9 @@
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
             var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
 
-            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave || leaveTypeId.Value == Constants.BusinessTrip))
+            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave 
+                || leaveTypeId.Value == Constants.BusinessTrip 
+                || leaveTypeId.Value == Constants.UnpaidLeaveInsurance))
             {
                 var criteria = new GetOffDateAndHolidayDateCriteria()
                 {

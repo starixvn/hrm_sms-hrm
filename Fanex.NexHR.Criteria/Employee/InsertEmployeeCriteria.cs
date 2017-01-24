@@ -31,7 +31,7 @@
 
         public int? SunShift { get; set; }
 
-        public int MainGroupID { get; set; }
+        public int MainGroupId { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

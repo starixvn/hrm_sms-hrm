@@ -194,9 +194,10 @@
             RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
             var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
 
-            var sendMailTask = new Task(()
-                => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
-            sendMailTask.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailProcess(action, request, processedBy, templateEmailPathForRelated);
+            });
         }
 
         public void SendMailForDeleteSuccessfully(long requestId)
@@ -209,8 +210,10 @@
             if (request != null)
             {
                 var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
-                var taskSendMail = new Task(() => SendMailForCancelRequest(request, templateEmailPath));
-                taskSendMail.Start();
+                Task.Factory.StartNew(() =>
+                {
+                    SendMailForCancelRequest(request, templateEmailPath);
+                });
             }
         }
 
@@ -506,7 +509,7 @@
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                this.SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCc, templateEmailPathForRelated);
+                this.SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
             }
         }
 
@@ -616,25 +619,25 @@
                 switch (request.RequestType.Id)
                 {
                     case (short)RequestType.Leave:
-                        this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
+                        this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.ChangeShift:
-                        this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
+                        this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.LateIn:
                     case (short)RequestType.EarlyOut:
-                        this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
+                        this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.CheckIn:
                     case (short)RequestType.CheckOut:
-                        this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
+                        this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.KeepInView:
-                        this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCc, email.SendToNickName, templateEmailPath);
+                        this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
                 }
             }
@@ -845,7 +848,7 @@
                 }
                 else
                 {
-                    emailModel.SendCc = mailHRs;
+                    emailModel.SendCC = mailHRs;
                 }
             }
 
@@ -861,13 +864,13 @@
                     emailModel.SendTo = relatedPeople.Requester.Email;
                     emailModel.SendToNickName = relatedPeople.Requester.NickName;
                 }
-                else if (string.IsNullOrWhiteSpace(emailModel.SendCc))
+                else if (string.IsNullOrWhiteSpace(emailModel.SendCC))
                 {
-                    emailModel.SendCc = relatedPeople.Requester.Email;
+                    emailModel.SendCC = relatedPeople.Requester.Email;
                 }
                 else
                 {
-                    emailModel.SendCc += ";" + relatedPeople.Requester.Email;
+                    emailModel.SendCC += ";" + relatedPeople.Requester.Email;
                 }
             }
 
@@ -883,13 +886,13 @@
                     emailModel.SendTo = relatedPeople.Requester.MailGroup;
                     emailModel.SendToNickName = Labels.All;
                 }
-                else if (string.IsNullOrWhiteSpace(emailModel.SendCc))
+                else if (string.IsNullOrWhiteSpace(emailModel.SendCC))
                 {
-                    emailModel.SendCc = relatedPeople.Requester.MailGroup;
+                    emailModel.SendCC = relatedPeople.Requester.MailGroup;
                 }
                 else
                 {
-                    emailModel.SendCc += ";" + relatedPeople.Requester.MailGroup;
+                    emailModel.SendCC += ";" + relatedPeople.Requester.MailGroup;
                 }
             }
 

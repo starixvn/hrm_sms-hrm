@@ -32,6 +32,7 @@
         public bool CrossDay { get; set; }
 
         [AllowHtml]
+        [Required(ErrorMessage = "The Remark field is required.")]
         public string Remark { get; set; }
 
         public string Shift { get; set; }
@@ -40,9 +41,11 @@
         public int ShiftId { get; set; }
 
         [Display(Name = "Verified by")]
+        [Required(ErrorMessage = "The Verified by field is required.")]
         public int? VerifierId { get; set; }
 
         [Display(Name = "Approved by")]
+        [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
 
         public VerifierAndApproverForRequest VerifierAndApprover { get; set; }

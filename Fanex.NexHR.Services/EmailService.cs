@@ -7,12 +7,12 @@
 
     public class EmailService : IEmailService
     {
-        public void SendEmail(string senderEmail, string receiverEmail, string mailCc, string subject, string body)
+        public void SendEmail(string senderEmail, string receiverEmail, string mailCC, string subject, string body)
         {
-            this.SendEmail(senderEmail, senderEmail, receiverEmail, mailCc, subject, body);
+            this.SendEmail(senderEmail, senderEmail, receiverEmail, mailCC, subject, body);
         }
 
-        public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCc,  string subject, string body)
+        public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCC, string subject, string body)
         {
             if (!Utilities.IsValidEmail(senderEmail) || !Utilities.IsValidEmail(receiverEmail) || ConfigSettings.IsDisabledSendMail)
             {
@@ -22,7 +22,7 @@
             var mailItem = new MailRecord
             {
                 MailTo = receiverEmail,
-                MailCc = mailCc,
+                MailCc = mailCC,
                 Subject = subject,
                 Title = ConfigurationManager.AppSettings["Email.SenderName"],
                 Body = body

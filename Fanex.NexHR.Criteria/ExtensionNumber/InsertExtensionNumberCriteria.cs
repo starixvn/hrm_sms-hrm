@@ -12,9 +12,9 @@
 
         public bool IsInternal { get; set; }
 
-        public int EmpID { get; set; }
+        public int EmpId { get; set; }
 
-        public int GroupID { get; set; }
+        public int GroupId { get; set; }
 
         public short OrderNo { get; set; }
 

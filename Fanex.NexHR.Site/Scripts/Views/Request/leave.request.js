@@ -398,6 +398,7 @@ var LeaveRequest = (function ($) {
             var toDate = $("#ToDate").val();
             var approver = $("#ApproverId").val();
             var verifier = $("#VerifierId").val();
+            var remark = $("#Remark").val();
 
             var start = $("[name='FromDate']").datepicker('getDate');
             var end = $("[name='ToDate']").datepicker('getDate');
@@ -417,10 +418,10 @@ var LeaveRequest = (function ($) {
 
             if (LeaveRequest.isTopManager === false) {
                 if (verifier === null || verifier === "") {
-                    errorString.push("Verifier is required.");
+                    errorString.push("Verified by field is required.");
                 }
                 if (approver === null || approver === "") {
-                    errorString.push("Approver is required.");
+                    errorString.push("Approved by field is required.");
                 }
             }
 
@@ -428,11 +429,13 @@ var LeaveRequest = (function ($) {
                 errorString.push("To Date must be greater than From Date.");
             }
 
+            if ($.trim(remark).length === 0) {
+                errorString.push("The Remark field is required.");
+            }
+
             if (errorString.length > 0) {
-                RequestCommon.showErrorMsg(errorString.join(" - "));
-                //                $("#errors-model-state").show();
-                //                $("#errors-model-state").html(errorString.join("</br>"));
-                return false;
+                RequestCommon.showErrorMsgs(errorString);
+                check = false;
             }
 
             return check;
@@ -541,7 +544,7 @@ var LeaveRequest = (function ($) {
         },
         getDisableDate: function () {
             var minDate = new Date(LeaveRequest.fromDate.attr("minDate"));
-            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 8));
+            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
             var leaveType = LeaveRequest.leaveTypeId.val();
 
             if (leaveType === LeaveRequest.generalLeaveType) {

@@ -4,7 +4,7 @@
 
     public class UpdateExtensionNumberMemberCriteria : CriteriaBase
     {
-        public int ExtID { get; set; }
+        public int ExtId { get; set; }
 
         public string FullName { get; set; }
 
@@ -14,9 +14,9 @@
 
         public bool IsInternal { get; set; }
 
-        public int EmpID { get; set; }
+        public int EmpId { get; set; }
 
-        public int GroupID { get; set; }
+        public int GroupId { get; set; }
 
         public short OrderNo { get; set; }
 
@@ -27,7 +27,7 @@
 
         public override bool IsValid()
         {
-            return ExtID > 0;
+            return ExtId > 0;
         }
     }
 }

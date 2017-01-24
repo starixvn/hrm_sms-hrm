@@ -21,15 +21,19 @@
         public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
-            var taskSendMail = new Task(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForInsertSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         public void SendMailForUpdateSuccessfully(UpdateCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
-            var taskSendMail = new Task(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
-            taskSendMail.Start();
+            Task.Factory.StartNew(() =>
+            {
+                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
+            });
         }
 
         private void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)
@@ -56,7 +60,7 @@
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
         }
@@ -85,7 +89,7 @@
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
-                email.SendCc,
+                email.SendCC,
                 email.Subject,
                 email.Body);
         }

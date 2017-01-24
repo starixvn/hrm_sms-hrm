@@ -16,12 +16,9 @@
 }
 <h2>@Labels.Edit</h2>
 <div class="bunhat">
-    @{ Html.EnableClientValidation(false); }
     @using (Html.BeginForm())
     {
-    
         @Html.ValidationSummary()
-
         if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
         <div class="success">@Messages.RequestUpdated</div> 
@@ -93,7 +90,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierAndApprover.Verifiers)*
+                @Html.LabelFor(model => model.VerifierAndApprover.Verifiers)
             </div>
             <div class="input">
                 @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
@@ -102,7 +99,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierAndApprover.Approvers)*
+                @Html.LabelFor(model => model.VerifierAndApprover.Approvers)
             </div>
             <div class="input">
                 @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })

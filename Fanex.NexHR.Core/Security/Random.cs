@@ -35,7 +35,10 @@
         public static byte[] RNGCrypto(int size)
         {
             byte[] valueArray = new byte[size];
-            new RNGCryptoServiceProvider().GetBytes(valueArray);
+            using (var serviceProvider = new RNGCryptoServiceProvider())
+            {
+                serviceProvider.GetBytes(valueArray);
+            }
 
             return valueArray;
         }

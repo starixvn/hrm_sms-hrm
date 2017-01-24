@@ -140,7 +140,7 @@ var editMemo = (function ($) {
         }
 
         fd.append('categoryID', $("#Category").val());
-        fd.append('overRide', $("#override").attr("checked") === "checked" ? "1" : "0");
+        fd.append('isOverride', $("#override").attr("checked") === "checked");
 
         var xhr = new XMLHttpRequest();
         xhr.addEventListener("load", uploadComplete, false);

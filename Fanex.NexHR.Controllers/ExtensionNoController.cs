@@ -65,8 +65,8 @@
                         NickName = model.NickName,
                         ExtensionNo = model.ExtensionNo,
                         IsInternal = model.IsInternal,
-                        EmpID = model.EmpId,
-                        GroupID = model.TeamId,
+                        EmpId = model.EmpId,
+                        GroupId = model.TeamId,
                     };
 
                     CommandResult result = commandService.Insert(criteria);
@@ -94,7 +94,7 @@
             };
 
             ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = isInternal, GroupID = null };
+            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = isInternal, GroupId = null };
             IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
 
             if (groups != null)
@@ -113,7 +113,7 @@
             var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
             {
                 IsInternal = model.IsInternal,
-                GroupID = null
+                GroupId = null
             };
             IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
             ViewBag.Group = group.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
@@ -125,9 +125,9 @@
                     NickName = model.NickName,
                     ExtensionNo = model.ExtensionNo,
                     IsInternal = model.IsInternal,
-                    ExtID = model.EmployeeExtensionId,
-                    EmpID = model.EmpId,
-                    GroupID = model.TeamId
+                    ExtId = model.EmployeeExtensionId,
+                    EmpId = model.EmpId,
+                    GroupId = model.TeamId
                 };
                 CommandResult result = commandService.Insert(criteria);
                 if (result.IsSuccessful)
@@ -183,7 +183,7 @@
                 var getGroupInfoCriteria = new GetExtensionNumberGroupInfoCriteria
                 {
                     IsInternal = isInternal,
-                    GroupID = groupId
+                    GroupId = groupId
                 };
                 IEnumerable<ExtensionNoModel> extensionGroups = extensionNumberService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
                 groups = extensionGroups.Select(x => new SelectListItem
