@@ -246,9 +246,9 @@
                 fromDate = $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
                 toDate = $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val();
 
-            window.location.href = _global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
+            window.open(_global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
                 + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
-                + '&isLocal=' + isLocal + '&reasonId=' + reasonId + '&fromSummaryPage=true';
+                + '&isLocal=' + isLocal + '&reasonId=' + reasonId + '&fromSummaryPage=true', '_blank');
         });
     }
 
