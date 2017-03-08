@@ -31,7 +31,7 @@
 
         public IQueryable<Employee> GetEmployees(
             string query,
-            string groupIds = "", 
+            string groupIds = "",
             bool? enable = null,
             bool? isDelete = null,
             int? titleId = null,
@@ -78,6 +78,7 @@
                 case Constants.CompensationLeave:
                     numberDays = (toDate - fromDate).Days + 1;
                     break;
+
                 case Constants.UnpaidLeave:
                 case Constants.BusinessTrip:
                     var criteria = new GetOffDateAndHolidayDateCriteria()
@@ -89,6 +90,7 @@
                     IEnumerable<DateTime> dates = employeeService.GetOffDateAndHolidayDate(criteria);
                     numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
                     break;
+
                 default:
                     var getDateRangeCriteria = new GetDateRangeCriteria()
                     {
@@ -110,8 +112,8 @@
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
             var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
 
-            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave 
-                || leaveTypeId.Value == Constants.BusinessTrip 
+            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave
+                || leaveTypeId.Value == Constants.BusinessTrip
                 || leaveTypeId.Value == Constants.UnpaidLeaveInsurance))
             {
                 var criteria = new GetOffDateAndHolidayDateCriteria()
