@@ -3625,6 +3625,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to H - .
+        /// </summary>
+        public static string SymbolHalfYear {
+            get {
+                return ResourceManager.GetString("SymbolHalfYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System Deduction.
         /// </summary>
         public static string SystemDeduction {

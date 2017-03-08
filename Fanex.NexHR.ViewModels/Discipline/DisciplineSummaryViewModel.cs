@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
+    using System.Web.Mvc;
 
     public class DisciplineSummaryViewModel
     {
@@ -36,5 +37,7 @@
         public bool FromSummaryPage { get; set; }
 
         public bool IsShowAll { get; set; }
+
+        public IList<SelectListItem> DateRange { get; set; }
     }
 }

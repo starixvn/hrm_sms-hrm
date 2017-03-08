@@ -18,14 +18,14 @@
 <h2>@Labels.DisciplineDetail</h2>
 <form class="form-filter">
     <div class="container_24 bunhat">
-        <div class="grid_3">
+        <div class="grid_2">
             @Html.LabelFor(model => model.TeamId)
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
             @Html.HiddenFor(model => model.TeamName)
         </div>
-        <div class="grid_2">@Labels.Category</div>
+        <div class="grid_3">@Labels.Category</div>
         <div class="grid_4">
             @{
                 var category = new List<SelectListItem>
@@ -46,13 +46,36 @@
         </div>
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="grid_3">
+        <div class="grid_2">
             @Html.LabelFor(model => model.ReasonId)
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All)
         </div>
-        <div class="grid_2">
+
+        <div class="grid_3">
+            @Html.LabelFor(model => model.HasIgnored)
+        </div>
+        <div class="grid_4">
+            @{
+                var ignoredStatus = new List<SelectListItem>
+                {
+                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                    new SelectListItem() {Text = Labels.Ignored, Value = "true"},
+                    new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
+                };
+            }
+            @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category" })
+        </div>
+
+        <div class="clear"></div>
+        <div class="space"></div>
+
+        <div class="grid_2">@Labels.DateRange</div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
+        </div>
+        <div class="grid_3">
             @Html.LabelFor(model => model.FromDate)
         </div>
         <div class="grid_4">
@@ -66,21 +89,7 @@
         </div>
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="grid_3">
-            @Html.LabelFor(model => model.HasIgnored)
-        </div>
-        <div class="grid_6">
-            @{
-                var ignoredStatus = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Ignored, Value = "true"},
-                    new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
-                };
-            }
-            @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus)
-        </div>
-        <div class="prefix_2 grid_6">
+        <div class="prefix_8 grid_6">
             <input type="button" id="submit" value="@Labels.Submit" />
             <input type="button" value="Excel" id="btnExcel" />
         </div>

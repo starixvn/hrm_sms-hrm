@@ -42,12 +42,22 @@
         </div>
         <div class="clear"></div>
         <div class="space"></div>
+
         <div class="grid_2">
             @Html.LabelFor(model => model.ReasonId)
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All)
         </div>
+
+        <div class="clear"></div>
+        <div class="space"></div>
+
+        <div class="grid_2">@Labels.DateRange</div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
+        </div>
+
         <div class="grid_2">
             @Html.LabelFor(model => model.FromDate)
         </div>
@@ -60,6 +70,7 @@
         <div class="grid_4">
             @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
         </div>
+
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2">
