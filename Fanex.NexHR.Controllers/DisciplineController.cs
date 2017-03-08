@@ -273,7 +273,12 @@
                 int currentYear = currentDate.Year;
                 int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
 
-                dateRange.Add(new SelectListItem() { Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear, Value = currentHalfYear + string.Empty + currentYear });
+                dateRange.Add(new SelectListItem()
+                {
+                    Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear,
+                    Value = currentHalfYear + string.Empty + currentYear
+                });
+
                 currentDate = currentDate.AddMonths(-6);
             }
 
