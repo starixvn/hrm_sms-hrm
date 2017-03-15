@@ -857,24 +857,40 @@
 
         private EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (relatedPeople.Requester != null && !emailModel.SendTo.Contains(relatedPeople.Requester.Email))
+            if (relatedPeople.Requester != null)
             {
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
                     emailModel.SendTo = relatedPeople.Requester.Email;
                     emailModel.SendToNickName = relatedPeople.Requester.NickName;
                 }
-                else if (string.IsNullOrWhiteSpace(emailModel.SendCC))
-                {
-                    emailModel.SendCC = relatedPeople.Requester.Email;
-                }
                 else
                 {
-                    emailModel.SendCC += ";" + relatedPeople.Requester.Email;
+                    emailModel.SendCC = AddMailToList(emailModel.SendCC, relatedPeople.Requester.Email);
                 }
             }
 
             return emailModel;
+        }
+
+        private string AddMailToList(string mailList, string mail)
+        {
+            if (!string.IsNullOrWhiteSpace(mail))
+            {
+                if (!string.IsNullOrWhiteSpace(mailList))
+                {
+                    if (!mailList.Contains(mail))
+                    {
+                        mailList += ";" + mail;
+                    }
+                }
+                else
+                {
+                    mailList = mail;
+                }
+            }
+            
+            return mailList;
         }
 
         private EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)

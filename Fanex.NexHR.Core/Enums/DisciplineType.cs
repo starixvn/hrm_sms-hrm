@@ -28,6 +28,9 @@
         WorkingUnderTime = 7,
 
         [Description("Unpaid Leave Absent")]
-        UnpaidLeaveAbsent = 8
+        UnpaidLeaveAbsent = 8,
+
+        [Description("Unplanned Leave")]
+        UnplannedLeave = 9
     }
 }

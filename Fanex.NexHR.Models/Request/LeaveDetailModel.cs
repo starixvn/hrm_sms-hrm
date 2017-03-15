@@ -29,5 +29,7 @@
         public bool IsUnpaidLeaveAbsent { get; set; }
 
         public bool IsAbsent { get; set; }
+
+        public bool IsUnplannedLeave { get; set; }
     }
 }

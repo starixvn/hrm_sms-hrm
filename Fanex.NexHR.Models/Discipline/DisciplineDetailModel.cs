@@ -30,6 +30,8 @@
 
         public DisciplineModel Absent { get; set; }
 
+        public DisciplineModel UnplannedLeave { get; set; }
+
         public DisciplineModel UnpaidLeave { get; set; }
 
         public DisciplineModel WorkingUnderTime { get; set; }

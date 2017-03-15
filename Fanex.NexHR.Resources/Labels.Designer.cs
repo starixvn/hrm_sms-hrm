@@ -1105,7 +1105,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Discipline Summary.
+        ///   Looks up a localized string similar to Discipline Review.
         /// </summary>
         public static string DisciplineSummary {
             get {
@@ -3945,6 +3945,15 @@ namespace Fanex.NexHR.Resources {
         public static string UnpaidLeave {
             get {
                 return ResourceManager.GetString("UnpaidLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unplanned Leave.
+        /// </summary>
+        public static string UnplannedLeave {
+            get {
+                return ResourceManager.GetString("UnplannedLeave", resourceCulture);
             }
         }
         

@@ -28,7 +28,13 @@
 
         public bool IsIgnoredUnpaidLeaveAbsent { get; set; }
 
-        public bool IsConfirmed { get; set; }
+        public bool IsConfirmed
+        {
+            get
+            {
+                return !IsIgnored;
+            }
+        }
 
         public decimal ApproverSubtractScore { get; set; }
     }

@@ -1147,7 +1147,7 @@
     <value>Edit Division</value>
   </data>
   <data name="DisciplineSummary" xml:space="preserve">
-    <value>Discipline Summary</value>
+    <value>Discipline Review</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>Reason</value>
@@ -1520,6 +1520,9 @@
   </data>
   <data name="TimeFormat" xml:space="preserve">
     <value>{0}:{1}</value>
+  </data>
+  <data name="UnplannedLeave" xml:space="preserve">
+    <value>Unplanned Leave</value>
   </data>
   <data name="SymbolHalfYear" xml:space="preserve">
     <value>H - </value>

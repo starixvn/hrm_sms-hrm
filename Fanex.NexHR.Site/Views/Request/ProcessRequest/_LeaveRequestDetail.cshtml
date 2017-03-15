@@ -93,6 +93,11 @@
                             var disciplinetypeId = (int)DisciplineType.Absent;
                             <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
                         }
+                        else if (item.IsUnplannedLeave)
+                        {
+                            var disciplinetypeId = (int)DisciplineType.UnplannedLeave;
+                            <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
+                        }
                         else if (item.LeaveTypeId == 25)//unpaid leave
                         {
                             var disciplinetypeId = (int)DisciplineType.UnpaidLeave;
@@ -104,7 +109,7 @@
                         }
                     </td>
                     <td class="violationRecorded">
-                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.LeaveTypeId == 25)
+                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.LeaveTypeId == 25)
                         {
                             <input type="radio" />
                         }

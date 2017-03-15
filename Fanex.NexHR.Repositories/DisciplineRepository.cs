@@ -76,6 +76,7 @@
                     LateIn = GetLateIn(discipline),
                     EarlyOut = GetEarlyOut(discipline),
                     Absent = GetAbsent(discipline),
+                    UnplannedLeave = GetUnplannedLeave(discipline),
                     UnpaidLeave = GetUnpaidLeave(discipline),
                     WorkingUnderTime = GetWorkingUnderTime(discipline),
                     UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
@@ -152,6 +153,19 @@
             };
         }
 
+        private static DisciplineModel GetUnplannedLeave(dynamic discipline)
+        {
+            return new DisciplineModel
+            {
+                DisciplineId = discipline.UnplannedLeaveId,
+                Value = discipline.UnplannedLeaveValue,
+                Score = discipline.UnplannedLeaveScore,
+                HasViolated = discipline.UnplannedLeaveHasViolated,
+                HasIgnored = discipline.UnplannedLeaveHasIgnored,
+                HasApprovedBy = discipline.UnplannedLeaveHasApprovedBy
+            };
+        }
+
         private static DisciplineModel GetUnpaidLeave(dynamic discipline)
         {
             return new DisciplineModel
@@ -208,6 +222,7 @@
                 disciplineDetail.EarlyOut,
                 disciplineDetail.WorkingUnderTime,
                 disciplineDetail.Absent,
+                disciplineDetail.UnplannedLeave,
                 disciplineDetail.UnpaidLeave,
                 disciplineDetail.UnpaidLeaveAbsent,
                 disciplineDetail.ChangeShift
