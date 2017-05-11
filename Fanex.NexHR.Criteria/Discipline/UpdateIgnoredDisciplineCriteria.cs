@@ -10,9 +10,9 @@
     {
         private const string DisciplineTemp =
             @"<Discipline WorkDate='{0}' EmployeeId='{1}' IsIgnoredChangeShift='{2}' IsIgnoredMissingCheckInOut='{3}' IsIgnoredLateIn='{4}'
-                IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnpaidLeave='{7}'
-                IsIgnoredWorkingUnderTime='{8}' IsIgnoredUnpaidLeaveAbsent='{9}'
-                IsConfirmed='{10}' ApproverSubtractScore='{11}'></Discipline>";
+                IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnplannedLeave='{7}' IsIgnoredUnpaidLeave='{8}'
+                IsIgnoredWorkingUnderTime='{9}' IsIgnoredUnpaidLeaveAbsent='{10}'
+                IsConfirmed='{11}' ApproverSubtractScore='{12}'></Discipline>";
 
         private const string BeginRootTag = "<ROOT>";
         private const string EndRootTag = "</ROOT>";
@@ -59,6 +59,7 @@
                         item.IsIgnoredLateIn,
                         item.IsIgnoredEarlyOut,
                         item.IsIgnoredAbsent,
+                        item.IsIgnoredUnplannedLeave,
                         item.IsIgnoredUnpaidLeave,
                         item.IsIgnoredWorkingUnderTime,
                         item.IsIgnoredUnpaidLeaveAbsent,

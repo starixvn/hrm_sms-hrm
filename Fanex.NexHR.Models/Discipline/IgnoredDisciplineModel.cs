@@ -22,6 +22,8 @@
 
         public bool IsIgnoredAbsent { get; set; }
 
+        public bool IsIgnoredUnplannedLeave { get; set; }
+
         public bool IsIgnoredUnpaidLeave { get; set; }
 
         public bool IsIgnoredWorkingUnderTime { get; set; }

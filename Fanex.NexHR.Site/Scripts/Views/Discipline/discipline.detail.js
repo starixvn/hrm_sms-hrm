@@ -74,6 +74,7 @@
                     IsIgnoredLateIn: false,
                     IsIgnoredEarlyOut: false,
                     IsIgnoredAbsent: false,
+                    IsIgnoredUnplannedLeave: false,
                     IsIgnoredUnpaidLeave: false,
                     IsIgnoredWorkingUnderTime: false,
                     IsIgnoredUnpaidLeaveAbsent: false,
@@ -109,6 +110,9 @@
                             break;
                         case 8:
                             ignoredDiscipline.IsIgnoredUnpaidLeaveAbsent = $(this).prop('checked');
+                            break;
+                        case 9:
+                            ignoredDiscipline.IsIgnoredUnplannedLeave = $(this).prop('checked');
                             break;
                     }
                 });
