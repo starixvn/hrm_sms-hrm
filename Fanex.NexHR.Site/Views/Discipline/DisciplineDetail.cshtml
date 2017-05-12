@@ -18,6 +18,26 @@
 <h2>@Labels.DisciplineDetail</h2>
 <form class="form-filter">
     <div class="container_24 bunhat">
+        <div class="space"></div>
+        <div class="grid_2">@Labels.DateRange</div>
+        <div class="grid_6">
+            @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
+        </div>
+        <div class="grid_3">
+            @Html.LabelFor(model => model.FromDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.ToDate)
+        </div>
+        <div class="grid_4">
+            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+        </div>
+
+        <div class="clear"></div>
+        <div class="space"></div>
         <div class="grid_2">
             @Html.LabelFor(model => model.TeamId)
         </div>
@@ -44,6 +64,7 @@
             @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
+
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2">
@@ -68,25 +89,7 @@
             @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category" })
         </div>
 
-        <div class="clear"></div>
-        <div class="space"></div>
 
-        <div class="grid_2">@Labels.DateRange</div>
-        <div class="grid_6">
-            @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
-        </div>
-        <div class="grid_3">
-            @Html.LabelFor(model => model.FromDate)
-        </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
-        </div>
-        <div class="grid_2">
-            @Html.LabelFor(model => model.ToDate)
-        </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
-        </div>
         <div class="clear"></div>
         <div class="space"></div>
         <div class="prefix_8 grid_6">
