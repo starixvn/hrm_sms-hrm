@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NexHR.Core
 {
-    using Fanex.NexHR.Core.Enums;
-
     public static class Constants
     {
         public const string JobTitle = "JT";
@@ -37,6 +35,10 @@
         public const int CurrentPage = 1;
 
         public const int ItemsPerPage = 50;
+
+        public const string BeginRootTag = "<ROOT>";
+
+        public const string EndRootTag = "</ROOT>";
 
         public const string WorkingTimeRequestGetAllByRequestId = "WorkingTimeRequest_GetAllByRequestID";
 

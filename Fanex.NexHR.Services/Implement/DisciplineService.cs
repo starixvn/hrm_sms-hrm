@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models;
@@ -10,6 +8,8 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class DisciplineService : BaseService, IDisciplineService
     {
@@ -105,10 +105,11 @@
                 writer.CopyRows(1, 1);
 
                 // Fill report header.
-                writer.CopyRows(3, 1);
+                writer.CopyRows(2, 1);
 
                 FillContentRowDisciplineSummaryReport(disciplines, ref writer);
-                writer.SyncColumnsWidth(17);
+                writer.SyncColumnsWidth(19);
+                writer.CreateFreezePane(6, 3);
 
                 writer.Render();
             }
@@ -146,10 +147,11 @@
                 writer.CopyRows(1, 1);
 
                 // Fill report header.
-                writer.CopyRows(3, 1);
+                writer.CopyRows(2, 1);
 
                 FillContentRowDisciplineDetailReport(disciplineDetails, ref writer);
-                writer.SyncColumnsWidth(20);
+                writer.SyncColumnsWidth(21);
+                writer.CreateFreezePane(5, 3);
 
                 writer.Render();
             }
@@ -168,7 +170,7 @@
         private void FillRowDisciplineSummaryReport(DisciplineSummaryModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordDisciplineSummaryReport(discipline, ref rowIndex);
-            writer.WriteRow(4, record);
+            writer.WriteRow(3, record);
         }
 
         private object CreateRecordDisciplineSummaryReport(DisciplineSummaryModel discipline, ref int rowIndex)
@@ -193,6 +195,8 @@
                 UnpaidLeave = discipline.UnpaidLeave,
                 UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent,
                 ChangeShift = discipline.ChangeShift,
+                UnplannedLeave = discipline.UnplannedLeave,
+                WeekendLeave = discipline.WeekendLeave,
                 OtherDiscipline = (decimal)otherDisciplines,
                 SystemSubtractScore = (decimal)systemSubtractScore,
                 ApproverSubtractScore = (decimal)approverSubtractScore
@@ -215,7 +219,15 @@
         private void FillRowDisciplineDetailReport(DisciplineDetailModel disciplineDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordDisciplineDetailReport(disciplineDetail, ref rowIndex);
-            writer.WriteRow(4, record);
+
+            if (disciplineDetail.IsWeekend)
+            {
+                writer.WriteRow(4, record);
+            }
+            else
+            {
+                writer.WriteRow(3, record);
+            }
         }
 
         private object CreateRecordDisciplineDetailReport(DisciplineDetailModel disciplineDetail, ref int rowIndex)
@@ -241,8 +253,9 @@
                 EarlyOut = !string.IsNullOrEmpty(disciplineDetail.MinutesEarlyOut) ? disciplineDetail.MinutesEarlyOut : string.Empty,
                 Absent = disciplineDetail.Absent.Value > 0 ? disciplineDetail.Absent.Value.ToString() : string.Empty,
                 UnpaidLeave = disciplineDetail.UnpaidLeave.Value > 0 ? disciplineDetail.UnpaidLeave.Value.ToString() : string.Empty,
-                UnpaidLeaveAbsent = disciplineDetail.UnpaidLeaveAbsent.Value > 0 ? disciplineDetail.UnpaidLeaveAbsent.Value.ToString() : string.Empty,
                 ChangeShift = disciplineDetail.ChangeShift.Value > 0 ? disciplineDetail.ChangeShift.Value.ToString() : string.Empty,
+                UnpaidLeaveAbsent = disciplineDetail.UnpaidLeaveAbsent.Value > 0 ? disciplineDetail.UnpaidLeaveAbsent.Value.ToString() : string.Empty,
+                WeekendLeave = disciplineDetail.WeekendLeave.Value > 0 ? disciplineDetail.WeekendLeave.Value.ToString() : string.Empty,
                 SystemSubtractScore = systemSubtractScore,
                 ApproverSubtractScore = approverSubtractScore,
                 ApproverComment = disciplineDetail.ApproverComment,

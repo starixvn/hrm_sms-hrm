@@ -80,6 +80,7 @@
                     UnpaidLeave = GetUnpaidLeave(discipline),
                     WorkingUnderTime = GetWorkingUnderTime(discipline),
                     UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
+                    WeekendLeave = GetWeekendLeave(discipline),
                     EmployeeComment = discipline.EmployeeComment,
                     ApproverComment = discipline.ApproverComment,
                     Confirmed = discipline.IsConfirmed,
@@ -202,6 +203,19 @@
                 HasViolated = discipline.UnpaidLeaveAbsentHasViolated,
                 HasIgnored = discipline.UnpaidLeaveAbsentHasIgnored,
                 HasApprovedBy = discipline.UnpaidLeaveAbsentHasApprovedBy
+            };
+        }
+
+        private static DisciplineModel GetWeekendLeave(dynamic discipline)
+        {
+            return new DisciplineModel
+            {
+                DisciplineId = discipline.WeekendLeaveId,
+                Value = discipline.WeekendLeaveValue,
+                Score = discipline.WeekendLeaveScore,
+                HasViolated = discipline.WeekendLeaveHasViolated,
+                HasIgnored = discipline.WeekendLeaveHasIgnored,
+                HasApprovedBy = discipline.WeekendLeaveHasApprovedBy
             };
         }
 

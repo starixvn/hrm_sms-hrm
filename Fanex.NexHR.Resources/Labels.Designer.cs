@@ -2635,6 +2635,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Following Leave Procedures.
+        /// </summary>
+        public static string NotFollowingLeaveProcedures {
+            get {
+                return ResourceManager.GetString("NotFollowingLeaveProcedures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notification.
         /// </summary>
         public static string Notification {
@@ -4134,6 +4143,15 @@ namespace Fanex.NexHR.Resources {
         public static string Wed {
             get {
                 return ResourceManager.GetString("Wed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekend Leave.
+        /// </summary>
+        public static string WeekendLeave {
+            get {
+                return ResourceManager.GetString("WeekendLeave", resourceCulture);
             }
         }
         

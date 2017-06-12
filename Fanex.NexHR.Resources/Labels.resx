@@ -1527,4 +1527,10 @@
   <data name="SymbolHalfYear" xml:space="preserve">
     <value>H - </value>
   </data>
+  <data name="NotFollowingLeaveProcedures" xml:space="preserve">
+    <value>Not Following Leave Procedures</value>
+  </data>
+  <data name="WeekendLeave" xml:space="preserve">
+    <value>Weekend Leave</value>
+  </data>
 </root>

@@ -30,6 +30,8 @@
 
         public bool IsIgnoredUnpaidLeaveAbsent { get; set; }
 
+        public bool IsIgnoredWeekendLeave { get; set; }
+
         public bool IsConfirmed
         {
             get

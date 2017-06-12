@@ -38,6 +38,8 @@
 
         public DisciplineModel UnpaidLeaveAbsent { get; set; }
 
+        public DisciplineModel WeekendLeave { get; set; }
+
         public decimal SystemSubtractScore { get; set; }
 
         public decimal ApproverSubtractScore { get; set; }

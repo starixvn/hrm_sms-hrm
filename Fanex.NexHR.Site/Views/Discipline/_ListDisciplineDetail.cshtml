@@ -7,7 +7,7 @@
         @if (Model != null & Model.Any() && hasPermissionToEdit)
         {
             <tr>
-                <th colspan="20" style="text-align: left;">
+                <th colspan="21" style="text-align: left;">
                     <input type="button" id="saveChange" value="@Labels.Save" />
                 </th>
             </tr>
@@ -25,10 +25,11 @@
             <th>@Labels.LateIn</th>
             <th>@Labels.EarlyOut</th>
             <th>@Labels.Absent</th>
-            <th>@Labels.UnplannedLeave</th>
             <th>@Labels.UPL</th>
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
+            <th>@Labels.NotFollowingLeaveProcedures</th>
+            <th>@Labels.WeekendLeave</th>
             <th class="width-80">@Labels.SystemDeduction</th>
             <th class="width-80">@Labels.ApproverDeduction</th>
             <th class="width-80">@Labels.ApproverComment</th>
@@ -172,25 +173,6 @@
                         }
                     </td>
                     <td>
-                        @if (item.UnplannedLeave.Value > 0)
-                        {
-                            <span class="float-left">@item.UnplannedLeave.Value</span>
-                            if (item.UnplannedLeave.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.UnplannedLeave;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnplannedLeave.HasIgnored"
-                                       disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
-                                       data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
                         @if (item.UnpaidLeave.Value > 0)
                         {
                             <span class="float-left">@item.UnpaidLeave.Value</span>
@@ -240,6 +222,44 @@
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
                                        data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
+                            }
+                        }
+                        else
+                        {
+                            <span class="float-left">-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.UnplannedLeave.Value > 0)
+                        {
+                            <span class="float-left">@item.UnplannedLeave.Value</span>
+                            if (item.UnplannedLeave.HasViolated)
+                            {
+                                disciplinetypeId = (int)DisciplineType.UnplannedLeave;
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnplannedLeave.HasIgnored"
+                                       disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
+                                       data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
+                            }
+                        }
+                        else
+                        {
+                            <span class="float-left">-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.WeekendLeave.Value > 0)
+                        {
+                            <span class="float-left">@item.WeekendLeave.Value</span>
+                            if (item.WeekendLeave.HasViolated)
+                            {
+                                disciplinetypeId = (int)DisciplineType.WeekendLeave;
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.WeekendLeave.HasIgnored"
+                                       disabled="@item.WeekendLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WeekendLeave.Score"
+                                       data-has-ignored="@item.WeekendLeave.HasIgnored" data-changed="false" />
                             }
                         }
                         else
@@ -300,6 +320,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 20);
+        @RazorHelper.DisplayNoInformation(colspan: 21);
     }
 </table>

@@ -78,6 +78,7 @@
                     IsIgnoredUnpaidLeave: false,
                     IsIgnoredWorkingUnderTime: false,
                     IsIgnoredUnpaidLeaveAbsent: false,
+                    IsIgnoredWeekendLeave: false,
                     ApproverSubtractScore: Math.abs(approverSubstractScore)
                 };
 
@@ -113,6 +114,9 @@
                             break;
                         case 9:
                             ignoredDiscipline.IsIgnoredUnplannedLeave = $(this).prop('checked');
+                            break;
+                        case 10:
+                            ignoredDiscipline.IsIgnoredWeekendLeave = $(this).prop('checked');
                             break;
                     }
                 });

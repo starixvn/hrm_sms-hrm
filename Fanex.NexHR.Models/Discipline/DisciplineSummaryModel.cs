@@ -14,13 +14,15 @@
 
         public int Absent { get; set; }
 
-        public int UnplannedLeave { get; set; }
-
         public int UnpaidLeave { get; set; }
 
         public int UnpaidLeaveAbsent { get; set; }
 
         public int ChangeShift { get; set; }
+
+        public int UnplannedLeave { get; set; }
+
+        public int WeekendLeave { get; set; }
 
         public float OtherDisciplineScore { get; set; }
 

@@ -1,44 +1,30 @@
 ﻿namespace Fanex.NexHR.Criteria.Discipline
 {
+    using Core;
+    using Data.Repository;
+    using Models.Discipline;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models.Discipline;
 
     public class UpdateIgnoredDisciplineCriteria : CriteriaBase
     {
         private const string DisciplineTemp =
             @"<Discipline WorkDate='{0}' EmployeeId='{1}' IsIgnoredChangeShift='{2}' IsIgnoredMissingCheckInOut='{3}' IsIgnoredLateIn='{4}'
                 IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnplannedLeave='{7}' IsIgnoredUnpaidLeave='{8}'
-                IsIgnoredWorkingUnderTime='{9}' IsIgnoredUnpaidLeaveAbsent='{10}'
-                IsConfirmed='{11}' ApproverSubtractScore='{12}'></Discipline>";
-
-        private const string BeginRootTag = "<ROOT>";
-        private const string EndRootTag = "</ROOT>";
+                IsIgnoredWorkingUnderTime='{9}' IsIgnoredUnpaidLeaveAbsent='{10}' IsIgnoredWeekendLeave='{11}'
+                IsConfirmed='{12}' ApproverSubtractScore='{13}'></Discipline>";
 
         public int ModifiedBy { get; set; }
 
-        public string IgnoredDetails
-        {
-            get
-            {
-                return ConvertIgnoredDisciplineToXml();
-            }
-        }
+        public string IgnoredDetails => ConvertIgnoredDisciplineToXml();
 
         [SpParam(Ignored = true)]
         public IList<IgnoredDisciplineModel> IgnoredDisciplines { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeDiscipline_UpdateIgnored";
-        }
+        public override string GetSettingKey() => "EmployeeDiscipline_UpdateIgnored";
 
-        public override bool IsValid()
-        {
-            return !string.IsNullOrWhiteSpace(IgnoredDetails);
-        }
+        public override bool IsValid() => !string.IsNullOrWhiteSpace(IgnoredDetails);
 
         private string ConvertIgnoredDisciplineToXml()
         {
@@ -46,7 +32,7 @@
 
             if (IgnoredDisciplines != null && IgnoredDisciplines.Any())
             {
-                disciplineXmlBuilder.Append(BeginRootTag);
+                disciplineXmlBuilder.Append(Constants.BeginRootTag);
 
                 foreach (IgnoredDisciplineModel item in IgnoredDisciplines)
                 {
@@ -63,11 +49,12 @@
                         item.IsIgnoredUnpaidLeave,
                         item.IsIgnoredWorkingUnderTime,
                         item.IsIgnoredUnpaidLeaveAbsent,
+                        item.IsIgnoredWeekendLeave,
                         item.IsConfirmed,
                         item.ApproverSubtractScore);
                 }
 
-                disciplineXmlBuilder.Append(EndRootTag);
+                disciplineXmlBuilder.Append(Constants.EndRootTag);
             }
 
             return disciplineXmlBuilder.ToString();

@@ -1,7 +1,8 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models.Discipline;
+    using Core;
+    using Data.Repository;
+    using Models.Discipline;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -9,8 +10,6 @@
     public class ApproveRequestCriteria : CriteriaBase
     {
         private const string DisciplineTemp = "<Discipline WorkDate='{0}' EmployeeId='{1}' DisciplineTypeId='{2}' IsIgnored='{3}' IsConfirmed='{4}'></Discipline>";
-        private const string BeginRootTag = "<ROOT>";
-        private const string EndRootTag = "</ROOT>";
 
         public long RequestId { get; set; }
 
@@ -23,26 +22,14 @@
         [SpParam(Ignored = true)]
         public string Action { get; set; }
 
-        public string IgnoredDetails
-        {
-            get
-            {
-                return ConvertDisciplineItemToXml();
-            }
-        }
+        public string IgnoredDetails => ConvertDisciplineItemToXml();
 
         [SpParam(Ignored = true)]
         public IList<IgnoredDisciplineModel> IgnoredDisciplines { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "WorkingTimeRequest_ApproveRequest";
-        }
+        public override string GetSettingKey() => "WorkingTimeRequest_ApproveRequest";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
 
         private string ConvertDisciplineItemToXml()
         {
@@ -50,14 +37,14 @@
 
             if (IgnoredDisciplines != null && IgnoredDisciplines.Any())
             {
-                disciplineXmlBuilder.Append(BeginRootTag);
+                disciplineXmlBuilder.Append(Constants.BeginRootTag);
 
                 foreach (IgnoredDisciplineModel item in IgnoredDisciplines)
                 {
                     disciplineXmlBuilder.AppendFormat(DisciplineTemp, item.WorkDate, item.EmployeeId, item.DisciplineTypeId, item.IsIgnored, item.IsConfirmed);
                 }
 
-                disciplineXmlBuilder.Append(EndRootTag);
+                disciplineXmlBuilder.Append(Constants.EndRootTag);
             }
 
             return disciplineXmlBuilder.ToString();
