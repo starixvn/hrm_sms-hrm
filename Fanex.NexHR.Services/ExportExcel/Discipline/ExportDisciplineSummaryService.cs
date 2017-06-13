@@ -1,0 +1,103 @@
+﻿namespace Fanex.NexHR.Services.ExportExcel
+{
+    using Core;
+    using Criteria.Discipline;
+    using Models.Discipline;
+    using Resources;
+    using System.Collections.Generic;
+    using System.Web;
+
+    public class ExportDisciplineSummaryService : IExportDisciplineSummaryService
+    {
+        private const string TemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
+        private const int HeaderRow = 2;
+        private const int BodyRow = 3;
+        private const int TotalRow = 19;
+
+        public void Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
+        {
+            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath),
+                reportName = Labels.DisciplineSummaryReportName,
+                reportTitle,
+                startDate = criteria.FromDate.ToString(Constants.DateFormat),
+                endDate = criteria.ToDate.ToString(Constants.DateFormat);
+
+            if (criteria.EmployeeId != null)
+            {
+                reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.EmployeeName, startDate, endDate);
+            }
+            else if (criteria.GroupId != null)
+            {
+                reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.GroupName, startDate, endDate);
+            }
+            else
+            {
+                reportTitle = string.Format(Labels.DisciplineSummaryReportTitleNoPrefix, startDate, endDate);
+            }
+
+            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineSummaryReportSheet);
+
+            // Fill report title.
+            writer.WriteRow(0, new object[] { reportTitle });
+            writer.CopyRows(1, 1);
+
+            // Fill report header.
+            writer.CopyRows(HeaderRow, 1);
+
+            FillContentRow(disciplines, ref writer);
+            writer.SyncColumnsWidth(TotalRow);
+            writer.CreateFreezePane(6, 3);
+
+            writer.Render();
+        }
+
+        private void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (DisciplineSummaryModel discipline in disciplines)
+            {
+                FillRow(discipline, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRow(DisciplineSummaryModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecord(discipline, ref rowIndex);
+            writer.WriteRow(BodyRow, record);
+        }
+
+        private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
+        {
+            float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0,
+                systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0,
+                approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
+
+            var record = new
+            {
+                Count = rowIndex,
+                Section = discipline.Employee.GroupName,
+                Code = discipline.Employee.Code,
+                Nick = discipline.Employee.NickName,
+                FullName = discipline.Employee.FullName,
+                Category = discipline.Employee.IsLocal ? Labels.Local : Labels.Expat,
+                MissingCheckInOut = discipline.MissingCheckInOut,
+                WorkingUnderTime = discipline.WorkingUnderTime,
+                LateIn = discipline.LateIn,
+                EarlyOut = discipline.EarlyOut,
+                Absent = discipline.Absent,
+                UnpaidLeave = discipline.UnpaidLeave,
+                UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent,
+                ChangeShift = discipline.ChangeShift,
+                UnplannedLeave = discipline.UnplannedLeave,
+                WeekendLeave = discipline.WeekendLeave,
+                OtherDiscipline = (decimal)otherDisciplines,
+                SystemSubtractScore = (decimal)systemSubtractScore,
+                ApproverSubtractScore = (decimal)approverSubtractScore
+            };
+            rowIndex++;
+
+            return record;
+        }
+    }
+}

@@ -240,7 +240,7 @@
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-            window.location.href = _global.root + 'Export/ExportDisciplineDetailReport?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportDiscipline/ExportDisciplineDetailReport?' + $('form.form-filter').serialize();
         });
 
         query();

@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using Fanex.NexHR.Criteria.Discipline;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Discipline;
+    using Criteria.Discipline;
+    using Models;
+    using Models.Discipline;
     using System.Collections.Generic;
 
     public interface IDisciplineService
@@ -16,10 +16,6 @@
         IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
 
         IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);
-
-        void ExportDisciplineSummaryReport(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines, string templatePath);
-
-        void ExportDisciplineDetailReport(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplineDetails, string templatePath);
 
         IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria);
     }

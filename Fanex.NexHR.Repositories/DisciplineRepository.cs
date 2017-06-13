@@ -254,7 +254,7 @@
             double numberMinutes = Math.Round(number);
 
             var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
-            string time = timeSpan.ToString(@"hh\:mm");
+            string time = number > 0 ? timeSpan.ToString(@"hh\:mm") : string.Empty;
 
             return time;
         }

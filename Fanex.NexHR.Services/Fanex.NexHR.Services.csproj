@@ -167,6 +167,10 @@
     <Compile Include="DepartmentService.cs" />
     <Compile Include="ExportExcel\Attendance\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Attendance\IExportExcelAttendanceReportService.cs" />
+    <Compile Include="ExportExcel\Discipline\ExportDisciplineDetailService.cs" />
+    <Compile Include="ExportExcel\Discipline\ExportDisciplineSummaryService.cs" />
+    <Compile Include="ExportExcel\Discipline\IExportDisciplineDetailService.cs" />
+    <Compile Include="ExportExcel\Discipline\IExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Employee\ExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\Employee\IExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\IExportService.cs" />

@@ -1,45 +1,37 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Fanex.NexHR.Controllers.Request;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Discipline;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Report;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Discipline;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel;
-    using Fanex.NexHR.Services.Implement;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Discipline;
-    using Fanex.NexHR.ViewModels.Request;
-    using Fanex.NexHR.Web.Providers;
+    using Core;
+    using Core.Enums;
+    using Criteria;
+    using Criteria.AnnualLeave;
+    using Criteria.Calendar;
+    using Criteria.Employee;
+    using Criteria.Report;
+    using Criteria.Request;
+    using Criteria.Supervisor;
+    using Criteria.Team;
+    using Models;
+    using Models.Request;
+    using Models.Supervisor;
     using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
+    using Request;
+    using Services;
+    using Services.ExportExcel;
+    using Services.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
+    using ViewModels;
+    using ViewModels.Request;
+    using Web.Providers;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class ExportController : RequestController
     {
-        private const string DisciplineSummaryTemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
-        private const string DisciplineDetailTemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
-        private const string WorkingTimeRequestTemplatePath = @"~\ExcelTemplates\WorkingTimeRequestTemplate.xls";
-
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
         private readonly IRequestService requestService;
@@ -47,7 +39,6 @@
         private readonly IOvertimeRequestService overtimeService;
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
-        private readonly IDisciplineService disciplineService;
         private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
         private readonly IExportExcelEmployeeInfoService exportExcelEmployeeInfoService;
         private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
@@ -60,7 +51,7 @@
         private IExportService exportService;
 
         public ExportController()
-            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+            : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
         {
         }
 
@@ -73,7 +64,6 @@
             IOvertimeRequestService overtimeService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
-            IDisciplineService disciplineService,
             IExportExcelAttendanceReportService exportExcelAttendanceReportService,
             IExportExcelEmployeeInfoService exportExcelEmployeeInfoService,
             IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
@@ -91,7 +81,6 @@
             this.overtimeService = overtimeService ?? new OvertimeRequestService();
             this.employeeService = employeeService ?? new EmployeeService();
             this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            this.disciplineService = disciplineService ?? new DisciplineService();
             this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
             this.exportExcelEmployeeInfoService = exportExcelEmployeeInfoService ?? new ExportExcelEmployeeInfoService();
             this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor ?? new ExportExcelEmployeeSupervisor();
@@ -123,7 +112,7 @@
             {
                 Fromdate = model.FromDate,
                 Todate = model.ToDate,
-                EmpId = (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
+                EmpId = (model.EmployeeId != -1 && model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
                 GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal
             };
@@ -306,8 +295,7 @@
         public ActionResult EmployeeOvertimeReport(int? year, int? month, int? calendar, int? empId)
         {
             var requestDate = new DateTime(year.Value, month.Value, 1);
-            var fromDate = new DateTime();
-            var toDate = new DateTime();
+            DateTime fromDate, toDate;
 
             if (calendar == 0)
             {
@@ -435,52 +423,6 @@
 
             IList<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(criteria);
             exportExcelManpowerCategoryService.Export(manpowers, year);
-
-            return new EmptyResult();
-        }
-
-        public ActionResult ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
-        {
-            var criteria = new GetDisciplineSummaryCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                GroupId = model.TeamId,
-                IsLocal = model.IsLocal,
-                EmployeeId = model.EmployeeId,
-                ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id,
-                EmployeeName = model.Employee,
-                GroupName = model.TeamName
-            };
-
-            IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
-
-            string templatePath = Server.MapPath(DisciplineSummaryTemplatePath);
-            disciplineService.ExportDisciplineSummaryReport(criteria, disciplines, templatePath);
-
-            return new EmptyResult();
-        }
-
-        public ActionResult ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
-        {
-            var criteria = new GetDisciplineDetailCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                GroupId = model.TeamId,
-                IsLocal = model.IsLocal,
-                EmployeeId = model.EmployeeId,
-                ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id,
-                EmployeeName = model.Employee,
-                GroupName = model.TeamName
-            };
-
-            IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
-
-            string templatePath = Server.MapPath(DisciplineDetailTemplatePath);
-            disciplineService.ExportDisciplineDetailReport(criteria, disciplines, templatePath);
 
             return new EmptyResult();
         }
