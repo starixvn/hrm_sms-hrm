@@ -37,8 +37,8 @@
             var sheet = hssfworkbook.CloneSheet("sheet1", "Request Statistic");
 
             var rowDate = sheet.GetRow(1);
-            rowDate.GetCell(3).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            rowDate.GetCell(5).SetCellValue(toDate.ToString("dd MMM, yyyy"));
+            rowDate.GetCell(3).SetCellValue(fromDate.ToString(Constants.DateFormat));
+            rowDate.GetCell(5).SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowIndex = _RowStartBodyHrRequestStatistic;
             var rowCopy = _RowStartBodyHrRequestStatistic;
@@ -89,8 +89,8 @@
             var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendarSummary");
 
             var rowDate = sheet.GetRow(1);
-            rowDate.GetCell(2).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            rowDate.GetCell(4).SetCellValue(toDate.ToString("dd MMM, yyyy"));
+            rowDate.GetCell(2).SetCellValue(fromDate.ToString(Constants.DateFormat));
+            rowDate.GetCell(4).SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowIndex = _RowStartBodyWorkingCalendarSummary;
             var rowCopy = _RowStartBodyWorkingCalendarSummary;
@@ -151,7 +151,7 @@
                     {
                         if (startColumn < totalCellInRow)
                         {
-                            rowHeaderDate.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("dd MMM, yyyy"));
+                            rowHeaderDate.GetCell(startColumn).SetCellValue(item.WorkDate.ToString(Constants.DateFormat));
                             rowHeaderDay.GetCell(startColumn).SetCellValue(item.WorkDate.ToString("ddd"));
                         }
 

@@ -370,17 +370,17 @@
             var rowDate = sheet.GetRow(1);
             ICell cellFromDate = rowDate.GetCell(2);
             ICell cellToDate = rowDate.GetCell(4);
-            cellFromDate.SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            cellToDate.SetCellValue(toDate.ToString("dd MMM, yyyy"));
+            cellFromDate.SetCellValue(fromDate.ToString(Constants.DateFormat));
+            cellToDate.SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowHeaderDate = sheet.GetRow(3);
-            rowHeaderDate.GetCell(5).SetCellValue(fromDate.ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1).ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2).ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3).ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4).ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5).ToString("dd MMM, yyyy"));
-            rowHeaderDate.GetCell(11).SetCellValue(toDate.ToString("dd MMM, yyyy"));
+            rowHeaderDate.GetCell(5).SetCellValue(fromDate.ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1).ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2).ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3).ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4).ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5).ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(11).SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowHeaderDay = sheet.GetRow(4);
             rowHeaderDay.GetCell(5).SetCellValue(fromDate.ToString("ddd"));

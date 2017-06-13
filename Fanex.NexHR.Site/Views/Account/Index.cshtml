@@ -1,4 +1,4 @@
-﻿@model Fanex.NexHR.Models.Employee
+﻿@model Employee
 @{
     ViewBag.Title = Labels.MyProfile;
 }
@@ -75,7 +75,7 @@
                         }
                         else
                         {
-                            @Model.DateOfBirth.ToString("dd MMM, yyyy")
+                            @Model.DateOfBirth.ToString(Constants.DateFormat)
                         }
                     </div>
                     <div class="clear"></div>

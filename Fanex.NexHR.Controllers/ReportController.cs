@@ -1,31 +1,30 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Core;
+    using Core.Enums;
+    using Criteria;
+    using Criteria.Lookup;
+    using Criteria.Report;
+    using Criteria.Request;
+    using Criteria.Supervisor;
+    using Criteria.Team;
+    using Criteria.Time;
+    using Models;
+    using Models.Supervisor;
+    using Nexus.RoleManagement.Services;
+    using NPOI.HSSF.UserModel;
+    using Services;
+    using Services.ExportExcel;
+    using Services.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Report;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
-    using Fanex.NexHR.Criteria.Time;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.ViewModels.Request;
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using NPOI.HSSF.UserModel;
+    using ViewModels;
+    using ViewModels.Request;
+    using Web.Providers;
 
     [ValidateInput(false)]
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
@@ -42,10 +41,10 @@
         }
 
         public ReportController(
-            IReportService reportSevice = null,
-            ITeamService teamService = null,
-            IExportExcelService exportExcelService = null,
-            ILookupDataService lookupDataService = null)
+            IReportService reportSevice,
+            ITeamService teamService,
+            IExportExcelService exportExcelService,
+            ILookupDataService lookupDataService)
         {
             this.reportService = reportSevice ?? new ReportService();
             this.teamService = teamService ?? new TeamService();
@@ -116,7 +115,7 @@
         public ActionResult TimesheetDetails(TimesheetViewModel model)
         {
             var fromDate = new DateTime(model.Year, model.Month, 1);
-            var toDate = new DateTime();
+            DateTime toDate;
 
             if (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year)
             {
@@ -331,7 +330,7 @@
 
             if (model.IsExportExcel)
             {
-                using (var export = new ExportController())
+                using (var export = new ExportTotalWorkingHourController())
                 {
                     return export.TotalWorkingHours(model);
                 }
@@ -344,7 +343,7 @@
             {
                 Fromdate = model.FromDate,
                 Todate = model.ToDate,
-                EmpId = (model.EmployeeId != -1 & model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
+                EmpId = (model.EmployeeId != -1 && model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
                 GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal
             };
@@ -456,7 +455,7 @@
              byte? isLocal = null,
              bool isExcel = false)
         {
-            if (fromDate == null && toDate == null)
+            if (!fromDate.HasValue && !toDate.HasValue)
             {
                 fromDate = DateTime.Now.Date;
                 toDate = DateTime.Now.Date;
@@ -466,8 +465,8 @@
             {
                 Employee = employee,
                 EmployeeId = employeeId,
-                FromDate = fromDate.Value.ToString("dd MMM, yyyy"),
-                ToDate = toDate.Value.ToString("dd MMM, yyyy"),
+                FromDate = fromDate.Value.ToString(Constants.DateFormat),
+                ToDate = toDate.Value.ToString(Constants.DateFormat),
                 IsLocal = isLocal,
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds

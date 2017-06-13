@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
+    using Core;
     using Fanex.NexHR.Models;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
@@ -26,7 +27,7 @@
 
         public TotalWorkingHourExportService()
             : this(null, null, null)
-        { 
+        {
         }
 
         public HSSFWorkbook Export()
@@ -34,7 +35,7 @@
             var workbook = new HSSFWorkbook();
             var sheet = workbook.CreateSheet("Total Working Hours");
             var rowTitle = sheet.CreateRow(1);
-            var titleString = "Total Working Hours: " + fromDate.ToString("dd MMM, yyyy") + " - " + toDate.ToString("dd MMM, yyyy");
+            var titleString = "Total Working Hours: " + fromDate.ToString(Constants.DateFormat) + " - " + toDate.ToString(Constants.DateFormat);
 
             var font = workbook.CreateFont();
             font.FontHeightInPoints = 18;

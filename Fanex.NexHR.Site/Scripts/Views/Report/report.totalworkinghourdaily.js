@@ -11,7 +11,7 @@
         });
 
         $("#btnExcel").on('click', function () {
-            window.location.href = _global.root + 'Export/ExportTotalWorkingHourDaily?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportTotalWorkingHour/ExportTotalWorkingHourDaily?' + $('form.form-filter').serialize();
         });
     });
 })();

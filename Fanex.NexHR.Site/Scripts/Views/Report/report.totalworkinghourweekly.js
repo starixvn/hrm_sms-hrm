@@ -32,7 +32,7 @@
         });
 
         $("#btnExcel").on('click', function () {
-            window.location.href = _global.root + 'Export/ExportTotalWorkingHourWeekly?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportTotalWorkingHour/ExportTotalWorkingHourWeekly?' + $('form.form-filter').serialize();
         });
 
         query();

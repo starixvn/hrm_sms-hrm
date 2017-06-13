@@ -54,7 +54,7 @@
         });
 
         $("#btnExcel").on('click', function () {
-            window.location.href = _global.root + 'Export/ExportTotalWorkingHourMonthly?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportTotalWorkingHour/ExportTotalWorkingHourMonthly?' + $('form.form-filter').serialize();
         });
 
         query();

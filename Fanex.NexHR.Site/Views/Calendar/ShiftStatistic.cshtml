@@ -1,8 +1,8 @@
 ﻿@model ShiftStatisticViewModel
 @{
     ViewBag.Title = @Labels.ShiftStatisticReport;
-    var displayFrom = (Model.FromDate).ToString("dd MMM, yyyy");
-    var displayTo = (Model.ToDate).ToString("dd MMM, yyyy");
+    var displayFrom = (Model.FromDate).ToString(Constants.DateFormat);
+    var displayTo = (Model.ToDate).ToString(Constants.DateFormat);
 }
 @section css{
     @Url.CombresLink("shiftstatisticcss")
