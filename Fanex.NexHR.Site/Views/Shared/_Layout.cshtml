@@ -1,8 +1,24 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var title = string.Empty;
+    int siteId = ConfigSettings.SiteId;
+}
+
+<!DOCTYPE html>
 <html xml:lang="en" lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>SMSHRMS - @ViewBag.Title</title>
+
+    @switch (siteId)
+    {
+        case (int)SiteId.SMS:
+            title = "SMS HRMS";
+            break;
+        case (int)SiteId.HM:
+            title = "HM HRM";
+            break;
+    }
+
+    <title>@title - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     @RenderSection("css", false)

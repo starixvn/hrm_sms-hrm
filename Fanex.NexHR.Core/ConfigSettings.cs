@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.Core
 {
-    using System.Configuration;
     using Fanex.Common;
+    using System.Configuration;
 
     public static class ConfigSettings
     {
@@ -42,6 +42,14 @@
             get
             {
                 return Converter.ToBool(ConfigurationManager.AppSettings["IsDisabledSendMail"].ToString());
+            }
+        }
+
+        public static int SiteId
+        {
+            get
+            {
+                return Converter.ToInt(ConfigurationManager.AppSettings["SiteId"].ToString());
             }
         }
     }

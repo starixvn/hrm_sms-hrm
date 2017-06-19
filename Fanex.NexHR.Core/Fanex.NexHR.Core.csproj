@@ -136,6 +136,7 @@
     <Compile Include="Enums\HrStatus.cs" />
     <Compile Include="Enums\SettingsSendMail.cs" />
     <Compile Include="Enums\ShiftStatus.cs" />
+    <Compile Include="Enums\SiteId.cs" />
     <Compile Include="Enums\SupervisorActionType.cs" />
     <Compile Include="Enums\VerifiedStatus.cs" />
     <Compile Include="Enums\CurrentRequestStatus.cs" />

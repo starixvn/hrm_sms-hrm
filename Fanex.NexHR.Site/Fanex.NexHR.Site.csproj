@@ -301,6 +301,8 @@
     </Content>
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
+    <Content Include="Images\Hongma-logo.png" />
+    <Content Include="Images\SMS-logo.png" />
     <Content Include="Images\warning.png" />
     <Content Include="Libs\FloatThead\jquery.floatThead.js" />
     <Content Include="Libs\FloatThead\jquery.floatThead.min.js" />
@@ -347,7 +349,6 @@
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />
-    <Content Include="Images\LogoSMS.jpg" />
     <Content Include="Images\panel_bg.png" />
     <Content Include="Images\picon.png" />
     <Content Include="Images\signin_icon.png" />
@@ -419,7 +420,6 @@
     <Content Include="Styles\employeechangeshift.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
-    <Content Include="Styles\Images\nexHRMicon.png" />
     <Content Include="Styles\Images\panel_bg.png" />
     <Content Include="Styles\Images\picon.png" />
     <Content Include="Styles\Images\signin_icon.png" />
@@ -483,7 +483,6 @@
     <Content Include="Images\info.png" />
     <Content Include="Images\irongrip.png" />
     <Content Include="Images\lock.png" />
-    <Content Include="Images\Logo.png" />
     <Content Include="Images\slash-gray.png" />
     <Content Include="Images\sprite_btn.png" />
     <Content Include="Images\sprite_ico_2012-05-15.png" />
@@ -1272,6 +1271,14 @@
     <Content Include="Views\Report\_TotalWorkingHourMonthlyDetails.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
     <Content Include="Views\Report\_AttendanceDetails.cshtml" />
+    <Content Include="WebConfigs\Web.PRO.sms.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebConfigs\Web.PRO.hm.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,19 +1,31 @@
-﻿@model Fanex.NexHR.Models.UserLoginModel
+﻿@model UserLoginModel
 @{
-	IList<Message> messages = ViewBag.Messages as IList<Message>;
+    IList<Message> messages = ViewBag.Messages as IList<Message>;
+    int siteId = ConfigSettings.SiteId;
 }
 <div class="header_wrap">
     <div class="header">
         <h1>
             <a href="~/">
-                <img src="/Images/LogoSMS.jpg" width="155px" height="35px" alt="." /></a></h1>
+                @switch (siteId)
+                {
+                    case (int)SiteId.SMS:
+                        <img src="~/Images/SMS-logo.png" width="155" alt="" />
+                        break;
+                    case (int)SiteId.HM:
+                        <img src="~/Images/Hongma-logo.png" width="155" alt="" />
+                        break;
+                }
+            </a>
+        </h1>
         <div class="search_bar">
             <form class="search" method="get" action="/employee/index" accept-charset="UTF-8" id="search">
-            <input type="text" autocomplete="off" placeholder="Nickname or full name" name="query"
-                id="searchbox" class="placeholder" /><a id="searchIcon" class="search_btn button straight-left no_border just-icon"><span class="icon magnifier"></span></a></form>
+                <input type="text" autocomplete="off" placeholder="Nickname or full name" name="query" id="searchbox" class="placeholder" />
+                <a id="searchIcon" class="search_btn button straight-left no_border just-icon"><span class="icon magnifier"></span></a>
+            </form>
         </div>
 
-        <div id="user_utilities" class="dropdown_navigation"  style="z-index: 1000;">
+        <div id="user_utilities" class="dropdown_navigation" style="z-index: 1000;">
             <h2>
                 @Model.FullName - <i>@Model.NickName</i>
             </h2>
@@ -24,11 +36,9 @@
                 <li><a class="" href="@Url.Action("create","lateinearlyout")">Request late in - early out</a> </li>
                 <li><a class="" href="@Url.Action("create","checkinout")">Request check in/out</a> </li>
                 <li><a class="" href="@Url.Action("index","account")">My profile</a> </li>
-				<li><a class="" href="@Url.Action("changepwd", "account")">Change Password</a> </li>
-				<li><a class="" href="@Url.Action("logout", "auth")">Logout</a> </li>
+                <li><a class="" href="@Url.Action("changepwd", "account")">Change Password</a> </li>
+                <li><a class="" href="@Url.Action("logout", "auth")">Logout</a> </li>
             </ol>
         </div>
-
-        
     </div>
-</div> 
+</div>
