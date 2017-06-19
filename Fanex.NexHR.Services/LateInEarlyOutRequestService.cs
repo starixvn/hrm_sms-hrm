@@ -1,15 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+    using Core;
+    using Core.Enums;
+    using Criteria.Employee;
+    using Criteria.Request.LateInEarlyOut;
+    using Interfaces;
+    using Models;
+    using Models.Request;
+    using Resources;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -50,18 +48,23 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.LateInEarlyOutEmailSubject + " " + employee.NickName
-                + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.LateInEarlyOutEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
                 email.SendToNickName,
                 employee.NickName,
-                criteria.RequestType == (short)RequestType.LateIn ? "a " + Resources.Labels.LateIn : "an " + Resources.Labels.EarlyOut,
+                criteria.RequestType == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
                 criteria.OnDate.ToDateMonthYearFormatedDate(),
                 criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                criteria.Remark);
+                criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -80,18 +83,23 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.UpdatedLateInEarlyOutEmailSubject + " " + employee.NickName
-                + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.UpdatedLateInEarlyOutEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
                 email.SendToNickName,
                 employee.NickName,
-                criteria.RequestType == (short)RequestType.LateIn ? "a " + Resources.Labels.LateIn : "an " + Resources.Labels.EarlyOut,
+                criteria.RequestType == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
                 criteria.OnDate.ToDateMonthYearFormatedDate(),
                 criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                criteria.Remark);
+                criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,

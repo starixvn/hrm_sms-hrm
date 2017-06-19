@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.Common.Helper;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.Leave;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+    using Common.Helper;
+    using Core;
+    using Core.Enums;
+    using Criteria.Request;
+    using Criteria.Request.Leave;
+    using Interfaces;
+    using Models;
+    using Models.Request;
+    using Resources;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,7 +17,6 @@
     public class LeaveRequestService : RequestService, ILeaveRequestService
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
-        private const string _ReeditReasonEmailTpl = "~/app_data/emails/ReeditRequest.cshtml";
 
         public IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria)
         {
@@ -78,10 +77,17 @@
 
                 email.Subject = subject;
                 string forDate = criteria.TotalDays == (decimal)0.5
-                ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
-                : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                    ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
+                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
-                email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    criteria.EmployeeName,
+                    forDate,
+                    criteria.LeaveTypeName,
+                    criteria.Remark,
+                    ConfigSettings.ApplicationDomain);
 
                 EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -112,7 +118,14 @@
                     ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
                     : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
-                email.Body = string.Format(email.Body, email.SendToNickName, criteria.EmployeeName, forDate, criteria.LeaveTypeName, criteria.Remark);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    criteria.EmployeeName,
+                    forDate,
+                    criteria.LeaveTypeName,
+                    criteria.Remark,
+                    ConfigSettings.ApplicationDomain);
 
                 EmailService.SendEmail(
                 ConfigSettings.EmailSetting,

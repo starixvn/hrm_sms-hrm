@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request.KeepInView;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+    using Core;
+    using Core.Enums;
+    using Criteria.Employee;
+    using Criteria.Request.KeepInView;
+    using Interfaces;
+    using Models;
+    using Resources;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -41,7 +41,12 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.InsertedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.InsertedKeepInViewEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
@@ -50,7 +55,8 @@
                 employee.NickName,
                 criteria.OnDate.ToDateMonthYearFormatedDate(),
                 criteria.ShiftName,
-                criteria.Remark);
+                criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -69,8 +75,13 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.UpdatedKeepInViewEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
-            
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.UpdatedKeepInViewEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
@@ -78,7 +89,8 @@
                 employee.NickName,
                 criteria.OnDate.ToDateMonthYearFormatedDate(),
                 criteria.ShiftName,
-                criteria.Remark);
+                criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,

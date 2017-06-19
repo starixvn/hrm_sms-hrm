@@ -52,5 +52,13 @@
                 return Converter.ToInt(ConfigurationManager.AppSettings["SiteId"].ToString());
             }
         }
+
+        public static string ApplicationDomain
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ApplicationDomain"].ToString();
+            }
+        }
     }
 }

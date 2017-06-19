@@ -1,13 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Web;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -22,6 +14,14 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Web;
 
     public class RequestService : BaseService, IRequestService
     {
@@ -889,7 +889,7 @@
                     mailList = mail;
                 }
             }
-            
+
             return mailList;
         }
 
@@ -921,17 +921,11 @@
             switch (requestType)
             {
                 case (short)RequestType.CheckIn:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
-                    break;
-
                 case (short)RequestType.CheckOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
 
                 case (short)RequestType.LateIn:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
-                    break;
-
                 case (short)RequestType.EarlyOut:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;

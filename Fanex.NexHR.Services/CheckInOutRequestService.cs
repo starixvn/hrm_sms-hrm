@@ -1,16 +1,12 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.CheckInOut;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+    using Core;
+    using Core.Enums;
+    using Criteria.Employee;
+    using Criteria.Request.CheckInOut;
+    using Interfaces;
+    using Models;
+    using Resources;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -44,8 +40,14 @@
             {
                 EmpId = criteria.EmpId
             };
-            var employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.CheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.CheckInOutEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
@@ -55,7 +57,8 @@
                     criteria.OnDate.ToDateMonthYearFormatedDate(),
                     criteria.Shift,
                     criteria.CheckTime.ToShortTime(),
-                    criteria.Remark);
+                    criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
@@ -73,8 +76,14 @@
             {
                 EmpId = criteria.EmpId
             };
-            var employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            email.Subject = Messages.UpdatedCheckInOutEmailSubject + " " + employee.NickName + " on " + criteria.OnDate.ToDateMonthYearFormatedDate();
+            Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+
+            email.Subject = string.Format(
+                "{0} {1} on {2}",
+                Messages.UpdatedCheckInOutEmailSubject,
+                employee.NickName,
+                criteria.OnDate.ToDateMonthYearFormatedDate());
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(
                 email.Body,
@@ -84,7 +93,8 @@
                     criteria.OnDate.ToDateMonthYearFormatedDate(),
                     criteria.Shift,
                     criteria.CheckTime.ToShortTime(),
-                    criteria.Remark);
+                    criteria.Remark,
+                ConfigSettings.ApplicationDomain);
 
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,

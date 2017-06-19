@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
+    using Core;
+    using Core.Enums;
+    using Criteria.Employee;
+    using Criteria.Request.ChangeShift;
+    using Interfaces;
+    using Models;
+    using Models.Request;
+    using Resources;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -51,9 +51,15 @@
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
-            email.Subject = Messages.ChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            email.Subject = string.Format(
+                "{0} {1} {2}",
+                Messages.ChangeShiftEmailSubject,
+                employee.DisplayName,
+                GetMessageDateString(criteria.FromDate, criteria.ToDate));
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark);
+            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark, ConfigSettings.ApplicationDomain);
+
             EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
@@ -73,10 +79,16 @@
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
 
-            email.Subject = Messages.UpdatedChangeShiftEmailSubject + " " + employee.DisplayName + " " + GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            email.Subject = string.Format(
+                "{0} {1} {2}",
+                Messages.UpdatedChangeShiftEmailSubject,
+                employee.DisplayName,
+                GetMessageDateString(criteria.FromDate, criteria.ToDate));
+
             email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark);
-            this.EmailService.SendEmail(
+            email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark, ConfigSettings.ApplicationDomain);
+
+            EmailService.SendEmail(
                 ConfigSettings.EmailSetting,
                 email.SendTo,
                 email.SendCC,
