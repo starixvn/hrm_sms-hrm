@@ -336,8 +336,6 @@
 
         private CommandResult ApproveRequest(ProcessRequestViewModel model)
         {
-            CommandResult result = new CommandResult();
-
             var criteria = new ApproveRequestCriteria()
             {
                 RequestId = model.RequestId,
@@ -347,7 +345,7 @@
                 ProcessedBy = CurrentUser.Id
             };
 
-            result = commandService.Update(criteria);
+            CommandResult result = commandService.Update(criteria);
             if (result != null && result.IsSuccessful)
             {
                 requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);

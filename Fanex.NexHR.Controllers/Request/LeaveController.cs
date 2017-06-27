@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -18,6 +14,10 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class LeaveController : BaseController
     {
@@ -395,7 +395,9 @@
                     Employee = request.Requester.DisplayName,
                     EmployeeId = request.Requester.Id,
                     FromDate = request.FromDate,
-                    ToDate = request.ToDate,
+                    ToDate = (request.LeaveType.Id != (int)LeaveTypes.GeneralLeave
+                            && request.IsHalfDay
+                            && request.ToDate.Date != request.ToTime.Date) ? request.ToDate.AddDays(1) : request.ToDate,
                     TotalDays = request.TotalDays,
                     HalfDayOff = request.IsHalfDay,
                     VerifierId = request.VerifiedBy.Id,

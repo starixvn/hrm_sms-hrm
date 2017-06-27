@@ -103,18 +103,20 @@ var LeaveRequest = (function ($) {
             LeaveRequest.getLeaveDetail();
         },
         timeChange: function () {
-            if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
-                var checked = LeaveRequest.isFromTimeAfterDay.attr("checked");
-                if (checked === "checked" || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
-                    LeaveRequest.isToTimeAfterDay.attr("checked", "checked");
+            if (LeaveRequest.halfDayOff.prop('checked')) {
+                if (LeaveRequest.isFromTimeAfterDay.prop('checked') || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
+                    LeaveRequest.isToTimeAfterDay.prop('checked', true);
                     var toDate = new Date(LeaveRequest.fromDate.val());
                     toDate.setDate(toDate.getDate() + 1);
                     LeaveRequest.toDate.val(toDate.format("dd mmm, yyyy"));
-                }
-                else {
-                    LeaveRequest.isToTimeAfterDay.removeAttr("checked");
+                } else {
+                    LeaveRequest.isToTimeAfterDay.prop('checked', false);
                     LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
                 }
+            } else {
+                LeaveRequest.isFromTimeAfterDay.prop('checked', false);
+                LeaveRequest.isToTimeAfterDay.prop('checked', false);
+                LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
             }
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
@@ -139,7 +141,7 @@ var LeaveRequest = (function ($) {
                     EmployeeName: LeaveRequest.employee.val(),
                     RequestType: 6,
                     FromDate: LeaveRequest.fromDate.val(),
-                    ToDate: (LeaveRequest.halfDayOff.attr("checked") === "checked" ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val()),
+                    ToDate: (LeaveRequest.halfDayOff.prop('checked') ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val()),
                     LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(":selected").text(),
                     TotalDays: LeaveRequest.totalDays.val(),
@@ -156,15 +158,15 @@ var LeaveRequest = (function ($) {
                 if (LeaveRequest.leaveTypeId.val() === "0") {
                     $(".tabledata tbody tr").each(function () {
                         leaveDate = $.trim($("td.tdleavedate", this).first().attr("data-date"));
-                        isHalfDay = $("td input.chkhalfday", this).first().attr("checked") === "checked";
+                        isHalfDay = $("td input.chkhalfday", this).first().prop('checked');
                         fromTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddlfromtime", this).first().val()) : ""));
                         toTime = new Date(leaveDate + (isHalfDay ? (" " + $("td select.ddltotime", this).first().val()) : ""));
 
-                        if ($("td input.chkIsFromAfterday", this).first().attr("checked") === "checked") {
+                        if ($("td input.chkIsFromAfterday", this).first().prop('checked')) {
                             fromTime.setDate(fromTime.getDate() + 1);
                         }
 
-                        if ($("td input.chkIsToAfterday", this).first().attr("checked") === "checked") {
+                        if ($("td input.chkIsToAfterday", this).first().prop('checked')) {
                             toTime.setDate(toTime.getDate() + 1);
                         }
 
@@ -178,14 +180,14 @@ var LeaveRequest = (function ($) {
                         });
                     });
                 }
-                else if (LeaveRequest.halfDayOff.attr("checked") === "checked") {
+                else if (LeaveRequest.halfDayOff.prop('checked')) {
                     fromTime = new Date(LeaveRequest.fromDate.val());
                     toTime = new Date(LeaveRequest.fromDate.val());
-                    if ($("#IsFromTimeAfterDay").attr("checked") === "checked") {
+                    if ($("#IsFromTimeAfterDay").prop('checked')) {
                         fromTime.setDate(fromTime.getDate() + 1);
                     }
 
-                    if ($("#IsToTimeAfterDay").attr("checked") === "checked") {
+                    if ($("#IsToTimeAfterDay").prop('checked')) {
                         toTime.setDate(toTime.getDate() + 1);
                     }
 
@@ -308,8 +310,8 @@ var LeaveRequest = (function ($) {
                     LeaveRequest.fromTime.val(data.BeginCheckInTime);
                     LeaveRequest.toTime.val(toTime);
 
-                    $("#IsFromTimeAfterDay").attr("checked", isFromAfterday);
-                    $("#IsToTimeAfterDay").attr("checked", isToAfterday);
+                    $("#IsFromTimeAfterDay").prop('checked', isFromAfterday);
+                    $("#IsToTimeAfterDay").prop('checked', isToAfterday);
 
                     if (isToAfterday) {
                         var toDate = new Date(LeaveRequest.fromDate.val());
