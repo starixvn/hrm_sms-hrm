@@ -347,7 +347,7 @@
 
             if (request != null)
             {
-                if (request.VerifiedBy != null && !supervisor.Verifiers.Where(t => t.OwnerId == request.VerifiedBy.Id).Any())
+                if (request.VerifiedBy != null && !supervisor.Verifiers.Any(t => t.OwnerId == request.VerifiedBy.Id))
                 {
                     var verifier = new SupervisorNameModel()
                     {
@@ -358,7 +358,7 @@
                     supervisor.Verifiers.Add(verifier);
                 }
 
-                if (request.ApprovedBy != null && !supervisor.Approvers.Where(t => t.OwnerId == request.ApprovedBy.Id).Any())
+                if (request.ApprovedBy != null && !supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
                 {
                     var approver = new SupervisorNameModel()
                     {

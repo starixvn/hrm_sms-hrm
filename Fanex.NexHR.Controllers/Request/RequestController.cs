@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
@@ -19,6 +15,10 @@
     using Fanex.NexHR.ViewModels.Request;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class RequestController : BaseController
     {
@@ -181,39 +181,39 @@
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
-            if (model != null && model.RequestId != 0 && model.RequestTypeId != 0 && model.RoleId != 0 && !string.IsNullOrEmpty(model.Command))
+            if (model != null
+                && model.RequestId != 0
+                && model.RoleId == (int)RoleSystem.Approver
+                && model.Command == Command.Approve.ToString())
             {
-                if (model.RoleId == (int)RoleSystem.Approver && model.Command == Command.Approve.ToString())
+                switch (model.RequestTypeId)
                 {
-                    switch (model.RequestTypeId)
-                    {
-                        case (int)RequestType.CheckIn:
-                        case (int)RequestType.CheckOut:
-                            var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria()
-                            {
-                                RequestId = model.RequestId
-                            };
-                            model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
-                            break;
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
+                        var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria()
+                        {
+                            RequestId = model.RequestId
+                        };
+                        model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
+                        break;
 
-                        case (int)RequestType.LateIn:
-                        case (int)RequestType.EarlyOut:
-                            var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria()
-                            {
-                                RequestId = model.RequestId
-                            };
-                            model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
-                            break;
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
+                        var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria()
+                        {
+                            RequestId = model.RequestId
+                        };
+                        model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
+                        break;
 
-                        case (int)RequestType.ChangeShift:
-                            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
-                            model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
-                            break;
+                    case (int)RequestType.ChangeShift:
+                        ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+                        model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
+                        break;
 
-                        case (int)RequestType.Leave:
-                            model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
-                            break;
-                    }
+                    case (int)RequestType.Leave:
+                        model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
+                        break;
                 }
             }
 
