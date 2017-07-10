@@ -229,6 +229,7 @@ $(document).ready(function () {
     });
     showExpatApplicableHoliday();
 
+    $('input#ResignedDate').removeAttr("readonly");
     $('input#ResignedDate').keyup(function(e) {
         if(e.keyCode == 8 || e.keyCode == 46) {
             $.datepicker._clearDate(this);
