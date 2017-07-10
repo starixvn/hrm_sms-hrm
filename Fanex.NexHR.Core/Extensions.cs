@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Core
 {
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Resources;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -11,8 +13,6 @@
     using System.Web.Mvc.Html;
     using System.Web.Routing;
     using System.Web.WebPages;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Resources;
 
     public static class Extensions
     {
@@ -63,17 +63,17 @@
             string formatDate = "dd MMM, yyyy",
             IEnumerable<DateTime> unavailDates = null)
         {
-            string disabledDate = (unavailDates != null && unavailDates.Count() > 0)
+            string disabledDate = (unavailDates != null && unavailDates.Any())
                 ? string.Join(",", unavailDates.Select(d => d.ToString("dd MMM yyyy")))
                 : string.Empty;
 
             var htmlAttribute = new
-                {
-                    @class = "datepicker",
-                    mindate = minDate != null && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
-                    maxdate = maxDate != null && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
-                    disabledDate = disabledDate
-                };
+            {
+                @class = "datepicker",
+                mindate = minDate != null && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
+                maxdate = maxDate != null && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
+                disabledDate = disabledDate
+            };
 
             var dateValue = date.HasValue ? date.Value.ToString(formatDate) : string.Empty;
 
@@ -92,9 +92,9 @@
             IEnumerable<DateTime> unavailDates = null)
         {
             var metaData = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
-            DateTime? value = DateTime.Now;
+            DateTime? value;
 
-            if (metaData.Model is DateTime || metaData.Model is DateTime)
+            if (metaData.Model is DateTime)
             {
                 value = (DateTime?)metaData.Model;
             }
@@ -441,23 +441,20 @@
             SelectListItem firstItem,
             object htmlAttributes)
         {
-            if (firstItem != null)
+            if (firstItem != null && firstItem.Value != null)
             {
-                if (firstItem.Value != null)
+                List<SelectListItem> list = new List<SelectListItem>();
+                list.Add(firstItem);
+
+                if (selectList != null)
                 {
-                    List<SelectListItem> list = new List<SelectListItem>();
-                    list.Add(firstItem);
-
-                    if (selectList != null)
+                    foreach (SelectListItem item in selectList)
                     {
-                        foreach (SelectListItem item in selectList)
-                        {
-                            list.Add(item);
-                        }
+                        list.Add(item);
                     }
-
-                    selectList = list;
                 }
+
+                selectList = list;
             }
 
             return SelectExtensions.DropDownListFor(htmlHelper, expression, selectList, htmlAttributes);
@@ -474,9 +471,7 @@
         {
             if (values != null)
             {
-                var valueList = values.GetType() == typeof(string[])
-                ? values as string[]
-                : values.ToString().Split(new[] { ',' });
+                var valueList = values.GetType() == typeof(string[]) ? values as string[] : values.ToString().Split(new[] { ',' });
 
                 List<SelectListItem> list = new List<SelectListItem>();
                 foreach (SelectListItem item in selectList)
