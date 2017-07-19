@@ -4,7 +4,7 @@
         @if ((bool)ViewBag.HasPermissionToAddOther)
         {
             <tr>
-                <th colspan="19" class="align-left">
+                <th colspan="18" class="align-left">
                     <a class="button" id="btnAddOtherDiscipline">
                         @Labels.AddOtherDiscipline
                     </a>
@@ -22,7 +22,6 @@
             <th>@Labels.LateIn</th>
             <th>@Labels.EarlyOut</th>
             <th>@Labels.Absent</th>
-            <th>@Labels.UnplannedLeave</th>
             <th>@Labels.UPL</th>
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
@@ -51,7 +50,6 @@
                     <td>@item.LateIn</td>
                     <td>@item.EarlyOut</td>
                     <td>@item.Absent</td>
-                    <td>@item.UnplannedLeave</td>
                     <td>@item.UnpaidLeave</td>
                     <td>@item.UnpaidLeaveAbsent</td>
                     <td>@item.ChangeShift</td>
@@ -113,6 +111,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 19);
+        @RazorHelper.DisplayNoInformation(colspan: 18);
     }
 </table>
