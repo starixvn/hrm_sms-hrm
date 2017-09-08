@@ -144,6 +144,7 @@
             {
                 Count = rowIndex,
                 Code = employee.Code,
+                EmployeeCard = employee.EmployeeCard,
                 DomainUsername = employee.DomainUsername,
                 FullName = employee.FullName,
                 NickName = employee.NickName,
