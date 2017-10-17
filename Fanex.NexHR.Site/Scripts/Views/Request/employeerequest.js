@@ -71,6 +71,7 @@
                     } else {
                         $(this).find('.validation-summary-valid').hide();
                         processRequest(requestId, roleId, command, comment, ignoredDisciplines);
+                        $(this).dialog('close');
                     }
                 },
                 'Cancel': function () {

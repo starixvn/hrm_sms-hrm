@@ -71,7 +71,7 @@
             if (request.StatusId == -2)
             {
                 request.StatusId = -1;
-                request.FromDate = DateTime.Now.AddDays(-60);
+                request.FromDate = DateTime.Now.Date.AddDays(-60);
                 request.IsFilterByAffectedDate = false;
             }
 
