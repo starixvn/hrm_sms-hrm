@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Web;
 
     public class ChangeShiftCommand : CriteriaBase
     {
@@ -36,7 +37,7 @@
                 {
                     foreach (ChangeShiftDetailModel item in RequestDetail)
                     {
-                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShiftId, item.ToShiftId, item.Remark);
+                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShiftId, item.ToShiftId, HttpUtility.HtmlEncode(item.Remark));
                     }
                 }
 
