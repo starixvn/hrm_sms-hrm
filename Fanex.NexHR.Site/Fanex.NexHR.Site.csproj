@@ -182,12 +182,8 @@
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="Avatars\avatar.jpg" />
-    <Content Include="Content\main.css">
-      <DependentUpon>main.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\main.min.css">
-      <DependentUpon>main.css</DependentUpon>
-    </Content>
+    <Content Include="Content\main.css" />
+    <Content Include="Content\main.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -315,7 +311,12 @@
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
+    <Content Include="Scripts\Libs\bootstrap\js\bootstrap.js" />
+    <Content Include="Scripts\Libs\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Scripts\Libs\bootstrap\js\npm.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Libs\jquery\jquery-1.12.4.min.js" />
+    <Content Include="Scripts\Libs\tipsy\jquery.tipsy.js" />
     <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
@@ -344,6 +345,16 @@
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
     <Content Include="Scripts\Views\Team\team.discipline.setting.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap.css" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Styles\css\lib\tipsy\tipsy.css" />
+    <Content Include="Styles\css\main.css" />
+    <Content Include="Styles\css\main.min.css" />
+    <Content Include="Styles\css\style.css" />
+    <Content Include="Styles\css\style.min.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Report\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
@@ -1002,6 +1013,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="Content\pages\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -1191,20 +1203,8 @@
     <Content Include="Libs\FontAwesome\scss\_screen-reader.scss" />
     <Content Include="Libs\FontAwesome\scss\_stacked.scss" />
     <Content Include="Libs\FontAwesome\scss\_variables.scss" />
-    <Content Include="Content\sass\abstracts\_variables.scss" />
-    <Content Include="Content\sass\abstracts\_mixins.scss" />
-    <Content Include="Content\sass\layout\_forms.scss" />
-    <Content Include="Content\sass\layout\_table.scss" />
-    <Content Include="Content\sass\components\_buttons.scss" />
-    <Content Include="Content\sass\components\_icon.scss" />
-    <Content Include="Content\sass\vendors\_contextmenu.scss" />
-    <Content Include="Content\main.scss" />
     <Content Include="Content\views\request\employee.request.css.map">
       <DependentUpon>employee.request.css</DependentUpon>
-    </Content>
-    <Content Include="Content\sass\layout\_grid.scss" />
-    <Content Include="Content\main.css.map">
-      <DependentUpon>main.css</DependentUpon>
     </Content>
     <Content Include="Content\views\employee\employee.shift.manger.css.map">
       <DependentUpon>employee.shift.manger.css</DependentUpon>
@@ -1212,7 +1212,6 @@
     <Content Include="Content\views\employee\employee.shift.manager.css.map">
       <DependentUpon>employee.shift.manager.css</DependentUpon>
     </Content>
-    <Content Include="Content\sass\components\_panels.scss" />
     <Content Include="Content\views\employee\employee.detail.css.map">
       <DependentUpon>employee.detail.css</DependentUpon>
     </Content>
@@ -1228,8 +1227,26 @@
     <Content Include="Content\views\calendar\workingcalendars.css.map">
       <DependentUpon>workingcalendars.css</DependentUpon>
     </Content>
-    <Content Include="Content\sass\vendors\_dataTables.scss" />
-    <Content Include="Content\sass\vendors\_jqueryUI.scss" />
+    <Content Include="Content\main.css.map" />
+    <Content Include="Content\main.scss" />
+    <Content Include="Content\style.scss" />
+    <Content Include="Content\abstracts\_mixins.scss" />
+    <Content Include="Content\abstracts\_variables.scss" />
+    <Content Include="Content\base\_common.scss" />
+    <Content Include="Content\base\_typo.scss" />
+    <Content Include="Content\components\_breadcrumb.scss" />
+    <Content Include="Content\components\_buttons.scss" />
+    <Content Include="Content\components\_icon.scss" />
+    <Content Include="Content\components\_panels.scss" />
+    <Content Include="Content\layout\_filter.scss" />
+    <Content Include="Content\layout\_forms.scss" />
+    <Content Include="Content\layout\_grid.scss" />
+    <Content Include="Content\layout\_table.scss" />
+    <Content Include="Content\vendors\_contextmenu.scss" />
+    <Content Include="Content\vendors\_dataTables.scss" />
+    <Content Include="Content\vendors\_jqueryUI.scss" />
+    <Content Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults" />
     <None Include="Content\views\employee\employee.detail.scss" />
     <Content Include="Content\views\employee\employee.edit.scss" />
     <Content Include="Content\views\employee\employee.edit.css.map">
@@ -1279,6 +1296,15 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.css.map" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.min.css.map" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Styles\css\lib\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\Request\TestPage.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

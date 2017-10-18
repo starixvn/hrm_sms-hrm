@@ -373,5 +373,10 @@
 
             return result;
         }
+
+        public ActionResult TestPage()
+        {
+            return View("TestPage");
+        }
     }
 }

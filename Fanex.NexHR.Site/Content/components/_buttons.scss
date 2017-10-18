@@ -523,3 +523,32 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
     width: 100%;
 }
+
+button[type="button"] {
+    margin-right: 0;
+    background: #308fb7;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
+    background-image: -moz-linear-gradient(#5eb2d5, #308fb7);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5eb2d5', endColorstr='#308fb7', GradientType=0);
+    border: 1px solid #256f8e;
+    border-bottom-color: #1b5066;
+    -webkit-box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+    -moz-box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 12px !important;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    padding: 0 8px;
+    line-height: 25px;
+    color: #fff !important;
+    text-decoration: none !important;
+    text-shadow: 0 -1px 0 #256f8e;
+    padding-bottom: 4px;
+    height: 28px;
+    vertical-align: bottom;
+    width: 75px;
+}

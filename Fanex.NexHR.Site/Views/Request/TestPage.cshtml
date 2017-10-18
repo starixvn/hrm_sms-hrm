@@ -1,0 +1,320 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SMS HRM</title>
+
+    <!-- Bootstrap -->
+    <link href="/Styles/css/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+    <link href="/Styles/css/lib/tipsy/tipsy.css" rel="stylesheet" />
+    <link href="/Styles/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="content-wrapper" class="content_wrap">
+        <section id="section_body">
+            <div class="content_scroll">
+                <h2 class="page-title">Member's request</h2>
+                <div class="filter">
+                    <div class="form-horizontal clearfix">
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">Date range</label>
+                            </div>
+                            <div class="select-form">
+                                <select class="form-control">
+                                    <option>Date range</option>
+                                    <option>Today</option>
+                                    <option>Yesterday</option>
+                                    <option>Current week</option>
+                                    <option>Since Last Month</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">From Date</label>
+                            </div>
+                            <div class="calendar-form">
+                                <input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
+                                <i class="icon-calendar glyphicon glyphicon-calendar"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">To Date</label>
+                            </div>
+                            <div class="calendar-form">
+                                <input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
+                                <i class="icon-calendar glyphicon glyphicon-calendar"></i>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form label--small">
+                                <label class="control-label">On</label>
+                            </div>
+                            <div class="select-form">
+                                <select class="form-control">
+                                    <option>Create Date</option>
+                                    <option>Effect Date</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">Status</label>
+                            </div>
+                            <div class="select-form">
+                                <select class="form-control">
+                                    <option>Pending & Verified</option>
+                                    <option>Pending</option>
+                                    <option>Approved</option>
+                                    <option>Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">Section</label>
+                            </div>
+                            <div class="select-form">
+                                <select class="form-control">
+                                    <option>Pending & Verified</option>
+                                    <option>Pending</option>
+                                    <option>Approved</option>
+                                    <option>Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">Employee</label>
+                            </div>
+                            <div class="input-form">
+                                <input type="text" class="form-control" placeholder="Full name or nick name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal clearfix">
+                        <div class="form-group form-group--m">
+                            <div class="label-form">
+                                <label class="control-label">Category</label>
+                            </div>
+                            <div class="select-form">
+                                <select class="form-control">
+                                    <option>All</option>
+                                    <option>Expat</option>
+                                    <option>Local</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group--l">
+                            <div class="label-form">
+                                <label class="control-label">Request</label>
+                            </div>
+                            <div class="radio-form">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options1" value="option1" checked>
+                                        All
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options2" value="option2">
+                                        Leave
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options3" value="option3">
+                                        Change Shift
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options4" value="option4">
+                                        Late In/Early Out
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options5" value="option5">
+                                        Check in/out
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="options6" value="option6">
+                                        Keep in view
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal clearfix">
+                        <div class="button-group">
+                            <button class="processing-submit" type="button" id="submit">Submit</button>
+                            <button type="button" id="btnExcel">Excel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-data">
+                    <table class="table table-custom persist-area">
+                        <thead>
+                            <tr class="persist-header">
+                                <th>#</th>
+                                <th>Employee</th>
+                                <th>Section</th>
+                                <th>Request</th>
+                                <th>Details</th>
+                                <th>Remark</th>
+                                <th>Created date</th>
+                                <th>Status</th>
+                                <th>History</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="Yee Wen Jat">Alex</span>
+                                </td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="MTD">MTD</span>
+                                </td>
+                                <td>
+                                    <a href="/Leave/Detail?requestId=327894">General Leave</a>
+                                </td>
+                                <td class="align-left">
+                                    <span class="req leave">09 - 18 Jun, 2017</span> 3.0 days AL, 5.0 days PL
+                                </td>
+                                <td>
+                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="Personal Matter"></span>
+                                </td>
+                                <td class="ddMMyyyyhhmm">
+                                    09 Jun, 2017 - 15h42'
+                                </td>
+                                <td class="status">
+                                    <a class="dropdown-toggle tooltip-tipsy" id="dropdownMenu1" href="javascript:void(0);" original-title="Approved by Kelly (11 Jun, 2017 - 21h09')" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Approved
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li class="processed"><a href="#"><i class="glyphicon glyphicon-ok"></i>Process</a></li>
+                                        <li class="void"><a href="#"><i class="glyphicon glyphicon-remove"></i>Void</a></li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327894&amp;type=4">
+                                        View
+                                    </a>
+                                </td>
+                                <td class="td-warning"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="Dương Tử Quậy">Kenice</span>
+                                </td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="LST">LST</span>
+                                </td>
+                                <td>
+                                    <a href="/Leave/Detail?requestId=327922">General Leave</a>
+                                </td>
+                                <td class="align-left">
+                                    <span class="req leave">24 Jun, 2017</span> 1.0 days AL
+                                </td>
+                                <td>
+                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="Go Camp"></span>
+                                </td>
+                                <td class="ddMMyyyyhhmm">
+                                    11 Jun, 2017 - 21h27'
+                                </td>
+                                <td>
+                                    <span>Pending</span>
+                                </td>
+
+                                <td>
+                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327922&amp;type=4">
+                                        View
+                                    </a>
+                                </td>
+                                <td class="td-warning"></td>
+                            </tr>
+                            <tr id="row327917">
+                                <td>3</td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="Loh Chee Ling">Boy</span>
+                                </td>
+                                <td>
+                                    <span class="tooltip-tipsy" original-title="LG">LG</span>
+                                </td>
+                                <td>
+                                    <a href="/request/Member?DateOption=0&amp;StatusId=-1&amp;FromDate=04%2F16%2F2017%2014%3A05%3A55&amp;ToDate=06%2F15%2F2017%2023%3A59%3A59&amp;EmployeeId=206&amp;Employee=Boy%20(Loh%20Chee%20Ling)&amp;RequestType=1&amp;CurrentUserId=0&amp;ViewType=PersonalSpace&amp;ActionName=Member&amp;IsAllowChangeStatus=True&amp;IsFilterByAffectedDate=False&amp;GetSelecListItemTeam=System.Collections.Generic.List%601%5BSystem.Web.Mvc.SelectListItem%5D&amp;BreadcrumbText=Personal&amp;PageTitle=Member's%20request">Check out</a>
+                                </td>
+                                <td class="align-left">
+                                    <span class="req checkinout">12:00+ 04 &gt;12</span> 21 Feb, 2017
+                                </td>
+                                <td>
+                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="mising check out"></span>
+                                </td>
+                                <td class="ddMMyyyyhhmm">
+                                    11 Jun, 2017 - 03h55'
+                                </td>
+                                <td class="status">
+                                    <a class="dropdown-toggle tooltip-tipsy" id="dropdownMenu2" href="javascript:void(0);" original-title="Approved by Kelly (11 Jun, 2017 - 21h09')" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Processed
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <li class="reset"><a href="#"><i class="glyphicon glyphicon-remove"></i>Reset</a></li>
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327917&amp;type=1">
+                                        View
+                                    </a>
+                                </td>
+                                <td class="td-warning"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+
+    <script src="/Scripts/Libs/bootstrap/js/bootstrap.js"></script>
+    <script src="/Scripts/Libs/tipsy/jquery.tipsy.js"></script>
+    <script>
+        $(function () {
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: 's' });
+        })
+    </script>
+</body>
+</html>

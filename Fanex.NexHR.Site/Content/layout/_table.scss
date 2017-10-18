@@ -161,3 +161,102 @@
         }
     }
 }
+
+#message {
+    position: absolute;
+    top: 0;
+    background: #ffff00;
+    border: solid 1px #ccc;
+    border-top: none;
+    padding: 4px 6px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-weight: bold;
+    display: none;
+}
+
+#dialoghistorycontent {
+    max-height: 600px !important;
+}
+
+.floatingHeader {
+    z-index: 999;
+    position: fixed;
+    top: 72px;
+}
+
+.team-select {
+    min-width: 130px !important;
+}
+
+.disabled {
+    background: #c8c8c8 !important;
+}
+
+span.req {
+    display: inline-block;
+    color: #fff;
+    padding: 3px 6px;
+    margin: 0 5px 0 0;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+span.arr {
+    font-size: 1.2em;
+}
+
+span.leave {
+    background-color: #A63C45;
+}
+
+span.req.checkinout {
+    background-color: #3366FF;
+}
+
+span.req.changeshift {
+    background-color: #ff7f50;
+}
+
+span.req.inout {
+    background-color: #999900;
+}
+
+span.req.overtime {
+    background-color: #893fd5;
+}
+
+span.req.keepinview {
+    background-color: #DB61DB;
+}
+
+span.req.mytimesheet-pending {
+    background-color: #808080;
+    padding: 3px 10px;
+}
+
+span.req.mytimesheet-accepted, span.req.mytimesheet-verified, span.req.mytimesheet-approved, span.req.mytimesheet-processed {
+    background-color: #008000;
+    padding: 3px 10px;
+}
+
+span.req.mytimesheet-notaccepted, span.req.mytimesheet-notverified, span.req.mytimesheet-rejected, span.req.mytimesheet-void {
+    background-color: #FF0000;
+    padding: 3px 10px;
+}
+
+.mytimesheet-workinginoffday {
+    background-color: #F8F89C;
+}
+
+.icon.remark {
+    color: #747474;
+    display: inline-block;
+    zoom: 1;
+    _height: 16px;
+    width: 16px;
+    height: 16px;
+}
