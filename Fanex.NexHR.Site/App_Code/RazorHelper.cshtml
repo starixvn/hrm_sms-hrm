@@ -44,9 +44,9 @@
         </td>
     </tr>
 }
-@helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, bool isShowPendingAndVerified = true, string controlName = "status")
+@helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, bool isShowPendingAndVerified = true, string controlName = "status", string htmlClass = "")
 {
-    <select name="@controlName" id="@controlName">
+    <select name="@controlName" id="@controlName" class="@htmlClass">
         @if (isShowAll)
         {
             <option selected="@(status == 0)" value="0">All</option>
@@ -66,6 +66,8 @@
     </select>
 
 }
+
+
 @helper BooleanDropDownList(bool? selectedValue, IList<System.Web.Mvc.SelectListItem> items, string controlName)
 {
     <select name="@controlName" id="@controlName">

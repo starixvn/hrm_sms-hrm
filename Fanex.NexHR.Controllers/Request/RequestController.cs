@@ -374,9 +374,19 @@
             return result;
         }
 
-        public ActionResult TestPage()
+        public ActionResult TestPage(RequestViewModel request)
         {
-            return View("TestPage");
+            request.ViewType = RequestViewType.PersonalSpace;
+
+            if (request.StatusId == -2)
+            {
+                request.StatusId = -1;
+                request.FromDate = DateTime.Now.Date.AddDays(-60);
+                request.IsFilterByAffectedDate = false;
+            }
+
+            GetRequests(request);
+            return View("TestPage", request);
         }
     }
 }

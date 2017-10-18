@@ -113,6 +113,7 @@
                 new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
             };    
             }
+
             @Html.RadioButtonList(model => model.RequestType, types)
         </div>
         <div class="clear">

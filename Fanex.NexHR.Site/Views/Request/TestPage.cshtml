@@ -1,7 +1,8 @@
 ﻿@{
     Layout = null;
 }
-
+@using Fanex.NexHR.Services
+@model RequestViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SMS HRM</title>
-
     <!-- Bootstrap -->
     <link href="/Styles/css/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
 
@@ -24,293 +24,401 @@
             <div class="content_scroll">
                 <h2 class="page-title">Member's request</h2>
                 <div class="filter">
-                    <div class="form-horizontal clearfix">
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">Date range</label>
-                            </div>
-                            <div class="select-form">
-                                <select class="form-control">
-                                    <option>Date range</option>
-                                    <option>Today</option>
-                                    <option>Yesterday</option>
-                                    <option>Current week</option>
-                                    <option>Since Last Month</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">From Date</label>
-                            </div>
-                            <div class="calendar-form">
-                                <input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
-                                <i class="icon-calendar glyphicon glyphicon-calendar"></i>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">To Date</label>
-                            </div>
-                            <div class="calendar-form">
-                                <input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
-                                <i class="icon-calendar glyphicon glyphicon-calendar"></i>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form label--small">
-                                <label class="control-label">On</label>
-                            </div>
-                            <div class="select-form">
-                                <select class="form-control">
-                                    <option>Create Date</option>
-                                    <option>Effect Date</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">Status</label>
-                            </div>
-                            <div class="select-form">
-                                <select class="form-control">
-                                    <option>Pending & Verified</option>
-                                    <option>Pending</option>
-                                    <option>Approved</option>
-                                    <option>Rejected</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">Section</label>
-                            </div>
-                            <div class="select-form">
-                                <select class="form-control">
-                                    <option>Pending & Verified</option>
-                                    <option>Pending</option>
-                                    <option>Approved</option>
-                                    <option>Rejected</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">Employee</label>
-                            </div>
-                            <div class="input-form">
-                                <input type="text" class="form-control" placeholder="Full name or nick name">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-horizontal clearfix">
-                        <div class="form-group form-group--m">
-                            <div class="label-form">
-                                <label class="control-label">Category</label>
-                            </div>
-                            <div class="select-form">
-                                <select class="form-control">
-                                    <option>All</option>
-                                    <option>Expat</option>
-                                    <option>Local</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group--l">
-                            <div class="label-form">
-                                <label class="control-label">Request</label>
-                            </div>
-                            <div class="radio-form">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options1" value="option1" checked>
-                                        All
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options2" value="option2">
-                                        Leave
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options3" value="option3">
-                                        Change Shift
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options4" value="option4">
-                                        Late In/Early Out
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options5" value="option5">
-                                        Check in/out
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="options6" value="option6">
-                                        Keep in view
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-horizontal clearfix">
-                        <div class="button-group">
-                            <button class="processing-submit" type="button" id="submit">Submit</button>
-                            <button type="button" id="btnExcel">Excel</button>
-                        </div>
-                    </div>
+                    @Html.Partial("_CriteriaPanelNewLayout", Model)
                 </div>
 
                 <div class="table-data">
                     <table class="table table-custom persist-area">
                         <thead>
                             <tr class="persist-header">
-                                <th>#</th>
-                                <th>Employee</th>
-                                <th>Section</th>
-                                <th>Request</th>
-                                <th>Details</th>
-                                <th>Remark</th>
-                                <th>Created date</th>
-                                <th>Status</th>
-                                <th>History</th>
+                                <th>@Labels.SymbolCount</th>
+                                <th>@Labels.Employee</th>
+                                <th>@Labels.Team</th>
+                                <th>@Labels.Request</th>
+                                <th>@Labels.Details</th>
+                                <th>@Labels.Remark</th>
+                                <th>@Labels.CreatedDate</th>
+                                <th>@Labels.Status</th>
+                                <th>@Labels.History</th>
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="Yee Wen Jat">Alex</span>
-                                </td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="MTD">MTD</span>
-                                </td>
-                                <td>
-                                    <a href="/Leave/Detail?requestId=327894">General Leave</a>
-                                </td>
-                                <td class="align-left">
-                                    <span class="req leave">09 - 18 Jun, 2017</span> 3.0 days AL, 5.0 days PL
-                                </td>
-                                <td>
-                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="Personal Matter"></span>
-                                </td>
-                                <td class="ddMMyyyyhhmm">
-                                    09 Jun, 2017 - 15h42'
-                                </td>
-                                <td class="status">
-                                    <a class="dropdown-toggle tooltip-tipsy" id="dropdownMenu1" href="javascript:void(0);" original-title="Approved by Kelly (11 Jun, 2017 - 21h09')" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Approved
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li class="processed"><a href="#"><i class="glyphicon glyphicon-ok"></i>Process</a></li>
-                                        <li class="void"><a href="#"><i class="glyphicon glyphicon-remove"></i>Void</a></li>
-                                    </ul>
-                                </td>
-
-                                <td>
-                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327894&amp;type=4">
-                                        View
-                                    </a>
-                                </td>
-                                <td class="td-warning"></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="Dương Tử Quậy">Kenice</span>
-                                </td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="LST">LST</span>
-                                </td>
-                                <td>
-                                    <a href="/Leave/Detail?requestId=327922">General Leave</a>
-                                </td>
-                                <td class="align-left">
-                                    <span class="req leave">24 Jun, 2017</span> 1.0 days AL
-                                </td>
-                                <td>
-                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="Go Camp"></span>
-                                </td>
-                                <td class="ddMMyyyyhhmm">
-                                    11 Jun, 2017 - 21h27'
-                                </td>
-                                <td>
-                                    <span>Pending</span>
-                                </td>
-
-                                <td>
-                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327922&amp;type=4">
-                                        View
-                                    </a>
-                                </td>
-                                <td class="td-warning"></td>
-                            </tr>
-                            <tr id="row327917">
-                                <td>3</td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="Loh Chee Ling">Boy</span>
-                                </td>
-                                <td>
-                                    <span class="tooltip-tipsy" original-title="LG">LG</span>
-                                </td>
-                                <td>
-                                    <a href="/request/Member?DateOption=0&amp;StatusId=-1&amp;FromDate=04%2F16%2F2017%2014%3A05%3A55&amp;ToDate=06%2F15%2F2017%2023%3A59%3A59&amp;EmployeeId=206&amp;Employee=Boy%20(Loh%20Chee%20Ling)&amp;RequestType=1&amp;CurrentUserId=0&amp;ViewType=PersonalSpace&amp;ActionName=Member&amp;IsAllowChangeStatus=True&amp;IsFilterByAffectedDate=False&amp;GetSelecListItemTeam=System.Collections.Generic.List%601%5BSystem.Web.Mvc.SelectListItem%5D&amp;BreadcrumbText=Personal&amp;PageTitle=Member's%20request">Check out</a>
-                                </td>
-                                <td class="align-left">
-                                    <span class="req checkinout">12:00+ 04 &gt;12</span> 21 Feb, 2017
-                                </td>
-                                <td>
-                                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="mising check out"></span>
-                                </td>
-                                <td class="ddMMyyyyhhmm">
-                                    11 Jun, 2017 - 03h55'
-                                </td>
-                                <td class="status">
-                                    <a class="dropdown-toggle tooltip-tipsy" id="dropdownMenu2" href="javascript:void(0);" original-title="Approved by Kelly (11 Jun, 2017 - 21h09')" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Processed
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                        <li class="reset"><a href="#"><i class="glyphicon glyphicon-remove"></i>Reset</a></li>
-                                    </ul>
-                                </td>
-
-                                <td>
-                                    <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=327917&amp;type=1">
-                                        View
-                                    </a>
-                                </td>
-                                <td class="td-warning"></td>
-                            </tr>
-                        </tbody>
+                        @if (Model.Requests != null && Model.Requests.Any())
+                        {
+                            int index = 1;
+                            <tbody>
+                                @foreach (RequestEntity request in Model.Requests)
+                                {
+                                    var requestModel = new RequestViewModel
+                                    {
+                                        DateOption = Model.DateOption,
+                                        FromDate = Model.FromDate,
+                                        ToDate = Model.ToDate,
+                                        EmployeeId = request.Requester.Id,
+                                        Employee = request.Requester.NickName + " (" + request.Requester.FullName + ")",
+                                        TeamIds = Model.TeamIds,
+                                        StatusId = Model.StatusId,
+                                        RequestType = request.RequestType.FilterRequest,
+                                        ViewType = Model.ViewType
+                                    };
+                                    <tr id="row@(request.Id)">
+                                        <td>@(index++)</td>
+                                        <td>                                          
+                                            <span class="tooltip-tipsy" original-title="@request.Requester.FullName">@request.Requester.NickName</span>
+                                        </td>
+                                        <td>
+                                            <span class="tooltip-tipsy" original-title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
+                                        </td>
+                                        <td>
+                                            @switch (request.RequestType.Id)
+                                            {
+                                                case (int)RequestType.Leave:
+                                                    <a href="@Url.Action("Detail", "Leave", new { requestId = request.Id })">@request.LeaveType.Name</a>
+                                                    break;
+                                                case (int)RequestType.ChangeShift:
+                                                    <a href="@Url.Action("Detail", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                                    break;
+                                                default:
+                                                    <a href="@Url.Action(Model.ActionName, "request", requestModel)">@request.RequestType.Name</a>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td class="align-left">
+                                            @Html.Raw(RequestService.ToRequestMessage(request))
+                                        </td>
+                                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                                        {
+                                            <td>
+                                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@request.Remark"></span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>-</td>
+                                        }
+                                        <td class="ddMMyyyyhhmm">
+                                            @request.CreatedDate.ToShortFormatedDate()
+                                        </td>
+                                        @RenderStatus(Model, request)
+                                        <td>
+                                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                                                @Labels.View
+                                            </a>
+                                        </td>
+                                        <td class="td-warning">
+                                            @if (request.IsWarning)
+                                            {
+                                                <span class="icon-warning tooltip" title="@Labels.RequestWarning"></span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            @RazorHelper.DisplayNoInformation(colspan: 10);
+                        }
+    
                     </table>
                 </div>
             </div>
+
+            @RenderContextMenu(Model)
+            <div id="dialoghistorycontent"></div>
+            <div id="dialogProcessRequest"></div>
+
+            @helper RenderContextMenu(RequestViewModel model)
+            {
+                switch (model.ViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                            @RazorHelper.VerifierAndApproverMenu()
+                            @RazorHelper.ResetMenu()
+                        break;
+                    case RequestViewType.SASpace:
+                            @RazorHelper.VoidMenu();
+                        break;
+                    case RequestViewType.HRSpace:
+                            @RazorHelper.HrMenu()
+                            @RazorHelper.ResetMenu()
+                        break;
+                }
+            }
+            @helper RenderStatus(RequestViewModel model, RequestEntity request)
+            {
+                switch (model.ViewType)
+                {
+                    case RequestViewType.PersonalSpace:
+                            @RenderStatusPersonalSpace(model, request);
+                        break;
+                    case RequestViewType.SASpace:
+                            @RenderStatusSASpace(model, request);
+                        break;
+                    default:
+                            @RenderStatusHRSpace(model, request);
+                        break;
+                }
+            }
+
+            @helper RenderStatusHRSpace(RequestViewModel model, RequestEntity request)
+            {
+                switch (request.Status.Id)
+                {
+                    case (byte)CurrentRequestStatus.Pending:
+                            <td>
+                                <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                    @request.Status.ToString()
+                                </span>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Verified:
+                    case (byte)CurrentRequestStatus.NotVerified:
+                            <td>
+                                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </span>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Approved:
+                    case (byte)CurrentRequestStatus.Rejected:
+                        if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="hr-actions tooltip"
+                                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </span>
+                                </td>
+                        }
+                        break;
+                    case (byte)CurrentRequestStatus.Processed:
+                        if (Model.IsAllowChangeStatus)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="hr-actions-reset tooltip"
+                                       title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </span>
+                                </td>
+                        }
+                        break;
+                    default:
+                            <td>
+                                <span class="tooltip">@request.Status.ToString()</span>
+                            </td>
+                        break;
+                }
+                }
+
+            @helper RenderStatusPersonalSpace(RequestViewModel model, RequestEntity request)
+            {
+                switch (request.Status.Id)
+                {
+                    case (byte)CurrentRequestStatus.Pending:
+                        if (request.ApprovedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="approver-actions tooltip"
+                                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else if (request.VerifiedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="verifier-actions tooltip"
+                                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span>@request.Status.ToString()</span>
+                                </td>
+                        }
+                        break;
+                    case (byte)CurrentRequestStatus.Verified:
+                        if (request.ApprovedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="approver-actions tooltip"
+                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else if (request.VerifiedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
+                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span>@request.Status.ToString()</span>
+                                </td>
+                        }
+                        break;
+                    case (byte)CurrentRequestStatus.NotVerified:
+                        if (request.VerifiedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
+                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span>@request.Status.ToString()</span>
+                                </td>
+                        }
+                        break;
+                    case (byte)CurrentRequestStatus.Approved:
+                    case (byte)CurrentRequestStatus.Rejected:
+                        if (request.ApprovedBy.Id == Model.CurrentUserId)
+                        {
+                                <td>
+                                    <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                       href="javascript:void(0);" class="approver-actions-reset tooltip"
+                                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                        @request.Status.ToString()
+                                    </a>
+                                </td>
+                        }
+                        else
+                        {
+                                <td>
+                                    <span>@request.Status.ToString()</span>
+                                </td>
+                        }
+                        break;
+                    case (byte)CurrentRequestStatus.Processed:
+                    case (byte)CurrentRequestStatus.Void:
+                            <td>
+                                <span>@request.Status.ToString()</span>
+                            </td>
+                        break;
+                    default:
+                            <td>
+                                <span>@request.Status.ToString()</span>
+                            </td>
+                        break;
+                }
+                }
+
+            @helper RenderStatusSASpace(RequestViewModel model, RequestEntity request)
+            {
+                switch (request.Status.Id)
+                {
+                    case (byte)CurrentRequestStatus.Pending:
+                            <td>
+                                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                   class="sa-void tooltip" href="javascript:void(0);"
+                                   title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                    @request.Status.ToString()
+                                </a>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Verified:
+                            <td>
+                                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                   class="sa-void tooltip" href="javascript:void(0);"
+                                   title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </a>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.NotVerified:
+                            <td>
+                                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </span>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Approved:
+                            <td>
+                                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                   class="sa-void tooltip" href="javascript:void(0);"
+                                   title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </a>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Rejected:
+                            <td>
+                                <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </span>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Processed:
+                            <td>
+                                <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+                                   class="sa-void tooltip" href="javascript:void(0);"
+                                   title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </a>
+                            </td>
+                        break;
+                    case (byte)CurrentRequestStatus.Void:
+                            <td>
+                                <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                    @request.Status.ToString()
+                                </span>
+                            </td>
+                        break;
+                    default:
+                            <td>
+                                <span class="tooltip">@request.Status.ToString()</span>
+                            </td>
+                        break;
+                }
+                }
         </section>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/Scripts/Libs/jquery/jquery-1.12.4.min.js"></script>
+
 
     <script src="/Scripts/Libs/bootstrap/js/bootstrap.js"></script>
     <script src="/Scripts/Libs/tipsy/jquery.tipsy.js"></script>
+
+    @Url.CombresLink("employeerequestjs_new")
+    @Html.Action("GlobalScript", "UI")
     <script>
         $(function () {
             $('.tooltip-tipsy').tipsy({ html: true, gravity: 's' });

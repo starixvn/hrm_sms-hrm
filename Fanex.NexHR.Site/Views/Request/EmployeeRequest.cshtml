@@ -12,7 +12,7 @@
 @section Breadcrumb {
     <a class="step">@Model.BreadcrumbText</a> <span class="step">@ViewBag.Title</span>
 }
-@*<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
     <div>
         @Html.Partial("CriteriaPanel", Model)
     </div>
@@ -392,8 +392,8 @@
                 </td>
                 break;
         }
-    }*@
+    }
 
-<iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+@*<iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         src='@Url.Action("TestPage","Request")'
-        style="border: 0; width: 100%; height: 100%"></iframe>
+        style="border: 0; width: 100%; height: 100%"></iframe>*@

@@ -62,7 +62,7 @@ function confirm(message, callback, options) {
 var dontBlock = false;
 $(document).ready(function () {
     $('.tooltip').tipsy({
-        live: true,
+       // live: true,
         gravity: $.fn.tipsy.autoNS
     });
 

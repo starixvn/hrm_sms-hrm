@@ -1,0 +1,165 @@
+﻿@model RequestViewModel
+@Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+@Html.HiddenFor(model => model.ActionName)
+@using (Html.BeginGetForm())
+{
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.DateRange, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                <select id="Date" name="Date" class="form-control">
+                    <option value="0" selected="@(Model.DateOption == 0)">
+                        @Labels.DateRange
+                    </option>
+                    <option value="1" selected="@(Model.DateOption == 1)">
+                        @Labels.ToDay
+                    </option>
+                    <option value="2" selected="@(Model.DateOption == 2)">
+                        @Labels.Yesterday
+                    </option>
+                    <option value="3" selected="@(Model.DateOption == 3)">
+                        @Labels.CurrentWeek
+                    </option>
+                    <option value="4" selected="@(Model.DateOption == 4)">
+                        @Labels.LastWeek
+                    </option>
+                    <option value="5" selected="@(Model.DateOption == 5)">
+                        @Labels.CurrentMonth
+                    </option>
+                    <option value="6" selected="@(Model.DateOption == 6)">
+                        @Labels.LastMonth
+                    </option>
+                    <option value="7" selected="@(Model.DateOption == 7)">
+                        @Labels.SinceLastMonth
+                    </option>
+                </select>
+                @Html.Hidden("DateOption", Model.DateOption)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+                @*<input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
+                <i class="icon-calendar glyphicon glyphicon-calendar"></i>*@
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form label--small">
+                <label class="control-label">@Labels.On</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var filteringDateType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "Effected Date", Value = "true"},
+                        new SelectListItem() {Text = "Created Date", Value = "false"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsFilterByAffectedDate, filteringDateType, new { @class="form-control"})
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.StatusId, new { @class="control-label"})
+            </div>
+            <div class="select-form">
+                @RazorHelper.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: (Model.ViewType == RequestViewType.PersonalSpace), controlName: "statusId", htmlClass: "form-control")
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamCollection, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownList("TeamId", Model.GetSelecListItemTeam, new { @multiple = "multiple" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+    </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Category, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @{
+                        var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "All", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"},
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
+                    }
+
+                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group form-group--l">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.RequestType, "Request", new { @class = "control-label" })
+                </div>
+                <div class="radio-form">
+                    @{
+                        var requestTypes = new List<SelectListItem>
+                        {
+                            new SelectListItem() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
+                            new SelectListItem() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
+                            new SelectListItem() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
+                            new SelectListItem() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
+                            new SelectListItem() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
+                            new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
+                         };
+
+                        foreach (var item in requestTypes)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(model => model.RequestType, item.Value)
+                                    @item.Text
+                                 </label>
+                            </div>
+                           
+                        }
+                    }
+                    
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal clearfix">
+            <div class="button-group">
+                <input class="processing-submit" type="submit" id="submit" value="@Labels.Submit" />
+                <input type="button" value="Excel" id="btnExcel" />
+            </div>
+        </div>
+
+}

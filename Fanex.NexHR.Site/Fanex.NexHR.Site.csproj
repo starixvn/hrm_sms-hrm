@@ -1305,6 +1305,7 @@
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Request\TestPage.cshtml" />
+    <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
