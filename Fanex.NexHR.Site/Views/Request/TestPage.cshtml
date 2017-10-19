@@ -13,7 +13,8 @@
     <title>SMS HRM</title>
     <!-- Bootstrap -->
     <link href="/Styles/css/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-
+    <link href="/Styles/Libs/jquery-ui-1.2.1/jquery-ui.css" rel="stylesheet" />
+    @Url.CombresLink("employeerequestcss_new")
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <link href="/Styles/css/lib/tipsy/tipsy.css" rel="stylesheet" />
     <link href="/Styles/css/style.css" rel="stylesheet" />
@@ -166,7 +167,7 @@
                 switch (request.Status.Id)
                 {
                     case (byte)CurrentRequestStatus.Pending:
-                            <td>
+                            <td class="status">
                                 <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                     @request.Status.ToString()
                                 </span>
@@ -174,7 +175,7 @@
                         break;
                     case (byte)CurrentRequestStatus.Verified:
                     case (byte)CurrentRequestStatus.NotVerified:
-                            <td>
+                            <td class="status">
                                 <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </span>
@@ -184,7 +185,7 @@
                     case (byte)CurrentRequestStatus.Rejected:
                         if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="hr-actions tooltip"
                                        title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
@@ -194,7 +195,7 @@
                         }
                         else
                         {
-                                <td>
+                                <td class="status">
                                     <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </span>
@@ -204,7 +205,7 @@
                     case (byte)CurrentRequestStatus.Processed:
                         if (Model.IsAllowChangeStatus)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="hr-actions-reset tooltip"
                                        title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
@@ -236,17 +237,17 @@
                     case (byte)CurrentRequestStatus.Pending:
                         if (request.ApprovedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="approver-actions tooltip"
-                                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                       href="javascript:void(0);" class="approver-actions dropdown-toggle tooltip-tipsy"
+                                       original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
                         }
                         else if (request.VerifiedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="verifier-actions tooltip"
                                        title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
@@ -256,7 +257,7 @@
                         }
                         else
                         {
-                                <td>
+                                <td class="status">
                                     <span>@request.Status.ToString()</span>
                                 </td>
                         }
@@ -264,7 +265,7 @@
                     case (byte)CurrentRequestStatus.Verified:
                         if (request.ApprovedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="approver-actions tooltip"
                                        title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
@@ -274,7 +275,7 @@
                         }
                         else if (request.VerifiedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="verifier-actions-reset tooltip"
                                        title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
@@ -284,7 +285,7 @@
                         }
                         else
                         {
-                                <td>
+                                <td class="status">
                                     <span>@request.Status.ToString()</span>
                                 </td>
                         }
@@ -292,7 +293,7 @@
                     case (byte)CurrentRequestStatus.NotVerified:
                         if (request.VerifiedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="verifier-actions-reset tooltip"
                                        title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
@@ -302,7 +303,7 @@
                         }
                         else
                         {
-                                <td>
+                                <td class="status">
                                     <span>@request.Status.ToString()</span>
                                 </td>
                         }
@@ -311,7 +312,7 @@
                     case (byte)CurrentRequestStatus.Rejected:
                         if (request.ApprovedBy.Id == Model.CurrentUserId)
                         {
-                                <td>
+                                <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                                        href="javascript:void(0);" class="approver-actions-reset tooltip"
                                        title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
@@ -321,19 +322,19 @@
                         }
                         else
                         {
-                                <td>
+                                <td class="status">
                                     <span>@request.Status.ToString()</span>
                                 </td>
                         }
                         break;
                     case (byte)CurrentRequestStatus.Processed:
                     case (byte)CurrentRequestStatus.Void:
-                            <td>
+                            <td class="status">
                                 <span>@request.Status.ToString()</span>
                             </td>
                         break;
                     default:
-                            <td>
+                            <td class="status">
                                 <span>@request.Status.ToString()</span>
                             </td>
                         break;
@@ -416,6 +417,7 @@
 
     <script src="/Scripts/Libs/bootstrap/js/bootstrap.js"></script>
     <script src="/Scripts/Libs/tipsy/jquery.tipsy.js"></script>
+    <script src="/Scripts/Libs/jquery-ui-1.2.1/jquery-ui.js"></script>
 
     @Url.CombresLink("employeerequestjs_new")
     @Html.Action("GlobalScript", "UI")

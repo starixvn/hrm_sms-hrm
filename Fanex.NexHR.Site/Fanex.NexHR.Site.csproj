@@ -314,6 +314,12 @@
     <Content Include="Scripts\Libs\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\Libs\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\Libs\bootstrap\js\npm.js" />
+    <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.filter.js" />
+    <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.filter.min.js" />
+    <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.js" />
+    <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.min.js" />
+    <Content Include="Scripts\Libs\jquery-ui-1.2.1\jquery-ui.js" />
+    <Content Include="Scripts\Libs\jquery-ui-1.2.1\jquery-ui.min.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Libs\jquery\jquery-1.12.4.min.js" />
     <Content Include="Scripts\Libs\tipsy\jquery.tipsy.js" />
@@ -340,6 +346,7 @@
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
+    <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
@@ -356,6 +363,14 @@
     <Content Include="Styles\css\style.css" />
     <Content Include="Styles\css\style.min.css" />
     <Content Include="Styles\discipline.css" />
+    <Content Include="Styles\Libs\jquery-multiselect-widget\jquery.multiselect.css" />
+    <Content Include="Styles\Libs\jquery-multiselect-widget\jquery.multiselect.filter.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.min.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.structure.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.structure.min.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.theme.css" />
+    <Content Include="Styles\Libs\jquery-ui-1.2.1\jquery-ui.theme.min.css" />
     <Content Include="Styles\Report\report.manpower.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
@@ -1015,6 +1030,7 @@
     <Folder Include="bin\" />
     <Folder Include="Content\pages\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Styles\Libs\jquery-ui-1.2.1\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\AccountSuspended.cshtml" />
@@ -1306,6 +1322,7 @@
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Request\TestPage.cshtml" />
     <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
+    <Content Include="Views\Request\EmployeeRequestOld.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,6 +1,7 @@
 ﻿@model RequestViewModel
 @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
-@Html.HiddenFor(model => model.ActionName)
+@*@Html.HiddenFor(model => model.ActionName)*@
+@Html.Hidden("ActionName", "MemberNewVersion")
 @using (Html.BeginGetForm())
 {
 
@@ -45,7 +46,8 @@
                 @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new {@class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" }) 
+                <i class="icon-calendar glyphicon glyphicon-calendar trigger-fromdate"></i>
             </div>
         </div>
 
@@ -54,9 +56,8 @@
                 @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
-                @*<input type="text" class="form-control" placeholder="From Date" value="15 Jun, 2017">
-                <i class="icon-calendar glyphicon glyphicon-calendar"></i>*@
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                <i class="icon-calendar glyphicon glyphicon-calendar trigger-todate"></i>
             </div>
         </div>
 

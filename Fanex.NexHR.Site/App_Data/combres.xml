@@ -480,13 +480,19 @@
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
 
-    <resourceSet name="employeerequestjs_new" type="js">      
+    <resourceSet name="employeerequestcss_new" type="css">
+      <resource path="~/Styles/Libs/jquery-multiselect-widget/jquery.multiselect.css" />
+    </resourceSet>
+
+    <resourceSet name="employeerequestjs_new" type="js">
+
       <!--<resource path="~/scripts/views/criteria.js" />-->
       <!--<resource path="~/scripts/libs/jquery.contextmenu.js" />-->
-      <!--<resource path="~/scripts/views/request/employeerequest.js" />-->
-      <!--<resource path="~/scripts/views/employee.search.in.team.js" />-->
-      <!--<resource path="~/scripts/libs/date.js" />
-      <resource path="~/scripts/views/date.filter.js" />-->
+      <resource path="~/Scripts/Libs/jquery-multiselect-widget/jquery.multiselect.js" />
+      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/scripts/views/request/date.filter.new.js" />
+      <resource path="~/scripts/views/request/employeerequest.js" />
     </resourceSet>
 
     <resourceSet name="teamjs" type="js">

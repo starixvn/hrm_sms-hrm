@@ -79,6 +79,22 @@
             return View("EmployeeRequest", request);
         }
 
+        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
+        public ActionResult MemberNewVersion(RequestViewModel request)
+        {
+            request.ViewType = RequestViewType.PersonalSpace;
+
+            if (request.StatusId == -2)
+            {
+                request.StatusId = -1;
+                request.FromDate = DateTime.Now.Date.AddDays(-60);
+                request.IsFilterByAffectedDate = false;
+            }
+
+            GetRequests(request);
+            return View("TestPage", request);
+        }
+
         [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
@@ -386,7 +402,7 @@
             }
 
             GetRequests(request);
-            return View("TestPage", request);
+            return View("EmployeeRequestOld", request);
         }
     }
 }

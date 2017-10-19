@@ -192,13 +192,13 @@
     $(document).ready(function () {
         $('#TeamId').multiselect();
 
-        bindMenu('.hr-actions', 'hrMenu');
-        bindMenu('.verifier-actions', 'verifierMenu');
-        bindMenu('.approver-actions', 'approverMenu');
-        bindMenu('.verifier-actions-reset', 'resetMenu');
-        bindMenu('.approver-actions-reset', 'resetMenu');
-        bindMenu('.hr-actions-reset', 'resetMenu');
-        bindMenu('.sa-void', 'voidMenu');
+        //bindMenu('.hr-actions', 'hrMenu');
+        //bindMenu('.verifier-actions', 'verifierMenu');
+        //bindMenu('.approver-actions', 'approverMenu');
+        //bindMenu('.verifier-actions-reset', 'resetMenu');
+        //bindMenu('.approver-actions-reset', 'resetMenu');
+        //bindMenu('.hr-actions-reset', 'resetMenu');
+        //bindMenu('.sa-void', 'voidMenu');
 
         $('.viewhistory').click(function () {
             var url = $(this).attr('id');
