@@ -1,0 +1,39 @@
+﻿@model RequestViewModel
+@{
+    ViewBag.Title = Labels.RequestHistory;
+    Layout = null;
+}
+
+@section Breadcrumb {
+    <a class="step">HR</a> <span class="step">@ViewBag.Title</span>
+}
+
+@switch ((int)ViewBag.requestType)
+{
+    case (int)RequestFilter.CheckInOut:
+        IList<RequestEntity> entityCheckInOut = ViewBag.EntityList;
+        Html.RenderPartial("HistoryNewVersion/ViewCheckInOutRequestHistory", entityCheckInOut);
+        break;
+    case (int)RequestFilter.LateInEarlyOut:
+        IList<RequestEntity> entityLateInEarlyOut = ViewBag.EntityList;
+        Html.RenderPartial("HistoryNewVersion/ViewLateInEarlyOutRequestHistory", entityLateInEarlyOut);
+        break;
+    case (int)RequestFilter.ChangeShift:
+        IList<RequestEntity> entityChangeShift = ViewBag.EntityList;
+        Html.RenderPartial("HistoryNewVersion/ViewChangeShiftRequestHistory", entityChangeShift);
+        break;
+    case (int)RequestFilter.Leave:
+        IList<RequestEntity> entityLeave = ViewBag.EntityList;
+        Html.RenderPartial("HistoryNewVersion/ViewLeaveRequestHistory", entityLeave);
+        break;
+    case (int)RequestFilter.KeepInView:
+        IList<RequestEntity> entityOKeepInView = ViewBag.EntityList;
+        Html.RenderPartial("HistoryNewVersion/ViewKeepInViewRequestHistory", entityOKeepInView);
+        break;
+}
+
+<script>
+        $(function () {
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
+        })
+</script>

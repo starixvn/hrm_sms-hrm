@@ -482,12 +482,15 @@
 
     <resourceSet name="employeerequestcss_new" type="css">
       <resource path="~/Styles/Libs/jquery-multiselect-widget/jquery.multiselect.css" />
+      <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.css" />
     </resourceSet>
 
     <resourceSet name="employeerequestjs_new" type="js">
 
       <!--<resource path="~/scripts/views/criteria.js" />-->
-      <!--<resource path="~/scripts/libs/jquery.contextmenu.js" />-->
+      
+      <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.js" />
+      <!--<resource path="~/Scripts/Libs/jquery.contextmenu.js" />-->
       <resource path="~/Scripts/Libs/jquery-multiselect-widget/jquery.multiselect.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/employee.search.in.team.js" />

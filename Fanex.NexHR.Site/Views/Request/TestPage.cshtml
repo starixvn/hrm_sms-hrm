@@ -102,14 +102,14 @@
                                         </td>
                                         @RenderStatus(Model, request)
                                         <td>
-                                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                                            <a class="viewhistory" href="javascript:;" id="/request/viewhistorynewversion?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
                                                 @Labels.View
                                             </a>
                                         </td>
                                         <td class="td-warning">
                                             @if (request.IsWarning)
                                             {
-                                                <span class="icon-warning tooltip" title="@Labels.RequestWarning"></span>
+                                                <span class="icon-warning tooltip-tipsy" original-title="@Labels.RequestWarning"></span>
                                             }
                                         </td>
                                     </tr>
@@ -128,6 +128,8 @@
             @RenderContextMenu(Model)
             <div id="dialoghistorycontent"></div>
             <div id="dialogProcessRequest"></div>
+            <div id="message">
+            </div>
 
             @helper RenderContextMenu(RequestViewModel model)
             {
@@ -168,7 +170,7 @@
                 {
                     case (byte)CurrentRequestStatus.Pending:
                             <td class="status">
-                                <span class="tooltip" title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                <span class="tooltip-tipsy" original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                     @request.Status.ToString()
                                 </span>
                             </td>
@@ -176,7 +178,7 @@
                     case (byte)CurrentRequestStatus.Verified:
                     case (byte)CurrentRequestStatus.NotVerified:
                             <td class="status">
-                                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </span>
                             </td>
@@ -187,8 +189,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="hr-actions tooltip"
-                                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="hr-actions tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -196,7 +198,7 @@
                         else
                         {
                                 <td class="status">
-                                    <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                    <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </span>
                                 </td>
@@ -207,24 +209,24 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="hr-actions-reset tooltip"
-                                       title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="hr-actions-reset tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
                         }
                         else
                         {
-                                <td>
-                                    <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                <td class="status">
+                                    <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </span>
                                 </td>
                         }
                         break;
                     default:
-                            <td>
-                                <span class="tooltip">@request.Status.ToString()</span>
+                            <td class="status">
+                                <span class="tooltip-tipsy">@request.Status.ToString()</span>
                             </td>
                         break;
                 }
@@ -239,9 +241,10 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="approver-actions dropdown-toggle tooltip-tipsy"
+                                       href="javascript:void(0);" class="approver-actions tooltip-tipsy"
                                        original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                         @request.Status.ToString()
+                                        <span class="caret"></span>
                                     </a>
                                 </td>
                         }
@@ -249,8 +252,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="verifier-actions tooltip"
-                                       title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                       href="javascript:void(0);" class="verifier-actions tooltip-tipsy"
+                                       original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -267,8 +270,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="approver-actions tooltip"
-                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="approver-actions tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -277,8 +280,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
-                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -295,8 +298,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="verifier-actions-reset tooltip"
-                                       title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -314,8 +317,8 @@
                         {
                                 <td class="status">
                                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                       href="javascript:void(0);" class="approver-actions-reset tooltip"
-                                       title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                       href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
+                                       original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                         @request.Status.ToString()
                                     </a>
                                 </td>
@@ -346,70 +349,71 @@
                 switch (request.Status.Id)
                 {
                     case (byte)CurrentRequestStatus.Pending:
-                            <td>
+                            <td class="status">
                                 <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                   class="sa-void tooltip" href="javascript:void(0);"
-                                   title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+                                   class="sa-void tooltip-tipsy" href="javascript:void(0);"
+                                   original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                                     @request.Status.ToString()
                                 </a>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.Verified:
-                            <td>
+                            <td class="status">
                                 <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                   class="sa-void tooltip" href="javascript:void(0);"
-                                   title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                                   class="sa-void tooltip-tipsy" href="javascript:void(0);"
+                                   original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </a>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.NotVerified:
-                            <td>
-                                <span class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                            <td class="status">
+                                <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </span>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.Approved:
-                            <td>
+                            <td class="status">
                                 <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                   class="sa-void tooltip" href="javascript:void(0);"
-                                   title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                                   class="sa-void tooltip-tipsy" href="javascript:void(0);"
+                                   original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </a>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.Rejected:
-                            <td>
-                                <span class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                            <td class="status">
+                                <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </span>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.Processed:
-                            <td>
+                            <td class="status">
                                 <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
-                                   class="sa-void tooltip" href="javascript:void(0);"
-                                   title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                                   class="sa-void tooltip-tipsy" href="javascript:void(0);"
+                                   original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </a>
                             </td>
                         break;
                     case (byte)CurrentRequestStatus.Void:
-                            <td>
-                                <span class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                            <td class="status">
+                                <span class="tooltip-tipsy" original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                                     @request.Status.ToString()
                                 </span>
                             </td>
                         break;
                     default:
-                            <td>
-                                <span class="tooltip">@request.Status.ToString()</span>
+                            <td class="status">
+                                <span class="tooltip-tipsy">@request.Status.ToString()</span>
                             </td>
                         break;
                 }
                 }
         </section>
+
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/Scripts/Libs/jquery/jquery-1.12.4.min.js"></script>
@@ -423,7 +427,7 @@
     @Html.Action("GlobalScript", "UI")
     <script>
         $(function () {
-            $('.tooltip-tipsy').tipsy({ html: true, gravity: 's' });
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
         })
     </script>
 </body>

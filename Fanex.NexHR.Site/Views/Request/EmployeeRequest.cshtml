@@ -12,6 +12,9 @@
     <a class="step">@Model.BreadcrumbText</a> <span class="step">@ViewBag.Title</span>
 }
 
-<iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-        src='@Url.Action("MemberNewVersion","Request")'
-        style="border: 0; width: 100%; height: 100%"></iframe>
+    <iframe sandbox="allow-modals allow-same-origin allow-scripts allow-popups allow-forms"
+            src='@Url.Action("MemberNewVersion","Request")'
+            frameborder="0"
+            style="border: 0; width: 100%; height: 100%"
+
+           ></iframe>

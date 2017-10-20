@@ -314,6 +314,12 @@
     <Content Include="Scripts\Libs\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\Libs\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\Libs\bootstrap\js\npm.js" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.css" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.js" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.css" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.js" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.ui.position.js" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.ui.position.min.js" />
     <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.filter.js" />
     <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.filter.min.js" />
     <Content Include="Scripts\Libs\jquery-multiselect-widget\jquery.multiselect.js" />
@@ -1323,6 +1329,19 @@
     <Content Include="Views\Request\TestPage.cshtml" />
     <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
     <Content Include="Views\Request\EmployeeRequestOld.cshtml" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.css.map" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.js.map" />
+    <Content Include="Views\Request\ViewHistoryNewVersion.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\SharedPeformedBy.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\ViewChangeShiftRequestHistory.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\ViewCheckInOutRequestHistory.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\ViewKeepInViewRequestHistory.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\ViewLateInEarlyOutRequestHistory.cshtml" />
+    <Content Include="Views\Request\HistoryNewVersion\ViewLeaveRequestHistory.cshtml" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.eot" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.ttf" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff" />
+    <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff2" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

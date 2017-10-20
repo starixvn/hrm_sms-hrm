@@ -1,7 +1,17 @@
 ﻿'use strict';
 /*global _global, fadeOutMessage, showMessage*/
 
-(function () {
+$(function () {
+
+    function showMessage(message) {
+        $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
+        $('#message').slideDown();
+    }
+
+    function fadeOutMessage() {
+        $('#message').fadeOut(500);
+    }
+
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
         var model = {
             RequestId: requestId,
@@ -123,7 +133,7 @@
         });
     }
 
-    function bindMenu(element, menu) {
+    function bindMenuOld(element, menu) {
         $(element).contextMenu({
             menu: menu
         },
@@ -161,13 +171,105 @@
                     renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                     break;
                 case 'Reset':
-                    confirm('Are you sure you want to reset?', function () {
+                    //confirm('Are you sure you want to reset?', function () {
                         processRequest(requestId, roleId, command);
-                    });
+                    //});
                     break;
             }
         });
     }
+
+    function processCommand(command, options) {
+        var eventElement = options.$trigger;
+        var title,
+            requestTypeId = parseInt((eventElement).attr('requestTypeId'), 10),
+            requestId = parseInt((eventElement).attr('requestId'), 10),
+            roleId = parseInt((eventElement).attr('roleId'), 10),
+            employeeId = parseInt((eventElement).attr('employeeId'), 10);
+        switch (command) {
+            case 'Accept':
+                title = 'Are you sure you want to verify?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'NotAccept':
+                title = 'Are you sure you dont want to verify?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'Approve':
+                title = 'Are you sure you want to approve?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'Reject':
+                title = 'Are you sure you want to reject?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'Process':
+                title = 'Are you sure you want to process?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'Void':
+            case 'VoidBySA':
+                title = 'Are you sure you want to void?';
+                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                break;
+            case 'Reset':
+                //confirm('Are you sure you want to reset?', function () {
+                    processRequest(requestId, roleId, command);
+                //});
+                break;
+        }
+    }
+
+    function renderIconOk(opt, $itemElement, itemKey, item) {
+        $itemElement.html('<i class="glyphicon glyphicon-ok"></i>' + item.name + opt.selector);
+        return '';
+    }
+
+    function renderIconRemove(opt, $itemElement, itemKey, item) {
+        $itemElement.html('<i class="glyphicon glyphicon-remove"></i>' + item.name + opt.selector);
+        return '';
+    }
+
+    function bindMenu(element, menu) {
+        var listItem = {};
+        switch (menu) {
+            case 'hrMenu':
+                listItem = {
+                    "Process": { name: "Process", icon: renderIconOk },
+                    "Void": { name: "Void", icon: renderIconRemove }
+                }
+                break;
+            case 'verifierMenu':
+                listItem = {
+                    "Accept": { name: "Verified", icon: renderIconOk },
+                    "NotAccept": { name: "Not Verified", icon: renderIconRemove }
+                }
+                break;
+            case 'approverMenu':
+                listItem = {
+                    "Approve": { name: "Approve", icon: renderIconOk },
+                    "Reject": { name: "Reject", icon: renderIconRemove }
+                }
+                break;
+            case 'resetMenu':
+                listItem = {
+                    "Reset": { name: "Reset", icon: renderIconRemove }
+                }
+                break;
+            case 'voidMenu':
+                listItem = {
+                    "VoidBySA": { name: "Void", icon: renderIconRemove },
+                }
+                break;
+        }
+
+        $.contextMenu({
+            selector: element,
+            callback: processCommand,
+            items: listItem
+        });
+    }
+
 
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
@@ -192,13 +294,15 @@
     $(document).ready(function () {
         $('#TeamId').multiselect();
 
-        //bindMenu('.hr-actions', 'hrMenu');
-        //bindMenu('.verifier-actions', 'verifierMenu');
-        //bindMenu('.approver-actions', 'approverMenu');
-        //bindMenu('.verifier-actions-reset', 'resetMenu');
-        //bindMenu('.approver-actions-reset', 'resetMenu');
-        //bindMenu('.hr-actions-reset', 'resetMenu');
-        //bindMenu('.sa-void', 'voidMenu');
+        bindMenu('.hr-actions', 'hrMenu');
+        bindMenu('.verifier-actions', 'verifierMenu');
+        bindMenu('.approver-actions', 'approverMenu');
+        bindMenu('.verifier-actions-reset', 'resetMenu');
+        bindMenu('.approver-actions-reset', 'resetMenu');
+        bindMenu('.hr-actions-reset', 'resetMenu');
+        bindMenu('.sa-void', 'voidMenu');
+
+        //bindMenuApprover('.approver-actions');
 
         $('.viewhistory').click(function () {
             var url = $(this).attr('id');
@@ -244,4 +348,4 @@
 
         initEventExportExcel();
     });
-})();
+});
