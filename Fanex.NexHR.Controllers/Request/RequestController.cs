@@ -75,21 +75,12 @@
                 request.IsFilterByAffectedDate = false;
             }
 
-            GetRequests(request);
             return View("EmployeeRequest", request);
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult MemberNewVersion(RequestViewModel request)
         {
-            request.ViewType = RequestViewType.PersonalSpace;
-
-            if (request.StatusId == -2)
-            {
-                request.StatusId = -1;
-                request.FromDate = DateTime.Now.Date.AddDays(-60);
-                request.IsFilterByAffectedDate = false;
-            }
 
             GetRequests(request);
             return View("TestPage", request);
@@ -100,7 +91,6 @@
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
-            GetRequests(request);
 
             return View("EmployeeRequest", request);
         }
@@ -109,7 +99,6 @@
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
             request.ViewType = RequestViewType.CompanySpace;
-            GetRequests(request);
 
             return View("EmployeeRequest", request);
         }
@@ -133,7 +122,6 @@
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
             request.ViewType = RequestViewType.SASpace;
-            GetRequests(request);
 
             return View("EmployeeRequest", request);
         }

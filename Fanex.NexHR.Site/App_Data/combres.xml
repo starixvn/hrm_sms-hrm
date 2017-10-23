@@ -488,7 +488,7 @@
     <resourceSet name="employeerequestjs_new" type="js">
 
       <!--<resource path="~/scripts/views/criteria.js" />-->
-      
+      <resource path="~/scripts/libs/jquery.blockUI.js" />
       <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.js" />
       <!--<resource path="~/Scripts/Libs/jquery.contextmenu.js" />-->
       <resource path="~/Scripts/Libs/jquery-multiselect-widget/jquery.multiselect.js" />

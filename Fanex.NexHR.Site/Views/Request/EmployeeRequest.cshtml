@@ -1,6 +1,6 @@
 ﻿@model RequestViewModel
 @{
-    ViewBag.Title = Model.PageTitle;
+   ViewBag.Title = Model.PageTitle;
 }
 @section css{
     @Url.CombresLink("employeerequestcss")
@@ -12,8 +12,8 @@
     <a class="step">@Model.BreadcrumbText</a> <span class="step">@ViewBag.Title</span>
 }
 
-    <iframe sandbox="allow-modals allow-same-origin allow-scripts allow-popups allow-forms"
-            src='@Url.Action("MemberNewVersion","Request")'
+    <iframe sandbox="allow-modals allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+            src='@Url.Action("MemberNewVersion","Request", Model)'
             frameborder="0"
             style="border: 0; width: 100%; height: 100%"
 

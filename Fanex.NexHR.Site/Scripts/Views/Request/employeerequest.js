@@ -265,6 +265,7 @@ $(function () {
 
         $.contextMenu({
             selector: element,
+            trigger: 'left',
             callback: processCommand,
             items: listItem
         });
@@ -291,7 +292,11 @@ $(function () {
         });
     }
 
+    var dontBlock = false;
+
     $(document).ready(function () {
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
+
         $('#TeamId').multiselect();
 
         bindMenu('.hr-actions', 'hrMenu');
@@ -301,8 +306,6 @@ $(function () {
         bindMenu('.approver-actions-reset', 'resetMenu');
         bindMenu('.hr-actions-reset', 'resetMenu');
         bindMenu('.sa-void', 'voidMenu');
-
-        //bindMenuApprover('.approver-actions');
 
         $('.viewhistory').click(function () {
             var url = $(this).attr('id');
@@ -347,5 +350,10 @@ $(function () {
         });
 
         initEventExportExcel();
-    });
+    }).ajaxStart(function () {
+        if (!dontBlock) {
+            $.blockUI();
+        }
+    }).ajaxStop($.unblockUI);
+    
 });

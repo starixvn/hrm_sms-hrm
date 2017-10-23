@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SMS HRM</title>
+    @*<base target="_parent" />*@
     <!-- Bootstrap -->
     <link href="/Styles/css/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="/Styles/Libs/jquery-ui-1.2.1/jquery-ui.css" rel="stylesheet" />
@@ -74,13 +75,13 @@
                                             @switch (request.RequestType.Id)
                                             {
                                                 case (int)RequestType.Leave:
-                                                    <a href="@Url.Action("Detail", "Leave", new { requestId = request.Id })">@request.LeaveType.Name</a>
+                                                    <a href="#" onclick="window.parent.location.href='@Url.Action("Detail", "Leave", new { requestId = request.Id })';">@request.LeaveType.Name</a>
                                                     break;
                                                 case (int)RequestType.ChangeShift:
-                                                    <a href="@Url.Action("Detail", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                                    <a href="#" onclick="window.parent.location.href='@Url.Action("Detail", "ChangeShift", new { id = request.Id })';">@request.RequestType.Name</a>
                                                     break;
                                                 default:
-                                                    <a href="@Url.Action(Model.ActionName, "request", requestModel)">@request.RequestType.Name</a>
+                                                    <a href="#" onclick='window.parent.location.href="@Url.Action(Model.ActionName, "request", requestModel)";'>@request.RequestType.Name</a>
                                                     break;
                                             }
                                         </td>
@@ -425,10 +426,5 @@
 
     @Url.CombresLink("employeerequestjs_new")
     @Html.Action("GlobalScript", "UI")
-    <script>
-        $(function () {
-            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
-        })
-    </script>
 </body>
 </html>
