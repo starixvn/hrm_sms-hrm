@@ -1,10 +1,9 @@
 ﻿@model RequestViewModel
-@Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
-@*@Html.HiddenFor(model => model.ActionName)*@
-@Html.Hidden("ActionName", "MemberNewVersion")
+
 @using (Html.BeginGetForm())
 {
-
+    @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+    @Html.HiddenFor(model => model.ActionName)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">

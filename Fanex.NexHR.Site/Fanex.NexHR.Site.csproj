@@ -1342,6 +1342,7 @@
     <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.ttf" />
     <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff" />
     <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff2" />
+    <Content Include="Views\Shared\_NewLayout.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
