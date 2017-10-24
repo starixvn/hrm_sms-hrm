@@ -30,19 +30,17 @@
     <header>
         @Html.Action("NewHeader", "UI")
     </header>
-    <div id="container" class="container">
-        <nav id="left-navigation">
-            <div class="column_wrap">
-                @Html.Action("NewNavBar", "UI")
-            </div>
+    <div id="container" style="margin-top: 44px;">
+        <nav id="left-navigation" class="left-navigation">
+            @Html.Action("NewNavBar", "UI")
         </nav>
-        <section id="section_content">
+        <section id="section_content" class="section-content">
             <div id="content-wrapper" class="content_wrap">
-                <section id="section_breadcrumb">
+                <section id="section_breadcrumb" class="section_breadcrumb">
                     <div class="separator js-separator">
                         <div class="js-view-title separator-view-title" id="view_title">
                             <div class="breadcrumb">
-                                <a id="toggle-left-navigation" class="toggle-left-navigation large-back" href="javascript:;" title="@Labels.HideLeftNavigation"></a>
+                                <a id="toggle-left-navigation" class="toggle-left-navigation large-back" href="javascript:;" title="@Labels.HideLeftNavigation"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                 <span class="separate">|</span>
                                 @RenderSection("Breadcrumb", required: true)
                             </div>
@@ -52,7 +50,7 @@
                         </div>
                     </div>
                 </section>
-                <section id="section_body">
+                <section id="section_body" class="section_body">
                     <div class="content_scroll">
                         @RenderBody()
                     </div>

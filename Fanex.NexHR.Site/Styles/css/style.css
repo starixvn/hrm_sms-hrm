@@ -9,7 +9,31 @@ body {
   padding: 0;
   height: 100%;
   color: #010101;
-  font: 300 1.3em Roboto, sans-serif; }
+  font: 300 1.3em Arial, sans-serif; }
+
+.left-navigation {
+  left: 0;
+  position: fixed;
+  width: 190px;
+  background: #eeeeee;
+  border-right: 1px solid white;
+  top: 44px;
+  bottom: 0;
+  overflow-x: hidden; }
+
+.section-content {
+  padding-left: 190px; }
+  .section-content .content_wrap {
+    border-left: 1px solid #898989; }
+
+.section_breadcrumb {
+  position: fixed;
+  right: 0;
+  left: 191px;
+  z-index: 9; }
+
+.section_body {
+  padding-top: 25px; }
 
 .content_wrap .content_scroll {
   padding: 10px; }
@@ -83,6 +107,186 @@ a:focus, a:hover {
   margin-top: 10px;
   text-shadow: 0 0 1px #ddd; }
 
+.nav_links .separator {
+  position: relative;
+  cursor: pointer;
+  background: url(/Images/sprite_v.png) repeat-x 0px -55px;
+  text-transform: uppercase;
+  color: #535353;
+  text-shadow: #f5f5f5 0 1px 0;
+  text-align: left;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+  padding-left: 15px;
+  padding-top: 6px;
+  padding-bottom: 4px;
+  line-height: 18px;
+  font-size: 12px; }
+  .nav_links .separator:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    display: block;
+    height: 0;
+    width: 0;
+    border: 4px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.2); }
+  .nav_links .separator.first {
+    background-position: 0px -56px;
+    height: 27px; }
+
+.nav_links .togglable_section.folded .separator:before {
+  left: 6px;
+  top: 9px;
+  display: block;
+  height: 0;
+  width: 0;
+  border: 4px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.2); }
+
+.nav_links .el {
+  position: relative;
+  display: block;
+  padding-left: 10px;
+  position: relative;
+  font-size: 11px; }
+  .nav_links .el a {
+    min-height: 16px;
+    padding: 6px 0 6px 30px;
+    display: block;
+    color: #535353; }
+    .nav_links .el a:hover {
+      text-decoration: none; }
+    .nav_links .el a:active {
+      font-weight: bold; }
+  .nav_links .el:hover {
+    background-color: #dcdcdc; }
+  .nav_links .el.selected, .nav_links .el.selected:hover {
+    background-color: #a0a0a0;
+    background-position: -190px 24px;
+    text-shadow: rgba(0, 0, 0, 0.8) 0px 1px 1px;
+    -webkit-font-smoothing: antialiased; }
+    .nav_links .el.selected a, .nav_links .el.selected:hover a {
+      color: white;
+      font-weight: bold; }
+
+.xicon {
+  width: 24px;
+  height: 24px;
+  padding: 0 !important;
+  vertical-align: middle;
+  background-image: url(../../images/icons.png);
+  background-repeat: no-repeat;
+  display: inline-block;
+  zoom: 1;
+  display: inline;
+  left: 12px;
+  position: absolute;
+  top: 1px; }
+  .xicon.ExtensionNumber {
+    background-position: 0 0; }
+  .xicon.plus {
+    background-position: 0 -72px; }
+  .xicon.MyDashboard {
+    background-position: -168px 0; }
+  .xicon.MyProfile {
+    background-position: -72px -48px; }
+  .xicon.MembersRequest {
+    background-position: -96px -216px; }
+  .xicon.MembersOvertime {
+    background-position: -96px -216px; }
+  .xicon.DisciplineSummary {
+    background-position: -96px -216px; }
+  .xicon.EmployeeRequest {
+    background-position: -96px -216px; }
+  .xicon.VoidRequest {
+    background-position: -96px -216px; }
+  .xicon.EmployeeOvertime {
+    background-position: -96px -216px; }
+  .xicon.DailyRequest {
+    background-position: -96px -216px; }
+  .xicon.JobTitleManagement {
+    background-position: -96px -216px; }
+  .xicon.UserManagement {
+    background-position: -24px 0; }
+  .xicon.ContactList {
+    background-position: -24px 0; }
+  .xicon.MyCalendar {
+    background-position: -192px 0; }
+  .xicon.WorkingCalendars {
+    background-position: -192px 0; }
+  .xicon.MyOvertime {
+    background-position: -192px -192px; }
+  .xicon.AttendanceReport {
+    background-position: -192px -192px; }
+  .xicon.calendar3 {
+    background-position: 0 -240px; }
+  .xicon.calendar4 {
+    background-position: -192px -216px; }
+  .xicon.calendar5 {
+    background-position: -144px -216px; }
+  .xicon.AnnualLeaveBalance {
+    background-position: -120px -216px; }
+  .xicon.LeaveRequest {
+    background-position: -24px -216px; }
+  .xicon.UnpaidLeave {
+    background-position: -24px -216px; }
+  .xicon.MyTimesheet {
+    background-position: 0 -216px; }
+  .xicon.holiday {
+    background-position: -216px -192px; }
+  .xicon.CompanyMemo {
+    background-position: -24px -240px; }
+  .xicon.CreateAccount {
+    background-position: -216px -216px; }
+  .xicon.SectionManagement {
+    background-position: -96px 0; }
+  .xicon.FunctionManagement {
+    background-position: -96px 0; }
+  .xicon.Division {
+    background-position: -96px 0; }
+  .xicon.clock {
+    background-position: -168px -216px; }
+  .xicon.CheckInCheckOut {
+    background-position: -144px -48px; }
+  .xicon.LateInEarlyOut {
+    background-position: -72px -216px; }
+  .xicon.ChangeShift {
+    background-position: -48px -216px; }
+  .xicon.RequestStatistic {
+    background-position: 0 -96px; }
+  .xicon.RequestsStatistic {
+    background-position: 0 -96px; }
+  .xicon.Reports {
+    background-position: 0 -96px; }
+  .xicon.large-back {
+    background-position: 0 -47px; }
+  .xicon.large-next {
+    background-position: -48px -192px; }
+  .xicon.KeepInView {
+    background-position: -216px -121px; }
+  .xicon.remove {
+    background-position: -216px -96px; }
+  .xicon.TimeRecord {
+    background-position: -168px -24px; }
+  .xicon.MyMessage {
+    background-position: -72px 0; }
+  .xicon.Message {
+    background-position: -72px 0; }
+  .xicon.ShiftStatistic {
+    background-position: -144px -216px; }
+  .xicon.ScheduleArrange {
+    background-position: 0 -240px; }
+
+.header_wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10; }
+
 .header_wrap {
   background: #dcdcdc;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#e4e4e4), to(#dcdcdc));
@@ -98,7 +302,7 @@ a:focus, a:hover {
   .header_wrap .logo {
     float: left;
     margin: 0;
-    width: 155px;
+    width: 172px;
     padding-bottom: 1px;
     padding-right: 18px;
     background: url(../../Images/sprite_v.png) top right no-repeat; }
@@ -459,7 +663,8 @@ span.req.mytimesheet-notaccepted, span.req.mytimesheet-notverified, span.req.myt
 
 .breadcrumb {
   background: none;
-  padding: 0 15px; }
+  padding: 0 15px;
+  margin: 0; }
   .breadcrumb .separate {
     font-size: 14px;
     margin: 0 10px; }
@@ -938,7 +1143,7 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%; }
 
-button[type="button"] {
+.button {
   margin-right: 0;
   background: #308fb7;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));

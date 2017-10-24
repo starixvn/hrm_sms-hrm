@@ -1270,6 +1270,7 @@
     <Content Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.defaults" />
     <Content Include="Content\layout\_header.scss" />
+    <Content Include="Content\layout\_navbar.scss" />
     <None Include="Content\views\employee\employee.detail.scss" />
     <Content Include="Content\views\employee\employee.edit.scss" />
     <Content Include="Content\views\employee\employee.edit.css.map">

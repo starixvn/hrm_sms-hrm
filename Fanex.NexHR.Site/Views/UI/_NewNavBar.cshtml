@@ -5,17 +5,17 @@
     var selectedMenu = (MenuModel)ViewBag.SelectedMenu;
     var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;
 }
-<div class="column">
-    <div class="nav_links">
-        @foreach (var parentMenu in Model.Where(i => i.ParentId == null).OrderBy(i => i.DisplayOrder))
+
+<div class="nav_links">
+    @foreach (var parentMenu in Model.Where(i => i.ParentId == null).OrderBy(i => i.DisplayOrder))
+    {
+        if (Model.Any(i => i.ParentId == parentMenu.MenuId))
         {
-            if (Model.Any(i => i.ParentId == parentMenu.MenuId))
-            {
-                <div class="overview_section togglable_section" id="@parentMenu.MenuId">
-                    <div class="separator">
-                        <strong>@parentMenu.Text</strong>
-                    </div>
+            <div class="overview_section togglable_section" id="@parentMenu.MenuId">
+                <div class="separator">
+                    <strong>@parentMenu.Text</strong>
                 </div>
+            </div>
                 <div class="navItem">
                     @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
                     {
@@ -27,10 +27,10 @@
                         </div>
                     }
                 </div>
-            }
         }
-    </div>
+    }
 </div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         var currentUrl = '@idSelected';
