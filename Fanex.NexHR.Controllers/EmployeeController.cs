@@ -408,6 +408,7 @@
                         processor.ProcessImage(file.InputStream, stream);
                         var image = Image.FromStream(stream);
                         image.Save(Server.MapPath("/avatars/") + code + ".jpg");
+                        image.Dispose();
 
                         return Json(true);
                     }
