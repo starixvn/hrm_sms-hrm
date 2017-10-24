@@ -91,5 +91,38 @@
                 }
             }
         }
+
+        [ChildActionOnly]
+        public ActionResult NewHeader()
+        {
+            var criteria = new GetMessageByEmployeeCriteria
+            {
+                EmployeeId = CurrentUser.Id,
+                FromDate = DateTime.Today,
+                ToDate = DateTime.Today,
+                IsDisabled = 0
+            };
+
+            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+            return PartialView("_NewHeader", CurrentUser);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult NewNavBar()
+        {
+            var routeData = ControllerContext.ParentActionViewContext.RouteData;
+            var controller = routeData.Values["controller"];
+            var action = routeData.Values["action"];
+            var link = string.Format("/{0}/{1}", controller, action);
+            var selectedMenu = CurrentUser.Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
+            var menus = GetNagivationData();
+            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
+
+            ViewBag.SelectedMenu = selectedMenu;
+            ViewBag.UnreadMessage = unreadMessageCount;
+
+            return PartialView("_NewNavBar", menus);
+        }
     }
 }

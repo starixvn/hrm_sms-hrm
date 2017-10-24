@@ -1269,6 +1269,7 @@
     <Content Include="Content\vendors\_jqueryUI.scss" />
     <Content Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.defaults" />
+    <Content Include="Content\layout\_header.scss" />
     <None Include="Content\views\employee\employee.detail.scss" />
     <Content Include="Content\views\employee\employee.edit.scss" />
     <Content Include="Content\views\employee\employee.edit.css.map">
@@ -1343,6 +1344,8 @@
     <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff" />
     <Content Include="Scripts\Libs\jquery-contextMenu\font\context-menu-icons.woff2" />
     <Content Include="Views\Shared\_NewLayout.cshtml" />
+    <Content Include="Views\UI\_NewHeader.cshtml" />
+    <Content Include="Views\UI\_NewNavBar.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

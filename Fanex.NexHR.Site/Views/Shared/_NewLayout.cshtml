@@ -1,5 +1,4 @@
 ﻿@{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     var title = string.Empty;
     int siteId = ConfigSettings.SiteId;
 }
@@ -29,12 +28,12 @@
 </head>
 <body class="locale_en production">
     <header>
-        @Html.Action("Header", "UI")
+        @Html.Action("NewHeader", "UI")
     </header>
     <div id="container" class="container">
         <nav id="left-navigation">
             <div class="column_wrap">
-                @Html.Action("NavBar", "UI")
+                @Html.Action("NewNavBar", "UI")
             </div>
         </nav>
         <section id="section_content">

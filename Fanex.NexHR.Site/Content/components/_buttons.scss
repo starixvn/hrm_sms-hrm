@@ -524,8 +524,7 @@ input[type="button"].btn-block {
     width: 100%;
 }
 
-input[type="button"],
-input[type="submit"] {
+button[type="button"] {
     margin-right: 0;
     background: #308fb7;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
