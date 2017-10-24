@@ -374,36 +374,6 @@
             return result;
         }
 
-        public ActionResult TestPage(RequestViewModel request)
-        {
-            request.ViewType = RequestViewType.PersonalSpace;
-
-            if (request.StatusId == -2)
-            {
-                request.StatusId = -1;
-                request.FromDate = DateTime.Now.Date.AddDays(-60);
-                request.IsFilterByAffectedDate = false;
-            }
-
-            GetRequests(request);
-            return View("EmployeeRequestOld", request);
-        }
-
-        public ActionResult TestThoi(RequestViewModel request)
-        {
-            request.ViewType = RequestViewType.PersonalSpace;
-
-            if (request.StatusId == -2)
-            {
-                request.StatusId = -1;
-                request.FromDate = DateTime.Now.Date.AddDays(-60);
-                request.IsFilterByAffectedDate = false;
-            }
-
-            GetRequests(request);
-            return View("TestPage", request);
-        }
-
         public ActionResult ViewHistoryNewVersion(long id, int type)
         {
             var criteria = new GetHistoryRequestCriteria

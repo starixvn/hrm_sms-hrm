@@ -24,7 +24,8 @@ body {
 .section-content {
   padding-left: 190px; }
   .section-content .content_wrap {
-    border-left: 1px solid #898989; }
+    border-left: 1px solid #898989;
+    padding-top: 44px; }
 
 .section_breadcrumb {
   position: fixed;
@@ -1143,7 +1144,8 @@ input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%; }
 
-.button {
+input[type="button"],
+input[type="submit"] {
   margin-right: 0;
   background: #308fb7;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));

@@ -115,29 +115,27 @@
 </div>
 <div id="dialoghistorycontent"></div>
 <div id="dialogProcessRequest"></div>
-<div id="message">
-    @*@RenderContextMenu(Model)
+<div id="message"></div>
+@*@RenderContextMenu(Model)
 
-
-
-                @helper RenderContextMenu(RequestViewModel model)
-                {
-        switch (model.ViewType)
-        {
-            case RequestViewType.PersonalSpace:
-                    @RazorHelper.VerifierAndApproverMenu()
-                    @RazorHelper.ResetMenu()
-                break;
-            case RequestViewType.SASpace:
-                    @RazorHelper.VoidMenu();
-                break;
-            case RequestViewType.HRSpace:
-                    @RazorHelper.HrMenu()
-                    @RazorHelper.ResetMenu()
-                break;
-        }
-        }*@
-    @helper RenderStatus(RequestViewModel model, RequestEntity request)
+            @helper RenderContextMenu(RequestViewModel model)
+            {
+    switch (model.ViewType)
+    {
+        case RequestViewType.PersonalSpace:
+                @RazorHelper.VerifierAndApproverMenu()
+                @RazorHelper.ResetMenu()
+            break;
+        case RequestViewType.SASpace:
+                @RazorHelper.VoidMenu();
+            break;
+        case RequestViewType.HRSpace:
+                @RazorHelper.HrMenu()
+                @RazorHelper.ResetMenu()
+            break;
+    }
+    }*@
+@helper RenderStatus(RequestViewModel model, RequestEntity request)
         {
 switch (model.ViewType)
 {
@@ -153,7 +151,7 @@ switch (model.ViewType)
 }
 }
 
-    @helper RenderStatusHRSpace(RequestViewModel model, RequestEntity request)
+@helper RenderStatusHRSpace(RequestViewModel model, RequestEntity request)
         {
 switch (request.Status.Id)
 {
@@ -221,7 +219,7 @@ switch (request.Status.Id)
 }
 }
 
-    @helper RenderStatusPersonalSpace(RequestViewModel model, RequestEntity request)
+@helper RenderStatusPersonalSpace(RequestViewModel model, RequestEntity request)
         {
 switch (request.Status.Id)
 {
@@ -333,7 +331,7 @@ switch (request.Status.Id)
 }
 }
 
-    @helper RenderStatusSASpace(RequestViewModel model, RequestEntity request)
+@helper RenderStatusSASpace(RequestViewModel model, RequestEntity request)
         {
 switch (request.Status.Id)
 {

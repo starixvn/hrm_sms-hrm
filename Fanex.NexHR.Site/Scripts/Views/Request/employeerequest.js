@@ -1,8 +1,16 @@
 ﻿'use strict';
 /*global _global, fadeOutMessage, showMessage*/
+$.extend({
+    getOrCreateDialog: function (id) {
+        var $box = $('#' + id);
+        if (!$box.length) {
+            $box = $('<div id="' + id + '"><p></p></div>').hide().appendTo('body');
+        }
+        return $box;
+    }
+});
 
 $(function () {
-
     function showMessage(message) {
         $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
         $('#message').slideDown();
@@ -10,6 +18,37 @@ $(function () {
 
     function fadeOutMessage() {
         $('#message').fadeOut(500);
+    }
+
+    function confirm(message, callback, options) {
+        var defaults = {
+            title: 'SMSHRM',
+            modal: true,
+            resizable: false,
+            buttons: {
+                OK: function () {
+                    $(this).dialog('close');
+                    if (callback !== null) {
+                        callback();
+                    }
+                    return true;
+                },
+                Cancel: function () {
+                    $(this).dialog('close');
+                    return false;
+                }
+            },
+            show: 'fade',
+            hide: 'fade',
+            minHeight: 50,
+            dialogClass: 'modal-shadow'
+        };
+
+        var $confirm = $.getOrCreateDialog('confirm');
+        // set message
+        $("p", $confirm).html(message);
+        // init dialog
+        $confirm.dialog($.extend({}, defaults, options));
     }
 
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
@@ -133,52 +172,6 @@ $(function () {
         });
     }
 
-    function bindMenuOld(element, menu) {
-        $(element).contextMenu({
-            menu: menu
-        },
-        function (command, eventElement) {
-            var title,
-                requestTypeId = parseInt($(eventElement).attr('requestTypeId'), 10),
-                requestId = parseInt($(eventElement).attr('requestId'), 10),
-                roleId = parseInt($(eventElement).attr('roleId'), 10),
-                employeeId = parseInt($(eventElement).attr('employeeId'), 10);
-
-            switch (command) {
-                case 'Accept':
-                    title = 'Are you sure you want to verify?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'NotAccept':
-                    title = 'Are you sure you dont want to verify?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'Approve':
-                    title = 'Are you sure you want to approve?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'Reject':
-                    title = 'Are you sure you want to reject?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'Process':
-                    title = 'Are you sure you want to process?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'Void':
-                case 'VoidBySA':
-                    title = 'Are you sure you want to void?';
-                    renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
-                    break;
-                case 'Reset':
-                    //confirm('Are you sure you want to reset?', function () {
-                        processRequest(requestId, roleId, command);
-                    //});
-                    break;
-            }
-        });
-    }
-
     function processCommand(command, options) {
         var eventElement = options.$trigger;
         var title,
@@ -213,9 +206,9 @@ $(function () {
                 renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                 break;
             case 'Reset':
-                //confirm('Are you sure you want to reset?', function () {
-                    processRequest(requestId, roleId, command);
-                //});
+                confirm('Are you sure you want to reset?', function () {
+                processRequest(requestId, roleId, command);
+                });
                 break;
         }
     }
@@ -270,7 +263,6 @@ $(function () {
             items: listItem
         });
     }
-
 
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
@@ -355,5 +347,4 @@ $(function () {
             $.blockUI();
         }
     }).ajaxStop($.unblockUI);
-    
 });
