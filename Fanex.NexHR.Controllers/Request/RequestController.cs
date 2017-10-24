@@ -406,7 +406,7 @@
 
         public ActionResult ViewHistoryNewVersion(long id, int type)
         {
-            var criteria = new GetHistoryRequestCriteria()
+            var criteria = new GetHistoryRequestCriteria
             {
                 RequestId = id,
                 RequestType = type
