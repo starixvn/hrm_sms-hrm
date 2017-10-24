@@ -238,12 +238,12 @@
                             row.GetCell(2).SetCellValue(item.Fullname);
                             row.GetCell(3).SetCellValue(item.Nickname);
                             row.GetCell(4).SetCellValue(item.Team);
-                            row.GetCell(5).SetCellValue(item.TotalWorkDays != 0 ? item.TotalWorkDays : defaultCellValue);
-                            row.GetCell(6).SetCellValue(item.UnpaidLeave != 0 ? item.UnpaidLeave : defaultCellValue);
-                            row.GetCell(7).SetCellValue(item.Normal != 0 ? item.Normal : defaultCellValue);
-                            row.GetCell(8).SetCellValue(item.Offday != 0 ? item.Offday : defaultCellValue);
-                            row.GetCell(9).SetCellValue(item.Holiday != 0 ? item.Holiday : defaultCellValue);
-                            row.GetCell(10).SetCellValue(item.Tax != 0 ? item.Tax : defaultCellValue);
+                            row.GetCell(5).SetCellValue(!item.TotalWorkDays.Equals(0) ? item.TotalWorkDays : defaultCellValue);
+                            row.GetCell(6).SetCellValue(!item.UnpaidLeave.Equals(0) ? item.UnpaidLeave : defaultCellValue);
+                            row.GetCell(7).SetCellValue(!item.Normal.Equals(0) ? item.Normal : defaultCellValue);
+                            row.GetCell(8).SetCellValue(!item.Offday.Equals(0) ? item.Offday : defaultCellValue);
+                            row.GetCell(9).SetCellValue(!item.Holiday.Equals(0) ? item.Holiday : defaultCellValue);
+                            row.GetCell(10).SetCellValue(!item.Tax.Equals(0) ? item.Tax : defaultCellValue);
 
                             var indexCount = 0;
                             for (int i = 1; i <= totalHeaderDateCell; i++)
@@ -252,7 +252,7 @@
                                 if (i % 2 == 0)
                                 {
                                     var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType2) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType2);
-                                    cellValue = cellValue == 0 ? defaultCellValue : cellValue;
+                                    cellValue = cellValue.Equals(0) ? defaultCellValue : cellValue;
                                     row.GetCell(i + 10).SetCellValue(cellValue);
 
                                     indexCount++;
@@ -260,7 +260,7 @@
                                 else
                                 {
                                     var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType1) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType1);
-                                    cellValue = cellValue == 0 ? defaultCellValue : cellValue;
+                                    cellValue = cellValue.Equals(0) ? defaultCellValue : cellValue;
                                     row.GetCell(i + 10).SetCellValue(cellValue);
                                 }
                             }

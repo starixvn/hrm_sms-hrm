@@ -63,7 +63,7 @@
 
         public ActionResult Index()
         {
-            var model = new UserManagementViewModel()
+            var model = new UserManagementViewModel
             {
                 IsEnable = true,
                 Groups = GetAllTeam(),
@@ -81,7 +81,7 @@
 
             if (model != null)
             {
-                var criteria = new GetAllEmployeeCriteria()
+                var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
                     GroupIds = model.GroupIds,
@@ -93,7 +93,7 @@
 
                 employees = employeeService.GetEmployees(criteria);
 
-                var pagerOption = new PagerOptionModel()
+                var pagerOption = new PagerOptionModel
                 {
                     CurrentPage = model.CurrentPage,
                     ItemsPerPage = model.ItemsPerPage,
@@ -116,7 +116,7 @@
                 Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
 
-            var model = new UserManagementViewModel()
+            var model = new UserManagementViewModel
             {
                 JobTitleId = jobTitleId,
                 GroupIds = groupIds,
@@ -138,7 +138,7 @@
 
             if (model != null)
             {
-                var criteria = new GetAllEmployeeCriteria()
+                var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
                     GroupIds = model.GroupIds,
@@ -152,7 +152,7 @@
 
                 employees = employeeService.GetEmployees(criteria);
 
-                var pagerOption = new PagerOptionModel()
+                var pagerOption = new PagerOptionModel
                 {
                     CurrentPage = model.CurrentPage,
                     ItemsPerPage = model.ItemsPerPage,
@@ -334,26 +334,29 @@
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult DefaultSchedule(EmployeeShift model)
         {
-            if (model != null && ModelState.IsValid)
+            if (model != null)
             {
-                var criteria = new UpdateEmployeeShiftCriteria()
+                if (ModelState.IsValid)
                 {
-                    EmpId = model.EmpId,
-                    FriShift = model.FriShiftId,
-                    MonShift = model.MonShiftId,
-                    SatShift = model.SatShiftId,
-                    SunShift = model.SunShiftId,
-                    ThuShift = model.ThuShiftId,
-                    TueShift = model.TueShiftId,
-                    WedShift = model.WedShiftId
-                };
-                CommandResult result = commandService.Update(criteria);
-                ViewBag.Updated = result.IsSuccessful;
-            }
+                    var criteria = new UpdateEmployeeShiftCriteria
+                    {
+                        EmpId = model.EmpId,
+                        FriShift = model.FriShiftId,
+                        MonShift = model.MonShiftId,
+                        SatShift = model.SatShiftId,
+                        SunShift = model.SunShiftId,
+                        ThuShift = model.ThuShiftId,
+                        TueShift = model.TueShiftId,
+                        WedShift = model.WedShiftId
+                    };
+                    CommandResult result = commandService.Update(criteria);
+                    ViewBag.Updated = result.IsSuccessful;
+                }
 
-            ViewBag.Employee = GetEmployeeById(model.EmpId);
-            ViewBag.Shifts = shiftService.GetSelectList();
-            ViewBag.Id = model.EmpId;
+                ViewBag.Employee = GetEmployeeById(model.EmpId);
+                ViewBag.Shifts = shiftService.GetSelectList();
+                ViewBag.Id = model.EmpId;
+            }
 
             return View(model);
         }
@@ -416,7 +419,7 @@
 
         public ActionResult MySpace()
         {
-            var getMySpaceCriteria = new GetMySpaceCriteria()
+            var getMySpaceCriteria = new GetMySpaceCriteria
             {
                 EmpId = CurrentUser.Id,
                 Date = DateTime.Now
@@ -447,7 +450,7 @@
         [HttpGet]
         public ActionResult Supervisor(short role, int employeeId)
         {
-            var criteria = new GetEmployeeSupervisorCriteria()
+            var criteria = new GetEmployeeSupervisorCriteria
             {
                 EmpId = employeeId,
                 Role = role
@@ -469,7 +472,7 @@
         [HttpPost]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
-            var updateSupervisorCriteria = new UpdateSupervisorCriteria()
+            var updateSupervisorCriteria = new UpdateSupervisorCriteria
             {
                 EmpId = model.EmployeeId,
                 Role = model.SupervisorRole,
@@ -489,7 +492,7 @@
         [HttpGet]
         public ActionResult ShiftManager(short role, int employeeId)
         {
-            var criteria = new GetEmployeeSupervisorCriteria()
+            var criteria = new GetEmployeeSupervisorCriteria
             {
                 EmpId = employeeId,
                 Role = role
@@ -512,7 +515,7 @@
         [HttpPost]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
-            var insertShiftMangerCriteria = new InsertShiftManagerCriteria()
+            var insertShiftMangerCriteria = new InsertShiftManagerCriteria
             {
                 EmpId = model.EmployeeId,
                 EmpIdShift = model.RoleShiftArrange,
@@ -536,7 +539,7 @@
         {
             ViewBag.Groups = GetAllTeam();
 
-            var criteria = new GetDisciplineSettingByEmployeeId()
+            var criteria = new GetDisciplineSettingByEmployeeId
             {
                 EmpId = employeeId
             };
@@ -570,7 +573,7 @@
 
         public JsonResult GetMemberByManager(string keyword)
         {
-            var criteria = new GetMemberByManagerCriteria()
+            var criteria = new GetMemberByManagerCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 Query = keyword,
@@ -583,7 +586,7 @@
 
         public JsonResult GetEmployees(
             string query,
-            string groupIds = "",
+            string groupIds,
             bool? enable = null,
             bool? isDelete = null,
             int? titleId = null,
@@ -594,7 +597,7 @@
                 groupIds = string.Empty;
             }
 
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            var getEmployeeCriteria = new GetAllEmployeeCriteria
             {
                 Query = query,
                 GroupIds = groupIds,
@@ -612,7 +615,7 @@
         {
             if (CurrentUser.Id == empId)
             {
-                var criteria = new GetEmployeeByIdCriteria()
+                var criteria = new GetEmployeeByIdCriteria
                 {
                     EmpId = empId
                 };
@@ -625,7 +628,7 @@
 
         private IList<SupervisorNameModel> GetSupervisors(int empId)
         {
-            var criteria = new GetListSupervisorNameCriteria()
+            var criteria = new GetListSupervisorNameCriteria
             {
                 EmpId = empId,
                 Role = null,
@@ -686,7 +689,7 @@
 
         private Employee GetEmployeeById(int empId)
         {
-            var criteria = new GetEmployeeByIdCriteria()
+            var criteria = new GetEmployeeByIdCriteria
             {
                 EmpId = empId
             };
@@ -697,7 +700,7 @@
 
         private EmployeeShift GetEmployeeShift(int empId)
         {
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria()
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria
             {
                 EmpId = empId
             };
@@ -790,7 +793,7 @@
                 TaxCode = model.TaxCode,
                 SocialInsuranceNo = model.SocialInsuranceNo,
                 RegisteredHospital = model.RegisteredHospital,
-                IsExpatUseHoliday = model.IsLocal ? false : model.IsExpatUseHoliday
+                IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday
             };
 
             return criteria;
