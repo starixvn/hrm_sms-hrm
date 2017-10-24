@@ -9,7 +9,7 @@
         {
             get
             {
-                return ConfigurationManager.AppSettings["Email"].ToString();
+                return ConfigurationManager.AppSettings["Email"];
             }
         }
 
@@ -17,7 +17,7 @@
         {
             get
             {
-                return Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"].ToString());
+                return Converter.ToBool(ConfigurationManager.AppSettings["IsCloseBalance"]);
             }
         }
 
@@ -25,7 +25,7 @@
         {
             get
             {
-                return Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"].ToString());
+                return Converter.ToBool(ConfigurationManager.AppSettings["AllowEditPersonalInformation"]);
             }
         }
 
@@ -33,7 +33,7 @@
         {
             get
             {
-                return Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"].ToString());
+                return Converter.ToBool(ConfigurationManager.AppSettings["AllowAdminLogin"]);
             }
         }
 
@@ -41,7 +41,7 @@
         {
             get
             {
-                return Converter.ToBool(ConfigurationManager.AppSettings["IsDisabledSendMail"].ToString());
+                return Converter.ToBool(ConfigurationManager.AppSettings["IsDisabledSendMail"]);
             }
         }
 
@@ -49,7 +49,7 @@
         {
             get
             {
-                return Converter.ToInt(ConfigurationManager.AppSettings["SiteId"].ToString());
+                return Converter.ToInt(ConfigurationManager.AppSettings["SiteId"]);
             }
         }
 
@@ -57,7 +57,7 @@
         {
             get
             {
-                return ConfigurationManager.AppSettings["ApplicationDomain"].ToString();
+                return ConfigurationManager.AppSettings["ApplicationDomain"];
             }
         }
     }

@@ -44,7 +44,7 @@
 
             string fileName = "TotalWorkingHours_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
-            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria()
+            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria
             {
                 Fromdate = model.FromDate,
                 Todate = model.ToDate,
@@ -64,7 +64,7 @@
         public ActionResult ExportTotalWorkingHourWeekly(TotalWorkingHourWeeklyViewModel model)
         {
             string fileName = "TotalWorkingHourWeekly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var criteria = new GetTotalWorkingHourWeeklyCriteria()
+            var criteria = new GetTotalWorkingHourWeeklyCriteria
             {
                 EmpId = model.EmployeeId,
                 FromDate = DateTime.Parse(model.FromDate),

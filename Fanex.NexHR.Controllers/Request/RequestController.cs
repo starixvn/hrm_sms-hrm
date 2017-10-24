@@ -100,7 +100,7 @@
 
         public ActionResult ViewHistory(long id, int type)
         {
-            var criteria = new GetHistoryRequestCriteria()
+            var criteria = new GetHistoryRequestCriteria
             {
                 RequestId = id,
                 RequestType = type
@@ -125,7 +125,7 @@
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteRequestCriteria()
+            var criteria = new DeleteRequestCriteria
             {
                 RequestId = id
             };
@@ -137,7 +137,7 @@
 
         public JsonResult GetEmployeesByActingUser(int role, string query)
         {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria()
+            var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
                 EmpId = CurrentUser.Id,
                 Role = (byte)role,
@@ -190,7 +190,7 @@
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria()
+                        var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria
                         {
                             RequestId = model.RequestId
                         };
@@ -199,7 +199,7 @@
 
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria()
+                        var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria
                         {
                             RequestId = model.RequestId
                         };
@@ -274,7 +274,7 @@
             }
 
             bool? isLocal = null;
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = employeeId,
                 FromDate = request.FromDate,
@@ -302,7 +302,7 @@
 
         private IList<Team> GetGroupBySupervisor()
         {
-            var criteria = new GetGroupBySupervisorCriteria()
+            var criteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = CurrentUser.Id
             };
@@ -313,7 +313,7 @@
 
         private List<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
         {
-            var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria()
+            var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria
             {
                 RequestId = requestId
             };
@@ -324,7 +324,7 @@
 
         private List<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)
         {
-            var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria()
+            var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria
             {
                 RequestId = requestId
             };
@@ -336,7 +336,7 @@
 
         private CommandResult ApproveRequest(ProcessRequestViewModel model)
         {
-            var criteria = new ApproveRequestCriteria()
+            var criteria = new ApproveRequestCriteria
             {
                 RequestId = model.RequestId,
                 RoleId = model.RoleId,
@@ -356,7 +356,7 @@
 
         private CommandResult Process(ProcessRequestViewModel model)
         {
-            var criteria = new ProcessRequestCriteria()
+            var criteria = new ProcessRequestCriteria
             {
                 Action = model.Command,
                 RequestId = model.RequestId,
