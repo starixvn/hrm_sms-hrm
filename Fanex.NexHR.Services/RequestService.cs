@@ -135,7 +135,9 @@
                     break;
 
                 case (int)RequestType.KeepInView:
-                    if ((double)request.TotalDays == 0.5)
+                    double totalDays = (double)request.TotalDays;
+
+                    if (totalDays.Equals(0.5))
                     {
                         msg.AppendFormat(
                             _MsgKeepInViewHalfday,

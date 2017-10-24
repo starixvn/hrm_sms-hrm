@@ -61,7 +61,7 @@
                     var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
 
                     var list = new List<WorkingScheduleViewModel>();
-                    if (dttWorkingSchedule.Rows.Count != 0)
+                    if (dttWorkingSchedule != null && dttWorkingSchedule.Rows.Count != 0)
                     {
                         var totalEmployeeInfoColumn = 5;
                         var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
@@ -94,9 +94,9 @@
                 using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
                 {
                     var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
-                    var totalColumns = dttWorkingCalendars.Columns.Count;
+                    var totalColumns = dttWorkingCalendars != null ? dttWorkingCalendars.Columns.Count : 0;
 
-                    foreach (DataRow row in dttWorkingCalendars.Rows)
+                    foreach (DataRow row in dttWorkingCalendars?.Rows)
                     {
                         var empWorkingCalendar = new WorkingCalendarsViewModel();
                         empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());

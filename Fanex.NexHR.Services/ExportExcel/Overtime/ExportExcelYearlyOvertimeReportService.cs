@@ -89,7 +89,7 @@
                 Oct = !overtimeDetail.Oct.Equals(0) ? (double)overtimeDetail.Oct : nullValue,
                 Nov = !overtimeDetail.Nov.Equals(0) ? (double)overtimeDetail.Nov : nullValue,
                 Dec = !overtimeDetail.Dec.Equals(0) ? (double)overtimeDetail.Dec : nullValue,
-                TotalHours = totalHours != 0 ? (double)totalHours : nullValue
+                TotalHours = !totalHours.Equals(0) ? (double)totalHours : nullValue
             };
 
             return record;
