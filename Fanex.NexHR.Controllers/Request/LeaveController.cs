@@ -414,15 +414,18 @@
 
             var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-5);
             var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-
-            if (model.LeaveTypeId == Constants.MaternityLeave)
+            if (model != null)
             {
-                //// rule: user can make leave request (maternity leave) for 6 months.
-                maxDate = maxDate.AddMonths(2);
+                if (model.LeaveTypeId == Constants.MaternityLeave)
+                {
+                    //// rule: user can make leave request (maternity leave) for 6 months.
+                    maxDate = maxDate.AddMonths(2);
+                }
+
+                model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
+                model.MaxDate = maxDate;
             }
 
-            model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
-            model.MaxDate = maxDate;
             return model;
         }
 

@@ -65,7 +65,8 @@
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
-            if (model != null && ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
                 var criteria = new InsertNewGroupCriteria
                 {
@@ -83,10 +84,8 @@
                 {
                     return RedirectToAction("Index", "Team");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                }
+
+                ModelState.AddModelError(string.Empty, result.Message);
             }
             else
             {

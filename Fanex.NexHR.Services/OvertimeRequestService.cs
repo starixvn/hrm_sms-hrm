@@ -271,24 +271,21 @@
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
             {
-                if (overtime.OffHours != 0 || overtime.PublicHours != 0 || overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours))
+                if (!overtime.OffHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours))
                 {
                     isInvalid = true;
                 }
             }
             else if (overtime.IsOffDay)
             {
-                if (overtime.NormalHours != 0 || overtime.PublicHours != 0 || overtime.TotalWorkHours < overtime.OffHours)
+                if (!overtime.NormalHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < overtime.OffHours)
                 {
                     isInvalid = true;
                 }
             }
             else if (overtime.IsHoliday)
             {
-                if (overtime.NormalHours != 0 || overtime.OffHours != 0 || overtime.TotalWorkHours < overtime.PublicHours)
-                {
-                    isInvalid = true;
-                }
+                isInvalid |= (!overtime.NormalHours.Equals(0) || !overtime.OffHours.Equals(0) || overtime.TotalWorkHours < overtime.PublicHours);
             }
 
             return isInvalid;
