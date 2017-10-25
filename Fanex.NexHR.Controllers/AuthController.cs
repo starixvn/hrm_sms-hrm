@@ -38,7 +38,7 @@
                 switch (retCode)
                 {
                     case 0: // OK
-                        var criteria = new GetEmployeeByCodeCriteria() { Code = model.UserName };
+                        var criteria = new GetEmployeeByCodeCriteria { Code = model.UserName };
                         UserLoginModel user = employeeService.GetUserLoginByCode(criteria);
                         user.IsShowLeftNavigation = true;
                         HttpContext.Session["CurrentUser"] = user;
@@ -53,8 +53,6 @@
                         ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                         break;
 
-                    case -1:
-                    case 3:
                     default: // wrong username/password
                         ModelState.AddModelError(string.Empty, Messages.WrongUsernameOrPassword);
                         break;

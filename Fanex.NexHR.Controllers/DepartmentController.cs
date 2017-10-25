@@ -29,7 +29,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(bool? isActive)
         {
-            var model = new DepartmentViewModel()
+            var model = new DepartmentViewModel
             {
                 IsActive = isActive
             };
@@ -100,7 +100,7 @@
         {
             Department department = GetDepartmentById(departmentId);
 
-            var model = new EditDepartmentViewModel()
+            var model = new EditDepartmentViewModel
             {
                 DeprtamentId = departmentId,
                 Code = department.Code,
@@ -165,7 +165,7 @@
 
         private IList<Department> GetAllDepartment(bool? isActive)
         {
-            var criteria = new GetDepartmentByParentIdCriteria()
+            var criteria = new GetDepartmentByParentIdCriteria
             {
                 IsActive = isActive
             };
@@ -188,7 +188,7 @@
 
         private IList<Department> GetParentDepartment(int departmentId)
         {
-            var criteria = new GetParentByDepartmentCriteria()
+            var criteria = new GetParentByDepartmentCriteria
             {
                 DepartmentId = departmentId
             };

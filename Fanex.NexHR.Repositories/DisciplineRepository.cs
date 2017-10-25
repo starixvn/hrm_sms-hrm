@@ -46,10 +46,10 @@
             return disciplines.Select(discipline =>
             {
                 double? totalHours = discipline.TotalHours;
-                int? lateIn = discipline.LateIn,
-                    earlyOut = discipline.EarlyOut;
-                DateTime? checkIn = discipline.CheckIn,
-                    checkOut = discipline.CheckOut;
+                int? lateIn = discipline.LateIn;
+                int? earlyOut = discipline.EarlyOut;
+                DateTime? checkIn = discipline.CheckIn;
+                DateTime? checkOut = discipline.CheckOut;
 
                 return new DisciplineDetailModel
                 {

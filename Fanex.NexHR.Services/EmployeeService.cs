@@ -24,10 +24,10 @@
 
     public class EmployeeService : BaseService, IEmployeeService
     {
-        private IEmployeeRepository employeeRepository;
-        private IFunctionService functionService;
-        private IRoleService roleService;
-        private IMenuService menuService;
+        private readonly IEmployeeRepository employeeRepository;
+        private readonly IFunctionService functionService;
+        private readonly IRoleService roleService;
+        private readonly IMenuService menuService;
 
         public EmployeeService()
             : this(null, null, null, null)
@@ -236,7 +236,7 @@
 
         public int ValidateUser(string code, string password)
         {
-            var criteria = new GetEmployeeByCodeCriteria()
+            var criteria = new GetEmployeeByCodeCriteria
             {
                 Code = code
             };
@@ -295,6 +295,7 @@
             ////  3: wrong password
             ////  0: success
             int retCode = -1;
+
             if (employee != null)
             {
                 if (employee.IsDeleted)

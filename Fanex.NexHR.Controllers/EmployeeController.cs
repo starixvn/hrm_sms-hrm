@@ -587,17 +587,12 @@
 
         public JsonResult GetEmployees(
             string query,
-            string groupIds,
+            string groupIds = "",
             bool? enable = null,
             bool? isDelete = null,
             int? titleId = null,
             bool? isLocal = null)
         {
-            if (groupIds == null)
-            {
-                groupIds = string.Empty;
-            }
-
             var getEmployeeCriteria = new GetAllEmployeeCriteria
             {
                 Query = query,

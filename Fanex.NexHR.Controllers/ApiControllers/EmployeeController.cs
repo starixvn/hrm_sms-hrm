@@ -37,12 +37,7 @@
             int? titleId = null,
             bool? isLocal = null)
         {
-            if (groupIds == null)
-            {
-                groupIds = string.Empty;
-            }
-
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            var getEmployeeCriteria = new GetAllEmployeeCriteria
             {
                 Query = query,
                 GroupIds = groupIds,
@@ -81,7 +76,7 @@
 
                 case Constants.UnpaidLeave:
                 case Constants.BusinessTrip:
-                    var criteria = new GetOffDateAndHolidayDateCriteria()
+                    var criteria = new GetOffDateAndHolidayDateCriteria
                     {
                         EmpId = employeeId,
                         FromDate = fromDate,
@@ -92,7 +87,7 @@
                     break;
 
                 default:
-                    var getDateRangeCriteria = new GetDateRangeCriteria()
+                    var getDateRangeCriteria = new GetDateRangeCriteria
                     {
                         EmpId = employeeId,
                         FromDate = fromDate,
@@ -116,7 +111,7 @@
                 || leaveTypeId.Value == Constants.BusinessTrip
                 || leaveTypeId.Value == Constants.UnpaidLeaveInsurance))
             {
-                var criteria = new GetOffDateAndHolidayDateCriteria()
+                var criteria = new GetOffDateAndHolidayDateCriteria
                 {
                     EmpId = employeeId,
                     FromDate = fromDate,
@@ -126,7 +121,7 @@
             }
             else
             {
-                var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria()
+                var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria
                 {
                     EmpId = employeeId,
                     FromDate = fromDate,
@@ -140,7 +135,7 @@
 
         public IList<SupervisorModel> GetEmployeeSupervisor(int empId, int role)
         {
-            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria()
+            var getEmployeeSupervisorCriteria = new GetEmployeeSupervisorCriteria
             {
                 EmpId = empId,
                 Role = role

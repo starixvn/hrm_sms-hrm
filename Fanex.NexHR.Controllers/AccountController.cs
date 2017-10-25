@@ -36,11 +36,11 @@
 
         public ActionResult Index()
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
             Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
 
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = CurrentUser.Id };
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = CurrentUser.Id };
             EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
 
             ViewBag.IsUpdated = false;
@@ -68,11 +68,11 @@
                 ViewBag.IsUpdated = false;
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = CurrentUser.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
             Employee displayModel = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
 
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria() { EmpId = CurrentUser.Id };
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = CurrentUser.Id };
             var workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
 
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
@@ -83,7 +83,7 @@
 
         public ActionResult UpdatePasswordResetStatus(bool status)
         {
-            var criteria = new UpdatePasswordResetStatusCriteria()
+            var criteria = new UpdatePasswordResetStatusCriteria
             {
                 EmpId = CurrentUser.Id,
                 PasswordReset = status
@@ -98,7 +98,7 @@
         public ActionResult ResetPassword(int id)
         {
             string hashPassword = Encryptor.ComputeHash(employeeService.HashProvider, "123456");
-            var criteria = new ChangePasswordCriteria()
+            var criteria = new ChangePasswordCriteria
             {
                 EmpId = id,
                 Password = hashPassword,
@@ -125,7 +125,7 @@
                 int retCode = employeeService.ValidateUser(CurrentUser.Code, model.Password);
                 if (retCode == 0)
                 {
-                    var criteria = new ChangePasswordCriteria()
+                    var criteria = new ChangePasswordCriteria
                     {
                         EmpId = CurrentUser.Id,
                         Password = Encryptor.ComputeHash(employeeService.HashProvider, model.NewPassword)
@@ -177,7 +177,7 @@
             var countries = employeeService.GetAllCountry(getAllCountryCriteria);
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
-            ViewBag.Genders = new List<SelectListItem>()
+            ViewBag.Genders = new List<SelectListItem>
             {
                 new SelectListItem
                 {

@@ -19,7 +19,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var employee = new Employee();
+                    Employee employee;
                     employee = multi.Read<Employee, Team, Employee>(
                         (e, t) =>
                         {
@@ -75,8 +75,8 @@
 
                     employees = GroupByRoles(employees, roles);
 
-                    PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
-                       prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalrow")).FirstOrDefault();
+                    PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(
+                        prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLowerInvariant().Equals("totalrow"));
 
                     if (totalitem != null)
                     {
@@ -111,7 +111,7 @@
                                 return er;
                             },
                             "RoleId");
-                    
+
                     employees = GroupByRoles(employees, roles);
 
                     return employees.ToList();

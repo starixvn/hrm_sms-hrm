@@ -57,8 +57,8 @@
         public ActionResult ArrangeSchedule()
         {
             var currentDate = DateTime.Now;
-            DateTime fromDate = GetStartOfWeek(currentDate),
-                toDate = GetEndOfWeek(currentDate);
+            DateTime fromDate = GetStartOfWeek(currentDate);
+            DateTime toDate = GetEndOfWeek(currentDate);
 
             IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
             var getAllJobTitleCriteria = new GetAllLookupDataCriteria
@@ -93,7 +93,7 @@
                 ModifiedDate = DateTime.Now,
             };
 
-            var criteria = new InsertOrUpdateWorkingCalendarsCriteria()
+            var criteria = new InsertOrUpdateWorkingCalendarsCriteria
             {
                 ModifiedDate = scheduleArrangeModel.ModifiedDate,
                 ModifiedBy = scheduleArrangeModel.ModifiedBy,
@@ -101,10 +101,10 @@
                 ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
             };
             CommandResult result = commandService.Insert(criteria);
-            object response = new 
-            { 
-                IsSuccessful = result.IsSuccessful, 
-                Message = result.Message, 
+            object response = new
+            {
+                IsSuccessful = result.IsSuccessful,
+                Message = result.Message,
                 ModifiedBy = CurrentUser.NickName,
                 ModifiedDate = DateTime.Now.ToShortFormatedDate()
             };
@@ -116,7 +116,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
-            var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria()
+            var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 Fromtime = fromDate,
@@ -168,7 +168,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
-            var getShiftCriteria = new GetShiftStatisticCriteria()
+            var getShiftCriteria = new GetShiftStatisticCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 Fromtime = fromDate,
@@ -202,10 +202,10 @@
         {
             var model = new EmployeeShiftViewModel
             {
-                TeamIds = teamIds == null ? string.Empty : teamIds,
+                TeamIds = teamIds ?? string.Empty,
                 WorkDate = workDate.HasValue ? workDate.Value : DateTime.Now,
                 IsLocal = isLocal,
-                IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
+                IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
                 ShiftId = shiftId.HasValue ? shiftId.Value : -1,
                 Shifts = shiftService.GetAll()
             };
@@ -225,13 +225,13 @@
             bool? isShowWholeCompany,
             byte? isLocal = null)
         {
-            var criteria = new GetEmployeeShiftDateCriteria()
+            var criteria = new GetEmployeeShiftDateCriteria
             {
                 WorkDate = workDate,
                 ShiftId = shiftId,
                 EmployeeId = employeeId,
                 SupervisorId = CurrentUser.Id,
-                IsShowWholeCompany = isShowWholeCompany.HasValue ? isShowWholeCompany.Value : false,
+                IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
                 TeamIds = teamIds,
                 IsLocal = isLocal
             };
@@ -243,7 +243,7 @@
 
         public ActionResult GetEmployeesByShiftMonitor(string query)
         {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria()
+            var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
                 EmpId = this.CurrentUser.Id,
                 Role = (int)RoleSystem.ShiftManager,
@@ -270,7 +270,7 @@
 
         public ActionResult GetWorkingSchedule(DateTime date, int id)
         {
-            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria()
+            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria
             {
                 ReportDate = date,
                 EmpId = id
@@ -295,7 +295,7 @@
             ViewBag.HasPermissionToViewHoliday = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Read);
 
-            var model = new WorkingCalendarFilterViewModel()
+            var model = new WorkingCalendarFilterViewModel
             {
                 FromDate = GetStartOfWeek(DateTime.Now),
                 ToDate = GetEndOfWeek(DateTime.Now),
@@ -308,9 +308,9 @@
 
         public ActionResult WorkingCalendarDetails(WorkingCalendarFilterViewModel model)
         {
-            IList<WorkingCalendarsViewModel> workingCalendars = new List<WorkingCalendarsViewModel>();
-            int month = DateTime.Now.Month,
-                year = DateTime.Now.Year;
+            IList<WorkingCalendarsViewModel> workingCalendars;
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
             var firstDateInMonth = new StringBuilder();
 
             firstDateInMonth.AppendFormat("{0}/{1}/1", year, month);
@@ -340,7 +340,7 @@
             CheckChangeShiff(workingCalendars, userChangedShifts, model.FromDate);
             CheckHalfDayOff(workingCalendars, userHalfDayOffs, model.FromDate);
 
-            var workingCalendarDetails = new WorkingCalendarDetailViewModel()
+            var workingCalendarDetails = new WorkingCalendarDetailViewModel
             {
                 Year = year,
                 Month = month,
@@ -354,7 +354,7 @@
 
         public ActionResult MemberScheduleInOrder()
         {
-            var criteria = new GetEmployeeByShiftManagementCriteria()
+            var criteria = new GetEmployeeByShiftManagementCriteria
             {
                 EmpId = CurrentUser.Id,
             };
@@ -375,7 +375,7 @@
         {
             var employeeOrdersDetail = JsonConverter.FromJsonArray<MemberOrderModel>(employeeOrders);
 
-            var criteria = new UpdateOrderShiftArrangeCriteria()
+            var criteria = new UpdateOrderShiftArrangeCriteria
             {
                 MemberOrders = employeeOrdersDetail,
                 SupervisorId = CurrentUser.Id

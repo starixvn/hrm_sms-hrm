@@ -66,7 +66,7 @@
             int lastYear = DateTime.Now.AddYears(-1).Year;
             DateTime date = new DateTime(lastYear, 12, 31);
 
-            var criteria = new GetAnnualLeaveBalanceCriteria()
+            var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = lastYear,
                 EmpId = null,
@@ -203,10 +203,8 @@
             {
                 return Delete(model);
             }
-            else
-            {
-                return Edit(model);
-            }
+
+            return Edit(model);
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
@@ -232,7 +230,7 @@
 
             if (ModelState.IsValid)
             {
-                var criteria = new InsertAnnualLeaveTransactionCriteria()
+                var criteria = new InsertAnnualLeaveTransactionCriteria
                 {
                     EmpId = model.EmpId,
                     RequestId = null,
@@ -259,7 +257,7 @@
 
         private IList<LeaveSummary> GetAnnualLeaveBalance(LeaveSummaryViewModel model)
         {
-            var criteria = new GetAnnualLeaveBalanceCriteria()
+            var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
@@ -274,7 +272,7 @@
 
         private IList<Team> GetBySupervisor()
         {
-            var criteria = new GetGroupBySupervisorCriteria()
+            var criteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = CurrentUser.Id
             };
@@ -285,7 +283,7 @@
 
         private Employee GetEmployeeById(int empId)
         {
-            var criteria = new GetEmployeeByIdCriteria()
+            var criteria = new GetEmployeeByIdCriteria
             {
                 EmpId = empId
             };
@@ -309,7 +307,7 @@
         {
             if (ModelState.IsValid)
             {
-                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria()
+                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria
                 {
                     LeaveTransId = model.LeaveTransId,
                     Description = model.Description,
@@ -340,7 +338,7 @@
 
         private ActionResult Delete(AnnualLeaveTransactionViewModel model)
         {
-            var criteria = new DeleteAnnualLeaveTransactionCriteria()
+            var criteria = new DeleteAnnualLeaveTransactionCriteria
             {
                 LeaveTransId = model.LeaveTransId,
                 ModifiedDate = DateTime.Now,

@@ -145,7 +145,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
         {
-            var criteria = new GetOtherDisciplineOfEmployeeCriteria()
+            var criteria = new GetOtherDisciplineOfEmployeeCriteria
             {
                 EmployeeId = employeeId,
                 FromDate = fromDate,
@@ -252,7 +252,7 @@
 
         private IList<DisciplineTypeModel> GetDisciplineType(bool includeOtherType)
         {
-            var criteria = new GetDisciplineTypeCriteria()
+            var criteria = new GetDisciplineTypeCriteria
             {
                 IncludeOtherType = includeOtherType
             };
@@ -263,7 +263,7 @@
 
         private IList<SelectListItem> GetDateRangeType()
         {
-            var dateRange = new List<SelectListItem> { new SelectListItem() { Text = Resources.Labels.DateRange, Value = "0" } };
+            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Resources.Labels.DateRange, Value = "0" } };
 
             var currentDate = DateTime.Today;
 
@@ -273,7 +273,7 @@
                 int currentYear = currentDate.Year;
                 int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
 
-                dateRange.Add(new SelectListItem()
+                dateRange.Add(new SelectListItem
                 {
                     Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear,
                     Value = currentHalfYear + string.Empty + currentYear

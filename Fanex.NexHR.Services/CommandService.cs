@@ -24,7 +24,8 @@
 
         public CommandResult Insert(ICriteria criteria, bool hasGetOutputParams = false)
         {
-            CommandResult result = null;
+            CommandResult result;
+
             if (criteria != null && criteria.IsValid())
             {
                 result = repository.Insert(criteria, hasGetOutputParams);
@@ -39,7 +40,8 @@
 
         public CommandResult Update(ICriteria criteria, bool hasGetOutputParams = false)
         {
-            CommandResult result = null;
+            CommandResult result;
+
             if (criteria != null && criteria.IsValid())
             {
                 result = repository.Update(criteria, hasGetOutputParams);
@@ -54,7 +56,8 @@
 
         public CommandResult Delete(ICriteria criteria, bool hasGetOutputParams = false)
         {
-            CommandResult result = null;
+            CommandResult result;
+
             if (criteria != null && criteria.IsValid())
             {
                 result = repository.Delete(criteria, hasGetOutputParams);
@@ -69,7 +72,7 @@
 
         private CommandResult GetInvalidInput()
         {
-            return new CommandResult()
+            return new CommandResult
             {
                 Code = 1,
                 Message = Messages.InvalidInputData
