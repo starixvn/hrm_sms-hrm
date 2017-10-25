@@ -10,47 +10,103 @@ $.extend({
     }
 });
 
-$(function () {
-    function showMessage(message) {
-        $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
-        $('#message').slideDown();
-    }
+function showMessage(message) {
+    $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
+    $('#message').slideDown();
+}
 
-    function fadeOutMessage() {
-        $('#message').fadeOut(500);
-    }
+function fadeOutMessage() {
+    $('#message').fadeOut(500);
+}
 
-    function confirm(message, callback, options) {
-        var defaults = {
-            title: 'SMSHRM',
-            modal: true,
-            resizable: false,
-            buttons: {
-                OK: function () {
-                    $(this).dialog('close');
-                    if (callback !== null) {
-                        callback();
-                    }
-                    return true;
-                },
-                Cancel: function () {
-                    $(this).dialog('close');
-                    return false;
+function confirm(message, callback, options) {
+    var defaults = {
+        title: 'SMSHRM',
+        modal: true,
+        resizable: false,
+        buttons: {
+            OK: function () {
+                $(this).dialog('close');
+                if (callback !== null) {
+                    callback();
                 }
+                return true;
             },
-            show: 'fade',
-            hide: 'fade',
-            minHeight: 50,
-            dialogClass: 'modal-shadow'
-        };
+            Cancel: function () {
+                $(this).dialog('close');
+                return false;
+            }
+        },
+        minHeight: 50,
+        dialogClass: 'modal-shadow'
+    };
 
-        var $confirm = $.getOrCreateDialog('confirm');
-        // set message
-        $("p", $confirm).html(message);
-        // init dialog
-        $confirm.dialog($.extend({}, defaults, options));
+    var $confirm = $.getOrCreateDialog('confirm');
+    // set message
+    $("p", $confirm).html(message);
+    // init dialog
+    $confirm.dialog($.extend({}, defaults, options));
+}
+
+function updateTableHeaders() {
+    if ($(".persist-area").val() !== undefined) {
+        var leftspace = 191;
+        var widthspace = $(".persist-area").width() + 18;
+        //if ($.browser.safari) {
+        //    leftspace = 192;
+        //    widthspace = widthspace - 8;
+        //    if (widthspace < 1060)
+        //        widthspace = 1060;
+        //}
+        //else {
+            widthspace = widthspace - 17;
+            if (widthspace < 1051)
+                widthspace = 1051;
+       // }
+
+        $('.floatingHeader').width(widthspace);
+        var left = $('table.persist-area thead tr:first').position()["left"];
+
+        var isShowLeftMenu = $("#toggle-left-navigation").hasClass("large-next");
+        var widthLeftMenu = isShowLeftMenu ? 190 : 0;
+
+        $(".persist-area").each(function () {
+            var el = $(this),
+                    offset = el.offset(),
+                    scrollTop = $(window).scrollTop(),
+                    floatingHeader = $(".floatingHeader", this);
+            if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
+                if (!isShowLeftMenu) {
+                    floatingHeader.css({
+                        "visibility": "visible",
+                        "left": (leftspace + left)
+                    });
+                }
+                else {
+                    floatingHeader.css({
+                        "visibility": "visible",
+                        "left": left + 1
+                    });
+                }
+            } else {
+                floatingHeader.css({
+                    "visibility": "hidden"
+                });
+            }
+        });
+
+        var i = 0;
+        $("table .persist-header th").each(function () {
+            var x = $(this).width();
+            $($("table .floatingHeader th")[i]).width(x);
+            i++;
+        });
     }
+}
 
+////////////////////////////////////////////////////////////////////////////
+
+$(function () {
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
         var model = {
             RequestId: requestId,
@@ -214,12 +270,12 @@ $(function () {
     }
 
     function renderIconOk(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<i class="glyphicon glyphicon-ok"></i>' + item.name + opt.selector);
+        $itemElement.html('<span class="processed"><i class="glyphicon glyphicon-ok"></i>' + item.name + opt.selector + '</span>');
         return '';
     }
 
     function renderIconRemove(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<i class="glyphicon glyphicon-remove"></i>' + item.name + opt.selector);
+        $itemElement.html('<span class="void"><i class="glyphicon glyphicon-remove"></i>' + item.name + opt.selector + '</span>');
         return '';
     }
 

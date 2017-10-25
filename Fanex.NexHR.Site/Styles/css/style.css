@@ -77,6 +77,37 @@ body {
 .tipsy .tipsy-arrow-e {
   border-left-color: #000; }
 
+.context-menu-list {
+  padding: 0; }
+  .context-menu-list > li {
+    padding: 5px 15px;
+    font-size: 13px;
+    color: #808080; }
+    .context-menu-list > li .glyphicon {
+      padding-right: 10px; }
+    .context-menu-list > li:hover span {
+      color: #fff; }
+    .context-menu-list > li .void {
+      color: #da5350; }
+    .context-menu-list > li .processed {
+      color: #5eb85d; }
+
+.ui-dialog .ui-dialog-titlebar button.ui-dialog-titlebar-close {
+  background: #fff !important;
+  border: 1px solid #ccc;
+  border-bottom-color: #ccc; }
+
+button.ui-multiselect {
+  background: #fff !important;
+  border: 1px solid #C8C8C8;
+  text-align: left;
+  padding: 4px 4px 4px 4px;
+  line-height: 15px; }
+  button.ui-multiselect span {
+    color: #222;
+    text-align: left;
+    text-shadow: none; }
+
 h2, h3 {
   font-weight: 900;
   text-transform: none; }
@@ -578,7 +609,7 @@ table.table.table-custom {
 
 #message {
   position: absolute;
-  top: 0;
+  top: 72px;
   background: #ffff00;
   border: solid 1px #ccc;
   border-top: none;
@@ -1145,7 +1176,8 @@ input[type="button"].btn-block {
   width: 100%; }
 
 input[type="button"],
-input[type="submit"] {
+input[type="submit"],
+button[type="button"] {
   margin-right: 0;
   background: #308fb7;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
@@ -1172,4 +1204,38 @@ input[type="submit"] {
   height: 28px;
   vertical-align: bottom;
   width: 75px; }
+
+input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, a.button:hover, button[type="button"]:hover {
+  cursor: pointer;
+  text-decoration: none;
+  background: #369fca;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#72bcda), to(#369fca));
+  background-image: -moz-linear-gradient(#72bcda, #369fca); }
+
+input[type="submit"]:active, input[type="button"]:active {
+  background: #5eb2d5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#308fb7), to(#5eb2d5));
+  background-image: -moz-linear-gradient(#308fb7, #5eb2d5); }
+
+input[type="submit"]:focus, input[type="button"]:focus, button[type="button"]:focus {
+  border: 1px solid #333;
+  background: #308fb7;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
+  background-image: -moz-linear-gradient(#5eb2d5, #308fb7); }
+
+#dialogProcessRequest form > .formrow {
+  margin: 10px 0; }
+  #dialogProcessRequest form > .formrow select#item_FromTime, #dialogProcessRequest form > .formrow select#item_ToTime {
+    min-width: inherit;
+    max-width: inherit; }
+  #dialogProcessRequest form > .formrow > .label {
+    width: auto;
+    color: #000; }
+  #dialogProcessRequest form > .formrow > .input {
+    margin-left: 0; }
+    #dialogProcessRequest form > .formrow > .input textarea {
+      resize: none;
+      margin: 0;
+      min-height: 80px;
+      width: 250px; }
 

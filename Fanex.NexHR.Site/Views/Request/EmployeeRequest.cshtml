@@ -116,25 +116,7 @@
 <div id="dialoghistorycontent"></div>
 <div id="dialogProcessRequest"></div>
 <div id="message"></div>
-@*@RenderContextMenu(Model)
 
-            @helper RenderContextMenu(RequestViewModel model)
-            {
-    switch (model.ViewType)
-    {
-        case RequestViewType.PersonalSpace:
-                @RazorHelper.VerifierAndApproverMenu()
-                @RazorHelper.ResetMenu()
-            break;
-        case RequestViewType.SASpace:
-                @RazorHelper.VoidMenu();
-            break;
-        case RequestViewType.HRSpace:
-                @RazorHelper.HrMenu()
-                @RazorHelper.ResetMenu()
-            break;
-    }
-    }*@
 @helper RenderStatus(RequestViewModel model, RequestEntity request)
         {
 switch (model.ViewType)
@@ -179,6 +161,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="hr-actions tooltip-tipsy"
                        original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -199,6 +182,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="hr-actions-reset tooltip-tipsy"
                        original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -242,6 +226,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="verifier-actions tooltip-tipsy"
                        original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -260,6 +245,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="approver-actions tooltip-tipsy"
                        original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -270,6 +256,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
                        original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -288,6 +275,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
                        original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -307,6 +295,7 @@ switch (request.Status.Id)
                        href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
                        original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                         @request.Status.ToString()
+                        <span class="caret"></span>
                     </a>
                 </td>
         }
@@ -341,6 +330,7 @@ switch (request.Status.Id)
                    class="sa-void tooltip-tipsy" href="javascript:void(0);"
                    original-title="@request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                     @request.Status.ToString()
+                    <span class="caret"></span>
                 </a>
             </td>
         break;
@@ -350,6 +340,7 @@ switch (request.Status.Id)
                    class="sa-void tooltip-tipsy" href="javascript:void(0);"
                    original-title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                     @request.Status.ToString()
+                    <span class="caret"></span>
                 </a>
             </td>
         break;
@@ -366,6 +357,7 @@ switch (request.Status.Id)
                    class="sa-void tooltip-tipsy" href="javascript:void(0);"
                    original-title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                     @request.Status.ToString()
+                    <span class="caret"></span>
                 </a>
             </td>
         break;
@@ -382,6 +374,7 @@ switch (request.Status.Id)
                    class="sa-void tooltip-tipsy" href="javascript:void(0);"
                    original-title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
                     @request.Status.ToString()
+                    <span class="caret"></span>
                 </a>
             </td>
         break;

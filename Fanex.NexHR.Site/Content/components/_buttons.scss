@@ -525,7 +525,8 @@ input[type="button"].btn-block {
 }
 
 input[type="button"],
-input[type="submit"] {
+input[type="submit"],
+button[type="button"] {
     margin-right: 0;
     background: #308fb7;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
@@ -552,4 +553,28 @@ input[type="submit"] {
     height: 28px;
     vertical-align: bottom;
     width: 75px;
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, a.button:hover, button[type="button"]:hover {
+    cursor: pointer;
+    text-decoration: none;
+    background: #369fca;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#72bcda), to(#369fca));
+    background-image: -moz-linear-gradient(#72bcda, #369fca);
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+    background: #5eb2d5;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#308fb7), to(#5eb2d5));
+    background-image: -moz-linear-gradient(#308fb7, #5eb2d5);
+
+}
+
+
+input[type="submit"]:focus, input[type="button"]:focus, button[type="button"]:focus {
+    border: 1px solid #333;
+    background: #308fb7;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#5eb2d5), to(#308fb7));
+    background-image: -moz-linear-gradient(#5eb2d5, #308fb7);
+
 }
