@@ -17,11 +17,11 @@
 
         public void Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath),
-                reportName = Labels.DisciplineDetailReportName,
-                reportTitle,
-                startDate = criteria.FromDate.ToString(Constants.DateFormat),
-                endDate = criteria.ToDate.ToString(Constants.DateFormat);
+            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath);
+            string reportName = Labels.DisciplineDetailReportName;
+            string reportTitle;
+            string startDate = criteria.FromDate.ToString(Constants.DateFormat);
+            string endDate = criteria.ToDate.ToString(Constants.DateFormat);
 
             if (criteria.EmployeeId != null)
             {
@@ -78,8 +78,8 @@
 
         private object CreateRecord(DisciplineDetailModel discipline, ref int rowIndex)
         {
-            decimal systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0,
-                approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
+            decimal systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
+            decimal approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
             var record = new
             {

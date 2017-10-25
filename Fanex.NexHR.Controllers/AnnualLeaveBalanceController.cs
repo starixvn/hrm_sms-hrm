@@ -180,7 +180,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
-            var criteria = new GetAnnualLeaveTransactionByIdCriteria()
+            var criteria = new GetAnnualLeaveTransactionByIdCriteria
             {
                 LeaveTransId = id
             };

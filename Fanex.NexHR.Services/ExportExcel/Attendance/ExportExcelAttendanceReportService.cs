@@ -28,8 +28,8 @@
 
         public void Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(AttendanceTemplatePath),
-                fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd");
+            string templatePath = HttpContext.Current.Server.MapPath(AttendanceTemplatePath);
+            string fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd");
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Attendance Report");
 
@@ -69,7 +69,7 @@
             {
                 writer.WriteRow(RowOffdate, record);
             }
-            else if (rowIndex % 2 == 1)
+            else if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }

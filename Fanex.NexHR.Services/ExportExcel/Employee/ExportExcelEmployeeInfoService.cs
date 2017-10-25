@@ -12,7 +12,7 @@
         private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
 
-        private enum BasicInfo : int
+        private enum BasicInfo
         {
             RowStartHeader = 2,
             RowStartBody = 3,
@@ -21,9 +21,9 @@
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(EmployeeBasicInfoTemplatePath),
-                fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd"),
-                sheetName = "Employee Basic Info";
+            string templatePath = HttpContext.Current.Server.MapPath(EmployeeBasicInfoTemplatePath);
+            string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
             /// Fill report title.
@@ -40,9 +40,9 @@
 
         public void ExportEmployeeDetailsInfo(IList<Employee> employees)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(EmployeeDetailsInfoTemplatePath),
-                fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd"),
-                sheetName = "Employee Details Info";
+            string templatePath = HttpContext.Current.Server.MapPath(EmployeeDetailsInfoTemplatePath);
+            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            string sheetName = "Employee Details Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
             /// Fill report title.
@@ -72,7 +72,7 @@
         private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(3, record);
             }
@@ -126,7 +126,7 @@
         private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(3, record);
             }

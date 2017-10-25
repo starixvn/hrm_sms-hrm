@@ -315,18 +315,18 @@
 
             firstDateInMonth.AppendFormat("{0}/{1}/1", year, month);
 
-            var getUserChangeShiftCriteria = new GetUserChangedShiftCriteria()
+            var getUserChangeShiftCriteria = new GetUserChangedShiftCriteria
             {
                 ReportDate = new DateTime(year, month, 1)
             };
-            var getUserHalfDayOffsCriteria = new GetEmployeeHalfDayOffCriteria()
+            var getUserHalfDayOffsCriteria = new GetEmployeeHalfDayOffCriteria
             {
                 ReportDate = DateTime.Parse(firstDateInMonth.ToString())
             };
             IList<UserChangedShift> userChangedShifts = employeeService.GetUserChangedShift(getUserChangeShiftCriteria);
             IList<HalfDayOff> userHalfDayOffs = employeeService.GetHalfDayOffs(getUserHalfDayOffsCriteria);
 
-            var criteria = new GetWorkingCalendarWeeklyCriteria()
+            var criteria = new GetWorkingCalendarWeeklyCriteria
             {
                 EmpId = model.EmployeeId,
                 Fromtime = model.FromDate,

@@ -19,10 +19,8 @@
     {
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;
-        private const int _RowStartBodyOvertimeReport = 4;
         private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
-        private const int _RowStartBodyYearlyOvertimeReport = 5;
 
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
@@ -96,7 +94,7 @@
                     sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                     var rowTeam = sheet.GetRow(rowIndex);
                     var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(item.Team.Name.ToUpper());
+                    cellTeam.SetCellValue(item.Team.Name.ToUpperInvariant());
                     sheet.MergeCells(rowIndex, 0, rowIndex, 18);
                     rowTeam.Height = height;
 
@@ -168,7 +166,7 @@
             int rowHeaderCount = 0;
             for (int i = 1; i <= totalHeaderDateCell; i++)
             {
-                if (i % 2 == 1)
+                if (i % 2 != 0)
                 {
                     var displayDate = fromDate.Date.AddDays(rowHeaderCount);
                     rowHeaderDate.GetCell(i + 10).SetCellValue(displayDate.ToString("dd-MMM"));
@@ -191,7 +189,7 @@
                         overtimeTypeIndex++;
                     }
 
-                    if (i % 2 == 1)
+                    if (i % 2 != 0)
                     {
                         rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType1);
                     }
@@ -201,13 +199,13 @@
                 overtimes.RemoveAt(0);
                 var model = (from item in overtimes
                              group item by item.Team into g
-                             select new OvertimeExcelReportViewModel() { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
+                             select new OvertimeExcelReportViewModel { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
 
                 var index = 1;
-                int rowIndex = _RowStartBodyOvertimeRecord,
-                    rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
-                short rowTeamHeight = sheet.GetRow(rowTeamCopy).Height,
-                    rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
+                int rowIndex = _RowStartBodyOvertimeRecord;
+                int rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
+                short rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
+                short rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
                 var numberCount = 1;
                 var numberStart = 0;
                 double? defaultCellValue = null;
@@ -277,13 +275,13 @@
                         ICell cellSumOff = rowTeam.GetCell(8);
                         ICell cellSumPH = rowTeam.GetCell(9);
                         ICell cellSumTax = rowTeam.GetCell(10);
-                        string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")",
-                            formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")",
-                            formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")",
-                            formulaTax = "SUMIF(K{0}:K{1},\"<>#N/A\")";
+                        string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")";
+                        string formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")";
+                        string formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")";
+                        string formulaTax = "SUMIF(K{0}:K{1},\"<>#N/A\")";
 
-                        string data1 = Convert.ToString(numberStart),
-                            data2 = Convert.ToString(rowIndex);
+                        string data1 = Convert.ToString(numberStart);
+                        string data2 = Convert.ToString(rowIndex);
                         cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
                         cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
                         cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
@@ -533,7 +531,8 @@
             {
                 messageDetail = string.Format("{0} ({1})", leaveDate, request.LeaveCountDetails);
             }
-            else if ((request.TotalDays - (decimal)0.5) == 0)
+
+            if ((request.TotalDays - (decimal)0.5) == 0)
             {
                 messageDetail = string.Format(
                 "{0} ({1}-{2}) ({3})",

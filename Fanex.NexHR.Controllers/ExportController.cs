@@ -119,7 +119,7 @@
                 isLocal = (byte)model.Category;
             }
 
-            var criteria = new GetAnnualLeaveBalanceCriteria()
+            var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
@@ -206,7 +206,7 @@
 
         public ActionResult EmployeeBasicInfo(UserManagementViewModel model)
         {
-            var criteria = new GetAllEmployeeCriteria()
+            var criteria = new GetAllEmployeeCriteria
             {
                 Query = model.Keyword,
                 GroupIds = model.GroupIds,
@@ -224,7 +224,7 @@
 
         public ActionResult EmployeeDetailsInfo(UserManagementViewModel model)
         {
-            var criteria = new GetAllEmployeeCriteria()
+            var criteria = new GetAllEmployeeCriteria
             {
                 Query = model.Keyword,
                 GroupIds = model.GroupIds,
@@ -243,7 +243,7 @@
         public ActionResult EmployeeWorkingCalendar(WorkingCalendarFilterViewModel model)
         {
             string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var criteria = new GetWorkingCalendarWeeklyCriteria()
+            var criteria = new GetWorkingCalendarWeeklyCriteria
             {
                 EmpId = model.EmployeeId,
                 Fromtime = model.FromDate,
@@ -296,7 +296,7 @@
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
             model.ViewType = RequestViewType.PersonalSpace;
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
@@ -323,7 +323,7 @@
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
             model.ViewType = RequestViewType.HRSpace;
 
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
@@ -348,7 +348,7 @@
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
             model.ViewType = RequestViewType.CompanySpace;
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
@@ -371,7 +371,7 @@
 
         public ActionResult Manpower(int year)
         {
-            var criteria = new GetManpowerCriteria()
+            var criteria = new GetManpowerCriteria
             {
                 Year = year
             };
@@ -384,7 +384,7 @@
 
         public ActionResult ManpowerCategory(int year)
         {
-            var criteria = new GetManpowerCategoryCriteria()
+            var criteria = new GetManpowerCategoryCriteria
             {
                 Year = year
             };
@@ -397,7 +397,7 @@
 
         public ActionResult ExportEmployeeSupervisor(EmployeeAndSectionSupervisorViewModel model)
         {
-            var criteria = new GetSupervisorReportCriteria()
+            var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
                 GroupIds = model.SectionIds,
@@ -412,7 +412,7 @@
 
         public ActionResult ExportSectionSupervisor(EmployeeAndSectionSupervisorViewModel model)
         {
-            var criteria = new GetSectionSupervisorCriteria()
+            var criteria = new GetSectionSupervisorCriteria
             {
                 GroupIds = model.SectionIds,
             };

@@ -16,11 +16,11 @@
 
         public void Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath),
-                reportName = Labels.DisciplineSummaryReportName,
-                reportTitle,
-                startDate = criteria.FromDate.ToString(Constants.DateFormat),
-                endDate = criteria.ToDate.ToString(Constants.DateFormat);
+            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath);
+            string reportName = Labels.DisciplineSummaryReportName;
+            string reportTitle;
+            string startDate = criteria.FromDate.ToString(Constants.DateFormat);
+            string endDate = criteria.ToDate.ToString(Constants.DateFormat);
 
             if (criteria.EmployeeId != null)
             {
@@ -69,9 +69,9 @@
 
         private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
         {
-            float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0,
-                systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0,
-                approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
+            float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
+            float systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
+            float approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
             var record = new
             {
