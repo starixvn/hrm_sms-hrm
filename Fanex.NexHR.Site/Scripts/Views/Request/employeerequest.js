@@ -19,6 +19,25 @@ function fadeOutMessage() {
     $('#message').fadeOut(500);
 }
 
+function floatingHeader() {
+    var clonedHeaderRow;
+    $(".persist-area").each(function () {
+        clonedHeaderRow = $(".persist-header", this);
+        clonedHeaderRow
+            .before(clonedHeaderRow.clone())
+            .css("width", clonedHeaderRow.width())
+            .addClass("floatingHeader")
+            .removeClass("persist-header");
+    });
+
+    $(".content_scroll").on("scroll", updateTableHeaders);
+        //.scroll(updateTableHeaders)
+        //.trigger("scroll");
+    $(window).resize(function () {
+        updateTableHeaders();
+    });
+}
+
 function confirm(message, callback, options) {
     var defaults = {
         title: 'SMSHRM',
@@ -396,6 +415,8 @@ $(function () {
                 location.href = url;
             }
         });
+
+        floatingHeader();
 
         initEventExportExcel();
     }).ajaxStart(function () {
