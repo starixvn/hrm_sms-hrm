@@ -25,11 +25,24 @@ body {
 }
 
 .section-content {
-    padding-left: 190px;
+    
 
     .content_wrap {
         border-left: 1px solid #898989;
         padding-top: 44px;
+        padding-left: 190px;
+
+        &.expand {
+            padding-left: 0;
+
+            .section_breadcrumb {
+                left: 0;
+
+                .glyphicon {
+                    transform: rotate(180deg);
+                }
+            }
+        }
     }
 }
 

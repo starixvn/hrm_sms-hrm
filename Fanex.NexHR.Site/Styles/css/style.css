@@ -21,11 +21,16 @@ body {
   bottom: 0;
   overflow-x: hidden; }
 
-.section-content {
+.section-content .content_wrap {
+  border-left: 1px solid #898989;
+  padding-top: 44px;
   padding-left: 190px; }
-  .section-content .content_wrap {
-    border-left: 1px solid #898989;
-    padding-top: 44px; }
+  .section-content .content_wrap.expand {
+    padding-left: 0; }
+    .section-content .content_wrap.expand .section_breadcrumb {
+      left: 0; }
+      .section-content .content_wrap.expand .section_breadcrumb .glyphicon {
+        transform: rotate(180deg); }
 
 .section_breadcrumb {
   position: fixed;
@@ -134,9 +139,8 @@ a:focus, a:hover {
 
 .page-title {
   font-family: Abel, Arial,Helvetica, "myriad Pro",tahoma;
-  font-size: 2.2rem;
+  font-size: 18px;
   margin-bottom: 10px;
-  margin-top: 10px;
   text-shadow: 0 0 1px #ddd; }
 
 .nav_links .separator {
@@ -186,7 +190,7 @@ a:focus, a:hover {
   font-size: 11px; }
   .nav_links .el a {
     min-height: 16px;
-    padding: 6px 0 6px 30px;
+    padding: 8px 0 7px 30px;
     display: block;
     color: #535353; }
     .nav_links .el a:hover {
@@ -415,7 +419,7 @@ a:focus, a:hover {
     padding-top: 6px;
     padding-bottom: 0;
     padding-right: 7px;
-    font-weight: 500; }
+    font-weight: 600; }
   #user_utilities .dropdown_arrow {
     margin: 0;
     display: block;
@@ -473,12 +477,12 @@ a:focus, a:hover {
   -webkit-box-shadow: 1px 1px 5px #888;
   box-shadow: 1px 1px 5px #888;
   min-width: 600px;
-  max-width: 1145px; }
+  max-width: 1150px; }
 
 .form-horizontal .form-group {
   margin: 0;
   float: left;
-  margin-right: 3rem;
+  margin-right: 3.2rem;
   margin-bottom: 1rem;
   position: relative; }
   .form-horizontal .form-group .form-control {
@@ -516,6 +520,8 @@ a:focus, a:hover {
   .form-horizontal .form-group .radio-form .radio {
     display: inline-block;
     margin-right: 1rem; }
+    .form-horizontal .form-group .radio-form .radio input[type="radio"] {
+      margin-top: 1px; }
   .form-horizontal .form-group:last-child {
     margin-right: 0; }
 
@@ -697,6 +703,9 @@ span.req.mytimesheet-notaccepted, span.req.mytimesheet-notverified, span.req.myt
   background: none;
   padding: 0 15px;
   margin: 0; }
+  .breadcrumb .toggle-left-navigation {
+    position: relative;
+    top: 2px; }
   .breadcrumb .separate {
     font-size: 14px;
     margin: 0 10px; }

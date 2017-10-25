@@ -9,14 +9,14 @@
     -webkit-box-shadow: 1px 1px 5px #888;
     box-shadow: 1px 1px 5px #888;
     min-width: 600px;
-    max-width: 1145px;
+    max-width: 1150px;
 }
 
 .form-horizontal {    
     .form-group {
         margin: 0;
         float: left;
-        margin-right: 3rem;
+        margin-right: 3.2rem;
         margin-bottom: 1rem;
         position: relative;
 
@@ -78,6 +78,11 @@
             .radio {
                 display: inline-block;
                 margin-right: 1rem;
+
+                input[type="radio"] {
+                    margin-top: 1px;
+                }
+
             }
         }
 
