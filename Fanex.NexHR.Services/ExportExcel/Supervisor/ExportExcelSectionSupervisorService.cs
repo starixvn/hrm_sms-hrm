@@ -17,7 +17,7 @@
 
         public void Export(IList<SectionSupervisorReportModel> supervisors)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(SectionSupervisorTemplatePath),
+            string templatePath = HttpContext.Current.Server.MapPath(SectionSupervisorTemplatePath);
             string fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
