@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -84,16 +85,23 @@
         private object CreateRecordReport(EmployeeAttendanceModel attendance, int rowIndex)
         {
             var requests = string.Empty;
+            StringBuilder requestsBuilder = new StringBuilder();
+
             if (attendance.RequestList != null && attendance.RequestList.Any())
             {
                 foreach (EmployeeAttendanceRequest request in attendance.RequestList)
                 {
-                    requests += "- " + request.RequestType.Name + ": " + GetRequestDetail(request)
-                        + "\r\n- Create date: " + request.CreatedDate.ToDateMonthYearFormatedDate()
-                        + (string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark) + "\r\n";
+                    requestsBuilder.Append("- ");
+                    requestsBuilder.Append(request.RequestType.Name);
+                    requestsBuilder.Append(": ");
+                    requestsBuilder.Append(GetRequestDetail(request));
+                    requestsBuilder.Append("\r\n- Create date: ");
+                    requestsBuilder.Append(request.CreatedDate.ToDateMonthYearFormatedDate());
+                    requestsBuilder.Append((string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark));
+                    requestsBuilder.Append("\r\n");
                 }
 
-                requests = requests.Substring(0, requests.Length - 2);
+                requests = requestsBuilder.ToString(0, requestsBuilder.Length - 2);
             }
 
             var record = new

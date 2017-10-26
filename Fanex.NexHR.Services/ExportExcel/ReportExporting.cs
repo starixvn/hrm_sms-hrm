@@ -18,8 +18,6 @@
     {
         private const int _RowStartBodyHrRequestStatistic = 4;
         private const int _RowStartBodyWorkingCalendarSummary = 5;
-        private const int _RowStartBodyEmployeeSupervisor = 4;
-        private const int _RowStartBodyTeamSupervisor = 4;
         private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
 

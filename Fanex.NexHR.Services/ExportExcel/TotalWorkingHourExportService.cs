@@ -116,9 +116,8 @@
 
             rowIndex++;
 
-            ICellStyle bodyStyle = workbook.CreateCellStyle();
+            ICellStyle bodyStyle, bodyStyle1 = workbook.CreateCellStyle();
 
-            ICellStyle bodyStyle1 = workbook.CreateCellStyle();
             bodyStyle1.Alignment = HorizontalAlignment.Center;
             bodyStyle1.VerticalAlignment = VerticalAlignment.Center;
 

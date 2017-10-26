@@ -20,9 +20,9 @@
 
         public void Export(IList<ManpowerModel> manpowers, int year)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(ManpowerTemplatePath),
-                fileName = "ManpowerReport_" + DateTime.Now.ToString("yyyyMMdd"),
-                reportTitle = Labels.ManpowerReportTitle + " " + year;
+            string templatePath = HttpContext.Current.Server.MapPath(ManpowerTemplatePath);
+            string fileName = "ManpowerReport_" + DateTime.Now.ToString("yyyyMMdd");
+            string reportTitle = Labels.ManpowerReportTitle + " " + year;
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Manpower Report");
 
@@ -54,7 +54,7 @@
         private void FillRowReport(ManpowerModel manpower, int year, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, year, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }
@@ -71,16 +71,9 @@
             bool isShowValue = false;
             dynamic result;
 
-            if (DateTime.Now.Year > year)
+            if ((DateTime.Now.Year > year) || (DateTime.Now.Year == year && DateTime.Now.Month >= month))
             {
                 isShowValue = true;
-            }
-            else if (DateTime.Now.Year == year)
-            {
-                if (DateTime.Now.Month >= month)
-                {
-                    isShowValue = true;
-                }
             }
 
             if (isShowValue)

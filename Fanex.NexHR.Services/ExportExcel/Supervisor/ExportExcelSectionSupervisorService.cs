@@ -18,7 +18,7 @@
         public void Export(IList<SectionSupervisorReportModel> supervisors)
         {
             string templatePath = HttpContext.Current.Server.MapPath(SectionSupervisorTemplatePath),
-                fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "SectionSupervisor_" + DateTime.Now.ToString("yyyyMMdd");
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
 
@@ -47,7 +47,7 @@
         private void FillRowReport(SectionSupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(supervisor, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }

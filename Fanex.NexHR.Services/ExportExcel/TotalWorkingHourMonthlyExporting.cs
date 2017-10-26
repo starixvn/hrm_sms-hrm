@@ -19,9 +19,9 @@
         private readonly ICellStyle _oddCellStyleWithCenterAlign;
         private readonly ICellStyle _defaultHeaderCellStyle;
         private readonly ICellStyle _offDayHeaderCellStyle;
-        private IList<TotalWorkingHourMonthly> _totalWorkingHourMonthly;
-        private TotalWorkingHourMonthly _firstRecord;
-        private HSSFWorkbook _workbook;
+        private readonly IList<TotalWorkingHourMonthly> _totalWorkingHourMonthly;
+        private readonly TotalWorkingHourMonthly _firstRecord;
+        private readonly HSSFWorkbook _workbook;
         private ISheet _sheet;
 
         public TotalWorkingHourMonthlyExporting(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly, TotalWorkingHourMonthly firstRecord)
@@ -39,44 +39,44 @@
 
         public HSSFWorkbook ExportTotalWorkingHourMonthly()
         {
-            this.CreateSheet(Labels.TotalWorkingHourMonthly);
-            this.ExportHeaderTitle(Labels.TotalWorkingHourMonthly);
-            if (this.IsHaveTableHeader(this._totalWorkingHourMonthly))
+            CreateSheet(Labels.TotalWorkingHourMonthly);
+            ExportHeaderTitle(Labels.TotalWorkingHourMonthly);
+            if (IsHaveTableHeader(_totalWorkingHourMonthly))
             {
-                this.ExportTable();
+                ExportTable();
             }
 
-            return this._workbook;
+            return _workbook;
         }
 
         public HSSFWorkbook ExportTotalWorkingHourDaily()
         {
-            this.CreateSheet(Labels.TotalWorkingHourDaily);
-            this.ExportHeaderTitle(Labels.TotalWorkingHourDaily);
-            if (this.IsHaveTableHeader(this._totalWorkingHourMonthly))
+            CreateSheet(Labels.TotalWorkingHourDaily);
+            ExportHeaderTitle(Labels.TotalWorkingHourDaily);
+            if (IsHaveTableHeader(this._totalWorkingHourMonthly))
             {
-                this.ExportTable();
+                ExportTable();
             }
 
-            return this._workbook;
+            return _workbook;
         }
 
         private void CreateSheet(string sheetName)
         {
-            _sheet = this._workbook.CreateSheet(sheetName);
+            _sheet = _workbook.CreateSheet(sheetName);
         }
 
         private void ExportHeaderTitle(string title)
         {
             IRow row = _sheet.CreateRow(_RowIndexOfHeaderTitle);
 
-            IFont font = this._workbook.CreateFont();
+            IFont font = _workbook.CreateFont();
             font.FontHeightInPoints = 16;
             font.Boldweight = (short)FontBoldWeight.Bold;
 
             ICell cell = row.CreateCell(1);
             cell.SetCellValue(title);
-            cell.CellStyle = this._workbook.CreateCellStyle();
+            cell.CellStyle = _workbook.CreateCellStyle();
             cell.CellStyle.SetFont(font);
             _sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 4));
         }
@@ -89,16 +89,16 @@
         private void ExportTable()
         {
             int rowIndex = _RowIndexOfTablePosition;
-            this.ExportHeader(rowIndex);
+            ExportHeader(rowIndex);
 
-            if (this.IsHaveContentRecords(_totalWorkingHourMonthly))
+            if (IsHaveContentRecords(_totalWorkingHourMonthly))
             {
                 rowIndex++;
-                this.ExportContent(rowIndex);
+                ExportContent(rowIndex);
             }
 
-            this.CreateFreezePane();
-            this.SetColumnWidthsForTable();
+            CreateFreezePane();
+            SetColumnWidthsForTable();
         }
 
         private void SetColumnWidthsForTable()
@@ -127,10 +127,10 @@
 
         private void ExportContent(int rowIndex)
         {
-            this.RemoveHeaderRecord();
+            RemoveHeaderRecord();
             foreach (var item in _totalWorkingHourMonthly)
             {
-                this.ExportOneRowIntoContentRegion(rowIndex, item);
+                ExportOneRowIntoContentRegion(rowIndex, item);
                 rowIndex++;
             }
         }
@@ -155,16 +155,16 @@
         private void ExportOneRowIntoContentRegion(int rowIndex, TotalWorkingHourMonthly totalWorkingHourMonthly)
         {
             IRow row = _sheet.CreateRow(rowIndex);
-            this.CreateCellContentWithCenterAlign(row, rowIndex, 0, (rowIndex - _RowIndexOfTablePosition).ToString());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 1, totalWorkingHourMonthly.StaffId.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.Section.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 3, totalWorkingHourMonthly.FullNameNick.Trim());
-            this.CreateCellContentWithLeftAlign(row, rowIndex, 4, totalWorkingHourMonthly.Nick.Trim());
-            this.CreateCellContentWithCenterAlign(row, rowIndex, 5, totalWorkingHourMonthly.CountWorkDay.ToString("0.0"));
+            CreateCellContentWithCenterAlign(row, rowIndex, 0, (rowIndex - _RowIndexOfTablePosition).ToString());
+            CreateCellContentWithLeftAlign(row, rowIndex, 1, totalWorkingHourMonthly.StaffId.Trim());
+            CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.Section.Trim());
+            CreateCellContentWithLeftAlign(row, rowIndex, 3, totalWorkingHourMonthly.FullNameNick.Trim());
+            CreateCellContentWithLeftAlign(row, rowIndex, 4, totalWorkingHourMonthly.Nick.Trim());
+            CreateCellContentWithCenterAlign(row, rowIndex, 5, totalWorkingHourMonthly.CountWorkDay.ToString("0.0"));
 
             for (int i = 0; i < totalWorkingHourMonthly.WorkingHours.Count; i++)
             {
-                this.CreateCellContentWithCenterAlign(row, rowIndex, 6 + i, totalWorkingHourMonthly.WorkingHours[i]);
+                CreateCellContentWithCenterAlign(row, rowIndex, 6 + i, totalWorkingHourMonthly.WorkingHours[i]);
             }
         }
 
@@ -214,16 +214,16 @@
         private void ExportHeader(int rowIndex)
         {
             IRow row = _sheet.CreateRow(rowIndex);
-            this.CreateFreezeHeaderCell(row, 0, Labels.SymbolCount);
-            this.CreateFreezeHeaderCell(row, 1, Labels.Code);
-            this.CreateFreezeHeaderCell(row, 2, Labels.Section);
-            this.CreateFreezeHeaderCell(row, 3, Labels.FullName);
-            this.CreateFreezeHeaderCell(row, 4, Labels.NickName);
-            this.CreateFreezeHeaderCell(row, 5, Labels.CountWorkDay);
+            CreateFreezeHeaderCell(row, 0, Labels.SymbolCount);
+            CreateFreezeHeaderCell(row, 1, Labels.Code);
+            CreateFreezeHeaderCell(row, 2, Labels.Section);
+            CreateFreezeHeaderCell(row, 3, Labels.FullName);
+            CreateFreezeHeaderCell(row, 4, Labels.NickName);
+            CreateFreezeHeaderCell(row, 5, Labels.CountWorkDay);
 
             for (int i = 0; i < _firstRecord.WorkingHours.Count; i++)
             {
-                this.CreateUnfreezeHeaderCell(row, 6 + i, _firstRecord.WorkingHours[i]);
+                CreateUnfreezeHeaderCell(row, 6 + i, _firstRecord.WorkingHours[i]);
             }
         }
 

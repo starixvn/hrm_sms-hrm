@@ -221,7 +221,7 @@
                         IRow rowTeam = sheet.GetRow(rowIndex);
                         rowTeam.Height = rowTeamHeight;
                         ICell cellTeam = rowTeam.GetCell(0);
-                        cellTeam.SetCellValue(overtime.Name.ToUpper());
+                        cellTeam.SetCellValue(overtime.Name.ToUpperInvariant());
                         sheet.MergeCells(rowIndex, 0, rowIndex, 2);
                         rowIndex++;
                         numberStart = rowIndex + 1;

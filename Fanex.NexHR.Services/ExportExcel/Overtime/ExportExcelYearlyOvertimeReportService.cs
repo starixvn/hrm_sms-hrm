@@ -18,9 +18,9 @@
 
         public void Export(IList<OvertimeAnnualReportViewModel> overtimeDetails, int year, int calendar)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(YearlyOvertimeTemplatePath),
-                fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd"),
-                calendarType = calendar == 1 ? "Fiscal Calendar" : "Normal Calendar";
+            string templatePath = HttpContext.Current.Server.MapPath(YearlyOvertimeTemplatePath);
+            string fileName = "YearlyOvertimeReport_" + DateTime.Now.ToString("yyyyMMdd");
+            string calendarType = calendar == 1 ? "Fiscal Calendar" : "Normal Calendar";
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Yearly Overtime Report");
 
@@ -52,7 +52,7 @@
         private void FillRowReport(OvertimeAnnualReportViewModel overtimeDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(overtimeDetail, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }
@@ -66,8 +66,8 @@
 
         private object CreateRecordReport(OvertimeAnnualReportViewModel overtimeDetail, int rowIndex)
         {
-            double? nullValue = null,
-                totalHours = overtimeDetail.Jan + overtimeDetail.Feb + overtimeDetail.Mar + overtimeDetail.Apr
+            double? nullValue = null;
+            double totalHours = overtimeDetail.Jan + overtimeDetail.Feb + overtimeDetail.Mar + overtimeDetail.Apr
                     + overtimeDetail.May + overtimeDetail.Jun + overtimeDetail.Jul + overtimeDetail.Aug
                     + overtimeDetail.Sep + overtimeDetail.Oct + overtimeDetail.Nov + overtimeDetail.Dec;
 
@@ -97,18 +97,18 @@
 
         private void FillContentRowFooterReport(IList<OvertimeAnnualReportViewModel> overtimeDetails, ref ExcelTemplateWriter writer)
         {
-            float jan = overtimeDetails.Sum(x => x.Jan),
-                feb = overtimeDetails.Sum(x => x.Feb),
-                mar = overtimeDetails.Sum(x => x.Mar),
-                apr = overtimeDetails.Sum(x => x.Apr),
-                may = overtimeDetails.Sum(x => x.May),
-                jun = overtimeDetails.Sum(x => x.Jun),
-                jul = overtimeDetails.Sum(x => x.Jul),
-                aug = overtimeDetails.Sum(x => x.Aug),
-                sep = overtimeDetails.Sum(x => x.Sep),
-                oct = overtimeDetails.Sum(x => x.Oct),
-                nov = overtimeDetails.Sum(x => x.Nov),
-                dec = overtimeDetails.Sum(x => x.Dec);
+            float jan = overtimeDetails.Sum(x => x.Jan);
+            float feb = overtimeDetails.Sum(x => x.Feb);
+            float mar = overtimeDetails.Sum(x => x.Mar);
+            float apr = overtimeDetails.Sum(x => x.Apr);
+            float may = overtimeDetails.Sum(x => x.May);
+            float jun = overtimeDetails.Sum(x => x.Jun);
+            float jul = overtimeDetails.Sum(x => x.Jul);
+            float aug = overtimeDetails.Sum(x => x.Aug);
+            float sep = overtimeDetails.Sum(x => x.Sep);
+            float oct = overtimeDetails.Sum(x => x.Oct);
+            float nov = overtimeDetails.Sum(x => x.Nov);
+            float dec = overtimeDetails.Sum(x => x.Dec);
 
             var record = new
             {

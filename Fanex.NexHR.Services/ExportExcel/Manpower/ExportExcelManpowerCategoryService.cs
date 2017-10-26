@@ -18,9 +18,9 @@
 
         public void Export(IList<ManpowerCategoryModel> manpowers, int year)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(ManpowerCategoryTemplatePath),
-                fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd"),
-                reportTitle = Labels.ManpowerCategoryReportTitle + " " + year;
+            string templatePath = HttpContext.Current.Server.MapPath(ManpowerCategoryTemplatePath);
+            string fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd");
+            string reportTitle = Labels.ManpowerCategoryReportTitle + " " + year;
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Manpower Report");
 
@@ -52,7 +52,7 @@
         private void FillRowReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }
@@ -92,12 +92,12 @@
         private void FillContentRowFooterReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
         {
             double defaultValue = 0.00;
-            int total = manpowers.Sum(t => t.Total),
-                management = manpowers.Sum(t => t.Management),
-                executiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition),
-                executive = manpowers.Sum(t => t.Executive),
-                staff = manpowers.Sum(t => t.Staff),
-                worker = manpowers.Sum(t => t.Worker);
+            int total = manpowers.Sum(t => t.Total);
+            int management = manpowers.Sum(t => t.Management);
+            int executiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition);
+            int executive = manpowers.Sum(t => t.Executive);
+            int staff = manpowers.Sum(t => t.Staff);
+            int worker = manpowers.Sum(t => t.Worker);
 
             var record = new
             {

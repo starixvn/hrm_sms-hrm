@@ -16,9 +16,9 @@
 
         public void Export(IList<OvertimeDaily> overtimeDetails, DateTime fromDate, DateTime toDate)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(OvertimeTemplatePath),
-                fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd"),
-                reportTitle = "Overtime Report Details" + " from " + fromDate.ToString("dd-MMM-yyyy") + " to " + toDate.ToString("dd-MMM-yyyy");
+            string templatePath = HttpContext.Current.Server.MapPath(OvertimeTemplatePath);
+            string fileName = "OvertimeReport_" + DateTime.Now.ToString("yyyyMMdd");
+            string reportTitle = "Overtime Report Details" + " from " + fromDate.ToString("dd-MMM-yyyy") + " to " + toDate.ToString("dd-MMM-yyyy");
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Overtime Detail Report");
 
@@ -49,7 +49,7 @@
         private void FillRowReport(OvertimeDaily overtimeDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(overtimeDetail, rowIndex);
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }
