@@ -374,18 +374,20 @@
         [AllowAnonymous]
         public FileResult Avatar(string id)
         {
+            string avatarName;
+
             if (string.IsNullOrWhiteSpace(id))
             {
-                id = CurrentUser.Code + ".jpg";
+                avatarName = CurrentUser.Code + ".jpg";
             }
             else
             {
-                id += ".jpg";
+                avatarName = id + ".jpg";
             }
 
-            if (System.IO.File.Exists(Server.MapPath("/avatars/" + id)))
+            if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
             {
-                return File("/avatars/" + id, "image/jpeg");
+                return File("/avatars/" + avatarName, "image/jpeg");
             }
 
             return File("/avatars/avatar.jpg", "image/jpeg");
@@ -637,12 +639,14 @@
         private string GetSupervisors(IList<SupervisorNameModel> supervisors, int roleSystem)
         {
             string supervisorsName = string.Empty;
+            IList<SupervisorNameModel> supervisorsFilter;
+
             if (supervisors != null)
             {
-                supervisors = supervisors.Where(x => x.ActionType == roleSystem).Take(3).ToList();
-                supervisorsName = string.Join(", ", supervisors.Select(x => x.NickName));
+                supervisorsFilter = supervisors.Where(x => x.ActionType == roleSystem).Take(3).ToList();
+                supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
 
-                if (supervisors.Count > 3)
+                if (supervisorsFilter.Count > 3)
                 {
                     supervisorsName = supervisorsName + ",...";
                 }
@@ -765,7 +769,7 @@
                 PassportExp = model.PassportExp,
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = CurrentUser.Id,
-                Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Password == null ? string.Empty : model.Password),
+                Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Password ?? string.Empty),
                 GroupId = model.Team.Id,
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,

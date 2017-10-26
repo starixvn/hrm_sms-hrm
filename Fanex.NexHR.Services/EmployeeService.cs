@@ -294,50 +294,28 @@
             ////  2: disabled
             ////  3: wrong password
             ////  0: success
-            int retCode = -1;
 
-            if (employee != null)
+            if (employee.IsDeleted)
             {
-                if (employee.IsDeleted)
-                {
-                    retCode = 1;
-                }
-                else if (!employee.Enabled)
-                {
-                    retCode = 2;
-                }
-                else if (string.IsNullOrWhiteSpace(employee.Password))
-                {
-                    retCode = 3;
-                }
-                else
-                {
-                    if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password))
-                    {
-                        retCode = 0;
-                    }
-                    else
-                    {
-                        if (ConfigSettings.AllowAdminLogin)
-                        {
-                            if (password == Constants.PassWordAdmin)
-                            {
-                                retCode = 0;
-                            }
-                            else
-                            {
-                                retCode = 3;
-                            }
-                        }
-                        else
-                        {
-                            retCode = 3;
-                        }
-                    }
-                }
+                return 1;
             }
 
-            return retCode;
+            if (!employee.Enabled)
+            {
+                return 2;
+            }
+
+            if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
+            {
+                return 0;
+            }
+
+            if (string.IsNullOrWhiteSpace(employee.Password) || (!ConfigSettings.AllowAdminLogin) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
+            {
+                return 3;
+            }
+
+            return -1;
         }
     }
 }
