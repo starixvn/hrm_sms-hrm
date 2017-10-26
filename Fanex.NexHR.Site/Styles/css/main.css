@@ -206,7 +206,7 @@ table.table.table-custom {
 
 #message {
   position: absolute;
-  top: 72px;
+  top: 0;
   background: #ffff00;
   border: solid 1px #ccc;
   border-top: none;
@@ -222,7 +222,7 @@ table.table.table-custom {
 .floatingHeader {
   z-index: 999;
   position: fixed;
-  top: 72px; }
+  top: 70px; }
 
 .team-select {
   min-width: 130px !important; }

@@ -30,9 +30,9 @@ function floatingHeader() {
             .removeClass("persist-header");
     });
 
-    $(".content_scroll").on("scroll", updateTableHeaders);
-        //.scroll(updateTableHeaders)
-        //.trigger("scroll");
+    $(".content_scroll")
+        .scroll(updateTableHeaders)
+        .trigger("scroll");
     $(window).resize(function () {
         updateTableHeaders();
     });
@@ -78,10 +78,10 @@ function updateTableHeaders() {
         //        widthspace = 1060;
         //}
         //else {
-            widthspace = widthspace - 17;
-            if (widthspace < 1051)
-                widthspace = 1051;
-       // }
+        widthspace = widthspace - 17;
+        if (widthspace < 1051)
+            widthspace = 1051;
+        // }
 
         $('.floatingHeader').width(widthspace);
         var left = $('table.persist-area thead tr:first').position()["left"];
@@ -126,6 +126,17 @@ function updateTableHeaders() {
 ////////////////////////////////////////////////////////////////////////////
 
 $(function () {
+    //Handle event when click search icon
+    $("#searchIcon").on('click', function () {
+        document.location = _global.root + 'employee/index?query=' + $("#searchbox").val();
+    });
+
+    $('#searchbox').keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#searchIcon").trigger('click');
+        }
+    });
+
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
         var model = {
             RequestId: requestId,
@@ -282,7 +293,7 @@ $(function () {
                 break;
             case 'Reset':
                 confirm('Are you sure you want to reset?', function () {
-                processRequest(requestId, roleId, command);
+                    processRequest(requestId, roleId, command);
                 });
                 break;
         }

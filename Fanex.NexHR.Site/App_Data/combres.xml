@@ -481,6 +481,7 @@
     </resourceSet>
 
     <resourceSet name="employeerequestcss_new" type="css">
+      <resource path="~/styles/font.css" />
       <resource path="~/Styles/css/lib/bootstrap/css/bootstrap.css" />
       <resource path="~/Styles/Libs/jquery-ui-1.2.1/jquery-ui.css" />
       <resource path="~/Styles/css/lib/tipsy/tipsy.css" />
@@ -494,13 +495,11 @@
       <resource path="~/Scripts/Libs/bootstrap/js/bootstrap.js" />
       <resource path="~/Scripts/Libs/tipsy/jquery.tipsy.js" />
       <resource path="~/Scripts/Libs/jquery-ui-1.2.1/jquery-ui.js" />
-      
-      <!--<resource path="~/scripts/views/criteria.js" />-->
       <resource path="~/scripts/libs/jquery.blockUI.js" />
       <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.js" />
-      <!--<resource path="~/Scripts/Libs/jquery.contextmenu.js" />-->
       <resource path="~/Scripts/Libs/jquery-multiselect-widget/jquery.multiselect.js" />
       <resource path="~/scripts/libs/date.js" />
+
       <resource path="~/scripts/views/employee.search.in.team.js" />
       <resource path="~/scripts/views/request/date.filter.new.js" />
       <resource path="~/scripts/views/request/employeerequest.js" />

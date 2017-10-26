@@ -164,7 +164,7 @@
 
 #message {
     position: absolute;
-    top: 72px;
+    top: 0;
     background: #ffff00;
     border: solid 1px #ccc;
     border-top: none;
@@ -182,7 +182,7 @@
 .floatingHeader {
     z-index: 999;
     position: fixed;
-    top: 72px;
+    top: 70px;
 }
 
 .team-select {

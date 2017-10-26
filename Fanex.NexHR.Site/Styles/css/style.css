@@ -18,7 +18,8 @@ body {
   background: #eeeeee;
   top: 44px;
   bottom: 0;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  border-right: 1px solid white; }
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -31,33 +32,37 @@ body {
     height: 50px; }
 
 .section-content .content_wrap {
-  /*padding-top: 44px;
-        padding-left: 190px;*/
-  left: 191px;
+  left: 190px;
   right: 0;
   border-left: 1px solid #898989;
   position: absolute;
   top: 44px;
   bottom: 0;
-  overflow-y: auto; }
+  overflow: hidden; }
   .section-content .content_wrap.expand {
-    padding-left: 0; }
-    .section-content .content_wrap.expand .section_breadcrumb {
-      left: 0; }
-      .section-content .content_wrap.expand .section_breadcrumb .glyphicon {
-        transform: rotate(180deg); }
+    left: 0; }
+    .section-content .content_wrap.expand .section_breadcrumb .glyphicon {
+      transform: rotate(180deg); }
 
-.section_breadcrumb {
-  position: fixed;
-  right: 0;
-  left: 191px;
-  z-index: 9; }
-
+/*.section_breadcrumb {
+    position: fixed;
+    right: 0;
+    left: 191px;
+    z-index: 9;
+}*/
 .section_body {
   padding-top: 25px; }
 
 .content_wrap .content_scroll {
-  padding: 10px; }
+  padding: 10px;
+  overflow-y: auto;
+  position: absolute;
+  top: 26px;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  .content_wrap .content_scroll .page-title {
+    margin-top: 10px; }
 
 .status {
   position: relative; }
@@ -138,7 +143,7 @@ a:focus, a:hover {
 
 .page-title {
   font-family: Abel, Arial,Helvetica, "myriad Pro",tahoma;
-  font-size: 18px;
+  font-size: 1.8em;
   margin-bottom: 10px;
   text-shadow: 0 0 1px #ddd; }
 
@@ -315,13 +320,13 @@ a:focus, a:hover {
   .xicon.ScheduleArrange {
     background-position: 0 -240px; }
 
-.header_wrap {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 10; }
-
+/*.header_wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+}*/
 .header_wrap {
   background: #dcdcdc;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#e4e4e4), to(#dcdcdc));
@@ -615,7 +620,7 @@ table.table.table-custom {
 
 #message {
   position: absolute;
-  top: 72px;
+  top: 0;
   background: #ffff00;
   border: solid 1px #ccc;
   border-top: none;
@@ -631,7 +636,7 @@ table.table.table-custom {
 .floatingHeader {
   z-index: 999;
   position: fixed;
-  top: 72px; }
+  top: 70px; }
 
 .team-select {
   min-width: 130px !important; }
