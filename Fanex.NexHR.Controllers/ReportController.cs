@@ -117,16 +117,10 @@
             var fromDate = new DateTime(model.Year, model.Month, 1);
             DateTime toDate;
 
-            if (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year)
-            {
-                toDate = DateTime.Now.Date;
-            }
-            else
-            {
-                toDate = new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
-            }
+            toDate = (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year) ?
+                    DateTime.Now.Date : new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
 
-            var criteria = new GetEmployeeAttendanceCriteria()
+            var criteria = new GetEmployeeAttendanceCriteria
             {
                 Fromtime = fromDate,
                 Totime = toDate,
@@ -333,7 +327,7 @@
             ViewBag.Groups = GetAllTeam();
             ViewBag.TeamIds = model.TeamIds;
 
-            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria()
+            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria
             {
                 Fromdate = model.FromDate,
                 Todate = model.ToDate,
@@ -415,7 +409,7 @@
         [HttpPost]
         public ActionResult TotalWorkingHourWeeklyDetails(TotalWorkingHourWeeklyViewModel model)
         {
-            var criteria = new GetTotalWorkingHourWeeklyCriteria()
+            var criteria = new GetTotalWorkingHourWeeklyCriteria
             {
                 EmpId = model.EmployeeId,
                 FromDate = DateTime.Parse(model.FromDate),

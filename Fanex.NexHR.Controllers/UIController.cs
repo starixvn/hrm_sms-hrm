@@ -57,7 +57,7 @@
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = CurrentUser.Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            var selectedMenu = CurrentUser.Menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
             var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
             var menus = GetNagivationData();
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
@@ -73,23 +73,6 @@
         public IEnumerable<MenuModel> GetNagivationData()
         {
             return CurrentUser.Menus;
-        }
-
-        private static void CheckRoleForDisplayNavigationItem(
-            SiteMapNode sectionNode,
-            UserLoginModel user,
-            NavigationViewModel sectionItem)
-        {
-            string personal = "Personal";
-            string overtime = "My overtime";
-
-            if (sectionNode.Title.ToUpper() == personal.ToUpper())
-            {
-                if (!user.CanOT)
-                {
-                    sectionItem.Childs.RemoveAll(row => string.Compare(row.Title, overtime, StringComparison.OrdinalIgnoreCase) == 0);
-                }
-            }
         }
 
         [ChildActionOnly]
@@ -114,7 +97,7 @@
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = CurrentUser.Menus.Where(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            var selectedMenu = CurrentUser.Menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
             var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
             var menus = GetNagivationData();
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;

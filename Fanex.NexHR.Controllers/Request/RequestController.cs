@@ -226,16 +226,9 @@
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {
             CommandResult result;
-            if (model.Command == Command.Accept.ToString()
-                || model.Command == Command.Approve.ToString()
-                || model.Command == Command.Process.ToString())
-            {
-                result = ApproveRequest(model);
-            }
-            else
-            {
-                result = Process(model);
-            }
+
+            result = (model.Command == Command.Accept.ToString() || model.Command == Command.Approve.ToString() || model.Command == Command.Process.ToString()) ?
+                    ApproveRequest(model) : Process(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

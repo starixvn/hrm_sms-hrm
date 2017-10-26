@@ -180,7 +180,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {
-            var criteria = new GetSupervisorByTeamIdCriteria()
+            var criteria = new GetSupervisorByTeamIdCriteria
             {
                 GroupId = id
             };
@@ -195,7 +195,7 @@
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
             ViewBag.Groups = GetAllTeam();
-            var criteria = new GetTeamSupervisorCriteria()
+            var criteria = new GetTeamSupervisorCriteria
             {
                 GroupId = teamId,
                 Role = supervisorRole
@@ -218,7 +218,7 @@
         {
             ViewBag.Groups = GetAllTeam();
 
-            var criteria = new GetTeamSupervisorCriteria()
+            var criteria = new GetTeamSupervisorCriteria
             {
                 GroupId = teamId,
                 Role = (short)RoleSystem.ShiftManager
@@ -241,7 +241,7 @@
         {
             ViewBag.Groups = GetAllTeam();
 
-            var criteria = new GetDisciplineSettingByGroupIdCriteria()
+            var criteria = new GetDisciplineSettingByGroupIdCriteria
             {
                 GroupId = teamId
             };
@@ -312,7 +312,7 @@
 
         private IList<Department> GetAllDepartment(bool? isActive)
         {
-            var criteria = new GetDepartmentByParentIdCriteria()
+            var criteria = new GetDepartmentByParentIdCriteria
             {
                 IsActive = isActive
             };

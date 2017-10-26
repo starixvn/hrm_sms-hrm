@@ -33,8 +33,10 @@
         public IEnumerable<MenuViewModel> GetMenus()
         {
             var criteria = new GetMenusCriteria();
+
             IEnumerable<MenuViewModel> menus = new List<MenuViewModel>();
-            if (criteria != null && criteria.IsValid())
+
+            if (criteria.IsValid())
             {
                 menus = menuRepository.GetMenus(criteria);
             }
@@ -80,7 +82,7 @@
         {
             var criteria = new DeleteMenuCriteria { MenuId = id };
             var result = new Result();
-            if (criteria != null && criteria.IsValid())
+            if (criteria.IsValid())
             {
                 result = Repository.Delete(criteria);
             }

@@ -26,14 +26,8 @@
         {
             CommandResult result;
 
-            if (criteria != null && criteria.IsValid())
-            {
-                result = repository.Insert(criteria, hasGetOutputParams);
-            }
-            else
-            {
-                result = GetInvalidInput();
-            }
+            result = (criteria != null && criteria.IsValid()) ?
+                    repository.Insert(criteria, hasGetOutputParams) : GetInvalidInput();
 
             return result;
         }
@@ -42,14 +36,8 @@
         {
             CommandResult result;
 
-            if (criteria != null && criteria.IsValid())
-            {
-                result = repository.Update(criteria, hasGetOutputParams);
-            }
-            else
-            {
-                result = GetInvalidInput();
-            }
+            result = (criteria != null && criteria.IsValid()) ?
+                repository.Update(criteria, hasGetOutputParams) : GetInvalidInput();
 
             return result;
         }
@@ -58,14 +46,8 @@
         {
             CommandResult result;
 
-            if (criteria != null && criteria.IsValid())
-            {
-                result = repository.Delete(criteria, hasGetOutputParams);
-            }
-            else
-            {
-                result = GetInvalidInput();
-            }
+            result = (criteria != null && criteria.IsValid()) ?
+                repository.Delete(criteria, hasGetOutputParams) : GetInvalidInput();
 
             return result;
         }

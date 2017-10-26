@@ -3,7 +3,7 @@
     using Fanex.Common.Extensions;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1717:OnlyFlagsEnumsShouldHavePluralNames", Justification = "Ok.")]
-    public enum LeaveTypes : int
+    public enum LeaveTypes
     {
         [StringValue("General Leave")]
         GeneralLeave = 0,

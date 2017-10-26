@@ -29,8 +29,8 @@
         }
 
         public KeepInViewController(
-            IKeepInViewRequestService keepInViewRequestService, 
-            IRequestService requestService, 
+            IKeepInViewRequestService keepInViewRequestService,
+            IRequestService requestService,
             ICommandService commandService,
             IShiftService shiftService,
             IEmployeeService employeeService)
@@ -44,7 +44,7 @@
 
         public ActionResult Create()
         {
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = CurrentUser.Id,
                 Date = DateTime.Now
@@ -77,7 +77,7 @@
 
                 if (ModelState.IsValid)
                 {
-                    var criteria = new InsertKeepInViewRequestCriteria()
+                    var criteria = new InsertKeepInViewRequestCriteria
                     {
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
@@ -117,7 +117,7 @@
 
         public ActionResult Update(long id)
         {
-            var criteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = id
             };
@@ -128,7 +128,7 @@
             }
             else
             {
-                var viewModel = new KeepInViewRequestViewModel()
+                var viewModel = new KeepInViewRequestViewModel
                 {
                     RequestId = id,
                     RefNo = request.RefNO,
@@ -164,7 +164,7 @@
 
                 if (ModelState.IsValid)
                 {
-                    var criteria = new UpdateKeepInViewRequestCriteria()
+                    var criteria = new UpdateKeepInViewRequestCriteria
                     {
                         RequestId = model.RequestId,
                         EmpId = model.EmployeeId,
@@ -214,7 +214,7 @@
         {
             ViewBag.Year = year;
 
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = CurrentUser.Id,
                 FromDate = new DateTime(year, 1, 1),
@@ -235,7 +235,7 @@
         {
             var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
             var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var criteria = new GetOffDateAndHolidayDateCriteria()
+            var criteria = new GetOffDateAndHolidayDateCriteria
             {
                 EmpId = employeeId,
                 FromDate = fromDate,

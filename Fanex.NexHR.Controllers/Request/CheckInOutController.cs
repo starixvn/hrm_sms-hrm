@@ -30,8 +30,8 @@
         }
 
         public CheckInOutController(
-            ICheckInOutRequestService checkInOutRequestService, 
-            IRequestService requestService, 
+            ICheckInOutRequestService checkInOutRequestService,
+            IRequestService requestService,
             ICommandService commandService,
             IEmployeeService employeeService,
             IShiftService shiftService)
@@ -53,7 +53,7 @@
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = CurrentUser.Id,
                 FromDate = new DateTime(year, 1, 1),
@@ -79,7 +79,7 @@
                 AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
-                RequestType = (!isMissingCheckIn.HasValue || (isMissingCheckIn.HasValue && isMissingCheckIn.Value)) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
+                RequestType = (isMissingCheckIn.HasValue && isMissingCheckIn.Value) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
                 TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id)
             };
@@ -102,7 +102,7 @@
 
                 if (ModelState.IsValid)
                 {
-                    var criteria = new InsertCheckInOutRequestCriteria()
+                    var criteria = new InsertCheckInOutRequestCriteria
                     {
                         EmpId = model.EmployeeId,
                         OnDate = model.AttendantDate,
@@ -135,7 +135,7 @@
 
         public ActionResult Update(int id)
         {
-            var criteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = id
             };
@@ -147,7 +147,7 @@
             else
             {
                 Shift shift = GetShiftByDate(request.RequestedDate);
-                var viewModel = new CheckInOutRequestViewModel()
+                var viewModel = new CheckInOutRequestViewModel
                 {
                     RequestId = request.Id,
                     RequestType = request.RequestType.Id,
@@ -179,7 +179,7 @@
 
                 if (ModelState.IsValid)
                 {
-                    var criteria = new UpdateCheckInOutRequestCriteria()
+                    var criteria = new UpdateCheckInOutRequestCriteria
                     {
                         RequestId = model.RequestId,
                         EmpId = model.EmployeeId,
@@ -213,7 +213,7 @@
         private decimal GetTotalRequestInMonth(int employeeId)
         {
             var currentDate = DateTime.Now.Date;
-            var criteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria
             {
                 EmployeeId = employeeId,
                 RequestType = (int)RequestType.CheckIn,
@@ -237,7 +237,7 @@
 
         private Shift GetShiftByDate(DateTime date)
         {
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria()
+            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = CurrentUser.Id,
                 Date = date
@@ -268,7 +268,7 @@
 
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
-            var criteria = new GetEmployeeByIdCriteria() { EmpId = model.EmployeeId };
+            var criteria = new GetEmployeeByIdCriteria { EmpId = model.EmployeeId };
             var employee = employeeService.GetEmployeeById(criteria);
             if (employee.IsTopManager)
             {

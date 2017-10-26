@@ -57,7 +57,7 @@
         [HttpGet]
         public ActionResult EmployeeView()
         {
-            var model = new OvertimeReportViewModel()
+            var model = new OvertimeReportViewModel
             {
                 Employee = CurrentUser.NickName,
                 EmpId = CurrentUser.Id,
@@ -92,7 +92,7 @@
             };
 
             OvertimeRequest overtime = overtimeService.GetOvertimeRequestByMonth(criteria);
-            var model = new MyOverTimeViewModel()
+            var model = new MyOverTimeViewModel
             {
                 OvertimeRequest = overtime.OvertimeDaily,
                 EmpId = empId,
@@ -150,7 +150,7 @@
 
         public ActionResult GetActingEmployees(string query)
         {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria()
+            var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
                 EmpId = CurrentUser.Id,
                 Role = (int)RoleSystem.ActingSupervisor,
@@ -265,7 +265,7 @@
 
         public ActionResult MemberDailyOvertime(int requestId, bool isHRView)
         {
-            var criteria = new GetOvertimeRequestByIdCriteria()
+            var criteria = new GetOvertimeRequestByIdCriteria
             {
                 RequestId = requestId
             };

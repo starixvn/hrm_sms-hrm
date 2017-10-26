@@ -39,10 +39,8 @@
                 {
                     return JsonConverter.FromJsonArray<IgnoredDisciplineModel>(IgnoredDisciplineDetails);
                 }
-                else
-                {
-                    return new List<IgnoredDisciplineModel>();
-                }
+
+                return new List<IgnoredDisciplineModel>();
             }
         }
     }

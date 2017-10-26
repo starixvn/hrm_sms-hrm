@@ -40,7 +40,7 @@
 
         public ActionResult AddTimeRecord()
         {
-            var model = new TimeRecordViewModel()
+            var model = new TimeRecordViewModel
             {
                 ForDate = DateTime.Today,
                 Hour = DateTime.Now.Hour,
@@ -54,7 +54,7 @@
         {
             if (model != null)
             {
-                var criteria = new InsertTimeRecordCriteria()
+                var criteria = new InsertTimeRecordCriteria
                 {
                     EmpId = model.EmpId,
                     RecordTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),

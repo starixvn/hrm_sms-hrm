@@ -77,19 +77,19 @@
                 Section = overtimeDetail.Team,
                 FullName = overtimeDetail.FullName,
                 NickName = overtimeDetail.NickName,
-                Jan = !overtimeDetail.Jan.Equals(0) ? (double)overtimeDetail.Jan : nullValue,
-                Feb = !overtimeDetail.Feb.Equals(0) ? (double)overtimeDetail.Feb : nullValue,
-                Mar = !overtimeDetail.Mar.Equals(0) ? (double)overtimeDetail.Mar : nullValue,
-                Apr = !overtimeDetail.Apr.Equals(0) ? (double)overtimeDetail.Apr : nullValue,
-                May = !overtimeDetail.May.Equals(0) ? (double)overtimeDetail.May : nullValue,
-                Jun = !overtimeDetail.Jun.Equals(0) ? (double)overtimeDetail.Jun : nullValue,
-                Jul = !overtimeDetail.Jul.Equals(0) ? (double)overtimeDetail.Jul : nullValue,
-                Aug = !overtimeDetail.Aug.Equals(0) ? (double)overtimeDetail.Aug : nullValue,
-                Sep = !overtimeDetail.Sep.Equals(0) ? (double)overtimeDetail.Sep : nullValue,
-                Oct = !overtimeDetail.Oct.Equals(0) ? (double)overtimeDetail.Oct : nullValue,
-                Nov = !overtimeDetail.Nov.Equals(0) ? (double)overtimeDetail.Nov : nullValue,
-                Dec = !overtimeDetail.Dec.Equals(0) ? (double)overtimeDetail.Dec : nullValue,
-                TotalHours = !totalHours.Equals(0) ? (double)totalHours : nullValue
+                Jan = !overtimeDetail.Jan.Equals(0) ? overtimeDetail.Jan : nullValue,
+                Feb = !overtimeDetail.Feb.Equals(0) ? overtimeDetail.Feb : nullValue,
+                Mar = !overtimeDetail.Mar.Equals(0) ? overtimeDetail.Mar : nullValue,
+                Apr = !overtimeDetail.Apr.Equals(0) ? overtimeDetail.Apr : nullValue,
+                May = !overtimeDetail.May.Equals(0) ? overtimeDetail.May : nullValue,
+                Jun = !overtimeDetail.Jun.Equals(0) ? overtimeDetail.Jun : nullValue,
+                Jul = !overtimeDetail.Jul.Equals(0) ? overtimeDetail.Jul : nullValue,
+                Aug = !overtimeDetail.Aug.Equals(0) ? overtimeDetail.Aug : nullValue,
+                Sep = !overtimeDetail.Sep.Equals(0) ? overtimeDetail.Sep : nullValue,
+                Oct = !overtimeDetail.Oct.Equals(0) ? overtimeDetail.Oct : nullValue,
+                Nov = !overtimeDetail.Nov.Equals(0) ? overtimeDetail.Nov : nullValue,
+                Dec = !overtimeDetail.Dec.Equals(0) ? overtimeDetail.Dec : nullValue,
+                TotalHours = !totalHours.Equals(0) ? totalHours : nullValue
             };
 
             return record;

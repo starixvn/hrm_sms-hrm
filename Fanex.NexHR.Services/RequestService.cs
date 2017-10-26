@@ -164,14 +164,9 @@
             {
                 if (fromDate.Year == toDate.Year)
                 {
-                    if (fromDate.Month != toDate.Month)
-                    {
-                        result = fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
-                    }
-                    else
-                    {
-                        result = fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
-                    }
+                    result = (fromDate.Month != toDate.Month) ?
+                        fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
+                        fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
                 }
                 else
                 {
@@ -188,7 +183,7 @@
 
         public void SendMailForProcessSuccessfully(long requestId, int processedBy, string action)
         {
-            var getRequestByIdCriteria = new GetRequestByIdCriteria()
+            var getRequestByIdCriteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
@@ -204,7 +199,7 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            var getRequestByIdCriteria = new GetRequestByIdCriteria()
+            var getRequestByIdCriteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
@@ -272,7 +267,7 @@
             int action)
         {
             var emailModel = new EmailModel();
-            var criteria = new GetRequestRelatedPeopleCriteria()
+            var criteria = new GetRequestRelatedPeopleCriteria
             {
                 RequestId = requestId,
                 Action = action
@@ -391,20 +386,15 @@
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             var forDate = string.Empty;
+
             if (totalDays > 1)
             {
                 forDate = string.Format(_MailContentLeave, fromDate.ToDateMonthYearFormatedDate(), toDate.ToDateMonthYearFormatedDate(), totalDays);
             }
             else
             {
-                if (totalDays == 1)
-                {
-                    forDate = string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate());
-                }
-                else
-                {
-                    forDate = string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
-                }
+                forDate = (totalDays == 1) ? string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate())
+                                           : string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
             }
 
             return forDate;
@@ -414,14 +404,8 @@
         {
             var messageDetail = string.Empty;
 
-            if (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
-            {
-                messageDetail = GetMessageForGeneralLeave(request);
-            }
-            else
-            {
-                messageDetail = GetMessageForOtherLeave(request);
-            }
+            messageDetail = (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ?
+                            GetMessageForGeneralLeave(request) : GetMessageForOtherLeave(request);
 
             return messageDetail;
         }
@@ -455,7 +439,8 @@
             {
                 messageDetail = string.Format("<span class='req leave'>{0}</span> {1}", leaveDate, request.LeaveCountDetails);
             }
-            else if ((request.TotalDays - (decimal)0.5) == 0)
+
+            if ((request.TotalDays - (decimal)0.5) == 0)
             {
                 messageDetail = string.Format(
                 "<span class='req leave'>{0} ({1}-{2})</span> {3}",
@@ -500,49 +485,56 @@
             int processBy,
             string templateEmailPathForRelated)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = request.Requester.Id };
-            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = processBy };
-            var employee = this.employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var processUser = this.employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = request.Requester.Id };
+            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria { EmpId = processBy };
+            var employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
+            var processUser = employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
-            command = this.GetPassiveNameOfCommand(command);
+            command = GetPassiveNameOfCommand(command);
 
             EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                this.SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
+                SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
             }
         }
 
         private int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;
+
             if (command == Command.Accept.ToString())
             {
                 action = (int)SettingsSendMail.Verify;
             }
-            else if (command == Command.NotAccept.ToString())
+
+            if (command == Command.NotAccept.ToString())
             {
                 action = (int)SettingsSendMail.NotVerify;
             }
-            else if (command == Command.Approve.ToString())
+
+            if (command == Command.Approve.ToString())
             {
                 action = (int)SettingsSendMail.Approve;
             }
-            else if (command == Command.Reject.ToString())
+
+            if (command == Command.Reject.ToString())
             {
                 action = (int)SettingsSendMail.Reject;
             }
-            else if (command == Command.Process.ToString())
+
+            if (command == Command.Process.ToString())
             {
                 action = (int)SettingsSendMail.Process;
             }
-            else if (command == Command.Void.ToString())
+
+            if (command == Command.Void.ToString())
             {
                 action = (int)SettingsSendMail.Void;
             }
-            else if (command == Command.Reset.ToString())
+
+            if (command == Command.Reset.ToString())
             {
                 action = GetActionResetRequest(request.Status.Id);
             }
@@ -729,7 +721,7 @@
                 body,
                 sendToNickName,
                 string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.RequestType.Name.ToLower(),
+                request.RequestType.Name.ToLowerInvariant(),
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 request.FromShift.Name,
                 request.RequestedDate.ToShortTime(),
@@ -772,40 +764,40 @@
         {
             if (command == Command.Accept.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Accepted.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant());
             }
 
             if (command == Command.NotAccept.ToString())
             {
-                return string.Format(Messages.HasNotBeen, Labels.Accepted.ToLower());
+                return string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant());
             }
 
             if (command == Command.Approve.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Approved.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant());
             }
 
             if (command == Command.Reject.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Rejected.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant());
             }
 
             if (command == Command.Process.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Processed.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant());
             }
 
             if (command == Command.Void.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Void.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
             }
 
             if (command == Command.Reset.ToString())
             {
-                return string.Format(Messages.HasBeen, Labels.Reseted.ToLower());
+                return string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant());
             }
 
-            return string.Format(Messages.HasBeen, Labels.Void.ToLower());
+            return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
         }
 
         private EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
@@ -1008,7 +1000,7 @@
             string mailCc,
             string templateEmailPath)
         {
-            var criteria = new GetEmployeeShiftByDateCriteria()
+            var criteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = employee.Id,
                 Date = request.FromDate
@@ -1142,7 +1134,7 @@
             string mailCc,
             string templateEmailPath)
         {
-            var criteria = new GetEmployeeShiftByDateCriteria()
+            var criteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = employee.Id,
                 Date = request.FromDate

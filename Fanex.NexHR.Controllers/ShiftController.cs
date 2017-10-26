@@ -58,7 +58,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new InsertShiftCriteria()
+                var criteria = new InsertShiftCriteria
                 {
                     Name = model.Name,
                     CheckInTime = model.TimeIn,
@@ -87,7 +87,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int shiftId)
         {
-            var criteria = new GetShiftByIdCriteria() { ShiftId = shiftId };
+            var criteria = new GetShiftByIdCriteria { ShiftId = shiftId };
             var shift = shiftService.GetById(criteria);
             ShiftViewModel model = null;
 
@@ -121,7 +121,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new UpdateShiftCriteria()
+                var criteria = new UpdateShiftCriteria
                 {
                     ShiftId = model.ShiftId,
                     Name = model.Name,
@@ -155,7 +155,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
         public JsonResult Delete(int shiftId)
         {
-            var criteria = new DeleteShiftCriteria() { ShiftId = shiftId };
+            var criteria = new DeleteShiftCriteria { ShiftId = shiftId };
             CommandResult result = commandService.Delete(criteria);
 
             return Json(result);
@@ -163,7 +163,7 @@
 
         public JsonResult GetShiftByDate(int employeeId, DateTime date)
         {
-            var criteria = new GetEmployeeShiftByDateCriteria()
+            var criteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = employeeId,
                 Date = date
@@ -173,7 +173,7 @@
             return Json(shift, JsonRequestBehavior.AllowGet);
         }
 
-        private static int GetTime(string time, int index = 0)
+        private static int GetTime(string time, int index)
         {
             var value = 0;
             if (!string.IsNullOrWhiteSpace(time))

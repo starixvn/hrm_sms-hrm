@@ -13,11 +13,13 @@
         public IList<Shift> GetAll(int statusId = 1, bool isShowOff = false)
         {
             IList<Shift> shifts = GetData<Shift>(new GetAllShiftCriteria()).ToList();
+
             if (statusId == (int)ShiftStatus.Active)
             {
                 shifts = shifts.Where(t => !t.IsDisabled).ToList();
             }
-            else if (statusId == (int)ShiftStatus.Disabled)
+
+            if (statusId == (int)ShiftStatus.Disabled)
             {
                 shifts = shifts.Where(t => t.IsDisabled).ToList();
             }
@@ -34,11 +36,11 @@
         {
             IList<Shift> shifts = GetAll(isShowOff: isShowOff);
             IList<Shift> queriedShifts = null;
-            query = query.ToUpper();
+            query = query.ToUpperInvariant();
 
             if (shifts != null && shifts.Any())
             {
-                queriedShifts = shifts.Where(t => t.Code.ToUpper().StartsWith(query.ToUpper(), System.StringComparison.CurrentCulture)).ToList();
+                queriedShifts = shifts.Where(t => t.Code.ToUpperInvariant().StartsWith(query.ToUpperInvariant(), System.StringComparison.CurrentCulture)).ToList();
             }
 
             return queriedShifts ?? new List<Shift>();

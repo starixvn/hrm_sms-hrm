@@ -90,7 +90,7 @@
 
         public ActionResult Update(long requestId)
         {
-            var criteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
@@ -133,7 +133,7 @@
 
         public ActionResult Detail(int requestId)
         {
-            var criteria = new GetRequestByIdCriteria()
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
@@ -157,7 +157,7 @@
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 EmpId = CurrentUser.Id,
@@ -178,7 +178,7 @@
 
         public ActionResult GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
         {
-            var criteria = new GetLeaveBalanceCriteria()
+            var criteria = new GetLeaveBalanceCriteria
             {
                 EmpId = employeeId,
                 RequestId = requestId == -1 ? null : requestId,
@@ -190,7 +190,7 @@
 
         public ActionResult LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
         {
-            var criteria = new GetWorkingCalendarByDateRangeCriteria()
+            var criteria = new GetWorkingCalendarByDateRangeCriteria
             {
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -201,7 +201,7 @@
             IList<LeaveDetailModel> leaveRequestDetail = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
-                var leaveDetailCriteria = new GetLeaveRequestDetailByIdCriteria()
+                var leaveDetailCriteria = new GetLeaveRequestDetailByIdCriteria
                 {
                     RequestId = requestId
                 };
@@ -265,15 +265,18 @@
             {
                 tempScheduleStatus = Labels.OffDay;
             }
-            else if (tempWokingCalendar.IsHoliday)
+
+            if (tempWokingCalendar.IsHoliday)
             {
                 tempScheduleStatus = Labels.Holiday;
             }
-            else if (tempWokingCalendar.Shift != null)
+
+            if (tempWokingCalendar.Shift != null)
             {
                 tempScheduleStatus = tempWokingCalendar.Shift.Name;
             }
-            else if (!tempWokingCalendar.IsLeaveDay)
+
+            if (!tempWokingCalendar.IsLeaveDay)
             {
                 tempScheduleStatus = Labels.NA;
             }
@@ -349,7 +352,7 @@
             {
                 if (request.VerifiedBy != null && !supervisor.Verifiers.Any(t => t.OwnerId == request.VerifiedBy.Id))
                 {
-                    var verifier = new SupervisorNameModel()
+                    var verifier = new SupervisorNameModel
                     {
                         OwnerId = request.VerifiedBy.Id,
                         NickName = request.VerifiedBy.NickName,
@@ -360,7 +363,7 @@
 
                 if (request.ApprovedBy != null && !supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
                 {
-                    var approver = new SupervisorNameModel()
+                    var approver = new SupervisorNameModel
                     {
                         OwnerId = request.ApprovedBy.Id,
                         NickName = request.ApprovedBy.NickName,
@@ -375,7 +378,7 @@
 
         private IList<LeaveType> GetAllLeaveType()
         {
-            var criteria = new GetLeaveTypeCriteria()
+            var criteria = new GetLeaveTypeCriteria
             {
                 ExcludeNotShown = true
             };
@@ -431,7 +434,7 @@
 
         private EmployeeLeaveBalance GetLeaveBalance(long? requestId, int? year)
         {
-            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria()
+            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria
             {
                 EmpId = CurrentUser.Id,
                 RequestId = requestId,
@@ -447,7 +450,7 @@
             var currentDate = DateTime.Now.Date;
             var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var criteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria
             {
                 EmployeeId = CurrentUser.Id,
                 RequestType = (int)RequestType.Leave,
@@ -461,7 +464,7 @@
 
         private IList<DateTime> GetUnavailDate(LeaveRequestViewModel model)
         {
-            var criteria = new GetUnavailableRequestDateCriteria()
+            var criteria = new GetUnavailableRequestDateCriteria
             {
                 EmpId = model.EmployeeId,
                 FromDate = model.MinDate,
