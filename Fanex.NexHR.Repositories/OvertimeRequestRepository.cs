@@ -184,7 +184,7 @@
 
                         for (int column = 1; column <= columnCount; column++)
                         {
-                            var entity = new OvertimeDailyReport()
+                            var entity = new OvertimeDailyReport
                             {
                                 TotalOvertimeType1 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 11) : ((column * 2) + 10)].ToString(),
                                 TotalOvertimeType2 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 12) : ((column * 2) + 11)].ToString()

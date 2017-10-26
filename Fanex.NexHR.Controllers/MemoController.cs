@@ -122,7 +122,8 @@
                 {
                     SendMail(updateMemoCriteria.Subject, result);
                 }
-                else if (!result.IsSuccessful)
+
+                if (!result.IsSuccessful)
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
@@ -190,7 +191,8 @@
                 {
                     SendMail(insertMemoCriteria.Subject, result);
                 }
-                else if (!result.IsSuccessful)
+
+                if (!result.IsSuccessful)
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
@@ -236,8 +238,8 @@
         private void SendMail(string subject, CommandResult result)
         {
             var link = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath;
-            var groupSd = ConfigurationManager.AppSettings["EmailSD"].ToString();
-            var groupGo = ConfigurationManager.AppSettings["EmailGo"].ToString();
+            var groupSd = ConfigurationManager.AppSettings["EmailSD"];
+            var groupGo = ConfigurationManager.AppSettings["EmailGo"];
 
             var bodyTemplate = Utilities.ReadTextFile(Server.MapPath("~/app_data/emails/MemoNotification.cshtml"));
             var body = string.Format(bodyTemplate, subject, link + "memo/detail/" + result);

@@ -15,7 +15,7 @@
 
         public LookupData GetLookupByCodeAndId(string lookupCode, int lookupId)
         {
-            var criteria = new GetAllLookupDataCriteria()
+            var criteria = new GetAllLookupDataCriteria
             {
                 LookupCode = lookupCode
             };

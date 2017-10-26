@@ -9,8 +9,8 @@
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class HRAuthorizeAttribute : AuthorizeAttribute
     {
-        private Policy policy;
-        private string[] functionKey;
+        private readonly Policy policy;
+        private readonly string[] functionKey;
 
         public HRAuthorizeAttribute(Policy policy, params string[] functionKey)
         {

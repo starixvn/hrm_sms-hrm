@@ -71,7 +71,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public ActionResult Create()
         {
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            var getEmployeeCriteria = new GetAllEmployeeCriteria
             {
                 Query = null,
                 GroupIds = null,
@@ -119,7 +119,7 @@
             };
 
             ViewBag.Message = messageService.GetMessageById(getMessageByIdCriteria);
-            var getEmployeeCriteria = new GetAllEmployeeCriteria()
+            var getEmployeeCriteria = new GetAllEmployeeCriteria
             {
                 Query = null,
                 GroupIds = null,

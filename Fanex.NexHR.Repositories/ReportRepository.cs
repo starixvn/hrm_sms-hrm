@@ -215,8 +215,7 @@
                     splitOn: "EmpId, GroupId",
                     parameterValues: criteria.GetSpParams()).ToList();
 
-                PropertyInfo totalitem = criteria.GetType().GetProperties().Where(
-                    prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalitem")).FirstOrDefault();
+                PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalitem"));
 
                 if (totalitem != null)
                 {
@@ -334,7 +333,7 @@
         {
             var leaveType = new LeaveType
             {
-                Id = t.LeaveTypeId == null ? 0 : t.LeaveTypeId,
+                Id = t.LeaveTypeId ?? 0,
                 Name = t.LeaveType
             };
 

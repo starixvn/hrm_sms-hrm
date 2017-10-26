@@ -39,12 +39,14 @@
             {
                 roleId = (int)RoleSystem.Verifier;
             }
-            else if (command == Command.Approve.ToString()
+
+            if (command == Command.Approve.ToString()
                 || command == Command.Reject.ToString())
             {
                 roleId = (int)RoleSystem.Approver;
             }
-            else if (command == Command.Process.ToString()
+
+            if (command == Command.Process.ToString()
                 || command == Command.Void.ToString())
             {
                 roleId = (int)RoleSystem.HR;

@@ -18,7 +18,7 @@
 
         public override bool IsValid()
         {
-            return Id > 0 && ModifiedDate != null && ModifiedBy > 0;
+            return Id > 0 && ModifiedBy > 0;
         }
     }
 }

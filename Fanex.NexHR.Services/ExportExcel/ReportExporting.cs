@@ -39,7 +39,7 @@
             rowDate.GetCell(5).SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowIndex = _RowStartBodyHrRequestStatistic;
-            var rowCopy = _RowStartBodyHrRequestStatistic;
+            var rowCopy = 0;
             var height = sheet.GetRow(_RowStartBodyHrRequestStatistic).Height;
             var index = 1;
 
@@ -91,7 +91,7 @@
             rowDate.GetCell(4).SetCellValue(toDate.ToString(Constants.DateFormat));
 
             var rowIndex = _RowStartBodyWorkingCalendarSummary;
-            var rowCopy = _RowStartBodyWorkingCalendarSummary;
+            var rowCopy = 0;
             var height = sheet.GetRow(_RowStartBodyWorkingCalendarSummary).Height;
             var index = 1;
             int countItem = 0;

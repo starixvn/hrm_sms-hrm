@@ -80,25 +80,25 @@
                     switch (this.OvertimeStatus.Value)
                     {
                         case (byte)CurrentRequestStatus.Pending:
-                            return Labels.Pending.ToLower();
+                            return Labels.Pending.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.Verified:
-                            return Labels.Verified.ToLower();
+                            return Labels.Verified.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.NotVerified:
-                            return Labels.NotVerified.ToLower();
+                            return Labels.NotVerified.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.Approved:
-                            return Labels.Approved.ToLower();
+                            return Labels.Approved.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.Rejected:
-                            return Labels.Rejected.ToLower();
+                            return Labels.Rejected.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.Processed:
-                            return Labels.Processed.ToLower();
+                            return Labels.Processed.ToLowerInvariant();
 
                         case (byte)CurrentRequestStatus.Void:
-                            return Labels.Void.ToLower();
+                            return Labels.Void.ToLowerInvariant();
 
                         default:
                             return string.Empty;

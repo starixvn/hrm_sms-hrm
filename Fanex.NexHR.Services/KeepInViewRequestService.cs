@@ -36,7 +36,7 @@
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
             {
                 EmpId = criteria.EmpId
             };
@@ -70,7 +70,7 @@
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria()
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
             {
                 EmpId = criteria.EmpId
             };

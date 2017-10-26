@@ -58,7 +58,7 @@
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-            var criteria = new GetRequestCriteria()
+            var criteria = new GetRequestCriteria
             {
                 EmpId = CurrentUser.Id,
                 FromDate = new DateTime(year, 1, 1),
@@ -114,7 +114,7 @@
 
         public ActionResult Update(int id)
         {
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            var getRequestByIdcriteria = new GetRequestByIdCriteria
             {
                 RequestId = id
             };
@@ -125,7 +125,7 @@
             }
             else
             {
-                var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+                var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria
                 {
                     RequestId = id
                 };
@@ -170,12 +170,12 @@
         {
             var model = new ChangeShiftViewModel();
 
-            var getRequestByIdcriteria = new GetRequestByIdCriteria()
+            var getRequestByIdcriteria = new GetRequestByIdCriteria
             {
                 RequestId = id
             };
             RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
-            var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria()
+            var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria
             {
                 RequestId = id
             };
@@ -183,7 +183,7 @@
 
             if (request != null && changeShiftDetail != null)
             {
-                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria() { EmpId = request.Requester.Id };
+                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = request.Requester.Id };
                 Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
                 model = new ChangeShiftViewModel
                 {
@@ -215,7 +215,7 @@
         private List<ChangeShiftDetailViewModel> GetChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var changeShiftDetail = new List<ChangeShiftDetailViewModel>();
-            var criteria = new GetWorkingCalendarByDateRangeCriteria()
+            var criteria = new GetWorkingCalendarByDateRangeCriteria
             {
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -268,9 +268,9 @@
 
             if (request != null)
             {
-                if (request.VerifiedBy != null && !supervisor.Verifiers.Where(t => t.OwnerId == request.VerifiedBy.Id).Any())
+                if (request.VerifiedBy != null && !supervisor.Verifiers.Any(t => t.OwnerId == request.VerifiedBy.Id))
                 {
-                    var verifier = new SupervisorNameModel()
+                    var verifier = new SupervisorNameModel
                     {
                         OwnerId = request.VerifiedBy.Id,
                         NickName = request.VerifiedBy.NickName,
@@ -279,9 +279,9 @@
                     supervisor.Verifiers.Add(verifier);
                 }
 
-                if (request.ApprovedBy != null && !supervisor.Approvers.Where(t => t.OwnerId == request.ApprovedBy.Id).Any())
+                if (request.ApprovedBy != null && !supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
                 {
-                    var approver = new SupervisorNameModel()
+                    var approver = new SupervisorNameModel
                     {
                         OwnerId = request.ApprovedBy.Id,
                         NickName = request.ApprovedBy.NickName,
@@ -297,7 +297,7 @@
         private decimal GetTotalRequestInMonth(int employeeId)
         {
             var currentDate = DateTime.Now.Date;
-            var criteria = new GetNumberRequestInMonthCriteria()
+            var criteria = new GetNumberRequestInMonthCriteria
             {
                 EmployeeId = employeeId,
                 RequestType = (int)RequestType.ChangeShift,
@@ -313,7 +313,7 @@
             IList<ChangeShiftDetailViewModel> changeShiftDetails = null;
             if (model != null)
             {
-                changeShiftDetails = model.Select(item => new ChangeShiftDetailViewModel()
+                changeShiftDetails = model.Select(item => new ChangeShiftDetailViewModel
                 {
                     OnDate = item.OnDate,
                     ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,

@@ -7,8 +7,8 @@
 
     public class MenuController : BaseController
     {
-        private IMenuService menuService;
-        private IFunctionService functionService;
+        private readonly IMenuService menuService;
+        private readonly IFunctionService functionService;
 
         public MenuController()
             : this(null, null)

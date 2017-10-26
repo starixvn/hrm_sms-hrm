@@ -16,8 +16,8 @@
 
         public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath),
-                fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
+            string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath);
+            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
 
@@ -43,7 +43,7 @@
 
             foreach (LeaveSummaryByTeam leaveSummary in leaveSummaries.Where(x => x.Team != null && x.LeaveSummaryInTeam != null && x.LeaveSummaryInTeam.Any()))
             {
-                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Team.Name.ToUpper() });
+                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Team.Name.ToUpperInvariant() });
 
                 foreach (LeaveSummary item in leaveSummary.LeaveSummaryInTeam)
                 {
@@ -56,7 +56,7 @@
         {
             object record = CreateRecordReport(leaveSummary, rowIndex);
 
-            if (rowIndex % 2 == 1)
+            if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);
             }

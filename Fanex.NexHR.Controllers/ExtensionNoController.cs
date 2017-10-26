@@ -38,7 +38,7 @@
 
             model = (from item in lstEntity
                      group item by item.TeamName into g
-                     select new ExtensionNumberViewModel() { Name = g.Key, Extensions = g.ToList() }).ToList();
+                     select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);

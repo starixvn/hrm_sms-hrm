@@ -8,8 +8,8 @@
 
     public class FunctionController : BaseController
     {
-        private IFunctionService functionService;
-        private IRoleService roleService;
+        private readonly IFunctionService functionService;
+        private readonly IRoleService roleService;
 
         public FunctionController()
             : this(null, null)

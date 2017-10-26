@@ -60,7 +60,7 @@
 
         public ActionResult Attendance()
         {
-            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            var getGroupCriteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = CurrentUser.Id
             };
@@ -82,7 +82,7 @@
         [HttpPost]
         public ActionResult AttendanceDetails(EmployeeAttendanceViewModel model)
         {
-            var criteria = new GetEmployeeAttendanceCriteria()
+            var criteria = new GetEmployeeAttendanceCriteria
             {
                 SupervisorId = model.SupervisorId,
                 Fromtime = model.FromDate,
@@ -172,7 +172,7 @@
                 employeeId = this.CurrentUser.Id;
             }
 
-            var criteria = new GetTimeRecordCriteria()
+            var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
                 GroupIds = model.TeamIds,
@@ -185,7 +185,7 @@
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
             ViewBag.HasPermission = hasPermissionToEdit;
 
-            var pagerOption = new PagerOptionModel()
+            var pagerOption = new PagerOptionModel
             {
                 CurrentPage = model.CurrentPage,
                 ItemsPerPage = model.ItemsPerPage,
@@ -242,14 +242,8 @@
             ViewBag.MaxRequest = maxRequest;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
-            if (viewRole == ((int)RoleSystem.HR).ToString())
-            {
-                ViewBag.isLeader = false;
-            }
-            else
-            {
-                ViewBag.isLeader = true;
-            }
+
+            ViewBag.isLeader = viewRole != ((int)RoleSystem.HR).ToString();
 
             if (isExcel)
             {
@@ -461,7 +455,7 @@
                 toDate = DateTime.Now.Date;
             }
 
-            var model = new WorkingCalendarSummaryViewModel()
+            var model = new WorkingCalendarSummaryViewModel
             {
                 Employee = employee,
                 EmployeeId = employeeId,
@@ -487,7 +481,7 @@
             }).ToList();
             if (isExcel)
             {
-                var criteria = new GetEmployeeWorkingCalendarByDateCriteria()
+                var criteria = new GetEmployeeWorkingCalendarByDateCriteria
                 {
                     EmployeeId = model.EmployeeId,
                     FromDate = fromDate.Value,
@@ -538,7 +532,7 @@
                 };
             }
 
-            var criteria = new GetUnpaidLeaveCriteria()
+            var criteria = new GetUnpaidLeaveCriteria
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
@@ -548,7 +542,7 @@
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
 
-            var getGroupCriteria = new GetGroupBySupervisorCriteria()
+            var getGroupCriteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = CurrentUser.Id
             };
@@ -582,7 +576,7 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel()
+            var model = new EmployeeAndSectionSupervisorViewModel
             {
                 Sections = GetAllTeam()
             };
@@ -592,7 +586,7 @@
 
         public ActionResult EmployeeSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
         {
-            var criteria = new GetSupervisorReportCriteria()
+            var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
                 GroupIds = model.SectionIds,
@@ -606,7 +600,7 @@
 
         public ActionResult SectionSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel()
+            var model = new EmployeeAndSectionSupervisorViewModel
             {
                 Sections = GetAllTeam()
             };
@@ -616,7 +610,7 @@
 
         public ActionResult SectionSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
         {
-            var criteria = new GetSectionSupervisorCriteria()
+            var criteria = new GetSectionSupervisorCriteria
             {
                 GroupIds = model.SectionIds,
             };
@@ -628,12 +622,12 @@
         [HttpGet]
         public ActionResult Manpower(int? year)
         {
-            var model = new ManpowerViewModel()
+            var model = new ManpowerViewModel
             {
                 Year = year.HasValue ? year.Value : DateTime.Now.Year
             };
 
-            var criteria = new GetManpowerCriteria()
+            var criteria = new GetManpowerCriteria
             {
                 Year = model.Year
             };
@@ -647,12 +641,12 @@
         [HttpGet]
         public ActionResult ManpowerCategory(int? year)
         {
-            var model = new ManpowerCategoryViewModel()
+            var model = new ManpowerCategoryViewModel
             {
                 Year = year.HasValue ? year.Value : DateTime.Now.Year
             };
 
-            var criteria = new GetManpowerCategoryCriteria()
+            var criteria = new GetManpowerCategoryCriteria
             {
                 Year = model.Year
             };

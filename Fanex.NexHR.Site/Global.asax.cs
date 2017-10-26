@@ -24,7 +24,6 @@ namespace Fanex.NexHR.Site
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            // filters.Add(new System.Web.Http.AuthorizeAttribute());
             filters.Add(new HandleErrorAttribute());
         }
 

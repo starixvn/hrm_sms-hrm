@@ -66,14 +66,9 @@
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 string subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-                if (criteria.TotalDays > 1)
-                {
-                    subject += " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate();
-                }
-                else
-                {
-                    subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                }
+
+                subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
+                                                  : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
 
                 email.Subject = subject;
                 string forDate = criteria.TotalDays == (decimal)0.5
@@ -104,15 +99,9 @@
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 string subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-                if (criteria.TotalDays > 1)
-                {
-                    subject += " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate();
-                }
-                else
-                {
-                    subject += " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                }
 
+                subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
+                                                  : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
                 email.Subject = subject;
                 string forDate = criteria.TotalDays == (decimal)0.5
                     ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)

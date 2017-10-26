@@ -33,12 +33,12 @@
         {
             get
             {
-                return this._controller.ToLower();
+                return _controller.ToLowerInvariant();
             }
 
             set
             {
-                this._controller = value ?? string.Empty;
+                _controller = value ?? string.Empty;
             }
         }
 
@@ -46,12 +46,12 @@
         {
             get
             {
-                return this._action.ToLower();
+                return _action.ToLowerInvariant();
             }
 
             set
             {
-                this._action = value ?? string.Empty;
+                _action = value ?? string.Empty;
             }
         }
 
@@ -59,12 +59,12 @@
         {
             get
             {
-                return this._title;
+                return _title;
             }
 
             set
             {
-                this._title = value ?? string.Empty;
+                _title = value ?? string.Empty;
             }
         }
 
