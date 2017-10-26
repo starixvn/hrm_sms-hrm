@@ -5,8 +5,5 @@
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class OutputAttribute : Attribute
     {
-        public OutputAttribute()
-        {
-        }
     }
 }

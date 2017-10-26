@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
@@ -19,8 +20,8 @@
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
-                        new SelectListItem() { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
+                        new SelectListItem { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
+                        new SelectListItem { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
                     };
             }
         }
@@ -31,8 +32,8 @@
             {
                 return new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
-                        new SelectListItem() { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
+                        new SelectListItem { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
+                        new SelectListItem { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
                     };
             }
         }
@@ -43,9 +44,9 @@
             {
                 return new List<SelectListItem>
                 {
-                    new SelectListItem() { Text = Labels.StandardLeave, Value = ((short)LocalLeave.StandardLeave).ToString() },
-                    new SelectListItem() { Text = Labels.AccumulationLeave, Value = ((short)LocalLeave.AccumulationLeave).ToString() },
-                    new SelectListItem() { Text = Labels.KeepInViewLeave, Value = ((short)LocalLeave.KIVLeave).ToString() }
+                    new SelectListItem { Text = Labels.StandardLeave, Value = ((short)LocalLeave.StandardLeave).ToString() },
+                    new SelectListItem { Text = Labels.AccumulationLeave, Value = ((short)LocalLeave.AccumulationLeave).ToString() },
+                    new SelectListItem { Text = Labels.KeepInViewLeave, Value = ((short)LocalLeave.KIVLeave).ToString() }
                 };
             }
         }
@@ -160,7 +161,7 @@
                     ca[i] = ci;
                 }
 
-                return new string(ca).ToLower();
+                return new string(ca).ToLowerInvariant();
             }
         }
 
@@ -192,7 +193,7 @@
             var index = 60;
             while (index > 0)
             {
-                list.Add(new SelectListItem()
+                list.Add(new SelectListItem
                 {
                     Text = string.Format(Labels.MinuteFormat, index),
                     Value = index.ToString()
@@ -212,7 +213,7 @@
             while (hour < 24)
             {
                 var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
-                list.Add(new SelectListItem()
+                list.Add(new SelectListItem
                 {
                     Text = value,
                     Value = value
@@ -237,7 +238,7 @@
             while (hour < 24)
             {
                 var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
-                list.Add(new SelectListItem()
+                list.Add(new SelectListItem
                 {
                     Text = value,
                     Value = value,
@@ -263,7 +264,7 @@
             while (hour < 1)
             {
                 var value = minute.ToString().PadLeft(2, '0');
-                list.Add(new SelectListItem()
+                list.Add(new SelectListItem
                 {
                     Text = value,
                     Value = value
@@ -285,14 +286,15 @@
                 return string.Empty;
             }
 
-            string result = string.Empty;
+            StringBuilder result = new StringBuilder();
 
             foreach (var item in array)
             {
-                result += item + ",";
+                result.Append(item);
+                result.Append(", ");
             }
 
-            return result.Substring(0, result.Length - 1);
+            return result.ToString(0, result.Length - 1);
         }
 
         public static bool IsValidEmail(string email)
@@ -308,8 +310,8 @@
 
         public static string TotalHoursToTime(float value)
         {
-            int hour = (int)value,
-                minute = (int)Math.Round((value - hour) * 60);
+            int hour = (int)value;
+            int minute = (int)Math.Round((value - hour) * 60);
 
             return hour > 0
                 ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
@@ -323,8 +325,8 @@
                 return string.Empty;
             }
 
-            int hour = value / 60,
-                minute = value - (hour * 60);
+            int hour = value / 60;
+            int minute = value - (hour * 60);
 
             return hour > 0
                 ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
@@ -344,26 +346,32 @@
         public static string GetCurrentStatusName(int statusId)
         {
             var statusName = Labels.NA;
-            switch (statusId) 
-            { 
+            switch (statusId)
+            {
                 case 1:
                     statusName = Labels.Pending;
                     break;
+
                 case 2:
                     statusName = Labels.Verified;
                     break;
+
                 case 3:
                     statusName = Labels.NotVerified;
                     break;
+
                 case 4:
                     statusName = Labels.Approved;
                     break;
+
                 case 5:
                     statusName = Labels.Rejected;
                     break;
+
                 case 6:
                     statusName = Labels.Processed;
                     break;
+
                 case 7:
                     statusName = Labels.Void;
                     break;

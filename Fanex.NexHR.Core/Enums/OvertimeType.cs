@@ -4,7 +4,7 @@
     using Fanex.Common.Extensions;
 
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
-    public enum OvertimeType : int
+    public enum OvertimeType
     {
         [StringValue("Normal")]
         Normal = 1,

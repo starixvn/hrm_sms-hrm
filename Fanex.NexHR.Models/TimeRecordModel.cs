@@ -13,22 +13,24 @@
 
         public byte? InOutType { get; set; }
 
-        public string GetInOutName 
-        { 
-            get 
+        public string GetInOutName
+        {
+            get
             {
                 var typeName = Labels.None;
+
                 if (InOutType == 0)
                 {
                     typeName = Labels.In;
                 }
-                else if (InOutType == 1)
+
+                if (InOutType == 1)
                 {
                     typeName = Labels.Out;
                 }
 
                 return typeName;
-            } 
+            }
         }
     }
 }

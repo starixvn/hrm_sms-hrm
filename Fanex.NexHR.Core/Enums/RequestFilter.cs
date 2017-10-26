@@ -2,7 +2,7 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum RequestFilter : int
+    public enum RequestFilter
     {
         [StringValue("All")]
         All = 0,

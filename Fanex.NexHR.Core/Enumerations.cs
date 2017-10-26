@@ -11,14 +11,13 @@
         {
             FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
             StringValueAttribute[] attributes = (StringValueAttribute[])fi.GetCustomAttributes(typeof(StringValueAttribute), false);
+
             if (attributes.Length > 0)
             {
                 return attributes[0].Value;
             }
-            else
-            {
-                return enumType.ToString();
-            }
+
+            return enumType.ToString();
         }
     }
 }

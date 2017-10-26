@@ -2,7 +2,7 @@
 {
     using System.ComponentModel;
 
-    public enum Permision : int
+    public enum Permision
     {
         [Description("None")]
         None = 0,

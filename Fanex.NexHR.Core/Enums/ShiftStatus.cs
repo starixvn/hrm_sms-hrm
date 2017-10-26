@@ -2,7 +2,7 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum ShiftStatus : int
+    public enum ShiftStatus
     {
         [StringValue("All")]
         All = 0,

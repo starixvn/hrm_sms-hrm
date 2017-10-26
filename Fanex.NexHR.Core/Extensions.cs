@@ -37,7 +37,7 @@
 
                     // Create and populate a radio button using the existing html helpers
                     var label = htmlHelper.Label(id, HttpUtility.HtmlEncode(item.Text));
-                    var radio = htmlHelper.RadioButtonFor(expression, item.Value, new { id = id }).ToHtmlString();
+                    var radio = htmlHelper.RadioButtonFor(expression, item.Value, new { id }).ToHtmlString();
 
                     // Create the html string that will be returned to the client
                     // e.g. <input data-val="true" data-val-required="You must select an option" id="TestRadio_1" name="TestRadio" type="radio" value="1" />
@@ -72,7 +72,7 @@
                 @class = "datepicker",
                 mindate = minDate != null && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
                 maxdate = maxDate != null && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
-                disabledDate = disabledDate
+                disabledDate
             };
 
             var dateValue = date.HasValue ? date.Value.ToString(formatDate) : string.Empty;
@@ -166,10 +166,8 @@
             {
                 return page.RenderSection(sectionName);
             }
-            else
-            {
-                return defaultContent(_O);
-            }
+
+            return defaultContent(_O);
         }
 
         public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name)
@@ -430,7 +428,7 @@
 
         public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)
         {
-            return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day) ? true : false;
+            return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]

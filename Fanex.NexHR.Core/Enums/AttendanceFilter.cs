@@ -2,7 +2,7 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum AttendanceFilter : int
+    public enum AttendanceFilter
     {
         [StringValue("All")]
         All = 0,
