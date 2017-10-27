@@ -13,11 +13,11 @@
     {
         #region Attributes
 
-        private string _fileName;
-        private string _sheetName;
-        private ISheet _templateSheet;
-        private ISheet _sheet;
-        private int _rowId = 0;
+        private readonly string _fileName;
+        private readonly string _sheetName;
+        private readonly ISheet _templateSheet;
+        private readonly ISheet _sheet;
+        private int _rowId;
 
         #endregion Attributes
 

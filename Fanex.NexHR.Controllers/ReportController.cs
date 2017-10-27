@@ -136,18 +136,12 @@
 
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
-            if (!fromDate.HasValue || !toDate.HasValue)
-            {
-                fromDate = DateTime.Now.Date;
-                toDate = DateTime.Now.Date;
-            }
-
             IList<Team> teams = GetAllTeam();
 
             var model = new TimeRecordViewModel
             {
-                FromDate = fromDate.Value,
-                ToDate = toDate.Value,
+                FromDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : fromDate.Value,
+                ToDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : toDate.Value,
                 Teams = teams,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
@@ -287,7 +281,7 @@
 
             var model = new TotalWorkingHoursViewModel
             {
-                TeamIds = teamIds == null ? string.Empty : teamIds,
+                TeamIds = teamIds ?? string.Empty,
                 Employee = employee,
                 FromDate = fromDate.HasValue ? fromDate.Value : new DateTime(year, month, 1),
                 ToDate = toDate.HasValue ? toDate.Value : new DateTime(year, month, DateTime.DaysInMonth(year, month)),
@@ -443,18 +437,15 @@
              byte? isLocal = null,
              bool isExcel = false)
         {
-            if (!fromDate.HasValue && !toDate.HasValue)
-            {
-                fromDate = DateTime.Now.Date;
-                toDate = DateTime.Now.Date;
-            }
+            DateTime nowDate = DateTime.Now.Date;
+            bool isInvalidDate = (!fromDate.HasValue && !toDate.HasValue);
 
             var model = new WorkingCalendarSummaryViewModel
             {
                 Employee = employee,
                 EmployeeId = employeeId,
-                FromDate = fromDate.Value.ToString(Constants.DateFormat),
-                ToDate = toDate.Value.ToString(Constants.DateFormat),
+                FromDate = isInvalidDate ? nowDate.ToString(Constants.DateFormat) : fromDate.Value.ToString(Constants.DateFormat),
+                ToDate = isInvalidDate ? nowDate.ToString(Constants.DateFormat) : toDate.Value.ToString(Constants.DateFormat),
                 IsLocal = isLocal,
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds
@@ -478,8 +469,8 @@
                 var criteria = new GetEmployeeWorkingCalendarByDateCriteria
                 {
                     EmployeeId = model.EmployeeId,
-                    FromDate = fromDate.Value,
-                    ToDate = toDate.Value,
+                    FromDate = isInvalidDate ? nowDate : fromDate.Value,
+                    ToDate = isInvalidDate ? nowDate : toDate.Value,
                     GroupIds = model.TeamIds,
                     IsLocal = model.IsLocal,
                     JobTitleId = model.JobTitleId

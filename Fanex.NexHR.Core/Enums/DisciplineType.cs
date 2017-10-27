@@ -4,7 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
 
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Reviewed. Suppression is OK here.")]
-    public enum DisciplineType : int
+    public enum DisciplineType
     {
         [Description("Change Shift")]
         ChangeShift = 1,

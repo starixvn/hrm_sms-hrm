@@ -5,8 +5,8 @@
 
     public class BaseService
     {
-        private IBaseRepository _repository;
-        private IDynamicRepository _dynamicRepository;
+        private readonly IBaseRepository _repository;
+        private readonly IDynamicRepository _dynamicRepository;
 
         public BaseService(IDynamicRepository dynamicRepository = null, IBaseRepository repository = null)
         {

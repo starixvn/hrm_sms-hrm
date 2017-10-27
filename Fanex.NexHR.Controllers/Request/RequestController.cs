@@ -214,6 +214,9 @@
                     case (int)RequestType.Leave:
                         model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                         break;
+
+                    default:
+                        return PartialView("_ProcessRequest", model);
                 }
             }
 
@@ -233,7 +236,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        protected string GetStatus(int statusId)
+        protected static string GetStatus(int statusId)
         {
             string statusIds;
             switch (statusId)
