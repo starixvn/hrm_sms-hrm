@@ -159,26 +159,22 @@
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
-            if (criteria.IsValid())
-            {
-                IList<OvertimeDaily> overtimeRequest = GetData<OvertimeDaily>(criteria).ToList();
-                return overtimeRequest;
-            }
+            IList<OvertimeDaily> overtimeRequest;
 
-            return null;
+            overtimeRequest = (criteria.IsValid()) ? GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
+
+            return overtimeRequest;
         }
 
         public IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
-            if (criteria.IsValid())
-            {
-                IList<OvertimeDaily> overtimeRequest = GetData<OvertimeDaily>(criteria).ToList();
-                return overtimeRequest;
-            }
+            IList<OvertimeDaily> overtimeRequest;
 
-            return null;
+            overtimeRequest = (criteria.IsValid()) ? GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
+
+            return overtimeRequest;
         }
 
         public IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria)
@@ -229,13 +225,10 @@
         {
             Check.Argument.IsNotNull(criteria, "criteria");
 
-            if (criteria.IsValid())
-            {
-                IList<OvertimeDaily> reportDetails = GetData<OvertimeDaily>(criteria).ToList();
-                return reportDetails;
-            }
+            IList<OvertimeDaily> reportDetails;
+            reportDetails = (criteria.IsValid()) ? GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
 
-            return null;
+            return reportDetails;
         }
 
         public bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria)
@@ -271,19 +264,15 @@
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
             {
-                if (!overtime.OffHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours))
-                {
-                    isInvalid = true;
-                }
+                isInvalid |= (!overtime.OffHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours));
             }
-            else if (overtime.IsOffDay)
+
+            if (overtime.IsOffDay)
             {
-                if (!overtime.NormalHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < overtime.OffHours)
-                {
-                    isInvalid = true;
-                }
+                isInvalid |= (!overtime.NormalHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < overtime.OffHours);
             }
-            else if (overtime.IsHoliday)
+
+            if (overtime.IsHoliday)
             {
                 isInvalid |= (!overtime.NormalHours.Equals(0) || !overtime.OffHours.Equals(0) || overtime.TotalWorkHours < overtime.PublicHours);
             }

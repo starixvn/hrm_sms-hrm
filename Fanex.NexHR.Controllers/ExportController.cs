@@ -93,7 +93,7 @@
 
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
         {
-            var criteria = new GetEmployeeAttendanceCriteria()
+            var criteria = new GetEmployeeAttendanceCriteria
             {
                 SupervisorId = model.SupervisorId,
                 Fromtime = model.FromDate,
@@ -140,7 +140,7 @@
 
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
-            var criteria = new GetUnpaidLeaveCriteria()
+            var criteria = new GetUnpaidLeaveCriteria
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,

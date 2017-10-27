@@ -31,12 +31,12 @@
         [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
-            year = year.HasValue ? year.Value : DateTime.Now.Year;
+            int yearToCheck = year.HasValue ? year.Value : DateTime.Now.Year;
 
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Host);
-            ViewBag.Year = year.Value;
+            ViewBag.Year = yearToCheck;
 
-            IList<Holiday> holidays = holidayService.GetByYear(year.Value);
+            IList<Holiday> holidays = holidayService.GetByYear(yearToCheck);
 
             return View(holidays);
         }

@@ -552,18 +552,8 @@
 
         public ActionResult OvertimeReport(int? month, int? year)
         {
-            if (!month.HasValue)
-            {
-                month = DateTime.Now.Month;
-            }
-
-            if (!year.HasValue)
-            {
-                year = DateTime.Now.Year;
-            }
-
-            ViewBag.Month = month.Value;
-            ViewBag.Year = year.Value;
+            ViewBag.Month = (month.HasValue) ? month.Value : DateTime.Now.Month;
+            ViewBag.Year = (year.HasValue) ? year.Value : DateTime.Now.Year;
 
             return View();
         }

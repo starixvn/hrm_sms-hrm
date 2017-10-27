@@ -40,14 +40,7 @@
 
                     pathAttach = pathAttach.Substring(2);
 
-                    if (string.IsNullOrEmpty(pathAttachFiles))
-                    {
-                        pathAttachFiles = pathAttach;
-                    }
-                    else
-                    {
-                        pathAttachFiles += ";/" + pathAttach;
-                    }
+                    pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
 
                     file.SaveAs(path);
                 }

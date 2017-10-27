@@ -23,7 +23,7 @@
         private readonly ICommandService commandService;
 
         public MemoController(
-            IMemoService memoService = null,
+            IMemoService memoService,
             ILookupDataService lookupDataService = null,
             IEmailService emailService = null,
             ICommandService commandService = null)

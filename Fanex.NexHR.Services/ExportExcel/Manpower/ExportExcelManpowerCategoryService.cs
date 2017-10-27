@@ -52,6 +52,7 @@
         private void FillRowReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, rowIndex);
+
             if (rowIndex % 2 != 0)
             {
                 writer.WriteRow(RowStartBody, record);

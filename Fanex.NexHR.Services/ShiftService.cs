@@ -36,7 +36,6 @@
         {
             IList<Shift> shifts = GetAll(isShowOff: isShowOff);
             IList<Shift> queriedShifts = null;
-            query = query.ToUpperInvariant();
 
             if (shifts != null && shifts.Any())
             {

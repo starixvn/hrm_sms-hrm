@@ -295,24 +295,27 @@
             ////  3: wrong password
             ////  0: success
 
-            if (employee.IsDeleted)
+            if (employee != null)
             {
-                return 1;
-            }
+                if (employee.IsDeleted)
+                {
+                    return 1;
+                }
 
-            if (!employee.Enabled)
-            {
-                return 2;
-            }
+                if (!employee.Enabled)
+                {
+                    return 2;
+                }
 
-            if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
-            {
-                return 0;
-            }
+                if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
+                {
+                    return 0;
+                }
 
-            if (string.IsNullOrWhiteSpace(employee.Password) || (!ConfigSettings.AllowAdminLogin) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
-            {
-                return 3;
+                if (string.IsNullOrWhiteSpace(employee.Password) || (!ConfigSettings.AllowAdminLogin) || (ConfigSettings.AllowAdminLogin && password != Constants.PassWordAdmin))
+                {
+                    return 3;
+                }
             }
 
             return -1;

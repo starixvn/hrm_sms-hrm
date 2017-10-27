@@ -34,11 +34,10 @@
         public ActionResult Index()
         {
             IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
-            var model = new List<ExtensionNumberViewModel>();
 
-            model = (from item in lstEntity
-                     group item by item.TeamName into g
-                     select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
+            var model = (from item in lstEntity
+                         group item by item.TeamName into g
+                         select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);

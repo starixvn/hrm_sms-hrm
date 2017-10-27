@@ -490,13 +490,14 @@
             var employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
             var processUser = employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
             var action = GetActionProcessRequest(request, command);
-            command = GetPassiveNameOfCommand(command);
+
+            string commandGetPassiveName = GetPassiveNameOfCommand(command);
 
             EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                SendToRelatedPeople(command, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
+                SendToRelatedPeople(commandGetPassiveName, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
             }
         }
 
@@ -869,22 +870,21 @@
 
         private string AddMailToList(string mailList, string mail)
         {
-            if (!string.IsNullOrWhiteSpace(mail))
+            string fullMailList = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(mail))
             {
-                if (!string.IsNullOrWhiteSpace(mailList))
-                {
-                    if (!mailList.Contains(mail))
-                    {
-                        mailList += ";" + mail;
-                    }
-                }
-                else
-                {
-                    mailList = mail;
-                }
+                return mailList;
             }
 
-            return mailList;
+            if (string.IsNullOrWhiteSpace(mailList))
+            {
+                return mail;
+            }
+
+            fullMailList = mailList + ";" + mail;
+
+            return fullMailList;
         }
 
         private EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)

@@ -217,16 +217,13 @@
         [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
-            if (!month.HasValue)
-            {
-                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
+            DateTime monthDefault = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
             var criteria = new GetMemberOvertimeByLeaderCriteria
             {
                 SupervisorId = CurrentUser.Id,
-                FromDate = month.Value,
-                ToDate = month.Value,
+                FromDate = (month.HasValue) ? month.Value : monthDefault,
+                ToDate = (month.HasValue) ? month.Value : monthDefault,
                 EmployeeId = employeeId,
                 GroupIds = teamIds,
                 Status = statusId
@@ -244,16 +241,13 @@
         [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
-            if (!month.HasValue)
-            {
-                month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            }
+            DateTime monthDefault = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
             var criteria = new GetMemberOvertimeCriteria
             {
                 SupervisorId = CurrentUser.Id,
-                FromDate = month.Value,
-                ToDate = month.Value,
+                FromDate = (month.HasValue) ? month.Value : monthDefault,
+                ToDate = (month.HasValue) ? month.Value : monthDefault,
                 EmployeeId = employeeId,
                 GroupIds = teamIds,
                 Status = statusId

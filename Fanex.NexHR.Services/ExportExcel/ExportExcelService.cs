@@ -510,14 +510,8 @@
         {
             var messageDetail = string.Empty;
 
-            if (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave)
-            {
-                messageDetail = GetMessageForGeneralLeave(request);
-            }
-            else
-            {
-                messageDetail = GetMessageForOtherLeave(request);
-            }
+            messageDetail = (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ? GetMessageForGeneralLeave(request) :
+                                                                                     GetMessageForOtherLeave(request);
 
             return messageDetail;
         }

@@ -215,7 +215,7 @@
                     splitOn: "EmpId, GroupId",
                     parameterValues: criteria.GetSpParams()).ToList();
 
-                PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLower().Equals("totalitem"));
+                PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLowerInvariant().Equals("totalitem"));
 
                 if (totalitem != null)
                 {

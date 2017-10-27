@@ -116,7 +116,8 @@
 
             rowIndex++;
 
-            ICellStyle bodyStyle, bodyStyle1 = workbook.CreateCellStyle();
+            ICellStyle bodyStyle;
+            ICellStyle bodyStyle1 = workbook.CreateCellStyle();
 
             bodyStyle1.Alignment = HorizontalAlignment.Center;
             bodyStyle1.VerticalAlignment = VerticalAlignment.Center;
@@ -140,14 +141,7 @@
 
             foreach (var totalWorkingHour in totalWorkingHours)
             {
-                if (rowIndex % 2 == 0)
-                {
-                    bodyStyle = bodyStyle2;
-                }
-                else
-                {
-                    bodyStyle = bodyStyle1;
-                }
+                bodyStyle = (rowIndex % 2 == 0) ? bodyStyle2 : bodyStyle1;
 
                 row = sheet.CreateRow(rowIndex);
                 cellBody = row.CreateCell(0);
@@ -160,14 +154,8 @@
 
                 bodyStyle3.Alignment = HorizontalAlignment.Left;
                 cellBody = row.CreateCell(2);
-                if (rowIndex % 2 == 0)
-                {
-                    cellBody.CellStyle = bodyStyle4;
-                }
-                else
-                {
-                    cellBody.CellStyle = bodyStyle3;
-                }
+
+                cellBody.CellStyle = (rowIndex % 2 == 0) ? bodyStyle4 : bodyStyle3;
 
                 cellBody.SetCellValue(totalWorkingHour.Employee.FullName);
 

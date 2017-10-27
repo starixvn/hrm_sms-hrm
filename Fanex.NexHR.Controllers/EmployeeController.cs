@@ -376,14 +376,7 @@
         {
             string avatarName;
 
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                avatarName = CurrentUser.Code + ".jpg";
-            }
-            else
-            {
-                avatarName = id + ".jpg";
-            }
+            avatarName = string.IsNullOrEmpty(id) ? CurrentUser.Code + ".jpg" : id + ".jpg";
 
             if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
             {
