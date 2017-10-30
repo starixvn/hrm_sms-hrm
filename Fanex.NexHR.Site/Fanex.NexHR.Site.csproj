@@ -42,7 +42,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>FanexRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Fanex.NexHR.Site.Debug.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +51,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>Fanex.NexHR.Site.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Combres, Version=2.2.2.18, Culture=neutral, PublicKeyToken=1ca6b37997dd7536, processorArchitecture=MSIL">
@@ -1285,6 +1286,8 @@
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
     <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
+    <Content Include="Fanex.NexHR.Site.Debug.ruleset" />
+    <Content Include="Fanex.NexHR.Site.ruleset" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
@@ -1347,6 +1350,11 @@
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\UI\_NewHeader.cshtml" />
     <Content Include="Views\UI\_NewNavBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
