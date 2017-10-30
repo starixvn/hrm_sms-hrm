@@ -66,14 +66,9 @@
         {
             object record = CreateRecord(discipline, ref rowIndex);
 
-            if (discipline.IsWeekend)
-            {
-                writer.WriteRow(WeekendRow, record);
-            }
-            else
-            {
-                writer.WriteRow(BodyRow, record);
-            }
+            var rowType = (discipline.IsWeekend) ? WeekendRow : BodyRow;
+
+            writer.WriteRow(rowType, record);
         }
 
         private object CreateRecord(DisciplineDetailModel discipline, ref int rowIndex)

@@ -72,14 +72,10 @@
         private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
-            if (rowIndex % 2 != 0)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
+
+            var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
+
+            writer.WriteRow(writeRowNumber, record);
 
             rowIndex++;
         }
@@ -126,14 +122,9 @@
         private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
-            if (rowIndex % 2 != 0)
-            {
-                writer.WriteRow(3, record);
-            }
-            else
-            {
-                writer.WriteRow(4, record);
-            }
+            var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
+
+            writer.WriteRow(writeRowNumber, record);
 
             rowIndex++;
         }

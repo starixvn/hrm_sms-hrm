@@ -456,7 +456,8 @@
                 for (int i = 0; i < numberDays; i++)
                 {
                     workingDate = fromDate.AddDays(i);
-                    employeeWorkingCalendars = workingCalendars.Where(t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
+                    employeeWorkingCalendars = workingCalendars.Where(
+                        t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
 
                     if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
                     {
@@ -516,6 +517,10 @@
 
                 case (int)DayOfWeek.Sunday:
                     scheduleModel.SundaySchedule = workingCalendar;
+                    break;
+
+                default:
+                    scheduleModel = null;
                     break;
             }
 

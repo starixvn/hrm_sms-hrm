@@ -159,24 +159,20 @@
 
         public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
         {
+            if ((toDate - fromDate).Days < 0)
+            {
+                return fromDate.ToDateMonthYearFormatedDate();
+            }
+
+            if (fromDate.Year != toDate.Year)
+            {
+                return fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
+            }
+
             string result = string.Empty;
-            if ((toDate - fromDate).Days > 0)
-            {
-                if (fromDate.Year == toDate.Year)
-                {
-                    result = (fromDate.Month != toDate.Month) ?
-                        fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
-                        fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
-                }
-                else
-                {
-                    result = fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
-                }
-            }
-            else
-            {
-                result = fromDate.ToDateMonthYearFormatedDate();
-            }
+            result = (fromDate.Month != toDate.Month) ?
+                fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
+                fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
 
             return result;
         }
@@ -279,7 +275,6 @@
             }
 
             if (relatedPeople.EmailSetting.AllowSendVerifier
-                && relatedPeople.Verifier != null
                 && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
                 && (string.IsNullOrWhiteSpace(emailModel.SendTo)
                 || !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase)))
@@ -385,19 +380,17 @@
 
         protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
-            var forDate = string.Empty;
-
             if (totalDays > 1)
             {
-                forDate = string.Format(_MailContentLeave, fromDate.ToDateMonthYearFormatedDate(), toDate.ToDateMonthYearFormatedDate(), totalDays);
-            }
-            else
-            {
-                forDate = (totalDays == 1) ? string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate())
-                                           : string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
+                return string.Format(_MailContentLeave, fromDate.ToDateMonthYearFormatedDate(), toDate.ToDateMonthYearFormatedDate(), totalDays);
             }
 
-            return forDate;
+            if (totalDays == 1)
+            {
+                return string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate());
+            }
+
+            return string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
         }
 
         private static string GetMessageForLeave(RequestEntity request)
@@ -614,26 +607,29 @@
                 switch (request.RequestType.Id)
                 {
                     case (short)RequestType.Leave:
-                        this.SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                        SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.ChangeShift:
-                        this.SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                        SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.LateIn:
                     case (short)RequestType.EarlyOut:
-                        this.SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                        SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.CheckIn:
                     case (short)RequestType.CheckOut:
-                        this.SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                        SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
 
                     case (short)RequestType.KeepInView:
-                        this.SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                        SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                         break;
+
+                    default:
+                        return;
                 }
             }
         }
@@ -911,7 +907,7 @@
 
         private string GetEmailTemplatePath(short requestType)
         {
-            var path = string.Empty;
+            string path;
             switch (requestType)
             {
                 case (short)RequestType.CheckIn:
@@ -934,6 +930,10 @@
 
                 case (short)RequestType.KeepInView:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);
+                    break;
+
+                default:
+                    path = string.Empty;
                     break;
             }
 
@@ -986,6 +986,9 @@
                     var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
                     KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, sendToNickName, mailTo, mailCc, templateEmailPath);
                     break;
+
+                default:
+                    return;
             }
         }
 

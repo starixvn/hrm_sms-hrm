@@ -468,7 +468,7 @@
 
         private string GetRequestDetail(RequestEntity request)
         {
-            var detail = string.Empty;
+            string detail = string.Empty;
             var date = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
 
             switch (request.RequestType.Id)
@@ -500,6 +500,10 @@
 
                 case (int)RequestType.KeepInView:
                     detail = string.Format(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    break;
+
+                default:
+                    detail = string.Empty;
                     break;
             }
 

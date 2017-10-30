@@ -129,7 +129,7 @@
         [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private string GetRequestDetail(EmployeeAttendanceRequest request)
         {
-            var detail = string.Empty;
+            string detail = string.Empty;
             var date = string.Empty;
 
             if (request.FromDate.HasValue && request.ToDate.HasValue)
@@ -183,6 +183,10 @@
 
                 case (int)RequestType.KeepInView:
                     detail = string.Format(MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
+                    break;
+
+                default:
+                    detail = string.Empty;
                     break;
             }
 
