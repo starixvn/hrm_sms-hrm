@@ -176,7 +176,7 @@
         {
             get
             {
-                return Roles != null ? Roles.Select(i => i.RoleId.ToString()).ToArray() : null;
+                return (string[])(Roles != null ? Roles.Select(i => i.RoleId.ToString()) : null);
             }
 
             set

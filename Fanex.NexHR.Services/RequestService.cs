@@ -152,6 +152,10 @@
                     }
 
                     break;
+
+                default:
+                    msg.AppendFormat(string.Empty);
+                    break;
             }
 
             return msg.ToString();

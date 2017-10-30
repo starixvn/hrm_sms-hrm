@@ -29,6 +29,7 @@
 
                 // Get source row that will be copied.
                 var sourceRow = sourceSheet.GetRow(sourceRowIndex);
+
                 if (sourceRow != null)
                 {
                     // Get the row at a specific index of the current sheet.
@@ -168,12 +169,14 @@
                                 {
                                     sheet.RemoveMergedRegion(i);
                                 }
-                                else if (mergedRegion.FirstColumn > columnIndex)
+
+                                if (mergedRegion.FirstColumn > columnIndex)
                                 {
                                     mergedRegion.FirstColumn = mergedRegion.FirstColumn - 1;
                                     mergedRegion.LastColumn = mergedRegion.LastColumn - 1;
                                 }
-                                else if (columnIndex <= mergedRegion.LastColumn)
+
+                                if (columnIndex <= mergedRegion.LastColumn)
                                 {
                                     mergedRegion.LastColumn = mergedRegion.LastColumn - 1;
                                 }
@@ -304,6 +307,10 @@
 
                     case CellType.Formula:
                         newCell.CellFormula = sourceCell.CellFormula;
+                        break;
+
+                    default:
+                        newCell.SetCellValue(0);
                         break;
                 }
             }

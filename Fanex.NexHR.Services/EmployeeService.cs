@@ -167,25 +167,26 @@
             IList<DateTime> availableDates = GetOffDateAndHolidayDate(criteria);
             IList<DateTime> unavailableDates = new List<DateTime>();
 
-            if (availableDates != null)
+            if (availableDates == null)
             {
-                for (DateTime dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
+                return unavailableDates;
+            }
+
+            for (DateTime dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
+            {
+                bool isIncludedToUnvailableDates = true;
+
+                foreach (DateTime availableDate in availableDates)
                 {
-                    bool isIncludedToUnvailableDates = true;
-
-                    foreach (DateTime availableDate in availableDates)
+                    if (dateInRange.IsSameDateWith(availableDate) && isIncludedToUnvailableDates)
                     {
-                        if (dateInRange.IsSameDateWith(availableDate))
-                        {
-                            isIncludedToUnvailableDates = false;
-                            break;
-                        }
+                        isIncludedToUnvailableDates = false;
                     }
+                }
 
-                    if (isIncludedToUnvailableDates)
-                    {
-                        unavailableDates.Add(dateInRange);
-                    }
+                if (isIncludedToUnvailableDates)
+                {
+                    unavailableDates.Add(dateInRange);
                 }
             }
 

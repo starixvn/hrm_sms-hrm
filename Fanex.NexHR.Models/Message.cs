@@ -53,6 +53,10 @@
                     case (int)MessageCategory.Violation:
                         category = MessageCategory.Violation.ToString();
                         break;
+
+                    default:
+                        category = string.Empty;
+                        break;
                 }
 
                 return category;

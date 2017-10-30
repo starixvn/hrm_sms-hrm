@@ -295,8 +295,10 @@
         }
 
         [HttpPost]
-        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
+        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel workingHoursModel)
         {
+            TotalWorkingHoursViewModel model = workingHoursModel;
+
             if (model == null)
             {
                 var year = DateTime.Now.Year;
@@ -506,8 +508,9 @@
         }
 
         [HttpPost]
-        public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
+        public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel leavingSummaryModel)
         {
+            var model = leavingSummaryModel;
             if (model == null)
             {
                 model = new LeaveSummaryViewModel

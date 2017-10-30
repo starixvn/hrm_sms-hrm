@@ -35,7 +35,6 @@
         private const string _MsgCheckInOut = "{0} {1} ({2})";
         private const string _MsgLateIn = "+{0}' {1} ({2})";
         private const string _MsgEarlyOut = "-{0}' {1} ({2})";
-        private const string _MsgOvertimeHours = "{0} ({1}-{2}) {3}' - {4}";
         private const string _MsgOvertimeShift = "{0} ({1}) {2}";
         private const string _MsgKeepInView = "{0} ({1})";
 
@@ -495,7 +494,7 @@
                     break;
 
                 case (int)RequestType.Overtime:
-                    GetMessageForOvertime(request);
+                    detail = GetMessageForOvertime(request);
                     break;
 
                 case (int)RequestType.KeepInView:
@@ -573,24 +572,14 @@
         private string GetMessageForOvertime(RequestEntity request)
         {
             var messageDetail = string.Empty;
-            if (request.IsOvertimeHours)
-            {
-                messageDetail = string.Format(
-                    _MsgOvertimeHours,
+
+            var overtimeMessage = (request.IsOvertimeHours) ? string.Format(request.FromDate.ToShortTime(), request.ToDate.ToShortTime(), request.TotalDays.ToString("0.#"))
+                                                            : (request.FromShift != null ? request.FromShift.Name : string.Empty);
+
+            messageDetail = string.Format(_MsgOvertimeShift,
                     request.FromDate.ToDateMonthYearFormatedDate(),
-                    request.FromDate.ToShortTime(),
-                    request.ToDate.ToShortTime(),
-                    request.TotalDays.ToString("0.#"),
+                    overtimeMessage,
                     new OvertimeTypeModel { Id = request.OvertimeType }.Name);
-            }
-            else
-            {
-                messageDetail = string.Format(
-                    _MsgOvertimeShift,
-                    request.FromDate.ToDateMonthYearFormatedDate(),
-                    request.FromShift != null ? request.FromShift.Name : string.Empty,
-                    new OvertimeTypeModel { Id = request.OvertimeType }.Name);
-            }
 
             return messageDetail;
         }

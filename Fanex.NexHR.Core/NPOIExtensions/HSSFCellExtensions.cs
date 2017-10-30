@@ -66,7 +66,6 @@
         {
             if (cell != null)
             {
-                value = value ?? 0;
                 cell.SetCellValue((double)value);
             }
         }
@@ -81,7 +80,6 @@
 
         public static void SetCellValue(this ICell cell, decimal? value)
         {
-            value = value ?? 0;
             cell.SetCellValue((decimal)value);
         }
 
@@ -97,7 +95,6 @@
         {
             if (cell != null)
             {
-                value = value ?? 0;
                 cell.SetCellValue((int)value);
             }
         }
@@ -114,7 +111,6 @@
         {
             if (cell != null)
             {
-                value = value ?? 0;
                 cell.SetCellValue((long)value);
             }
         }

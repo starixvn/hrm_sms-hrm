@@ -520,8 +520,7 @@
                     break;
 
                 default:
-                    scheduleModel = null;
-                    break;
+                    return scheduleModel;
             }
 
             return scheduleModel;

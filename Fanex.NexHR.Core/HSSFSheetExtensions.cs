@@ -105,6 +105,10 @@
                 case CellType.Unknown:
                     destCell.SetCellValue(sourceCell.StringCellValue);
                     break;
+
+                default:
+                    destCell.SetCellValue(0);
+                    break;
             }
 
             return destCell;

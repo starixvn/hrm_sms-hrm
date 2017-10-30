@@ -81,6 +81,10 @@
                     case RequestViewType.SASpace:
                         action = "VoidRequest";
                         break;
+
+                    default:
+                        action = string.Empty;
+                        break;
                 }
 
                 return action;
@@ -183,6 +187,10 @@
 
                     case RequestViewType.SASpace:
                         pageTitle = Labels.VoidRequest;
+                        break;
+
+                    default:
+                        pageTitle = Labels.NA;
                         break;
                 }
 

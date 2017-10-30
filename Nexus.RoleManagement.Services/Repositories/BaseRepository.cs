@@ -64,7 +64,7 @@
             {
                 if (property.CanWrite)
                 {
-                    var value = hash[property.Name.ToLower()];
+                    var value = hash[property.Name.ToLowerInvariant()];
                     property.SetValue(criteria, value, null);
                 }
             }

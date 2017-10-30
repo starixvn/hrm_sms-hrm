@@ -21,7 +21,7 @@
         {
             int id = colIndex;
 
-            if (row != null & values != null)
+            if (row != null && values != null)
             {
                 foreach (var value in values)
                 {

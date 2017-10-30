@@ -28,8 +28,9 @@
             this.reportService = reportService ?? new ReportService();
         }
 
-        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel model)
+        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel workingHoursModel)
         {
+            var model = workingHoursModel;
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             if (model == null)

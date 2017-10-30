@@ -165,12 +165,9 @@
             }
         }
 
-        public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo cultureInfo = null)
+        public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo culture = null)
         {
-            if (cultureInfo == null)
-            {
-                cultureInfo = CultureInfo.CurrentCulture;
-            }
+            CultureInfo cultureInfo = culture ?? CultureInfo.CurrentCulture;
 
             DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
             DateTime firstDayInWeek = dayInWeek.Date;
@@ -345,7 +342,7 @@
 
         public static string GetCurrentStatusName(int statusId)
         {
-            var statusName = Labels.NA;
+            var statusName = string.Empty;
             switch (statusId)
             {
                 case 1:
@@ -374,6 +371,10 @@
 
                 case 7:
                     statusName = Labels.Void;
+                    break;
+
+                default:
+                    statusName = Labels.NA;
                     break;
             }
 
