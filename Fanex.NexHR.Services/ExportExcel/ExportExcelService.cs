@@ -583,5 +583,13 @@
 
             return messageDetail;
         }
+
+        public static void WriteRowExcelReport(ref ExcelTemplateWriter writer, ref int rowIndex, int rowStartBody, object record)
+        {
+            var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
+            writer.WriteRow(rowStart, record);
+
+            rowIndex++;
+        }
     }
 }

@@ -29,7 +29,6 @@
 
                 // Get source row that will be copied.
                 var sourceRow = sourceSheet.GetRow(sourceRowIndex);
-
                 if (sourceRow != null)
                 {
                     // Get the row at a specific index of the current sheet.

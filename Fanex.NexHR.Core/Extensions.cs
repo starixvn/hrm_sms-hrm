@@ -195,7 +195,7 @@
 
             if (string.IsNullOrEmpty(fullHtmlFieldName))
             {
-                throw new ArgumentException("name cannot be null or empty.", "name");
+                throw new ArgumentException("name cannot be null or empty.", nameof(name));
             }
 
             bool selectListFromViewData = false;
@@ -208,7 +208,7 @@
 
             if (selectList == null)
             {
-                throw new ArgumentNullException("selectList");
+                throw new ArgumentNullException(nameof(selectList));
             }
 
             object values = null;

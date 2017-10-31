@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
+    using ExportExcel;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
@@ -52,17 +53,7 @@
         private void FillRowReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, rowIndex);
-
-            if (rowIndex % 2 != 0)
-            {
-                writer.WriteRow(RowStartBody, record);
-            }
-            else
-            {
-                writer.WriteRow(RowStartBody + 1, record);
-            }
-
-            rowIndex++;
+            ExportExcelService.WriteRowExcelReport(ref writer, ref rowIndex, RowStartBody, record);
         }
 
         private object CreateRecordReport(ManpowerCategoryModel manpower, int rowIndex)

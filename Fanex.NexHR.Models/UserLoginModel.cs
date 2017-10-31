@@ -50,13 +50,12 @@
             var function = Functions.Where(i => i.FunctionKey.Equals(functionKey));
             if (function.Any())
             {
-                switch (policy)
+                if (policy == Policy.Host)
                 {
-                    case Policy.Host:
-                        return function.First().IsHost;
-                    default:
-                        return function.First().IsRead;
+                    return function.First().IsHost;
                 }
+
+                return function.First().IsRead;
             }
 
             return false;
