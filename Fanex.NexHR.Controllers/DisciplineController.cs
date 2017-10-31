@@ -186,6 +186,7 @@
                 EmployeeId = model.EmployeeId,
                 WorkDate = model.WorkDate,
                 DisciplineTypeId = model.DisciplineTypeId,
+                Score = model.MinusScore,
                 Comment = model.Comment,
                 CreatedBy = CurrentUser.Id
             };

@@ -12,6 +12,8 @@
 
         public int DisciplineTypeId { get; set; }
 
+        public decimal Score { get; set; }
+
         [SpParam(SqlParamName = "ApproverComment")]
         public string Comment { get; set; }
 

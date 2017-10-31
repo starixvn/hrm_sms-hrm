@@ -23,7 +23,7 @@
         public int DisciplineTypeId { get; set; }
 
         [Display(Name = "Minus Score")]
-        public float MinusScore { get; set; }
+        public decimal MinusScore { get; set; }
 
         public string Comment { get; set; }
 

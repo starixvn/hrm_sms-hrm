@@ -30,7 +30,8 @@
             errorString = '',
             empId = $('#dialogAddOtherDiscipline #EmployeeId').val(),
             workDate = $('#dialogAddOtherDiscipline #WorkDate').datepicker('getDate'),
-            disciplineTypeId = $('#dialogAddOtherDiscipline #OtherDisciplineTypeId').val();
+            disciplineTypeId = $('#dialogAddOtherDiscipline #DisciplineTypeId').val(),
+            comment = $('#dialogAddOtherDiscipline #Comment').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
             errorString += '<li>The Employee field is required.</li>';
@@ -42,6 +43,10 @@
 
         if (disciplineTypeId && parseInt(disciplineTypeId, 10) === 0) {
             errorString += '<li>Discipline Type field is required.</li>';
+        }
+
+        if (comment.trim().length === 0) {
+            errorString += '<li>Comment field is required.</li>';
         }
 
         if (errorString.length > 0) {
