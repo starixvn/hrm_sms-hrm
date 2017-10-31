@@ -629,7 +629,7 @@
             return supervisors;
         }
 
-        private string GetSupervisors(IList<SupervisorNameModel> supervisors, int roleSystem)
+        private static string GetSupervisors(IList<SupervisorNameModel> supervisors, int roleSystem)
         {
             string supervisorsName = string.Empty;
             IList<SupervisorNameModel> supervisorsFilter;
@@ -648,27 +648,27 @@
             return supervisorsName;
         }
 
-        private string GetVerifiers(IList<SupervisorNameModel> supervisors)
+        private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
         {
             return GetSupervisors(supervisors, (int)RoleSystem.Verifier);
         }
 
-        private string GetApprovers(IList<SupervisorNameModel> supervisors)
+        private static string GetApprovers(IList<SupervisorNameModel> supervisors)
         {
             return GetSupervisors(supervisors, (int)RoleSystem.Approver);
         }
 
-        private string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
+        private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
         {
             return GetSupervisors(supervisors, (int)RoleSystem.ShiftManager);
         }
 
-        private string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
+        private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
         {
             return GetSupervisors(supervisors, (int)RoleSystem.ActingSupervisor);
         }
 
-        private string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
+        private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
         {
             return GetSupervisors(supervisors, (int)RoleSystem.DisciplineManager);
         }
@@ -792,7 +792,7 @@
             return criteria;
         }
 
-        private string BuildRole(IList<SystemRoleModel> roles)
+        private static string BuildRole(IList<SystemRoleModel> roles)
         {
             var result = string.Empty;
             if (roles != null)
@@ -814,12 +814,12 @@
             return string.IsNullOrEmpty(result) ? BuildDefaultRole() : BuildDefaultRole() + "," + result;
         }
 
-        private string BuildDefaultRole()
+        private static string BuildDefaultRole()
         {
             return ((int)RoleSystem.Member).ToString();
         }
 
-        private string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
+        private static string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
         {
             IList<int> roleIds = roles.Where(x => x.RoleId != (int)RoleSystem.Approver || x.RoleId != (int)RoleSystem.DisciplineManager)
                 .Select(x => x.RoleId).ToList();
@@ -829,7 +829,7 @@
             return string.Join(",", roleIds);
         }
 
-        private string BuildSARole()
+        private static string BuildSARole()
         {
             return string.Format(
                 "{0},{1},{2},{3},{4},{5},{6}",

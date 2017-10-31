@@ -382,7 +382,7 @@
             return leaveDetails;
         }
 
-        protected string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
+        protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             if (totalDays > 1)
             {
@@ -498,7 +498,7 @@
             }
         }
 
-        private int GetActionProcessRequest(RequestEntity request, string command)
+        private static int GetActionProcessRequest(RequestEntity request, string command)
         {
             var action = (int)SettingsSendMail.New;
 
@@ -540,7 +540,7 @@
             return action;
         }
 
-        private int GetActionResetRequest(byte statusId)
+        private static int GetActionResetRequest(byte statusId)
         {
             byte action = 0;
             switch (statusId)
@@ -563,7 +563,7 @@
             return action;
         }
 
-        private string GetEmailTemplatePathForCancelRequest(short requestType)
+        private static string GetEmailTemplatePathForCancelRequest(short requestType)
         {
             string templateEmailPath;
 
@@ -761,7 +761,7 @@
                 body);
         }
 
-        private string GetPassiveNameOfCommand(string command)
+        private static string GetPassiveNameOfCommand(string command)
         {
             if (command == Command.Accept.ToString())
             {
@@ -801,7 +801,7 @@
             return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
         }
 
-        private EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
+        private static EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
         {
             var emailModel = new EmailModel();
             if (relatedPeople.Approver != null)
@@ -813,7 +813,7 @@
             return emailModel;
         }
 
-        private EmailModel GetMailVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static EmailModel GetMailVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Verifier != null)
             {
@@ -831,7 +831,7 @@
             return emailModel;
         }
 
-        private EmailModel GetMailHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static EmailModel GetMailHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
             {
@@ -850,7 +850,7 @@
             return emailModel;
         }
 
-        private EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Requester != null)
             {
@@ -868,7 +868,7 @@
             return emailModel;
         }
 
-        private string AddMailToList(string mailList, string mail)
+        private static string AddMailToList(string mailList, string mail)
         {
             string fullMailList = string.Empty;
 
@@ -887,7 +887,7 @@
             return fullMailList;
         }
 
-        private EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Requester != null)
             {
@@ -909,7 +909,7 @@
             return emailModel;
         }
 
-        private string GetEmailTemplatePath(short requestType)
+        private static string GetEmailTemplatePath(short requestType)
         {
             string path;
             switch (requestType)
@@ -1088,7 +1088,7 @@
                 forDate,
                 request.Remark);
 
-            this.emailService.SendEmail(
+            emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
                 mailTo,
                 mailCc,

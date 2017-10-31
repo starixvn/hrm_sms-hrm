@@ -57,7 +57,7 @@
             };
         }
 
-        private void SetValueForOutputProperty(ICriteria criteria, Hashtable hash)
+        private static void SetValueForOutputProperty(ICriteria criteria, Hashtable hash)
         {
             IEnumerable<PropertyInfo> properties = criteria.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(OutputAttribute)));

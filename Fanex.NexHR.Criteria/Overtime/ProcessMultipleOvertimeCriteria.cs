@@ -30,7 +30,7 @@
             return ProcessedBy > 0;
         }
 
-        public int GetRoleIdForProcessOvertime(string command)
+        public static int GetRoleIdForProcessOvertime(string command)
         {
             int roleId = 0;
 
@@ -55,7 +55,7 @@
             return roleId;
         }
 
-        private string GetSpKeyForProcessMultipleOvertime(string command)
+        private static string GetSpKeyForProcessMultipleOvertime(string command)
         {
             string key = string.Empty;
 

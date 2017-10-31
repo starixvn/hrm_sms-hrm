@@ -247,7 +247,7 @@
             return shift;
         }
 
-        private void CheckShiftFromToFormat(CheckInOutRequestViewModel viewModel, Shift shift)
+        private static void CheckShiftFromToFormat(CheckInOutRequestViewModel viewModel, Shift shift)
         {
             if (shift != null)
             {

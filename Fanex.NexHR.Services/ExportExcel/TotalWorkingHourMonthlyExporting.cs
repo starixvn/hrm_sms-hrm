@@ -53,7 +53,7 @@
         {
             CreateSheet(Labels.TotalWorkingHourDaily);
             ExportHeaderTitle(Labels.TotalWorkingHourDaily);
-            if (IsHaveTableHeader(this._totalWorkingHourMonthly))
+            if (IsHaveTableHeader(_totalWorkingHourMonthly))
             {
                 ExportTable();
             }
@@ -81,7 +81,7 @@
             _sheet.AddMergedRegion(new CellRangeAddress(1, 1, 1, 4));
         }
 
-        private bool IsHaveTableHeader(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
+        private static bool IsHaveTableHeader(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
         {
             return totalWorkingHourMonthly != null && totalWorkingHourMonthly.Any();
         }
@@ -206,7 +206,7 @@
             return cellStyle;
         }
 
-        private bool IsHaveContentRecords(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
+        private static bool IsHaveContentRecords(IList<TotalWorkingHourMonthly> totalWorkingHourMonthly)
         {
             return totalWorkingHourMonthly.Any();
         }

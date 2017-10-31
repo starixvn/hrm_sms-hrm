@@ -190,7 +190,7 @@
                 ProcessedBy = this.CurrentUser.Id,
                 ProcessedDate = DateTime.Now
             };
-            criteria.RoleId = criteria.GetRoleIdForProcessOvertime(command);
+            criteria.RoleId = ProcessMultipleOvertimeCriteria.GetRoleIdForProcessOvertime(command);
             CommandResult result = commandService.Update(criteria);
             return Json(result);
         }

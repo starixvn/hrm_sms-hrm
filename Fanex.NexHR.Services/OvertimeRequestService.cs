@@ -259,7 +259,7 @@
             return isInvalid;
         }
 
-        private bool CheckInvalidOvertimes(OvertimeDaily overtime)
+        private static bool CheckInvalidOvertimes(OvertimeDaily overtime)
         {
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
@@ -280,7 +280,7 @@
             return isInvalid;
         }
 
-        private List<List<string>> SplitList(List<string> locations, int size)
+        private static List<List<string>> SplitList(List<string> locations, int size)
         {
             List<List<string>> emails = new List<List<string>>();
 

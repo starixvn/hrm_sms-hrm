@@ -509,7 +509,7 @@
             return detail;
         }
 
-        private string GetMessageForLeave(RequestEntity request)
+        private static string GetMessageForLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
 
@@ -519,7 +519,7 @@
             return messageDetail;
         }
 
-        private string GetMessageForGeneralLeave(RequestEntity request)
+        private static string GetMessageForGeneralLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
             var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
@@ -542,7 +542,7 @@
             return messageDetail;
         }
 
-        private string GetMessageForOtherLeave(RequestEntity request)
+        private static string GetMessageForOtherLeave(RequestEntity request)
         {
             var messageDetail = string.Empty;
             var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);

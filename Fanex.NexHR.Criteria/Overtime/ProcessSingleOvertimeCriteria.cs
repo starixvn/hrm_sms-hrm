@@ -30,7 +30,7 @@
             return ProcessedBy > 0 && RequestId > 0;
         }
 
-        private string GetSpKeyForProcessSingleOvertime(string command)
+        private static string GetSpKeyForProcessSingleOvertime(string command)
         {
             string key = string.Empty;
 

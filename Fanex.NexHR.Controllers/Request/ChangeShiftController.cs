@@ -238,7 +238,7 @@
             return changeShiftDetail;
         }
 
-        private string GetScheduleStatus(WorkingCalendarModel model)
+        private static string GetScheduleStatus(WorkingCalendarModel model)
         {
             var schedule = string.Empty;
             if (model.IsOffDay)

@@ -58,7 +58,7 @@
             ExportExcelService.WriteRowExcelReport(ref writer, ref rowIndex, RowStartBody, record);
         }
 
-        private dynamic GetValueForCell(int value, int year, int month)
+        private static dynamic GetValueForCell(int value, int year, int month)
         {
             bool isShowValue = false;
             dynamic result;

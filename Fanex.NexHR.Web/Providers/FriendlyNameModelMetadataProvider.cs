@@ -22,7 +22,7 @@
             return metadata;
         }
 
-        private string DisplayNameFromCamelCase(string name)
+        private static string DisplayNameFromCamelCase(string name)
         {
             var temp = "(?<!^)" + // don't match on the first character - never want to place a space here
             "(" +
@@ -31,7 +31,7 @@
             "  (?<![A-Z])[A-Z]$" + // if the last letter is capital, prefix it with a space too
             ")";
 
-            var result = Regex.Replace( 
+            var result = Regex.Replace(
             name,
             temp,
             " $1",

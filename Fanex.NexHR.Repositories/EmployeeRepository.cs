@@ -119,7 +119,7 @@
             }
         }
 
-        private IEnumerable<Employee> GroupByRoles(IEnumerable<Employee> employees, IEnumerable<EmployeeRole> roles)
+        private static IEnumerable<Employee> GroupByRoles(IEnumerable<Employee> employees, IEnumerable<EmployeeRole> roles)
         {
             foreach (var employee in employees)
             {
