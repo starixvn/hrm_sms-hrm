@@ -16,7 +16,6 @@
     public class ExportTotalWorkingHourController : BaseController
     {
         private readonly IReportService reportService;
-        private IExportService exportService;
 
         public ExportTotalWorkingHourController()
             : this(null)
@@ -30,6 +29,7 @@
 
         public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel workingHoursModel)
         {
+            IExportService exportService;
             var model = workingHoursModel;
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
@@ -64,6 +64,7 @@
 
         public ActionResult ExportTotalWorkingHourWeekly(TotalWorkingHourWeeklyViewModel model)
         {
+            IExportService exportService;
             string fileName = "TotalWorkingHourWeekly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetTotalWorkingHourWeeklyCriteria
             {
@@ -82,6 +83,7 @@
 
         public ActionResult ExportTotalWorkingHourMonthly(TotalWorkingHourMonthlyViewModel model)
         {
+            IExportService exportService;
             string fileName = "TotalWorkingHourMonthly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetTotalWorkingHourMonthlyCriteria
             {
@@ -100,6 +102,7 @@
 
         public ActionResult ExportTotalWorkingHourDaily(TotalWorkingHourDailyViewModel model)
         {
+            IExportService exportService;
             string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetTotalWorkingHourDailyCriteria
             {

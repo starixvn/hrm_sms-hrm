@@ -48,8 +48,7 @@
 
         public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
-            var exportExcel = new ReportExporting();
-            HSSFWorkbook hssfworkbook = exportExcel.ExportHRRequestStatistic(requests, fromDate, toDate);
+            HSSFWorkbook hssfworkbook = ReportExporting.ExportHRRequestStatistic(requests, fromDate, toDate);
 
             return hssfworkbook;
         }
@@ -584,7 +583,7 @@
             return messageDetail;
         }
 
-        public static void WriteRowExcelReport(ref ExcelTemplateWriter writer, ref int rowIndex, int rowStartBody, object record)
+        public static void WriteRowExcelReport(ExcelTemplateWriter writer, int rowIndex, int rowStartBody, object record)
         {
             var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
             writer.WriteRow(rowStart, record);
