@@ -10,8 +10,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
-    using NPOI.SS.UserModel;
-    using NPOI.SS.Util;
 
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportExporting
@@ -21,11 +19,11 @@
         private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
 
-        public static HSSFWorkbook ExportHRRequestStatistic(ReportExporting instance, List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
+        public static HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
 
-            var templatePath = HttpContext.Current.Server.MapPath(instance._HrRequestStatisticFilePathExcelTemplate);
+            var templatePath = HttpContext.Current.Server.MapPath(_HrRequestStatisticFilePathExcelTemplate);
             using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
@@ -38,14 +36,14 @@
             rowDate.GetCell(3).SetCellValue(fromDate.ToString(Constants.DateFormat));
             rowDate.GetCell(5).SetCellValue(toDate.ToString(Constants.DateFormat));
 
-            var rowIndex = instance._RowStartBodyHrRequestStatistic;
+            var rowIndex = _RowStartBodyHrRequestStatistic;
             var rowCopy = 0;
-            var height = sheet.GetRow(instance._RowStartBodyHrRequestStatistic).Height;
+            var height = sheet.GetRow(_RowStartBodyHrRequestStatistic).Height;
             var index = 1;
 
             foreach (var item in requests)
             {
-                rowCopy = instance._RowStartBodyHrRequestStatistic + (index % 2);
+                rowCopy = _RowStartBodyHrRequestStatistic + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;

@@ -48,7 +48,7 @@
         private void FillRowReport(SectionSupervisorReportModel supervisor, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(supervisor, rowIndex);
-            ExportExcelService.WriteRowExcelReport(ref writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
         }
 
         private object CreateRecordReport(SectionSupervisorReportModel supervisor, int rowIndex)

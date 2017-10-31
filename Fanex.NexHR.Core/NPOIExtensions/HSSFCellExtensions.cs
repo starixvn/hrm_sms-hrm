@@ -8,142 +8,125 @@
     {
         public static void SetCellValue(this ICell cell, object value)
         {
-            if (cell != null)
+            if (value == null)
             {
-                if (value == null)
+                cell.SetCellValue(string.Empty);
+            }
+            else
+            {
+                var stringValue = value as string;
+                var richTextString = value as IRichTextString;
+
+                if (!string.IsNullOrEmpty(stringValue))
                 {
-                    cell.SetCellValue(string.Empty);
+                    cell.SetCellValue(stringValue);
+                }
+                else if (value is int?)
+                {
+                    cell.SetCellValue((int)value);
+                }
+                else if (value is long?)
+                {
+                    cell.SetCellValue((long)value);
+                }
+                else if (value is double?)
+                {
+                    cell.SetCellValue((double)value);
+                }
+                else if (value is decimal?)
+                {
+                    cell.SetCellValue((decimal)value);
+                }
+                else if (value is bool?)
+                {
+                    cell.SetCellValue((bool)value);
+                }
+                else if (value is DateTime?)
+                {
+                    cell.SetCellValue((DateTime)value);
+                }
+                else if (richTextString != null)
+                {
+                    cell.SetCellValue(richTextString);
                 }
                 else
                 {
-                    var stringValue = value as string;
-                    var richTextString = value as IRichTextString;
-
-                    if (stringValue != null)
-                    {
-                        cell.SetCellValue(stringValue);
-                    }
-
-                    if (value is int)
-                    {
-                        cell.SetCellValue((int)value);
-                    }
-
-                    if (value is long)
-                    {
-                        cell.SetCellValue((long)value);
-                    }
-
-                    if (value is double)
-                    {
-                        cell.SetCellValue((double)value);
-                    }
-
-                    if (value is decimal)
-                    {
-                        cell.SetCellValue((decimal)value);
-                    }
-
-                    if (value is bool)
-                    {
-                        cell.SetCellValue((bool)value);
-                    }
-
-                    if (value is DateTime)
-                    {
-                        cell.SetCellValue((DateTime)value);
-                    }
-
-                    if (richTextString != null)
-                    {
-                        cell.SetCellValue(richTextString);
-                    }
+                    cell.SetCellValue(string.Empty);
                 }
             }
         }
 
         public static void SetCellValue(this ICell cell, double? value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue((double)value);
-            }
+            double result = value ?? 0;
+
+            cell.SetCellValue(result);
         }
 
         public static void SetCellValue(this ICell cell, decimal value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue(Convert.ToDouble(value));
-            }
+            cell.SetCellValue(Convert.ToDouble(value));
         }
 
         public static void SetCellValue(this ICell cell, decimal? value)
         {
-            cell.SetCellValue((decimal)value);
+            decimal result = value ?? 0;
+
+            cell.SetCellValue(result);
         }
 
         public static void SetCellValue(this ICell cell, int value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue(Convert.ToDouble(value));
-            }
+            cell.SetCellValue(Convert.ToDouble(value));
         }
 
         public static void SetCellValue(this ICell cell, int? value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue((int)value);
-            }
+            int result = value ?? 0;
+
+            cell.SetCellValue(result);
         }
 
         public static void SetCellValue(this ICell cell, long value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue(Convert.ToDouble(value));
-            }
+            cell.SetCellValue(Convert.ToDouble(value));
         }
 
         public static void SetCellValue(this ICell cell, long? value)
         {
-            if (cell != null)
-            {
-                cell.SetCellValue((long)value);
-            }
+            long result = value ?? 0;
+
+            cell.SetCellValue(result);
         }
 
         public static void CopyFrom(this ICell cell, ICell sourceCell)
         {
             // Copy merged cells.
             CellRangeAddress sourceRange = null;
+            int i = 0;
 
-            if (cell != null && sourceCell != null)
+            while (sourceRange == null && i < sourceCell.Sheet.NumMergedRegions)
             {
-                for (var i = 0; i < sourceCell.Sheet.NumMergedRegions; i++)
-                {
-                    CellRangeAddress range = sourceCell.Sheet.GetMergedRegion(i);
+                CellRangeAddress range = sourceCell.Sheet.GetMergedRegion(i);
 
-                    if ((range.FirstColumn <= sourceCell.ColumnIndex)
-                        && (range.LastColumn >= sourceCell.ColumnIndex)
-                        && (range.FirstRow <= sourceCell.RowIndex)
-                        && (range.LastRow >= sourceCell.RowIndex))
-                    {
-                        sourceRange = range;
-                        break;
-                    }
+                if ((range.FirstColumn <= sourceCell.ColumnIndex)
+                    && (range.LastColumn >= sourceCell.ColumnIndex)
+                    && (range.FirstRow <= sourceCell.RowIndex)
+                    && (range.LastRow >= sourceCell.RowIndex))
+                {
+                    sourceRange = range;
                 }
 
-                if (sourceRange != null)
-                {
-                    cell.Sheet.AddMergedRegion(sourceRange.Clone());
-                }
-
-                // Copy style
-                cell.CellStyle = sourceCell.CellStyle;
+                i += 1;
             }
+
+            if (sourceRange != null)
+            {
+                cell.Sheet.AddMergedRegion(sourceRange.Clone());
+            }
+
+            // Copy style
+            cell.CellStyle = sourceCell.CellStyle;
         }
     }
 }

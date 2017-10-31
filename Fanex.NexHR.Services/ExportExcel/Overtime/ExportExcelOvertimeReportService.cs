@@ -50,7 +50,7 @@
         private void FillRowReport(OvertimeDaily overtimeDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(overtimeDetail, rowIndex);
-            ExportExcelService.WriteRowExcelReport(ref writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
         }
 
         private object CreateRecordReport(OvertimeDaily overtimeDetail, int rowIndex)

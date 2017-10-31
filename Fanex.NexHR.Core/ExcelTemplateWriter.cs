@@ -4,17 +4,16 @@
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using Fanex.NexHR.Core.NPOIExtensions;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
+    using NPOIExtensions;
 
     public class ExcelTemplateWriter
     {
         #region Attributes
 
         private readonly string _fileName;
-        private readonly string _sheetName;
         private readonly ISheet _templateSheet;
         private readonly ISheet _sheet;
         private int _rowId;
@@ -41,9 +40,8 @@
         public ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, string sheetName)
         {
             _fileName = excelFileName;
-            _sheetName = sheetName;
             _templateSheet = template.GetSheetAt(0);
-            _sheet = template.CreateSheet(_sheetName);
+            _sheet = template.CreateSheet(sheetName);
         }
 
         #endregion Constructors
