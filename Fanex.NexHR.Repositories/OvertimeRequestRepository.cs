@@ -165,30 +165,13 @@
 
                     foreach (DataRow row in dataTableOvertimeExcelReport.Rows)
                     {
-                        var overtimeExcelReport = new OvertimeExcelReport();
-
-                        overtimeExcelReport.Team = row["Team"].ToString();
-                        overtimeExcelReport.Positions = row["Positions"].ToString();
-                        overtimeExcelReport.EmpId = Convert.ToInt32(!string.IsNullOrEmpty(row["EmpId"].ToString()) ? row["EmpId"].ToString() : "0");
-                        overtimeExcelReport.EmpCode = row["EmpCode"].ToString();
-                        overtimeExcelReport.Nickname = row["Nickname"].ToString();
-                        overtimeExcelReport.Fullname = row["Fullname"].ToString();
-                        overtimeExcelReport.TotalWorkDays = Convert.ToDouble(!string.IsNullOrEmpty(row["TotalWorkDays"].ToString()) ? row["TotalWorkDays"].ToString() : "0");
-                        overtimeExcelReport.UnpaidLeave = Convert.ToDouble(!string.IsNullOrEmpty(row["UnpaidLeave"].ToString()) ? row["UnpaidLeave"].ToString() : "0");
-                        overtimeExcelReport.Normal = Convert.ToDouble(!string.IsNullOrEmpty(row["Normal"].ToString()) ? row["Normal"].ToString() : "0");
-                        overtimeExcelReport.Offday = Convert.ToDouble(!string.IsNullOrEmpty(row["Offday"].ToString()) ? row["Offday"].ToString() : "0");
-                        overtimeExcelReport.Holiday = Convert.ToDouble(!string.IsNullOrEmpty(row["Holiday"].ToString()) ? row["Holiday"].ToString() : "0");
-                        overtimeExcelReport.Tax = Convert.ToDouble(!string.IsNullOrEmpty(row["Tax"].ToString()) ? row["Tax"].ToString() : "0");
+                        var overtimeExcelReport = SetOvertimeExcelReport(row);
 
                         var list = new List<OvertimeDailyReport>();
 
                         for (int column = 1; column <= columnCount; column++)
                         {
-                            var entity = new OvertimeDailyReport
-                            {
-                                TotalOvertimeType1 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 11) : ((column * 2) + 10)].ToString(),
-                                TotalOvertimeType2 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 12) : ((column * 2) + 11)].ToString()
-                            };
+                            var entity = SetValueOvertimeDailyReport(dataTableOvertimeExcelReport, column, rowIndex);
                             list.Add(entity);
                         }
 
@@ -200,6 +183,36 @@
 
                 return entityList;
             }
+        }
+
+        private static OvertimeExcelReport SetOvertimeExcelReport(DataRow row)
+        {
+            OvertimeExcelReport overtimeExcelReport = new OvertimeExcelReport();
+            overtimeExcelReport.Team = row["Team"].ToString();
+            overtimeExcelReport.Positions = row["Positions"].ToString();
+            overtimeExcelReport.EmpId = Convert.ToInt32(!string.IsNullOrEmpty(row["EmpId"].ToString()) ? row["EmpId"].ToString() : "0");
+            overtimeExcelReport.EmpCode = row["EmpCode"].ToString();
+            overtimeExcelReport.Nickname = row["Nickname"].ToString();
+            overtimeExcelReport.Fullname = row["Fullname"].ToString();
+            overtimeExcelReport.TotalWorkDays = Convert.ToDouble(!string.IsNullOrEmpty(row["TotalWorkDays"].ToString()) ? row["TotalWorkDays"].ToString() : "0");
+            overtimeExcelReport.UnpaidLeave = Convert.ToDouble(!string.IsNullOrEmpty(row["UnpaidLeave"].ToString()) ? row["UnpaidLeave"].ToString() : "0");
+            overtimeExcelReport.Normal = Convert.ToDouble(!string.IsNullOrEmpty(row["Normal"].ToString()) ? row["Normal"].ToString() : "0");
+            overtimeExcelReport.Offday = Convert.ToDouble(!string.IsNullOrEmpty(row["Offday"].ToString()) ? row["Offday"].ToString() : "0");
+            overtimeExcelReport.Holiday = Convert.ToDouble(!string.IsNullOrEmpty(row["Holiday"].ToString()) ? row["Holiday"].ToString() : "0");
+            overtimeExcelReport.Tax = Convert.ToDouble(!string.IsNullOrEmpty(row["Tax"].ToString()) ? row["Tax"].ToString() : "0");
+
+            return overtimeExcelReport;
+        }
+
+        private static OvertimeDailyReport SetValueOvertimeDailyReport(DataTable dataTableOvertimeExcelReport, int column, int rowIndex)
+        {
+            var entity = new OvertimeDailyReport
+            {
+                TotalOvertimeType1 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 11) : ((column * 2) + 10)].ToString(),
+                TotalOvertimeType2 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 12) : ((column * 2) + 11)].ToString()
+            };
+
+            return entity;
         }
     }
 }

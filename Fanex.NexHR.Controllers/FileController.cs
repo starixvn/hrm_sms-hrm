@@ -14,39 +14,43 @@
 
             foreach (HttpPostedFileBase file in files)
             {
-                string pathAttach = string.Empty;
-
                 if (file.ContentLength > 0)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var dir = "~/file/uploads/" + categoryId;
-                    pathAttach = dir + "/" + fileName;
-
-                    if (isOverride)
-                    {
-                        while (System.IO.File.Exists(Server.MapPath(pathAttach)))
-                        {
-                            fileName = "(1)" + fileName;
-                            pathAttach = dir + "/" + fileName;
-                        }
-                    }
-
-                    if (!Directory.Exists(Server.MapPath(dir)))
-                    {
-                        Directory.CreateDirectory(Server.MapPath(dir));
-                    }
-
-                    var path = Path.Combine(Server.MapPath(dir), fileName);
-
-                    pathAttach = pathAttach.Substring(2);
+                    string pathAttach = SaveFileToServer(file, categoryId, isOverride);
 
                     pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
-
-                    file.SaveAs(path);
                 }
             }
 
             return pathAttachFiles;
+        }
+
+        private string SaveFileToServer(HttpPostedFileBase file, int categoryId, bool isOverride)
+        {
+            string pathAttach = string.Empty;
+            var fileName = Path.GetFileName(file.FileName);
+            var dir = "~/file/uploads/" + categoryId;
+            pathAttach = dir + "/" + fileName;
+
+            if (isOverride)
+            {
+                while (System.IO.File.Exists(Server.MapPath(pathAttach)))
+                {
+                    fileName = "(1)" + fileName;
+                    pathAttach = dir + "/" + fileName;
+                }
+            }
+
+            if (!Directory.Exists(Server.MapPath(dir)))
+            {
+                Directory.CreateDirectory(Server.MapPath(dir));
+            }
+
+            var path = Path.Combine(Server.MapPath(dir), fileName);
+
+            file.SaveAs(path);
+
+            return pathAttach.Substring(2);
         }
 
         public bool Delete(string fileName)

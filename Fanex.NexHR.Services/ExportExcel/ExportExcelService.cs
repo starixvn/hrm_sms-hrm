@@ -583,7 +583,7 @@
             return messageDetail;
         }
 
-        public static void WriteRowExcelReport(ExcelTemplateWriter writer, int rowIndex, int rowStartBody, object record)
+        public static void WriteRowExcelReport(ExcelTemplateWriter writer, ref int rowIndex, int rowStartBody, object record)
         {
             var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
             writer.WriteRow(rowStart, record);

@@ -240,18 +240,20 @@
             {
                 IEnumerable<OvertimeDaily> rawOvertime = GetData<OvertimeDaily>(criteria);
 
-                if (rawOvertime != null)
+                if (rawOvertime == null)
                 {
-                    IList<OvertimeDaily> overtimes = rawOvertime.ToList();
+                    return isInvalid;
+                }
 
-                    if (overtimes != null && overtimes.Any())
+                IList<OvertimeDaily> overtimes = rawOvertime.ToList();
+
+                if (overtimes != null && overtimes.Any())
+                {
+                    var index = 0;
+                    while (!isInvalid && index < overtimes.Count())
                     {
-                        var index = 0;
-                        while (!isInvalid && index < overtimes.Count())
-                        {
-                            isInvalid = CheckInvalidOvertimes(overtimes[index]);
-                            index++;
-                        }
+                        isInvalid = CheckInvalidOvertimes(overtimes[index]);
+                        index++;
                     }
                 }
             }
@@ -264,20 +266,41 @@
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
             {
-                isInvalid |= (!overtime.OffHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours));
+                isInvalid |= IsInvalidKeepInView(overtime);
             }
 
             if (overtime.IsOffDay)
             {
-                isInvalid |= (!overtime.NormalHours.Equals(0) || !overtime.PublicHours.Equals(0) || overtime.TotalWorkHours < overtime.OffHours);
+                isInvalid |= IsInvalidOffDay(overtime);
             }
 
             if (overtime.IsHoliday)
             {
-                isInvalid |= (!overtime.NormalHours.Equals(0) || !overtime.OffHours.Equals(0) || overtime.TotalWorkHours < overtime.PublicHours);
+                isInvalid |= IsInvalidHoliday(overtime);
             }
 
             return isInvalid;
+        }
+
+        private static bool IsInvalidKeepInView(OvertimeDaily overtime)
+        {
+            return (!overtime.OffHours.Equals(0) ||
+                !overtime.PublicHours.Equals(0) ||
+                overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours));
+        }
+
+        private static bool IsInvalidOffDay(OvertimeDaily overtime)
+        {
+            return (!overtime.NormalHours.Equals(0) ||
+                !overtime.PublicHours.Equals(0) ||
+                overtime.TotalWorkHours < overtime.OffHours);
+        }
+
+        private static bool IsInvalidHoliday(OvertimeDaily overtime)
+        {
+            return (!overtime.NormalHours.Equals(0) ||
+                !overtime.OffHours.Equals(0) ||
+                overtime.TotalWorkHours < overtime.PublicHours);
         }
 
         private static List<List<string>> SplitList(List<string> locations, int size)

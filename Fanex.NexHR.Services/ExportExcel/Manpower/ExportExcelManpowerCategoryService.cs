@@ -53,7 +53,7 @@
         private void FillRowReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, rowIndex);
-            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, ref rowIndex, RowStartBody, record);
         }
 
         private object CreateRecordReport(ManpowerCategoryModel manpower, int rowIndex)
@@ -80,20 +80,8 @@
             return record;
         }
 
-        private static double ReturnValidValue(int condition, double value)
-        {
-            double defaultValue = 0.00;
-            if (condition != 0)
-            {
-                return value;
-            }
-
-            return defaultValue;
-        }
-
         private void FillContentRowFooterReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
         {
-            double defaultValue = 0.00;
             int total = manpowers.Sum(t => t.Total);
             int management = manpowers.Sum(t => t.Management);
             int executiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition);
@@ -121,6 +109,17 @@
             };
 
             writer.WriteRow(RowFooter, record);
+        }
+
+        private static double ReturnValidValue(int condition, double value)
+        {
+            double defaultValue = 0.00;
+            if (condition != 0)
+            {
+                return value;
+            }
+
+            return defaultValue;
         }
     }
 }

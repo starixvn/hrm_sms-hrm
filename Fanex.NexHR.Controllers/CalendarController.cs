@@ -405,16 +405,21 @@
         {
             foreach (UserChangedShift user in userChangeShift)
             {
-                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == user.EmpId))
+                HandleUserChangeShift(user, models, fromDate);
+            }
+        }
+
+        private static void HandleUserChangeShift(UserChangedShift user, IList<WorkingCalendarsViewModel> models, DateTime fromDate)
+        {
+            foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == user.EmpId))
+            {
+                for (int i = 0; i < employee.WorkingDays.Count; i++)
                 {
-                    for (int i = 0; i < employee.WorkingDays.Count; i++)
+                    if (user.Day == fromDate.AddDays(i).Day)
                     {
-                        if (user.Day == fromDate.AddDays(i).Day)
-                        {
-                            var changeShift = "_" + employee.WorkingDays[i];
-                            employee.WorkingDays[i] = changeShift;
-                            employee.WorkingSchedule[i].Title = changeShift;
-                        }
+                        var changeShift = "_" + employee.WorkingDays[i];
+                        employee.WorkingDays[i] = changeShift;
+                        employee.WorkingSchedule[i].Title = changeShift;
                     }
                 }
             }
@@ -424,16 +429,21 @@
         {
             foreach (HalfDayOff item in halfDayOff)
             {
-                foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == item.Id))
+                HandleHalfDayOff(item, models, fromDate);
+            }
+        }
+
+        private static void HandleHalfDayOff(HalfDayOff halfDayOff, IList<WorkingCalendarsViewModel> models, DateTime fromDate)
+        {
+            foreach (WorkingCalendarsViewModel employee in models.Where(x => x.EmpId == halfDayOff.Id))
+            {
+                for (int i = 0; i < employee.WorkingDays.Count; i++)
                 {
-                    for (int i = 0; i < employee.WorkingDays.Count; i++)
+                    if (halfDayOff.Day == fromDate.AddDays(i).Day)
                     {
-                        if (item.Day == fromDate.AddDays(i).Day)
-                        {
-                            var halfDay = "-" + employee.WorkingDays[i];
-                            employee.WorkingDays[i] = halfDay;
-                            employee.WorkingSchedule[i].Title = halfDay;
-                        }
+                        var halfDay = "-" + employee.WorkingDays[i];
+                        employee.WorkingDays[i] = halfDay;
+                        employee.WorkingSchedule[i].Title = halfDay;
                     }
                 }
             }
@@ -443,47 +453,54 @@
         private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
         {
             var scheduleModels = new List<ScheduleArrangeViewModel>();
+
+            var employees = workingCalendars.GroupBy(x => x.Employee.Id).Select(x => x.Key);
+
+            foreach (var employeeId in employees)
+            {
+                var scheduleArrangeModel = HandleConvertWorkingCalendarToScheduleModel(employeeId, fromDate, toDate, workingCalendars);
+                scheduleModels.Add(scheduleArrangeModel);
+            }
+
+            return scheduleModels;
+        }
+
+        private ScheduleArrangeViewModel HandleConvertWorkingCalendarToScheduleModel(int employeeId, DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
+        {
             var numberDays = (toDate - fromDate).Days + 1;
             IEnumerable<WorkingCalendarModel> employeeWorkingCalendars = null;
             WorkingCalendarModel workingCalendar = null;
             ScheduleArrangeViewModel scheduleArrangeModel = null;
             var workingDate = DateTime.Now.Date;
-            var employees = workingCalendars.GroupBy(x => x.Employee.Id).Select(x => x.Key);
-
-            foreach (var employeeId in employees)
+            var scheduleHasInfo = false;
+            for (int i = 0; i < numberDays; i++)
             {
-                var scheduleHasInfo = false;
-                for (int i = 0; i < numberDays; i++)
+                workingDate = fromDate.AddDays(i);
+                employeeWorkingCalendars = workingCalendars.Where(
+                    t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
+
+                if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
                 {
-                    workingDate = fromDate.AddDays(i);
-                    employeeWorkingCalendars = workingCalendars.Where(
-                        t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
+                    workingCalendar = employeeWorkingCalendars.FirstOrDefault();
 
-                    if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
+                    if (!scheduleHasInfo)
                     {
-                        workingCalendar = employeeWorkingCalendars.FirstOrDefault();
-
-                        if (!scheduleHasInfo)
+                        scheduleArrangeModel = new ScheduleArrangeViewModel
                         {
-                            scheduleArrangeModel = new ScheduleArrangeViewModel
-                            {
-                                EmployeeId = workingCalendar.Employee.Id,
-                                NickName = workingCalendar.Employee.NickName,
-                                TeamName = workingCalendar.Employee.Team.Name,
-                                TeamCode = workingCalendar.Employee.Team.Code
-                            };
+                            EmployeeId = workingCalendar.Employee.Id,
+                            NickName = workingCalendar.Employee.NickName,
+                            TeamName = workingCalendar.Employee.Team.Name,
+                            TeamCode = workingCalendar.Employee.Team.Code
+                        };
 
-                            scheduleHasInfo = true;
-                        }
-
-                        SetWorkingCalendarForDayOfWeek(scheduleArrangeModel, workingCalendar);
+                        scheduleHasInfo = true;
                     }
-                }
 
-                scheduleModels.Add(scheduleArrangeModel);
+                    SetWorkingCalendarForDayOfWeek(scheduleArrangeModel, workingCalendar);
+                }
             }
 
-            return scheduleModels;
+            return scheduleArrangeModel;
         }
 
         [NonAction]
