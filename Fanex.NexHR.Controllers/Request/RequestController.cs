@@ -186,41 +186,46 @@
                 && model.RoleId == (int)RoleSystem.Approver
                 && model.Command == Command.Approve.ToString())
             {
-                switch (model.RequestTypeId)
-                {
-                    case (int)RequestType.CheckIn:
-                    case (int)RequestType.CheckOut:
-                        var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria
-                        {
-                            RequestId = model.RequestId
-                        };
-                        model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
-                        break;
-
-                    case (int)RequestType.LateIn:
-                    case (int)RequestType.EarlyOut:
-                        var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria
-                        {
-                            RequestId = model.RequestId
-                        };
-                        model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
-                        break;
-
-                    case (int)RequestType.ChangeShift:
-                        ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
-                        model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
-                        break;
-
-                    case (int)RequestType.Leave:
-                        model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
-                        break;
-
-                    default:
-                        return PartialView("_ProcessRequest", model);
-                }
+                HandleProcessRequest(model);
             }
 
             return PartialView("_ProcessRequest", model);
+        }
+
+        private void HandleProcessRequest(ProcessRequestViewModel model)
+        {
+            switch (model.RequestTypeId)
+            {
+                case (int)RequestType.CheckIn:
+                case (int)RequestType.CheckOut:
+                    var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria
+                    {
+                        RequestId = model.RequestId
+                    };
+                    model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
+                    break;
+
+                case (int)RequestType.LateIn:
+                case (int)RequestType.EarlyOut:
+                    var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria
+                    {
+                        RequestId = model.RequestId
+                    };
+                    model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
+                    break;
+
+                case (int)RequestType.ChangeShift:
+                    ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+                    model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
+                    break;
+
+                case (int)RequestType.Leave:
+                    model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
+                    break;
+
+                default:
+                    return;
+            }
         }
 
         [HttpPost]

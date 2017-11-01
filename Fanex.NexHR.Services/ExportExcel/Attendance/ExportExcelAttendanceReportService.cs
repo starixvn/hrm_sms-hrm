@@ -140,28 +140,7 @@
             switch (request.RequestType.Id)
             {
                 case (int)RequestType.Leave:
-                    if (request.TotalDays > 1)
-                    {
-                        detail = string.Format(MsgLeave, Convert.ToInt32(request.TotalDays), date);
-                    }
-                    else if (request.TotalDays == 1)
-                    {
-                        detail = string.Format(MsgLeaveOneDay, date);
-                    }
-                    else if ((request.TotalDays - (decimal)0.5) == 0)
-                    {
-                        detail = string.Format(MsgLeaveHalfDay, date, request.FromDate.Value.ToString("HH:mm"), request.ToDate.Value.ToString("HH:mm"));
-                    }
-                    else
-                    {
-                        detail = string.Format(
-                            MsgLeaveDuringWorking,
-                            date,
-                            request.FromDate.Value.ToString("HH:mm"),
-                            request.ToDate.Value.ToString("HH:mm"),
-                            (request.ToDate.Value - request.FromDate.Value).TotalMinutes);
-                    }
-
+                    detail = GetDetailLeaveRequest(request, date);
                     break;
 
                 case (int)RequestType.ChangeShift:
@@ -191,6 +170,31 @@
             }
 
             return detail;
+        }
+
+        private static string GetDetailLeaveRequest(EmployeeAttendanceRequest request, string date)
+        {
+            if (request.TotalDays > 1)
+            {
+                return string.Format(MsgLeave, Convert.ToInt32(request.TotalDays), date);
+            }
+
+            if (request.TotalDays == 1)
+            {
+                return string.Format(MsgLeaveOneDay, date);
+            }
+
+            if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                return string.Format(MsgLeaveHalfDay, date, request.FromDate.Value.ToString("HH:mm"), request.ToDate.Value.ToString("HH:mm"));
+            }
+
+            return string.Format(
+                MsgLeaveDuringWorking,
+                date,
+                request.FromDate.Value.ToString("HH:mm"),
+                request.ToDate.Value.ToString("HH:mm"),
+                (request.ToDate.Value - request.FromDate.Value).TotalMinutes);
         }
     }
 }

@@ -62,9 +62,9 @@
 
         public RequestService()
         {
-            this.employeeRepository = new EmployeeRepository();
-            this.requestRepository = new RequestRepository();
-            this.emailService = new EmailService();
+            employeeRepository = new EmployeeRepository();
+            requestRepository = new RequestRepository();
+            emailService = new EmailService();
         }
 
         public RequestService(
@@ -120,8 +120,8 @@
 
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
-                    msg.AppendFormat(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+                    message = GetMessageForCheckInOut(request);
+                    msg.Append(message);
                     break;
 
                 case (int)RequestType.LateIn:
@@ -137,19 +137,8 @@
                 case (int)RequestType.KeepInView:
                     double totalDays = (double)request.TotalDays;
 
-                    if (totalDays.Equals(0.5))
-                    {
-                        msg.AppendFormat(
-                            _MsgKeepInViewHalfday,
-                            request.FromDate.ToDateMonthYearFormatedDate(),
-                            request.FromTime.ToShortTime(),
-                            request.ToTime.ToShortTime(),
-                            request.FromShift.Name);
-                    }
-                    else
-                    {
-                        msg.AppendFormat(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
-                    }
+                    message = GetMessageForKeepInView(request, totalDays);
+                    msg.Append(message);
 
                     break;
 
@@ -159,6 +148,27 @@
             }
 
             return msg.ToString();
+        }
+
+        private static string GetMessageForCheckInOut(RequestEntity request)
+        {
+            var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+            return string.Format(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+        }
+
+        private static string GetMessageForKeepInView(RequestEntity request, double totalDays)
+        {
+            if (totalDays.Equals(0.5))
+            {
+                return string.Format(
+                    _MsgKeepInViewHalfday,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromTime.ToShortTime(),
+                    request.ToTime.ToShortTime(),
+                    request.FromShift.Name);
+            }
+
+            return string.Format(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
         }
 
         public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
@@ -288,16 +298,7 @@
 
             if (relatedPeople.EmailSetting.AllowSendHR)
             {
-                if (relatedPeople.Verifier != null)
-                {
-                    relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Verifier.Email).ToList();
-                }
-
-                if (relatedPeople.Approver != null)
-                {
-                    relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Approver.Email).ToList();
-                }
-
+                RelatedPeopleAllowSendHR(relatedPeople);
                 emailModel = GetMailHR(relatedPeople, emailModel);
             }
 
@@ -313,6 +314,19 @@
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             return emailModel;
+        }
+
+        private static void RelatedPeopleAllowSendHR(RequestRelatedPeopleModel relatedPeople)
+        {
+            if (relatedPeople.Verifier != null)
+            {
+                relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Verifier.Email).ToList();
+            }
+
+            if (relatedPeople.Approver != null)
+            {
+                relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Approver.Email).ToList();
+            }
         }
 
         public string CheckRoleAccordingToRequestType(RequestViewType requestViewType)
@@ -608,33 +622,38 @@
             EmailModel email = GetMailToAndMailCC(request.Id, actionSendMail);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
-                switch (request.RequestType.Id)
-                {
-                    case (short)RequestType.Leave:
-                        SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                        break;
+                HandleSendMailCancelRequest(request, templateEmailPath, email);
+            }
+        }
 
-                    case (short)RequestType.ChangeShift:
-                        SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                        break;
+        private void HandleSendMailCancelRequest(RequestEntity request, string templateEmailPath, EmailModel email)
+        {
+            switch (request.RequestType.Id)
+            {
+                case (short)RequestType.Leave:
+                    SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                    break;
 
-                    case (short)RequestType.LateIn:
-                    case (short)RequestType.EarlyOut:
-                        SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                        break;
+                case (short)RequestType.ChangeShift:
+                    SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                    break;
 
-                    case (short)RequestType.CheckIn:
-                    case (short)RequestType.CheckOut:
-                        SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                        break;
+                case (short)RequestType.LateIn:
+                case (short)RequestType.EarlyOut:
+                    SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                    break;
 
-                    case (short)RequestType.KeepInView:
-                        SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                        break;
+                case (short)RequestType.CheckIn:
+                case (short)RequestType.CheckOut:
+                    SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                    break;
 
-                    default:
-                        return;
-                }
+                case (short)RequestType.KeepInView:
+                    SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
+                    break;
+
+                default:
+                    return;
             }
         }
 

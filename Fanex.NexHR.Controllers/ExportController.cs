@@ -261,7 +261,7 @@
 
         public ActionResult EmployeeOvertimeReport(int? year, int? month, int? calendar, int? empId)
         {
-            var requestDate = new DateTime(year.Value, month.Value, 1);
+            DateTime requestDate = new DateTime(year.Value, month.Value, 1);
             DateTime fromDate;
             DateTime toDate;
 
