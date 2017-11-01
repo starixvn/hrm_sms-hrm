@@ -51,7 +51,7 @@ namespace Fanex.NexHR.Site
                 defaults: new { controller = "employee", action = "myspace", id = UrlParameter.Optional });
         }
 
-        protected static void Application_Start()
+        protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             RegisterGlobalFilters(GlobalFilters.Filters);
