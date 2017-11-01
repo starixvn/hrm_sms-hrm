@@ -58,7 +58,6 @@
 
         private object CreateRecordReport(ManpowerCategoryModel manpower, int rowIndex)
         {
-            double defaultValue = 0.00;
             var record = new
             {
                 Count = rowIndex,
@@ -67,18 +66,29 @@
                 TotalLocal = manpower.TotalLocal,
                 Total = manpower.Total,
                 Management = manpower.Management,
-                AVGManagement = manpower.Total != 0 ? ((manpower.Management * 1.00) / manpower.Total) : defaultValue,
+                AVGManagement = ReturnValidValue(manpower.Total, ((manpower.Management * 1.00) / manpower.Total)),
                 ExecutiveWithPosition = manpower.ExecutiveWithPosition,
-                AVGExecutiveWithPosition = manpower.Total != 0 ? ((manpower.ExecutiveWithPosition * 1.00) / manpower.Total) : defaultValue,
+                AVGExecutiveWithPosition = ReturnValidValue(manpower.Total, ((manpower.ExecutiveWithPosition * 1.00) / manpower.Total)),
                 Executive = manpower.Executive,
-                AVGExecutive = manpower.Total != 0 ? ((manpower.Executive * 1.00) / manpower.Total) : defaultValue,
+                AVGExecutive = ReturnValidValue(manpower.Total, ((manpower.Executive * 1.00) / manpower.Total)),
                 Staff = manpower.Staff,
-                AVGStaff = manpower.Total != 0 ? ((manpower.Staff * 1.00) / manpower.Total) : defaultValue,
+                AVGStaff = ReturnValidValue(manpower.Total, ((manpower.Staff * 1.00) / manpower.Total)),
                 Worker = manpower.Worker,
-                AVGWorker = manpower.Total != 0 ? ((manpower.Worker * 1.00) / manpower.Total) : defaultValue
+                AVGWorker = ReturnValidValue(manpower.Total, ((manpower.Worker * 1.00) / manpower.Total))
             };
 
             return record;
+        }
+
+        private static double ReturnValidValue(int condition, double value)
+        {
+            double defaultValue = 0.00;
+            if (condition != 0)
+            {
+                return value;
+            }
+
+            return defaultValue;
         }
 
         private void FillContentRowFooterReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
@@ -99,15 +109,15 @@
                 TotalLocal = manpowers.Sum(t => t.TotalLocal),
                 Total = total,
                 Management = management,
-                AVGManagement = total != 0 ? ((management * 1.00) / total) : defaultValue,
+                AVGManagement = ReturnValidValue(total, ((management * 1.00) / total)),
                 ExecutiveWithPosition = executiveWithPosition,
-                AVGExecutiveWithPosition = total != 0 ? ((executiveWithPosition * 1.00) / total) : defaultValue,
+                AVGExecutiveWithPosition = ReturnValidValue(total, ((executiveWithPosition * 1.00) / total)),
                 Executive = executive,
-                AVGExecutive = total != 0 ? ((executive * 1.00) / total) : defaultValue,
+                AVGExecutive = ReturnValidValue(total, ((executive * 1.00) / total)),
                 Staff = staff,
-                AVGStaff = total != 0 ? ((staff * 1.00) / total) : defaultValue,
+                AVGStaff = ReturnValidValue(total, ((staff * 1.00) / total)),
                 Worker = worker,
-                AVGWorker = total != 0 ? ((worker * 1.00) / total) : defaultValue
+                AVGWorker = ReturnValidValue(total, ((worker * 1.00) / total))
             };
 
             writer.WriteRow(RowFooter, record);

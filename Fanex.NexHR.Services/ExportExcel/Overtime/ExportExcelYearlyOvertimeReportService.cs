@@ -58,7 +58,6 @@
 
         private object CreateRecordReport(OvertimeAnnualReportViewModel overtimeDetail, int rowIndex)
         {
-            double? nullValue = null;
             double totalHours = overtimeDetail.Jan + overtimeDetail.Feb + overtimeDetail.Mar + overtimeDetail.Apr
                     + overtimeDetail.May + overtimeDetail.Jun + overtimeDetail.Jul + overtimeDetail.Aug
                     + overtimeDetail.Sep + overtimeDetail.Oct + overtimeDetail.Nov + overtimeDetail.Dec;
@@ -69,22 +68,28 @@
                 Section = overtimeDetail.Team,
                 FullName = overtimeDetail.FullName,
                 NickName = overtimeDetail.NickName,
-                Jan = !overtimeDetail.Jan.Equals(0) ? overtimeDetail.Jan : nullValue,
-                Feb = !overtimeDetail.Feb.Equals(0) ? overtimeDetail.Feb : nullValue,
-                Mar = !overtimeDetail.Mar.Equals(0) ? overtimeDetail.Mar : nullValue,
-                Apr = !overtimeDetail.Apr.Equals(0) ? overtimeDetail.Apr : nullValue,
-                May = !overtimeDetail.May.Equals(0) ? overtimeDetail.May : nullValue,
-                Jun = !overtimeDetail.Jun.Equals(0) ? overtimeDetail.Jun : nullValue,
-                Jul = !overtimeDetail.Jul.Equals(0) ? overtimeDetail.Jul : nullValue,
-                Aug = !overtimeDetail.Aug.Equals(0) ? overtimeDetail.Aug : nullValue,
-                Sep = !overtimeDetail.Sep.Equals(0) ? overtimeDetail.Sep : nullValue,
-                Oct = !overtimeDetail.Oct.Equals(0) ? overtimeDetail.Oct : nullValue,
-                Nov = !overtimeDetail.Nov.Equals(0) ? overtimeDetail.Nov : nullValue,
-                Dec = !overtimeDetail.Dec.Equals(0) ? overtimeDetail.Dec : nullValue,
-                TotalHours = !totalHours.Equals(0) ? totalHours : nullValue
+                Jan = ReturnDoubleValue(overtimeDetail.Jan),
+                Feb = ReturnDoubleValue(overtimeDetail.Feb),
+                Mar = ReturnDoubleValue(overtimeDetail.Mar),
+                Apr = ReturnDoubleValue(overtimeDetail.Apr),
+                May = ReturnDoubleValue(overtimeDetail.May),
+                Jun = ReturnDoubleValue(overtimeDetail.Jun),
+                Jul = ReturnDoubleValue(overtimeDetail.Jul),
+                Aug = ReturnDoubleValue(overtimeDetail.Aug),
+                Sep = ReturnDoubleValue(overtimeDetail.Sep),
+                Oct = ReturnDoubleValue(overtimeDetail.Oct),
+                Nov = ReturnDoubleValue(overtimeDetail.Nov),
+                Dec = ReturnDoubleValue(overtimeDetail.Dec),
+                TotalHours = ReturnDoubleValue(totalHours),
             };
 
             return record;
+        }
+
+        private static double? ReturnDoubleValue(double value)
+        {
+            double? nullValue = null;
+            return !value.Equals(0) ? value : nullValue;
         }
 
         private void FillContentRowFooterReport(IList<OvertimeAnnualReportViewModel> overtimeDetails, ref ExcelTemplateWriter writer)

@@ -291,9 +291,15 @@
 
         private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
         {
-            return requests.OrderByDescending(t => (t.Status.Id == (byte)CurrentRequestStatus.Pending
-                && (t.ApprovedBy.Id == CurrentUser.Id || t.VerifiedBy.Id == CurrentUser.Id))
-                || (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == CurrentUser.Id)).ToList();
+            return requests.OrderByDescending(t => (SortRequestValidate(t))).ToList();
+        }
+
+        private bool SortRequestValidate(RequestEntity t)
+        {
+            bool pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
+                && (t.ApprovedBy.Id == CurrentUser.Id || t.VerifiedBy.Id == CurrentUser.Id);
+            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == CurrentUser.Id);
+            return pending || verified;
         }
 
         private IList<Team> GetGroupBySupervisor()

@@ -6,6 +6,7 @@
     using Resources;
     using System.Collections.Generic;
     using System.Web;
+    using System;
 
     public class ExportDisciplineDetailService : IExportDisciplineDetailService
     {
@@ -85,19 +86,19 @@
                 Section = discipline.Employee.GroupName,
                 Date = discipline.WorkDate,
                 ShiftName = discipline.ShiftName,
-                CheckIn = discipline.CheckIn.HasValue ? discipline.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty,
-                CheckOut = discipline.CheckOut.HasValue ? discipline.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty,
-                TotalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty,
-                MissingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty,
-                WorkingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty,
-                LateIn = !string.IsNullOrEmpty(discipline.MinutesLateIn) ? discipline.MinutesLateIn : string.Empty,
-                EarlyOut = !string.IsNullOrEmpty(discipline.MinutesEarlyOut) ? discipline.MinutesEarlyOut : string.Empty,
-                Absent = discipline.Absent.Value > 0 ? discipline.Absent.Value.ToString() : string.Empty,
-                UnpaidLeave = discipline.UnpaidLeave.Value > 0 ? discipline.UnpaidLeave.Value.ToString() : string.Empty,
-                UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent.Value > 0 ? discipline.UnpaidLeaveAbsent.Value.ToString() : string.Empty,
-                ChangeShift = discipline.ChangeShift.Value > 0 ? discipline.ChangeShift.Value.ToString() : string.Empty,
-                UnplannedLeave = discipline.UnplannedLeave.Value > 0 ? discipline.UnplannedLeave.Value.ToString() : string.Empty,
-                WeekendLeave = discipline.WeekendLeave.Value > 0 ? discipline.WeekendLeave.Value.ToString() : string.Empty,
+                CheckIn = Utilities.ReturnValidString(discipline.CheckIn.HasValue, discipline.CheckIn.Value.ToString(Constants.TimeFormat)),
+                CheckOut = Utilities.ReturnValidString(discipline.CheckOut.HasValue, discipline.CheckOut.Value.ToString(Constants.TimeFormat)),
+                TotalHours = Utilities.ReturnValidString(!string.IsNullOrEmpty(discipline.TotalHours), discipline.TotalHours),
+                MissingCheckInOut = Utilities.ReturnValidString(discipline.MissingCheckInOut.Value > 0, discipline.MissingCheckInOut.Value.ToString()),
+                WorkingUnderTime = Utilities.ReturnValidString(discipline.WorkingUnderTime.Value > 0, "1"),
+                LateIn = Utilities.ReturnValidString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn),
+                EarlyOut = Utilities.ReturnValidString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut),
+                Absent = Utilities.ReturnValidString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString()),
+                UnpaidLeave = Utilities.ReturnValidString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString()),
+                UnpaidLeaveAbsent = Utilities.ReturnValidString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString()),
+                ChangeShift = Utilities.ReturnValidString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString()),
+                UnplannedLeave = Utilities.ReturnValidString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString()),
+                WeekendLeave = Utilities.ReturnValidString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString()),
                 SystemSubtractScore = systemSubtractScore,
                 ApproverSubtractScore = approverSubtractScore,
                 ApproverComment = discipline.ApproverComment,

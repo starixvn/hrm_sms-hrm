@@ -107,19 +107,19 @@
             var record = new
             {
                 Count = rowIndex,
-                AttendanceDate = attendance.AttendanceDate.HasValue ? attendance.AttendanceDate.Value.ToDayOfWeekFormatedDate() : string.Empty,
+                AttendanceDate = Utilities.ReturnValidString(attendance.AttendanceDate.HasValue, attendance.AttendanceDate.Value.ToDayOfWeekFormatedDate()),
                 Code = attendance.Code,
                 NickName = attendance.NickName,
                 FullName = attendance.FullName,
                 TeamCode = attendance.TeamCode,
-                ShiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty,
-                InFixed = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToShortTime() : string.Empty,
-                OutFixed = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToShortTime() : string.Empty,
+                ShiftCode = Utilities.ReturnValidString(!string.IsNullOrEmpty(attendance.ShiftCode), attendance.ShiftCode),
+                InFixed = Utilities.ReturnValidString(attendance.InFixed.HasValue, attendance.InFixed.Value.ToShortTime()),
+                OutFixed = Utilities.ReturnValidString(attendance.OutFixed.HasValue, attendance.OutFixed.Value.ToShortTime()),
                 TotalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty,
                 LateIn = Utilities.MinuteToTime(attendance.LateIn),
                 EarlyOut = Utilities.MinuteToTime(attendance.EarlyOut),
                 Remark = requests,
-                Overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty,
+                Overtime = Utilities.ReturnValidString(attendance.IsOvertime, attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")"),
                 Notes = attendance.Notes
             };
 

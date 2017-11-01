@@ -55,7 +55,6 @@
 
         private object CreateRecordReport(OvertimeDaily overtimeDetail, int rowIndex)
         {
-            double? nullValue = null;
             CurrentRequestStatus status = (CurrentRequestStatus)overtimeDetail.Status;
 
             var record = new
@@ -68,15 +67,21 @@
                 Schedule = overtimeDetail.Schedule,
                 TimeIn = overtimeDetail.TimeIn,
                 TimeOut = overtimeDetail.TimeOut,
-                TotalHours = overtimeDetail.TotalWorkHours > 0 ? Math.Round(overtimeDetail.TotalWorkHours, 2) : nullValue,
-                NormalDay = overtimeDetail.NormalHours > 0 ? (double)overtimeDetail.NormalHours : nullValue,
-                OffDay = overtimeDetail.OffHours > 0 ? (double)overtimeDetail.OffHours : nullValue,
-                PublicHoliday = overtimeDetail.PublicHours > 0 ? (double)overtimeDetail.PublicHours : nullValue,
+                TotalHours = ValidateHours(overtimeDetail.TotalWorkHours > 0, Math.Round(overtimeDetail.TotalWorkHours, 2)),
+                NormalDay = ValidateHours(overtimeDetail.NormalHours > 0, overtimeDetail.NormalHours),
+                OffDay = ValidateHours(overtimeDetail.OffHours > 0, overtimeDetail.OffHours),
+                PublicHoliday = ValidateHours(overtimeDetail.PublicHours > 0, overtimeDetail.PublicHours),
                 Remark = overtimeDetail.Remark,
                 Status = status.ToString()
             };
 
             return record;
+        }
+
+        private static double? ValidateHours(bool hourCondition, double value)
+        {
+            double? nullValue = null;
+            return hourCondition ? value : nullValue;
         }
     }
 }

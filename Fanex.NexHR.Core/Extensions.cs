@@ -63,6 +63,8 @@
             string formatDate = "dd MMM, yyyy",
             IEnumerable<DateTime> unavailDates = null)
         {
+            bool validMinDate = minDate.HasValue && minDate != DateTime.MinValue;
+            bool validMaxDate = maxDate.HasValue && maxDate != DateTime.MinValue;
             string disabledDate = (unavailDates != null && unavailDates.Any())
                 ? string.Join(",", unavailDates.Select(d => d.ToString("dd MMM yyyy")))
                 : string.Empty;
@@ -70,8 +72,8 @@
             var htmlAttribute = new
             {
                 @class = "datepicker",
-                mindate = minDate.HasValue && minDate != DateTime.MinValue ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
-                maxdate = maxDate.HasValue && maxDate != DateTime.MinValue ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
+                mindate = validMinDate ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
+                maxdate = validMaxDate ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
                 disabledDate
             };
 
@@ -439,6 +441,8 @@
             SelectListItem firstItem,
             object htmlAttributes)
         {
+            IEnumerable<SelectListItem> outputSelectList = null;
+
             if (firstItem != null && firstItem.Value != null)
             {
                 List<SelectListItem> list = new List<SelectListItem>();
@@ -452,10 +456,10 @@
                     }
                 }
 
-                selectList = list;
+                outputSelectList = list;
             }
 
-            return SelectExtensions.DropDownListFor(htmlHelper, expression, selectList, htmlAttributes);
+            return SelectExtensions.DropDownListFor(htmlHelper, expression, outputSelectList, htmlAttributes);
         }
 
         #endregion Business

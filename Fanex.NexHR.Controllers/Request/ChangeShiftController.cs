@@ -241,11 +241,13 @@
         private static string GetScheduleStatus(WorkingCalendarModel model)
         {
             var schedule = string.Empty;
+            bool validChangeShift = !model.IsChangeShift && model.Shift != null;
+
             if (model.IsOffDay)
             {
                 schedule = Labels.Off;
             }
-            else if (!model.IsHoliday && !model.IsLeaveDay && !model.IsKeepInViewDay && !model.IsChangeShift && model.Shift != null)
+            else if (!model.IsHoliday && !model.IsLeaveDay && !model.IsKeepInViewDay && validChangeShift)
             {
                 schedule = model.Shift.Name;
             }
