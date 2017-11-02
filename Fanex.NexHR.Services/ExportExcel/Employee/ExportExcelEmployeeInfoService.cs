@@ -82,6 +82,11 @@
 
         private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
+            string groupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string companyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string confirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string resignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+
             var record = new
             {
                 Count = rowIndex,
@@ -89,10 +94,10 @@
                 FullName = employee.FullName,
                 NickName = employee.NickName,
                 Section = employee.Team.Name,
-                GroupDate = Utilities.ReturnValidString(employee.JoinedDate.HasValue, employee.JoinedDate.Value.ToDateMonthYearFormatedDate()),
-                CompanyDate = Utilities.ReturnValidString(employee.CompanyDate.HasValue, employee.CompanyDate.Value.ToDateMonthYearFormatedDate()),
-                ConfirmedDate = Utilities.ReturnValidString(employee.ConfirmedDate.HasValue, employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate()),
-                ResignedDate = Utilities.ReturnValidString(employee.ResignedDate.HasValue, employee.ResignedDate.Value.ToDateMonthYearFormatedDate()),
+                GroupDate = groupDate,
+                CompanyDate = companyDate,
+                ConfirmedDate = confirmedDate,
+                ResignedDate = resignedDate,
                 DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
@@ -131,6 +136,13 @@
 
         private object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
         {
+            string dateOfInCard = employee.DateOfIdCard.HasValue ? employee.DateOfIdCard.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string passportExp = employee.PassportExp.HasValue ? employee.PassportExp.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string groupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string companyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string confirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+            string resignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+
             var record = new
             {
                 Count = rowIndex,
@@ -149,10 +161,10 @@
                 MarriageName = employee.MarriageName,
                 CountryName = employee.CountryName,
                 CardNo = employee.CardNo,
-                DateOfIdCard = Utilities.ReturnValidString(employee.DateOfIdCard.HasValue, employee.DateOfIdCard.Value.ToDateMonthYearFormatedDate()),
+                DateOfIdCard = dateOfInCard,
                 PlaceOfIdCard = employee.PlaceOfIdCard,
                 PassportNo = employee.PassportNo,
-                PassportExp = Utilities.ReturnValidString(employee.PassportExp.HasValue, employee.PassportExp.Value.ToDateMonthYearFormatedDate()),
+                PassportExp = passportExp,
                 Qualification = employee.Qualification,
                 Major = employee.Major,
                 Phone = employee.Phone,
@@ -163,10 +175,10 @@
                 Skype = employee.Skype,
                 Unit = employee.Unit,
                 JobTitle = employee.JobTitle,
-                GroupDate = Utilities.ReturnValidString(employee.JoinedDate.HasValue, employee.JoinedDate.Value.ToDateMonthYearFormatedDate()),
-                CompanyDate = Utilities.ReturnValidString(employee.CompanyDate.HasValue, employee.CompanyDate.Value.ToDateMonthYearFormatedDate()),
-                ConfirmedDate = Utilities.ReturnValidString(employee.ConfirmedDate.HasValue, employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate()),
-                ResignedDate = Utilities.ReturnValidString(employee.ResignedDate.HasValue, employee.ResignedDate.Value.ToDateMonthYearFormatedDate()),
+                GroupDate = groupDate,
+                CompanyDate = companyDate,
+                ConfirmedDate = confirmedDate,
+                ResignedDate = resignedDate,
                 WorkingDays = employee.WorkingDays,
                 WorkingHours = employee.WorkingHours,
                 OffDaysbyWeek = employee.OffDaysbyWeek,

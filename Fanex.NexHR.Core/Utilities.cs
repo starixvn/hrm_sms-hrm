@@ -383,10 +383,5 @@
 
             return statusName;
         }
-
-        public static string ReturnValidString(bool condition, string value)
-        {
-            return condition ? value : string.Empty;
-        }
     }
 }

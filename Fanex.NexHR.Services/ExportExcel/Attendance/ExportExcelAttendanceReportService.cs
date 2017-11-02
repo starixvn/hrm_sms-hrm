@@ -84,6 +84,39 @@
 
         private object CreateRecordReport(EmployeeAttendanceModel attendance, int rowIndex)
         {
+            string requests = RequestsRemark(attendance);
+
+            string attendanceDate = attendance.AttendanceDate.HasValue ? attendance.AttendanceDate.Value.ToDayOfWeekFormatedDate() : string.Empty;
+            string shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
+            string inFixed = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToShortTime() : string.Empty;
+            string outFixed = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToShortTime() : string.Empty;
+            string totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
+            string overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
+
+            var record = new
+            {
+                Count = rowIndex,
+                AttendanceDate = attendanceDate,
+                Code = attendance.Code,
+                NickName = attendance.NickName,
+                FullName = attendance.FullName,
+                TeamCode = attendance.TeamCode,
+                ShiftCode = shiftCode,
+                InFixed = inFixed,
+                OutFixed = outFixed,
+                TotalWorkHours = totalWorkHours,
+                LateIn = Utilities.MinuteToTime(attendance.LateIn),
+                EarlyOut = Utilities.MinuteToTime(attendance.EarlyOut),
+                Remark = requests,
+                Overtime = overtime,
+                Notes = attendance.Notes
+            };
+
+            return record;
+        }
+
+        private string RequestsRemark(EmployeeAttendanceModel attendance)
+        {
             var requests = string.Empty;
             StringBuilder requestsBuilder = new StringBuilder();
 
@@ -104,26 +137,7 @@
                 requests = requestsBuilder.ToString(0, requestsBuilder.Length - 2);
             }
 
-            var record = new
-            {
-                Count = rowIndex,
-                AttendanceDate = Utilities.ReturnValidString(attendance.AttendanceDate.HasValue, attendance.AttendanceDate.Value.ToDayOfWeekFormatedDate()),
-                Code = attendance.Code,
-                NickName = attendance.NickName,
-                FullName = attendance.FullName,
-                TeamCode = attendance.TeamCode,
-                ShiftCode = Utilities.ReturnValidString(!string.IsNullOrEmpty(attendance.ShiftCode), attendance.ShiftCode),
-                InFixed = Utilities.ReturnValidString(attendance.InFixed.HasValue, attendance.InFixed.Value.ToShortTime()),
-                OutFixed = Utilities.ReturnValidString(attendance.OutFixed.HasValue, attendance.OutFixed.Value.ToShortTime()),
-                TotalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty,
-                LateIn = Utilities.MinuteToTime(attendance.LateIn),
-                EarlyOut = Utilities.MinuteToTime(attendance.EarlyOut),
-                Remark = requests,
-                Overtime = Utilities.ReturnValidString(attendance.IsOvertime, attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")"),
-                Notes = attendance.Notes
-            };
-
-            return record;
+            return requests;
         }
 
         [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
