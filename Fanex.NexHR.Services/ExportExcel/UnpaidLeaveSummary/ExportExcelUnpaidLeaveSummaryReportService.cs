@@ -56,7 +56,8 @@
         private void FillRowReport(LeaveSummary leaveSummary, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(leaveSummary, rowIndex);
-            ExportExcelService.WriteRowExcelReport(writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
+            rowIndex++;
         }
 
         private object CreateRecordReport(LeaveSummary leaveSummary, int rowIndex)

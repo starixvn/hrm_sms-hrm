@@ -55,7 +55,8 @@
         private void FillRowReport(ManpowerModel manpower, int year, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, year, rowIndex);
-            ExportExcelService.WriteRowExcelReport(writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
+            rowIndex++;
         }
 
         private static dynamic GetValueForCell(int value, int year, int month)

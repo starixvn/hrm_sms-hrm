@@ -53,7 +53,8 @@
         private void FillRowReport(ManpowerCategoryModel manpower, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(manpower, rowIndex);
-            ExportExcelService.WriteRowExcelReport(writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
+            rowIndex++;
         }
 
         private object CreateRecordReport(ManpowerCategoryModel manpower, int rowIndex)

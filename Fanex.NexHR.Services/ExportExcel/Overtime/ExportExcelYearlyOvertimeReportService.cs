@@ -53,7 +53,8 @@
         private void FillRowReport(OvertimeAnnualReportViewModel overtimeDetail, ref ExcelTemplateWriter writer, ref int rowIndex)
         {
             object record = CreateRecordReport(overtimeDetail, rowIndex);
-            ExportExcelService.WriteRowExcelReport(writer, ref rowIndex, RowStartBody, record);
+            ExportExcelService.WriteRowExcelReport(writer, rowIndex, RowStartBody, record);
+            rowIndex++;
         }
 
         private object CreateRecordReport(OvertimeAnnualReportViewModel overtimeDetail, int rowIndex)
