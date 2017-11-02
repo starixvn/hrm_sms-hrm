@@ -29,10 +29,10 @@
     options: {
       header: true,
       height: 175,
-      minWidth: 200,
+      minWidth: 180,
       classes: '',
-      checkAllText: 'Check all',
-      uncheckAllText: 'Uncheck all',
+      checkAllText: 'Check',
+      uncheckAllText: 'Uncheck',
       noneSelectedText: 'Select options',
       showCheckAll: true,
       showUncheckAll: true,

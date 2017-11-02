@@ -9,13 +9,13 @@
 .ui-multiselect-header ul li { float:left; padding:0 10px 0 0; }
 .ui-multiselect-header a { text-decoration:none; }
 .ui-multiselect-header a:hover { text-decoration:underline; }
-.ui-multiselect-header span.ui-icon { float:left; margin-top: 0;}
+.ui-multiselect-header span.ui-icon { float:left; margin-top: -1px;}
 .ui-multiselect-header .ui-multiselect-close { float:right; padding-right:0; text-align:right; }
 
 .ui-multiselect-menu { display:none; padding:3px; position:absolute; text-align: left; }
 .ui-multiselect-checkboxes { overflow-y:auto; position:relative; }
 .ui-multiselect-checkboxes label { border:1px solid transparent; cursor:default; display:block; padding:3px 1px; margin-bottom: 0}
-.ui-multiselect-checkboxes label input { position:relative; top:1px; margin-top: 0;}
+.ui-multiselect-checkboxes label input { position:relative; top:2px; margin-top: 0; margin-right: 3px}
 .ui-multiselect-checkboxes label img { height: 30px; vertical-align: middle; padding-right: 3px;}
 .ui-multiselect-checkboxes li { clear:both; font-size:0.9em; list-style: none; padding-right:3px; }
 .ui-multiselect-checkboxes .ui-multiselect-optgroup { padding: 3px; }
