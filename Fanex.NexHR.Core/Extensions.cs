@@ -200,14 +200,6 @@
                 throw new ArgumentException("name cannot be null or empty.", nameof(name));
             }
 
-            bool selectListFromViewData = false;
-
-            if (selectList == null)
-            {
-                selectList = htmlHelper.ViewData.Eval(fullHtmlFieldName) as IEnumerable<SelectListItem>;
-                selectListFromViewData = true;
-            }
-
             if (selectList == null)
             {
                 throw new ArgumentNullException(nameof(selectList));
@@ -222,7 +214,7 @@
                 values = state.Value.ConvertTo(typeof(string[]), null);
             }
 
-            if (!selectListFromViewData && (values == null))
+            if (values == null)
             {
                 values = htmlHelper.ViewData.Eval(fullHtmlFieldName);
             }
