@@ -77,19 +77,20 @@
             decimal systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
             decimal approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
-            string checkIn = discipline.CheckIn.HasValue ? discipline.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty;
-            string checkOut = discipline.CheckOut.HasValue ? discipline.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty;
-            string totalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty;
-            string missingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty;
-            string workingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty;
-            string lateIn = !string.IsNullOrEmpty(discipline.MinutesLateIn) ? discipline.MinutesLateIn : string.Empty;
-            string earlyOut = !string.IsNullOrEmpty(discipline.MinutesEarlyOut) ? discipline.MinutesEarlyOut : string.Empty;
-            string absent = discipline.Absent.Value > 0 ? discipline.Absent.Value.ToString() : string.Empty;
-            string unpaidLeave = discipline.UnpaidLeave.Value > 0 ? discipline.UnpaidLeave.Value.ToString() : string.Empty;
-            string unpaidLeaveAbsent = discipline.UnpaidLeaveAbsent.Value > 0 ? discipline.UnpaidLeaveAbsent.Value.ToString() : string.Empty;
-            string changeShift = discipline.ChangeShift.Value > 0 ? discipline.ChangeShift.Value.ToString() : string.Empty;
-            string unplannedLeave = discipline.UnplannedLeave.Value > 0 ? discipline.UnplannedLeave.Value.ToString() : string.Empty;
-            string weekendLeave = discipline.WeekendLeave.Value > 0 ? discipline.WeekendLeave.Value.ToString() : string.Empty;
+            string checkIn = ReturnValueOrEmtpyString(discipline.CheckIn.HasValue, discipline.CheckIn.Value.ToString(Constants.TimeFormat));
+            string checkOut = ReturnValueOrEmtpyString(discipline.CheckOut.HasValue, discipline.CheckOut.Value.ToString(Constants.TimeFormat));
+            string totalHours = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.TotalHours), discipline.TotalHours);
+            string missingCheckInOut = ReturnValueOrEmtpyString(discipline.MissingCheckInOut.Value > 0, discipline.MissingCheckInOut.Value.ToString());
+            string workingUnderTime = ReturnValueOrEmtpyString(discipline.WorkingUnderTime.Value > 0, "1");
+            string lateIn = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
+            string earlyOut = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
+            string absent = ReturnValueOrEmtpyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());
+            string unpaidLeave = ReturnValueOrEmtpyString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString());
+            string unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
+            string changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
+            string unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
+            string weekendLeave = ReturnValueOrEmtpyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
+
             var record = new
             {
                 Shift = discipline.Employee.Code,
@@ -120,6 +121,11 @@
             rowIndex++;
 
             return record;
+        }
+
+        private static string ReturnValueOrEmtpyString(bool condition, string value)
+        {
+            return condition ? value : string.Empty;
         }
     }
 }

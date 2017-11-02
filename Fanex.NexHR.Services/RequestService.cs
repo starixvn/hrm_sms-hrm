@@ -508,7 +508,7 @@
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                SendToRelatedPeople(commandGetPassiveName, processUser, request, employee, emailModel.SendToNickName, emailModel.SendTo, emailModel.SendCC, templateEmailPathForRelated);
+                SendToRelatedPeople(commandGetPassiveName, processUser, request, employee, emailModel, templateEmailPathForRelated);
             }
         }
 
@@ -968,46 +968,44 @@
             Employee processUser,
             RequestEntity request,
             Employee employee,
-            string sendToNickName,
-            string mailTo,
-            string mailCc,
+            EmailModel emailModel,
             string templateEmailPath)
         {
             switch (request.RequestType.Id)
             {
                 case (short)RequestType.CheckIn:
                     var subjectCheckIn = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, sendToNickName, mailTo, mailCc, templateEmailPath);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckIn, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.CheckOut:
                     var subjectCheckOut = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, sendToNickName, mailTo, mailCc, templateEmailPath);
+                    CheckInOutRelatedMail(command, employee, processUser, request, subjectCheckOut, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.LateIn:
                     var subjectLateIn = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, sendToNickName, mailTo, mailCc, true, templateEmailPath);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectLateIn, emailModel, true, templateEmailPath);
                     break;
 
                 case (short)RequestType.EarlyOut:
                     var subjectEarlyOut = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, sendToNickName, mailTo, mailCc, false, templateEmailPath);
+                    LateInEarlyOutRelatedMail(command, employee, processUser, request, subjectEarlyOut, emailModel, false, templateEmailPath);
                     break;
 
                 case (short)RequestType.ChangeShift:
                     var subjectChangeShift = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
-                    ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, sendToNickName, mailTo, mailCc, templateEmailPath);
+                    ChangeShiftRelatedMail(command, employee, processUser, request, subjectChangeShift, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.Leave:
                     var subjectLeave = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
-                    LeaveRelatedMail(command, employee, processUser, request, subjectLeave, sendToNickName, mailTo, mailCc, templateEmailPath);
+                    LeaveRelatedMail(command, employee, processUser, request, subjectLeave, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.KeepInView:
                     var subjectKeepInView = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
-                    KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, sendToNickName, mailTo, mailCc, templateEmailPath);
+                    KeepInViewRelatedMail(command, employee, processUser, request, subjectKeepInView, emailModel, templateEmailPath);
                     break;
 
                 default:
@@ -1021,9 +1019,7 @@
             Employee processUser,
             RequestEntity request,
             string subject,
-            string sendToNickName,
-            string mailTo,
-            string mailCc,
+            EmailModel emailModel,
             string templateEmailPath)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
@@ -1035,7 +1031,7 @@
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(
                 body,
-                sendToNickName,
+                emailModel.SendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
@@ -1047,8 +1043,8 @@
 
             this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCc,
+                emailModel.SendTo,
+                emailModel.SendCC,
                 subject,
                 body);
         }
@@ -1059,16 +1055,14 @@
             Employee processUser,
             RequestEntity request,
             string subject,
-            string sendToNickName,
-            string mailTo,
-            string mailCc,
+            EmailModel emailModel,
             bool isLateIn,
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(
                 body,
-                sendToNickName,
+                emailModel.SendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
@@ -1078,8 +1072,8 @@
                 request.Remark);
             this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCc,
+                emailModel.SendTo,
+                emailModel.SendCC,
                 subject,
                 body);
         }
@@ -1090,16 +1084,14 @@
             Employee processUser,
             RequestEntity request,
             string subject,
-            string sendToNickName,
-            string mailTo,
-            string mailCc,
+            EmailModel emailModel,
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
             var forDate = GetMessageDateString(request.FromDate, request.ToDate);
             body = string.Format(
                 body,
-                sendToNickName,
+                emailModel.SendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
@@ -1109,8 +1101,8 @@
 
             emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCc,
+                emailModel.SendTo,
+                emailModel.SendCC,
                 subject,
                 body);
         }
@@ -1121,9 +1113,7 @@
             Employee processUser,
             RequestEntity request,
             string subject,
-            string sendToNickName,
-            string mailTo,
-            string sendCc,
+            EmailModel emailModel,
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
@@ -1132,7 +1122,7 @@
                 : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
             body = string.Format(
                 body,
-                sendToNickName,
+                emailModel.SendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
@@ -1143,8 +1133,8 @@
 
             this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                sendCc,
+                emailModel.SendTo,
+                emailModel.SendCC,
                 subject,
                 body);
         }
@@ -1155,9 +1145,7 @@
             Employee processUser,
             RequestEntity request,
             string subject,
-            string sendToNickName,
-            string mailTo,
-            string mailCc,
+            EmailModel emailModel,
             string templateEmailPath)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
@@ -1169,7 +1157,7 @@
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(
                 body,
-                sendToNickName,
+                emailModel.SendToNickName,
                 string.Format("{0} ({1})", employee.NickName, employee.FullName),
                 command,
                 string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
@@ -1180,8 +1168,8 @@
 
             this.emailService.SendEmail(
                 ConfigurationManager.AppSettings["Email"],
-                mailTo,
-                mailCc,
+                emailModel.SendTo,
+                emailModel.SendCC,
                 subject,
                 body);
         }
