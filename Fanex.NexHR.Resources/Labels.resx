@@ -1533,6 +1533,12 @@
   <data name="WeekendLeave" xml:space="preserve">
     <value>Weekend Leave</value>
   </data>
+  <data name="AddWeekendLeave" xml:space="preserve">
+    <value>Add Weekend Leave</value>
+  </data>
+  <data name="WorkDate" xml:space="preserve">
+    <value>Work Date</value>
+  </data>
   <data name="Domain" xml:space="preserve">
     <value>Domain</value>
   </data>

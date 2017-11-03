@@ -2,36 +2,30 @@
 /*global _global, autoIndex, noInformation, floatThead*/
 
 (function () {
-    function showSuccessMsg(msg) {
-        $('#dialogAddOtherDiscipline .validation-summary-valid')
-            .show()
-            .addClass('success')
-            .find('ul:first')
-            .append('<li>' + msg + '</li>');
+    var $disciplineTableBody, $dialogAddOtherDiscipline, $dialogViewOtherDiscipline, $btnAddOtherDiscipline, $btnAddWeekendLeave;
+
+    function showSuccessMsg($dialog, msg) {
+        $dialog.find('.validation-summary-valid')
+            .show().addClass('success').find('ul:first').append('<li>' + msg + '</li>');
     }
 
-    function showErrorMsg(msg) {
-        $('#dialogAddOtherDiscipline .validation-summary-valid')
-            .show()
-            .addClass('validation-summary-errors')
-            .find('ul:first').append(msg);
+    function showErrorMsg($dialog, msg) {
+        $dialog.find('.validation-summary-valid')
+            .show().addClass('validation-summary-errors').find('ul:first').append(msg);
     }
 
-    function removeMsg() {
-        $('#dialogAddOtherDiscipline .validation-summary-valid')
-            .hide()
-            .removeClass('success')
-            .removeClass('validation-summary-errors')
-            .find('ul:first').html("");
+    function removeMsg($dialog) {
+        $dialog.find('.validation-summary-valid')
+            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html("");
     }
 
     function validateAddOtherDiscipline() {
         var isValid = true,
             errorString = '',
-            empId = $('#dialogAddOtherDiscipline #EmployeeId').val(),
-            workDate = $('#dialogAddOtherDiscipline #WorkDate').datepicker('getDate'),
-            disciplineTypeId = $('#dialogAddOtherDiscipline #DisciplineTypeId').val(),
-            comment = $('#dialogAddOtherDiscipline #Comment').val();
+            empId = $dialogAddOtherDiscipline.find('#EmployeeId').val(),
+            workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate'),
+            disciplineTypeId = $dialogAddOtherDiscipline.find('#DisciplineTypeId').val(),
+            comment = $dialogAddOtherDiscipline.find('#Comment').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
             errorString += '<li>The Employee field is required.</li>';
@@ -50,17 +44,39 @@
         }
 
         if (errorString.length > 0) {
-            showErrorMsg(errorString);
+            showErrorMsg($dialogAddOtherDiscipline, errorString);
             isValid = false;
         }
 
         return isValid;
     }
 
-    function initAutocomplete() {
-        var selectorName = '#dialogAddOtherDiscipline #Employee',
-            selectorId = '#dialogAddOtherDiscipline #EmployeeId';
-        $(selectorName).autocomplete({
+    function validateAddWeekendLeave() {
+        var isValid = true,
+            errorString = '',
+            empId = $dialogAddOtherDiscipline.find('#EmployeeId').val(),
+            workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate');
+
+        if (empId && parseInt(empId, 10) <= 0) {
+            errorString += '<li>The Employee field is required.</li>';
+        }
+
+        if (workDate === null || workDate === '') {
+            errorString += '<li>Discipline Date field is required.</li>';
+        }
+
+        if (errorString.length > 0) {
+            showErrorMsg($dialogAddOtherDiscipline, errorString);
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function initAutocomplete($dialog) {
+        var $selectorName = $dialog.find('#Employee'),
+            $selectorId = $dialog.find('#EmployeeId');
+        $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: _global.root + 'discipline/GetMemberToAddOtherDiscipline',
@@ -74,43 +90,40 @@
                                 value: item.Id
                             };
                         }));
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(textStatus + ': ' + errorThrown);
                     }
                 });
             },
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                $(selectorName).val(ui.item.label);
-                $(selectorId).val(ui.item.value);
+                $selectorName.val(ui.item.label);
+                $selectorId.val(ui.item.value);
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $(selectorName).val(ui.item.label);
-                $(selectorId).val(ui.item.value);
+                $selectorName.val(ui.item.label);
+                $selectorId.val(ui.item.value);
             },
             change: function (event, ui) {
                 event.preventDefault();
                 if (ui && ui.item) {
-                    $(selectorName).val(ui.item.label);
-                    $(selectorId).val(ui.item.value);
+                    $selectorName.val(ui.item.label);
+                    $selectorId.val(ui.item.value);
                 } else {
-                    if ($(selectorName).val() === '') {
-                        $(selectorId).val('');
+                    if ($selectorName.val() === '') {
+                        $selectorId.val('');
                     } else {
-                        $(selectorId).val('0');
+                        $selectorId.val('0');
                     }
                 }
             }
         }).autocomplete('widget').addClass('search-employee-autocomplete');
     }
 
-    function initDatePicker() {
-        var mindate = $('#dialogAddOtherDiscipline .datepicker').attr('mindate');
+    function initDatePicker($dialog) {
+        var mindate = $dialog.find('.datepicker').attr('mindate');
 
-        $('#dialogAddOtherDiscipline .datepicker').datepicker({
+        $dialog.find('.datepicker').datepicker({
             dateFormat: 'dd M, yy',
             showOn: 'button',
             buttonImageOnly: true,
@@ -121,30 +134,31 @@
 
         if (mindate !== 'null') {
             mindate = mindate.split('/');
-            $('#dialogAddOtherDiscipline .datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+            $dialog.find('.datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
         }
     }
 
     function initEventForOtherDisciplineDropdown() {
-        $('#dialogAddOtherDiscipline select#DisciplineTypeId').on('change', function () {
+        $dialogAddOtherDiscipline.find('select#DisciplineTypeId').on('change', function () {
             var score = $('option:selected', this).data('score');
-            $('#dialogAddOtherDiscipline #MinusScore').val(score);
+            $dialogAddOtherDiscipline.find('#MinusScore').val(score);
         });
     }
 
     function initAddOtherDisciplineDialog() {
-        initAutocomplete();
-        initDatePicker();
+        initAutocomplete($dialogAddOtherDiscipline);
+        initDatePicker($dialogAddOtherDiscipline);
         initEventForOtherDisciplineDropdown();
-        $('#dialogAddOtherDiscipline select#DisciplineTypeId').change();
+        $dialogAddOtherDiscipline.find('select#DisciplineTypeId').change();
 
-        $('#dialogAddOtherDiscipline').dialog({
+        $dialogAddOtherDiscipline.dialog({
             modal: true,
+            title: 'Add Other Discipline',
             buttons: [
                 {
                     text: 'Submit',
                     click: function () {
-                        removeMsg();
+                        removeMsg($dialogAddOtherDiscipline);
                         if (validateAddOtherDiscipline()) {
                             $.ajax({
                                 type: 'POST',
@@ -152,13 +166,61 @@
                                 data: $('#frmAddOtherDiscipline').serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
-                                        showSuccessMsg('Add other discipline successfully!');
+                                        showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
                                     } else {
-                                        showErrorMsg('<li>' + result.Message + '</li>');
+                                        showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
                                     }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
+                                }
+                            });
+                        }
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }
+            ],
+            close: function () {
+                query();
+            },
+            show: {
+                effect: 'fade',
+                duration: 300
+            },
+            hide: {
+                effect: 'fade',
+                duration: 200
+            },
+            minWidth: 460,
+            dialogClass: 'modal-shadow'
+        });
+    }
+
+    function initAddWeekendLeaveDialog() {
+        initAutocomplete($dialogAddOtherDiscipline);
+        initDatePicker($dialogAddOtherDiscipline);
+
+        $dialogAddOtherDiscipline.dialog({
+            modal: true,
+            title: 'Add Weekend Leave',
+            buttons: [
+                {
+                    text: 'Submit',
+                    click: function () {
+                        removeMsg($dialogAddOtherDiscipline);
+                        if (validateAddWeekendLeave()) {
+                            $.ajax({
+                                type: 'POST',
+                                url: _global.root + 'discipline/AddWeekendLeave',
+                                data: $('#frmAddWeekendLeave').serialize(),
+                                success: function (result) {
+                                    if (result.IsSuccessful) {
+                                        showSuccessMsg($dialogAddOtherDiscipline, 'Add Weekend Leave successfully!');
+                                    } else {
+                                        showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
+                                    }
                                 }
                             });
                         }
@@ -198,7 +260,7 @@
     }
 
     function initEventViewOtherDiscipline() {
-        $('table a.viewOtherDiscipline').on('click', function () {
+        $disciplineTableBody.find('a.viewOtherDiscipline').on('click', function () {
             var empId = parseInt($(this).data('empid'), 10),
                 nickname = $(this).data('nickname');
 
@@ -213,9 +275,9 @@
                         toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
                     },
                     success: function (data) {
-                        $('#dialogViewOtherDiscipline').html(data);
+                        $dialogViewOtherDiscipline.html(data);
                         initEventForDeleteOtherDiscipline();
-                        $('#dialogViewOtherDiscipline').dialog({
+                        $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Other Discipline - ' + nickname,
                             close: function () {
@@ -232,9 +294,47 @@
                             minWidth: 500,
                             dialogClass: 'modal-shadow'
                         });
+                    }
+                });
+            }
+        });
+    }
+
+    function initEventViewWeekendLeave() {
+        $disciplineTableBody.find('a.viewWeekendLeave').on('click', function () {
+            var empId = parseInt($(this).data('empid'), 10),
+                nickname = $(this).data('nickname');
+
+            if (empId > 0) {
+                $.ajax({
+                    type: 'GET',
+                    url: _global.root + 'discipline/PartialViewWeekendLeave',
+                    dataType: 'html',
+                    data: {
+                        employeeId: empId,
+                        fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
+                        toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(textStatus + ': ' + errorThrown);
+                    success: function (data) {
+                        $dialogViewOtherDiscipline.html(data);
+                        initEventForDeleteWeekendLeave();
+                        $dialogViewOtherDiscipline.dialog({
+                            modal: true,
+                            title: 'Weekend Leave - ' + nickname,
+                            close: function () {
+                                query();
+                            },
+                            show: {
+                                effect: 'fade',
+                                duration: 300
+                            },
+                            hide: {
+                                effect: 'fade',
+                                duration: 200
+                            },
+                            minWidth: 500,
+                            dialogClass: 'modal-shadow'
+                        });
                     }
                 });
             }
@@ -242,7 +342,7 @@
     }
 
     function initEventForViewDisciplineDetail() {
-        $('table a.viewDisciplineDetail').on('click', function () {
+        $disciplineTableBody.find('a.viewDisciplineDetail').on('click', function () {
             var empId = $(this).data('empid'),
                 employee = $(this).data('employee'),
                 teamId = $('form.form-filter #TeamId').val(),
@@ -258,7 +358,7 @@
     }
 
     function initEventForDeleteOtherDiscipline() {
-        $('table a.deleteOtherDiscipline').on('click', function () {
+        $dialogViewOtherDiscipline.find('a.deleteOtherDiscipline').on('click', function () {
             var empId = $(this).data('empid'),
                 workdate = $(this).data('workdate'),
                 disciplineTypeId = $(this).data('disciplinetype'),
@@ -269,16 +369,34 @@
                     employeeId: empId,
                     workDate: workdate,
                     disciplineTypeId: disciplineTypeId
-                }, function (error) {
-                    if (error.length > 0) {
-                        alert(error);
-                        return;
-                    }
+                }, function () {
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
-                    if ($('#dialogViewOtherDiscipline table.table tbody > tr').length === 0) {
+                    if ($dialogViewOtherDiscipline.find('table.table tbody > tr').length === 0) {
                         $(noInformation(6)).appendTo('#dialogViewOtherDiscipline table.table');
+                    }
+                });
+            });
+        });
+    }
+
+    function initEventForDeleteWeekendLeave() {
+        $dialogViewOtherDiscipline.find('a.deleteWeekendLeave').on('click', function () {
+            var empId = $(this).data('empid'),
+                workdate = $(this).data('workdate'),
+                rowIndex = $(this).data('row-index');
+
+            confirm('Are you sure you want to delete this weekend leave?', function () {
+                $.post(_global.root + 'discipline/DeleteWeekendLeave', {
+                    employeeId: empId,
+                    workDate: workdate
+                }, function () {
+                    $('#row_' + rowIndex).remove();
+                    autoIndex();
+
+                    if ($dialogViewOtherDiscipline.find('table.table tbody > tr').length === 0) {
+                        $(noInformation(4)).appendTo('#dialogViewOtherDiscipline table.table');
                     }
                 });
             });
@@ -318,6 +436,38 @@
         });
     }
 
+    function initEventAddOtherDiscipline() {
+        $btnAddOtherDiscipline.on('click', function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: 'GET',
+                url: _global.root + 'discipline/PartialAddOtherDiscipline',
+                dataType: 'html',
+                success: function (data) {
+                    $dialogAddOtherDiscipline.html(data);
+                    initAddOtherDisciplineDialog();
+                }
+            });
+        });
+    }
+
+    function initEventAddWeekendLeave() {
+        $btnAddWeekendLeave.on('click', function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: 'GET',
+                url: _global.root + 'discipline/PartialAddWeekendLeave',
+                dataType: 'html',
+                success: function (data) {
+                    $dialogAddOtherDiscipline.html(data);
+                    initAddWeekendLeaveDialog();
+                }
+            });
+        });
+    }
+
     function formatDate(date) {
         var monthNames = [
           "Jan", "Feb", "Mar",
@@ -338,36 +488,25 @@
             url: _global.root + 'discipline/PartialListDisciplineSummary',
             data: $('form.form-filter').serialize(),
             success: function (data) {
-                $('#discipline-summary').html(data);
+                $disciplineTableBody.html(data);
 
-                floatThead("table#data");
                 initEventViewOtherDiscipline();
+                initEventViewWeekendLeave();
                 initEventForViewDisciplineDetail();
-
-                $('#btnAddOtherDiscipline').on('click', function (event) {
-                    event.preventDefault();
-
-                    $.ajax({
-                        type: 'GET',
-                        url: _global.root + 'discipline/PartialAddOtherDiscipline',
-                        dataType: 'html',
-                        success: function (data) {
-                            $('#dialogAddOtherDiscipline').html(data);
-                            initAddOtherDisciplineDialog();
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert(textStatus + ': ' + errorThrown);
-                        }
-                    });
-                });
             }
         });
     }
 
     $(document).ready(function () {
-        initEventForTeamDropdown();
+        $disciplineTableBody = $('#disciplineTableBody');
+        $dialogAddOtherDiscipline = $('#dialogAddOtherDiscipline');
+        $dialogViewOtherDiscipline = $('#dialogViewOtherDiscipline');
+        $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
+        $btnAddWeekendLeave = $('#btnAddWeekendLeave');
 
+        initEventForTeamDropdown();
         initEventForDateRangeDropdown();
+
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');
         });
@@ -382,6 +521,9 @@
             window.location.href = _global.root + 'ExportDiscipline/ExportDisciplineSummaryReport?' + $('form.form-filter').serialize();
         });
 
+        floatThead("table#data");
+        initEventAddOtherDiscipline();
+        initEventAddWeekendLeave();
         query();
     });
 })();

@@ -1,116 +1,92 @@
 ﻿@model IList<DisciplineSummaryModel>
-<table id="data" class="table table-custom discipline-summary">
-    <thead>
-        @if ((bool)ViewBag.HasPermissionToAddOther)
-        {
-            <tr>
-                <th colspan="18" class="align-left">
-                    <a class="button" id="btnAddOtherDiscipline">
-                        @Labels.AddOtherDiscipline
-                    </a>
-                </th>
-            </tr>
-        }
 
+@if (Model != null && Model.Any())
+{
+    int index = 0;
+    foreach (DisciplineSummaryModel item in Model)
+    {
+        index++;
         <tr>
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.Section</th>
-            <th>@Labels.Code</th>
-            <th>@Labels.Nick</th>
-            <th>@Labels.MissingCheckInOut</th>
-            <th>@Labels.WorkingUnderTime</th>
-            <th>@Labels.LateIn</th>
-            <th>@Labels.EarlyOut</th>
-            <th>@Labels.Absent</th>
-            <th>@Labels.UPL</th>
-            <th>@Labels.UPLAbsent</th>
-            <th>@Labels.ChangeShift</th>
-            <th>@Labels.NotFollowingLeaveProcedures</th>
-            <th>@Labels.WeekendLeave</th>
-            <th>@Labels.OtherDiscipline</th>
-            <th>@Labels.SystemDeduction</th>
-            <th>@Labels.ApproverDeduction</th>
-            <th>@Labels.Action</th>
+            <td>@index</td>
+            <td>@item.Employee.GroupName</td>
+            <td>@item.Employee.Code</td>
+            <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
+            <td>@item.MissingCheckInOut</td>
+            <td>@item.WorkingUnderTime</td>
+            <td>@item.LateIn</td>
+            <td>@item.EarlyOut</td>
+            <td>@item.Absent</td>
+            <td>@item.UnpaidLeave</td>
+            <td>@item.UnpaidLeaveAbsent</td>
+            <td>@item.ChangeShift</td>
+            <td>@item.UnplannedLeave</td>
+            <td>
+                @if (item.WeekendLeave > 0)
+                {
+                    <a class="other-discipline viewWeekendLeave" style="color: red"
+                       data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
+                        -@item.WeekendLeave
+                    </a>
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <td>
+                @if (item.OtherDisciplineScore > 0)
+                {
+                    <a class="other-discipline viewOtherDiscipline" style="color: red"
+                       data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
+                        -@item.OtherDisciplineScore
+                    </a>
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <td>
+                @if (item.SystemSubtractScore > 0)
+                {
+                    <span style="color: red">-@item.SystemSubtractScore</span>
+                }
+                else
+                {
+                    @item.SystemSubtractScore
+                }
+            </td>
+            <td>
+                @if (item.ApproverSubtractScore > 0)
+                {
+                    <span style="color: red">-@item.ApproverSubtractScore</span>
+                }
+                else
+                {
+                    @item.ApproverSubtractScore
+                }
+            </td>
+            <td>
+                @{
+                    var empId = item.Employee.EmployeeId;
+                    var employee = item.Employee.NickName + " (" + item.Employee.FullName + ")";
+                }
+                @switch (item.Permission)
+                {
+                    case (int)Permision.Host:
+                        <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
+                            <i class="fa fa-pencil fa-lg icon-edit"></i>
+                        </a>
+                        break;
+                    default:
+                        <a href="javascript:;" class="icon view viewDisciplineDetail" data-empid="@empId" data-employee="@employee"></a>
+                        break;
+                }
+            </td>
         </tr>
-    </thead>
-    @if (Model != null && Model.Any())
-    {
-        int index = 0;
-        <tbody>
-            @foreach (DisciplineSummaryModel item in Model)
-            {
-                index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@item.Employee.GroupName</td>
-                    <td>@item.Employee.Code</td>
-                    <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
-                    <td>@item.MissingCheckInOut</td>
-                    <td>@item.WorkingUnderTime</td>
-                    <td>@item.LateIn</td>
-                    <td>@item.EarlyOut</td>
-                    <td>@item.Absent</td>
-                    <td>@item.UnpaidLeave</td>
-                    <td>@item.UnpaidLeaveAbsent</td>
-                    <td>@item.ChangeShift</td>
-                    <td>@item.UnplannedLeave</td>
-                    <td>@item.WeekendLeave</td>
-                    <td>
-                        @if (item.OtherDisciplineScore > 0)
-                        {
-                            <a class="other-discipline viewOtherDiscipline" style="color: red"
-                               data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
-                                -@item.OtherDisciplineScore
-                            </a>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.SystemSubtractScore > 0)
-                        {
-                            <span style="color: red">-@item.SystemSubtractScore</span>
-                        }
-                        else
-                        {
-                            @item.SystemSubtractScore
-                        }
-                    </td>
-                    <td>
-                        @if (item.ApproverSubtractScore > 0)
-                        {
-                            <span style="color: red">-@item.ApproverSubtractScore</span>
-                        }
-                        else
-                        {
-                            @item.ApproverSubtractScore
-                        }
-                    </td>
-                    <td>
-                        @{
-                        var empId = item.Employee.EmployeeId;
-                        var employee = item.Employee.NickName + " (" + item.Employee.FullName + ")";
-                        }
-                        @switch (item.Permission)
-                        {
-                            case (int)Permision.Host:
-                                <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
-                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                </a>
-                                break;
-                            default:
-                            <a href="javascript:;" class="icon view viewDisciplineDetail" data-empid="@empId" data-employee="@employee"></a>
-                                break;
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
     }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 18);
-    }
-</table>
+}
+else
+{
+    @RazorHelper.DisplayNoInformation(colspan: 18);
+}

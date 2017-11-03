@@ -1353,6 +1353,8 @@
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\UI\_NewHeader.cshtml" />
     <Content Include="Views\UI\_NewNavBar.cshtml" />
+    <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
+    <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\Google.Protobuf.dll" />

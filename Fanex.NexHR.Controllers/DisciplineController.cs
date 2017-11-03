@@ -61,6 +61,8 @@
                 model.DateRange = GetDateRangeType();
             }
 
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+
             return View(model);
         }
 
@@ -81,7 +83,7 @@
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
-            ViewBag.HasPermissionToAddOther = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ListDisciplineSummary", disciplines);
         }
@@ -153,9 +155,25 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            ViewBag.HasPermissionToDelete = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
+        }
+
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        public ActionResult PartialViewWeekendLeave(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetWeekendLeaveOfEmployeeCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            IList<OtherDisciplineModel> weekendLeaves = disciplineService.GetWeekendLeave(criteria);
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+
+            return PartialView("_ViewWeekendLeave", weekendLeaves);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
@@ -175,7 +193,18 @@
             return PartialView("_AddOtherDiscipline", model);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
+        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        public ActionResult PartialAddWeekendLeave()
+        {
+            var model = new AddOtherDisciplineViewModel
+            {
+                EmployeeId = -1,
+                WorkDate = DateTime.Now
+            };
+
+            return PartialView("_AddWeekendLeave", model);
+        }
+
         [HttpPost]
         [ValidateInput(false)]
         [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
@@ -196,7 +225,24 @@
             return Json(commandResult);
         }
 
-        /// [Authorize(Roles = "SystemAdmin")]
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        public JsonResult AddWeekendLeave(AddOtherDisciplineViewModel model)
+        {
+            var criteria = new InsertWeekendLeaveCriteria
+            {
+                EmployeeId = model.EmployeeId,
+                WorkDate = model.WorkDate,
+                Score = model.MinusScore,
+                CreatedBy = CurrentUser.Id
+            };
+
+            CommandResult commandResult = commandService.Insert(criteria);
+
+            return Json(commandResult);
+        }
+
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
@@ -215,7 +261,24 @@
             return string.Empty;
         }
 
-        /// [Authorize(Roles = "Approver")]
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        public string DeleteWeekendLeave(DeleteWeekendLeaveCriteria criteria)
+        {
+            if (criteria != null)
+            {
+                criteria.ModifiedBy = CurrentUser.Id;
+                CommandResult commandResult = commandService.Delete(criteria);
+
+                if (!commandResult.IsSuccessful)
+                {
+                    return commandResult.Message;
+                }
+            }
+
+            return string.Empty;
+        }
+
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)

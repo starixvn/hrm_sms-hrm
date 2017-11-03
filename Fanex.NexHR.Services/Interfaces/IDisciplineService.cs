@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
+    using System.Collections.Generic;
     using Criteria.Discipline;
     using Models;
     using Models.Discipline;
-    using System.Collections.Generic;
 
     public interface IDisciplineService
     {
@@ -12,6 +12,8 @@
         IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria);
 
         IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria);
+
+        IList<OtherDisciplineModel> GetWeekendLeave(GetWeekendLeaveOfEmployeeCriteria criteria);
 
         IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
 

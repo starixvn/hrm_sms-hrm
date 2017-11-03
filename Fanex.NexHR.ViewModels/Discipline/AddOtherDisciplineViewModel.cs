@@ -13,7 +13,6 @@
         public string Employee { get; set; }
 
         [Required(ErrorMessage = "Discipline Date is required.")]
-        [Display(Name = "Discipline Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime WorkDate { get; set; }

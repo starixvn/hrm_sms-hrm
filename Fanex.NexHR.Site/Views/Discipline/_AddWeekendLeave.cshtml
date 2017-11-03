@@ -1,0 +1,38 @@
+﻿@model AddOtherDisciplineViewModel
+
+<form id="frmAddWeekendLeave">
+    @Html.ValidationSummary()
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.Employee)
+        </div>
+        <div class="input">
+            @Html.EditorFor(model => model.Employee)
+            @Html.HiddenFor(model => model.EmployeeId)
+            @Html.ValidationMessageFor(model => model.EmployeeId)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.WorkDate, Labels.WorkDate)
+        </div>
+        <div class="input">
+            @Html.DatePickerFor(model => model.WorkDate, minDate: new DateTime(2010, 1, 1))
+            @Html.ValidationMessageFor(model => model.WorkDate)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="formrow">
+        <div class="label">
+            @Html.LabelFor(model => model.MinusScore)
+        </div>
+        <div class="input">
+            @Html.TextBoxFor(model => model.MinusScore)
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</form>

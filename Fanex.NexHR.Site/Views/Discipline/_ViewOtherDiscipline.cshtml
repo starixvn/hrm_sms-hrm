@@ -1,6 +1,6 @@
 ﻿@model IList<OtherDisciplineModel>
 @{
-    var hasPermissionToDelete = (bool)ViewBag.HasPermissionToDelete;
+    var isHost = (bool)ViewBag.IsHost;
 }
 <table class="table table-custom">
     <thead>
@@ -27,7 +27,7 @@
                     <td>@item.Score</td>
                     <td>@item.Comment</td>
                     <td>
-                        @if (hasPermissionToDelete)
+                        @if (isHost)
                         {
                             <a href="javascript:;" class="deleteOtherDiscipline" data-row-index="@index" data-empid="@item.EmployeeId"
                                data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">

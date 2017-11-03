@@ -1,11 +1,11 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
+    using System.Collections.Generic;
+    using System.Web;
     using Core;
     using Criteria.Discipline;
     using Models.Discipline;
     using Resources;
-    using System.Collections.Generic;
-    using System.Web;
 
     public class ExportDisciplineSummaryService : IExportDisciplineSummaryService
     {
@@ -70,6 +70,7 @@
         private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
         {
             float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
+            float weekendLeave = discipline.WeekendLeave > 0 ? -discipline.WeekendLeave : 0;
             float systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
             float approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
@@ -90,7 +91,7 @@
                 UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent,
                 ChangeShift = discipline.ChangeShift,
                 UnplannedLeave = discipline.UnplannedLeave,
-                WeekendLeave = discipline.WeekendLeave,
+                WeekendLeave = (decimal)weekendLeave,
                 OtherDiscipline = (decimal)otherDisciplines,
                 SystemSubtractScore = (decimal)systemSubtractScore,
                 ApproverSubtractScore = (decimal)approverSubtractScore

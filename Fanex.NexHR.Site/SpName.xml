@@ -443,6 +443,9 @@
     <Setting Key="EmployeeDiscipline_GetMemberToAddOtherDiscipine" SpName="EmployeeDiscipline_GetMemberToAddOtherDiscipine" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="EmployeeDiscipline_GetWeekendLeave" SpName="EmployeeDiscipline_GetWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_AddWeekendLeave" SpName="EmployeeDiscipline_AddWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeDiscipline_DeleteWeekendLeave" SpName="EmployeeDiscipline_DeleteWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="RoleManagement">
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>
