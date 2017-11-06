@@ -13,7 +13,7 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class ChangeShiftRequestService : RequestService, IChangeShiftRequestService
+    public class ChangeShiftRequestService : RequestMailService, IChangeShiftRequestService
     {
         private const string ChangeShiftTmp = "~/app_data/emails/ChangeShift.Request.cshtml";
 

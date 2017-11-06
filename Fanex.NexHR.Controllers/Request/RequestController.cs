@@ -25,11 +25,12 @@
         private readonly IEmployeeService employeeService;
         private readonly IShiftService shiftService;
         private readonly IRequestService requestService;
+        private readonly IRequestMailService requestMailService;
         private readonly ITeamService teamService;
         private readonly ICommandService commandService;
 
         public RequestController()
-            : this(null, null, null, null, null)
+            : this(null, null, null, null, null, null)
         {
         }
 
@@ -37,12 +38,14 @@
             IEmployeeService employeeService,
             IShiftService shiftService,
             IRequestService requestService,
+            IRequestMailService requestMailService,
             ITeamService teamService,
             ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
             this.shiftService = shiftService ?? new ShiftService();
             this.requestService = requestService ?? new RequestService();
+            this.requestMailService = requestMailService ?? new RequestMailService();
             this.teamService = teamService ?? new TeamService();
             this.commandService = commandService ?? new CommandService();
         }
@@ -130,7 +133,7 @@
                 RequestId = id
             };
 
-            requestService.SendMailForDeleteSuccessfully(id);
+            requestMailService.SendMailForDeleteSuccessfully(id);
             CommandResult result = commandService.Delete(criteria);
             return Json(result);
         }
@@ -355,7 +358,7 @@
             CommandResult result = commandService.Update(criteria);
             if (result != null && result.IsSuccessful)
             {
-                requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
+                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
             }
 
             return result;
@@ -375,7 +378,7 @@
             CommandResult result = commandService.Update(criteria);
             if (result != null && result.IsSuccessful)
             {
-                requestService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
+                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
             }
 
             return result;

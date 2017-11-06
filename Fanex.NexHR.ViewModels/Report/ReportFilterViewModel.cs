@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class TotalWorkingHoursViewModel
+    public class ReportFilterViewModel
     {
         [DataType(DataType.DateTime)]
         public DateTime FromDate { get; set; }
@@ -24,5 +24,7 @@
         public bool IsExportExcel { get; set; }
 
         public byte? IsLocal { get; set; }
+
+        public string JobTitleIds { get; set; }
     }
 }

@@ -27,7 +27,7 @@
             this.reportService = reportService ?? new ReportService();
         }
 
-        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel workingHoursModel)
+        public ActionResult TotalWorkingHours(ReportFilterViewModel workingHoursModel)
         {
             IExportService exportService;
             var model = workingHoursModel;
@@ -35,7 +35,7 @@
             var month = DateTime.Now.Month;
             if (model == null)
             {
-                model = new TotalWorkingHoursViewModel
+                model = new ReportFilterViewModel
                 {
                     FromDate = new DateTime(year, month, 1),
                     ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),

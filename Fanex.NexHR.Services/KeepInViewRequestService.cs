@@ -10,7 +10,7 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class KeepInViewRequestService : RequestService, IKeepInViewRequestService
+    public class KeepInViewRequestService : RequestMailService, IKeepInViewRequestService
     {
         private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
 

@@ -23,13 +23,14 @@
     using System.Linq;
     using System.Web.Mvc;
     using ViewModels;
+    using ViewModels.Report;
     using ViewModels.Request;
     using Web.Providers;
     using ViewModels.Report;
     using Models.Report;
 
     [ValidateInput(false)]
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
+    //[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class ReportController : BaseController
     {
         private readonly IReportService reportService;
@@ -207,38 +208,30 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.RequestStatisticMember, FunctionKey.RequestStatisticEmployee)]
-        public ActionResult HRRequestMonitoringDetails(
-            DateTime fromDate,
-            DateTime toDate,
-            int maxRequest,
-            int? empId,
-            string group,
-            byte? isLocal,
-            bool isExcel,
-            string viewRole)
+        public ActionResult HRRequestMonitoringDetails(RequestMonitoringViewModel requestFilter)
         {
             var getRequestMonitoringCriteria = new GetRequestMonitoringCriteria
             {
-                FromDate = fromDate,
-                ToDate = toDate,
-                MaxRequest = maxRequest,
-                Role = viewRole,
-                EmployeeId = empId,
+                FromDate = requestFilter.FromDate,
+                ToDate = requestFilter.ToDate,
+                MaxRequest = requestFilter.MaxRequest,
+                Role = requestFilter.ViewRole,
+                EmployeeId = requestFilter.EmpId,
                 LoginUserId = CurrentUser.Id,
-                GroupIds = group,
-                IsLocal = isLocal
+                GroupIds = requestFilter.Group,
+                IsLocal = requestFilter.IsLocal
             };
             List<RequestsMonitoring> requests = reportService.GetRequestMonitoring(getRequestMonitoringCriteria).ToList();
-            ViewBag.MaxRequest = maxRequest;
-            ViewBag.FromDate = fromDate;
-            ViewBag.ToDate = toDate;
+            ViewBag.MaxRequest = requestFilter.MaxRequest;
+            ViewBag.FromDate = requestFilter.FromDate;
+            ViewBag.ToDate = requestFilter.ToDate;
 
-            ViewBag.isLeader = viewRole != ((int)RoleSystem.HR).ToString();
+            ViewBag.isLeader = requestFilter.ViewRole != ((int)RoleSystem.HR).ToString();
 
-            if (isExcel)
+            if (requestFilter.IsExcel)
             {
                 string fileName = "HrRequestStatistic_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = exportExcelService.ExportHRRequestStatistic(requests, fromDate, toDate);
+                var hssfworkbook = exportExcelService.ExportHRRequestStatistic(requests, requestFilter.FromDate, requestFilter.ToDate);
                 return ExcelFile(hssfworkbook, fileName);
             }
 
@@ -268,44 +261,33 @@
             return View("RequestMonitoring", model);
         }
 
-        public ActionResult TotalWorkingHours(
-            string teamIds,
-            string employee,
-            DateTime? fromDate = null,
-            DateTime? toDate = null,
-            int? dateOption = null,
-            int? employeeId = null,
-            bool isExportExcel = false,
-            byte? isLocal = null)
+        [HttpGet]
+        public ActionResult TotalWorkingHours()
         {
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
 
-            var model = new TotalWorkingHoursViewModel
+            var model = new ReportFilterViewModel
             {
-                TeamIds = teamIds ?? string.Empty,
-                Employee = employee,
-                FromDate = fromDate.HasValue ? fromDate.Value : new DateTime(year, month, 1),
-                ToDate = toDate.HasValue ? toDate.Value : new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
-                IsExportExcel = isExportExcel,
-                DateOption = dateOption.HasValue ? dateOption.Value : 5,
-                IsLocal = isLocal
+                FromDate = new DateTime(year, month, 1),
+                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                EmployeeId = -1,
+                DateOption = 5
             };
 
             return TotalWorkingHours(model);
         }
 
         [HttpPost]
-        public ActionResult TotalWorkingHours(TotalWorkingHoursViewModel workingHoursModel)
+        public ActionResult TotalWorkingHours(ReportFilterViewModel workingHoursModel)
         {
-            TotalWorkingHoursViewModel model = workingHoursModel;
+            ReportFilterViewModel model = workingHoursModel;
 
             if (model == null)
             {
                 var year = DateTime.Now.Year;
                 var month = DateTime.Now.Month;
-                model = new TotalWorkingHoursViewModel
+                model = new ReportFilterViewModel
                 {
                     FromDate = new DateTime(year, month, 1),
                     ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
@@ -490,64 +472,52 @@
             return PartialView("_TotalWorkingHourWeeklyDetails", totalWorkingHours);
         }
 
-        [SuppressMessage("StyleCop.CSharp.Nexcel.NexcelCustomRules",
-            "SP2101:MethodMustNotContainMoreLinesThan",
-            Justification = "Reviewed. Suppression is OK here.")]
-        public ActionResult WorkingCalendarSummary(
-             int? employeeId,
-             string employee,
-             DateTime? fromDate,
-             DateTime? toDate,
-             string teamIds,
-             string jobTitleId,
-             byte? isLocal = null,
-             bool isExcel = false)
+        public ActionResult WorkingCalendarSummary(ReportFilterViewModel filterModel)
         {
-            DateTime nowDate = DateTime.Now.Date;
-            bool isInvalidDate = (!fromDate.HasValue && !toDate.HasValue);
-
-            var model = new WorkingCalendarSummaryViewModel
-            {
-                Employee = employee,
-                EmployeeId = employeeId,
-                FromDate = isInvalidDate ? nowDate.ToString(Constants.DateFormat) : fromDate.Value.ToString(Constants.DateFormat),
-                ToDate = isInvalidDate ? nowDate.ToString(Constants.DateFormat) : toDate.Value.ToString(Constants.DateFormat),
-                IsLocal = isLocal,
-                JobTitleId = jobTitleId,
-                TeamIds = teamIds
-            };
-            ViewBag.Groups = GetAllTeam();
-            ViewBag.DefaultFromDate = model.FromDate;
-            ViewBag.DefaultToDate = model.ToDate;
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
-            ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
-            {
-                Text = j.Name,
-                Value = j.Id.ToString(),
-                Selected = string.IsNullOrEmpty(j.Id.ToString())
-            }).ToList();
-            if (isExcel)
+            if (filterModel.IsExportExcel)
             {
                 var criteria = new GetEmployeeWorkingCalendarByDateCriteria
                 {
-                    EmployeeId = model.EmployeeId,
-                    FromDate = isInvalidDate ? nowDate : fromDate.Value,
-                    ToDate = isInvalidDate ? nowDate : toDate.Value,
-                    GroupIds = model.TeamIds,
-                    IsLocal = model.IsLocal,
-                    JobTitleId = model.JobTitleId
+                    EmployeeId = filterModel.EmployeeId,
+                    FromDate = filterModel.FromDate,
+                    ToDate = filterModel.ToDate,
+                    GroupIds = filterModel.TeamIds,
+                    IsLocal = filterModel.IsLocal,
+                    JobTitleId = filterModel.JobTitleIds
                 };
                 List<WorkingCalendarSummary> calendars = reportService.CalendarSummaryList(criteria).ToList();
                 string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = exportExcelService.ExportWorkingCalendarSummary(calendars, fromDate.Value, toDate.Value);
+                var hssfworkbook = exportExcelService.ExportWorkingCalendarSummary(calendars, filterModel.FromDate, filterModel.ToDate);
                 return ExcelFile(hssfworkbook, fileName);
             }
+            else
+            {
+                var model = new WorkingCalendarSummaryViewModel
+                {
+                    Employee = filterModel.Employee,
+                    EmployeeId = filterModel.EmployeeId,
+                    FromDate = DateTime.Now.Date.ToString(Constants.DateFormat),
+                    ToDate = DateTime.Now.Date.ToString(Constants.DateFormat),
+                    IsLocal = filterModel.IsLocal
+                };
 
-            return View(model);
+                ViewBag.Groups = GetAllTeam();
+                ViewBag.DefaultFromDate = model.FromDate;
+                ViewBag.DefaultToDate = model.ToDate;
+                var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+                {
+                    LookupCode = Constants.JobTitle
+                };
+                IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
+                ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+                {
+                    Text = j.Name,
+                    Value = j.Id.ToString(),
+                    Selected = string.IsNullOrEmpty(j.Id.ToString())
+                }).ToList();
+
+                return View(model);
+            }
         }
 
         public ActionResult UnpaidLeaveSummary(

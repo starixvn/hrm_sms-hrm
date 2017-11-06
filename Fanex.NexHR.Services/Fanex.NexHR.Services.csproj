@@ -203,6 +203,7 @@
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
+    <Compile Include="Interfaces\IRequestMailService.cs" />
     <Compile Include="Interfaces\IWorkingCalendarService.cs" />
     <Compile Include="KeepInViewRequestService.cs" />
     <Compile Include="ChangeShiftRequestService.cs" />
@@ -230,6 +231,7 @@
     </Compile>
     <Compile Include="OvertimeRequestService.cs" />
     <Compile Include="ReportService.cs" />
+    <Compile Include="RequestMailService.cs" />
     <Compile Include="TeamService.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="Interfaces\IHolidayService.cs" />

@@ -14,7 +14,7 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class LeaveRequestService : RequestService, ILeaveRequestService
+    public class LeaveRequestService : RequestMailService, ILeaveRequestService
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
 

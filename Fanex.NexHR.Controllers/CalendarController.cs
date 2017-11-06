@@ -21,7 +21,6 @@
     using System.Text;
     using System.Web.Mvc;
 
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class CalendarController : BaseController
     {
         private readonly IWorkingCalendarService workingCalendarService;

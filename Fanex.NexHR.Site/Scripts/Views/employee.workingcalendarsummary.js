@@ -30,7 +30,7 @@ function exportExcel() {
 		var title = $("#title").val() != null ? $("#title").val().join() : "";
 
 		url = _global.root + "report/WorkingCalendarSummary?fromDate=" + fromDate + "&toDate=" + toDate + "&teamIds=" + group + 
-			"&jobTitleId=" + title + "&employeeId=" + employeeId + "&isLocal=" + isLocal + "&isExcel=" + true;
+			"&jobTitleIds=" + title + "&employeeId=" + employeeId + "&isLocal=" + isLocal + "&isExportExcel=" + true;
 		location.href = url;
 	}
 }

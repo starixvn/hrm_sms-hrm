@@ -1,10 +1,8 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using System.Collections.Generic;
 
@@ -17,12 +15,6 @@
         IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria);
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
-
-        void SendMailForProcessSuccessfully(long requestId, int processedBy, string action);
-
-        void SendMailForDeleteSuccessfully(long requestId);
-
-        string CheckRoleAccordingToRequestType(RequestViewType requestViewType);
 
         VerifierAndApproverForRequest GetVerifierAndApprover(GetVerifierAndApproverCriteria criteria);
 

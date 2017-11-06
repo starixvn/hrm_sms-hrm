@@ -10,7 +10,7 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class CheckInOutRequestService : RequestService, ICheckInOutRequestService
+    public class CheckInOutRequestService : RequestMailService, ICheckInOutRequestService
     {
         private const string CheckInOutTmp = "~/app_data/emails/CheckInOut.Request.cshtml";
 

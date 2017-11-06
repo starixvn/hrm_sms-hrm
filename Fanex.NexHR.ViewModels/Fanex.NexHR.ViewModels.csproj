@@ -93,6 +93,7 @@
     <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
+    <Compile Include="Report\RequestMonitoringViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Report\WeekendLeaveSummaryViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />
@@ -139,7 +140,7 @@
     <Compile Include="Report\EmployeeAttendanceModel.cs" />
     <Compile Include="Report\EmployeeAttendanceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Report\TotalWorkingHoursViewModel.cs" />
+    <Compile Include="Report\ReportFilterViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummaryViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarsViewModel.cs" />
     <Compile Include="Calendar\WorkingScheduleViewModel.cs" />

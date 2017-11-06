@@ -11,7 +11,7 @@
     using System.Threading.Tasks;
     using System.Web;
 
-    public class LateInEarlyOutRequestService : RequestService, ILateInEarlyOutRequestService
+    public class LateInEarlyOutRequestService : RequestMailService, ILateInEarlyOutRequestService
     {
         private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
 
