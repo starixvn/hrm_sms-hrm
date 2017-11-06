@@ -356,6 +356,7 @@
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
+    <Content Include="Scripts\Views\Report\report.weekendleave.summary.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
@@ -1353,8 +1354,11 @@
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\UI\_NewHeader.cshtml" />
     <Content Include="Views\UI\_NewNavBar.cshtml" />
-    <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
-    <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />
+    <Content Include="Views\Report\WeekendLeaveSummary.cshtml" />
+    <Content Include="Views\Report\_ListWeekendLeaveSummary.cshtml" />
+    <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
+    <Content Include="Scripts\Views\Report\report.weekendleave.detail.js" />
+    <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\Google.Protobuf.dll" />

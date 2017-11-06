@@ -94,6 +94,7 @@
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
+    <Compile Include="Report\WeekendLeaveSummaryViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />
     <Compile Include="Message\MessageViewModel.cs" />
     <Compile Include="EmployeeGroup\TeamSupervisorViewModel.cs" />

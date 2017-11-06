@@ -25,6 +25,8 @@
     using ViewModels;
     using ViewModels.Request;
     using Web.Providers;
+    using ViewModels.Report;
+    using Models.Report;
 
     [ValidateInput(false)]
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
@@ -339,6 +341,68 @@
             return View(model);
         }
 
+        public ActionResult WeekendLeaveSummary(WeekendLeaveSummaryViewModel model)
+        {
+            if (model != null)
+            {
+                var today = DateTime.Today;
+                int currentMonth = today.Month;
+                model.FromDate = new DateTime(today.Year, currentMonth, 1);
+                model.ToDate = today;
+                model.Teams = GetAllTeam();
+                model.DateRange = GetDateRangeType();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult PartialListWeekendLeaveSummary(WeekendLeaveSummaryViewModel model)
+        {
+            var criteria = new GetWeekendLeaveSummaryCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+            };
+
+            IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
+
+            return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
+        }
+
+        public ActionResult WeekendLeaveDetail(WeekendLeaveSummaryViewModel model)
+        {
+            if (model != null)
+            {
+                var today = DateTime.Today;
+                int currentMonth = today.Month;
+                model.FromDate = new DateTime(today.Year, currentMonth, 1);
+                model.ToDate = today;
+                model.Teams = GetAllTeam();
+                model.DateRange = GetDateRangeType();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult PartialListWeekendLeaveDetail(WeekendLeaveSummaryViewModel model)
+        {
+            var criteria = new GetWeekendLeaveDetailCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+            };
+
+            IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
+
+            return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
+        }
+
         [HttpGet]
         public ActionResult TotalWorkingHourMonthly()
         {
@@ -649,6 +713,30 @@
             var criteria = new GetAllGroupCriteria();
 
             return teamService.GetAll(criteria);
+        }
+
+        private IList<SelectListItem> GetDateRangeType()
+        {
+            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Resources.Labels.DateRange, Value = "0" } };
+
+            var currentDate = DateTime.Today;
+
+            for (int i = 0; i < 6; i++)
+            {
+                int currentMonth = currentDate.Month;
+                int currentYear = currentDate.Year;
+                int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
+
+                dateRange.Add(new SelectListItem
+                {
+                    Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear,
+                    Value = currentHalfYear + string.Empty + currentYear
+                });
+
+                currentDate = currentDate.AddMonths(-6);
+            }
+
+            return dateRange;
         }
     }
 }

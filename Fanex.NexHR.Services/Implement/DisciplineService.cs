@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Criteria.Discipline;
     using Interfaces;
     using Models;
     using Models.Discipline;
     using Repositories;
     using Repositories.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class DisciplineService : BaseService, IDisciplineService
     {
@@ -57,12 +57,6 @@
         {
             IList<OtherDisciplineModel> otherDisciplines = GetData<OtherDisciplineModel>(criteria).ToList();
             return otherDisciplines;
-        }
-
-        public IList<OtherDisciplineModel> GetWeekendLeave(GetWeekendLeaveOfEmployeeCriteria criteria)
-        {
-            IList<OtherDisciplineModel> weekendLeaves = GetData<OtherDisciplineModel>(criteria).ToList();
-            return weekendLeaves;
         }
 
         public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)

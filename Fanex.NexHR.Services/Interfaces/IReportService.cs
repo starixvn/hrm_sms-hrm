@@ -10,6 +10,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
+    using Models.Report;
 
     public interface IReportService
     {
@@ -42,5 +43,9 @@
         IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria);
 
         IList<ManpowerCategoryModel> GetManpowerCategory(GetManpowerCategoryCriteria criteria);
+
+        IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
+
+        IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria);
     }
 }

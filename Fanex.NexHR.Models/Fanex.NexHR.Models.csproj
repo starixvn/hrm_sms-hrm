@@ -116,6 +116,8 @@
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />
     <Compile Include="Report\ManpowerModel.cs" />
+    <Compile Include="Report\WeekendLeaveDetail.cs" />
+    <Compile Include="Report\WeekendLeaveSummary.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />

@@ -79,55 +79,12 @@
 
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="prefix_2 grid_6">
+        <div class="prefix_8 grid_6">
             <input type="button" id="submit" value="@Labels.Submit" />
             <input type="button" value="Excel" id="btnExcel" />
         </div>
     </div>
 </form>
-<div id="discipline-summary">
-    <table id="data" class="table table-custom discipline-summary">
-        <thead>
-            @if ((bool)ViewBag.IsHost)
-            {
-                <tr>
-                    <th colspan="18" class="align-left">
-                        <a class="button" id="btnAddOtherDiscipline">
-                            @Labels.AddOtherDiscipline
-                        </a>
-                        <a class="button" id="btnAddWeekendLeave">
-                            @Labels.AddWeekendLeave
-                        </a>
-                    </th>
-                </tr>
-            }
-
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th>@Labels.Section</th>
-                <th>@Labels.Code</th>
-                <th>@Labels.Nick</th>
-                <th>@Labels.MissingCheckInOut</th>
-                <th>@Labels.WorkingUnderTime</th>
-                <th>@Labels.LateIn</th>
-                <th>@Labels.EarlyOut</th>
-                <th>@Labels.Absent</th>
-                <th>@Labels.UPL</th>
-                <th>@Labels.UPLAbsent</th>
-                <th>@Labels.ChangeShift</th>
-                <th>@Labels.NotFollowingLeaveProcedures</th>
-                <th>@Labels.WeekendLeave</th>
-                <th>@Labels.OtherDiscipline</th>
-                <th>@Labels.SystemDeduction</th>
-                <th>@Labels.ApproverDeduction</th>
-                <th>@Labels.Action</th>
-            </tr>
-        </thead>
-        <tbody id="disciplineTableBody">
-        </tbody>
-    </table>
-</div>
-<div id="dialogAddOtherDiscipline"></div>
+<div id="discipline-summary"></div>
+<div id="dialogAddOtherDiscipline" title="Other Discipline"></div>
 <div id="dialogViewOtherDiscipline"></div>

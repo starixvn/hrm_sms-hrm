@@ -13,6 +13,8 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels;
+    using Models.Discipline;
+    using Models.Report;
     using Nexus.RoleManagement.Services;
 
     public class ReportRepository : IReportRepository

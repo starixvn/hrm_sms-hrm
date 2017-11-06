@@ -5,6 +5,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
+    using Models.Report;
 
     public interface IReportRepository
     {

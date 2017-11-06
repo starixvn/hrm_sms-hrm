@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Discipline
 {
     using System;
-    using Data.Repository;
+    using Fanex.Data.Repository;
 
     public class InsertOtherDisciplineCriteria : CriteriaBase
     {
@@ -19,8 +19,14 @@
 
         public int CreatedBy { get; set; }
 
-        public override bool IsValid() => EmployeeId > 0 && CreatedBy > 0 && Score > 0;
+        public override bool IsValid()
+        {
+            return EmployeeId > 0 && CreatedBy > 0;
+        }
 
-        public override string GetSettingKey() => "EmployeeDiscipline_AddOtherDiscipline";
+        public override string GetSettingKey()
+        {
+            return "EmployeeDiscipline_AddOtherDiscipline";
+        }
     }
 }

@@ -29,6 +29,7 @@
             <th>@Labels.UPLAbsent</th>
             <th>@Labels.ChangeShift</th>
             <th>@Labels.NotFollowingLeaveProcedures</th>
+            <th>@Labels.WeekendLeave</th>
             <th class="width-80">@Labels.SystemDeduction</th>
             <th class="width-80">@Labels.ApproverDeduction</th>
             <th class="width-80">@Labels.ApproverComment</th>
@@ -240,6 +241,25 @@
                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
                                        data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
+                            }
+                        }
+                        else
+                        {
+                            <span class="float-left">-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.WeekendLeave.Value > 0)
+                        {
+                            <span class="float-left">@item.WeekendLeave.Value</span>
+                            if (item.WeekendLeave.HasViolated)
+                            {
+                                disciplinetypeId = (int)DisciplineType.WeekendLeave;
+                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.WeekendLeave.HasIgnored"
+                                       disabled="@item.WeekendLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WeekendLeave.Score"
+                                       data-has-ignored="@item.WeekendLeave.HasIgnored" data-changed="false" />
                             }
                         }
                         else

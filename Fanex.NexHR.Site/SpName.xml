@@ -57,6 +57,8 @@
     <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_GetWeekendLeaveDetail" SpName="Report_GetWeekendLeaveDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByMonth" SpName="Report_EmployeeCalendarByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>
@@ -443,9 +445,6 @@
     <Setting Key="EmployeeDiscipline_GetMemberToAddOtherDiscipine" SpName="EmployeeDiscipline_GetMemberToAddOtherDiscipine" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="EmployeeDiscipline_GetWeekendLeave" SpName="EmployeeDiscipline_GetWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_AddWeekendLeave" SpName="EmployeeDiscipline_AddWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_DeleteWeekendLeave" SpName="EmployeeDiscipline_DeleteWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="RoleManagement">
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>

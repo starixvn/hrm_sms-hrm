@@ -15,6 +15,7 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
+    using Models.Report;
 
     public class ReportService : BaseService, IReportService
     {
@@ -214,6 +215,20 @@
             }
 
             return manpowers;
+        }
+
+        public IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria)
+        {
+            IList<WeekendLeaveSummary> weekendLeaves = null;
+            weekendLeaves = GetData<WeekendLeaveSummary>(criteria).ToList();
+            return weekendLeaves;
+        }
+
+        public IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria)
+        {
+            IList<WeekendLeaveDetail> weekendLeaveDetails = null;
+            weekendLeaveDetails = GetData<WeekendLeaveDetail>(criteria).ToList();
+            return weekendLeaveDetails;
         }
 
         private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(

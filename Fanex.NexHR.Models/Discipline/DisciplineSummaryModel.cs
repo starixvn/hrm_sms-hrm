@@ -22,7 +22,7 @@
 
         public int UnplannedLeave { get; set; }
 
-        public float WeekendLeave { get; set; }
+        public int WeekendLeave { get; set; }
 
         public float OtherDisciplineScore { get; set; }
 

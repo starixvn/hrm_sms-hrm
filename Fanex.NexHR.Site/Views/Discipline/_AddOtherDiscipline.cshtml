@@ -16,7 +16,7 @@
     </div>
     <div class="formrow">
         <div class="label">
-            @Html.LabelFor(model => model.WorkDate, "Discipline Date")
+            @Html.LabelFor(model => model.WorkDate)
         </div>
         <div class="input">
             @Html.DatePickerFor(model => model.WorkDate, minDate: new DateTime(2010, 1, 1))

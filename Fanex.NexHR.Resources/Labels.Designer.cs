@@ -223,15 +223,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Weekend Leave.
-        /// </summary>
-        public static string AddWeekendLeave {
-            get {
-                return ResourceManager.GetString("AddWeekendLeave", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Adjust.
         /// </summary>
         public static string Adjust {
@@ -2028,6 +2019,24 @@ namespace Fanex.NexHR.Resources {
         public static string LeaveCount {
             get {
                 return ResourceManager.GetString("LeaveCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave Date.
+        /// </summary>
+        public static string LeaveDate {
+            get {
+                return ResourceManager.GetString("LeaveDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave Day.
+        /// </summary>
+        public static string LeaveDay {
+            get {
+                return ResourceManager.GetString("LeaveDay", resourceCulture);
             }
         }
         
@@ -3913,6 +3922,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Weekend Leave.
+        /// </summary>
+        public static string TotalWeekendLeave {
+            get {
+                return ResourceManager.GetString("TotalWeekendLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Working Day(s) in.
         /// </summary>
         public static string TotalWorkingDays {
@@ -4201,20 +4219,29 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weekend Leave Detail.
+        /// </summary>
+        public static string WeekendLeaveDetail {
+            get {
+                return ResourceManager.GetString("WeekendLeaveDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekend Leave Summary.
+        /// </summary>
+        public static string WeekendLeaveSummary {
+            get {
+                return ResourceManager.GetString("WeekendLeaveSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Work.
         /// </summary>
         public static string Work {
             get {
                 return ResourceManager.GetString("Work", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Work Date.
-        /// </summary>
-        public static string WorkDate {
-            get {
-                return ResourceManager.GetString("WorkDate", resourceCulture);
             }
         }
         

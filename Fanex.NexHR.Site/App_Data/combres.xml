@@ -762,6 +762,18 @@
       <resource path="~/scripts/views/discipline/discipline.detail.js" />
     </resourceSet>
 
+    <resourceSet name="weekendleavesummaryjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/scripts/views/report/report.weekendleave.summary.js" />
+    </resourceSet>
+
+    <resourceSet name="weekendleavedetailjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/scripts/views/report/report.weekendleave.detail.js" />
+    </resourceSet>
+
     <resourceSet name="employeedisciplinesettingcss" type="css">
       <resource reference="sitecss" />
     </resourceSet>

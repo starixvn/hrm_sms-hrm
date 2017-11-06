@@ -1533,12 +1533,6 @@
   <data name="WeekendLeave" xml:space="preserve">
     <value>Weekend Leave</value>
   </data>
-  <data name="AddWeekendLeave" xml:space="preserve">
-    <value>Add Weekend Leave</value>
-  </data>
-  <data name="WorkDate" xml:space="preserve">
-    <value>Work Date</value>
-  </data>
   <data name="Domain" xml:space="preserve">
     <value>Domain</value>
   </data>
@@ -1550,5 +1544,20 @@
   </data>
   <data name="TargetSite" xml:space="preserve">
     <value>TargetSite</value>
+  </data>
+  <data name="WeekendLeaveDetail" xml:space="preserve">
+    <value>Weekend Leave Detail</value>
+  </data>
+  <data name="WeekendLeaveSummary" xml:space="preserve">
+    <value>Weekend Leave Summary</value>
+  </data>
+  <data name="LeaveDate" xml:space="preserve">
+    <value>Leave Date</value>
+  </data>
+  <data name="LeaveDay" xml:space="preserve">
+    <value>Leave Day</value>
+  </data>
+  <data name="TotalWeekendLeave" xml:space="preserve">
+    <value>Total Weekend Leave</value>
   </data>
 </root>
