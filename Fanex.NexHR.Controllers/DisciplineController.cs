@@ -199,6 +199,7 @@
             var model = new AddOtherDisciplineViewModel
             {
                 EmployeeId = -1,
+                MinusScore = 3.5M,
                 WorkDate = DateTime.Now
             };
 
