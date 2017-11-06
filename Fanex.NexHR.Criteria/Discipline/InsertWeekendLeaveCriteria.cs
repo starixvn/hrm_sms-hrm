@@ -14,7 +14,7 @@
 
         public int CreatedBy { get; set; }
 
-        public override bool IsValid() => EmployeeId > 0 && CreatedBy > 0;
+        public override bool IsValid() => EmployeeId > 0 && CreatedBy > 0 && Score > 0;
 
         public override string GetSettingKey() => "EmployeeDiscipline_AddWeekendLeave";
     }

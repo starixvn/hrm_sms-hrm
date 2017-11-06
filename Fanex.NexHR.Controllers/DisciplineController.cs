@@ -145,7 +145,7 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
-        public ActionResult PartialViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
+        public ActionResult ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetOtherDisciplineOfEmployeeCriteria
             {
@@ -161,7 +161,7 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
-        public ActionResult PartialViewWeekendLeave(int employeeId, DateTime fromDate, DateTime toDate)
+        public ActionResult ViewWeekendLeave(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetWeekendLeaveOfEmployeeCriteria
             {

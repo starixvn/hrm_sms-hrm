@@ -25,6 +25,7 @@
             empId = $dialogAddOtherDiscipline.find('#EmployeeId').val(),
             workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate'),
             disciplineTypeId = $dialogAddOtherDiscipline.find('#DisciplineTypeId').val(),
+            score = $dialogAddOtherDiscipline.find('#MinusScore').val(),
             comment = $dialogAddOtherDiscipline.find('#Comment').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
@@ -37,6 +38,10 @@
 
         if (disciplineTypeId && parseInt(disciplineTypeId, 10) === 0) {
             errorString += '<li>Discipline Type field is required.</li>';
+        }
+
+        if (score.trim().length === 0 || parseFloat(score) <= 0) {
+            errorString += '<li>Score must be greater than 0.</li>';
         }
 
         if (comment.trim().length === 0) {
@@ -55,7 +60,8 @@
         var isValid = true,
             errorString = '',
             empId = $dialogAddOtherDiscipline.find('#EmployeeId').val(),
-            workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate');
+            workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate'),
+            score = $dialogAddOtherDiscipline.find('#MinusScore').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
             errorString += '<li>The Employee field is required.</li>';
@@ -63,6 +69,10 @@
 
         if (workDate === null || workDate === '') {
             errorString += '<li>Discipline Date field is required.</li>';
+        }
+
+        if (score.trim().length === 0 || parseFloat(score) <= 0) {
+            errorString += '<li>Score must be greater than 0.</li>';
         }
 
         if (errorString.length > 0) {
@@ -267,7 +277,7 @@
             if (empId > 0) {
                 $.ajax({
                     type: 'GET',
-                    url: _global.root + 'discipline/PartialViewOtherDiscipline',
+                    url: _global.root + 'discipline/ViewOtherDiscipline',
                     dataType: 'html',
                     data: {
                         employeeId: empId,
@@ -308,7 +318,7 @@
             if (empId > 0) {
                 $.ajax({
                     type: 'GET',
-                    url: _global.root + 'discipline/PartialViewWeekendLeave',
+                    url: _global.root + 'discipline/ViewWeekendLeave',
                     dataType: 'html',
                     data: {
                         employeeId: empId,
