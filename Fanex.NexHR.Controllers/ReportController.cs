@@ -26,6 +26,7 @@
     using ViewModels.Report;
     using ViewModels.Request;
     using Web.Providers;
+    using Resources;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -321,7 +322,7 @@
                 model.FromDate = new DateTime(today.Year, currentMonth, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
-                model.DateRange = GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeType();
             }
 
             return View(model);
@@ -352,7 +353,7 @@
                 model.FromDate = new DateTime(today.Year, currentMonth, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
-                model.DateRange = GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeType();
             }
 
             return View(model);
@@ -672,30 +673,6 @@
             var criteria = new GetAllGroupCriteria();
 
             return teamService.GetAll(criteria);
-        }
-
-        private IList<SelectListItem> GetDateRangeType()
-        {
-            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Resources.Labels.DateRange, Value = "0" } };
-
-            var currentDate = DateTime.Today;
-
-            for (int i = 0; i < 6; i++)
-            {
-                int currentMonth = currentDate.Month;
-                int currentYear = currentDate.Year;
-                int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
-
-                dateRange.Add(new SelectListItem
-                {
-                    Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear,
-                    Value = currentHalfYear + string.Empty + currentYear
-                });
-
-                currentDate = currentDate.AddMonths(-6);
-            }
-
-            return dateRange;
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-    using Fanex.NexHR.Core.Enums;
+    using Core;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -15,6 +11,9 @@
     using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public class DisciplineController : BaseController
     {
@@ -42,23 +41,11 @@
         {
             if (model != null)
             {
-                var today = DateTime.Today;
-                int month = DateTime.Today.Month;
-
-                if (month >= 1 && month <= 6)
-                {
-                    model.FromDate = new DateTime(today.Year, 1, 1);
-                    model.ToDate = new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6));
-                }
-                else
-                {
-                    model.FromDate = new DateTime(today.Year, 7, 1);
-                    model.ToDate = new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
-                }
-
+                model.FromDate = GetFromDate();
+                model.ToDate = GetToDate();
                 model.Teams = GetAllTeam();
                 model.DisciplineTypes = GetDisciplineType(true);
-                model.DateRange = GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeType();
             }
 
             ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
@@ -95,19 +82,8 @@
             {
                 if (model.FromDate == default(DateTime))
                 {
-                    var today = DateTime.Today;
-                    int month = DateTime.Today.Month;
-
-                    if (month >= 1 && month <= 6)
-                    {
-                        model.FromDate = new DateTime(today.Year, 1, 1);
-                        model.ToDate = new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6));
-                    }
-                    else
-                    {
-                        model.FromDate = new DateTime(today.Year, 6, 1);
-                        model.ToDate = new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
-                    }
+                    model.FromDate = GetFromDate();
+                    model.ToDate = GetToDate();
                 }
 
                 if (model.ReasonId < 0)
@@ -117,10 +93,28 @@
 
                 model.Teams = GetAllTeam();
                 model.DisciplineTypes = GetDisciplineType(false);
-                model.DateRange = GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeType();
             }
 
             return View(model);
+        }
+
+        private static DateTime GetFromDate()
+        {
+            var today = DateTime.Today;
+            int month = DateTime.Today.Month;
+            DateTime fromDate = (month >= 1 && month <= 6) ? new DateTime(today.Year, 1, 1) : new DateTime(today.Year, 6, 1);
+            return fromDate;
+        }
+
+        private static DateTime GetToDate()
+        {
+            var today = DateTime.Today;
+            int month = DateTime.Today.Month;
+            DateTime toDate = (month >= 1 && month <= 6)
+                    ? new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6))
+                    : new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
+            return toDate;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
@@ -324,30 +318,6 @@
             IList<DisciplineTypeModel> disciplineTypes = disciplineService.GetDisciplineType(criteria);
 
             return disciplineTypes;
-        }
-
-        private IList<SelectListItem> GetDateRangeType()
-        {
-            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Resources.Labels.DateRange, Value = "0" } };
-
-            var currentDate = DateTime.Today;
-
-            for (int i = 0; i < 6; i++)
-            {
-                int currentMonth = currentDate.Month;
-                int currentYear = currentDate.Year;
-                int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
-
-                dateRange.Add(new SelectListItem
-                {
-                    Text = currentHalfYear + Resources.Labels.SymbolHalfYear + currentYear,
-                    Value = currentHalfYear + string.Empty + currentYear
-                });
-
-                currentDate = currentDate.AddMonths(-6);
-            }
-
-            return dateRange;
         }
     }
 }

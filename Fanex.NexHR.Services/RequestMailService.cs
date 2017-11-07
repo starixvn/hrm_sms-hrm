@@ -162,27 +162,6 @@
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             return emailModel;
         }
-
-        protected static string GetMessageDateString(DateTime fromDate, DateTime toDate)
-        {
-            if ((toDate - fromDate).Days < 0)
-            {
-                return fromDate.ToDateMonthYearFormatedDate();
-            }
-
-            if (fromDate.Year != toDate.Year)
-            {
-                return fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
-            }
-
-            string result = string.Empty;
-            result = (fromDate.Month != toDate.Month) ?
-                fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
-                fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
-
-            return result;
-        }
-
         protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             if (totalDays > 1)
@@ -400,7 +379,7 @@
             string templateEmailPath)
         {
             var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.NickName);
-            var forDate = GetMessageDateString(request.FromDate, request.ToDate);
+            var forDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
             var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
@@ -767,7 +746,7 @@
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = GetMessageDateString(request.FromDate, request.ToDate);
+            var forDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
             body = string.Format(
                 body,
                 emailModel.SendToNickName,

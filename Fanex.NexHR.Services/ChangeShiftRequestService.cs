@@ -50,12 +50,12 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            string forDate = RequestService.GetMessageDateString(criteria.FromDate, criteria.ToDate);
             email.Subject = string.Format(
                 "{0} {1} {2}",
                 Messages.ChangeShiftEmailSubject,
                 employee.DisplayName,
-                GetMessageDateString(criteria.FromDate, criteria.ToDate));
+                forDate);
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark, ConfigSettings.ApplicationDomain);
@@ -77,13 +77,13 @@
                 EmpId = criteria.EmpId
             };
             Employee employee = EmployeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            string forDate = GetMessageDateString(criteria.FromDate, criteria.ToDate);
+            string forDate = RequestService.GetMessageDateString(criteria.FromDate, criteria.ToDate);
 
             email.Subject = string.Format(
                 "{0} {1} {2}",
                 Messages.UpdatedChangeShiftEmailSubject,
                 employee.DisplayName,
-                GetMessageDateString(criteria.FromDate, criteria.ToDate));
+                RequestService.GetMessageDateString(criteria.FromDate, criteria.ToDate));
 
             email.Body = Utilities.ReadTextFile(templateEmailPath);
             email.Body = string.Format(email.Body, email.SendToNickName, employee.NickName, forDate, criteria.Remark, ConfigSettings.ApplicationDomain);

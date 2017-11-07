@@ -33,27 +33,8 @@
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
-            model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
             model.ViewType = RequestViewType.PersonalSpace;
-            var criteria = new GetRequestCriteria
-            {
-                EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                GroupIds = model.TeamIds,
-                Status = model.StatusIds,
-                RequestType = model.RequestType,
-                IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-                RequestViewType = model.ViewType,
-                SupervisorId = CurrentUser.Id,
-                IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
-            };
-
-            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-            string fileName = "MemberRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-
-            return ExcelFile(hssfworkbook, fileName);
+            return WorkingTimeRequest(model);
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
@@ -84,6 +65,12 @@
         }
 
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)
+        {
+            model.ViewType = RequestViewType.CompanySpace;
+            return WorkingTimeRequest(model);
+        }
+
+        private ActionResult WorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
             model.ViewType = RequestViewType.CompanySpace;

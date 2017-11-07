@@ -53,18 +53,7 @@
         [ChildActionOnly]
         public PartialViewResult NavBar()
         {
-            var routeData = ControllerContext.ParentActionViewContext.RouteData;
-            var controller = routeData.Values["controller"];
-            var action = routeData.Values["action"];
-            var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = CurrentUser.Menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
-            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
-            var menus = GetNagivationData();
-            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
-
-            ViewBag.SelectedMenu = selectedMenu;
-            ViewBag.UnreadMessage = unreadMessageCount;
-
+            var menus = GetNavBar();
             return PartialView(menus);
         }
 
@@ -93,6 +82,12 @@
         [ChildActionOnly]
         public PartialViewResult NewNavBar()
         {
+            var menus = GetNavBar();
+            return PartialView("_NewNavBar", menus);
+        }
+
+        private IEnumerable<MenuModel> GetNavBar()
+        {
             var routeData = ControllerContext.ParentActionViewContext.RouteData;
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
@@ -105,7 +100,7 @@
             ViewBag.SelectedMenu = selectedMenu;
             ViewBag.UnreadMessage = unreadMessageCount;
 
-            return PartialView("_NewNavBar", menus);
+            return menus;
         }
     }
 }
