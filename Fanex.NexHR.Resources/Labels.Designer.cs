@@ -223,6 +223,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Weekend Leave.
+        /// </summary>
+        public static string AddWeekendLeave {
+            get {
+                return ResourceManager.GetString("AddWeekendLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjust.
         /// </summary>
         public static string Adjust {
@@ -4242,6 +4251,15 @@ namespace Fanex.NexHR.Resources {
         public static string Work {
             get {
                 return ResourceManager.GetString("Work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Work Date.
+        /// </summary>
+        public static string WorkDate {
+            get {
+                return ResourceManager.GetString("WorkDate", resourceCulture);
             }
         }
         

@@ -89,13 +89,16 @@
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
     <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
+    <Compile Include="Discipline\DeleteWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineSummaryCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineTypeCriteria.cs" />
     <Compile Include="Discipline\GetMemberToAddOtherDiscipineBySupervisorIdCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
+    <Compile Include="Discipline\GetWeekendLeaveOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
+    <Compile Include="Discipline\InsertWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />

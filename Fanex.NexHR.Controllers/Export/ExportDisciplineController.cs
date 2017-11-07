@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria.Discipline;
     using Models.Discipline;
     using Services.ExportExcel;
     using Services.Implement;
     using Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using ViewModels.Discipline;
 
     public class ExportDisciplineController : BaseController

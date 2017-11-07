@@ -1359,6 +1359,8 @@
     <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
     <Content Include="Scripts\Views\Report\report.weekendleave.detail.js" />
     <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
+    <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
+    <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.6.3.0.2862\analyzers\Google.Protobuf.dll" />

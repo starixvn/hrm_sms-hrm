@@ -1560,4 +1560,10 @@
   <data name="TotalWeekendLeave" xml:space="preserve">
     <value>Total Weekend Leave</value>
   </data>
+  <data name="AddWeekendLeave" xml:space="preserve">
+    <value>Add Weekend Leave</value>
+  </data>
+  <data name="WorkDate" xml:space="preserve">
+    <value>Work Date</value>
+  </data>
 </root>
