@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fanex.NexHR.Models.Discipline;
-
-namespace Fanex.NexHR.Models.Report
+﻿namespace Fanex.NexHR.Models.Report
 {
     public class WeekendLeaveSummary
     {
@@ -24,6 +18,6 @@ namespace Fanex.NexHR.Models.Report
 
         public string GroupName { get; set; }
 
-        public float TotalWeekendLeave { get; set; }
+        public double TotalWeekendLeave { get; set; }
     }
 }

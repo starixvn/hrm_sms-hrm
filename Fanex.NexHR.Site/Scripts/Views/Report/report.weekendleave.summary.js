@@ -48,7 +48,6 @@ function initEventForViewWeekendLeaveDetail() {
     });
 }
 
-
 function formatDate(date) {
     var monthNames = [
       "Jan", "Feb", "Mar",
@@ -82,7 +81,6 @@ function query() {
 }
 
 $(document).ready(function () {
-
     initEventForDateRangeDropdown();
     $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
         $('form.form-filter #DateRange').val('0');
@@ -91,6 +89,10 @@ $(document).ready(function () {
     $('form.form-filter #submit').on('click', function (event) {
         event.preventDefault();
         query();
+    });
+    $('form.form-filter #btnExcel').on('click', function (event) {
+        event.preventDefault();
+        window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveSummaryReport?' + $('form.form-filter').serialize();
     });
 
     query();

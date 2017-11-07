@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Fanex.Data.Repository;
-
-namespace Fanex.NexHR.Criteria.Report
+﻿namespace Fanex.NexHR.Criteria.Report
 {
+    using System;
+    using Fanex.Data.Repository;
+
     public class GetWeekendLeaveSummaryCriteria : CriteriaBase
     {
         public DateTime FromDate { get; set; }
