@@ -108,6 +108,7 @@
     <Compile Include="Overtime\GetMemberOvertimeByLeaderCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
+    <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />

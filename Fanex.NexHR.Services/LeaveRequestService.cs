@@ -63,46 +63,24 @@
         private void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
-            {
-                string subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-
-                subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
-                                                  : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-
-                email.Subject = subject;
-                string forDate = criteria.TotalDays == (decimal)0.5
-                    ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
-                    : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
-                email.Body = Utilities.ReadTextFile(templateEmailPath);
-                email.Body = string.Format(
-                    email.Body,
-                    email.SendToNickName,
-                    criteria.EmployeeName,
-                    forDate,
-                    criteria.LeaveTypeName,
-                    criteria.Remark,
-                    ConfigSettings.ApplicationDomain);
-
-                EmailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
-            }
+            email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
+            SendMailForSuccessfully(criteria, templateEmailPath, email);
         }
 
         private void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+            email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+
+            SendMailForSuccessfully(criteria, templateEmailPath, email);
+        }
+
+        private void SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
+        {
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
-                string subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-
-                subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
+                email.Subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
                                                   : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                email.Subject = subject;
                 string forDate = criteria.TotalDays == (decimal)0.5
                     ? GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
                     : GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
