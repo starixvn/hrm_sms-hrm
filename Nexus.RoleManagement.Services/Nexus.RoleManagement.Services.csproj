@@ -109,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="script.sql" />
     <None Include="Nexus.RoleManagement.Services.Debug.ruleset" />
     <None Include="Nexus.RoleManagement.Services.ruleset" />
     <None Include="packages.config" />
