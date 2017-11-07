@@ -24,7 +24,16 @@
                     <td>@item.Code</td>
                     <td>@item.NickName</td>
                     <td>@item.FullName</td>
-                    <td>@item.TotalWeekendLeave</td>
+                    <td>
+                        @if (item.TotalWeekendLeave > 14)
+                        {
+                            <span style="color: red">@item.TotalWeekendLeave</span>
+                        }
+                        else
+                        {
+                            @item.TotalWeekendLeave
+                        }
+                    </td>
                     <td>
                         @{
                             var empId = item.EmployeeId;
