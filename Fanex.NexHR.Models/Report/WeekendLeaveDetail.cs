@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Fanex.NexHR.Models.Report
+﻿namespace Fanex.NexHR.Models.Report
 {
+    using System;
+
     public class WeekendLeaveDetail
     {
         public int EmployeeId { get; set; }

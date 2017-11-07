@@ -1,0 +1,100 @@
+﻿namespace Fanex.NexHR.Services.ExportExcel.WeekendLeave
+{
+    using System.Collections.Generic;
+    using System.Web;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Criteria.Report;
+    using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Resources;
+
+    public class ExportWeekendLeaveDetailService : IExportWeekendLeaveDetailService
+    {
+        private const string WeekendLeaveDetailTemplatePath = @"~\ExcelTemplates\WeekendLeaveDetailTemplate.xls";
+        private const int HeaderRow = 3;
+        private const int BodyRow = 4;
+        private const int TotalCol = 9;
+
+        public void Export(GetWeekendLeaveDetailCriteria criteria, IList<WeekendLeaveDetail> weekendLeaveDetails)
+        {
+            string templatePath = HttpContext.Current.Server.MapPath(WeekendLeaveDetailTemplatePath);
+            string reportName = Labels.WeekendLeaveDetail;
+            string reportTitle;
+            string startDate = criteria.FromDate.ToString(Constants.DateFormat);
+            string endDate = criteria.ToDate.ToString(Constants.DateFormat);
+
+            if (criteria.EmployeeId != null)
+            {
+                reportTitle = string.Format(Labels.WeekendLeaveDetail, criteria.EmployeeName, startDate, endDate);
+            }
+            else if (criteria.GroupId != null)
+            {
+                reportTitle = string.Format(Labels.WeekendLeaveDetail, criteria.GroupName, startDate, endDate);
+            }
+            else
+            {
+                reportTitle = string.Format(Labels.WeekendLeaveDetail, startDate, endDate);
+            }
+
+            var dateRange = new
+            {
+                string.Empty,
+                FromDateLabel = Labels.FromDate,
+                FromDate = criteria.FromDate.ToDateMonthYearFormatedDate(),
+                ToDateLable = Labels.ToDate,
+                ToDate = criteria.ToDate.ToDateMonthYearFormatedDate()
+            };
+
+            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WeekendLeave);
+
+            // Fill report title.
+            writer.WriteRow(0, new object[] { reportTitle });
+            writer.WriteRow(1, dateRange);
+            writer.CopyRows(1, 1);
+
+            // Fill report header.
+            writer.CopyRows(HeaderRow, 1);
+
+            FillContentRow(weekendLeaveDetails, ref writer);
+            writer.SyncColumnsWidth(TotalCol);
+            writer.CreateFreezePane(6, 3);
+
+            writer.Render();
+        }
+
+        private void FillContentRow(IList<WeekendLeaveDetail> weekendLeaveDetails, ref ExcelTemplateWriter writer)
+        {
+            int rowIndex = 1;
+
+            foreach (WeekendLeaveDetail item in weekendLeaveDetails)
+            {
+                FillRow(item, ref writer, ref rowIndex);
+            }
+        }
+
+        private void FillRow(WeekendLeaveDetail weekendLeave, ref ExcelTemplateWriter writer, ref int rowIndex)
+        {
+            object record = CreateRecord(weekendLeave, ref rowIndex);
+            writer.WriteRow(BodyRow, record);
+        }
+
+        private object CreateRecord(WeekendLeaveDetail weekendLeave, ref int rowIndex)
+        {
+            double leaveDayQuantity = weekendLeave.LeaveDay > 0 ? weekendLeave.LeaveDay : 0;
+            var record = new
+            {
+                Count = rowIndex,
+                Code = weekendLeave.Code,
+                FullName = weekendLeave.FullName,
+                Nick = weekendLeave.NickName,
+                Section = weekendLeave.GroupName,
+                Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,
+                LeaveDate = weekendLeave.LeaveDate.ToDateMonthYearFormatedDate(),
+                LeaveType = weekendLeave.LeaveType,
+                LeaveDay = leaveDayQuantity
+            };
+            rowIndex++;
+
+            return record;
+        }
+    }
+}

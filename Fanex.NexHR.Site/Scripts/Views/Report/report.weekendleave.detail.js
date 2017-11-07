@@ -73,5 +73,10 @@ $(document).ready(function () {
 		query();
 	});
 
+	$('form.form-filter #btnExcel').on('click', function (event) {
+	    event.preventDefault();
+	    window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveDetailReport?' + $('form.form-filter').serialize();
+	});
+
 	query();
 })

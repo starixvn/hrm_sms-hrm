@@ -196,7 +196,8 @@
     <Compile Include="ExportExcel\TotalWorkingHourMonthlyExportService.cs" />
     <Compile Include="ExportExcel\UnpaidLeaveSummary\ExportExcelUnpaidLeaveSummaryReportService.cs" />
     <Compile Include="ExportExcel\UnpaidLeaveSummary\IExportExcelUnpaidLeaveSummaryReportService.cs" />
-    <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveService.cs" />
+    <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveDetailService.cs" />
+    <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveDetailService.cs" />
     <Compile Include="ExtensionNumberService.cs" />
     <Compile Include="ExportExcel\ITotalWorkingHourMonthlyExporting.cs" />
@@ -206,7 +207,7 @@
     <Compile Include="Interfaces\ICommandService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
-    <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveService.cs" />
+    <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveSummaryService.cs" />
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />

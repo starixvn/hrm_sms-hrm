@@ -3,19 +3,19 @@
     using System.Collections.Generic;
     using Criteria.Report;
     using Models.Report;
-    using Interfaces;
     using System.Web;
     using Resources;
     using Core;
+    using Interfaces;
 
-    public class ExportWeekendLeaveService : IExportWeekendLeaveService
+    public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
     {
         private const string WeekendLeaveSummaryTemplatePath = @"~\ExcelTemplates\WeekendLeaveSummaryTemplate.xls";
         private const int HeaderRow = 3;
         private const int BodyRow = 4;
         private const int TotalCol = 7;
 
-        public void ExportWeekendLeaveSummay(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
+        public void Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
         {
             string templatePath = HttpContext.Current.Server.MapPath(WeekendLeaveSummaryTemplatePath);
             string reportName = Labels.WeekendLeaveSummary;
@@ -36,10 +36,20 @@
                 reportTitle = string.Format(Labels.WeekendLeaveSummary, startDate, endDate);
             }
 
-            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineSummaryReportSheet);
+            var dateRange = new
+            {
+                string.Empty,
+                FromDateLabel = Labels.FromDate,
+                FromDate = criteria.FromDate.ToDateMonthYearFormatedDate(),
+                ToDateLable = Labels.ToDate,
+                ToDate = criteria.ToDate.ToDateMonthYearFormatedDate()
+            };
+
+            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WeekendLeave);
 
             // Fill report title.
             writer.WriteRow(0, new object[] { reportTitle });
+            writer.WriteRow(1, dateRange);
             writer.CopyRows(1, 1);
 
             // Fill report header.
@@ -52,11 +62,11 @@
             writer.Render();
         }
 
-        private void FillContentRow(IList<WeekendLeaveSummary> weekendLeaveDetails, ref ExcelTemplateWriter writer)
+        private void FillContentRow(IList<WeekendLeaveSummary> weekendLeaves, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
 
-            foreach (WeekendLeaveSummary item in weekendLeaveDetails)
+            foreach (WeekendLeaveSummary item in weekendLeaves)
             {
                 FillRow(item, ref writer, ref rowIndex);
             }

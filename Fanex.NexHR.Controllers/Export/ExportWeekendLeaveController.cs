@@ -12,19 +12,22 @@
     public class ExportWeekendLeaveController : BaseController
     {
         private readonly IReportService reportService;
-        private readonly IExportWeekendLeaveService exportWeekendLeaveService;
+        private readonly IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService;
+        private readonly IExportWeekendLeaveDetailService exportWeekendLeaveDetailService;
 
         public ExportWeekendLeaveController()
-            : this(null, null)
+            : this(null, null, null)
         {
         }
 
         public ExportWeekendLeaveController(
                             IReportService reportService,
-                            IExportWeekendLeaveService exportWeekendLeaveService)
+                            IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
+                            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
         {
             this.reportService = reportService ?? new ReportService();
-            this.exportWeekendLeaveService = exportWeekendLeaveService ?? new ExportWeekendLeaveService();
+            this.exportWeekendLeaveSummaryService = exportWeekendLeaveSummaryService ?? new ExportWeekendLeaveSummaryService();
+            this.exportWeekendLeaveDetailService = exportWeekendLeaveDetailService ?? new ExportWeekendLeaveDetailService();
         }
 
         public ActionResult ExportWeekendLeaveSummaryReport(WeekendLeaveSummaryViewModel model)
@@ -39,7 +42,24 @@
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
-            exportWeekendLeaveService.ExportWeekendLeaveSummay(criteria, weekendLeaves);
+            exportWeekendLeaveSummaryService.Export(criteria, weekendLeaves);
+
+            return new EmptyResult();
+        }
+
+        public ActionResult ExportWeekendLeaveDetailReport(WeekendLeaveSummaryViewModel model)
+        {
+            var criteria = new GetWeekendLeaveDetailCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                GroupId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+            };
+
+            IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
+            exportWeekendLeaveDetailService.Export(criteria, weekendLeaveDetails);
 
             return new EmptyResult();
         }
