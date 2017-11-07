@@ -392,21 +392,6 @@
             emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
         }
 
-        //private string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
-        //{
-        //    if (totalDays > 1)
-        //    {
-        //        return string.Format(_MailContentLeave, fromDate.ToDateMonthYearFormatedDate(), toDate.ToDateMonthYearFormatedDate(), totalDays);
-        //    }
-
-        //    if (totalDays == 1)
-        //    {
-        //        return string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate());
-        //    }
-
-        //    return string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
-        //}
-
         private void SendMailForCancelChangeShiftRequest(
             RequestEntity request,
             string mailTo,

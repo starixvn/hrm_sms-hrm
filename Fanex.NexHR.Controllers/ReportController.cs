@@ -1,5 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core;
     using Core.Enums;
     using Criteria;
@@ -10,27 +15,19 @@
     using Criteria.Team;
     using Criteria.Time;
     using Models;
+    using Models.Report;
     using Models.Supervisor;
     using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
     using Services;
     using Services.ExportExcel;
     using Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Mvc;
     using ViewModels;
     using ViewModels.Report;
     using ViewModels.Request;
     using Web.Providers;
-    using ViewModels.Report;
-    using Models.Report;
 
     [ValidateInput(false)]
-    //[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class ReportController : BaseController
     {
         private readonly IReportService reportService;
