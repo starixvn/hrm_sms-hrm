@@ -29,7 +29,7 @@
         public string Remark { get; set; }
 
         [Required]
-        [Range(1, 150, ErrorMessage = "The Minute field must be between 1 and 150")]
+        [Range(1, 60, ErrorMessage = "The Minute field must be between 1 and 60")]
         public int Minute { get; set; }
 
         [Required]
