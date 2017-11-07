@@ -49,7 +49,7 @@
         });
 
         $("#btnExcel").click(function () {
-            window.location.href = _global.root + "export/OvertimeReport?" + $('form.form-filter').serialize();
+            window.location.href = _global.root + "ExportOvertime/OvertimeReport?" + $('form.form-filter').serialize();
         });
     });
 })();

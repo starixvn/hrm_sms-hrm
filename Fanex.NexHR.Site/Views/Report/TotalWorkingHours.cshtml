@@ -1,5 +1,5 @@
 ﻿@using Fanex.NexHR.ViewModels.Request
-@model TotalWorkingHoursViewModel
+@model ReportFilterViewModel
 
 @{
     ViewBag.Title = Labels.ReportWorkingHours;
@@ -113,7 +113,7 @@
 
         <div class="grid_5 prefix_2">
             <input id="btnSubmit" type="submit" value="@Labels.Submit" class="processing-submit" />
-            <input id="btnExcel" type="submit" value="Excel" />
+            <input id="btnExcel" type="button" value="Excel" />
         </div>
         <div class="clear"></div>
     </div>

@@ -357,7 +357,7 @@ $(function () {
                 requestType = $("input[type='radio'][name='RequestType']:checked").val(),
                 isLocal = $('#IsLocal').val(),
                 isFilterByAffectedDate = $('#IsFilterByAffectedDate').val();
-            var url = _global.root + 'export/' + action + '?DateOption=' + $('#Date').val() +
+            var url = _global.root + 'ExportRequest/' + action + '?DateOption=' + $('#Date').val() +
                 '&TeamIds=' + teams + '&Employee=' + $('#Employee').val() +
                 '&EmployeeId=' + $('#EmployeeId').val() +
                 '&FromDate=' + $('#FromDate').val() +

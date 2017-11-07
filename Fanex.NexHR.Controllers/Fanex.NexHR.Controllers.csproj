@@ -153,6 +153,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\BaseExportController.cs" />
+    <Compile Include="Export\ExportAttendanceController.cs" />
+    <Compile Include="Export\ExportCalendarController.cs" />
+    <Compile Include="Export\ExportSupervisorController.cs" />
+    <Compile Include="Export\ExportManpowerControlle.cs" />
+    <Compile Include="Export\ExportRequestController.cs" />
+    <Compile Include="Export\ExportOvertimeController.cs" />
+    <Compile Include="Export\ExportLeaveSummaryController.cs" />
     <Compile Include="Export\ExportTotalWorkingHourController.cs" />
     <Compile Include="Export\ExportDisciplineController.cs" />
     <Compile Include="MenuController.cs" />
@@ -166,7 +174,7 @@
     <Compile Include="DisciplineController.cs" />
     <Compile Include="ErrorController.cs" />
     <Compile Include="EmployeeController.cs" />
-    <Compile Include="ExportController.cs" />
+    <Compile Include="Export\ExportEmployeeController.cs" />
     <Compile Include="ExtensionNoController.cs" />
     <Compile Include="FileController.cs" />
     <Compile Include="FunctionController.cs" />

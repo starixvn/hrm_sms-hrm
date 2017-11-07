@@ -244,28 +244,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        protected static string GetStatus(int statusId)
-        {
-            string statusIds;
-            switch (statusId)
-            {
-                case -1:
-                    // status = -1 --> pending and verified (1,2)
-                    statusIds = "1,2";
-                    break;
-
-                case 0:
-                    statusIds = string.Empty;
-                    break;
-
-                default:
-                    statusIds = statusId.ToString();
-                    break;
-            }
-
-            return statusIds;
-        }
-
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
@@ -284,7 +262,7 @@
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
                 GroupIds = request.TeamIds,
-                Status = GetStatus(request.StatusId),
+                Status = request.StatusIds,
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,

@@ -351,15 +351,6 @@
             var sheet = hssfworkbook.CloneSheet("sheet1", title);
             var rowIndex = _RowStartBodyWorkingTimeRequest;
             var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
-            ICell cellNo = null;
-            ICell cellTeam = null;
-            ICell cellNick = null;
-            ICell cellName = null;
-            ICell cellRequest = null;
-            ICell cellDetails = null;
-            ICell cellRemarks = null;
-            ICell cellCreateDate = null;
-            ICell cellStatus = null;
 
             var rowTitle = sheet.GetRow(0);
             var cellTitle = rowTitle.GetCell(0);
@@ -370,19 +361,7 @@
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
-                RenderBodyWorkingTimeRequest(
-                    rowIndex,
-                    ref cellNo,
-                    ref cellTeam,
-                    ref cellNick,
-                    ref cellName,
-                    ref cellRequest,
-                    ref cellDetails,
-                    ref cellRemarks,
-                    ref cellCreateDate,
-                    ref cellStatus,
-                    item,
-                    row);
+                RenderBodyWorkingTimeRequest(rowIndex, item, row);
                 rowIndex++;
             }
 
@@ -471,18 +450,19 @@
 
         private void RenderBodyWorkingTimeRequest(
             int rowIndex,
-            ref ICell cellNo,
-            ref ICell cellTeam,
-            ref ICell cellNick,
-            ref ICell cellName,
-            ref ICell cellRequest,
-            ref ICell cellDetails,
-            ref ICell cellRemarks,
-            ref ICell cellCreateDate,
-            ref ICell cellStatus,
             RequestEntity item,
             IRow row)
         {
+            ICell cellNo = null;
+            ICell cellTeam = null;
+            ICell cellNick = null;
+            ICell cellName = null;
+            ICell cellRequest = null;
+            ICell cellDetails = null;
+            ICell cellRemarks = null;
+            ICell cellCreateDate = null;
+            ICell cellStatus = null;
+
             cellNo = row.GetCell(0);
             cellTeam = row.GetCell(1);
             cellNick = row.GetCell(2);

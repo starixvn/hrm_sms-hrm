@@ -293,14 +293,6 @@
                 };
             }
 
-            if (model.IsExportExcel)
-            {
-                using (var export = new ExportTotalWorkingHourController())
-                {
-                    return export.TotalWorkingHours(model);
-                }
-            }
-
             ViewBag.Groups = GetAllTeam();
             ViewBag.TeamIds = model.TeamIds;
 

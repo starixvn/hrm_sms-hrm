@@ -34,7 +34,7 @@
         });
 
         $('form.form-filter #btnExcel').on('click', function () {
-            window.location.href = _global.root + 'Export/ExportSectionSupervisor?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportSupervisor/SectionSupervisor?' + $('form.form-filter').serialize();
         });
     });
 })();

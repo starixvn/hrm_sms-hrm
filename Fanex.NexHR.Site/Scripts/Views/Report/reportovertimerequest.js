@@ -8,7 +8,7 @@ function exportExcel() {
 	var employeeId = $("#EmployeeId").val();
 	var url = null;
 
-	url = _global.root + "export/EmployeeOvertimeReport?year=" + year + "&month=" + month +
+	url = _global.root + "ExportOvertime/EmployeeOvertimeReport?year=" + year + "&month=" + month +
 		"&calendar=" + calendar + "&empId=" + employeeId;
 	location.href = url;
 }

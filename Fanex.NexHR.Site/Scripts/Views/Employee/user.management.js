@@ -78,10 +78,10 @@
             controllerPath;
 
         if (object.attr("id") === "basicExcel") {
-            controllerPath = "export/EmployeeBasicInfo?";
+            controllerPath = "ExportEmployee/EmployeeBasicInfo?";
         }
         if (object.attr("id") === "detailsExcel") {
-            controllerPath = "export/EmployeeDetailsInfo?";
+            controllerPath = "ExportEmployee/EmployeeDetailsInfo?";
         }
 
         url = _global.root + controllerPath + $('form.form-filter').serialize();

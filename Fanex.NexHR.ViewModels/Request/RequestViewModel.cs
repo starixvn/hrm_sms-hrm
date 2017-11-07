@@ -59,6 +59,31 @@
 
         public RequestViewType ViewType { get; set; }
 
+        public string StatusIds
+        {
+            get
+            {
+                string statusIds;
+                switch (StatusId)
+                {
+                    case -1:
+                        // status = -1 --> pending and verified (1,2)
+                        statusIds = "1,2";
+                        break;
+
+                    case 0:
+                        statusIds = string.Empty;
+                        break;
+
+                    default:
+                        statusIds = StatusId.ToString();
+                        break;
+                }
+
+                return statusIds;
+            }
+        }
+
         public string ActionName
         {
             get

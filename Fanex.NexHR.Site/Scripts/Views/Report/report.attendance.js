@@ -104,7 +104,7 @@ $(document).ready(function () {
     });
 
     $("#btnExcel").click(function () {
-        location.href = _global.root + "export/Attendance?" + $('.form-filter').serialize();
+        location.href = _global.root + "ExportAttendance/Attendance?" + $('.form-filter').serialize();
     });
 
     query();

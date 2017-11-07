@@ -4,7 +4,7 @@
 $(document).ready(function () {
     $("#btnExcel").click(function () {
         var year = $("#Year").val();
-        var url = _global.root + "export/Manpower?year=" + year;
+        var url = _global.root + "ExportManpower/Manpower?year=" + year;
         location.href = url;
     });
 });

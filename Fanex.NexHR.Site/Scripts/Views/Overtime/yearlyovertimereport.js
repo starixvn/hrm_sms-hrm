@@ -100,7 +100,7 @@
         });
 
         $("#btnExcel").click(function () {
-            var url = _global.root + "export/YearlyOvertimeReport?" + $('form.form-filter').serialize();
+            var url = _global.root + "ExportOvertime/YearlyOvertimeReport?" + $('form.form-filter').serialize();
             location.href = url;
         });
     });

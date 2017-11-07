@@ -38,7 +38,7 @@
         });
 
         $('form.form-filter #btnExcel').on('click', function () {
-            window.location.href = _global.root + 'Export/ExportEmployeeSupervisor?' + $('form.form-filter').serialize();
+            window.location.href = _global.root + 'ExportSupervisor/EmployeeSupervisor?' + $('form.form-filter').serialize();
         });
     });
 })();

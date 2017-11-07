@@ -29,7 +29,7 @@ function exportExcel() {
 		var group = $("#group").val() != null ? $("#group").val().join() : "";
 		var title = $("#title").val() != null ? $("#title").val().join() : "";
 
-		url = _global.root + "report/WorkingCalendarSummary?fromDate=" + fromDate + "&toDate=" + toDate + "&teamIds=" + group + 
+		url = _global.root + "Report/WorkingCalendarSummary?fromDate=" + fromDate + "&toDate=" + toDate + "&teamIds=" + group +
 			"&jobTitleIds=" + title + "&employeeId=" + employeeId + "&isLocal=" + isLocal + "&isExportExcel=" + true;
 		location.href = url;
 	}

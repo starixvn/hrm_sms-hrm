@@ -13,7 +13,7 @@ $(document).ready(function () {
     });
 
     $("#btnExcel").click(function () {
-        var postToUrl = "export/leavesummary?year=";
+        var postToUrl = "ExportLeaveSummary/AnnualLeaveSummary?year=";
         var url = submitData(postToUrl);
         location.href = url;
     });
