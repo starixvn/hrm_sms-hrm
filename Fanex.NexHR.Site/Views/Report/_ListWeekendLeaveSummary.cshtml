@@ -7,6 +7,7 @@
             <th>@Labels.Code</th>
             <th>@Labels.Nick</th>
             <th>@Labels.FullName</th>
+            <th>@Labels.Category</th>
             <th>@Labels.TotalWeekendLeave</th>
             <th>@Labels.Action</th>
         </tr>
@@ -23,7 +24,17 @@
                     <td>@item.GroupName</td>
                     <td>@item.Code</td>
                     <td>@item.NickName</td>
-                    <td>@item.FullName</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td>
+                        @if (item.IsLocal)
+                        {
+                            <span>@Labels.Local</span>
+                        }
+                        else
+                        {
+                            <span>@Labels.Expat</span>
+                        }
+                    </td>
                     <td>
                         @if (item.TotalWeekendLeave > 14)
                         {

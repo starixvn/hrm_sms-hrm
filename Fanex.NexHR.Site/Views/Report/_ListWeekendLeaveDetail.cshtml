@@ -8,6 +8,7 @@
             <th>@Labels.Code</th>
             <th>@Labels.Nick</th>
             <th>@Labels.FullName</th>
+            <th>@Labels.Category</th>
             <th>@Labels.LeaveDate</th>
             <th>@Labels.LeaveType</th>
             <th>@Labels.LeaveDay</th>
@@ -25,7 +26,17 @@
                     <td>@item.GroupName</td>
                     <td>@item.Code</td>
                     <td>@item.NickName</td>
-                    <td>@item.FullName</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td>
+                        @if (item.IsLocal)
+                        {
+                            <span>@Labels.Local</span>
+                        }
+                        else
+                        {
+                            <span>@Labels.Expat</span>
+                        }
+                    </td>
                     <td>@item.LeaveDate</td>
                     <td>@item.LeaveType</td>
                     <td>@item.LeaveDay</td>

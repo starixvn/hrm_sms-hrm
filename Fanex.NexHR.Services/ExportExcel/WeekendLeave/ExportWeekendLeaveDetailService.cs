@@ -35,6 +35,19 @@
                 reportTitle = string.Format(Labels.WeekendLeaveDetail, startDate, endDate);
             }
 
+            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WeekendLeave);
+
+            FillHeaderRows(ref writer, criteria, reportTitle);
+
+            FillContentRow(weekendLeaveDetails, ref writer);
+            writer.SyncColumnsWidth(TotalCol);
+            writer.CreateFreezePane(6, 3);
+
+            writer.Render();
+        }
+
+        private void FillHeaderRows(ref ExcelTemplateWriter writer, GetWeekendLeaveDetailCriteria criteria, string reportTitle)
+        {
             var dateRange = new
             {
                 string.Empty,
@@ -44,21 +57,11 @@
                 ToDate = criteria.ToDate.ToDateMonthYearFormatedDate()
             };
 
-            var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WeekendLeave);
-
-            // Fill report title.
             writer.WriteRow(0, new object[] { reportTitle });
             writer.WriteRow(1, dateRange);
             writer.CopyRows(1, 1);
 
-            // Fill report header.
             writer.CopyRows(HeaderRow, 1);
-
-            FillContentRow(weekendLeaveDetails, ref writer);
-            writer.SyncColumnsWidth(TotalCol);
-            writer.CreateFreezePane(6, 3);
-
-            writer.Render();
         }
 
         private void FillContentRow(IList<WeekendLeaveDetail> weekendLeaveDetails, ref ExcelTemplateWriter writer)
