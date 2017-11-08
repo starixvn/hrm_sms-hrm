@@ -142,11 +142,13 @@
                 {
                     var found = false;
                     var rand = (int)random[i];
-                    bool randFrom48To57 = (rand >= 48) && (rand <= 57);
-                    bool randFrom65To90 = (rand >= 65) && (rand <= 90);
-                    bool randFrom97To122 = (rand >= 97) && (rand <= 122);
+
                     while (!found)
                     {
+                        bool randFrom48To57 = (rand >= 48) && (rand <= 57);
+                        bool randFrom65To90 = (rand >= 65) && (rand <= 90);
+                        bool randFrom97To122 = (rand >= 97) && (rand <= 122);
+
                         if (randFrom48To57 || randFrom65To90 || randFrom97To122)
                         {
                             found = true;
