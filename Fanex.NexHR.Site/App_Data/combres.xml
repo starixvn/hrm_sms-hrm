@@ -485,7 +485,7 @@
       <resource path="~/Styles/css/lib/bootstrap/css/bootstrap.css" />
       <resource path="~/Styles/Libs/jquery-ui-1.2.1/jquery-ui.css" />
       <resource path="~/Styles/css/lib/tipsy/tipsy.css" />
-      <resource path="~/Styles/css/style.css" />
+      <resource path="~/Styles/css/style.min.css" />
       <resource path="~/Styles/Libs/jquery-multiselect-widget/jquery.multiselect.css" />
       <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.css" />
     </resourceSet>
