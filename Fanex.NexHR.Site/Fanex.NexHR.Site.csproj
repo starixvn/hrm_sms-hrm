@@ -1041,7 +1041,6 @@
     <Folder Include="bin\" />
     <Folder Include="Content\pages\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Styles\Libs\jquery-ui-1.2.1\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\AccountSuspended.cshtml" />
