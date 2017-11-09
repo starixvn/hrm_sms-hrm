@@ -76,11 +76,11 @@
             decimal systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
             decimal approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
-            string checkIn = ReturnValueOrEmtpyString(discipline.CheckIn.HasValue, discipline.CheckIn.Value.ToString(Constants.TimeFormat));
-            string checkOut = ReturnValueOrEmtpyString(discipline.CheckOut.HasValue, discipline.CheckOut.Value.ToString(Constants.TimeFormat));
-            string totalHours = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.TotalHours), discipline.TotalHours);
-            string missingCheckInOut = ReturnValueOrEmtpyString(discipline.MissingCheckInOut.Value > 0, discipline.MissingCheckInOut.Value.ToString());
-            string workingUnderTime = ReturnValueOrEmtpyString(discipline.WorkingUnderTime.Value > 0, "1");
+            string checkIn = discipline.CheckIn.HasValue ? discipline.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty;
+            string checkOut = discipline.CheckOut.HasValue ? discipline.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty;
+            string totalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty;
+            string missingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty;
+            string workingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty;
             string lateIn = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
             string earlyOut = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
             string absent = ReturnValueOrEmtpyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());

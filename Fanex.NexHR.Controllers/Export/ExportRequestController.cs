@@ -14,20 +14,26 @@
     using System.Web.Mvc;
     using ViewModels.Request;
     using Web.Providers;
+    using Models;
+    using Criteria.Team;
+    using System.Linq;
+    using Resources;
 
     public class ExportRequestController : BaseExportController
     {
         private readonly IExportExcelService exportExcelService;
         private readonly IRequestService requestService;
+        private readonly ITeamService teamService;
 
-        public ExportRequestController(): this(null, null)
+        public ExportRequestController() : this(null, null, null)
         {
         }
 
-        public ExportRequestController(IExportExcelService exportExcelService, IRequestService requestService)
+        public ExportRequestController(IExportExcelService exportExcelService, IRequestService requestService, ITeamService teamService)
         {
             this.exportExcelService = exportExcelService ?? new ExportExcelService();
             this.requestService = requestService ?? new RequestService();
+            this.teamService = teamService ?? new TeamService();
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
@@ -62,6 +68,49 @@
             string fileName = "EmployeeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
+        }
+
+        public ActionResult VoidRequestWorkingTimeRequest(RequestViewModel request)
+        {
+            request.TeamCollection = GetGroupBySupervisor();
+            request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
+            int? employeeId = null;
+            if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
+            {
+                employeeId = request.EmployeeId;
+            }
+
+            bool? isLocal = null;
+            var criteria = new GetRequestCriteria
+            {
+                EmpId = employeeId,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                GroupIds = request.TeamIds,
+                Status = request.StatusIds,
+                RequestType = request.RequestType,
+                IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
+                RequestViewType = request.ViewType,
+                SupervisorId = CurrentUser.Id,
+                IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
+            };
+
+            IList<RequestEntity> requestList = requestService.GetRequests(criteria);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
+            string fileName = "EmployeeVoidRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+
+            return ExcelFile(hssfworkbook, fileName);
+        }
+
+        private IList<Team> GetGroupBySupervisor()
+        {
+            var criteria = new GetGroupBySupervisorCriteria
+            {
+                SupervisorId = CurrentUser.Id
+            };
+
+            IList<Team> teams = teamService.GetBySupervisor(criteria);
+            return teams;
         }
 
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)

@@ -15,3 +15,25 @@ function deleteDepartment(departmentId) {
         });
     });
 }
+
+function filterDepartment() {
+    var status = $("#IsActive").val();
+    var isActive = "";
+    if (status == 0) {
+        isActive = true;
+    } else {
+        isActive = false;
+    }
+
+    console.log(status);
+    if (status != 'undefined')
+    {
+        window.location.href = _global.root + 'department/index?isActive=' + isActive;
+    }
+}
+
+$(document).ready(function () {
+    $('#submit').on('click', function () {
+        filterDepartment();
+    })
+})
