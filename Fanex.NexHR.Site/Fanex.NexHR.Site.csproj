@@ -308,7 +308,12 @@
     <Content Include="Libs\FloatThead\jquery.floatThead.min.js" />
     <Content Include="Libs\FontAwesome\css\font-awesome.css" />
     <Content Include="Libs\FontAwesome\css\font-awesome.min.css" />
+    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
     <Content Include="Libs\FontAwesome\HELP-US-OUT.txt" />
     <Content Include="Libs\SimplePagination\.gitignore" />
     <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
@@ -367,7 +372,11 @@
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.css" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Styles\css\lib\tipsy\tipsy.css" />
     <Content Include="Styles\css\main.css" />
     <Content Include="Styles\css\main.min.css" />
@@ -1202,11 +1211,6 @@
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.eot" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
     <Content Include="Libs\FontAwesome\less\animated.less" />
     <Content Include="Libs\FontAwesome\less\bordered-pulled.less" />
     <Content Include="Libs\FontAwesome\less\core.less" />
@@ -1336,10 +1340,6 @@
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.min.css.map" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.css.map" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.min.css.map" />
-    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Request\TestPage.cshtml" />
     <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
     <Content Include="Views\Request\EmployeeRequestOld.cshtml" />

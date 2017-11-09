@@ -55,7 +55,7 @@
         {
             var criteria = new GetEmployeeByRoleCriteria
             {
-                ExcludeIds = excludeIds,
+                ExcludeIds = excludeIds ?? string.Empty,
                 Query = query.Trim(),
                 RoleIds = roleIds
             };

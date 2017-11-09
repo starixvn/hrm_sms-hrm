@@ -47,6 +47,7 @@ $(document).ready(function () {
     $("#Supervisor").autocomplete({
         source: function (request, response) {
             var listIgnore = "";
+            console.log("List Ignore" + listIgnore);
             var supervisors = $("#tblSupervisor").find("tbody tr");
             for (var i = 0; i < supervisors.length; i++) {
                 var supervisor = $(supervisors[i]).children().eq(1);
@@ -58,7 +59,8 @@ $(document).ready(function () {
                 query: $.trim(request.term),
                 $top: 10
             };
-            if ($("#supervisorRole").val() === "True") {
+            console.log($("#supervisorRole").val() === "False");
+            if ($("#supervisorRole").val() === "False") {
                 $.ajax({
                     url: urlAllEmployee,
                     data: params,
@@ -107,8 +109,10 @@ $(document).ready(function () {
             event.preventDefault();
         },
         close: function () {
-            $('#Supervisor').val(nickName.split("-")[0].trim());
-            $('#SupervisorTeam').val(nickName.split("-")[1].trim());
+            if (nickName) {
+                $('#Supervisor').val(nickName.split("-")[0].trim());
+                $('#SupervisorTeam').val(nickName.split("-")[1].trim());
+            }
         }
     });
 

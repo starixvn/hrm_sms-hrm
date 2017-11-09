@@ -290,9 +290,7 @@
                         $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Other Discipline - ' + nickname,
-                            close: function () {
-                                query();
-                            },
+                            close: true,
                             show: {
                                 effect: 'fade',
                                 duration: 300
@@ -331,9 +329,7 @@
                         $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Weekend Leave - ' + nickname,
-                            close: function () {
-                                query();
-                            },
+                            close: true,
                             show: {
                                 effect: 'fade',
                                 duration: 300
