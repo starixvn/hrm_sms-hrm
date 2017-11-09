@@ -138,6 +138,7 @@ var OvertimeMemberDetail = (function ($) {
 
                     if (isShowWarning) {
                         alert("There are some request has verified yet.");
+                        return;
                     }
 
                     if (requestIds.length > 0) {
@@ -146,6 +147,7 @@ var OvertimeMemberDetail = (function ($) {
 
                     $.post(_global.root + 'overtime/ProcessMultiple', { command: ConstantRequest.CONSTANT_APPROVE, requestIds: requestIds },
                     function (response) {
+                        console.log(response);
                         fadeOutMessage();
                         if (response.IsSuccessful) {
                             MemberOvertime.submitEvent();

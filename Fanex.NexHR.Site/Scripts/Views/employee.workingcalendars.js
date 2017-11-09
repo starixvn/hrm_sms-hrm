@@ -7,7 +7,7 @@ function exportExcel() {
         fromDate = $.datepicker.formatDate('d M, yy', from),
         toDate = $.datepicker.formatDate('d M, yy', to);
 
-    var url = _global.root + 'export/EmployeeWorkingCalendar?fromDate=' + fromDate + '&toDate=' + toDate + '&EmployeeId=' + $('#EmployeeId').val() +
+    var url = _global.root + 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + fromDate + '&toDate=' + toDate + '&EmployeeId=' + $('#EmployeeId').val() +
         '&SectionIds=' + $('#SectionIds').val() + '&JobTitleIds=' + $('#JobTitleIds').val() + '&IsLocal=' + $('#IsLocal').val();
     location.href = url;
 }
