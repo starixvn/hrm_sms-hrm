@@ -1,4 +1,7 @@
 ﻿@model ProcessRequestViewModel
+@section js{
+    @Url.CombresLink("employeerequestjs_new")
+}
 <form>
     @Html.HiddenFor(model => model.RequestId)
     @Html.HiddenFor(model => model.EmployeeId)

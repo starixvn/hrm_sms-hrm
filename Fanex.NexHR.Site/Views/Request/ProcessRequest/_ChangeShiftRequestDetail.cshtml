@@ -1,4 +1,7 @@
 ﻿@model List<ChangeShiftDetailModel>
+@section js{
+    @Url.CombresLink("employeerequestjs_new")
+}
 <table class="table table-custom">
     <thead>
         <tr>
@@ -30,8 +33,8 @@
                     </td>
                     if (!string.IsNullOrWhiteSpace(item.Remark))
                     {
-                        <td class="tooltip" title="@item.Remark">
-                            <span class="icon remark" alt="remark"></span>
+                        <td>
+                            <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" title="@item.Remark"></span>
                         </td>
                     }
                     else

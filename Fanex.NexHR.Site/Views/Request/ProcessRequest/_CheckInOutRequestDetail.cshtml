@@ -30,8 +30,8 @@
             </td>
             @if (!string.IsNullOrWhiteSpace(Model.Remark))
             {
-                <td class="tooltip" title="@Model.Remark">
-                    <span class="icon remark" alt="remark"></span>
+                <td>
+                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@Model.Remark"></span>
                 </td>
             }
             else
