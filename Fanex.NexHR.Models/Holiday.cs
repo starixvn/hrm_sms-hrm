@@ -5,6 +5,7 @@
 
     public class Holiday : EntityBase<int>
     {
+        [RegularExpression(@"^[^><]*$", ErrorMessage = "Holiday name cannot start by <")]
         public string HolidayName { get; set; }
 
         [DataType(DataType.Date)]
