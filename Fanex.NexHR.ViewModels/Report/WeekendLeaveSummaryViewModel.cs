@@ -29,6 +29,9 @@ namespace Fanex.NexHR.ViewModels.Report
 
         public bool IsShowAll { get; set; }
 
+        [Display(Name = "Leave Type")]
+        public int LeaveTypeId { get; set; }
+
         public IList<SelectListItem> DateRange { get; set; }
     }
 }

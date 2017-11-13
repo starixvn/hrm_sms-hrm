@@ -11,10 +11,10 @@
     @Url.CombresLink("weekendleavedetailjs")
 }
 @section Breadcrumb {
-     <a class="step" href="@Url.Action("weekendleavesummary", "report")">@Labels.WeekendLeaveSummary</a>
+    <a class="step" href="@Url.Action("weekendleavesummary", "report")">@Labels.WeekendLeaveSummary</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@Labels.WeekendLeaveSummary</h2>
+<h2>@Labels.WeekendLeaveDetail</h2>
 <form class="form-filter">
     <div class="container_24 bunhat">
         <div class="space"></div>
@@ -63,6 +63,23 @@
         <div class="grid_7">
             @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
+        </div>
+
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="grid_2">
+            @Html.LabelFor(model => model.LeaveTypeId)
+        </div>
+        <div class="grid_6">
+            @{
+                var leaveType = new List<SelectListItem>
+                {
+                    new SelectListItem() {Text = Labels.All, Value = "-1"},
+                    new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
+                    new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
+                };
+            }
+            @Html.DropDownListFor(model => model.LeaveTypeId, leaveType)
         </div>
 
         <div class="clear"></div>

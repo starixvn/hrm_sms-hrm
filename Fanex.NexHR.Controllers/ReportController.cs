@@ -350,6 +350,7 @@
             {
                 var today = DateTime.Today;
                 int currentMonth = today.Month;
+
                 model.FromDate = new DateTime(today.Year, currentMonth, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
@@ -368,6 +369,7 @@
                 GroupId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
+                LeaveTypeId = model.LeaveTypeId
             };
 
             IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);

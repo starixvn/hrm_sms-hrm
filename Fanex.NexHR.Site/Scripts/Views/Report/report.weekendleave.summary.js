@@ -44,7 +44,7 @@ function initEventForViewWeekendLeaveDetail() {
 
         window.location.href = _global.root + 'report/WeekendLeaveDetail?fromDate=' + fromDate + '&toDate=' + toDate
             + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
-            + '&isLocal=' + isLocal + '&fromSummaryPage=true', '_blank';
+            + '&isLocal=' + isLocal + '&fromSummaryPage=true&leaveTypeId=-1', '_blank';
     });
 }
 

@@ -21,6 +21,8 @@
         [SpParam(Ignored = true)]
         public string GroupName { get; set; }
 
+        public int LeaveTypeId { get; set; }
+
         public override bool IsValid()
         {
             return FromDate <= ToDate;
