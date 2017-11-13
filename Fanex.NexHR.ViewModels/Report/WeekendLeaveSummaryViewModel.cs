@@ -21,6 +21,7 @@ namespace Fanex.NexHR.ViewModels.Report
 
         public bool? IsLocal { get; set; }
 
+        [AllowHtml]
         public string Employee { get; set; }
 
         public int? EmployeeId { get; set; }
