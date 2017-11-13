@@ -123,7 +123,7 @@
             {
                 Query = null,
                 GroupIds = null,
-                EnableUser = false,
+                EnableUser = true,
                 IsDeleteUser = false,
                 TitleId = null,
                 IsLocalUser = null
