@@ -56,6 +56,7 @@
                 GroupId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
+                LeaveTypeId = model.LeaveTypeId
             };
 
             IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
