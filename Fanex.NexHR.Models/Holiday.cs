@@ -2,10 +2,11 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     public class Holiday : EntityBase<int>
     {
-        [RegularExpression(@"^[^><]*$", ErrorMessage = "Holiday name cannot start by <")]
+        [AllowHtml]
         public string HolidayName { get; set; }
 
         [DataType(DataType.Date)]
