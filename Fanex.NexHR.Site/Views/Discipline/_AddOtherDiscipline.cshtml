@@ -2,6 +2,9 @@
 
 <form id="frmAddOtherDiscipline">
     @Html.ValidationSummary()
+
+    @Html.Hidden("IsSuccessful", false)
+
     <div class="formrow">
         <div class="label">
             @Html.LabelFor(model => model.Employee)

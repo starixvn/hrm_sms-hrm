@@ -177,6 +177,7 @@
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
+                                        $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true)
                                     } else {
                                         showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
                                     }
@@ -193,7 +194,9 @@
                 }
             ],
             close: function () {
-                query();
+                if ($('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked')) {
+                    query();
+                }
             },
             show: {
                 effect: 'fade',
@@ -228,6 +231,7 @@
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         showSuccessMsg($dialogAddOtherDiscipline, 'Add Weekend Leave successfully!');
+                                        $('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked', true)
                                     } else {
                                         showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
                                     }
@@ -244,7 +248,9 @@
                 }
             ],
             close: function () {
-                query();
+                if ($('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked')) {
+                    query();
+                }
             },
             show: {
                 effect: 'fade',
@@ -290,7 +296,11 @@
                         $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Other Discipline - ' + nickname,
-                            close: true,
+                            close: function () {
+                                if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
+                                    query();
+                                }
+                            },
                             show: {
                                 effect: 'fade',
                                 duration: 300
@@ -329,7 +339,11 @@
                         $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Weekend Leave - ' + nickname,
-                            close: true,
+                            close: function () {
+                                if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
+                                    query();
+                                }
+                            },
                             show: {
                                 effect: 'fade',
                                 duration: 300
@@ -376,6 +390,7 @@
                     workDate: workdate,
                     disciplineTypeId: disciplineTypeId
                 }, function () {
+                    $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true);
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
@@ -398,6 +413,7 @@
                     employeeId: empId,
                     workDate: workdate
                 }, function () {
+                    $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true)
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
