@@ -397,7 +397,8 @@ else
 @helper MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
 {
     <select id="@name" name="@name" class="minWidthDropdown">
-        @for (int i = 1; i <= 20; i++)
+        <option selected="@(minTotalLeave == 0)" value="0">All</option>
+        @for (int i = 14; i <= 20; i++)
         {
             <option selected="@(i == minTotalLeave)" value="@i">@i</option>
         }

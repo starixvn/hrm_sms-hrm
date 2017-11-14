@@ -323,7 +323,6 @@
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
                 model.DateRange = Utilities.GetDateRangeType();
-                model.MinTotalLeave = 1;
             }
 
             return View(model);
