@@ -177,7 +177,7 @@
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
-                                        $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true)
+                                        $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true);
                                     } else {
                                         showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
                                     }
@@ -231,7 +231,7 @@
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         showSuccessMsg($dialogAddOtherDiscipline, 'Add Weekend Leave successfully!');
-                                        $('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked', true)
+                                        $('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked', true);
                                     } else {
                                         showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
                                     }
@@ -413,7 +413,7 @@
                     employeeId: empId,
                     workDate: workdate
                 }, function () {
-                    $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true)
+                    $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true);
                     $('#row_' + rowIndex).remove();
                     autoIndex();
 
