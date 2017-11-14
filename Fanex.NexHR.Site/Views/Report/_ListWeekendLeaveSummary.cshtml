@@ -36,7 +36,7 @@
                         }
                     </td>
                     <td>
-                        @if (item.TotalWeekendLeave > 14)
+                        @if (item.TotalWeekendLeave >= Constants.TotalWeekendLeaveLimit)
                         {
                             <span style="color: red">@item.TotalWeekendLeave</span>
                         }
@@ -53,11 +53,11 @@
                         <a href="javascript:;" class="icon view viewWeekendLeaveDetail" data-empid="@empId" data-employee="@employee"></a>
                     </td>
                 </tr>
-                }
+                            }
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 18);
-    }
+                            }
+                            else
+                            {
+                                @RazorHelper.DisplayNoInformation(colspan: 8);
+                            }
 </table>

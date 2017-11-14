@@ -15,18 +15,18 @@
 <form class="form-filter">
     <div class="container_24 bunhat">
         <div class="space"></div>
-        <div class="grid_2">@Labels.DateRange</div>
+        <div class="grid_2 gridlabel">@Labels.DateRange</div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
         </div>
 
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.FromDate)
         </div>
         <div class="grid_4">
             @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.ToDate)
         </div>
         <div class="grid_4">
@@ -35,14 +35,14 @@
 
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.TeamId)
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
             @Html.HiddenFor(model => model.TeamName)
         </div>
-        <div class="grid_2">@Labels.Category</div>
+        <div class="grid_2 gridlabel">@Labels.Category</div>
         <div class="grid_4">
             @{
                 var category = new List<SelectListItem>
@@ -54,7 +54,7 @@
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.Employee)
         </div>
         <div class="grid_7">
@@ -64,16 +64,16 @@
 
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.ReasonId)
         </div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All)
         </div>
-        <div class="grid_2">
+        <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.IsShowAll, "Show all")
         </div>
-        <div class="grid_6">
+        <div class="grid_6" style="padding-top: 5px;">
             @Html.CheckBoxFor(model => model.IsShowAll)
         </div>
 

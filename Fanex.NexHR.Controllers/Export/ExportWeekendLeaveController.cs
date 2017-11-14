@@ -30,7 +30,7 @@
             this.exportWeekendLeaveDetailService = exportWeekendLeaveDetailService ?? new ExportWeekendLeaveDetailService();
         }
 
-        public ActionResult ExportWeekendLeaveSummaryReport(WeekendLeaveSummaryViewModel model)
+        public ActionResult ExportWeekendLeaveSummaryReport(WeekendLeaveViewModel model)
         {
             var criteria = new GetWeekendLeaveSummaryCriteria
             {
@@ -47,7 +47,7 @@
             return new EmptyResult();
         }
 
-        public ActionResult ExportWeekendLeaveDetailReport(WeekendLeaveSummaryViewModel model)
+        public ActionResult ExportWeekendLeaveDetailReport(WeekendLeaveViewModel model)
         {
             var criteria = new GetWeekendLeaveDetailCriteria
             {

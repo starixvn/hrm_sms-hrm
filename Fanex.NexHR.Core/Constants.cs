@@ -53,5 +53,7 @@
         public const string WorkingTimeRequestUpdateKeepInViewRequest = "WorkingTimeRequest_Update_KeepInViewRequest";
 
         public const string WorkingTimeRequestGetRequestHistory = "WorkingTimeRequest_GetRequestHistory";
+
+        public const int TotalWeekendLeaveLimit = 14;
     }
 }

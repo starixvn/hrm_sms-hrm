@@ -1,4 +1,5 @@
-﻿@model IList<Fanex.NexHR.Models.Report.WeekendLeaveDetail>
+﻿@using Fanex.NexHR.Models.Report;
+@model IList<WeekendLeaveDetail>
 
 <table id="data" class="table table-custom discipline-summary">
     <thead>
@@ -18,7 +19,7 @@
     {
         int index = 0;
         <tbody>
-            @foreach (Fanex.NexHR.Models.Report.WeekendLeaveDetail item in Model)
+            @foreach (WeekendLeaveDetail item in Model)
                 {
                     index++;
                 <tr>
@@ -37,7 +38,7 @@
                             <span>@Labels.Expat</span>
                         }
                     </td>
-                    <td>@item.LeaveDate</td>
+                    <td>@item.LeaveDate.ToDateMonthYearFormatedDate()</td>
                     <td>@item.LeaveType</td>
                     <td>@item.LeaveDay</td>
                 </tr>
@@ -46,6 +47,6 @@
                 }
                 else
                 {
-                    @RazorHelper.DisplayNoInformation(colspan: 18);
+                    @RazorHelper.DisplayNoInformation(colspan: 9);
                 }
 </table>

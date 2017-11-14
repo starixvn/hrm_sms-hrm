@@ -67,7 +67,6 @@
 
 }
 
-
 @helper BooleanDropDownList(bool? selectedValue, IList<System.Web.Mvc.SelectListItem> items, string controlName)
 {
     <select name="@controlName" id="@controlName">
@@ -79,37 +78,37 @@
 }
 @helper StatusDisplayByHR(long statusId, Fanex.NexHR.Models.Request.RequestStatus status)
 {
-    if (status.Id != (byte)CurrentRequestStatus.Rejected)
-    {
+if (status.Id != (byte)CurrentRequestStatus.Rejected)
+{
         <td>
             <a requestid="@statusId" href="javascript:;" class="@status.Name tooltip">@status.Name</a>
         </td>
-    }
-    else
-    {
+}
+else
+{
         <td>
             @status.Name
         </td>
-    }
+}
 }
 
 @helper ModifierDisplay(string nickName, string fullName, DateTime? modifiedDate, long requestId)
 {
-    if (!string.IsNullOrWhiteSpace(nickName))
+if (!string.IsNullOrWhiteSpace(nickName))
+{
+    if (modifiedDate > new DateTime(2010, 1, 1))
     {
-        if (modifiedDate > new DateTime(2010, 1, 1))
-        {
             <td id="pb@(requestId)">@nickName, @modifiedDate.ToShortFormatedDate()</td>
-        }
-        else
-        {
-            <td id="pb@(requestId)">@nickName</td>
-        }
     }
     else
     {
-        <td id="pb@(requestId)">N/A</td>
+            <td id="pb@(requestId)">@nickName</td>
     }
+}
+else
+{
+        <td id="pb@(requestId)">N/A</td>
+}
 }
 @helper TeamDropDownList(List<Fanex.NexHR.Models.Team> teamList, string controlName = "team")
 {
@@ -177,14 +176,14 @@
 }
 @helper LateInEarlyOutTimeFormat(int mins, short type)
 {
-    if (type == (byte)RequestType.LateIn)
-    {
+if (type == (byte)RequestType.LateIn)
+{
         <span>+@mins'</span>
-    }
-    else
-    {
+}
+else
+{
         <span>-@mins'</span>
-    }
+}
 }
 @helper VerifierAndApproverMenu()
 {
@@ -395,6 +394,15 @@
     </select>
 }
 
+@helper MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
+{
+    <select id="@name" name="@name" class="minWidthDropdown">
+        @for (int i = 1; i <= 20; i++)
+        {
+            <option selected="@(i == minTotalLeave)" value="@i">@i</option>
+        }
+    </select>
+}
 @helper ShiftDropDownList(string name, int? currentValue, IList<System.Web.Mvc.SelectListItem> listItem)
 {
     <select id="@name" name="@name">

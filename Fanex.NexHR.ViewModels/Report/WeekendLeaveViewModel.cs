@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using Fanex.NexHR.Models;
-
-namespace Fanex.NexHR.ViewModels.Report
+﻿namespace Fanex.NexHR.ViewModels.Report
 {
-    public class WeekendLeaveSummaryViewModel
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Models;
+
+    public class WeekendLeaveViewModel
     {
         public DateTime FromDate { get; set; }
 
@@ -26,13 +26,12 @@ namespace Fanex.NexHR.ViewModels.Report
 
         public int? EmployeeId { get; set; }
 
-        public bool FromSummaryPage { get; set; }
-
-        public bool IsShowAll { get; set; }
-
         [Display(Name = "Leave Type")]
         public int LeaveTypeId { get; set; }
 
         public IList<SelectListItem> DateRange { get; set; }
+
+        [Display(Name = "Total Leave >=")]
+        public int MinTotalLeave { get; set; }
     }
 }

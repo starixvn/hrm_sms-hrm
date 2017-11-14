@@ -313,7 +313,7 @@
             return View(model);
         }
 
-        public ActionResult WeekendLeaveSummary(WeekendLeaveSummaryViewModel model)
+        public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
         {
             if (model != null)
             {
@@ -323,12 +323,13 @@
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
                 model.DateRange = Utilities.GetDateRangeType();
+                model.MinTotalLeave = 1;
             }
 
             return View(model);
         }
 
-        public ActionResult PartialListWeekendLeaveSummary(WeekendLeaveSummaryViewModel model)
+        public ActionResult PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
         {
             var criteria = new GetWeekendLeaveSummaryCriteria
             {
@@ -337,6 +338,7 @@
                 GroupId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
+                MinTotalLeave = model.MinTotalLeave
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
@@ -344,7 +346,7 @@
             return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
         }
 
-        public ActionResult WeekendLeaveDetail(WeekendLeaveSummaryViewModel model)
+        public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
         {
             if (model != null)
             {
@@ -360,7 +362,7 @@
             return View(model);
         }
 
-        public ActionResult PartialListWeekendLeaveDetail(WeekendLeaveSummaryViewModel model)
+        public ActionResult PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
         {
             var criteria = new GetWeekendLeaveDetailCriteria
             {
