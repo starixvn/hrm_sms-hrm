@@ -388,7 +388,7 @@
 
         public static IList<SelectListItem> GetDateRangeType()
         {
-            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Resources.Labels.DateRange, Value = "0" } };
+            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
 
             var currentDate = DateTime.Today;
 

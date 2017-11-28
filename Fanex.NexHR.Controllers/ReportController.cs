@@ -318,8 +318,7 @@
             if (model != null)
             {
                 var today = DateTime.Today;
-                int currentMonth = today.Month;
-                model.FromDate = new DateTime(today.Year, currentMonth, 1);
+                model.FromDate = new DateTime(today.Year, today.Month, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
                 model.DateRange = Utilities.GetDateRangeType();
