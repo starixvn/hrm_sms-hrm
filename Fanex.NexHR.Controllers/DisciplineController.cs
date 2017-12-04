@@ -103,7 +103,7 @@
         {
             var today = DateTime.Today;
             int month = DateTime.Today.Month;
-            DateTime fromDate = (month >= 1 && month <= 6) ? new DateTime(today.Year, 1, 1) : new DateTime(today.Year, 6, 1);
+            DateTime fromDate = (month >= 1 && month <= 6) ? new DateTime(today.Year, 1, 1) : new DateTime(today.Year, 7, 1);
             return fromDate;
         }
 
