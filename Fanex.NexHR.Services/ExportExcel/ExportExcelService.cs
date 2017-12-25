@@ -173,7 +173,7 @@
                 int rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
                 short rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
                 var numberCount = 1;
-                var numberStart = 0;
+
                 foreach (OvertimeExcelReportViewModel overtime in model)
                 {
                     if (overtime.Name != null && overtime.ListOvertimeEntity.Any())
@@ -186,9 +186,9 @@
                         cellTeam.SetCellValue(overtime.Name.ToUpperInvariant());
                         sheet.MergeCells(rowIndex, 0, rowIndex, 2);
                         rowIndex++;
-                        numberStart = rowIndex + 1;
+                        var numberStart = rowIndex + 1;
 
-                        SetCellBody(overtime, sheet, templateSheet, rowIndex, numberCount, totalHeaderDateCell);
+                        RenderOvertimeSection(overtime, sheet, templateSheet, ref rowIndex, ref numberCount, totalHeaderDateCell);
 
                         ICell cellCountMemberInTeam = rowTeam.GetCell(3);
                         cellCountMemberInTeam.SetCellValue(numberCount - 1);
@@ -229,12 +229,12 @@
             }
         }
 
-        private static void SetCellBody(
+        private static void RenderOvertimeSection(
             OvertimeExcelReportViewModel overtime,
             ISheet sheet,
             ISheet templateSheet,
-            int rowIndex,
-            int numberCount,
+            ref int rowIndex,
+            ref int numberCount,
             int totalHeaderDateCell)
         {
             var index = 1;
