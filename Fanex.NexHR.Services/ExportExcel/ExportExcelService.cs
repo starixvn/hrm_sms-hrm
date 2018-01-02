@@ -284,7 +284,7 @@
             if (i % 2 == 0)
             {
                 var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType2) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType2);
-                cellValue = cellValue.Equals(0) ? defaultCellValue : cellValue;
+                cellValue = cellValue == 0 ? defaultCellValue : cellValue;
                 row.GetCell(i + 10).SetCellValue(cellValue);
 
                 indexCount++;
@@ -292,7 +292,7 @@
             else
             {
                 var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType1) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType1);
-                cellValue = cellValue.Equals(0) ? defaultCellValue : cellValue;
+                cellValue = cellValue == 0 ? defaultCellValue : cellValue;
                 row.GetCell(i + 10).SetCellValue(cellValue);
             }
         }
