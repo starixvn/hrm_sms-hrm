@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Text;
+    using System.Web;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
 
@@ -48,7 +49,7 @@
                             detail.NormalHours,
                             detail.OffHours,
                             detail.PublicHours,
-                            detail.Remark);
+                            HttpUtility.HtmlEncode(detail.Remark));
                     }
                 }
 
