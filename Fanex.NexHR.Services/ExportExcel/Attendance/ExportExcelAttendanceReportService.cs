@@ -115,7 +115,7 @@
             return record;
         }
 
-        private string RequestsRemark(EmployeeAttendanceModel attendance)
+        private static string RequestsRemark(EmployeeAttendanceModel attendance)
         {
             var requests = string.Empty;
             StringBuilder requestsBuilder = new StringBuilder();
@@ -140,8 +140,7 @@
             return requests;
         }
 
-        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        private string GetRequestDetail(EmployeeAttendanceRequest request)
+        private static string GetRequestDetail(EmployeeAttendanceRequest request)
         {
             string detail = string.Empty;
             var date = string.Empty;
