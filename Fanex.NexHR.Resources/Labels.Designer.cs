@@ -2356,6 +2356,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modified Date.
+        /// </summary>
+        public static string ModifiedDate {
+            get {
+                return ResourceManager.GetString("ModifiedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mon.
         /// </summary>
         public static string Mon {
@@ -2802,6 +2811,15 @@ namespace Fanex.NexHR.Resources {
         public static string Out {
             get {
                 return ResourceManager.GetString("Out", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Out Of Control Reason.
+        /// </summary>
+        public static string OutOfControlReason {
+            get {
+                return ResourceManager.GetString("OutOfControlReason", resourceCulture);
             }
         }
         

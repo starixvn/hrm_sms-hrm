@@ -95,7 +95,7 @@
         $('#Keyword').keydown(function (event) {
             // enter
             if (event.keyCode === 13) {
-                return false;
+                query();
             }
         });
 

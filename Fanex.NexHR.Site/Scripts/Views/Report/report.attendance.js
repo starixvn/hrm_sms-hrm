@@ -2,7 +2,7 @@
 /*global _global, floatThead, _messages, dontBlock:true*/
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
-    createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours) {
+    createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
     var result = '';
     dontBlock = true;
     $.ajax({
@@ -14,7 +14,7 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
             "fromtime": fromTime, "totime": toTime,
             "createddate": createdDate, "fromshiftCode": fromShift,
             "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours
+            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut
         },
         success: function (data) {
             result = data;
@@ -43,7 +43,8 @@ function initTooltip() {
             object.attr('data-totaldays'),
             object.attr('data-totalmins'),
             object.attr('data-ottype'),
-            object.attr('data-isothours'));
+            object.attr('data-isothours'),
+            object.attr('data-actualLateInEarlyOut'));
             return "<div class='tooltip'>" + "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +

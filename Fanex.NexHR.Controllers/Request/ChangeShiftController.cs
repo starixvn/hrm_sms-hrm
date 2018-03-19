@@ -247,6 +247,10 @@
             {
                 schedule = Labels.Off;
             }
+            else if (model.IsHoliday)
+            {
+                schedule = Labels.Holiday;
+            }
             else if (!model.IsHoliday && !model.IsLeaveDay && !model.IsKeepInViewDay && validChangeShift)
             {
                 schedule = model.Shift.Name;

@@ -18,26 +18,6 @@
 
     public class RequestService : BaseService, IRequestService
     {
-        #region constant
-
-        private const string _MsgLeave = "<span class='req leave'>{1}</span> {0} days";
-        private const string _MsgLeaveHalfDay = "<span class='req leave'>{0} ({1}-{2})</span> 0.5 day";
-        private const string _MsgLeaveOneDay = "<span class='req leave'>{0}</span> 1 day";
-        private const string _MsgLeavePublicHoliday = "<span class='req leave'>{0}</span>";
-        private const string _MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
-        private const string _MsgChangeShift = "<span class='req changeshift'>{0}</span>";
-        private const string _MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
-        private const string _MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2} ({3})";
-        private const string _MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2} ({3})";
-        private const string _MsgKeepInView = "<span class='req keepinview'>{0}</span> {1}";
-        private const string _MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> {3}";
-
-        private const string _MailContentLeave = "{0} to {1} ({2} days)";
-        private const string _MailContentLeaveOneDay = "{0}";
-        private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
-
-        #endregion constant
-
         private readonly IRequestRepository requestRepository;
 
         public RequestService()
@@ -51,37 +31,34 @@
         }
 
 
-        public static string ToRequestMessage(RequestEntity request)
+        public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
         {
             string message;
             switch (request.RequestType.Id)
             {
                 case (int)RequestType.Leave:
-                    message = GetMessageForLeave(request);
+                    message = GetMessageForLeave(request, isNoFormat);
                     break;
 
                 case (int)RequestType.ChangeShift:
-                    message = GetMessageForChangeShift(request);
+                    message = GetMessageForChangeShift(request, isNoFormat);
                     break;
 
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    message = GetMessageForCheckInOut(request);
+                    message = GetMessageForCheckInOut(request, isNoFormat);
                     break;
 
                 case (int)RequestType.LateIn:
-                    var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
-                    message = string.Format(_MsgLateIn, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
+                    message = GetMessageForLateIn(request, isNoFormat);
                     break;
 
                 case (int)RequestType.EarlyOut:
-                    var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
-                    message = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
+                    message = GetMessageForEarlyOut(request, isNoFormat);
                     break;
 
                 case (int)RequestType.KeepInView:
-                    double totalDays = (double)request.TotalDays;
-                    message = GetMessageForKeepInView(request, totalDays);
+                    message = GetMessageForKeepInView(request, isNoFormat);
                     break;
 
                 default:
@@ -92,43 +69,24 @@
             return message;
         }
 
-        private static string GetMessageForCheckInOut(RequestEntity request)
-        {
-            var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
-            return string.Format(_MsgCheckInOut, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
-        }
-
-        private static string GetMessageForKeepInView(RequestEntity request, double totalDays)
-        {
-            if (totalDays.Equals(0.5))
-            {
-                return string.Format(
-                    _MsgKeepInViewHalfday,
-                    request.FromDate.ToDateMonthYearFormatedDate(),
-                    request.FromTime.ToShortTime(),
-                    request.ToTime.ToShortTime(),
-                    request.FromShift.Name);
-            }
-
-            return string.Format(_MsgKeepInView, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
-        }
-
         public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
         {
-            if ((toDate - fromDate).Days < 0)
-            {
-                return fromDate.ToDateMonthYearFormatedDate();
-            }
-
-            if (fromDate.Year != toDate.Year)
-            {
-                return fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
-            }
-
             string result = string.Empty;
-            result = (fromDate.Month != toDate.Month) ?
+
+            if ((toDate - fromDate).Days <= 0)
+            {
+                result = fromDate.ToDateMonthYearFormatedDate();
+            }
+            else if (fromDate.Year != toDate.Year)
+            {
+                result = fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
+            }
+            else
+            {
+                result = (fromDate.Month != toDate.Month) ?
                 fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
                 fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
+            }
 
             return result;
         }
@@ -227,95 +185,118 @@
             return leaveDetails;
         }
 
-        protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
+        private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)
         {
-            if (totalDays > 1)
-            {
-                return string.Format(_MailContentLeave, fromDate.ToDateMonthYearFormatedDate(), toDate.ToDateMonthYearFormatedDate(), totalDays);
-            }
-
-            if (totalDays == 1)
-            {
-                return string.Format(_MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate());
-            }
-
-            return string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
-        }
-
-        private static string GetMessageForLeave(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-
-            messageDetail = (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ?
-                            GetMessageForGeneralLeave(request) : GetMessageForOtherLeave(request);
+            var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLeaveWithNoFormat : RequestFormatConstants.MsgLeave;
+            var leaveDateTime = GetDateTimeForLeaveRequest(request);
+            var leaveDayDetail = GetLeaveDayDetail(request);
+            var messageDetail = string.Format(msgTemplate, leaveDateTime, leaveDayDetail);
 
             return messageDetail;
         }
 
-        private static string GetMessageForChangeShift(RequestEntity request)
+        private static string GetDateTimeForLeaveRequest(RequestEntity request)
         {
-            var messageDetail = string.Empty;
+            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
+
+            if ((request.TotalDays - (decimal)0.5) == 0)
+            {
+                leaveDate = string.Format(RequestFormatConstants.MsgLeaveHalfDayWithNoFormat, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+            }
+
+            return leaveDate;
+        }
+
+        private static string GetMessageForChangeShift(RequestEntity request, bool isNoFormat)
+        {
+            string msgTemplate;
+            string messageDetail;
             if (request.FromDate.Date == request.ToDate.Date)
             {
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
                 messageDetail = string.Format(
-                        _MsgChangeShiftOneDay,
+                        msgTemplate,
                         request.FromShift.Name,
                         request.ToShift.Name,
                         request.FromDate.ToDateMonthYearFormatedDate());
             }
             else
             {
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
                 var date = GetMessageDateString(request.FromDate, request.ToDate);
-                messageDetail = string.Format(_MsgChangeShift, date);
+                messageDetail = string.Format(msgTemplate, date);
             }
 
             return messageDetail;
         }
 
-        private static string GetMessageForGeneralLeave(RequestEntity request)
+        private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
         {
-            var messageDetail = string.Empty;
-            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
-
-            if (request.TotalDays >= 1)
-            {
-                messageDetail = string.Format("<span class='req leave'>{0}</span> {1}", leaveDate, request.LeaveCountDetails);
-            }
-
-            if ((request.TotalDays - (decimal)0.5) == 0)
-            {
-                messageDetail = string.Format(
-                "<span class='req leave'>{0} ({1}-{2})</span> {3}",
-                leaveDate,
-                request.FromTime.ToShortTime(),
-                request.ToTime.ToShortTime(),
-                request.LeaveCountDetails);
-            }
-
-            return messageDetail;
+            var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
+            var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+            return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
         }
 
-        private static string GetMessageForOtherLeave(RequestEntity request)
+        private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)
         {
-            var messageDetail = string.Empty;
-            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
+            var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
+            var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
+            
+            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
+        }
 
-            if (request.TotalDays > 1)
+        private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
+        {
+            var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
+            var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
+
+            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
+        }
+
+        private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)
+        {
+            string msgTemplate;
+            string messageDetail;
+            if (request.TotalDays.Equals(0.5))
             {
-                messageDetail = string.Format(_MsgLeave, request.TotalDays, leaveDate);
-            }
-            else if (request.TotalDays == 1)
-            {
-                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
-            }
-            else if ((request.TotalDays - (decimal)0.5) == 0)
-            {
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfdayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfday;
                 messageDetail = string.Format(
-                _MsgLeaveHalfDay, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+                    msgTemplate,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromTime.ToShortTime(),
+                    request.ToTime.ToShortTime(),
+                    request.FromShift.Name);
             }
             else
             {
-                messageDetail = string.Format(_MsgLeavePublicHoliday, leaveDate);
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewWithNoFormat : RequestFormatConstants.MsgKeepInView;
+                messageDetail = string.Format(msgTemplate, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
+            }
+
+            return messageDetail;
+        }
+
+        private static string GetLeaveDayDetail(RequestEntity request)
+        {
+            return (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ?
+                            request.LeaveCountDetails : GetTotalDay(request.TotalDays);
+        }
+
+        private static string GetTotalDay(decimal totalDays)
+        {
+            var messageDetail = string.Empty;
+
+            if (totalDays > 1)
+            {
+                messageDetail = string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#"));
+            }
+            else if (totalDays > 0)
+            {
+                messageDetail = string.Format(RequestFormatConstants.MsgTotalLeaveDay, totalDays.ToString("0.#"));
+            }
+            else
+            {
+                messageDetail = string.Empty;
             }
 
             return messageDetail;

@@ -23,6 +23,8 @@
 
         public int LeaveTypeId { get; set; }
 
+        public int SupervisorId { get; set; }
+
         public override bool IsValid()
         {
             return FromDate <= ToDate;

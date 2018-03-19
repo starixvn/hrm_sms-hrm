@@ -40,6 +40,13 @@
             }
         });
 
+        $('#discipline-detail table.discipline-detail td input.outOfControlReason:checkbox')
+        .on('click', function () {
+            var changed = !$(this).data('changed');
+
+            $(this).data('changed', changed);
+        });
+
         $('#discipline-detail table.discipline-detail td input.violationRecorded:checkbox')
         .on('click', function () {
             var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
@@ -65,6 +72,13 @@
                 }
             });
 
+            if (!isChanged)
+            {
+                if ($('td input.outOfControlReason').first().data('changed')) {
+                    isChanged = true;
+                }
+            }
+
             if (isChanged) {
                 var ignoredDiscipline = {
                     WorkDate: '',
@@ -79,8 +93,11 @@
                     IsIgnoredWorkingUnderTime: false,
                     IsIgnoredUnpaidLeaveAbsent: false,
                     IsIgnoredWeekendLeave: false,
-                    ApproverSubtractScore: Math.abs(approverSubstractScore)
+                    ApproverSubtractScore: Math.abs(approverSubstractScore),
+                    IsOutOfControlReason: false
                 };
+
+                ignoredDiscipline.IsOutOfControlReason = $(this).find('td input.outOfControlReason').prop('checked');
 
                 $(this).find('td input.ignoredDiscipline').each(function () {
                     var disciplineTypeId = $(this).data('discipline-type-id');

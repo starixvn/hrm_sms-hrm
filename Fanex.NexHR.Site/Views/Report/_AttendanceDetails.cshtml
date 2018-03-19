@@ -104,6 +104,7 @@
                                    data-totime="@request.ToTime"
                                    data-totaldays="@request.TotalDays"
                                    data-totalmins="@request.TotalMins"
+                                   data-actualLateInEarlyOut="@(request.RequestType.Id == 3 ? item.LateIn : item.EarlyOut)"
                                    data-remark='@request.Remark'>
                                     @request.RequestType.Name
                                 </a>

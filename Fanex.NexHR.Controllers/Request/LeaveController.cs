@@ -261,6 +261,11 @@
             LeaveDetailModel tempLeaveDetailModel = null;
             var isOffOrHoliday = tempWokingCalendar.IsOffDay || tempWokingCalendar.IsHoliday;
 
+            if (!tempWokingCalendar.IsLeaveDay)
+            {
+                tempScheduleStatus = Labels.NA;
+            }
+
             if (tempWokingCalendar.IsOffDay)
             {
                 tempScheduleStatus = Labels.OffDay;
@@ -274,11 +279,6 @@
             if (tempWokingCalendar.Shift != null)
             {
                 tempScheduleStatus = tempWokingCalendar.Shift.Name;
-            }
-
-            if (!tempWokingCalendar.IsLeaveDay)
-            {
-                tempScheduleStatus = Labels.NA;
             }
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())

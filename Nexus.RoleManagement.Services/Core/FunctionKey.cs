@@ -6,6 +6,10 @@
 
         public const string Discipline = "Discipline";
 
+        public const string OtherDiscipline = "OtherDiscipline";
+
+        public const string UpdateOutOfControlReason = "UpdateOutOfControlReason";
+
         public const string Message = "Message";
 
         public const string JobTitleManagement = "JobTitleManagement";

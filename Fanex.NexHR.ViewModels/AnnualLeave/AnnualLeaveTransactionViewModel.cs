@@ -10,6 +10,6 @@
 
         public long? RequestId { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

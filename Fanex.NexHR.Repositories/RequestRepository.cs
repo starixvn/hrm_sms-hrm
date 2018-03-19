@@ -174,6 +174,7 @@
                     Id = reader.ToInt("RequesterId"),
                     NickName = reader.ToString("RequesterNickName"),
                     FullName = reader.ToString("RequesterFullName"),
+                    AnnualLeaveBalance = reader.ToDecimal("AnnualLeaveBalance"),
                     Team = new Team
                     {
                         Id = reader.ToInt("GroupId"),

@@ -155,6 +155,7 @@
     <Compile Include="NPOIExtensions\HSSFRowExtensions.cs" />
     <Compile Include="NPOIExtensions\HSSFSheetExtensions.cs" />
     <Compile Include="NPOIExtensions\HSSFWorkbookExtensions.cs" />
+    <Compile Include="RequestFormatConstants.cs" />
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Random.cs" />
     <Compile Include="UserSession.cs" />

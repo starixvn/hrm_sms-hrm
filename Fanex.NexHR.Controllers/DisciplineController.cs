@@ -49,7 +49,7 @@
             }
 
             ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
-
+            ViewBag.IsHostOtherDiscipline = CurrentUser.HasPermission(FunctionKey.OtherDiscipline, Policy.Host);
             return View(model);
         }
 
@@ -134,6 +134,7 @@
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
             ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+            ViewBag.HasPermissionToUpdateOutOfControlReason = CurrentUser.HasPermission(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
             return PartialView("_ListDisciplineDetail", disciplines);
         }
@@ -154,7 +155,7 @@
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Read, FunctionKey.OtherDiscipline)]
         public ActionResult ViewWeekendLeave(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetWeekendLeaveOfEmployeeCriteria
@@ -170,7 +171,7 @@
             return PartialView("_ViewWeekendLeave", weekendLeaves);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
         public ActionResult PartialAddOtherDiscipline(string employee, int? employeeId = null)
         {
             var criteria = new GetOtherDisciplineTypeCriteria();
@@ -187,7 +188,7 @@
             return PartialView("_AddOtherDiscipline", model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Read, FunctionKey.OtherDiscipline)]
         public ActionResult PartialAddWeekendLeave()
         {
             var model = new AddOtherDisciplineViewModel
@@ -202,7 +203,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertOtherDisciplineCriteria
@@ -222,7 +223,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
         public JsonResult AddWeekendLeave(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertWeekendLeaveCriteria
@@ -239,7 +240,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
@@ -257,7 +258,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
         public string DeleteWeekendLeave(DeleteWeekendLeaveCriteria criteria)
         {
             if (criteria != null)
@@ -281,6 +282,7 @@
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
                 IgnoredDisciplines = ignoredDisciplineDetails,
+                HasUpdateOutOfControlReason = CurrentUser.HasPermission(FunctionKey.UpdateOutOfControlReason, Policy.Host),
                 ModifiedBy = CurrentUser.Id,
             };
 

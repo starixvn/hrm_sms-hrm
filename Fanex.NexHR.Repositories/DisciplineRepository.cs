@@ -84,7 +84,8 @@
                     EmployeeComment = discipline.EmployeeComment,
                     ApproverComment = discipline.ApproverComment,
                     Confirmed = discipline.IsConfirmed,
-                    HasConfirmed = discipline.HasConfirmed
+                    HasConfirmed = discipline.HasConfirmed,
+                    IsOutOfControlReason = discipline.IsOutOfControlReason
                 };
             }).ToList();
         }

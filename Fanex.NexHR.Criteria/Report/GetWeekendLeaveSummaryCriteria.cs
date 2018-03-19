@@ -15,6 +15,8 @@
 
         public bool? IsLocal { get; set; }
 
+        public int SupervisorId { get; set; }
+
         [SpParam(Ignored = true)]
         public string EmployeeName { get; set; }
 

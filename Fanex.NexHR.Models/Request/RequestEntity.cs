@@ -61,6 +61,8 @@
 
         public string LeaveCountDetails { get; set; }
 
+        public decimal AnnualLeaveBalance { get; set; }
+
         // ChangeShift
         public Shift FromShift { get; set; }
 

@@ -128,7 +128,7 @@
         classOfInput = "shift";
     }
 
-    if (workingCalendarModel.IsOvertime)
+    if (workingCalendarModel.IsOvertime || workingCalendarModel.IsChangeShift)
     {
         disabledAttribute = "disabled";
         isShowCheckBox = false;
@@ -376,7 +376,7 @@
         UPL
     </div>
     <div class="grid_2 leaveday businesstrip tooltip" title="Business Trip">
-        BT
+        BTL
     </div>
     <div class="grid_2 leaveday weddingleave tooltip" title="Wedding Leave">
         WL

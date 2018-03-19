@@ -6,7 +6,6 @@
             <th>@Labels.ScheduleStatus</th>
             <th>@Labels.LeaveTypeName</th>
             <th>@Labels.HalfDay</th>
-            <th>@Labels.LeaveCount</th>
             <th>@Labels.FromTime</th>
             <th>@Labels.ToTime</th>
             <th>@Labels.ViolationIgnored</th>
@@ -45,7 +44,7 @@
                             @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
                         }
                     </td>
-                    <td>
+                    @*<td>
                         @if (item.LeaveTypeId == 0)
                         {
                             <span>-</span>
@@ -55,7 +54,7 @@
                             double totalDays = item.ToTime.Subtract(item.FromTime).TotalDays + 1;
                             @(item.IsHalfDay ? "0.5" : totalDays.ToString())
                         }
-                    </td>
+                    </td>*@
                     <td>
                         @if (item.IsHalfDay)
                         {
@@ -121,7 +120,6 @@
                 }
                 else
                 {
-                    <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>

@@ -9,6 +9,8 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.ViewModels;
+    using Models.Request;
+    using Models;
 
     public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
     {
@@ -16,15 +18,6 @@
         private const int RowStartBody = 3;
         private const int RowHighlight = 5;
         private const int RowOffdate = 6;
-        private const string MsgLeave = "{1} ({0} days)";
-        private const string MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
-        private const string MsgLeaveOneDay = "{0} (1 day)";
-        private const string MsgLeaveDuringWorking = "{0} ({1}-{2}) {3} minutes";
-        private const string MsgChangeShift = "{0} --> {1} ({2})";
-        private const string MsgCheckInOut = "{0} {1} ({2})";
-        private const string MsgLateIn = "+{0}' {1} ({2})";
-        private const string MsgEarlyOut = "-{0}' {1} ({2})";
-        private const string MsgKeepInView = "{0} ({1})";
         private const string AttendanceTemplatePath = @"~\ExcelTemplates\AttendanceReportTemplate.xls";
 
         public void Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
@@ -122,12 +115,14 @@
 
             if (attendance.RequestList != null && attendance.RequestList.Any())
             {
-                foreach (EmployeeAttendanceRequest request in attendance.RequestList)
+                foreach (EmployeeAttendanceRequest item in attendance.RequestList)
                 {
+                    var actualLateInErlyOut = item.RequestType.Id == (int)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
+                    var request = GetRequestEntity(item, actualLateInErlyOut);
                     requestsBuilder.Append("- ");
                     requestsBuilder.Append(request.RequestType.Name);
                     requestsBuilder.Append(": ");
-                    requestsBuilder.Append(GetRequestDetail(request));
+                    requestsBuilder.Append(RequestService.ToRequestMessage(request, isNoFormat: true));
                     requestsBuilder.Append("\r\n- Create date: ");
                     requestsBuilder.Append(request.CreatedDate.ToDateMonthYearFormatedDate());
                     requestsBuilder.Append((string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark));
@@ -140,74 +135,33 @@
             return requests;
         }
 
-        private static string GetRequestDetail(EmployeeAttendanceRequest request)
+        private static RequestEntity GetRequestEntity(EmployeeAttendanceRequest request, int actualLateInErlyOut)
         {
-            string detail = string.Empty;
-            var date = string.Empty;
-
-            if (request.FromDate.HasValue && request.ToDate.HasValue)
+            var requestEntity = new RequestEntity
             {
-                date = RequestService.GetMessageDateString(request.FromDate.Value, request.ToDate.Value);
-            }
+                RequestType = request.RequestType,
+                Remark = request.Remark,
+                RequestedDate = request.FromDate.HasValue ? request.FromDate.Value : DateTime.Now,
+                FromDate = request.FromDate.HasValue ? request.FromDate.Value : DateTime.Now,
+                ToDate = request.ToDate.HasValue ? request.ToDate.Value : DateTime.Now,
+                CreatedDate = request.CreatedDate.HasValue ? request.CreatedDate.Value : DateTime.Now,
+                TotalDays = request.TotalDays.HasValue ? request.TotalDays.Value : 0,
+                LeaveType = request.LeaveType,
+                FromTime = request.FromTime.HasValue ? request.FromTime.Value : DateTime.Now,
+                ToTime = request.ToTime.HasValue ? request.ToTime.Value : DateTime.Now,
+                FromShift = new Shift
+                {
+                    Name = request.FromShift
+                },
+                ToShift = new Shift
+                {
+                    Name = request.ToShift
+                },
+                TotalMins = request.TotalMins.HasValue ? request.TotalMins.Value : 0,
+                ActualLateInEarlyOut = actualLateInErlyOut
+            };
 
-            switch (request.RequestType.Id)
-            {
-                case (int)RequestType.Leave:
-                    detail = GetDetailLeaveRequest(request, date);
-                    break;
-
-                case (int)RequestType.ChangeShift:
-                    detail = string.Format(MsgChangeShift, request.FromShift, request.ToShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.CheckIn:
-                case (int)RequestType.CheckOut:
-                    detail = string.Format(MsgCheckInOut, request.FromDate.Value.ToString("HH:mm"), request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.LateIn:
-                    detail = string.Format(MsgLateIn, request.TotalMins, request.FromShift, date);
-                    break;
-
-                case (int)RequestType.EarlyOut:
-                    detail = string.Format(MsgEarlyOut, request.TotalMins, request.FromShift, date);
-                    break;
-
-                case (int)RequestType.KeepInView:
-                    detail = string.Format(MsgKeepInView, request.FromShift, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                default:
-                    detail = string.Empty;
-                    break;
-            }
-
-            return detail;
-        }
-
-        private static string GetDetailLeaveRequest(EmployeeAttendanceRequest request, string date)
-        {
-            if (request.TotalDays > 1)
-            {
-                return string.Format(MsgLeave, Convert.ToInt32(request.TotalDays), date);
-            }
-
-            if (request.TotalDays == 1)
-            {
-                return string.Format(MsgLeaveOneDay, date);
-            }
-
-            if ((request.TotalDays - (decimal)0.5) == 0)
-            {
-                return string.Format(MsgLeaveHalfDay, date, request.FromDate.Value.ToString("HH:mm"), request.ToDate.Value.ToString("HH:mm"));
-            }
-
-            return string.Format(
-                MsgLeaveDuringWorking,
-                date,
-                request.FromDate.Value.ToString("HH:mm"),
-                request.ToDate.Value.ToString("HH:mm"),
-                (request.ToDate.Value - request.FromDate.Value).TotalMinutes);
+            return requestEntity;
         }
     }
 }

@@ -27,17 +27,6 @@
         private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
-        private const string _MsgLeave = "{1} ({0} days)";
-        private const string _MsgLeaveHalfDay = "{0} ({1}-{2}) 0.5 day";
-        private const string _MsgLeaveOneDay = "{0} (1 day)";
-        private const string _MsgLeaveDuringWorking = "{0} ({1}-{2}) {3} minutes";
-        private const string _MsgChangeShift = "{0} --> {1} ({2})";
-        private const string _MsgCheckInOut = "{0} {1} ({2})";
-        private const string _MsgLateIn = "+{0}' {1} ({2})";
-        private const string _MsgEarlyOut = "-{0}' {1} ({2})";
-        private const string _MsgOvertimeShift = "{0} ({1}) {2}";
-        private const string _MsgKeepInView = "{0} ({1})";
-
         public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
         {
             var exportExcel = new ReportExporting();
@@ -462,7 +451,7 @@
             return hssfworkbook;
         }
 
-        private void RenderBodyWorkingTimeRequest(
+        private static void RenderBodyWorkingTimeRequest(
             int rowIndex,
             RequestEntity item,
             IRow row)
@@ -493,129 +482,10 @@
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (int)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
 
-            cellDetails.SetCellValue(GetRequestDetail(item));
+            cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
             cellStatus.SetCellValue(item.Status.Name);
-        }
-
-        private string GetRequestDetail(RequestEntity request)
-        {
-            string detail = string.Empty;
-            var date = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
-
-            switch (request.RequestType.Id)
-            {
-                case (int)RequestType.Leave:
-                    detail = GetMessageForLeave(request);
-                    break;
-
-                case (int)RequestType.ChangeShift:
-                    detail = string.Format(_MsgChangeShift, request.FromShift.Name, request.ToShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.CheckIn:
-                case (int)RequestType.CheckOut:
-                    detail = string.Format(_MsgCheckInOut, request.RequestedDate.ToShortTime(), request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                case (int)RequestType.LateIn:
-                    detail = string.Format(_MsgLateIn, request.TotalMins, request.FromShift.Name, date);
-                    break;
-
-                case (int)RequestType.EarlyOut:
-                    detail = string.Format(_MsgEarlyOut, request.TotalMins, request.FromShift.Name, date);
-                    break;
-
-                case (int)RequestType.Overtime:
-                    detail = GetMessageForOvertime(request);
-                    break;
-
-                case (int)RequestType.KeepInView:
-                    detail = string.Format(_MsgKeepInView, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
-                    break;
-
-                default:
-                    detail = string.Empty;
-                    break;
-            }
-
-            return detail;
-        }
-
-        private static string GetMessageForLeave(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-
-            messageDetail = (request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ? GetMessageForGeneralLeave(request) :
-                                                                                     GetMessageForOtherLeave(request);
-
-            return messageDetail;
-        }
-
-        private static string GetMessageForGeneralLeave(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-            var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
-
-            if (request.TotalDays >= 1)
-            {
-                messageDetail = string.Format("{0} ({1})", leaveDate, request.LeaveCountDetails);
-            }
-
-            if ((request.TotalDays - (decimal)0.5) == 0)
-            {
-                messageDetail = string.Format(
-                "{0} ({1}-{2}) ({3})",
-                leaveDate,
-                request.FromTime.ToShortTime(),
-                request.ToTime.ToShortTime(),
-                request.LeaveCountDetails);
-            }
-
-            return messageDetail;
-        }
-
-        private static string GetMessageForOtherLeave(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-            var leaveDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
-
-            if (request.TotalDays > 1)
-            {
-                messageDetail = string.Format(_MsgLeave, request.TotalDays, leaveDate);
-            }
-            else if (request.TotalDays == 1)
-            {
-                messageDetail = string.Format(_MsgLeaveOneDay, leaveDate);
-            }
-            else if ((request.TotalDays - (decimal)0.5) == 0)
-            {
-                messageDetail = string.Format(
-                _MsgLeaveHalfDay, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
-            }
-            else
-            {
-                var duration = (request.ToTime - request.FromTime).Hours;
-                messageDetail = string.Format(_MsgLeaveDuringWorking, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime(), duration);
-            }
-
-            return messageDetail;
-        }
-
-        private string GetMessageForOvertime(RequestEntity request)
-        {
-            var messageDetail = string.Empty;
-
-            var overtimeMessage = (request.IsOvertimeHours) ? string.Format(request.FromDate.ToShortTime(), request.ToDate.ToShortTime(), request.TotalDays.ToString("0.#"))
-                                                            : (request.FromShift != null ? request.FromShift.Name : string.Empty);
-
-            messageDetail = string.Format(_MsgOvertimeShift,
-                    request.FromDate.ToDateMonthYearFormatedDate(),
-                    overtimeMessage,
-                    new OvertimeTypeModel { Id = request.OvertimeType }.Name);
-
-            return messageDetail;
         }
 
         public static void WriteRowExcelReport(ExcelTemplateWriter writer, int rowIndex, int rowStartBody, object record)

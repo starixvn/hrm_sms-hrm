@@ -1,6 +1,7 @@
 ﻿@model IList<DisciplineDetailModel>
 @{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;
 }
 <table id="data" class="table table-custom discipline-detail">
     <thead>
@@ -13,6 +14,10 @@
             </tr>
         }
         <tr>
+            @if (hasPermissionToUpdateOutOfControlReason)
+            {
+                <th>@Labels.OutOfControlReason</th>
+            }
             <th>@Labels.Nick</th>
             <th>@Labels.Section</th>
             <th>@Labels.Date</th>
@@ -42,6 +47,13 @@
             {
                 int disciplinetypeId;
                 <tr>
+                    @if (hasPermissionToUpdateOutOfControlReason)
+                    {
+                        <td>
+                            <input class="outOfControlReason" type="checkbox" checked="@item.IsOutOfControlReason" data-changed="false" />
+                        </td>
+                    }
+                    
                     <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.Employee.GroupName</td>
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
@@ -300,6 +312,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 21);
+        @RazorHelper.DisplayNoInformation(colspan: 22);
     }
 </table>

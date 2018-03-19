@@ -48,7 +48,7 @@
             <th>@Labels.AffectFrom</th>
             <th>@Labels.TotalDays</th>
             <th>@Labels.Description</th>
-            <th>@Labels.CreatedDate</th>
+            <th>@Labels.ModifiedDate</th>
             <th>@Labels.Edit</th>
         </tr>
     </thead>
@@ -62,14 +62,14 @@
                     <td>@(index++)</td>
                     <td class="ddMMyyyy">@item.AffectedFrom.ToDateMonthYearFormatedDate()</td>
                     <td>@item.TotalDays</td>
-                    <td class="left">
+                    <td class="align-left">
                         @if (item.RequestId != null)
                         {
                             <span>[request]</span>
                         }
                         @item.Description
                     </td>
-                    <td>@item.CreatedDate.ToShortFormatedDate()</td>
+                    <td>@item.ModifiedDate.ToShortFormatedDate()</td>
                     @if (item.RequestId == null)
                     {
                         <td>

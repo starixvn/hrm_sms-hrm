@@ -41,5 +41,7 @@
         }
 
         public decimal ApproverSubtractScore { get; set; }
+
+        public bool IsOutOfControlReason { get; set; }
     }
 }

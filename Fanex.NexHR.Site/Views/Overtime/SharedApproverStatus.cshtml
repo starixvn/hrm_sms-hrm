@@ -5,26 +5,13 @@
     {
         switch (request.CurrentStatus)
         {
+            case (byte)CurrentRequestStatus.Pending:
             case (byte)CurrentRequestStatus.Verified:
                 <td>
                     <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-pending menu">
                         @Utilities.GetCurrentStatusName(request.CurrentStatus)
                     </a>
                 </td>
-                break;
-            case (byte)CurrentRequestStatus.Pending:
-                if (request.VerifiedBy.Id == Convert.ToInt32(ViewBag.CurrentUserId))
-                {
-                    <td>
-                        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:void(0);" class="approver-pending menu">
-                            @Utilities.GetCurrentStatusName(request.CurrentStatus)
-                        </a>
-                    </td>
-                }
-                else
-                {
-                     <td class="tooltip"><span class="status">@Utilities.GetCurrentStatusName(request.CurrentStatus)</span> </td>
-                }
                 break;
             case (byte)CurrentRequestStatus.Approved:
                 <td>

@@ -59,5 +59,7 @@
                 return WorkDate.DayOfWeek == DayOfWeek.Saturday || WorkDate.DayOfWeek == DayOfWeek.Sunday;
             }
         }
+
+        public bool IsOutOfControlReason { get; set; }
     }
 }

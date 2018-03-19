@@ -13,11 +13,13 @@
             @"<Discipline WorkDate='{0}' EmployeeId='{1}' IsIgnoredChangeShift='{2}' IsIgnoredMissingCheckInOut='{3}' IsIgnoredLateIn='{4}'
                 IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnplannedLeave='{7}' IsIgnoredUnpaidLeave='{8}'
                 IsIgnoredWorkingUnderTime='{9}' IsIgnoredUnpaidLeaveAbsent='{10}' IsIgnoredWeekendLeave='{11}'
-                IsConfirmed='{12}' ApproverSubtractScore='{13}'></Discipline>";
+                IsConfirmed='{12}' ApproverSubtractScore='{13}' IsOutOfControlReason='{14}'></Discipline>";
 
         public int ModifiedBy { get; set; }
 
         public string IgnoredDetails => ConvertIgnoredDisciplineToXml();
+
+        public bool HasUpdateOutOfControlReason { get; set; }
 
         [SpParam(Ignored = true)]
         public IList<IgnoredDisciplineModel> IgnoredDisciplines { get; set; }
@@ -51,7 +53,8 @@
                         item.IsIgnoredUnpaidLeaveAbsent,
                         item.IsIgnoredWeekendLeave,
                         item.IsConfirmed,
-                        item.ApproverSubtractScore);
+                        item.ApproverSubtractScore,
+                        item.IsOutOfControlReason);
                 }
 
                 disciplineXmlBuilder.Append(Constants.EndRootTag);
