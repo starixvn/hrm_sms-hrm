@@ -98,12 +98,13 @@ window.CommandOvertime = (function ($) {
             function (response) {
                 fadeOutMessage();
                 if (response.IsSuccessful) {
-                    if (typeof DailyOvertimeMember === 'undefined' && typeof OvertimeMemberDetail !== 'undefined') {
-                        MemberOvertime.submitEvent();
-                    }
-                    else {
-                        window.location.reload();
-                    }
+                    MemberOvertime.submitEvent();
+                    //if (typeof DailyOvertimeMember === 'undefined' && typeof OvertimeMemberDetail !== 'undefined') {
+                    //    MemberOvertime.submitEvent();
+                    //}
+                    //else {
+                    //    window.location.reload();
+                    //}
                 }
                 else {
                     alert(response.Message);
