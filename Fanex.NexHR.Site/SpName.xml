@@ -362,7 +362,9 @@
   <Function Name="Request">
     <Setting Key="GetCheckInOutByYear" SpName="WorkingTimeRequest_GetRequestByEmp_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetLateInOutByYear" SpName="WorkingTimeRequest_GetRequestByEmp_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" SpName="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" SpName="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="WorkDate" ObjectProperty="LeaveDate" />
+    </Setting>
     <Setting Key="WorkingTimeRequest_GetCheckInOutRequestToIgnoreById" SpName="WorkingTimeRequest_GetCheckInOutRequestToIgnoreById" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestType" ObjectProperty="Id" />
       <Mapping DataField="RequesterId" ObjectProperty="Id" />

@@ -39,7 +39,8 @@
                 GroupId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
-                MinTotalLeave = model.MinTotalLeave
+                MinTotalLeave = model.MinTotalLeave,
+                SupervisorId = CurrentUser.Id
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);

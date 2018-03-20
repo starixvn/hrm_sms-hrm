@@ -74,7 +74,7 @@
 
             if (!isChanged)
             {
-                if ($('td input.outOfControlReason').first().data('changed')) {
+                if ($(this).find('td input.outOfControlReason').first().data('changed')) {
                     isChanged = true;
                 }
             }

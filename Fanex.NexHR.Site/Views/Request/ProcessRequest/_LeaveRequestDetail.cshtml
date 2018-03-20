@@ -63,10 +63,6 @@
                                 @Html.CheckBoxFor(m => item.IsFromAfterday, new { @disabled = "disabled", @title = "Is after day" })
                             </div>
                         }
-                        else
-                        {
-                            @item.FromTime.ToDateMonthYearFormatedDate()
-                        }
                     </td>
                     <td>
                         @if (item.IsHalfDay)
@@ -75,10 +71,6 @@
                                 @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @disabled = "disabled" })
                                 @Html.CheckBoxFor(m => item.IsToAfterday, new { @disabled = "disabled", @title = "Is after day" })
                             </div>
-                        }
-                        else
-                        {
-                            @item.ToTime.ToDateMonthYearFormatedDate()
                         }
                     </td>
                     <td class="violationIgnored">

@@ -10,8 +10,8 @@
 
         public const string MsgCheckInOutWithNoFormat = "{0} {1} ({2})";
 
-        public const string MsgLateInWithNoFormat = "+{0}' {1} ({2} - Real: {3})";
-        public const string MsgEarlyOutWithNoFormat = "-{0}' {1} ({2} - Real: {3})";
+        public const string MsgLateInWithNoFormat = "+{0}' {1} ({2} - Actual: {3})";
+        public const string MsgEarlyOutWithNoFormat = "-{0}' {1} ({2} - Actual: {3})";
 
         public const string MsgKeepInViewWithNoFormat = "{0} ({1})";
         public const string MsgKeepInViewHalfdayWithNoFormat = "{0} ({1} - {2}) {3}";
@@ -23,8 +23,8 @@
         public const string MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         public const string MsgChangeShift = "<span class='req changeshift'>{0}</span>";
         public const string MsgCheckInOut = "<span class='req checkinout'>{0} {1}</span> {2}";
-        public const string MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2} (Real: {3})";
-        public const string MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2} (Real: {3})";
+        public const string MsgLateIn = "<span class='req inout'>+{0}' {1}</span> {2} (Actual: {3})";
+        public const string MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2} (Actual: {3})";
         public const string MsgKeepInView = "<span class='req keepinview'>{0}</span> {1}";
         public const string MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> {3}";
     }
