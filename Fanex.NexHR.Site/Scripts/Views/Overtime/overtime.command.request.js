@@ -48,63 +48,64 @@ window.CommandOvertime = (function ($) {
                     }
                 });
         },
-        acceptRequest: function (command, requestId, roleId) {
+        acceptRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to vefiry?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        notAcceptRequest: function (command, requestId, roleId) {
+        notAcceptRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to not verify?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        approveRequest: function (command, requestId, roleId) {
+        approveRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to approve?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        rejectRequest: function (command, requestId, roleId) {
+        rejectRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to reject?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        processRequest: function (command, requestId, roleId) {
+        processRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             CommandOvertime.checkInvalidOvertime(requestId);
             if (CommandOvertime.isInvalid) {
                 confirm('There are some overtimes are invalid. Are you sure you want to process?', function () {
-                    CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                    CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
                 });
             }
             else {
                 confirm('Are you sure you want to process?', function () {
-                    CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                    CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
                 });
             }
         },
-        voidRequest: function (command, requestId, roleId) {
+        voidRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to void?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        resetRequest: function (command, requestId, roleId) {
+        resetRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             confirm('Are you sure you want to reset?', function () {
-                CommandOvertime.commandProcessRequest(command, requestId, roleId);
+                CommandOvertime.commandProcessRequest(command, requestId, roleId, isProcessFromDetailPage);
             });
         },
-        commandProcessRequest: function (command, requestId, roleId) {
+        commandProcessRequest: function (command, requestId, roleId, isProcessFromDetailPage) {
             showMessage('Processing');
             $.post(_global.root + 'overtime/ProcessSingle',
             { command: command, requestId: requestId, roleId: roleId },
             function (response) {
                 fadeOutMessage();
                 if (response.IsSuccessful) {
-                    MemberOvertime.submitEvent();
-                    //if (typeof DailyOvertimeMember === 'undefined' && typeof OvertimeMemberDetail !== 'undefined') {
-                    //    MemberOvertime.submitEvent();
-                    //}
-                    //else {
-                    //    window.location.reload();
-                    //}
+                    if (isProcessFromDetailPage)
+                    {
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        MemberOvertime.submitEvent();
+                    }
                 }
                 else {
                     alert(response.Message);

@@ -95,66 +95,66 @@ var DailyOvertimeMember = (function ($) {
             });
 
             DailyOvertimeMember.btnAccept.on("click", function () {
-                CommandOvertime.acceptRequest(ConstantRequest.CONSTANT_ACCEPT, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.acceptRequest(ConstantRequest.CONSTANT_ACCEPT, requestId, DailyOvertimeMember.verifyRole, true);
             });
             DailyOvertimeMember.btnAcceptFooter.on("click", function () {
-                CommandOvertime.acceptRequest(ConstantRequest.CONSTANT_ACCEPT, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.acceptRequest(ConstantRequest.CONSTANT_ACCEPT, requestId, DailyOvertimeMember.verifyRole, true);
             });
 
             DailyOvertimeMember.btnNotAccept.on("click", function () {
-                CommandOvertime.notAcceptRequest(ConstantRequest.CONSTANT_NOTACCEPT, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.notAcceptRequest(ConstantRequest.CONSTANT_NOTACCEPT, requestId, DailyOvertimeMember.verifyRole, true);
             });
             DailyOvertimeMember.btnNotAcceptFooter.on("click", function () {
-                CommandOvertime.notAcceptRequest(ConstantRequest.CONSTANT_NOTACCEPT, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.notAcceptRequest(ConstantRequest.CONSTANT_NOTACCEPT, requestId, DailyOvertimeMember.verifyRole, true);
             });
 
             DailyOvertimeMember.btnApprove.on("click", function () {
-                CommandOvertime.approveRequest(ConstantRequest.CONSTANT_APPROVE, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.approveRequest(ConstantRequest.CONSTANT_APPROVE, requestId, DailyOvertimeMember.approveRole, true);
             });
             DailyOvertimeMember.btnApproveFooter.on("click", function () {
-                CommandOvertime.approveRequest(ConstantRequest.CONSTANT_APPROVE, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.approveRequest(ConstantRequest.CONSTANT_APPROVE, requestId, DailyOvertimeMember.approveRole, true);
             });
 
             DailyOvertimeMember.btnReject.on("click", function () {
-                CommandOvertime.rejectRequest(ConstantRequest.CONSTANT_REJECT, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.rejectRequest(ConstantRequest.CONSTANT_REJECT, requestId, DailyOvertimeMember.approveRole, true);
             });
             DailyOvertimeMember.btnRejectFooter.on("click", function () {
-                CommandOvertime.rejectRequest(ConstantRequest.CONSTANT_REJECT, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.rejectRequest(ConstantRequest.CONSTANT_REJECT, requestId, DailyOvertimeMember.approveRole, true);
             });
 
             DailyOvertimeMember.btnProcess.on("click", function () {
-                CommandOvertime.processRequest(ConstantRequest.CONSTANT_PROCESS, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.processRequest(ConstantRequest.CONSTANT_PROCESS, requestId, DailyOvertimeMember.hrRole, true);
             });
             DailyOvertimeMember.btnProcessFooter.on("click", function () {
-                CommandOvertime.processRequest(ConstantRequest.CONSTANT_PROCESS, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.processRequest(ConstantRequest.CONSTANT_PROCESS, requestId, DailyOvertimeMember.hrRole, true);
             });
 
             DailyOvertimeMember.btnVoid.on("click", function () {
-                CommandOvertime.voidRequest(ConstantRequest.CONSTANT_VOID, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.voidRequest(ConstantRequest.CONSTANT_VOID, requestId, DailyOvertimeMember.hrRole, true);
             });
             DailyOvertimeMember.btnVoidFooter.on("click", function () {
-                CommandOvertime.voidRequest(ConstantRequest.CONSTANT_VOID, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.voidRequest(ConstantRequest.CONSTANT_VOID, requestId, DailyOvertimeMember.hrRole, true);
             });
 
             DailyOvertimeMember.btnVerifierReset.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.verifyRole, true);
             });
             DailyOvertimeMember.btnVerifierResetFooter.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.verifyRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.verifyRole, true);
             });
 
             DailyOvertimeMember.btnApproverReset.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.approveRole, true);
             });
             DailyOvertimeMember.btnApproverResetFooter.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.approveRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.approveRole, true);
             });
 
             DailyOvertimeMember.btnHRReset.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.hrRole, true);
             });
             DailyOvertimeMember.btnHRResetFooter.on("click", function () {
-                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.hrRole);
+                CommandOvertime.resetRequest(ConstantRequest.CONSTANT_RESET, requestId, DailyOvertimeMember.hrRole, true);
             });
         },
 
