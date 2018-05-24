@@ -100,6 +100,7 @@
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\InsertWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
+    <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
     <Compile Include="Holidays\GetHolidaysCriteria.cs" />

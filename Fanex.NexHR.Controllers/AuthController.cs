@@ -6,21 +6,24 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Employee;
+    using System;
     using System.Web.Mvc;
     using System.Web.Security;
 
     public class AuthController : Controller
     {
         private readonly IEmployeeService employeeService;
+        private readonly ICommandService commandService;
 
         public AuthController()
-            : this(null)
+            : this(null, null)
         {
         }
 
-        public AuthController(IEmployeeService employeeService)
+        public AuthController(IEmployeeService employeeService, ICommandService commandService)
         {
             this.employeeService = employeeService ?? new EmployeeService();
+            this.commandService = commandService ?? new CommandService();
         }
 
         [HttpGet]
@@ -40,6 +43,7 @@
                     case 0: // OK
                         var criteria = new GetEmployeeByCodeCriteria { Code = model.UserName };
                         UserLoginModel user = employeeService.GetUserLoginByCode(criteria);
+                        LogEmployeeLogin(user.Id);
                         user.IsShowLeftNavigation = true;
                         HttpContext.Session["CurrentUser"] = user;
                         FormsAuthentication.SetAuthCookie(model.UserName, false);
@@ -73,6 +77,19 @@
 
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
+        }
+
+        private void LogEmployeeLogin(int employeeId)
+        {
+            var criteria = new LogEmployeeLoginCriteria
+            {
+                EmployeeId = employeeId,
+                IP = Request.UserHostAddress,
+                Platform = Request.Headers["User-Agent"],
+                LoginTime = DateTime.Now
+            };
+
+            commandService.Insert(criteria);
         }
     }
 }

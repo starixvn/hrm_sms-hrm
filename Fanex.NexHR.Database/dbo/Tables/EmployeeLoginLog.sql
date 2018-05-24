@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[EmployeeLoginLog]
+(
+	Id INT IDENTITY(1,1),
+	EmployeeId INT NOT NULL,
+	LoginTime DATETIME NOT NULL,
+	Platform VARCHAR(255) NOT NULL,
+	IP VARCHAR(50) NOT NULL,
+	CONSTRAINT PK_UserLoginLog PRIMARY KEY (Id)
+)
