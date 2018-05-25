@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
+    using System.Text;
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NexHR.Criteria.Employee;
@@ -37,6 +38,7 @@
         {
             if (ModelState.IsValid)
             {
+                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 int retCode = employeeService.ValidateUser(model.UserName, model.Password);
                 switch (retCode)
                 {

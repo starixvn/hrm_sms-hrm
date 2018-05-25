@@ -567,6 +567,7 @@
       <resource path="~/scripts/libs/jquery.min.js" />
       <resource path="~/scripts/libs/jquery.validate.js" />
       <resource path="~/scripts/libs/jquery.validate.unobtrusive.js" />
+      <resource path="~/scripts/Views/login.js" />
     </resourceSet>
 
     <resourceSet name="changepwdjs" type="js">

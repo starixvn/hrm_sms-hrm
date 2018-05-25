@@ -33,6 +33,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -338,6 +339,7 @@
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Libs\jquery\jquery-1.12.4.min.js" />
     <Content Include="Scripts\Libs\tipsy\jquery.tipsy.js" />
+    <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
