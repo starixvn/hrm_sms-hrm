@@ -1,17 +1,17 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
     using Criteria.Request.ChangeShift;
+    using Hangfire;
     using Interfaces;
     using Models;
     using Models.Request;
     using Resources;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class ChangeShiftRequestService : RequestMailService, IChangeShiftRequestService
     {
@@ -26,22 +26,16 @@
         public void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForInsertSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(ChangeShiftTmp);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
-        private void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -68,7 +62,7 @@
                 email.Body);
         }
 
-        private void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 

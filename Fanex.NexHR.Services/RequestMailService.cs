@@ -1,12 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.Common.Helper;
+    using System;
+    using System.Configuration;
+    using System.Linq;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -14,18 +15,12 @@
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Web;
+    using Hangfire;
 
     public class RequestMailService : BaseService, IRequestMailService
     {
         #region constant
+
         private const string _MailContentLeave = "{0} to {1} ({2} days)";
         private const string _MailContentLeaveOneDay = "{0}";
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
@@ -98,10 +93,7 @@
             RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
             var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
 
-            Task.Factory.StartNew(() =>
-            {
-                SendMailProcess(action, request, processedBy, templateEmailPathForRelated);
-            });
+            BackgroundJob.Enqueue(() => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
         }
 
         public void SendMailForDeleteSuccessfully(long requestId)
@@ -114,10 +106,7 @@
             if (request != null)
             {
                 var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
-                Task.Factory.StartNew(() =>
-                {
-                    SendMailForCancelRequest(request, templateEmailPath);
-                });
+                BackgroundJob.Enqueue(() => SendMailForCancelRequest(request, templateEmailPath));
             }
         }
 
@@ -162,6 +151,7 @@
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             return emailModel;
         }
+
         protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             if (totalDays > 1)
@@ -177,7 +167,6 @@
             return string.Format(_MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(), fromDate.ToShortTime(), toDate.ToShortTime());
         }
 
-
         private static void RelatedPeopleAllowSendHR(RequestRelatedPeopleModel relatedPeople)
         {
             if (relatedPeople.Verifier != null)
@@ -191,7 +180,7 @@
             }
         }
 
-        private void SendMailProcess(string command, RequestEntity request, int processBy, string templateEmailPathForRelated)
+        public void SendMailProcess(string command, RequestEntity request, int processBy, string templateEmailPathForRelated)
         {
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = request.Requester.Id };
             var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria { EmpId = processBy };
@@ -308,7 +297,7 @@
             return templateEmailPath;
         }
 
-        private void SendMailForCancelRequest(RequestEntity request, string templateEmailPath)
+        public void SendMailForCancelRequest(RequestEntity request, string templateEmailPath)
         {
             var actionSendMail = (request.RequestType.Id == (short)RequestType.Leave && request.ReworkCount > 0)
                 ? (int)SettingsSendMail.Delete
@@ -710,7 +699,7 @@
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-             emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LateInEarlyOutRelatedMail(

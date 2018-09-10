@@ -1,27 +1,27 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Overtime;
-    using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
+    using Core;
+    using Core.Enums;
+    using Criteria;
+    using Criteria.Lookup;
+    using Criteria.Overtime;
+    using Criteria.Request;
+    using Criteria.Supervisor;
+    using Criteria.Team;
+    using Hangfire;
+    using Models;
+    using Models.Request;
+    using Models.Supervisor;
+    using Nexus.RoleManagement.Services;
+    using Services;
+    using Services.Interfaces;
+    using ViewModels;
+    using Web.Providers;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class OvertimeController : BaseController
@@ -447,10 +447,7 @@
         [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
         public void ReminderClaimOvertime(string subject, string content)
         {
-            Task.Factory.StartNew(() =>
-            {
-                overtimeService.SendMailToReminderClaimOvertime(subject, content);
-            });
+            BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
         }
 
         [NonAction]

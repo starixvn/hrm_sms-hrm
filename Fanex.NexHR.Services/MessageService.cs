@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
+    using Hangfire;
 
     public class MessageService : BaseService, IMessageService
     {
@@ -84,13 +84,10 @@
         public void SendMailToStaff(Message model)
         {
             var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(messageEmailTemplate));
-            Task.Factory.StartNew(() =>
-            {
-                SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate);
-            });
+            BackgroundJob.Enqueue(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
         }
 
-        private void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
+        public void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
         {
             var body = string.Format(emailTemplatePath, subject, content);
 

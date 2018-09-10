@@ -1,18 +1,18 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
     using Common.Helper;
     using Core;
     using Core.Enums;
     using Criteria.Request;
     using Criteria.Request.Leave;
+    using Hangfire;
     using Interfaces;
     using Models;
     using Models.Request;
     using Resources;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class LeaveRequestService : RequestMailService, ILeaveRequestService
     {
@@ -45,29 +45,23 @@
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForInsertSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_LeaveRequestEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
-        private void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
             email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
             SendMailForSuccessfully(criteria, templateEmailPath, email);
         }
 
-        private void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
             email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;

@@ -1,12 +1,15 @@
 ﻿namespace Fanex.NexHR.Site
 {
-    using Data.Configuration;
-    using Logging;
-    using Resources;
     using System;
     using System.Web;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using Common;
+    using Data.Configuration;
+    using Hangfire;
+    using Logging;
+    using Resources;
     using Web.Providers;
 
     public class MvcApplication : HttpApplication
@@ -18,6 +21,9 @@
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             DbSettingProviderManager.Current.Start();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
+
+            var connectionString = Cryptography.DeCryptConnectionString(WebConfigurationManager.ConnectionStrings["nexhrx"].ConnectionString);
+            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
         }
 
         [ValidateInput(false)]

@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
     using Criteria.Request.KeepInView;
+    using Hangfire;
     using Interfaces;
     using Models;
     using Resources;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class KeepInViewRequestService : RequestMailService, IKeepInViewRequestService
     {
@@ -17,22 +17,16 @@
         public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForInsertSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
-        private void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -66,7 +60,7 @@
                 email.Body);
         }
 
-        private void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 

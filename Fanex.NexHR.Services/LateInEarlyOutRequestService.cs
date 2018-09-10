@@ -1,15 +1,15 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
     using Criteria.Request.LateInEarlyOut;
+    using Hangfire;
     using Interfaces;
     using Models;
     using Models.Request;
     using Resources;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class LateInEarlyOutRequestService : RequestMailService, ILateInEarlyOutRequestService
     {
@@ -24,22 +24,16 @@
         public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForInsertSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
-        private void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -74,7 +68,7 @@
                 email.Body);
         }
 
-        private void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 

@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
     using Criteria.Request.CheckInOut;
+    using Hangfire;
     using Interfaces;
     using Models;
     using Resources;
-    using System.Threading.Tasks;
-    using System.Web;
 
     public class CheckInOutRequestService : RequestMailService, ICheckInOutRequestService
     {
@@ -17,22 +17,16 @@
         public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForInsertSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateCheckInOutRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(CheckInOutTmp);
-            Task.Factory.StartNew(() =>
-            {
-                SendMailForUpdateSuccessfully(criteria, templateEmailPath);
-            });
+            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
-        private void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
@@ -68,7 +62,7 @@
                 email.Body);
         }
 
-        private void SendMailForUpdateSuccessfully(UpdateCheckInOutRequestCriteria criteria, string templateEmailPath)
+        public void SendMailForUpdateSuccessfully(UpdateCheckInOutRequestCriteria criteria, string templateEmailPath)
         {
             EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
