@@ -1,10 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Fanex.NexHR.Models;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
+    using Fanex.NexHR.Models;
 
     [Authorize]
     public class BaseController : Controller
