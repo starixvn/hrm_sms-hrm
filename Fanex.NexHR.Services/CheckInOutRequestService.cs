@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
@@ -9,6 +8,7 @@
     using Interfaces;
     using Models;
     using Resources;
+    using System.Web;
 
     public class CheckInOutRequestService : RequestMailService, ICheckInOutRequestService
     {

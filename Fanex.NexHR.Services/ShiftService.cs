@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using Core.Services;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;

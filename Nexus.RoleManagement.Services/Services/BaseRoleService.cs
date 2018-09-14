@@ -3,12 +3,12 @@
     using Fanex.Data.Repository;
     using System.Collections.Generic;
 
-    public class BaseService
+    public class BaseRoleService
     {
         private readonly IBaseRepository _repository;
         private readonly IDynamicRepository _dynamicRepository;
 
-        public BaseService(IDynamicRepository dynamicRepository = null, IBaseRepository repository = null)
+        public BaseRoleService(IDynamicRepository dynamicRepository = null, IBaseRepository repository = null)
         {
             _dynamicRepository = dynamicRepository ?? new DynamicRepository();
             _repository = repository ?? new BaseRepository();

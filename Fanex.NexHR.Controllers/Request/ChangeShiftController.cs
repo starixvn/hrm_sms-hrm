@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -17,6 +15,10 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class ChangeShiftController : BaseController
     {

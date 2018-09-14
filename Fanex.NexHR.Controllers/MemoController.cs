@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;

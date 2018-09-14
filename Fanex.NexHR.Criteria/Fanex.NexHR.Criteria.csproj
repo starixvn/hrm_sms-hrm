@@ -239,7 +239,6 @@
     <Compile Include="Overtime\ProcessSingleOvertimeCriteria.cs" />
     <Compile Include="Overtime\UpdateOvertimeRequestCriteria.cs" />
     <Compile Include="Request\ProcessRequestCriteria.cs" />
-    <Compile Include="ResultCriteria.cs" />
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />
     <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />

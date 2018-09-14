@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class MenuService : BaseService, IMenuService
+    public class MenuService : BaseRoleService, IMenuService
     {
         private readonly IMenuRepository menuRepository;
 

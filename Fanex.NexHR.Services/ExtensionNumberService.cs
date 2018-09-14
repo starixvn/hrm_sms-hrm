@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using Core.Services;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;

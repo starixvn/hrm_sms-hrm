@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Core.Services
 {
     using Fanex.Data.Repository;
     using System.Collections.Generic;

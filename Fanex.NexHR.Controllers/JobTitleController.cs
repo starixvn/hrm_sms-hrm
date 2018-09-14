@@ -1,10 +1,11 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using Core.Enums;
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;

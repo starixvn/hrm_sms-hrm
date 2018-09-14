@@ -1,8 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
@@ -12,6 +9,9 @@
     using Models;
     using Models.Request;
     using Resources;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
 
     public class ChangeShiftRequestService : RequestMailService, IChangeShiftRequestService
     {

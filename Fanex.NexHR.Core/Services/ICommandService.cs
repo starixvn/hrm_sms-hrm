@@ -1,9 +1,9 @@
-﻿namespace Fanex.NexHR.Repositories.Interfaces
+﻿namespace Fanex.NexHR.Core.Services
 {
+    using Core.Models;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
 
-    public interface IBaseRepository
+    public interface ICommandService
     {
         CommandResult Insert(ICriteria criteria, bool hasGetOutputParams = false);
 

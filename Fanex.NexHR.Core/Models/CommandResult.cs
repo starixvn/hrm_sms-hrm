@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Core.Models
 {
     public class CommandResult
     {

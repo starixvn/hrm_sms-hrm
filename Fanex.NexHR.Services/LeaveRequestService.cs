@@ -1,8 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Common.Helper;
     using Core;
     using Core.Enums;
@@ -13,6 +10,9 @@
     using Models;
     using Models.Request;
     using Resources;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
 
     public class LeaveRequestService : RequestMailService, ILeaveRequestService
     {

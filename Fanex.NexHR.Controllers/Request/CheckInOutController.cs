@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
@@ -12,7 +14,6 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Web.Mvc;
 

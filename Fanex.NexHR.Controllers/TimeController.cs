@@ -1,9 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Criteria.Time;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Time;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;

@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+    using Core.Services;
     using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
@@ -10,6 +8,9 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public class HolidayController : BaseController
     {

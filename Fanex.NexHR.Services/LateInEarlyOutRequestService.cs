@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Web;
     using Core;
     using Core.Enums;
     using Criteria.Employee;
@@ -10,6 +9,7 @@
     using Models;
     using Models.Request;
     using Resources;
+    using System.Web;
 
     public class LateInEarlyOutRequestService : RequestMailService, ILateInEarlyOutRequestService
     {

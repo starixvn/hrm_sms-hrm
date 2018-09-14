@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Nexus.RoleManagement.Services
 {
-    public class FunctionService : BaseService, IFunctionService
+    public class FunctionService : BaseRoleService, IFunctionService
     {
         public IEnumerable<FunctionModel> GetFunctions()
         {

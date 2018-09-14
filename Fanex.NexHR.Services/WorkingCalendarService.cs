@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    using Core.Services;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
@@ -11,6 +10,8 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Repositories;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class WorkingCalendarService : BaseService, IWorkingCalendarService
     {

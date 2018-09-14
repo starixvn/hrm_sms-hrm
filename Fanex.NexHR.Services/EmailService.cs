@@ -1,15 +1,14 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Configuration;
-    using Fanex.MailDeliver.Model;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Services.Interfaces;
+    using MailDeliver;
 
     public class EmailService : IEmailService
     {
         public void SendEmail(string senderEmail, string receiverEmail, string mailCC, string subject, string body)
         {
-            this.SendEmail(senderEmail, senderEmail, receiverEmail, mailCC, subject, body);
+            SendEmail(senderEmail, senderEmail, receiverEmail, mailCC, subject, body);
         }
 
         public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCC, string subject, string body)
@@ -24,13 +23,11 @@
                 MailTo = receiverEmail,
                 MailCc = mailCC,
                 Subject = subject,
-                Title = ConfigurationManager.AppSettings["Email.SenderName"],
                 Body = body
             };
-            using (var client = new Fanex.MailDeliver.MailClient.API.MailDeliver())
-            {
-                client.SendMail(mailItem);
-            }
+
+            var mailservice = new BaseMailService();
+            mailservice.SendEmailAsync(mailItem);
         }
     }
 }

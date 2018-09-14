@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using Core;
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;

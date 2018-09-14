@@ -76,11 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
-    <Compile Include="Interfaces\IBaseRepository.cs" />
     <Compile Include="Interfaces\IDisciplineRepository.cs" />
     <Compile Include="Interfaces\IOvertimeRequestRepository.cs" />
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />

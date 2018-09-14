@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
@@ -16,6 +14,10 @@
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
 
     public class AnnualLeaveBalanceController : BaseController
     {

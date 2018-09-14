@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services.Interfaces
 {
+    using Core.Services;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using System.Collections.Generic;

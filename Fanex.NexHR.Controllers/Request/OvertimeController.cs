@@ -22,6 +22,8 @@
     using Services.Interfaces;
     using ViewModels;
     using Web.Providers;
+    using Core.Services;
+    using Core.Models;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class OvertimeController : BaseController

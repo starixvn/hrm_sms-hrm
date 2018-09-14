@@ -1,10 +1,11 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    using Core.Services;
     using Criteria.Holidays;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class HolidayService : BaseService, IHolidayService
     {

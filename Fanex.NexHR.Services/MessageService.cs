@@ -1,14 +1,15 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Web;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Web;
 
     public class MessageService : BaseService, IMessageService
     {

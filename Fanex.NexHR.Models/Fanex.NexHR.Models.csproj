@@ -95,7 +95,6 @@
     <Compile Include="Calendar\HalfDayOff.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="Calendar\WorkingCalendarSummary.cs" />
-    <Compile Include="CommandResult.cs" />
     <Compile Include="Discipline\DisciplineDetailModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />
     <Compile Include="Discipline\DisciplineTypeModel.cs" />

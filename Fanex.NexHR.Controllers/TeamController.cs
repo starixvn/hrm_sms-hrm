@@ -17,6 +17,8 @@
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.Web.Providers;
     using Nexus.RoleManagement.Services;
+    using Core.Services;
+    using Core.Models;
 
     public class TeamController : BaseController
     {

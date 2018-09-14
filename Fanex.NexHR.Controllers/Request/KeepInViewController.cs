@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;

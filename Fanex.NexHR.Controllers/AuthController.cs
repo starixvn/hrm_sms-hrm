@@ -1,15 +1,16 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Text;
-    using System.Web.Mvc;
-    using System.Web.Security;
+    using Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Employee;
+    using System;
+    using System.Text;
+    using System.Web.Mvc;
+    using System.Web.Security;
 
     public class AuthController : Controller
     {

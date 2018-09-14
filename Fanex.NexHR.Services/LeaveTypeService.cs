@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Models;

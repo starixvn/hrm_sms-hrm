@@ -8,6 +8,7 @@
     using Models.Discipline;
     using Repositories;
     using Repositories.Interfaces;
+    using Core.Services;
 
     public class DisciplineService : BaseService, IDisciplineService
     {

@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    using Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
@@ -16,6 +15,8 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Models.Report;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class ReportService : BaseService, IReportService
     {

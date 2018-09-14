@@ -80,10 +80,6 @@
     <Reference Include="Fanex.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.1.0.0.0\lib\net40\Fanex.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.MailDeliver.MailClient, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.MailDeliver.MailClient.1.0.0.2\lib\net40\Fanex.MailDeliver.MailClient.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Hangfire.Core, Version=1.6.20.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hangfire.Core.1.6.20\lib\net45\Hangfire.Core.dll</HintPath>
       <Private>True</Private>
@@ -182,8 +178,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseService.cs" />
-    <Compile Include="CommandService.cs" />
     <Compile Include="DepartmentService.cs" />
     <Compile Include="ExportExcel\Attendance\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Attendance\IExportExcelAttendanceReportService.cs" />
@@ -219,7 +213,6 @@
     <Compile Include="ExportExcel\ReportExporting.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
-    <Compile Include="Interfaces\ICommandService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveSummaryService.cs" />
@@ -278,6 +271,10 @@
     <ProjectReference Include="..\Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj">
       <Project>{089B8314-1793-403B-ADA8-E83E842C275E}</Project>
       <Name>Fanex.NexHR.Criteria</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.MailDeliver\Fanex.NexHR.MailDeliver.csproj">
+      <Project>{085eb762-ecdd-4f5f-9f63-93d6fb6eae08}</Project>
+      <Name>Fanex.NexHR.MailDeliver</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
       <Project>{5955CE2D-B3DC-48C2-B3B4-CCEE2DB5B35F}</Project>

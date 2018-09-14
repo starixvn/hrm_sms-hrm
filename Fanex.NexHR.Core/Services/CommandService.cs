@@ -1,12 +1,9 @@
-﻿namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Core.Services
 {
-    using Fanex.Common.Helper;
+    using Core.Models;
+    using Core.Repositories;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services.Interfaces;
 
     public class CommandService : ICommandService
     {

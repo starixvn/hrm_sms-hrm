@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using Core.Services;
     using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class RoleService : BaseService, IRoleService
+    public class RoleService : BaseRoleService, IRoleService
     {
         public IEnumerable<SystemRoleModel> GetRolesByUserId(int userId)
         {

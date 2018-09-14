@@ -1,11 +1,10 @@
-﻿namespace Fanex.NexHR.Repositories
+﻿namespace Fanex.NexHR.Core.Repositories
 {
+    using Criteria;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories.Interfaces;
+    using Models;
     using System;
     using System.Collections;
     using System.Collections.Generic;
