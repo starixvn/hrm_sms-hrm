@@ -30,6 +30,8 @@
     using Simplicode.Imaging.Filters;
     using Core.Services;
     using Core.Models;
+    using Criteria.Request;
+    using Criteria.Calendar;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class EmployeeController : BaseController
@@ -601,6 +603,96 @@
             IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetSupervisors(string roleIds, string query, string excludeIds)
+        {
+            var criteria = new GetEmployeeByRoleCriteria
+            {
+                ExcludeIds = excludeIds ?? string.Empty,
+                Query = query.Trim(),
+                RoleIds = roleIds
+            };
+            IList<Employee> employees = employeeService.GetEmployeesByRole(criteria);
+
+            return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetRangeDate(int leaveTypeId, int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var numberDays = 0;
+            switch (leaveTypeId)
+            {
+                case Constants.MaternityLeave:
+                case Constants.CompensationLeave:
+                    numberDays = (toDate - fromDate).Days + 1;
+                    break;
+
+                case Constants.UnpaidLeave:
+                case Constants.BusinessTrip:
+                    var criteria = new GetOffDateAndHolidayDateCriteria
+                    {
+                        EmpId = employeeId,
+                        FromDate = fromDate,
+                        ToDate = toDate
+                    };
+                    IEnumerable<DateTime> dates = employeeService.GetOffDateAndHolidayDate(criteria);
+                    numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
+                    break;
+
+                default:
+                    var getDateRangeCriteria = new GetDateRangeCriteria
+                    {
+                        EmpId = employeeId,
+                        FromDate = fromDate,
+                        ToDate = toDate
+                    };
+                    numberDays = employeeService.GetDateRange(getDateRangeCriteria);
+                    break;
+            }
+
+            return Json(numberDays, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUnavailableDates(int employeeId, DateTime date, int? leaveTypeId = null)
+        {
+            IEnumerable<DateTime> dates = null;
+            var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
+            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
+            var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
+
+            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave
+                || leaveTypeId.Value == Constants.BusinessTrip
+                || leaveTypeId.Value == Constants.UnpaidLeaveInsurance))
+            {
+                var criteria = new GetOffDateAndHolidayDateCriteria
+                {
+                    EmpId = employeeId,
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                dates = employeeService.GetOffDateAndHolidayDate(criteria);
+            }
+            else
+            {
+                var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria
+                {
+                    EmpId = employeeId,
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                dates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
+            }
+
+            return Json(dates, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetNewEmployeeCode()
+        {
+            var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();
+            string newCode = employeeService.NewEmployeeCode(getNewEmployeeCodeCriteria);
+
+            return Json(newCode, JsonRequestBehavior.AllowGet);
         }
 
         private void UpdateUserSession(int empId)

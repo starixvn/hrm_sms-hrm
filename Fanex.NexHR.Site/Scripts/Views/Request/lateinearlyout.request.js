@@ -69,7 +69,7 @@ $(document).ready(function () {
     });
 
     $("#Employee").blur(function () {
-        $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
+        $.getJSON(_global.root + 'employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
                 function (response) {
                     if (response != null) {
                         $("#Date").attr("disableddate", response.join(","));

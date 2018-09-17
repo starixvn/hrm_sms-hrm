@@ -9,7 +9,6 @@
     using System.Configuration;
     using System.IO;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
 
     public class BaseMailService
     {
@@ -29,7 +28,6 @@
             var mailStatus = new MailStatus();
             if (email != null && IsValidEmail(email.MailTo))
             {
-                email.MailTo = "quinn.vo@nexcel.vn";
                 email.MailSetting = GetMailSettingById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
                 InsertMailRecord(email);
                 var message = GetMessageContent(email);
@@ -46,7 +44,6 @@
 
             using (var mailclient = new SmtpClient())
             {
-                email.MailSetting.Port = 465;
                 mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
                 if (email.MailSetting.IsAuth)
                 {

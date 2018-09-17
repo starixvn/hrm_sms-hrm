@@ -446,7 +446,7 @@ var LeaveRequest = (function ($) {
             var employeeId = $("#EmployeeId").val();
             if (employeeId !== null) {
                 $.ajax({
-                    url: _global.root + 'api/employee/GetEmployee',
+                    url: _global.root + 'employee/GetEmployee',
                     data: {
                         id: employeeId
                     },
@@ -511,7 +511,7 @@ var LeaveRequest = (function ($) {
         },
         getDateRange: function () {
             $.ajax({
-                url: _global.root + 'api/employee/GetRangeDate',
+                url: _global.root + 'employee/GetRangeDate',
                 data: {
                     leaveTypeId: LeaveRequest.leaveTypeId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
@@ -527,7 +527,7 @@ var LeaveRequest = (function ($) {
             });
         },
         getUnavailableDate: function () {
-            $.getJSON(_global.root + 'api/employee/GetUnavailableDates',
+            $.getJSON(_global.root + 'employee/GetUnavailableDates',
                     {
                         employeeId: LeaveRequest.employeeId.val(),
                         date: new Date().toDateString(),

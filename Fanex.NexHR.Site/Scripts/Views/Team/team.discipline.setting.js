@@ -13,7 +13,7 @@
                 }
 
                 $.ajax({
-                    url: _global.root + 'api/employee/GetSupervisors',
+                    url: _global.root + 'employee/GetSupervisors',
                     data: {
                         roleIds: $('#SupervisorRole').val(),
                         query: $.trim(request.term),

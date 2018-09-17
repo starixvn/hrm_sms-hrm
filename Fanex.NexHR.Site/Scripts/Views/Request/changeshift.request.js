@@ -20,7 +20,7 @@ $(document).ready(function () {
     });
 
     $("#Employee").blur(function () {
-        $.getJSON(_global.root + 'api/employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
+        $.getJSON(_global.root + 'employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
                 function (response) {
                     if (response != null) {
                         $(".datepicker").attr("disabledDate", response.join(","));
@@ -219,7 +219,7 @@ $(document).ready(function () {
         var employeeId = $("#EmployeeId").val();
         if (employeeId != null) {
             $.ajax({
-                url: _global.root + 'api/employee/GetEmployee',
+                url: _global.root + 'employee/GetEmployees',
                 data: {
                     id: employeeId
                 },

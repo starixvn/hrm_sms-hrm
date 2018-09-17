@@ -19,7 +19,7 @@ $(document).ready(function () {
 	// Generate new employee code.
 	$("#generate").on("click", function () {
 		$.ajax({
-			url: _global.root + 'api/employee/GetNewEmployeeCode',
+			url: _global.root + 'employee/GetNewEmployeeCode',
 			success: function (data) {
 				$("#Code").val("X" + data);
 			}

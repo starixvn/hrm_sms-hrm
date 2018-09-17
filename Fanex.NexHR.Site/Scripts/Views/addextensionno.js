@@ -46,7 +46,7 @@ var modifiedExtensionNo = (function ($) {
         $("#Employee").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: urlRoot + 'api/employee/getemployees',
+                    url: urlRoot + 'employee/getemployees',
                     data: {
                         query: request.term
                     },

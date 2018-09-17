@@ -6,7 +6,7 @@
         $("#Leader").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'api/employee/getemployees',
+                    url: _global.root + 'employee/getemployees',
                     data: {
                         query: request.term,
                         enable: true,
@@ -54,7 +54,7 @@
         $("#AssistantLeader").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'api/employee/getemployees',
+                    url: _global.root + 'employee/getemployees',
                     data: {
                         query: request.term,
                         enable: true,

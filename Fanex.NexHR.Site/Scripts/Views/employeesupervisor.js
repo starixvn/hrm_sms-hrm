@@ -54,7 +54,7 @@ $(document).ready(function () {
                 listIgnore += $(supervisor).attr("data-id") + ",";
             }
 
-            var urlAllEmployee = _global.root + 'api/employee/getemployees';
+            var urlAllEmployee = _global.root + 'employee/getemployees';
             var params = {
                 query: $.trim(request.term),
                 $top: 10
@@ -76,7 +76,7 @@ $(document).ready(function () {
             }
             else {
                 $.ajax({
-                    url: _global.root + 'api/employee/GetSupervisors',
+                    url: _global.root + 'employee/GetSupervisors',
                     data: {
                         roleIds: $('#SupervisorRole').val(),
                         query: $.trim(request.term),
@@ -300,7 +300,7 @@ $(document).ready(function () {
         var groups = $("#group").val() !== null ? $("#group").val().join() : "";
 
         $.getJSON(
-        _global.root + 'api/employee/getemployees',
+        _global.root + 'employee/getemployees',
         {
             query: '',
             groupIds: groups,

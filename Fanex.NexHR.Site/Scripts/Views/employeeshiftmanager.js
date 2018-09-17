@@ -16,7 +16,7 @@ $(document).ready(function () {
             }
 
             $.ajax({
-                url: _global.root + 'api/employee/getemployees',
+                url: _global.root + 'employee/getemployees',
                 data: {
                     query: $.trim(request.term),
                     $top: 10
@@ -137,7 +137,7 @@ $(document).ready(function () {
         var groups = $("#group").val() !== null ? $("#group").val().join() : "";
 
         $.getJSON(
-        _global.root + 'api/employee/getemployees',
+        _global.root + 'employee/getemployees',
         {
             query: '',
             groupIds: groups,

@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.ViewModels.Employee
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Web.Mvc;
 
     public class ChangePasswordViewModel
     {

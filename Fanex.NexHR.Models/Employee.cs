@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
     using Nexus.RoleManagement.Services;
@@ -8,7 +7,6 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.Web.Mvc;
 
     public class Employee : EntityBase<int>
     {
