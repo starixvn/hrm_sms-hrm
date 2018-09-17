@@ -56,22 +56,22 @@
                 catch (AuthenticationException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw ex;
+                    throw;
                 }
                 catch (SmtpCommandException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw ex;
+                    throw;
                 }
                 catch (SmtpProtocolException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw ex;
+                    throw;
                 }
                 catch (Exception ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw ex;
+                    throw;
                 }
 
                 mailclient.Disconnect(true);
