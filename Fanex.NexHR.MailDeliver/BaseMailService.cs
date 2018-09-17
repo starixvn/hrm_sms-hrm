@@ -24,21 +24,21 @@
 
         public bool SendEmailAsync(MailRecord email)
         {
-            var mailStatus = new MailStatus();
+            var isSucessfull = false;
             if (email != null && IsValidEmail(email.MailTo))
             {
                 email.MailSetting = GetMailSettingById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
                 InsertMailRecord(email);
                 var message = GetMessageContent(email);
-                mailStatus = Send(email, message);
+                isSucessfull = Send(email, message);
             }
 
-            return mailStatus.IsSucessfull;
+            return isSucessfull;
         }
 
-        private MailStatus Send(MailRecord email, MimeMessage message)
+        private bool Send(MailRecord email, MimeMessage message)
         {
-            var mailStatus = new MailStatus();
+            var isSucessfull = false;
 
             using (var mailclient = new SmtpClient())
             {
@@ -51,7 +51,8 @@
                 try
                 {
                     mailclient.SendAsync(message);
-                    UpdateMailStatus(email, true);
+                    isSucessfull = true;
+                    UpdateMailStatus(email, isSucessfull);
                 }
                 catch (AuthenticationException ex)
                 {
@@ -77,7 +78,7 @@
                 mailclient.Disconnect(true);
             }
 
-            return mailStatus;
+            return isSucessfull;
         }
 
         private MimeMessage GetMessageContent(MailRecord email)
