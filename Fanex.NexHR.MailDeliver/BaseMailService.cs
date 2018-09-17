@@ -7,7 +7,6 @@
     using MimeKit;
     using System;
     using System.Configuration;
-    using System.IO;
     using System.Text.RegularExpressions;
 
     public class BaseMailService
@@ -32,7 +31,6 @@
                 InsertMailRecord(email);
                 var message = GetMessageContent(email);
                 mailStatus = Send(email, message);
-                UpdateMailStatus(email, mailStatus);
             }
 
             return mailStatus.IsSucessfull;
@@ -53,27 +51,27 @@
                 try
                 {
                     mailclient.SendAsync(message);
-                    mailStatus.IsSucessfull = true;
+                    UpdateMailStatus(email, true);
                 }
                 catch (AuthenticationException ex)
                 {
-                    mailStatus.ErrorMessage = ex.Message;
-                    mailStatus.StackTrace = ex.StackTrace;
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                    throw ex;
                 }
                 catch (SmtpCommandException ex)
                 {
-                    mailStatus.ErrorMessage = ex.Message;
-                    mailStatus.StackTrace = ex.StackTrace;
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                    throw ex;
                 }
                 catch (SmtpProtocolException ex)
                 {
-                    mailStatus.ErrorMessage = ex.Message;
-                    mailStatus.StackTrace = ex.StackTrace;
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                    throw ex;
                 }
                 catch (Exception ex)
                 {
-                    mailStatus.ErrorMessage = ex.Message;
-                    mailStatus.StackTrace = ex.StackTrace;
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                    throw ex;
                 }
 
                 mailclient.Disconnect(true);
@@ -129,49 +127,40 @@
                 MailDate = DateTime.Now
             };
 
-            var result = commandService.Insert(criteria, hasGetOutputParams: true);
+            commandService.Insert(criteria, hasGetOutputParams: true);
             email.MailId = criteria.MailId;
         }
 
-        private void InsertMailError(MailRecord email, MailStatus mailStatus)
+        private void HandleMailError(MailRecord email, string errorMessage, string stackTrace)
+        {
+            InsertMailError(email, errorMessage, stackTrace);
+            UpdateMailStatus(email, false);
+        }
+
+        private void InsertMailError(MailRecord email, string errorMessage, string stackTrace)
         {
             var criteria = new InsertMailErrorCriteria
             {
                 AppId = email.MailSetting.AppId,
                 MailId = email.MailId,
-                Message = mailStatus.ErrorMessage,
-                StackTrace = mailStatus.StackTrace,
+                Message = errorMessage,
+                StackTrace = stackTrace,
                 ErrorTime = DateTime.Now
             };
 
-            var result = commandService.Insert(criteria);
-
-            throw new Exception(mailStatus.ErrorMessage);
+            commandService.Insert(criteria);
         }
 
-        private void UpdateMailStatus(MailRecord email, MailStatus mailStatus)
+        private void UpdateMailStatus(MailRecord email, bool isSucessfull)
         {
             var criteria = new UpdateMailStatusCriteria
             {
                 MailId = email.MailId,
-                Status = mailStatus.IsSucessfull,
+                Status = isSucessfull,
                 MailUpdatedDate = DateTime.Now
             };
 
             commandService.Update(criteria);
-
-            if (!mailStatus.IsSucessfull)
-            {
-                InsertMailError(email, mailStatus);
-            }
-        }
-
-        public string ReadTextFile(string filePath)
-        {
-            using (var sr = new StreamReader(filePath))
-            {
-                return sr.ReadToEnd();
-            }
         }
 
         private static bool IsValidEmail(string email)
