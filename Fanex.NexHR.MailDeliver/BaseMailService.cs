@@ -151,7 +151,7 @@
             }
         }
 
-        private void GetMailFromString(string mailString, MailAddressCollection mails)
+        private static void GetMailFromString(string mailString, MailAddressCollection mails)
         {
             if (!string.IsNullOrWhiteSpace(mailString))
             {
@@ -180,7 +180,7 @@
                 emails = emails.Replace(";;", ";");
             }
 
-            return emails.TrimEnd(new char[] { ',', ';' });
+            return emails.TrimEnd(new [] { ',', ';' });
         }
 
         private MimeMessage GetMessageContent(MailRecord email)
