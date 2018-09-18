@@ -6,7 +6,10 @@
     using MailKit.Security;
     using MimeKit;
     using System;
+    using System.ComponentModel;
     using System.Configuration;
+    using System.Net.Mail;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     public class BaseMailService
@@ -40,17 +43,33 @@
         {
             var isSucessfull = false;
 
-            using (var mailclient = new SmtpClient())
+            if (email.MailSetting.Port == 465)
+            {
+                isSucessfull = SendByMailKit(email, message);
+            }
+            else
+            {
+                isSucessfull = SendByMailNet(email, message);
+            }
+
+            return isSucessfull;
+        }
+
+        private bool SendByMailKit(MailRecord email, MimeMessage message)
+        {
+            var isSucessfull = false;
+
+            using (var mailclient = new MailKit.Net.Smtp.SmtpClient())
             {
                 mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
                 if (email.MailSetting.IsAuth)
                 {
-                    mailclient.AuthenticateAsync(email.MailSetting.Username, email.MailSetting.Password);
+                    mailclient.Authenticate(email.MailSetting.Username, email.MailSetting.Password);
                 }
 
                 try
                 {
-                    mailclient.SendAsync(message);
+                    mailclient.Send(message);
                     isSucessfull = true;
                     UpdateMailStatus(email, isSucessfull);
                 }
@@ -79,6 +98,99 @@
             }
 
             return isSucessfull;
+        }
+
+        private bool SendByMailNet(MailRecord email, MimeMessage message)
+        {
+            var isSucessfull = false;
+            try
+            {
+                var msg = new MailMessage();
+                msg.From = new MailAddress(email.MailSetting.Username);
+                if (!string.IsNullOrEmpty(email.MailTo))
+                {
+                    GetMailFromString(email.MailTo, msg.To);
+                    GetMailFromString(email.MailCc, msg.CC);
+                    GetMailFromString(email.MailBcc, msg.Bcc);
+
+                    msg.Subject = email.Subject;
+                    msg.SubjectEncoding = Encoding.UTF8;
+                    msg.IsBodyHtml = true;
+                    msg.Body = email.Body;
+                    msg.BodyEncoding = Encoding.UTF8;
+                    msg.Priority = MailPriority.Normal;
+
+                    var client = new System.Net.Mail.SmtpClient
+                    {
+                        Port = email.MailSetting.Port,
+                        Host = email.MailSetting.Server
+                    };
+                    if (email.MailSetting.IsAuth)
+                    {
+                        client.Credentials = new System.Net.NetworkCredential(email.MailSetting.Username, email.MailSetting.Password);
+                        client.EnableSsl = true;
+                    }
+
+                    System.Net.ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
+
+                    client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+                    client.SendAsync(msg, email);
+                    isSucessfull = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleMailError(email, ex.Message, ex.StackTrace);
+                throw;
+            }
+           
+            return isSucessfull;
+        }
+
+        private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+        {
+            var email = (MailRecord)e.UserState;
+            bool status = e.Error == null;
+            if (status == false)
+            {
+                HandleMailError(email, e.Error.Message, e.Error.StackTrace);
+                throw new Exception(e.Error.Message, e.Error.InnerException);
+            }
+            else
+            {
+                UpdateMailStatus(email, true);
+            }
+        }
+
+        private void GetMailFromString(string mailString, MailAddressCollection mails)
+        {
+            if (!string.IsNullOrWhiteSpace(mailString))
+            {
+                mailString = RemoveDoubleComma(mailString);
+                var mailArrs = mailString.Split(';');
+                foreach (var mail in mailArrs)
+                {
+                    if (!string.IsNullOrEmpty(mail))
+                    {
+                        mails.Add(mail);
+                    }
+                }
+            }
+        }
+
+        private static string RemoveDoubleComma(string mails)
+        {
+            while (mails.Contains(",,"))
+            {
+                mails = mails.Replace(",,", ",");
+            }
+
+            while (mails.Contains(";;"))
+            {
+                mails = mails.Replace(";;", ";");
+            }
+
+            return mails.TrimEnd(new char[] { ',', ';' });
         }
 
         private MimeMessage GetMessageContent(MailRecord email)
