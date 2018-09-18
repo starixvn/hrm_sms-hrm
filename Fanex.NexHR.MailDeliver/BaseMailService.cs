@@ -41,17 +41,7 @@
 
         private bool Send(MailRecord email, MimeMessage message)
         {
-            var isSucessfull = false;
-
-            if (email.MailSetting.Port == 465)
-            {
-                isSucessfull = SendByMailKit(email, message);
-            }
-            else
-            {
-                isSucessfull = SendByMailNet(email, message);
-            }
-
+            var isSucessfull = email.MailSetting.Port == 465 ? SendByMailKit(email, message) : SendByMailNet(email);
             return isSucessfull;
         }
 
@@ -100,7 +90,7 @@
             return isSucessfull;
         }
 
-        private bool SendByMailNet(MailRecord email, MimeMessage message)
+        private bool SendByMailNet(MailRecord email)
         {
             var isSucessfull = false;
             try
@@ -133,7 +123,7 @@
 
                     System.Net.ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
 
-                    client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
+                    client.SendCompleted += SendCompletedCallback;
                     client.SendAsync(msg, email);
                     isSucessfull = true;
                 }
@@ -151,10 +141,9 @@
         {
             var email = (MailRecord)e.UserState;
             bool status = e.Error == null;
-            if (status == false)
+            if (!status)
             {
                 HandleMailError(email, e.Error.Message, e.Error.StackTrace);
-                throw new Exception(e.Error.Message, e.Error.InnerException);
             }
             else
             {
@@ -166,8 +155,8 @@
         {
             if (!string.IsNullOrWhiteSpace(mailString))
             {
-                mailString = RemoveDoubleComma(mailString);
-                var mailArrs = mailString.Split(';');
+                var emails = RemoveDoubleComma(mailString);
+                var mailArrs = emails.Split(';');
                 foreach (var mail in mailArrs)
                 {
                     if (!string.IsNullOrEmpty(mail))
@@ -180,17 +169,18 @@
 
         private static string RemoveDoubleComma(string mails)
         {
-            while (mails.Contains(",,"))
+            var emails = mails;
+            while (emails.Contains(",,"))
             {
-                mails = mails.Replace(",,", ",");
+                emails = emails.Replace(",,", ",");
             }
 
-            while (mails.Contains(";;"))
+            while (emails.Contains(";;"))
             {
-                mails = mails.Replace(";;", ";");
+                emails = emails.Replace(";;", ";");
             }
 
-            return mails.TrimEnd(new char[] { ',', ';' });
+            return emails.TrimEnd(new char[] { ',', ';' });
         }
 
         private MimeMessage GetMessageContent(MailRecord email)
