@@ -143,7 +143,7 @@
             bool status = e.Error == null;
             if (!status)
             {
-                HandleMailError(email, e.Error.Message, e.Error.StackTrace);
+                HandleMailError(email, (e.Error.InnerException != null ? e.Error.InnerException.Message : e.Error.Message), e.Error.StackTrace);
             }
             else
             {
