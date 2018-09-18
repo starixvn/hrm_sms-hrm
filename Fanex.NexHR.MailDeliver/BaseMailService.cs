@@ -167,6 +167,22 @@
             }
         }
 
+        private static void GetMailAddressFromString(string mailString, InternetAddressList mails)
+        {
+            if (!string.IsNullOrWhiteSpace(mailString))
+            {
+                var emails = RemoveDoubleComma(mailString);
+                var mailArrs = emails.Split(';');
+                foreach (var mail in mailArrs)
+                {
+                    if (!string.IsNullOrEmpty(mail))
+                    {
+                        mails.Add(new MailboxAddress(mail));
+                    }
+                }
+            }
+        }
+
         private static string RemoveDoubleComma(string mails)
         {
             var emails = mails;
@@ -187,7 +203,8 @@
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(email.MailSetting.Username));
-            message.To.Add(new MailboxAddress(email.MailTo));
+            GetMailAddressFromString(email.MailTo, message.To);
+
             message.Subject = email.Subject;
             message.Priority = (MessagePriority)email.Priority;
 
