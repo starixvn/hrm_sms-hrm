@@ -152,6 +152,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailController.cs" />
     <Compile Include="Export\BaseExportController.cs" />
     <Compile Include="Export\ExportAttendanceController.cs" />
     <Compile Include="Export\ExportCalendarController.cs" />

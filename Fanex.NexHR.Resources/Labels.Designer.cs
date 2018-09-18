@@ -3742,6 +3742,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test Send Mail.
+        /// </summary>
+        public static string TestSendMail {
+            get {
+                return ResourceManager.GetString("TestSendMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thu.
         /// </summary>
         public static string Thu {

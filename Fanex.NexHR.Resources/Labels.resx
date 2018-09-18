@@ -1572,4 +1572,7 @@
   <data name="OutOfControlReason" xml:space="preserve">
     <value>Out Of Control Reason</value>
   </data>
+  <data name="TestSendMail" xml:space="preserve">
+    <value>Test Send Mail</value>
+  </data>
 </root>
