@@ -684,7 +684,7 @@
                 dates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
             }
 
-            return Json(dates, JsonRequestBehavior.AllowGet);
+            return Json(dates.Select(t=>t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetNewEmployeeCode()
