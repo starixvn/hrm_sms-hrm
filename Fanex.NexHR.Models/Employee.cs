@@ -179,7 +179,7 @@
 
             set
             {
-                Roles = value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList();
+                Roles = value != null ? value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList() : new List<SystemRoleModel>();
             }
         }
 
