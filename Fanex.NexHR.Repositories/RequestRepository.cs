@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -8,10 +12,6 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories.Interfaces;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     public class RequestRepository : IRequestRepository
     {

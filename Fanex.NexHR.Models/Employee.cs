@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using Fanex.NexHR.Core.Attributes;
-    using Fanex.NexHR.Core.Enums;
-    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using Fanex.NexHR.Core.Attributes;
+    using Fanex.NexHR.Core.Enums;
+    using Nexus.RoleManagement.Services;
 
     public class Employee : EntityBase<int>
     {
@@ -179,7 +179,11 @@
 
             set
             {
-                Roles = value != null ? value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList() : new List<SystemRoleModel>();
+                
+                {
+Roles = value != null ? value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList() : new List<SystemRoleModel>();
+
+                }
             }
         }
 

@@ -125,10 +125,7 @@
                 emailModel = GetMailApprover(relatedPeople);
             }
 
-            if (relatedPeople.EmailSetting.AllowSendVerifier
-                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
-                && (string.IsNullOrWhiteSpace(emailModel.SendTo)
-                || !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase)))
+            if (CheckGetMailVerifier(relatedPeople, emailModel.SendTo))
             {
                 emailModel = GetMailVerifier(relatedPeople, emailModel);
             }
@@ -151,6 +148,17 @@
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             return emailModel;
+        }
+
+        private static bool CheckGetMailVerifier(RequestRelatedPeopleModel relatedPeople, string sendTo)
+        {
+            bool isNotExistVerifier = (relatedPeople.Verifier != null && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email));
+            bool isVerifierDifferenceApprover = (relatedPeople.Verifier != null && relatedPeople.Approver != null) &&
+                !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
+            return relatedPeople.EmailSetting.AllowSendVerifier
+                   && isNotExistVerifier
+                   && (string.IsNullOrWhiteSpace(sendTo))
+                   || isVerifierDifferenceApprover;
         }
 
         protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
