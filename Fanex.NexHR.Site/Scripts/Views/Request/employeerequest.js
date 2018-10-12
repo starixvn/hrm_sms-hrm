@@ -373,7 +373,7 @@ $(function () {
     var dontBlock = false;
 
     $(document).ready(function () {
-        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
 
         $('#TeamId').multiselect();
 

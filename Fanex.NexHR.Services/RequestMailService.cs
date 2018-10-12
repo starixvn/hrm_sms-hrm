@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
+    using System.Configuration;
+    using System.Linq;
+    using System.Web;
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
@@ -13,10 +17,6 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
-    using System;
-    using System.Configuration;
-    using System.Linq;
-    using System.Web;
 
     public class RequestMailService : BaseService, IRequestMailService
     {
@@ -104,6 +104,7 @@
                 RequestId = requestId
             };
             RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
+
             if (request != null)
             {
                 var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
