@@ -6,7 +6,6 @@
     using System.Linq;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
-    using Nexus.RoleManagement.Services;
 
     public class Employee : EntityBase<int>
     {

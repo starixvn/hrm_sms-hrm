@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
@@ -10,11 +13,7 @@
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class LateInEarlyOutController : BaseController
     {
@@ -23,21 +22,16 @@
         private readonly ICommandService commandService;
         private readonly IEmployeeService employeeService;
 
-        public LateInEarlyOutController()
-            : this(null, null, null, null)
-        {
-        }
-
         public LateInEarlyOutController(
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
             ICommandService commandService,
             IEmployeeService employeeService)
         {
-            this.lateInEarlyOutRequestService = lateInEarlyOutRequestService ?? new LateInEarlyOutRequestService();
-            this.requestService = requestService ?? new RequestService();
-            this.commandService = commandService ?? new CommandService();
-            this.employeeService = employeeService ?? new EmployeeService();
+            this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
+            this.requestService = requestService;
+            this.commandService = commandService;
+            this.employeeService = employeeService;
         }
 
         public ActionResult Create(DateTime? suggestedDate, bool? isLateIn)

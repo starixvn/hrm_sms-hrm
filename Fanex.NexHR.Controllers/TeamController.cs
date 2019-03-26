@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Department;
@@ -12,13 +15,9 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using Core.Services;
-    using Core.Models;
 
     public class TeamController : BaseController
     {
@@ -26,19 +25,14 @@
         private readonly IDepartmentService departmentService;
         private readonly ICommandService commandService;
 
-        public TeamController()
-            : this(null, null, null)
-        {
-        }
-
         public TeamController(
             ITeamService teamService,
             IDepartmentService departmentService,
             ICommandService commandService)
         {
-            this.teamService = teamService ?? new TeamService();
-            this.departmentService = departmentService ?? new DepartmentService();
-            this.commandService = commandService ?? new CommandService();
+            this.teamService = teamService;
+            this.departmentService = departmentService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]

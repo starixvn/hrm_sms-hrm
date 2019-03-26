@@ -1,31 +1,22 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Fanex.NexHR.Criteria.Message;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels;
-    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Message;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
 
     [Authorize]
     public class UIController : BaseController
     {
         private readonly IMessageService messageService;
 
-        public UIController()
-            : this(null)
-        {
-        }
-
         public UIController(IMessageService messageService)
         {
-            this.messageService = messageService ?? new MessageService();
+            this.messageService = messageService;
         }
 
         [ChildActionOnly]

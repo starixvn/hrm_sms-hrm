@@ -1,8 +1,13 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.LeaveType;
@@ -13,13 +18,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class LeaveController : BaseController
     {
@@ -30,11 +29,6 @@
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly ILeaveTypeService leaveTypeService;
 
-        public LeaveController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public LeaveController(
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
@@ -43,12 +37,12 @@
             IWorkingCalendarService workingCalendarService,
             ILeaveTypeService leaveTypeService)
         {
-            this.leaveRequestService = leaveRequestService ?? new LeaveRequestService();
-            this.requestService = requestService ?? new RequestService();
-            this.commandService = commandService ?? new CommandService();
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            this.leaveTypeService = leaveTypeService ?? new LeaveTypeService();
+            this.leaveRequestService = leaveRequestService;
+            this.requestService = requestService;
+            this.commandService = commandService;
+            this.employeeService = employeeService;
+            this.workingCalendarService = workingCalendarService;
+            this.leaveTypeService = leaveTypeService;
         }
 
         public ActionResult Create()

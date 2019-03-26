@@ -1,13 +1,11 @@
 ﻿namespace Fanex.NexHR.Controllers.Export
 {
-    using Services.Interfaces;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using ViewModels.Report;
     using Criteria.Report;
     using Models.Report;
     using Services;
-    using Services.ExportExcel.WeekendLeave;
+    using ViewModels.Report;
 
     public class ExportWeekendLeaveController : BaseController
     {
@@ -15,19 +13,14 @@
         private readonly IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService;
         private readonly IExportWeekendLeaveDetailService exportWeekendLeaveDetailService;
 
-        public ExportWeekendLeaveController()
-            : this(null, null, null)
-        {
-        }
-
         public ExportWeekendLeaveController(
-                            IReportService reportService,
-                            IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
-                            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
+            IReportService reportService,
+            IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
+            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
         {
-            this.reportService = reportService ?? new ReportService();
-            this.exportWeekendLeaveSummaryService = exportWeekendLeaveSummaryService ?? new ExportWeekendLeaveSummaryService();
-            this.exportWeekendLeaveDetailService = exportWeekendLeaveDetailService ?? new ExportWeekendLeaveDetailService();
+            this.reportService = reportService;
+            this.exportWeekendLeaveSummaryService = exportWeekendLeaveSummaryService;
+            this.exportWeekendLeaveDetailService = exportWeekendLeaveDetailService;
         }
 
         public ActionResult ExportWeekendLeaveSummaryReport(WeekendLeaveViewModel model)

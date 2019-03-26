@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Repositories.Interfaces
+﻿namespace Fanex.NexHR.Repositories
 {
     using System;
     using System.Collections.Generic;

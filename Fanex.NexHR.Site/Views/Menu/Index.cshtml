@@ -1,4 +1,5 @@
-﻿@using Nexus.RoleManagement.Services;
+﻿@using Fanex.NexHR.Models;
+@using Fanex.NexHR.ViewModels;
 
 @model IEnumerable<MenuViewModel>
 @{
@@ -47,7 +48,7 @@
             {
                 <tr>
                     <td class="rowdivider highlight left" colspan="@totalColumn">
-                        <a href="@Url.Action("edit", "menu", new { Id = menu.MenuId })"> 
+                        <a href="@Url.Action("edit", "menu", new { Id = menu.MenuId })">
                             @(menu.DisplayOrder + ". " + menu.Text)
                         </a>
                     </td>

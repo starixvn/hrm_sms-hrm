@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
     using Fanex.NexHR.Models;
 

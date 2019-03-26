@@ -1,12 +1,12 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel.WeekendLeave
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using Criteria.Report;
-    using Models.Report;
     using System.Web;
-    using Resources;
     using Core;
-    using Interfaces;
+    using Criteria.Report;
+    using Fanex.NexHR.Core.Constants;
+    using Models.Report;
+    using Resources;
 
     public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
     {

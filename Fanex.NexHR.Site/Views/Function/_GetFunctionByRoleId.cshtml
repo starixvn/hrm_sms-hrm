@@ -1,6 +1,7 @@
-﻿@using Nexus.RoleManagement.Services;
+﻿@using Fanex.NexHR.Models;
 
-@model IEnumerable<FunctionViewModel>
+@model IEnumerable<FunctionModel>
+
 @{
     var hasPermission = (bool)ViewBag.HasPermission;
 }
@@ -18,7 +19,7 @@
     @if (Model.Any())
     {
         <tbody>
-            @foreach (FunctionViewModel function in Model)
+            @foreach (FunctionModel function in Model)
             {
                 <tr>
                     <td class="align-left">

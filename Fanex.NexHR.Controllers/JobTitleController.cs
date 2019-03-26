@@ -1,32 +1,28 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core.Enums;
     using Core.Models;
     using Core.Services;
-    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using Resources;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class JobTitleController : BaseController
     {
         private readonly ILookupDataService lookupDataService;
         private readonly ICommandService commandService;
 
-        public JobTitleController()
-            : this(null, null)
+        public JobTitleController(
+            ILookupDataService lookupDataService,
+            ICommandService commandService)
         {
-        }
-
-        public JobTitleController(ILookupDataService lookupDataService, ICommandService commandService)
-        {
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
-            this.commandService = commandService ?? new CommandService();
+            this.lookupDataService = lookupDataService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]

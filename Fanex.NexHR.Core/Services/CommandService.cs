@@ -9,14 +9,9 @@
     {
         private readonly IBaseRepository repository;
 
-        public CommandService()
-            : this(null)
-        {
-        }
-
         public CommandService(IBaseRepository repository)
         {
-            this.repository = repository ?? new BaseRepository();
+            this.repository = repository;
         }
 
         public CommandResult Insert(ICriteria criteria, bool hasGetOutputParams = false)

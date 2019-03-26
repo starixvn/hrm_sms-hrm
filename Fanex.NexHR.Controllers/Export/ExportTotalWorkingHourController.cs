@@ -1,30 +1,24 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Web.Mvc;
     using Criteria;
     using Criteria.Report;
     using Models;
     using NPOI.HSSF.UserModel;
     using Services;
     using Services.ExportExcel;
-    using Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Web.Mvc;
     using ViewModels;
 
     public class ExportTotalWorkingHourController : BaseController
     {
         private readonly IReportService reportService;
 
-        public ExportTotalWorkingHourController()
-            : this(null)
-        {
-        }
-
         public ExportTotalWorkingHourController(IReportService reportService)
         {
-            this.reportService = reportService ?? new ReportService();
+            this.reportService = reportService;
         }
 
         public ActionResult TotalWorkingHours(ReportFilterViewModel workingHoursModel)

@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
@@ -11,11 +14,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class CheckInOutController : BaseController
     {
@@ -25,11 +24,6 @@
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
 
-        public CheckInOutController()
-            : this(null, null, null, null, null)
-        {
-        }
-
         public CheckInOutController(
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
@@ -37,11 +31,11 @@
             IEmployeeService employeeService,
             IShiftService shiftService)
         {
-            this.checkInOutRequestService = checkInOutRequestService ?? new CheckInOutRequestService();
-            this.requestService = requestService ?? new RequestService();
-            this.commandService = commandService ?? new CommandService();
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.shiftService = shiftService ?? new ShiftService();
+            this.checkInOutRequestService = checkInOutRequestService;
+            this.requestService = requestService;
+            this.commandService = commandService;
+            this.employeeService = employeeService;
+            this.shiftService = shiftService;
         }
 
         [HttpGet]

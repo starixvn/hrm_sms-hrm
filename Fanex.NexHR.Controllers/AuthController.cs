@@ -1,31 +1,27 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Text;
+    using System.Web.Mvc;
+    using System.Web.Security;
     using Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Employee;
-    using System;
-    using System.Text;
-    using System.Web.Mvc;
-    using System.Web.Security;
 
     public class AuthController : Controller
     {
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
-        public AuthController()
-            : this(null, null)
+        public AuthController(
+            IEmployeeService employeeService,
+            ICommandService commandService)
         {
-        }
-
-        public AuthController(IEmployeeService employeeService, ICommandService commandService)
-        {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService;
+            this.commandService = commandService;
         }
 
         [HttpGet]

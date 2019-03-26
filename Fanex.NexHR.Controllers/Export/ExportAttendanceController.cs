@@ -1,25 +1,22 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Criteria.Report;
-    using Services;
-    using Services.Interfaces;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Criteria.Report;
+    using Services;
     using ViewModels;
 
-    public class ExportAttendanceController: BaseExportController
+    public class ExportAttendanceController : BaseExportController
     {
         private readonly IReportService reportService;
         private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
 
-        public ExportAttendanceController(): this(null, null)
+        public ExportAttendanceController(
+            IReportService reportService,
+            IExportExcelAttendanceReportService exportExcelAttendanceReportService)
         {
-        }
-
-        public ExportAttendanceController(IReportService reportService, IExportExcelAttendanceReportService exportExcelAttendanceReportService)
-        {
-            this.reportService = reportService ?? new ReportService();
-            this.exportExcelAttendanceReportService = exportExcelAttendanceReportService ?? new ExportExcelAttendanceReportService();
+            this.reportService = reportService;
+            this.exportExcelAttendanceReportService = exportExcelAttendanceReportService;
         }
 
         public ActionResult Attendance(EmployeeAttendanceViewModel model)

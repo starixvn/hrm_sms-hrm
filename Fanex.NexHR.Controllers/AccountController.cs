@@ -3,7 +3,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
@@ -11,29 +15,20 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Employee;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using Core.Services;
-    using Core.Models;
 
     public class AccountController : BaseController
     {
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
-        public AccountController()
-            : this(null, null)
-        {
-        }
-
         public AccountController(
             IEmployeeService employeeService,
             ICommandService commandService)
         {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService;
+            this.commandService = commandService;
         }
 
         public ActionResult Index()

@@ -4,7 +4,6 @@ using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartup(typeof(Fanex.NexHR.Site.Startup))]
-
 namespace Fanex.NexHR.Site
 {
     public static class Startup

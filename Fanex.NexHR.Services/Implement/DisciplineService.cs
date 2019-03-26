@@ -1,27 +1,24 @@
-﻿namespace Fanex.NexHR.Services.Implement
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Core.Services;
     using Criteria.Discipline;
-    using Interfaces;
+    using Fanex.NexHR.Repositories;
     using Models;
     using Models.Discipline;
-    using Repositories;
-    using Repositories.Interfaces;
-    using Core.Services;
 
-    public class DisciplineService : BaseService, IDisciplineService
+    public class DisciplineService : IDisciplineService
     {
         private readonly IDisciplineRepository disciplineRepository;
+        private readonly IBaseService baseService;
 
-        public DisciplineService()
-            : this(null)
+        public DisciplineService(
+            IDisciplineRepository disciplineRepository,
+            IBaseService baseService)
         {
-        }
-
-        public DisciplineService(IDisciplineRepository disciplineRepository)
-        {
-            this.disciplineRepository = disciplineRepository ?? new DisciplineRepository();
+            this.disciplineRepository = disciplineRepository;
+            this.baseService = baseService;
         }
 
         public IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria)
@@ -50,32 +47,27 @@
 
         public IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
         {
-            IList<Employee> employees = GetData<Employee>(criteria).ToList();
-            return employees;
+            return baseService.GetData<Employee>(criteria).ToList();
         }
 
         public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)
         {
-            IList<OtherDisciplineModel> otherDisciplines = GetData<OtherDisciplineModel>(criteria).ToList();
-            return otherDisciplines;
+            return baseService.GetData<OtherDisciplineModel>(criteria).ToList();
         }
 
         public IList<OtherDisciplineModel> GetWeekendLeave(GetWeekendLeaveOfEmployeeCriteria criteria)
         {
-            IList<OtherDisciplineModel> weekendLeaves = GetData<OtherDisciplineModel>(criteria).ToList();
-            return weekendLeaves;
+            return baseService.GetData<OtherDisciplineModel>(criteria).ToList();
         }
 
         public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)
         {
-            IList<DisciplineTypeModel> disciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
-            return disciplineTypes;
+            return baseService.GetData<DisciplineTypeModel>(criteria).ToList();
         }
 
         public IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria)
         {
-            IList<DisciplineTypeModel> otherDisciplineTypes = GetData<DisciplineTypeModel>(criteria).ToList();
-            return otherDisciplineTypes;
+            return baseService.GetData<DisciplineTypeModel>(criteria).ToList();
         }
     }
 }

@@ -1,31 +1,28 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Core.Services;
-    using Criteria.Holidays;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
-    using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Core.Services;
+    using Criteria.Holidays;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Web.Providers;
 
     public class HolidayController : BaseController
     {
         private readonly IHolidayService holidayService;
         private readonly ICommandService commandService;
 
-        public HolidayController()
-            : this(null, null)
+        public HolidayController(
+            IHolidayService holidayService,
+            ICommandService commandService)
         {
-        }
-
-        public HolidayController(IHolidayService holidayService, ICommandService commandService)
-        {
-            this.holidayService = holidayService ?? new HolidayService();
-            this.commandService = commandService ?? new CommandService();
+            this.holidayService = holidayService;
+            this.commandService = commandService;
         }
 
         [HttpGet]

@@ -8,7 +8,12 @@
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
+    using Criteria.Calendar;
+    using Criteria.Request;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria;
@@ -21,17 +26,11 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
-    using Core.Services;
-    using Core.Models;
-    using Criteria.Request;
-    using Criteria.Calendar;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class EmployeeController : BaseController
@@ -43,11 +42,6 @@
         private readonly ICommandService commandService;
         private readonly IRoleService roleService;
 
-        public EmployeeController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public EmployeeController(
             IEmployeeService employeeService,
             ITeamService teamService,
@@ -56,12 +50,12 @@
             ICommandService commandService,
             IRoleService roleService)
         {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.teamService = teamService ?? new TeamService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
-            this.shiftService = shiftService ?? new ShiftService();
-            this.commandService = commandService ?? new CommandService();
-            this.roleService = roleService ?? new RoleService();
+            this.employeeService = employeeService;
+            this.teamService = teamService;
+            this.lookupDataService = lookupDataService;
+            this.shiftService = shiftService;
+            this.commandService = commandService;
+            this.roleService = roleService;
         }
 
         public ActionResult Index()
@@ -684,7 +678,7 @@
                 dates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
             }
 
-            return Json(dates.Select(t=>t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior.AllowGet);
+            return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetNewEmployeeCode()

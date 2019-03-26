@@ -2,15 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.ViewModels;
-    using Models.Request;
     using Models;
+    using Models.Request;
 
     public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
     {

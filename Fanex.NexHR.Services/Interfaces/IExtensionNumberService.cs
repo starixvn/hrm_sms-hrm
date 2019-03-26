@@ -1,8 +1,8 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Models;
-    using System.Collections.Generic;
 
     public interface IExtensionNumberService
     {

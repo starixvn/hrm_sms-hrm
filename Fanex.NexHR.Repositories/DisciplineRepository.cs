@@ -1,13 +1,12 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models.Discipline;
-    using Fanex.NexHR.Repositories.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using Fanex.NexHR.Models.Discipline;
 
     public class DisciplineRepository : IDisciplineRepository
     {

@@ -1,8 +1,12 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
@@ -10,12 +14,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class KeepInViewController : BaseController
     {
@@ -25,11 +24,6 @@
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
 
-        public KeepInViewController()
-            : this(null, null, null, null, null)
-        {
-        }
-
         public KeepInViewController(
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
@@ -37,11 +31,11 @@
             IShiftService shiftService,
             IEmployeeService employeeService)
         {
-            this.keepInViewRequestService = keepInViewRequestService ?? new KeepInViewRequestService();
-            this.requestService = requestService ?? new RequestService();
-            this.commandService = commandService ?? new CommandService();
-            this.shiftService = shiftService ?? new ShiftService();
-            this.employeeService = employeeService ?? new EmployeeService();
+            this.keepInViewRequestService = keepInViewRequestService;
+            this.requestService = requestService;
+            this.commandService = commandService;
+            this.shiftService = shiftService;
+            this.employeeService = employeeService;
         }
 
         public ActionResult Create()

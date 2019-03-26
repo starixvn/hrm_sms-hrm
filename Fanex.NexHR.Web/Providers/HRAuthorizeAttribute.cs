@@ -3,8 +3,8 @@
     using System;
     using System.Web;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
-    using Nexus.RoleManagement.Services;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class HRAuthorizeAttribute : AuthorizeAttribute

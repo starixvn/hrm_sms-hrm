@@ -1,23 +1,21 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Core;
-    using Core.Enums;
-    using Criteria.Request;
-    using Models.Request;
-    using Nexus.RoleManagement.Services;
-    using NPOI.HSSF.UserModel;
-    using Services;
-    using Services.ExportExcel;
-    using Services.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Core;
+    using Core.Enums;
+    using Criteria.Request;
+    using Criteria.Team;
+    using Fanex.NexHR.Core.Constants;
+    using Models;
+    using Models.Request;
+    using NPOI.HSSF.UserModel;
+    using Resources;
+    using Services;
+    using Services.ExportExcel;
     using ViewModels.Request;
     using Web.Providers;
-    using Models;
-    using Criteria.Team;
-    using System.Linq;
-    using Resources;
 
     public class ExportRequestController : BaseExportController
     {
@@ -25,15 +23,14 @@
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
 
-        public ExportRequestController() : this(null, null, null)
+        public ExportRequestController(
+            IExportExcelService exportExcelService,
+            IRequestService requestService,
+            ITeamService teamService)
         {
-        }
-
-        public ExportRequestController(IExportExcelService exportExcelService, IRequestService requestService, ITeamService teamService)
-        {
-            this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            this.requestService = requestService ?? new RequestService();
-            this.teamService = teamService ?? new TeamService();
+            this.exportExcelService = exportExcelService;
+            this.requestService = requestService;
+            this.teamService = teamService;
         }
 
         [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]

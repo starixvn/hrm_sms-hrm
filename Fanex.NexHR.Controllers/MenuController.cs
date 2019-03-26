@@ -2,23 +2,25 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Menu;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
 
     public class MenuController : BaseController
     {
         private readonly IMenuService menuService;
         private readonly IFunctionService functionService;
 
-        public MenuController()
-            : this(null, null)
+        public MenuController(
+            IMenuService menuService,
+            IFunctionService functionService)
         {
-        }
-
-        public MenuController(IMenuService menuService, IFunctionService functionService)
-        {
-            this.menuService = menuService ?? new MenuService();
-            this.functionService = functionService ?? new FunctionService();
+            this.menuService = menuService;
+            this.functionService = functionService;
         }
 
         [HttpGet]

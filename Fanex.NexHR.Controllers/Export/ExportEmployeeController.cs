@@ -1,11 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria.Employee;
     using Models;
     using Services;
-    using Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using ViewModels;
 
     public class ExportEmployeeController : BaseExportController
@@ -13,14 +12,12 @@
         private readonly IEmployeeService employeeService;
         private readonly IExportExcelEmployeeInfoService exportExcelEmployeeInfoService;
 
-        public ExportEmployeeController(): this(null, null)
+        public ExportEmployeeController(
+            IEmployeeService employeeService,
+            IExportExcelEmployeeInfoService exportExcelEmployeeInfoService)
         {
-        }
-
-        public ExportEmployeeController(IEmployeeService employeeService, IExportExcelEmployeeInfoService exportExcelEmployeeInfoService)
-        {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.exportExcelEmployeeInfoService = exportExcelEmployeeInfoService ?? new ExportExcelEmployeeInfoService();
+            this.employeeService = employeeService;
+            this.exportExcelEmployeeInfoService = exportExcelEmployeeInfoService;
         }
 
         public ActionResult EmployeeBasicInfo(UserManagementViewModel model)

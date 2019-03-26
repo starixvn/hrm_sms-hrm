@@ -1,31 +1,26 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria;
     using Criteria.Report;
     using Models;
     using Services;
-    using Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
-    public class ExportManpowerController: BaseExportController
+    public class ExportManpowerController : BaseExportController
     {
         private readonly IReportService reportService;
         private readonly IExportExcelManpowerCategoryService exportExcelManpowerCategoryService;
         private readonly IExportExcelManpowerService exportExcelManpowerService;
-
-        public ExportManpowerController(): this(null, null, null)
-        {
-        }
 
         public ExportManpowerController(
             IReportService reportService,
             IExportExcelManpowerCategoryService exportExcelManpowerCategoryService,
             IExportExcelManpowerService exportExcelManpowerService)
         {
-            this.reportService = reportService ?? new ReportService();
-            this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService ?? new ExportExcelManpowerCategoryService();
-            this.exportExcelManpowerService = exportExcelManpowerService ?? new ExportExcelManpowerService();
+            this.reportService = reportService;
+            this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService;
+            this.exportExcelManpowerService = exportExcelManpowerService;
         }
 
         public ActionResult Manpower(int year)

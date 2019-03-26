@@ -7,7 +7,6 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.ViewModels;
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository

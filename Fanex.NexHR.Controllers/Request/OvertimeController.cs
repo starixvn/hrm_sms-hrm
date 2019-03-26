@@ -7,23 +7,22 @@
     using System.Web.Mvc;
     using Core;
     using Core.Enums;
+    using Core.Models;
+    using Core.Services;
     using Criteria;
     using Criteria.Lookup;
     using Criteria.Overtime;
     using Criteria.Request;
     using Criteria.Supervisor;
     using Criteria.Team;
+    using Fanex.NexHR.Core.Constants;
     using Hangfire;
     using Models;
     using Models.Request;
     using Models.Supervisor;
-    using Nexus.RoleManagement.Services;
     using Services;
-    using Services.Interfaces;
     using ViewModels;
     using Web.Providers;
-    using Core.Services;
-    using Core.Models;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class OvertimeController : BaseController
@@ -35,11 +34,6 @@
         private readonly IOvertimeRequestService overtimeService;
         private readonly ICommandService commandService;
 
-        public OvertimeController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public OvertimeController(
             IEmployeeService employeeService,
             IRequestService requestService,
@@ -48,12 +42,12 @@
             ILookupDataService lookupDataService,
             ICommandService commandService)
         {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.requestService = requestService ?? new RequestService();
-            this.teamService = teamService ?? new TeamService();
-            this.overtimeService = overtimeService ?? new OvertimeRequestService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
-            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService;
+            this.requestService = requestService;
+            this.teamService = teamService;
+            this.overtimeService = overtimeService;
+            this.lookupDataService = lookupDataService;
+            this.commandService = commandService;
         }
 
         [HttpGet]

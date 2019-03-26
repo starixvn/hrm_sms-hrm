@@ -1,23 +1,23 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class AnnualLeaveBalanceController : BaseController
     {
@@ -26,21 +26,16 @@
         private readonly IReportService reportService;
         private readonly ICommandService commandService;
 
-        public AnnualLeaveBalanceController()
-            : this(null, null, null, null)
-        {
-        }
-
         public AnnualLeaveBalanceController(
             IEmployeeService employeeService,
             ITeamService teamService,
             IReportService reportService,
             ICommandService commandService)
         {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.teamService = teamService ?? new TeamService();
-            this.reportService = reportService ?? new ReportService();
-            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService;
+            this.teamService = teamService;
+            this.reportService = reportService;
+            this.commandService = commandService;
         }
 
         [ValidateInput(false)]

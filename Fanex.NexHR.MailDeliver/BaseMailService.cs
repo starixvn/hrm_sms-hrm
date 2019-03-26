@@ -1,28 +1,28 @@
 ﻿namespace Fanex.NexHR.MailDeliver
 {
-    using Core.Services;
-    using Criteria;
-    using MailKit.Net.Smtp;
-    using MailKit.Security;
-    using MimeKit;
     using System;
     using System.ComponentModel;
     using System.Configuration;
     using System.Net.Mail;
     using System.Text;
     using System.Text.RegularExpressions;
+    using Core.Services;
+    using Criteria;
+    using MailKit.Net.Smtp;
+    using MailKit.Security;
+    using MimeKit;
 
-    public class BaseMailService
+    public class BaseMailService : IBaseMailService
     {
         private readonly BaseService baseService;
         private readonly ICommandService commandService;
 
-        public BaseMailService() : this(null, null) { }
-
-        public BaseMailService(BaseService baseService, ICommandService commandService)
+        public BaseMailService(
+            BaseService baseService,
+            ICommandService commandService)
         {
-            this.baseService = baseService ?? new BaseService();
-            this.commandService = commandService ?? new CommandService();
+            this.baseService = baseService;
+            this.commandService = commandService;
         }
 
         public bool SendEmailAsync(MailRecord email)
@@ -95,8 +95,10 @@
             var isSucessfull = false;
             try
             {
-                var msg = new MailMessage();
-                msg.From = new MailAddress(email.MailSetting.Username);
+                var msg = new MailMessage
+                {
+                    From = new MailAddress(email.MailSetting.Username)
+                };
                 if (!string.IsNullOrEmpty(email.MailTo))
                 {
                     GetMailFromString(email.MailTo, msg.To);
@@ -133,7 +135,7 @@
                 HandleMailError(email, ex.Message, ex.StackTrace);
                 throw;
             }
-           
+
             return isSucessfull;
         }
 
@@ -196,7 +198,7 @@
                 emails = emails.Replace(";;", ";");
             }
 
-            return emails.TrimEnd(new [] { ',', ';' });
+            return emails.TrimEnd(new[] { ',', ';' });
         }
 
         private MimeMessage GetMessageContent(MailRecord email)

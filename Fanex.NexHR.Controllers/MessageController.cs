@@ -1,18 +1,18 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Web.Mvc;
 
     public class MessageController : BaseController
     {
@@ -21,21 +21,16 @@
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
-        public MessageController()
-            : this(null, null, null, null)
-        {
-        }
-
         public MessageController(
             IMessageService messageService,
             ITeamService teamService,
             IEmployeeService employeeService,
             ICommandService commandService)
         {
-            this.messageService = messageService ?? new MessageService();
-            this.teamService = teamService ?? new TeamService();
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.commandService = commandService ?? new CommandService();
+            this.messageService = messageService;
+            this.teamService = teamService;
+            this.employeeService = employeeService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Message)]

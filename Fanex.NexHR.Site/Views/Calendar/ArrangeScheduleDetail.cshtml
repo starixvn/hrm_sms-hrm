@@ -1,4 +1,6 @@
-﻿@model ScheduleViewModel
+﻿@using Fanex.NexHR.Core.Constants;
+
+@model ScheduleViewModel
 @{
     Layout = null;
     var isSARole = (bool)ViewBag.IsSARole;
@@ -171,7 +173,7 @@
     }
 
     <td class="shiftdate">
-        <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)" 
+        <input type="text" class="@classOfInput" value="@HttpUtility.HtmlDecode(valueOfInput)"
                data-date="@workingCalendarModel.WorkDate.ToDateMonthYearFormatedDate()" @dataShiftId @disabledAttribute />
     </td>
     if (hasPermission)

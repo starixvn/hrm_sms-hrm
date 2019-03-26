@@ -1,21 +1,20 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Implement;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Discipline;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class DisciplineController : BaseController
     {
@@ -23,19 +22,14 @@
         private readonly IDisciplineService disciplineService;
         private readonly ICommandService commandService;
 
-        public DisciplineController()
-            : this(null, null, null)
-        {
-        }
-
         public DisciplineController(
             ITeamService teamService,
             IDisciplineService disciplineService,
             ICommandService commandService)
         {
-            this.teamService = teamService ?? new TeamService();
-            this.disciplineService = disciplineService ?? new DisciplineService();
-            this.commandService = commandService ?? new CommandService();
+            this.teamService = teamService;
+            this.disciplineService = disciplineService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]

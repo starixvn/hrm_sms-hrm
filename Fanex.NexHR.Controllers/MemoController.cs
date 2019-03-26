@@ -1,20 +1,19 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Core.Models;
-    using Core.Services;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Memo;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.Memo;
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using Services;
     using System;
     using System.Configuration;
     using System.Web.Mvc;
+    using Core.Models;
+    using Core.Services;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Lookup;
+    using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.ViewModels.Memo;
+    using Fanex.NexHR.Web.Providers;
+    using Services;
 
     public class MemoController : BaseController
     {
@@ -26,19 +25,14 @@
 
         public MemoController(
             IMemoService memoService,
-            ILookupDataService lookupDataService = null,
-            IEmailService emailService = null,
-            ICommandService commandService = null)
+            ILookupDataService lookupDataService,
+            IEmailService emailService,
+            ICommandService commandService)
         {
-            this.memoService = memoService ?? new MemoService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
-            this.emailService = emailService ?? new EmailService();
-            this.commandService = commandService ?? new CommandService();
-        }
-
-        public MemoController()
-            : this(null, null, null, null)
-        {
+            this.memoService = memoService;
+            this.lookupDataService = lookupDataService;
+            this.emailService = emailService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Memo)]

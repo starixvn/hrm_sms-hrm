@@ -1,10 +1,9 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using Nexus.RoleManagement.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Security;
+    using Fanex.NexHR.Core.Enums;
 
     [Serializable]
     public class UserLoginModel
@@ -33,7 +32,7 @@
 
         public IEnumerable<SystemRoleModel> Roles { get; set; }
 
-        public IEnumerable<FunctionViewModel> Functions { get; set; }
+        public IEnumerable<FunctionModel> Functions { get; set; }
 
         public IEnumerable<MenuModel> Menus { get; set; }
 

@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria;
     using Criteria.AnnualLeave;
     using Criteria.Team;
@@ -7,10 +10,6 @@
     using NPOI.HSSF.UserModel;
     using Services;
     using Services.ExportExcel;
-    using Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using ViewModels;
 
     public class ExportLeaveSummaryController : BaseExportController
@@ -20,20 +19,16 @@
         private readonly ITeamService teamService;
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
 
-        public ExportLeaveSummaryController(): this(null, null, null, null)
-        {
-        }
-
         public ExportLeaveSummaryController(
             IReportService reportService,
             IExportExcelService exportExcelService,
             ITeamService teamService,
             IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService)
         {
-            this.reportService = reportService ?? new ReportService();
-            this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            this.teamService = teamService ?? new TeamService();
-            this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService ?? new ExportExcelUnpaidLeaveSummaryReportService();
+            this.reportService = reportService;
+            this.exportExcelService = exportExcelService;
+            this.teamService = teamService;
+            this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService;
         }
 
         public ActionResult AnnualLeaveSummary(LeaveSummaryViewModel model)

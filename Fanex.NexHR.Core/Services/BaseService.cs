@@ -1,20 +1,15 @@
 ﻿namespace Fanex.NexHR.Core.Services
 {
-    using Fanex.Data.Repository;
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
 
-    public class BaseService
+    public class BaseService : IBaseService
     {
         private readonly IDynamicRepository dynamicRepository;
 
-        public BaseService()
-            : this(null)
-        {
-        }
-
         public BaseService(IDynamicRepository dynamicRepository)
         {
-            this.dynamicRepository = dynamicRepository ?? new DynamicRepository();
+            this.dynamicRepository = dynamicRepository;
         }
 
         public virtual IEnumerable<T> GetData<T>(ICriteria criteria)

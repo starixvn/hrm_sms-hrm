@@ -1,8 +1,8 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models.Request;
-    using System.Collections.Generic;
 
     public interface IChangeShiftRequestService
     {

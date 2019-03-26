@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Nexus.RoleManagement.Services;
 
     public class SupervisorReportModel
     {

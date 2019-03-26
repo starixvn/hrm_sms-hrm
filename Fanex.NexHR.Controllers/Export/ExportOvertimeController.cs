@@ -1,15 +1,14 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Criteria;
     using Models;
     using NPOI.HSSF.UserModel;
     using Services;
     using Services.ExportExcel;
-    using Services.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
     using ViewModels;
 
     public class ExportOvertimeController : BaseExportController
@@ -19,20 +18,16 @@
         private readonly IExportExcelOvertimeReportService exportExcelOvertimeReportService;
         private readonly IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService;
 
-        public ExportOvertimeController(): this(null, null, null, null)
-        {
-        }
-
         public ExportOvertimeController(
             IExportExcelService exportExcelService,
             IOvertimeRequestService overtimeService,
             IExportExcelOvertimeReportService exportExcelOvertimeReportService,
             IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService)
         {
-            this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            this.overtimeService = overtimeService ?? new OvertimeRequestService();
-            this.exportExcelOvertimeReportService = exportExcelOvertimeReportService ?? new ExportExcelOvertimeReportService();
-            this.exportExcelYearlyOvertimeReportService = exportExcelYearlyOvertimeReportService ?? new ExportExcelYearlyOvertimeReportService();
+            this.exportExcelService = exportExcelService;
+            this.overtimeService = overtimeService;
+            this.exportExcelOvertimeReportService = exportExcelOvertimeReportService;
+            this.exportExcelYearlyOvertimeReportService = exportExcelYearlyOvertimeReportService;
         }
 
         public ActionResult OvertimeReport(OvertimeDetailReportViewModel model)

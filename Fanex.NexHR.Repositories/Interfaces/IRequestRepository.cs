@@ -1,9 +1,9 @@
-﻿namespace Fanex.NexHR.Repositories.Interfaces
+﻿namespace Fanex.NexHR.Repositories
 {
+    using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
-    using System.Collections.Generic;
 
     public interface IRequestRepository
     {

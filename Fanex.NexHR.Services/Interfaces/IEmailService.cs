@@ -1,7 +1,5 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
-    using System.Threading.Tasks;
-
     public interface IEmailService
     {
         void SendEmail(string senderEmail, string receiverEmail, string mailCC, string subject, string body);

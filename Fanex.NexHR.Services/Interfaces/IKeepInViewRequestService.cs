@@ -1,7 +1,6 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
     using Fanex.NexHR.Criteria.Request.KeepInView;
-    using Fanex.NexHR.Models;
 
     public interface IKeepInViewRequestService
     {

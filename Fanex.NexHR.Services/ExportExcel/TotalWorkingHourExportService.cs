@@ -1,15 +1,15 @@
 ﻿namespace Fanex.NexHR.Services.ExportExcel
 {
-    using Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
     using NPOI.HSSF.UserModel;
     using NPOI.HSSF.Util;
     using NPOI.SS.UserModel;
     using NPOI.SS.Util;
     using Resources;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class TotalWorkingHourExportService : IExportService

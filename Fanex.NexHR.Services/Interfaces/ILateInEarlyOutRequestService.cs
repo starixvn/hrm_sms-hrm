@@ -1,7 +1,6 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
     public interface ILateInEarlyOutRequestService

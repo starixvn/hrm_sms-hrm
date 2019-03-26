@@ -1,4 +1,6 @@
-﻿@model ShiftStatisticViewModel
+﻿@using Fanex.NexHR.Core.Constants;
+
+@model ShiftStatisticViewModel
 @{
     ViewBag.Title = @Labels.ShiftStatisticReport;
     var displayFrom = (Model.FromDate).ToString(Constants.DateFormat);

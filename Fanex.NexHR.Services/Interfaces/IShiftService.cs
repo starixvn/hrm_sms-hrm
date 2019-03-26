@@ -1,9 +1,9 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Models;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Models;
 
     public interface IShiftService
     {

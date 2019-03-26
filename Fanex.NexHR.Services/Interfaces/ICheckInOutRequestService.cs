@@ -1,8 +1,6 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
-    using Fanex.NexHR.Models.Request;
 
     public interface ICheckInOutRequestService
     {

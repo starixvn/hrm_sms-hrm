@@ -1,17 +1,16 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Web.Mvc;
     using Core.Enums;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Shifts;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Web.Mvc;
 
     public class ShiftController : BaseController
     {
@@ -20,15 +19,12 @@
         private readonly IShiftService shiftService;
         private readonly ICommandService commandService;
 
-        public ShiftController()
-            : this(null, null)
+        public ShiftController(
+            ICommandService commandService,
+            IShiftService shiftService)
         {
-        }
-
-        public ShiftController(ICommandService commandService, IShiftService shiftService)
-        {
-            this.commandService = commandService ?? new CommandService();
-            this.shiftService = shiftService ?? new ShiftService();
+            this.commandService = commandService;
+            this.shiftService = shiftService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]

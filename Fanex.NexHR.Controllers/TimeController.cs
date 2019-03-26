@@ -1,26 +1,22 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.ViewModels.Time;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Web.Mvc;
 
     public class TimeController : BaseController
     {
         private readonly ICommandService commandService;
 
-        public TimeController()
-            : this(null)
-        {
-        }
-
         public TimeController(ICommandService commandService)
         {
-            this.commandService = commandService ?? new CommandService();
+            this.commandService = commandService;
         }
 
         [HttpPost]

@@ -1,8 +1,13 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
@@ -13,14 +18,8 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class RequestController : BaseController
     {
@@ -31,11 +30,6 @@
         private readonly ITeamService teamService;
         private readonly ICommandService commandService;
 
-        public RequestController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public RequestController(
             IEmployeeService employeeService,
             IShiftService shiftService,
@@ -44,12 +38,12 @@
             ITeamService teamService,
             ICommandService commandService)
         {
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.shiftService = shiftService ?? new ShiftService();
-            this.requestService = requestService ?? new RequestService();
-            this.requestMailService = requestMailService ?? new RequestMailService();
-            this.teamService = teamService ?? new TeamService();
-            this.commandService = commandService ?? new CommandService();
+            this.employeeService = employeeService;
+            this.shiftService = shiftService;
+            this.requestService = requestService;
+            this.requestMailService = requestMailService;
+            this.teamService = teamService;
+            this.commandService = commandService;
         }
 
         [HttpPost]

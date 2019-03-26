@@ -3,10 +3,9 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Criteria.Discipline;
+    using Fanex.NexHR.Services;
     using Models.Discipline;
     using Services.ExportExcel;
-    using Services.Implement;
-    using Services.Interfaces;
     using ViewModels.Discipline;
 
     public class ExportDisciplineController : BaseController
@@ -15,19 +14,14 @@
         private readonly IExportDisciplineSummaryService exportDisciplineSummaryService;
         private readonly IExportDisciplineDetailService exportDisciplineDetailService;
 
-        public ExportDisciplineController()
-            : this(null, null, null)
-        {
-        }
-
         public ExportDisciplineController(
             IDisciplineService disciplineService,
             IExportDisciplineSummaryService exportDisciplineSummaryService,
             IExportDisciplineDetailService exportDisciplineDetailService)
         {
-            this.disciplineService = disciplineService ?? new DisciplineService();
-            this.exportDisciplineSummaryService = exportDisciplineSummaryService ?? new ExportDisciplineSummaryService();
-            this.exportDisciplineDetailService = exportDisciplineDetailService ?? new ExportDisciplineDetailService();
+            this.disciplineService = disciplineService;
+            this.exportDisciplineSummaryService = exportDisciplineSummaryService;
+            this.exportDisciplineDetailService = exportDisciplineDetailService;
         }
 
         public ActionResult ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)

@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
@@ -13,12 +17,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Request;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class ChangeShiftController : BaseController
     {
@@ -29,11 +28,6 @@
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
 
-        public ChangeShiftController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public ChangeShiftController(
             IChangeShiftRequestService changeShiftRequestService,
             IRequestService requestService,
@@ -42,12 +36,12 @@
             IShiftService shiftService,
             IWorkingCalendarService workingCalendarService)
         {
-            this.changeShiftRequestService = changeShiftRequestService ?? new ChangeShiftRequestService();
-            this.requestService = requestService ?? new RequestService();
-            this.commandService = commandService ?? new CommandService();
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.shiftService = shiftService ?? new ShiftService();
-            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
+            this.changeShiftRequestService = changeShiftRequestService;
+            this.requestService = requestService;
+            this.commandService = commandService;
+            this.employeeService = employeeService;
+            this.shiftService = shiftService;
+            this.workingCalendarService = workingCalendarService;
         }
 
         [HttpGet]

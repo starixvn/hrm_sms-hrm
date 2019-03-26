@@ -1,4 +1,6 @@
-﻿@using Nexus.RoleManagement.Services;
+﻿@using Fanex.NexHR.Models;
+@using Fanex.NexHR.ViewModels;
+
 @model MenuModel
 @{
     ViewBag.Title = "Create Menu";
@@ -52,9 +54,9 @@
             </div>
             <div class="input">
                 @{
-    var menus = new List<MenuViewModel>();
-    menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
-    menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
+                    var menus = new List<MenuViewModel>();
+                    menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
+                    menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
                 }
                 @Html.DropDownListFor(model => model.ParentId, new SelectList(menus, "MenuId", "Name"))
             </div>
@@ -65,8 +67,8 @@
             </div>
             <div class="input">
                 @{var functions = new List<FunctionModel>();
-                functions.Add(new FunctionModel { FunctionId = 0, Name = string.Empty });
-                functions.AddRange((List<FunctionModel>)ViewBag.Functions);
+                    functions.Add(new FunctionModel { FunctionId = 0, Name = string.Empty });
+                    functions.AddRange((List<FunctionModel>)ViewBag.Functions);
                 }
                 @Html.DropDownListFor(model => model.FunctionId, new SelectList(functions, "FunctionId", "Name"))
             </div>

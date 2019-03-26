@@ -1,31 +1,28 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Department;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
 
     public class DepartmentController : BaseController
     {
         private readonly IDepartmentService departmentService;
         private readonly ICommandService commandService;
 
-        public DepartmentController()
-            : this(null, null)
+        public DepartmentController(
+            IDepartmentService departmentService,
+            ICommandService commandService)
         {
-        }
-
-        public DepartmentController(IDepartmentService departmentService, ICommandService commandService)
-        {
-            this.departmentService = departmentService ?? new DepartmentService();
-            this.commandService = commandService ?? new CommandService();
+            this.departmentService = departmentService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]

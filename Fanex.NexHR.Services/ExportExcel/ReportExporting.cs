@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
@@ -24,7 +25,7 @@
             HSSFWorkbook hssfworkbook;
 
             var templatePath = HttpContext.Current.Server.MapPath(_HrRequestStatisticFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, System.IO.FileAccess.Read))
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
             }

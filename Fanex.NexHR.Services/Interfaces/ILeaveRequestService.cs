@@ -1,10 +1,10 @@
-﻿namespace Fanex.NexHR.Services.Interfaces
+﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using System.Collections.Generic;
 
     public interface ILeaveRequestService
     {

@@ -1,0 +1,19 @@
+﻿namespace Fanex.NexHR.Criteria.Function
+{
+    using Fanex.Data.Repository;
+
+    public class GetFunctionByUserIdCriteria : CriteriaBase
+    {
+        public int UserId { get; set; }
+
+        public override bool IsValid()
+        {
+            return UserId > 0;
+        }
+
+        public override string GetSettingKey()
+        {
+            return "Function_GetFunctionsByUserId";
+        }
+    }
+}

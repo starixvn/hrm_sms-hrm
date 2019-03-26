@@ -1,18 +1,18 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.ExtensionNumber;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
 
     public class ExtensionNoController : BaseController
     {
@@ -20,16 +20,14 @@
         private readonly ITeamService teamService;
         private readonly ICommandService commandService;
 
-        public ExtensionNoController()
-            : this(null, null, null)
+        public ExtensionNoController(
+            IExtensionNumberService extensionNumberService,
+            ITeamService teamService,
+            ICommandService commandService)
         {
-        }
-
-        public ExtensionNoController(IExtensionNumberService extensionNumberService, ITeamService teamService, ICommandService commandService)
-        {
-            this.extensionNumberService = extensionNumberService ?? new ExtensionNumberService();
-            this.teamService = teamService ?? new TeamService();
-            this.commandService = commandService ?? new CommandService();
+            this.extensionNumberService = extensionNumberService;
+            this.teamService = teamService;
+            this.commandService = commandService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ExtensionNumber)]

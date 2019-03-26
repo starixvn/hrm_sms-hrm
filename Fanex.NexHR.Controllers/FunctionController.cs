@@ -1,25 +1,28 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Criteria.Function;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Web.Providers;
 
     public class FunctionController : BaseController
     {
         private readonly IFunctionService functionService;
         private readonly IRoleService roleService;
 
-        public FunctionController()
-            : this(null, null)
+        public FunctionController(
+            IFunctionService functionService,
+            IRoleService roleService)
         {
-        }
-
-        public FunctionController(IFunctionService functionService, IRoleService roleService)
-        {
-            this.functionService = functionService ?? new FunctionService();
-            this.roleService = roleService ?? new RoleService();
+            this.functionService = functionService;
+            this.roleService = roleService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
@@ -34,7 +37,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
         public ActionResult GetFunctionByRoleId(int roleId)
         {
-            IEnumerable<FunctionViewModel> functions = functionService.GetFunctionsByRoleId(roleId);
+            IEnumerable<FunctionModel> functions = functionService.GetFunctionsByRoleId(roleId);
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host);
 
             return PartialView("_GetFunctionByRoleId", functions);
@@ -50,7 +53,7 @@
                 ModifiedBy = CurrentUser.Id
             };
 
-            Result commandResult = functionService.AssignFunctionsToRole(criteria);
+            CommandResult commandResult = functionService.AssignFunctionsToRole(criteria);
 
             return Json(new { success = commandResult.IsSuccessful });
         }

@@ -8,7 +8,6 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Repositories.Interfaces;
 
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {

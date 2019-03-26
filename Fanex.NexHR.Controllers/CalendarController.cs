@@ -1,8 +1,14 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Lookup;
@@ -12,15 +18,8 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.Web.Providers;
-    using Nexus.RoleManagement.Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web.Mvc;
 
     public class CalendarController : BaseController
     {
@@ -31,11 +30,6 @@
         private readonly IEmployeeService employeeService;
         private readonly ICommandService commandService;
 
-        public CalendarController()
-            : this(null, null, null, null, null, null)
-        {
-        }
-
         public CalendarController(
             IWorkingCalendarService workingCalendarService,
             ITeamService teamService,
@@ -44,12 +38,12 @@
             IEmployeeService employeeService,
             ICommandService commandService)
         {
-            this.workingCalendarService = workingCalendarService ?? new WorkingCalendarService();
-            this.teamService = teamService ?? new TeamService();
-            this.shiftService = shiftService ?? new ShiftService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
-            this.employeeService = employeeService ?? new EmployeeService();
-            this.commandService = commandService ?? new CommandService();
+            this.workingCalendarService = workingCalendarService;
+            this.teamService = teamService;
+            this.shiftService = shiftService;
+            this.lookupDataService = lookupDataService;
+            this.employeeService = employeeService;
+            this.commandService = commandService;
         }
 
         [HttpGet]

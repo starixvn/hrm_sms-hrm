@@ -14,19 +14,17 @@
     using Criteria.Supervisor;
     using Criteria.Team;
     using Criteria.Time;
+    using Fanex.NexHR.Core.Constants;
     using Models;
     using Models.Report;
     using Models.Supervisor;
-    using Nexus.RoleManagement.Services;
     using NPOI.HSSF.UserModel;
     using Services;
     using Services.ExportExcel;
-    using Services.Interfaces;
     using ViewModels;
     using ViewModels.Report;
     using ViewModels.Request;
     using Web.Providers;
-    using Resources;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -36,21 +34,16 @@
         private readonly IExportExcelService exportExcelService;
         private readonly ILookupDataService lookupDataService;
 
-        public ReportController()
-            : this(null, null, null, null)
-        {
-        }
-
         public ReportController(
             IReportService reportSevice,
             ITeamService teamService,
             IExportExcelService exportExcelService,
             ILookupDataService lookupDataService)
         {
-            this.reportService = reportSevice ?? new ReportService();
-            this.teamService = teamService ?? new TeamService();
-            this.exportExcelService = exportExcelService ?? new ExportExcelService();
-            this.lookupDataService = lookupDataService ?? new LookupDataService();
+            this.reportService = reportSevice;
+            this.teamService = teamService;
+            this.exportExcelService = exportExcelService;
+            this.lookupDataService = lookupDataService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]

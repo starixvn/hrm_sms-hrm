@@ -1,7 +1,10 @@
-﻿@model Employee
+﻿@using Fanex.NexHR.Models
+
+@model Employee
+
 @{
     ViewBag.Title = "Edit";
-    var roles = (IEnumerable<Nexus.RoleManagement.Services.SystemRoleModel>)ViewBag.Roles;
+    var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
     var roleItemList = roles.Select(i => new SelectListItem() { Text = i.RoleName, Value = i.RoleId.ToString() });
 }
 @section css{
@@ -610,4 +613,4 @@
             <input type="button" id="resetpassword" value="Reset Password" />
         </div>
     </div>
-                        }
+}

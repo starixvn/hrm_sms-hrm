@@ -1,11 +1,10 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Criteria.Supervisor;
     using Models.Supervisor;
     using Services;
-    using Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using ViewModels;
 
     public class ExportSupervisorController : BaseExportController
@@ -14,19 +13,14 @@
         private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
         private readonly IExportExcelSectionSupervisorService exportExcelSectionSupervisorService;
 
-        public ExportSupervisorController()
-            : this(null, null, null)
-        {
-        }
-
         public ExportSupervisorController(
             IReportService reportService,
             IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
             IExportExcelSectionSupervisorService exportExcelSectionSupervisorService)
         {
-            this.reportService = reportService ?? new ReportService();
-            this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor ?? new ExportExcelEmployeeSupervisor();
-            this.exportExcelSectionSupervisorService = exportExcelSectionSupervisorService ?? new ExportExcelSectionSupervisorService();
+            this.reportService = reportService;
+            this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor;
+            this.exportExcelSectionSupervisorService = exportExcelSectionSupervisorService;
         }
 
         public ActionResult EmployeeSupervisor(EmployeeAndSectionSupervisorViewModel model)
