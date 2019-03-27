@@ -30,13 +30,15 @@
                 }
                 else
                 {
-                    string lostLogin = "Session is expired. Please press F5 to login again.";
+                    const string lostLogin = "Session is expired. Please press F5 to login again.";
                     var contentType = filterContext.HttpContext.Request.ContentType ?? "text/html";
                     if (contentType.Contains("json"))
                     {
-                        var result = new JsonResult();
-                        result.Data = new { Code = -101, Message = lostLogin };
-                        result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                        var result = new JsonResult
+                        {
+                            Data = new { Code = -101, Message = lostLogin },
+                            JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                        };
                         filterContext.Result = result;
                     }
                     else

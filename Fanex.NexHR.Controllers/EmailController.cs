@@ -17,7 +17,13 @@
         [HttpGet]
         public JsonResult Index()
         {
-            emailService.SendEmail(ConfigurationManager.AppSettings["EmailSD"], ConfigurationManager.AppSettings["EmailSD"], string.Empty, Labels.TestSendMail, Labels.TestSendMail);
+            string emailSD = ConfigurationManager.AppSettings["EmailSD"];
+            emailService.SendEmail(
+                emailSD,
+                receiverEmail: emailSD,
+                mailCC: string.Empty, subject: Labels.TestSendMail,
+                body: Labels.TestSendMail);
+
             return Json("Done", JsonRequestBehavior.AllowGet);
         }
     }

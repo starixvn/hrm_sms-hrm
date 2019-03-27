@@ -1,5 +1,5 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Fanex.NexHR.Site.AppStart.Combres), "PreStart")]
-namespace Fanex.NexHR.Site.AppStart
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Fanex.NexHR.Site.App_Start.Combres), "PreStart")]
+namespace Fanex.NexHR.Site.App_Start
 {
     using System.Web.Routing;
     using global::Combres;

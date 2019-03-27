@@ -171,7 +171,7 @@
                 rowHeaderDay.Height = height;
 
                 var templeteCellHeader = rowHeaderDate.GetCell(5);
-                var customCellWidth = 3071;
+                const int customCellWidth = 3071;
 
                 for (int i = 5; i < totalCellInRow; i++)
                 {

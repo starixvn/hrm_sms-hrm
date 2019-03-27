@@ -23,7 +23,7 @@
         {
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeBasicInfoTemplatePath);
             string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
-            string sheetName = "Employee Basic Info";
+            const string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
             /// Fill report title.
@@ -42,7 +42,7 @@
         {
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeDetailsInfoTemplatePath);
             string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd");
-            string sheetName = "Employee Details Info";
+            const string sheetName = "Employee Details Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
             /// Fill report title.

@@ -114,7 +114,7 @@
 
         private static double ReturnValidValue(int condition, double value)
         {
-            double defaultValue = 0.00;
+            const double defaultValue = 0.00;
             if (condition != 0)
             {
                 return value;

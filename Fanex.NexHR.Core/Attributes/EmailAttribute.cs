@@ -18,7 +18,7 @@
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(
             ModelMetadata metadata, ControllerContext context)
         {
-            string errorMessage = "Invalid email address.";
+            const string errorMessage = "Invalid email address.";
 
             yield return new EmailValidationRule(errorMessage);
         }

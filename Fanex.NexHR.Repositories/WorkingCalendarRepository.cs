@@ -62,7 +62,7 @@
                     var list = new List<WorkingScheduleViewModel>();
                     if (dttWorkingSchedule != null && dttWorkingSchedule.Rows.Count != 0)
                     {
-                        var totalEmployeeInfoColumn = 5;
+                        const int totalEmployeeInfoColumn = 5;
                         var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
                         var index = totalEmployeeInfoColumn;
 

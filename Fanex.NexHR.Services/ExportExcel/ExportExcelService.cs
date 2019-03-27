@@ -160,7 +160,7 @@
                              select new OvertimeExcelReportViewModel { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
 
                 int rowIndex = _RowStartBodyOvertimeRecord;
-                int rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
+                const int rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
                 short rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
                 var numberCount = 1;
 
@@ -187,10 +187,10 @@
                         ICell cellSumOff = rowTeam.GetCell(8);
                         ICell cellSumPH = rowTeam.GetCell(9);
                         ICell cellSumTax = rowTeam.GetCell(10);
-                        string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")";
-                        string formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")";
-                        string formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")";
-                        string formulaTax = "SUMIF(K{0}:K{1},\"<>#N/A\")";
+                        const string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")";
+                        const string formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")";
+                        const string formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")";
+                        const string formulaTax = "SUMIF(K{0}:K{1},\"<>#N/A\")";
 
                         string data1 = Convert.ToString(numberStart);
                         string data2 = Convert.ToString(rowIndex);

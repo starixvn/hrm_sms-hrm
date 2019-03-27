@@ -8,7 +8,7 @@
 
         public static string Numberic(int size)
         {
-            string numeric = "0123456789";
+            const string numeric = "0123456789";
             return RandomString(numeric, size);
         }
 
@@ -18,13 +18,13 @@
 
         public static string Alphabet(int size)
         {
-            string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            const string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
             return RandomString(alphabet, size);
         }
 
         public static string AnyAlphabet(int size)
         {
-            string alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%&()<>?-+=\|/";
+            const string alphabet = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%&()<>?-+=\|/";
             return RandomString(alphabet, size);
         }
 
