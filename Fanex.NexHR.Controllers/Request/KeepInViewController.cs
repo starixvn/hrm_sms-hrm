@@ -20,20 +20,20 @@
     {
         private readonly IKeepInViewRequestService keepInViewRequestService;
         private readonly IRequestService requestService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
 
         public KeepInViewController(
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
-            ICommandService commandService,
+            IBaseService baseService,
             IShiftService shiftService,
             IEmployeeService employeeService)
         {
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.shiftService = shiftService;
             this.employeeService = employeeService;
         }
@@ -92,7 +92,7 @@
                         CreatedBy = CurrentUser.Id
                     };
 
-                    CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
                     if (result.IsSuccessful)
                     {
                         keepInViewRequestService.SendMailForInsertSuccessfully(criteria);
@@ -180,7 +180,7 @@
                         ModifiedBy = CurrentUser.Id,
                     };
 
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
                         keepInViewRequestService.SendMailForUpdateSuccessfully(criteria);

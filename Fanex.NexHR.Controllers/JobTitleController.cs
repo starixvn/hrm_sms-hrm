@@ -15,14 +15,14 @@
     public class JobTitleController : BaseController
     {
         private readonly ILookupDataService lookupDataService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public JobTitleController(
             ILookupDataService lookupDataService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.lookupDataService = lookupDataService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
@@ -53,7 +53,8 @@
             {
                 Id = id
             };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -68,7 +69,8 @@
                 Name = name,
                 CategoryId = categoryId.ToString()
             };
-            CommandResult result = commandService.Insert(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -83,7 +85,8 @@
                 Name = name,
                 CategoryId = categoryId.ToString()
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 

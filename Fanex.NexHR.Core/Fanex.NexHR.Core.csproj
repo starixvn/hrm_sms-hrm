@@ -201,9 +201,7 @@
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Security\Random.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\CommandService.cs" />
     <Compile Include="Services\IBaseService.cs" />
-    <Compile Include="Services\ICommandService.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />

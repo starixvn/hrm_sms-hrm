@@ -39,7 +39,7 @@
         private readonly ILookupDataService lookupDataService;
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IRoleService roleService;
 
         public EmployeeController(
@@ -47,14 +47,14 @@
             ITeamService teamService,
             ILookupDataService lookupDataService,
             IShiftService shiftService,
-            ICommandService commandService,
+            IBaseService baseService,
             IRoleService roleService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.lookupDataService = lookupDataService;
             this.shiftService = shiftService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.roleService = roleService;
         }
 
@@ -221,7 +221,7 @@
                     WedShift = model.WedShift
                 };
 
-                CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+                CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
                 if (result.IsSuccessful)
                 {
                     return RedirectToAction("Edit", new { id = criteria.EmpId });
@@ -265,8 +265,8 @@
             {
                 if (ModelState.IsValid)
                 {
-                    UpdateEmployeeCriteria updateEmployeeCriteria = SetUpdateEmployeeCriteria(model);
-                    CommandResult result = commandService.Update(updateEmployeeCriteria);
+                    UpdateEmployeeCriteria criteria = SetUpdateEmployeeCriteria(model);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                     if (result.IsSuccessful)
                     {
@@ -291,6 +291,7 @@
             }
 
             ComposeViewBagsForEditEmployee();
+
             return View(model);
         }
 
@@ -303,7 +304,7 @@
                 EmpId = id,
                 ResignedDate = resignedDate
             };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
@@ -346,7 +347,7 @@
                         TueShift = model.TueShiftId,
                         WedShift = model.WedShiftId
                     };
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     ViewBag.Updated = result.IsSuccessful;
                 }
 
@@ -465,7 +466,7 @@
         [HttpPost]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
-            var updateSupervisorCriteria = new UpdateSupervisorCriteria
+            var criteria = new UpdateSupervisorCriteria
             {
                 EmpId = model.EmployeeId,
                 Role = model.SupervisorRole,
@@ -477,7 +478,7 @@
                 EmpIdKeepInViews = model.RoleKeepInViews,
                 ModifiedBy = CurrentUser.Id
             };
-            CommandResult result = commandService.Update(updateSupervisorCriteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
@@ -514,7 +515,7 @@
                 EmpIdShift = model.RoleShiftArrange,
                 ModifiedBy = CurrentUser.Id
             };
-            CommandResult result = commandService.Insert(insertShiftMangerCriteria);
+            CommandResult result = baseService.ExecuteNonQuery(insertShiftMangerCriteria);
 
             return Json(result);
         }
@@ -559,7 +560,7 @@
                 ModifiedBy = CurrentUser.Id,
                 Role = (short)RoleSystem.DisciplineManager
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

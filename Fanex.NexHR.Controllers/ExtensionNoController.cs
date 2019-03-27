@@ -18,16 +18,16 @@
     {
         private readonly IExtensionNumberService extensionNumberService;
         private readonly ITeamService teamService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public ExtensionNoController(
             IExtensionNumberService extensionNumberService,
             ITeamService teamService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.extensionNumberService = extensionNumberService;
             this.teamService = teamService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ExtensionNumber)]
@@ -68,7 +68,7 @@
                         GroupId = model.TeamId,
                     };
 
-                    CommandResult result = commandService.Insert(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
                         return RedirectToAction("Index", "ExtensionNo");
@@ -128,7 +128,7 @@
                     EmpId = model.EmpId,
                     GroupId = model.TeamId
                 };
-                CommandResult result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
                 if (result.IsSuccessful)
                 {
                     return RedirectToAction("Index", "ExtensionNo");
@@ -147,7 +147,7 @@
         public JsonResult DeleteExtensionNumber(int employeeExtensionId)
         {
             var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = employeeExtensionId };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             return Json(result);
         }
 
@@ -204,7 +204,8 @@
             {
                 FullName = groupName
             };
-            CommandResult result = commandService.Insert(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -213,7 +214,7 @@
         public JsonResult DeleteExternalGroup(int groupId)
         {
             var criteria = new DeleteExternalGroupCriteria { ExternalId = groupId };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
@@ -228,7 +229,8 @@
                 ExternalId = groupId,
                 FullName = groupName
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 

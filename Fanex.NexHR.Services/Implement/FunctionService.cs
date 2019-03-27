@@ -10,13 +10,9 @@
     public class FunctionService : IFunctionService
     {
         private readonly IBaseService baseService;
-        private readonly ICommandService commandService;
 
-        public FunctionService(
-            IBaseService baseService,
-            ICommandService commandService)
+        public FunctionService(IBaseService baseService)
         {
-            this.commandService = commandService;
             this.baseService = baseService;
         }
 
@@ -29,39 +25,21 @@
         public IEnumerable<FunctionModel> GetFunctionsByUserId(int userId)
         {
             var criteria = new GetFunctionByUserIdCriteria { UserId = userId };
-            IEnumerable<FunctionModel> functions = new List<FunctionModel>();
-            if (criteria.IsValid())
-            {
-                functions = baseService.GetData<FunctionModel>(criteria);
-            }
-
-            return functions;
+            return baseService.GetData<FunctionModel>(criteria);
         }
 
         public IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId)
         {
             var criteria = new GetFunctionsByRoleIdCriteria { RoleId = roleId };
-            IEnumerable<FunctionModel> functions = new List<FunctionModel>();
-
-            if (criteria.IsValid())
-            {
-                functions = baseService.GetData<FunctionModel>(criteria);
-                functions = functions.OrderBy(i => i.FunctionKey);
-            }
+            IEnumerable<FunctionModel> functions = baseService.GetData<FunctionModel>(criteria);
+            functions = functions.OrderBy(i => i.FunctionKey);
 
             return functions;
         }
 
         public CommandResult AssignFunctionsToRole(AssignFunctionToRoleCriteria criteria)
         {
-            var commandResult = new CommandResult();
-
-            if (criteria != null && criteria.IsValid())
-            {
-                commandResult = commandService.Update(criteria);
-            }
-
-            return commandResult;
+            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }

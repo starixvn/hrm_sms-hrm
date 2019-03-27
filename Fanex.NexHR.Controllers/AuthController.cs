@@ -14,14 +14,14 @@
     public class AuthController : Controller
     {
         private readonly IEmployeeService employeeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public AuthController(
             IEmployeeService employeeService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.employeeService = employeeService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -88,7 +88,7 @@
                 LoginTime = DateTime.Now
             };
 
-            commandService.Insert(criteria);
+            baseService.ExecuteNonQuery(criteria);
         }
     }
 }

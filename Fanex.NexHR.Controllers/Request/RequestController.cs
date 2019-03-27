@@ -28,7 +28,7 @@
         private readonly IRequestService requestService;
         private readonly IRequestMailService requestMailService;
         private readonly ITeamService teamService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public RequestController(
             IEmployeeService employeeService,
@@ -36,14 +36,14 @@
             IRequestService requestService,
             IRequestMailService requestMailService,
             ITeamService teamService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.employeeService = employeeService;
             this.shiftService = shiftService;
             this.requestService = requestService;
             this.requestMailService = requestMailService;
             this.teamService = teamService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpPost]
@@ -130,7 +130,8 @@
             };
 
             requestMailService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -329,8 +330,8 @@
                 ProcessedBy = CurrentUser.Id
             };
 
-            CommandResult result = commandService.Update(criteria);
-            if (result != null && result.IsSuccessful)
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            if (result.IsSuccessful)
             {
                 requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
             }
@@ -349,8 +350,8 @@
                 ProcessedBy = CurrentUser.Id
             };
 
-            CommandResult result = commandService.Update(criteria);
-            if (result != null && result.IsSuccessful)
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            if (result.IsSuccessful)
             {
                 requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
             }

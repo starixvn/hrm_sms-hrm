@@ -15,14 +15,14 @@
     public class DepartmentController : BaseController
     {
         private readonly IDepartmentService departmentService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public DepartmentController(
             IDepartmentService departmentService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.departmentService = departmentService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
@@ -78,7 +78,7 @@
                         ManagerId = model.ManagerId,
                         CreatedBy = CurrentUser.Id
                     };
-                    CommandResult result = commandService.Insert(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                     if (result.IsSuccessful)
                     {
@@ -133,7 +133,7 @@
                         ModifiedBy = CurrentUser.Id,
                     };
 
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                     if (result.IsSuccessful)
                     {
@@ -158,7 +158,8 @@
                 DepartmentId = departmentId,
                 ModifiedBy = CurrentUser.Id,
             };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 

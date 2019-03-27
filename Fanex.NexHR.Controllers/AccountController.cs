@@ -21,14 +21,14 @@
     public class AccountController : BaseController
     {
         private readonly IEmployeeService employeeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public AccountController(
             IEmployeeService employeeService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.employeeService = employeeService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         public ActionResult Index()
@@ -54,7 +54,7 @@
             employeeModel.Modifier = new Employee { Id = CurrentUser.Id };
             ModelState.Clear();
             UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
                 ViewBag.IsUpdated = true;
@@ -85,7 +85,7 @@
                 EmpId = CurrentUser.Id,
                 PasswordReset = status
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
@@ -103,7 +103,7 @@
                 ModifiedBy = CurrentUser.Id
             };
 
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             return Json(result);
         }
 
@@ -128,7 +128,7 @@
                         Password = Encryptor.ComputeHash(employeeService.HashProvider, model.NewPassword)
                     };
 
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     switch (result.Code)
                     {
                         case 0: // OK

@@ -23,7 +23,7 @@
     {
         private readonly IChangeShiftRequestService changeShiftRequestService;
         private readonly IRequestService requestService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
@@ -31,14 +31,14 @@
         public ChangeShiftController(
             IChangeShiftRequestService changeShiftRequestService,
             IRequestService requestService,
-            ICommandService commandService,
+            IBaseService baseService,
             IEmployeeService employeeService,
             IShiftService shiftService,
             IWorkingCalendarService workingCalendarService)
         {
             this.changeShiftRequestService = changeShiftRequestService;
             this.requestService = requestService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.employeeService = employeeService;
             this.shiftService = shiftService;
             this.workingCalendarService = workingCalendarService;
@@ -99,7 +99,7 @@
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
             criteria.CreatedBy = CurrentUser.Id;
 
-            CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+            CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
             {
                 changeShiftRequestService.SendMailForInsertSuccessfully(criteria);
@@ -153,7 +153,7 @@
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
             criteria.ModifiedBy = CurrentUser.Id;
 
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
                 changeShiftRequestService.SendMailForUpdateSuccessfully(criteria);

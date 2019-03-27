@@ -20,20 +20,20 @@
     {
         private readonly ICheckInOutRequestService checkInOutRequestService;
         private readonly IRequestService requestService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
 
         public CheckInOutController(
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
-            ICommandService commandService,
+            IBaseService baseService,
             IEmployeeService employeeService,
             IShiftService shiftService)
         {
             this.checkInOutRequestService = checkInOutRequestService;
             this.requestService = requestService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.employeeService = employeeService;
             this.shiftService = shiftService;
         }
@@ -110,8 +110,7 @@
                         ApproverId = model.ApproverId,
                         Shift = model.Shift
                     };
-
-                    CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
 
                     if (result.IsSuccessful)
                     {
@@ -189,7 +188,7 @@
                         Shift = model.Shift
                     };
 
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
                         checkInOutRequestService.SendMailForUpdateSuccessfully(criteria);

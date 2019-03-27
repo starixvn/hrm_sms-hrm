@@ -28,7 +28,7 @@
         private readonly IShiftService shiftService;
         private readonly ILookupDataService lookupDataService;
         private readonly IEmployeeService employeeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public CalendarController(
             IWorkingCalendarService workingCalendarService,
@@ -36,14 +36,14 @@
             IShiftService shiftService,
             ILookupDataService lookupDataService,
             IEmployeeService employeeService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.workingCalendarService = workingCalendarService;
             this.teamService = teamService;
             this.shiftService = shiftService;
             this.lookupDataService = lookupDataService;
             this.employeeService = employeeService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -94,7 +94,7 @@
                 ScheduleList = scheduleArrangeModel.ScheduleModelXML,
                 ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
             };
-            CommandResult result = commandService.Insert(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             object response = new
             {
                 IsSuccessful = result.IsSuccessful,
@@ -374,7 +374,7 @@
                 MemberOrders = employeeOrdersDetail,
                 SupervisorId = CurrentUser.Id
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

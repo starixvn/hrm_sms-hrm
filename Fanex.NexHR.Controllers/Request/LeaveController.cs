@@ -24,7 +24,7 @@
     {
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IRequestService requestService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly ILeaveTypeService leaveTypeService;
@@ -32,14 +32,14 @@
         public LeaveController(
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
-            ICommandService commandService,
+            IBaseService baseService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
             ILeaveTypeService leaveTypeService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.employeeService = employeeService;
             this.workingCalendarService = workingCalendarService;
             this.leaveTypeService = leaveTypeService;
@@ -75,7 +75,7 @@
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = CurrentUser.Id;
 
-            CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+            CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailForInsertSuccessfully(criteria);
@@ -118,7 +118,7 @@
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = CurrentUser.Id;
 
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailForUpdateSuccessfully(criteria);

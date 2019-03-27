@@ -17,13 +17,13 @@
         private const int HourIndex = 0;
         private const int MinutesIndex = 1;
         private readonly IShiftService shiftService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public ShiftController(
-            ICommandService commandService,
+            IBaseService baseService,
             IShiftService shiftService)
         {
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.shiftService = shiftService;
         }
 
@@ -66,8 +66,7 @@
                     CreatedBy = CurrentUser.Id,
                     CreatedDate = DateTime.Now
                 };
-
-                CommandResult result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -131,8 +130,7 @@
                     ModifiedDate = DateTime.Now,
                     IsDisabled = model.IsDisabled
                 };
-
-                CommandResult result = commandService.Update(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -154,7 +152,7 @@
         public JsonResult Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria { ShiftId = shiftId };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }

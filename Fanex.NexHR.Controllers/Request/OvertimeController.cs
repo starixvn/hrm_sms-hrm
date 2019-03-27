@@ -32,7 +32,7 @@
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
         private readonly IOvertimeRequestService overtimeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public OvertimeController(
             IEmployeeService employeeService,
@@ -40,14 +40,14 @@
             ITeamService teamService,
             IOvertimeRequestService overtimeService,
             ILookupDataService lookupDataService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.teamService = teamService;
             this.overtimeService = overtimeService;
             this.lookupDataService = lookupDataService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -140,7 +140,8 @@
                 ApproverId = model.ApproverId,
                 OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList()
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -171,7 +172,8 @@
                 ProcessedBy = CurrentUser.Id,
                 ProcessedDate = DateTime.Now
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -187,7 +189,8 @@
                 ProcessedDate = DateTime.Now
             };
             criteria.RoleId = ProcessMultipleOvertimeCriteria.GetRoleIdForProcessOvertime(command);
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 

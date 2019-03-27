@@ -13,27 +13,20 @@
     {
         private readonly IMenuRepository menuRepository;
         private readonly IBaseService baseService;
-        private readonly ICommandService commandService;
 
         public MenuService(
             IMenuRepository menuRepository,
-            IBaseService baseService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.menuRepository = menuRepository;
-            this.commandService = commandService;
             this.baseService = baseService;
         }
 
         public IEnumerable<MenuModel> GetMenusByUserId(int userId)
         {
             var criteria = new GetMenusByUserIdCriteria { UserId = userId };
-            IEnumerable<MenuModel> menus = new List<MenuModel>();
-            if (criteria.IsValid())
-            {
-                menus = baseService.GetData<MenuModel>(criteria);
-                menus = menus.GroupBy(i => i.Name).Select(g => g.First()).ToList();
-            }
+            IEnumerable<MenuModel> menus = baseService.GetData<MenuModel>(criteria);
+            menus = menus.GroupBy(i => i.Name).Select(g => g.First());
 
             return menus;
         }
@@ -41,7 +34,6 @@
         public IEnumerable<MenuViewModel> GetMenus()
         {
             var criteria = new GetMenusCriteria();
-
             IEnumerable<MenuViewModel> menus = new List<MenuViewModel>();
 
             if (criteria.IsValid())
@@ -55,47 +47,24 @@
         public MenuModel GetMenusById(int id)
         {
             var criteria = new GetMenuByIdCriteria { MenuId = id };
-            var menu = new MenuModel();
-            if (criteria.IsValid())
-            {
-                menu = baseService.GetDataEntity<MenuModel>(criteria);
-            }
-
-            return menu;
+            return baseService.GetDataEntity<MenuModel>(criteria);
         }
 
         public CommandResult Insert(InsertMenuCriteria criteria)
         {
-            var result = new CommandResult();
-            if (criteria != null && criteria.IsValid())
-            {
-                result = commandService.Insert(criteria);
-            }
-
-            return result;
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public CommandResult Update(UpdateMenuCriteria criteria)
         {
-            var result = new CommandResult();
-            if (criteria != null && criteria.IsValid())
-            {
-                result = commandService.Update(criteria);
-            }
-
-            return result;
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public CommandResult Delete(int id)
         {
             var criteria = new DeleteMenuCriteria { MenuId = id };
-            var result = new CommandResult();
-            if (criteria.IsValid())
-            {
-                result = commandService.Delete(criteria);
-            }
 
-            return result;
+            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }

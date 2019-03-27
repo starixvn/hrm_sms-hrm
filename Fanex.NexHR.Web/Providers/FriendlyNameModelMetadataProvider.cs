@@ -24,7 +24,7 @@
 
         private static string DisplayNameFromCamelCase(string name)
         {
-            var temp = "(?<!^)" + // don't match on the first character - never want to place a space here
+            const string temp = "(?<!^)" + // don't match on the first character - never want to place a space here
             "(" +
             "  [A-Z][a-z] |" + // put a space before "Aaaa"
             "  (?<=[a-z])[A-Z] |" + // put a space into "aAAA" before the first capital
@@ -32,10 +32,10 @@
             ")";
 
             var result = Regex.Replace(
-            name,
-            temp,
-            " $1",
-            RegexOptions.IgnorePatternWhitespace).Trim();
+                name,
+                temp,
+                " $1",
+                RegexOptions.IgnorePatternWhitespace).Trim();
 
             return result.EndsWith(" Id", StringComparison.OrdinalIgnoreCase) ? result.Replace(" Id", string.Empty) : result;
         }

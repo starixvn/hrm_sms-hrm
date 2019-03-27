@@ -24,18 +24,18 @@
         private readonly IEmployeeService employeeService;
         private readonly ITeamService teamService;
         private readonly IReportService reportService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public AnnualLeaveBalanceController(
             IEmployeeService employeeService,
             ITeamService teamService,
             IReportService reportService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.reportService = reportService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [ValidateInput(false)]
@@ -53,7 +53,8 @@
                 DeductDays = model.DeductDays,
                 FromDate = model.AffectedFrom
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
 
@@ -82,7 +83,7 @@
                 FromDate = date,
                 ResetDays = minbalance
             };
-            CommandResult result = commandService.Update(resetAnnualLeaveCriteria);
+            CommandResult result = baseService.ExecuteNonQuery(resetAnnualLeaveCriteria);
 
             return Json(result);
         }
@@ -238,7 +239,8 @@
                     CreatedDate = DateTime.Now,
                     CreatedBy = CurrentUser.Id
                 };
-                CommandResult result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
+
                 if (result.IsSuccessful)
                 {
                     return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
@@ -304,7 +306,7 @@
         {
             if (ModelState.IsValid)
             {
-                var updateAnnualLeaveTransactionCriteria = new UpdateAnnualLeaveTransactionCriteria
+                var criteria = new UpdateAnnualLeaveTransactionCriteria
                 {
                     LeaveTransId = model.LeaveTransId,
                     Description = model.Description,
@@ -314,7 +316,7 @@
                     ModifiedDate = DateTime.Now,
                     ModifiedBy = CurrentUser.Id
                 };
-                CommandResult result = commandService.Update(updateAnnualLeaveTransactionCriteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -341,7 +343,8 @@
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = CurrentUser.Id
             };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             if (result.IsSuccessful)
             {
                 return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });

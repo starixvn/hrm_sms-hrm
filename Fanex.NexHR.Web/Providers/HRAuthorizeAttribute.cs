@@ -9,30 +9,15 @@
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class HRAuthorizeAttribute : AuthorizeAttribute
     {
-        private readonly Policy policy;
-        private readonly string[] functionKey;
-
         public HRAuthorizeAttribute(Policy policy, params string[] functionKey)
         {
-            this.policy = policy;
-            this.functionKey = functionKey;
+            Policy = policy;
+            FunctionKey = functionKey;
         }
 
-        public Policy Policy
-        {
-            get
-            {
-                return policy;
-            }
-        }
+        public Policy Policy { get; }
 
-        public string[] FunctionKey
-        {
-            get
-            {
-                return functionKey;
-            }
-        }
+        public string[] FunctionKey { get; }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
@@ -49,7 +34,7 @@
             if (isAuthorized)
             {
                 var user = (UserLoginModel)httpContext.Session["CurrentUser"];
-                foreach (var function in FunctionKey)
+                foreach (string function in FunctionKey)
                 {
                     var hasPermission = user.HasPermission(function, Policy);
                     if (hasPermission)

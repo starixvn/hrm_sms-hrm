@@ -19,18 +19,18 @@
     {
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
 
         public LateInEarlyOutController(
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
-            ICommandService commandService,
+            IBaseService baseService,
             IEmployeeService employeeService)
         {
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
             this.requestService = requestService;
-            this.commandService = commandService;
+            this.baseService = baseService;
             this.employeeService = employeeService;
         }
 
@@ -75,8 +75,7 @@
                         ApproverId = model.ApproverId,
                         CreatedBy = CurrentUser.Id
                     };
-
-                    CommandResult result = commandService.Insert(criteria, hasGetOutputParams: true);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
 
                     if (result.IsSuccessful)
                     {
@@ -152,7 +151,7 @@
                         ModifiedBy = CurrentUser.Id,
                     };
 
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
                         lateInEarlyOutRequestService.SendMailForUpdateSuccessfully(criteria);

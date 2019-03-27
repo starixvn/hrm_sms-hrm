@@ -7,6 +7,7 @@
     using Criteria.Holidays;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -15,14 +16,14 @@
     public class HolidayController : BaseController
     {
         private readonly IHolidayService holidayService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public HolidayController(
             IHolidayService holidayService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.holidayService = holidayService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -63,7 +64,7 @@
                     ModifiedDate = DateTime.Now
                 };
 
-                var result = commandService.Update(criteria);
+                var result = baseService.ExecuteNonQuery(criteria);
 
                 ViewBag.Updated = result.IsSuccessful;
 
@@ -106,8 +107,7 @@
                     ModifiedBy = CurrentUser.Id,
                     ModifiedDate = DateTime.Now
                 };
-
-                var result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 ViewBag.Updated = result.IsSuccessful;
 
@@ -134,7 +134,8 @@
                 ModifiedBy = CurrentUser.Id,
                 ModifiedDate = DateTime.Now
             };
-            var result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
             return Json(result);
         }
     }

@@ -20,16 +20,16 @@
     {
         private readonly ITeamService teamService;
         private readonly IDisciplineService disciplineService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public DisciplineController(
             ITeamService teamService,
             IDisciplineService disciplineService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.teamService = teamService;
             this.disciplineService = disciplineService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
@@ -211,8 +211,7 @@
                 Comment = model.Comment,
                 CreatedBy = CurrentUser.Id
             };
-
-            CommandResult commandResult = commandService.Insert(criteria);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return Json(commandResult);
         }
@@ -229,8 +228,7 @@
                 Score = model.MinusScore,
                 CreatedBy = CurrentUser.Id
             };
-
-            CommandResult commandResult = commandService.Insert(criteria);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return Json(commandResult);
         }
@@ -242,7 +240,7 @@
             if (criteria != null)
             {
                 criteria.ModifiedBy = CurrentUser.Id;
-                CommandResult commandResult = commandService.Delete(criteria);
+                CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)
                 {
@@ -260,7 +258,7 @@
             if (criteria != null)
             {
                 criteria.ModifiedBy = CurrentUser.Id;
-                CommandResult commandResult = commandService.Delete(criteria);
+                CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)
                 {
@@ -282,7 +280,7 @@
                 ModifiedBy = CurrentUser.Id,
             };
 
-            CommandResult commandResult = commandService.Update(criteria);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }

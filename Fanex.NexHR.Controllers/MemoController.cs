@@ -21,18 +21,18 @@
         private readonly IMemoService memoService;
         private readonly ILookupDataService lookupDataService;
         private readonly IEmailService emailService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public MemoController(
             IMemoService memoService,
             ILookupDataService lookupDataService,
             IEmailService emailService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.memoService = memoService;
             this.lookupDataService = lookupDataService;
             this.emailService = emailService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Memo)]
@@ -111,7 +111,7 @@
                     MemoType = model.MemoType
                 };
 
-                CommandResult result = commandService.Update(updateMemoCriteria);
+                CommandResult result = baseService.ExecuteNonQuery(updateMemoCriteria);
                 ViewBag.Updated = result.IsSuccessful;
 
                 if (result.IsSuccessful && updateMemoCriteria.SendMail)
@@ -179,7 +179,7 @@
                     SendMail = model.SendMail
                 };
 
-                CommandResult result = commandService.Insert(insertMemoCriteria);
+                CommandResult result = baseService.ExecuteNonQuery(insertMemoCriteria);
 
                 ViewBag.Updated = result.IsSuccessful;
 
@@ -207,7 +207,7 @@
         {
             var criteria = new DeleteMemoCriteria { Id = id };
             Memo memo = memoService.GetById(new GetMemoByIdCriteria { Id = id });
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             if (result.IsSuccessful && memo.MemoType == UploadMemoType)
             {

@@ -12,11 +12,11 @@
 
     public class TimeController : BaseController
     {
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
-        public TimeController(ICommandService commandService)
+        public TimeController(IBaseService baseService)
         {
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HttpPost]
@@ -29,7 +29,8 @@
                 criteria.ModifiedDate = DateTime.Now;
             }
 
-            CommandResult commandResult = commandService.Update(criteria);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
@@ -55,8 +56,7 @@
                     RecordTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
                     InOutType = model.InOutType != 1
                 };
-
-                CommandResult result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 ViewBag.Requested = result.IsSuccessful;
             }

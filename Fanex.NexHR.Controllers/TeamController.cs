@@ -23,16 +23,16 @@
     {
         private readonly ITeamService teamService;
         private readonly IDepartmentService departmentService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public TeamController(
             ITeamService teamService,
             IDepartmentService departmentService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.teamService = teamService;
             this.departmentService = departmentService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
@@ -74,7 +74,7 @@
                     AssistantLeaderId = model.AssistantLeaderId,
                     CreatedBy = CurrentUser.Id
                 };
-                CommandResult result = commandService.Insert(criteria);
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -139,7 +139,7 @@
                         AssistantLeaderId = model.AssistantLeaderId,
                         ModifiedBy = CurrentUser.Id
                     };
-                    CommandResult result = commandService.Update(criteria);
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
 
                     if (result.IsSuccessful)
                     {
@@ -168,7 +168,7 @@
                 GroupId = id,
                 ModifiedBy = CurrentUser.Id
             };
-            CommandResult result = commandService.Delete(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
@@ -269,7 +269,7 @@
                 ModifiedBy = CurrentUser.Id,
                 Role = model.SupervisorRole
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -284,8 +284,7 @@
                 ShiftArrangers = model.RoleShiftArrange,
                 ModifiedBy = CurrentUser.Id
             };
-
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -301,7 +300,7 @@
                 ModifiedBy = CurrentUser.Id,
                 Role = (short)RoleSystem.DisciplineManager
             };
-            CommandResult result = commandService.Update(criteria);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

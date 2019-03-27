@@ -10,7 +10,6 @@
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Web.Providers;
 
@@ -19,18 +18,18 @@
         private readonly IMessageService messageService;
         private readonly ITeamService teamService;
         private readonly IEmployeeService employeeService;
-        private readonly ICommandService commandService;
+        private readonly IBaseService baseService;
 
         public MessageController(
             IMessageService messageService,
             ITeamService teamService,
             IEmployeeService employeeService,
-            ICommandService commandService)
+            IBaseService baseService)
         {
             this.messageService = messageService;
             this.teamService = teamService;
             this.employeeService = employeeService;
-            this.commandService = commandService;
+            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.Message)]
@@ -90,14 +89,16 @@
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Create(Message model)
         {
-            CommandResult result = new CommandResult();
+            var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
             {
-                InsertMessageCriteria criteria = new InsertMessageCriteria(model);
-                criteria.CreatedBy = CurrentUser.Id;
+                var criteria = new InsertMessageCriteria(model)
+                {
+                    CreatedBy = CurrentUser.Id
+                };
 
-                result = commandService.Insert(criteria);
+                result = baseService.ExecuteNonQuery(criteria);
                 if (model.HasSendEmail && result.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
@@ -139,23 +140,20 @@
         [HRAuthorize(Policy.Host, FunctionKey.Message)]
         public JsonResult Edit(Message model)
         {
-            CommandResult result = new CommandResult();
+            var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
             {
-                UpdateMessageCriteria criteria = new UpdateMessageCriteria(model);
-                criteria.ModifiedBy = CurrentUser.Id;
+                var criteria = new UpdateMessageCriteria(model)
+                {
+                    ModifiedBy = CurrentUser.Id
+                };
 
-                result = commandService.Update(criteria);
+                result = baseService.ExecuteNonQuery(criteria);
                 if (model.HasSendEmail && result.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
                 }
-            }
-            else
-            {
-                result.Code = 1;
-                result.Message = Messages.InvalidInputData;
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -171,8 +169,8 @@
                 ModifiedBy = CurrentUser.Id,
                 ModifiedDate = DateTime.Now
             };
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            CommandResult result = commandService.Delete(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -212,8 +210,8 @@
                 MessageId = id,
                 EmployeeId = CurrentUser.Id
             };
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            CommandResult result = commandService.Delete(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -247,8 +245,8 @@
                 MessageId = id,
                 EmployeeId = CurrentUser.Id
             };
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            CommandResult result = commandService.Update(criteria);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

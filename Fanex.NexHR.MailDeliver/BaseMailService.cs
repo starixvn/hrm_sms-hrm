@@ -15,14 +15,10 @@
     public class BaseMailService : IBaseMailService
     {
         private readonly BaseService baseService;
-        private readonly ICommandService commandService;
 
-        public BaseMailService(
-            BaseService baseService,
-            ICommandService commandService)
+        public BaseMailService(BaseService baseService)
         {
             this.baseService = baseService;
-            this.commandService = commandService;
         }
 
         public bool SendEmailAsync(MailRecord email)
@@ -249,7 +245,7 @@
                 MailDate = DateTime.Now
             };
 
-            commandService.Insert(criteria, hasGetOutputParams: true);
+            baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             email.MailId = criteria.MailId;
         }
 
@@ -270,7 +266,7 @@
                 ErrorTime = DateTime.Now
             };
 
-            commandService.Insert(criteria);
+            baseService.ExecuteNonQuery(criteria);
         }
 
         private void UpdateMailStatus(MailRecord email, bool isSucessfull)
@@ -282,7 +278,7 @@
                 MailUpdatedDate = DateTime.Now
             };
 
-            commandService.Update(criteria);
+            baseService.ExecuteNonQuery(criteria);
         }
 
         private static bool IsValidEmail(string email)
