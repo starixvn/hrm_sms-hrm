@@ -1,4 +1,7 @@
-﻿#dialogProcessRequest {
+﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
+@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
+
+#dialogProcessRequest {
     form {
         > .formrow {
             margin: 10px 0;

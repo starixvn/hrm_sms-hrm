@@ -5,10 +5,10 @@
     ViewBag.Title = Model.PageTitle;
 }
 @section css{
-    @Url.CombresLink("employeerequestcss")
+    <link href="~/wwwroot/dist/styles/employee.request.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("employeerequestjs")
+    <script src="~/wwwroot/dist/js/employee.request.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Model.BreadcrumbText</a><span class="step">@ViewBag.Title</span>

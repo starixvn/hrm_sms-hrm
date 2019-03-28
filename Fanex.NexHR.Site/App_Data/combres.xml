@@ -167,7 +167,7 @@
     <resourceSet name="attendancereportjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/report/report.attendance.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
@@ -328,7 +328,7 @@
 
     <resourceSet name="employeeshiftjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/Calendar/report.employeeshift.js" />
     </resourceSet>
     <resourceSet name="employeeshiftcss" type="css">
@@ -349,13 +349,13 @@
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
     <resourceSet name="workingcalendarsummaryjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendarsummary.js" />
     </resourceSet>
 
@@ -401,7 +401,7 @@
 
     <resourceSet name="annualbalancejs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/annualbalanceadj.js" />
       <resource path="~/scripts/views/annualbalance.js" />
     </resourceSet>
@@ -417,7 +417,7 @@
     </resourceSet>
     <resourceSet name="totalworkinghourjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.totalworkinghours.js" />
@@ -429,7 +429,7 @@
     </resourceSet>
     <resourceSet name="employeesupervisorreportjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.employee.supervisor.js" />
     </resourceSet>
     <resourceSet name="sectionsupervisorreportjs" type="js">
@@ -445,13 +445,13 @@
     <resourceSet name="totalworkinghourmonthlyjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
     </resourceSet>
 
     <resourceSet name="totalworkinghourdailyjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourdaily.js" />
     </resourceSet>
 
@@ -461,34 +461,8 @@
     </resourceSet>
     <resourceSet name="totalworkinghourweeklyjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourweekly.js" />
-    </resourceSet>
-
-    <resourceSet name="employeerequestcss" type="css">
-      <resource path="~/styles/font.css" />
-      <resource path="~/Styles/css/lib/bootstrap/css/bootstrap.css" />
-      <resource path="~/Styles/Libs/jquery-ui-1.2.1/jquery-ui.css" />
-      <resource path="~/Styles/css/lib/tipsy/tipsy.css" />
-      <resource path="~/Styles/Libs/jquery-multiselect-widget/jquery.multiselect.css" />
-      <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.css" />
-      <resource path="~/wwwroot/dist/styles/main_new.css" />
-      <resource path="~/wwwroot/dist/styles/employee.request.css" />
-    </resourceSet>
-
-    <resourceSet name="employeerequestjs" type="js">
-      <resource path="~/Scripts/Libs/jquery/jquery-1.12.4.min.js" />
-      <resource path="~/Scripts/Libs/bootstrap/js/bootstrap.js" />
-      <resource path="~/Scripts/Libs/tipsy/jquery.tipsy.js" />
-      <resource path="~/Scripts/Libs/jquery-ui-1.2.1/jquery-ui.js" />
-      <resource path="~/scripts/libs/jquery.blockUI.js" />
-      <resource path="~/Scripts/Libs/jquery-contextMenu/jquery.contextMenu.min.js" />
-      <resource path="~/Scripts/Libs/jquery-multiselect-widget/jquery.multiselect.js" />
-      <resource path="~/scripts/libs/date.js" />
-
-      <resource path="~/scripts/views/employee.search.in.team.js" />
-      <resource path="~/scripts/views/request/date.filter.new.js" />
-      <resource path="~/scripts/views/request/employeerequest.js" />
     </resourceSet>
 
     <resourceSet name="teamjs" type="js">
@@ -519,7 +493,7 @@
 
     <resourceSet name="leavesummaryjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
 
@@ -531,7 +505,7 @@
     <resourceSet name="requestmonitoringjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/date.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
     </resourceSet>
@@ -590,7 +564,7 @@
     </resourceSet>
     <resourceSet name="yearlyovertimereportjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/yearlyovertimereport.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
@@ -599,7 +573,7 @@
     <resourceSet name="overtimereportdetailsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/Overtime/overtimereportdetails.js" />
     </resourceSet>
 
@@ -614,7 +588,7 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/overtime/monthlyovertime.member.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
     </resourceSet>
     <resourceSet name="memberovertimecss" type="css">
       <resource reference="sitecss" />
@@ -668,7 +642,7 @@
     <resourceSet name="reportovertimerequestjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/reportovertimerequest.js" />
     </resourceSet>
 
@@ -679,7 +653,7 @@
     <resourceSet name="timerecordjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/libs/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.timerecord.js" />
@@ -739,24 +713,24 @@
     </resourceSet>
     <resourceSet name="disciplinesummaryjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/discipline/discipline.summary.js" />
     </resourceSet>
     <resourceSet name="disciplinedetailjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/discipline/discipline.detail.js" />
     </resourceSet>
 
     <resourceSet name="weekendleavesummaryjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.weekendleave.summary.js" />
     </resourceSet>
 
     <resourceSet name="weekendleavedetailjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.search.in.team.js" />
+      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.weekendleave.detail.js" />
     </resourceSet>
 

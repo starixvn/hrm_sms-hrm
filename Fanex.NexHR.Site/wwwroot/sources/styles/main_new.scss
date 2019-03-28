@@ -2,6 +2,12 @@
 @import 'base/common';
 @import 'base/typo';
 
+@import '~jquery-ui-bundle/jquery-ui.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~tipsy/src/stylesheets/tipsy.css';
+
+@import 'fonts/font.css';
+
 @import 'layout/navbar';
 @import 'layout/header';
 @import 'layout/filter';
@@ -9,3 +15,11 @@
 
 @import 'components/breadcrumb';
 @import 'components/buttons';
+
+.tipsy {
+    .tipsy-inner {
+        padding: 8px 11px 7px 11px;
+        font-size: 12px;
+        text-align: left;
+    }
+}

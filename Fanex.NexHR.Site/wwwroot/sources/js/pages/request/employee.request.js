@@ -1,7 +1,11 @@
-﻿import 'jquery-ui-bundle/jquery-ui.js';
-import 'jquery.tipsy/src/jquery.tipsy';
+﻿import $ from 'jquery/dist/jquery';
+import 'bootstrap/dist/js/bootstrap';
+import 'jquery-ui-bundle/jquery-ui';
+import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
+
+import { floatingHeader } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/employee.search.in.team';
 import './date.filter.new';
@@ -23,25 +27,6 @@ function showMessage(message) {
 
 function fadeOutMessage() {
     $('#message').fadeOut(500);
-}
-
-function floatingHeader() {
-    var clonedHeaderRow;
-    $(".persist-area").each(function () {
-        clonedHeaderRow = $(".persist-header", this);
-        clonedHeaderRow
-            .before(clonedHeaderRow.clone())
-            .css("width", clonedHeaderRow.width())
-            .addClass("floatingHeader")
-            .removeClass("persist-header");
-    });
-
-    $(".content_scroll")
-        .scroll(updateTableHeaders)
-        .trigger("scroll");
-    $(window).resize(function () {
-        updateTableHeaders();
-    });
 }
 
 function confirm(message, callback, options) {
@@ -68,78 +53,22 @@ function confirm(message, callback, options) {
 
     var $confirm = $.getOrCreateDialog('confirm');
     // set message
-    $("p", $confirm).html(message);
+    $('p', $confirm).html(message);
     // init dialog
     $confirm.dialog($.extend({}, defaults, options));
-}
-
-function updateTableHeaders() {
-    if ($(".persist-area").val() !== undefined) {
-        var leftspace = 191;
-        var widthspace = $(".persist-area").width() + 18;
-        //if ($.browser.safari) {
-        //    leftspace = 192;
-        //    widthspace = widthspace - 8;
-        //    if (widthspace < 1060)
-        //        widthspace = 1060;
-        //}
-        //else {
-        widthspace = widthspace - 17;
-        if (widthspace < 1051)
-            widthspace = 1051;
-        // }
-
-        $('.floatingHeader').width(widthspace);
-        var left = $('table.persist-area thead tr:first').position()["left"];
-
-        var isShowLeftMenu = $("#toggle-left-navigation").hasClass("large-next");
-        var widthLeftMenu = isShowLeftMenu ? 190 : 0;
-
-        $(".persist-area").each(function () {
-            var el = $(this),
-                    offset = el.offset(),
-                    scrollTop = $(window).scrollTop(),
-                    floatingHeader = $(".floatingHeader", this);
-            if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
-                if (!isShowLeftMenu) {
-                    floatingHeader.css({
-                        "visibility": "visible",
-                        "left": (leftspace + left)
-                    });
-                }
-                else {
-                    floatingHeader.css({
-                        "visibility": "visible",
-                        "left": left + 1
-                    });
-                }
-            } else {
-                floatingHeader.css({
-                    "visibility": "hidden"
-                });
-            }
-        });
-
-        var i = 0;
-        $("table .persist-header th").each(function () {
-            var x = $(this).width();
-            $($("table .floatingHeader th")[i]).width(x);
-            i++;
-        });
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 $(function () {
     //Handle event when click search icon
-    $("#searchIcon").on('click', function () {
-        document.location = _global.root + 'employee/index?query=' + $("#searchbox").val();
+    $('#searchIcon').on('click', function () {
+        document.location = _global.root + 'employee/index?query=' + $('#searchbox').val();
     });
 
     $('#searchbox').keyup(function (event) {
         if (event.keyCode === 13) {
-            $("#searchIcon").trigger('click');
+            $('#searchIcon').trigger('click');
         }
     });
 
@@ -188,7 +117,7 @@ $(function () {
                         comment = $(this).find('textarea#Comment').val(),
                         isValid = true;
 
-                    $(this).find("table.table tbody tr").each(function () {
+                    $(this).find('table.table tbody tr').each(function () {
                         var chkIgnored = $(this).find('td.violationIgnored input:radio'),
                             chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
@@ -241,7 +170,7 @@ $(function () {
 
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
 
-                $('#dialogProcessRequest').find("table.table tbody tr").each(function () {
+                $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
                     var chkIgnored = $(this).find('td.violationIgnored input:radio'),
                         chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
@@ -306,12 +235,12 @@ $(function () {
     }
 
     function renderIconOk(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<span class="processed"><i class="glyphicon glyphicon-ok"></i>' + item.name + opt.selector + '</span>');
+        $itemElement.html('<span class="processed"><i class="glyphicon glyphicon-ok"></i>' + item.name + '</span>');
         return '';
     }
 
     function renderIconRemove(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<span class="void"><i class="glyphicon glyphicon-remove"></i>' + item.name + opt.selector + '</span>');
+        $itemElement.html('<span class="void"><i class="glyphicon glyphicon-remove"></i>' + item.name + '</span>');
         return '';
     }
 
@@ -320,31 +249,31 @@ $(function () {
         switch (menu) {
             case 'hrMenu':
                 listItem = {
-                    "Process": { name: "Process", icon: renderIconOk },
-                    "Void": { name: "Void", icon: renderIconRemove }
-                }
+                    'Process': { name: 'Process', icon: renderIconOk },
+                    'Void': { name: 'Void', icon: renderIconRemove }
+                };
                 break;
             case 'verifierMenu':
                 listItem = {
-                    "Accept": { name: "Verified", icon: renderIconOk },
-                    "NotAccept": { name: "Not Verified", icon: renderIconRemove }
-                }
+                    'Accept': { name: 'Verified', icon: renderIconOk },
+                    'NotAccept': { name: 'Not Verified', icon: renderIconRemove }
+                };
                 break;
             case 'approverMenu':
                 listItem = {
-                    "Approve": { name: "Approve", icon: renderIconOk },
-                    "Reject": { name: "Reject", icon: renderIconRemove }
-                }
+                    'Approve': { name: 'Approve', icon: renderIconOk },
+                    'Reject': { name: 'Reject', icon: renderIconRemove }
+                };
                 break;
             case 'resetMenu':
                 listItem = {
-                    "Reset": { name: "Reset", icon: renderIconRemove }
-                }
+                    'Reset': { name: 'Reset', icon: renderIconRemove }
+                };
                 break;
             case 'voidMenu':
                 listItem = {
-                    "VoidBySA": { name: "Void", icon: renderIconRemove },
-                }
+                    'VoidBySA': { name: 'Void', icon: renderIconRemove }
+                };
                 break;
         }
 
@@ -376,12 +305,14 @@ $(function () {
         });
     }
 
-    var dontBlock = false;
-
     $(document).ready(function () {
         $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
 
-        $('#TeamId').multiselect();
+        $('#TeamId').multiselect({
+            minWidth: 180,
+            checkAllText: 'Check',
+            uncheckAllText: 'Uncheck'
+        });
 
         bindMenu('.hr-actions', 'hrMenu');
         bindMenu('.verifier-actions', 'verifierMenu');
@@ -395,9 +326,10 @@ $(function () {
             var url = $(this).attr('id');
             $.get(url, function (data) {
                 $('#dialoghistorycontent').html(data);
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
                 $('#dialoghistorycontent').dialog({
                     modal: true,
-                    minHeight: 0,
+                    height: 'auto',
                     width: 1100,
                     title: 'Request History'
                 });
@@ -420,14 +352,14 @@ $(function () {
                     isLocal = $('#IsLocal').val(),
                     isFilterByAffectedDate = $('#IsFilterByAffectedDate').val();
                 var url = _global.root + 'request/' + action + '?DateOption=' + $('#Date').val() +
-                '&TeamIds=' + teams + '&Employee=' + $('#Employee').val() +
-                '&EmployeeId=' + $('#EmployeeId').val() +
-                '&FromDate=' + $('#FromDate').val() +
-                '&ToDate=' + $('#ToDate').val() +
-                '&StatusId=' + $('#statusId').val() +
-                '&RequestType=' + requestType +
-                '&IsLocal=' + isLocal +
-                '&IsFilterByAffectedDate=' + isFilterByAffectedDate;
+                    '&TeamIds=' + teams + '&Employee=' + $('#Employee').val() +
+                    '&EmployeeId=' + $('#EmployeeId').val() +
+                    '&FromDate=' + $('#FromDate').val() +
+                    '&ToDate=' + $('#ToDate').val() +
+                    '&StatusId=' + $('#statusId').val() +
+                    '&RequestType=' + requestType +
+                    '&IsLocal=' + isLocal +
+                    '&IsFilterByAffectedDate=' + isFilterByAffectedDate;
 
                 location.href = url;
             }
@@ -436,9 +368,5 @@ $(function () {
         floatingHeader();
 
         initEventExportExcel();
-    }).ajaxStart(function () {
-        if (!dontBlock) {
-            $.blockUI();
-        }
-    }).ajaxStop($.unblockUI);
+    });
 });

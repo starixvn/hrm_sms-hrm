@@ -1,4 +1,5 @@
 ﻿import $ from 'jquery/dist/jquery';
+import { updateTableHeaders } from './shared/common.functions';
 
 $(document).ready(function () {
     function toggleLeftNavigation(isShow) {
@@ -10,8 +11,7 @@ $(document).ready(function () {
             currentElement.attr({ title: 'Hide Left Navigation' });
             $('#left-navigation').show();
             $('#content-wrapper').removeClass('expand');
-        }
-        else {
+        } else {
             currentElement.removeClass('large-back');
             currentElement.addClass('large-next');
             currentElement.attr({ title: 'Show Left Navigation' });
@@ -30,8 +30,7 @@ $(document).ready(function () {
 
     if (_global.isShowLeftNavigation === 'True') {
         toggleLeftNavigation(true);
-    }
-    else {
+    } else {
         toggleLeftNavigation(false);
     }
 
@@ -40,8 +39,7 @@ $(document).ready(function () {
         if (currentElement.hasClass('large-back')) {
             toggleLeftNavigation(false);
             updateLeftNavigationSetting(false);
-        }
-        else {
+        } else {
             toggleLeftNavigation(true);
             updateLeftNavigationSetting(true);
         }
@@ -64,8 +62,7 @@ $(document).ready(function () {
         if (currentSection.hasClass('folded')) {
             currentSection.removeClass('folded');
             divItems.show(200);
-        }
-        else {
+        } else {
             currentSection.addClass('folded');
             divItems.hide(200);
         }
@@ -79,5 +76,6 @@ $(document).ready(function () {
             $(this).find('.hoveraction').fadeIn(400);
         }, function () {
             $(this).find('.hoveraction').hide();
-        });
+        }
+    );
 });

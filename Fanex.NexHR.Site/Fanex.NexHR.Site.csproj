@@ -733,7 +733,6 @@
     <Content Include="Scripts\tiny_mce\utils\validate.js" />
     <Content Include="Scripts\Views\annualbalanceadj.js" />
     <Content Include="Scripts\Views\criteria.js" />
-    <Content Include="Scripts\Views\employee.search.in.team.js" />
     <Content Include="Scripts\Views\checkinout.bymanager.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Libs\date.js" />
@@ -1195,6 +1194,7 @@
     <Content Include="wwwroot\sources\styles\layout\_navbar.scss" />
     <Content Include="combres.readme" />
     <Content Include="wwwroot\sources\styles\main_new.scss" />
+    <Content Include="wwwroot\sources\js\shared\common.functions.js" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
