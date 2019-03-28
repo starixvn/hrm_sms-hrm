@@ -17,8 +17,7 @@ module.exports = {
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
 
         //
-        //[`${jsDistPath}/jquery`]: './node_modules/jquery/dist/jquery.js',
         [`${jsDistPath}/main`]: './sources/js/main.js',
-        [`${jsDistPath}/employee-request`]: `${jsSourcePath}/request/employee.request.js`
+        [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`
     }
 };

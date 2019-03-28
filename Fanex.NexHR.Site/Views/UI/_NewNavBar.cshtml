@@ -31,36 +31,4 @@
     }
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var currentUrl = '@idSelected';
-        var selectNavItem = $("#" + currentUrl);
-        if (selectNavItem != undefined) {
-            selectNavItem.addClass("selected");
-        }
-
-        //show/hide navigation secion
-        $("div.togglable_section").bind("click", function () {
-            var currentSection = $(this);
-            var divItems = currentSection.next("div.navItem");
-            if (currentSection.hasClass("folded")) {
-                currentSection.removeClass("folded");
-                divItems.show(200);
-            }
-            else {
-                currentSection.addClass("folded");
-                divItems.hide(200);
-            }
-        });
-
-        //add style for first item section
-        $("div.togglable_section:first-child").children(":first").addClass("first");
-
-        $('.el[data-hashovermenu=True], .el[data-hashovermenu=data-hashovermenu]').hover(
-        function () {
-            $(this).find('.hoveraction').fadeIn(400);
-        }, function () {
-            $(this).find('.hoveraction').hide();
-        });
-    });
-</script>
+@Html.Hidden("CurrentUrlSelected", idSelected)

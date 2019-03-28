@@ -22,8 +22,6 @@
     <meta name="viewport" content="width=device-width" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     @RenderSection("css", false)
-    @RenderSection("js", false)
-    @Html.Action("GlobalScript", "UI")
     <meta name="description" content="The description of my page" />
 </head>
 <body class="locale_en production">
@@ -64,59 +62,9 @@
     <footer></footer>
     <div id="message">
     </div>
-    <script type="text/javascript">
-        function toggleLeftNavigation(isShow) {
-            var currentElement = $("#toggle-left-navigation");
 
-            if (isShow) {
-                currentElement.removeClass("large-next");
-                currentElement.addClass("large-back");
-                currentElement.attr({ title: "@Labels.HideLeftNavigation" });
-                $("#left-navigation").show();
-                $("#content-wrapper").removeClass("expand");
-            }
-            else {
-                currentElement.removeClass("large-back");
-                currentElement.addClass("large-next");
-                currentElement.attr({ title: "@Labels.ShowLeftNavigation" });
-                $("#left-navigation").hide();
-                $("#content-wrapper").addClass("expand");
-            }
-        }
-
-        function updateLeftNavigationSetting(isShow) {
-            $.ajax({
-                type: "POST",
-                url: "@(Url.Action("ToogleLeftNavigation", "Employee"))",
-                data: { isShow: isShow }
-            });
-        }
-
-        $(document).ready(function () {
-            if (_global.isShowLeftNavigation == "True") {
-                toggleLeftNavigation(true);
-            }
-            else {
-                toggleLeftNavigation(false);
-            }
-
-            $("#toggle-left-navigation").bind("click", function () {
-                var currentElement = $(this);
-                if (currentElement.hasClass("large-back")) {
-                    toggleLeftNavigation(false);
-                    updateLeftNavigationSetting(false);
-                }
-                else {
-                    toggleLeftNavigation(true);
-                    updateLeftNavigationSetting(true);
-                }
-
-                $(".content_scroll").scroll(updateTableHeaders).trigger("scroll");
-                $(window).resize(function () {
-                    updateTableHeaders();
-                });
-            });
-        });
-    </script>
+    @Html.Action("GlobalScript", "UI")
+    <script src="~/wwwroot/dist/js/main.js"></script>
+    @RenderSection("js", false)
 </body>
 </html>
