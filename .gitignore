@@ -39,3 +39,4 @@ packages/
 *.vs
 Fanex.NexHR.Database/Fanex.NexHR.Database.dbmdl
 /Fanex.NexHR.Database/Fanex.NexHR.Database.jfm
+node_modules/

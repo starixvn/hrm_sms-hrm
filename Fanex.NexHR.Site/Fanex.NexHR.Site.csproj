@@ -227,119 +227,6 @@
     <Content Include="App_Data\combres_full_with_annotation.xml" />
     <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="Avatars\avatar.jpg" />
-    <Content Include="Content\main.css" />
-    <Content Include="Content\main.min.css" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Content\views\calendar\schedulearrange.css">
-      <DependentUpon>schedulearrange.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\schedulearrange.min.css">
-      <DependentUpon>schedulearrange.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\shiftstatistic.css">
-      <DependentUpon>shiftstatistic.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\shiftstatistic.min.css">
-      <DependentUpon>shiftstatistic.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\workingcalendars.css">
-      <DependentUpon>workingcalendars.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\workingcalendars.min.css">
-      <DependentUpon>workingcalendars.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.detail.css">
-      <DependentUpon>employee.detail.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.detail.min.css">
-      <DependentUpon>employee.detail.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.edit.css">
-      <DependentUpon>employee.edit.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manager.css">
-      <DependentUpon>employee.shift.manager.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manager.min.css">
-      <DependentUpon>employee.shift.manager.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manger.css">
-      <DependentUpon>employee.shift.manager.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manger.min.css">
-      <DependentUpon>employee.shift.manger.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\report\report.attendance.css">
-      <DependentUpon>report.attendance.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\report\report.attendance.min.css">
-      <DependentUpon>report.attendance.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\request\employee.request.css">
-      <DependentUpon>employee.request.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\views\request\employee.request.min.css">
-      <DependentUpon>employee.request.css</DependentUpon>
-    </Content>
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\Hongma-logo.png" />
@@ -420,10 +307,6 @@
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Styles\css\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Styles\css\lib\tipsy\tipsy.css" />
-    <Content Include="Styles\css\main.css" />
-    <Content Include="Styles\css\main.min.css" />
-    <Content Include="Styles\css\style.css" />
-    <Content Include="Styles\css\style.min.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Libs\jquery-multiselect-widget\jquery.multiselect.css" />
     <Content Include="Styles\Libs\jquery-multiselect-widget\jquery.multiselect.filter.css" />
@@ -985,6 +868,21 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="wwwroot\parts\constant.js" />
+    <Content Include="wwwroot\parts\entry.js" />
+    <Content Include="wwwroot\sources\js\date.js" />
+    <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\shared\employee.search.in.team.js" />
+    <Content Include="wwwroot\sources\js\pages\request\date.filter.new.js" />
+    <Content Include="wwwroot\sources\js\pages\request\employee.request.js" />
+    <Content Include="wwwroot\sources\styles\fonts\font.css" />
+    <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
+    <Content Include="wwwroot\webpack.config.dev.js" />
+    <Content Include="wwwroot\webpack.config.js" />
+    <Content Include="wwwroot\webpack.config.vendor.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">
@@ -1089,7 +987,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\pages\" />
+    <Folder Include="wwwroot\dist\js\" />
+    <Folder Include="wwwroot\dist\styles\" />
+    <Folder Include="wwwroot\dist\vendors\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\AccountSuspended.cshtml" />
@@ -1272,64 +1172,34 @@
     <Content Include="Libs\FontAwesome\scss\_screen-reader.scss" />
     <Content Include="Libs\FontAwesome\scss\_stacked.scss" />
     <Content Include="Libs\FontAwesome\scss\_variables.scss" />
-    <Content Include="Content\views\request\employee.request.css.map">
-      <DependentUpon>employee.request.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manger.css.map">
-      <DependentUpon>employee.shift.manger.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.shift.manager.css.map">
-      <DependentUpon>employee.shift.manager.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\employee\employee.detail.css.map">
-      <DependentUpon>employee.detail.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\schedulearrange.scss" />
-    <Content Include="Content\views\calendar\schedulearrange.css.map">
-      <DependentUpon>schedulearrange.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\shiftstatistic.scss" />
-    <Content Include="Content\views\calendar\shiftstatistic.css.map">
-      <DependentUpon>shiftstatistic.css</DependentUpon>
-    </Content>
-    <Content Include="Content\views\calendar\workingcalendars.scss" />
-    <Content Include="Content\views\calendar\workingcalendars.css.map">
-      <DependentUpon>workingcalendars.css</DependentUpon>
-    </Content>
-    <Content Include="Content\main.css.map" />
-    <Content Include="Content\main.scss" />
-    <Content Include="Content\style.scss" />
-    <Content Include="Content\abstracts\_mixins.scss" />
-    <Content Include="Content\abstracts\_variables.scss" />
-    <Content Include="Content\base\_common.scss" />
-    <Content Include="Content\base\_typo.scss" />
-    <Content Include="Content\components\_breadcrumb.scss" />
-    <Content Include="Content\components\_buttons.scss" />
-    <Content Include="Content\components\_icon.scss" />
-    <Content Include="Content\components\_panels.scss" />
-    <Content Include="Content\layout\_filter.scss" />
-    <Content Include="Content\layout\_forms.scss" />
-    <Content Include="Content\layout\_grid.scss" />
-    <Content Include="Content\layout\_table.scss" />
-    <Content Include="Content\vendors\_contextmenu.scss" />
-    <Content Include="Content\vendors\_dataTables.scss" />
-    <Content Include="Content\vendors\_jqueryUI.scss" />
-    <Content Include="compilerconfig.json" />
-    <Content Include="compilerconfig.json.defaults" />
-    <Content Include="Content\layout\_header.scss" />
-    <Content Include="Content\layout\_navbar.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\shiftstatistic.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
+    <Content Include="wwwroot\sources\styles\main.scss" />
+    <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />
+    <Content Include="wwwroot\sources\styles\abstracts\_variables.scss" />
+    <Content Include="wwwroot\sources\styles\base\_common.scss" />
+    <Content Include="wwwroot\sources\styles\base\_typo.scss" />
+    <Content Include="wwwroot\sources\styles\components\_breadcrumb.scss" />
+    <Content Include="wwwroot\sources\styles\components\_buttons.scss" />
+    <Content Include="wwwroot\sources\styles\components\_icon.scss" />
+    <Content Include="wwwroot\sources\styles\components\_panels.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_filter.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_forms.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_grid.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_table.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_contextmenu.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_dataTables.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_header.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_navbar.scss" />
     <Content Include="combres.readme" />
-    <None Include="Content\views\employee\employee.detail.scss" />
-    <Content Include="Content\views\employee\employee.edit.scss" />
-    <Content Include="Content\views\employee\employee.edit.css.map">
-      <DependentUpon>employee.edit.css</DependentUpon>
-    </Content>
-    <None Include="Content\views\employee\employee.shift.manager.scss" />
-    <Content Include="Content\views\report\report.attendance.scss" />
-    <Content Include="Content\views\report\report.attendance.css.map">
-      <DependentUpon>report.attendance.css</DependentUpon>
-    </Content>
-    <None Include="Content\views\request\employee.request.scss" />
+    <Content Include="wwwroot\sources\styles\main_new.scss" />
+    <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
+    <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
+    <None Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
     <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
@@ -1337,6 +1207,7 @@
     <Content Include="Fanex.NexHR.Site.ruleset" />
     <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
     <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
+    <Content Include="package.json" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
@@ -1377,9 +1248,7 @@
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap-theme.min.css.map" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.css.map" />
     <Content Include="Styles\css\lib\bootstrap\css\bootstrap.min.css.map" />
-    <Content Include="Views\Request\TestPage.cshtml" />
     <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
-    <Content Include="Views\Request\EmployeeRequestOld.cshtml" />
     <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.css.map" />
     <Content Include="Scripts\Libs\jquery-contextMenu\jquery.contextMenu.min.js.map" />
     <Content Include="Views\Request\ViewHistoryNewVersion.cshtml" />
@@ -1403,6 +1272,8 @@
     <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
     <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
     <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />
+    <Content Include="wwwroot\package.json" />
+    <Content Include="wwwroot\.babelrc" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\Google.Protobuf.dll" />
