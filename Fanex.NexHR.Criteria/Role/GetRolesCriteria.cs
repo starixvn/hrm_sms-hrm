@@ -4,9 +4,8 @@
 
     public class GetRolesCriteria : CriteriaBase
     {
-        public override string GetSettingKey()
-        {
-            return "Role_GetRoles";
-        }
+        public override string GetSettingKey() => "Role_GetRoles";
+
+        public override bool IsValid() => true;
     }
 }
