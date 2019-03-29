@@ -34,6 +34,7 @@
         private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
         private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
         private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
+        private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
         #endregion constant
 
@@ -347,7 +348,7 @@
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
+            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private void SendMailForCancelChangeShiftRequest(
@@ -363,7 +364,7 @@
             var body = Utilities.ReadTextFile(templateEmailPath);
             body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
+            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private void SendMailForCancelLateInEarlyOutRequest(
@@ -406,7 +407,7 @@
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
+            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private void SendMailForCancelKeepInViewRequest(
@@ -426,7 +427,7 @@
                 request.FromShift.Name,
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
+            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private static string GetPassiveNameOfCommand(string command)
@@ -689,7 +690,7 @@
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LateInEarlyOutRelatedMail(
@@ -713,7 +714,7 @@
                 isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void ChangeShiftRelatedMail(
@@ -736,7 +737,7 @@
                 forDate,
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LeaveRelatedMail(
@@ -762,7 +763,7 @@
                 request.LeaveType.Name,
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void KeepInViewRelatedMail(
@@ -791,7 +792,7 @@
                 shift != null ? shift.Name : string.Empty,
                 request.Remark);
 
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
     }
 }

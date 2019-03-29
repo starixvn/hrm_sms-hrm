@@ -55,11 +55,11 @@
             DateTime toDate = GetEndOfWeek(currentDate);
 
             IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            var criteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
-            IList<LookupData> jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria);
+            IList<LookupData> jobTitles = lookupDataService.GetAll(criteria);
             var model = new ScheduleArrangeFilterViewModel
             {
                 FromDate = fromDate,
@@ -110,7 +110,7 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
         {
-            var getWorkingCalendarCriteria = new GetWorkingCalendarsForShiftArrangeCriteria
+            var criteria = new GetWorkingCalendarsForShiftArrangeCriteria
             {
                 SupervisorId = CurrentUser.Id,
                 Fromtime = fromDate,
@@ -119,7 +119,7 @@
                 JobTitleId = jobTitles,
                 EmpId = employeeId
             };
-            IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(getWorkingCalendarCriteria);
+            IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(criteria);
             var scheduleArranges = new List<ScheduleArrangeViewModel>();
 
             if (workingCalendars.Any())

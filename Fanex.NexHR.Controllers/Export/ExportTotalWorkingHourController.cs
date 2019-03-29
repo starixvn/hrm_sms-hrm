@@ -33,7 +33,7 @@
                 {
                     FromDate = new DateTime(year, month, 1),
                     ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    DateOption = 5,
+                    DateOption = 5
                 };
             }
 

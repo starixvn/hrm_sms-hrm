@@ -221,12 +221,13 @@
             IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
             foreach (WorkingCalendarModel item in calendars)
             {
+                int shiftId = item.Shift != null ? item.Shift.Id : 0;
                 var shiftDetail = new ChangeShiftDetailViewModel
                 {
                     OnDate = item.WorkDate,
                     Remark = string.Empty,
                     ScheduleStatus = GetScheduleStatus(item),
-                    FromShiftId = item.IsOffDay ? -1 : (item.Shift != null ? item.Shift.Id : 0)
+                    FromShiftId = item.IsOffDay ? -1 : shiftId
                 };
                 changeShiftDetail.Add(shiftDetail);
             }

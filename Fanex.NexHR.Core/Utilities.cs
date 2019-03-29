@@ -350,31 +350,31 @@
             var statusName = string.Empty;
             switch (statusId)
             {
-                case 1:
+                case (int)CurrentRequestStatus.Pending:
                     statusName = Labels.Pending;
                     break;
 
-                case 2:
+                case (int)CurrentRequestStatus.Verified:
                     statusName = Labels.Verified;
                     break;
 
-                case 3:
+                case (int)CurrentRequestStatus.NotVerified:
                     statusName = Labels.NotVerified;
                     break;
 
-                case 4:
+                case (int)CurrentRequestStatus.Approved:
                     statusName = Labels.Approved;
                     break;
 
-                case 5:
+                case (int)CurrentRequestStatus.Rejected:
                     statusName = Labels.Rejected;
                     break;
 
-                case 6:
+                case (int)CurrentRequestStatus.Processed:
                     statusName = Labels.Processed;
                     break;
 
-                case 7:
+                case (int)CurrentRequestStatus.Void:
                     statusName = Labels.Void;
                     break;
 
