@@ -76,7 +76,7 @@
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="employeejs" type="js">
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employee/user.management.js" />
@@ -87,7 +87,7 @@
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="contactlistjs" type="js">
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employee/employee.index.js" />
@@ -168,7 +168,7 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/report/report.attendance.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
     </resourceSet>
 
@@ -179,7 +179,7 @@
     </resourceSet>
     <resourceSet name="timesheetjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/libs/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/report/report.timesheet.js" />
     </resourceSet>
@@ -418,7 +418,7 @@
     <resourceSet name="totalworkinghourjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.totalworkinghours.js" />
     </resourceSet>
@@ -504,7 +504,7 @@
 
     <resourceSet name="requestmonitoringjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
@@ -654,7 +654,7 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/libs/date.js" />
+      <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
       <resource path="~/scripts/views/report/report.timerecord.js" />
     </resourceSet>

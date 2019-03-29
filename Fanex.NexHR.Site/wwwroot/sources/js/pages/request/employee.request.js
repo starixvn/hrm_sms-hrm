@@ -5,75 +5,14 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 
-import { floatingHeader } from '../../shared/common.functions';
+import { floatingHeader, showMessage, fadeOutMessage, confirm } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/employee.search.in.team';
 import './date.filter.new';
 
-$.extend({
-    getOrCreateDialog: function (id) {
-        var $box = $('#' + id);
-        if (!$box.length) {
-            $box = $('<div id="' + id + '"><p></p></div>').hide().appendTo('body');
-        }
-        return $box;
-    }
-});
-
-function showMessage(message) {
-    $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
-    $('#message').slideDown();
-}
-
-function fadeOutMessage() {
-    $('#message').fadeOut(500);
-}
-
-function confirm(message, callback, options) {
-    var defaults = {
-        title: 'SMSHRM',
-        modal: true,
-        resizable: false,
-        buttons: {
-            OK: function () {
-                $(this).dialog('close');
-                if (callback !== null) {
-                    callback();
-                }
-                return true;
-            },
-            Cancel: function () {
-                $(this).dialog('close');
-                return false;
-            }
-        },
-        minHeight: 50,
-        dialogClass: 'modal-shadow'
-    };
-
-    var $confirm = $.getOrCreateDialog('confirm');
-    // set message
-    $('p', $confirm).html(message);
-    // init dialog
-    $confirm.dialog($.extend({}, defaults, options));
-}
-
-////////////////////////////////////////////////////////////////////////////
-
 $(function () {
-    //Handle event when click search icon
-    $('#searchIcon').on('click', function () {
-        document.location = _global.root + 'employee/index?query=' + $('#searchbox').val();
-    });
-
-    $('#searchbox').keyup(function (event) {
-        if (event.keyCode === 13) {
-            $('#searchIcon').trigger('click');
-        }
-    });
-
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
-        var model = {
+        const model = {
             RequestId: requestId,
             RoleId: roleId,
             Command: command,
@@ -113,12 +52,12 @@ $(function () {
             modal: true,
             buttons: {
                 'Confirm': function () {
-                    var ignoredDisciplines = [],
+                    let ignoredDisciplines = [],
                         comment = $(this).find('textarea#Comment').val(),
                         isValid = true;
 
                     $(this).find('table.table tbody tr').each(function () {
-                        var chkIgnored = $(this).find('td.violationIgnored input:radio'),
+                        let chkIgnored = $(this).find('td.violationIgnored input:radio'),
                             chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
                         if (chkIgnored.length === 1) {
@@ -152,7 +91,7 @@ $(function () {
     }
 
     function renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title) {
-        var model = {
+        const model = {
             RequestId: requestId,
             RoleId: roleId,
             RequestTypeId: requestTypeId,
@@ -171,7 +110,7 @@ $(function () {
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
 
                 $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
-                    var chkIgnored = $(this).find('td.violationIgnored input:radio'),
+                    let chkIgnored = $(this).find('td.violationIgnored input:radio'),
                         chkNotIgnored = $(this).find('td.violationRecorded input:radio');
 
                     chkIgnored.on('click', function () {
@@ -194,12 +133,12 @@ $(function () {
     }
 
     function processCommand(command, options) {
-        var eventElement = options.$trigger;
-        var title,
-            requestTypeId = parseInt((eventElement).attr('requestTypeId'), 10),
-            requestId = parseInt((eventElement).attr('requestId'), 10),
-            roleId = parseInt((eventElement).attr('roleId'), 10),
-            employeeId = parseInt((eventElement).attr('employeeId'), 10);
+        const eventElement = options.$trigger;
+        const requestTypeId = parseInt(eventElement.attr('requestTypeId'), 10);
+        const requestId = parseInt(eventElement.attr('requestId'), 10);
+        const roleId = parseInt(eventElement.attr('roleId'), 10);
+        const employeeId = parseInt(eventElement.attr('employeeId'), 10);
+        let title;
         switch (command) {
             case 'Accept':
                 title = 'Are you sure you want to verify?';
@@ -245,7 +184,7 @@ $(function () {
     }
 
     function bindMenu(element, menu) {
-        var listItem = {};
+        let listItem = {};
         switch (menu) {
             case 'hrMenu':
                 listItem = {
@@ -287,20 +226,19 @@ $(function () {
 
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
-            var action = $('#ActionName').val() + 'WorkingTimeRequest',
-                teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '',
-                requestType = $("input[type='radio'][name='RequestType']:checked").val(),
-                isLocal = $('#IsLocal').val(),
-                isFilterByAffectedDate = $('#IsFilterByAffectedDate').val();
-            var url = _global.root + 'ExportRequest/' + action + '?DateOption=' + $('#Date').val() +
-                '&TeamIds=' + teams + '&Employee=' + $('#Employee').val() +
-                '&EmployeeId=' + $('#EmployeeId').val() +
-                '&FromDate=' + $('#FromDate').val() +
-                '&ToDate=' + $('#ToDate').val() +
-                '&StatusId=' + $('#statusId').val() +
-                '&RequestType=' + requestType +
-                '&IsLocal=' + isLocal +
-                '&IsFilterByAffectedDate=' + isFilterByAffectedDate;
+            const action = $('#ActionName').val() + 'WorkingTimeRequest';
+            const teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '';
+            const url = _global.root + 'ExportRequest/' + action
+                + '?DateOption=' + $('#Date').val()
+                + '&TeamIds=' + teams
+                + '&Employee=' + $('#Employee').val()
+                + '&EmployeeId=' + $('#EmployeeId').val()
+                + '&FromDate=' + $('#FromDate').val()
+                + '&ToDate=' + $('#ToDate').val()
+                + '&StatusId=' + $('#statusId').val()
+                + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val()
+                + '&IsLocal=' + $('#IsLocal').val()
+                + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val();
             location.href = url;
         });
     }
@@ -323,7 +261,7 @@ $(function () {
         bindMenu('.sa-void', 'voidMenu');
 
         $('.viewhistory').click(function () {
-            var url = $(this).attr('id');
+            const url = $(this).attr('id');
             $.get(url, function (data) {
                 $('#dialoghistorycontent').html(data);
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
@@ -338,28 +276,26 @@ $(function () {
 
         $('form').submit(function (e) {
             e.preventDefault();
-            var from = new Date($('#FromDate').val()),
-                to = new Date($('#ToDate').val());
+            const from = new Date($('#FromDate').val());
+            const to = new Date($('#ToDate').val());
             if (from > to) {
                 alert('From Date must be less than To Date');
                 $('#submit').removeClass('disabled');
                 $('#submit').val('Submit');
                 e.preventDefault();
             } else {
-                var action = $('#ActionName').val(),
-                    teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '',
-                    requestType = $("input[type='radio'][name='RequestType']:checked").val(),
-                    isLocal = $('#IsLocal').val(),
-                    isFilterByAffectedDate = $('#IsFilterByAffectedDate').val();
-                var url = _global.root + 'request/' + action + '?DateOption=' + $('#Date').val() +
-                    '&TeamIds=' + teams + '&Employee=' + $('#Employee').val() +
-                    '&EmployeeId=' + $('#EmployeeId').val() +
-                    '&FromDate=' + $('#FromDate').val() +
-                    '&ToDate=' + $('#ToDate').val() +
-                    '&StatusId=' + $('#statusId').val() +
-                    '&RequestType=' + requestType +
-                    '&IsLocal=' + isLocal +
-                    '&IsFilterByAffectedDate=' + isFilterByAffectedDate;
+                const teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '';
+                const url = _global.root + 'request/' + $('#ActionName').val()
+                    + '?DateOption=' + $('#Date').val()
+                    + '&TeamIds=' + teams
+                    + '&Employee=' + $('#Employee').val()
+                    + '&EmployeeId=' + $('#EmployeeId').val()
+                    + '&FromDate=' + $('#FromDate').val()
+                    + '&ToDate=' + $('#ToDate').val()
+                    + '&StatusId=' + $('#statusId').val()
+                    + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val()
+                    + '&IsLocal=' + $('#IsLocal').val()
+                    + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val();
 
                 location.href = url;
             }

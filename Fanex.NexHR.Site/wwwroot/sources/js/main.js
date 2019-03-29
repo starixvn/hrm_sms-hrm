@@ -34,6 +34,16 @@ $(document).ready(function () {
         toggleLeftNavigation(false);
     }
 
+    $('#searchIcon').on('click', function () {
+        document.location = _global.root + 'employee/index?query=' + $('#searchbox').val();
+    });
+
+    $('#searchbox').keyup(function (event) {
+        if (event.keyCode === 13) {
+            $('#searchIcon').trigger('click');
+        }
+    });
+
     $('#toggle-left-navigation').bind('click', function () {
         let currentElement = $(this);
         if (currentElement.hasClass('large-back')) {
@@ -68,7 +78,7 @@ $(document).ready(function () {
         }
     });
 
-    //add style for first item section
+    // add style for first item section
     $('div.togglable_section:first-child').children(':first').addClass('first');
 
     $('.el[data-hashovermenu=True], .el[data-hashovermenu=data-hashovermenu]').hover(
