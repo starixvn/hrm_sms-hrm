@@ -269,7 +269,6 @@
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
     <Content Include="Scripts\Views\message.edit.js" />
-    <Content Include="Scripts\Views\Report\report.hrrequestmonitoring.js" />
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
@@ -370,7 +369,6 @@
     <Content Include="Styles\Images\tipsy.gif" />
     <Content Include="Styles\request.checkinout.css" />
     <Content Include="Styles\report.totalworkinghours.css" />
-    <Content Include="Styles\report.requestmonitoring.css" />
     <Content Include="Styles\employee.monthschedule.css" />
     <Content Include="Styles\request.overtime.css" />
     <Content Include="Styles\style.css" />
@@ -933,7 +931,6 @@
     <Content Include="Views\UI\Header.cshtml" />
     <Content Include="Views\UI\NavBar.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
-    <Content Include="Views\Report\RequestMonitoring.cshtml" />
     <Content Include="Views\Report\TotalWorkingHours.cshtml" />
     <Content Include="Views\Report\UnpaidLeaveSummary.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
@@ -1055,9 +1052,7 @@
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourWeekly.cshtml" />
     <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
-    <Content Include="ExcelTemplates\HrRequestStatisticTemplate.xls" />
     <Content Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
-    <Content Include="Views\Report\RequestMonitoringDetails.cshtml" />
     <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\Create.cshtml" />
     <Content Include="Views\Message\Edit.cshtml" />

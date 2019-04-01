@@ -15,59 +15,8 @@
     [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportExporting
     {
-        private const int _RowStartBodyHrRequestStatistic = 4;
         private const int _RowStartBodyWorkingCalendarSummary = 5;
-        private const string _HrRequestStatisticFilePathExcelTemplate = "~\\ExcelTemplates\\HrRequestStatisticTemplate.xls";
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";
-
-        public static HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
-        {
-            HSSFWorkbook hssfworkbook;
-
-            var templatePath = HttpContext.Current.Server.MapPath(_HrRequestStatisticFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "Request Statistic");
-
-            var rowDate = sheet.GetRow(1);
-            rowDate.GetCell(3).SetCellValue(fromDate.ToString(Constants.DateFormat));
-            rowDate.GetCell(5).SetCellValue(toDate.ToString(Constants.DateFormat));
-
-            var rowIndex = _RowStartBodyHrRequestStatistic;
-            var rowCopy = 0;
-            var height = sheet.GetRow(_RowStartBodyHrRequestStatistic).Height;
-            var index = 1;
-
-            foreach (var item in requests)
-            {
-                rowCopy = _RowStartBodyHrRequestStatistic + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                row.Height = height;
-
-                row.GetCell(0).SetCellValue(index);
-                row.GetCell(1).SetCellValue(item.Requester.FullName);
-                row.GetCell(2).SetCellValue(item.Requester.NickName);
-                row.GetCell(3).SetCellValue(item.Requester.Team.Name);
-                row.GetCell(4).SetCellValue(item.TotalLeave);
-                row.GetCell(5).SetCellValue(item.TotalUnpaidLeave);
-                row.GetCell(6).SetCellValue(item.TotalChangeShift);
-                row.GetCell(7).SetCellValue(item.TotalLateIn);
-                row.GetCell(8).SetCellValue(item.TotalEarlyOut);
-                row.GetCell(9).SetCellValue(item.TotalCheckInOut);
-
-                rowIndex++;
-                index++;
-            }
-
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
 
         public HSSFWorkbook ExportWorkingCalendarSummary(
             List<WorkingCalendarSummary> calendars,

@@ -118,7 +118,6 @@
     <Compile Include="Overtime\OvertimeReportViewModel.cs" />
     <Compile Include="Overtime\MemberOvertimeDailyViewModel.cs" />
     <Compile Include="Overtime\MemberOvertimeViewModel.cs" />
-    <Compile Include="Request\RequestsMonitoringViewModel.cs" />
     <Compile Include="Request\RequestViewModel.cs" />
     <Compile Include="Supervisor\ScheduleArrangeFilterViewModel.cs" />
     <Compile Include="Supervisor\ScheduleArrangeViewModel.cs" />

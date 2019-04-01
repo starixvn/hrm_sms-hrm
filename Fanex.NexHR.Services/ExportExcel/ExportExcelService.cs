@@ -36,13 +36,6 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportHRRequestStatistic(List<RequestsMonitoring> requests, DateTime fromDate, DateTime toDate)
-        {
-            HSSFWorkbook hssfworkbook = ReportExporting.ExportHRRequestStatistic(requests, fromDate, toDate);
-
-            return hssfworkbook;
-        }
-
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
         {
             HSSFWorkbook hssfworkbook;

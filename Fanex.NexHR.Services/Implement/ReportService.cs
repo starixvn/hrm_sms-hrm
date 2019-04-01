@@ -76,17 +76,6 @@
             return totalWorkingHours;
         }
 
-        public IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria)
-        {
-            IList<RequestsMonitoring> requestMonitoring = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                requestMonitoring = reportRepository.GetRequestMonitoring(criteria);
-            }
-
-            return requestMonitoring;
-        }
-
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
             IList<EmployeeAttendanceModel> employeeAttendance = null;

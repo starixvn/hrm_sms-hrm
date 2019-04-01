@@ -496,20 +496,7 @@
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
-
-    <resourceSet name="requestmonitoringcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/report.requestmonitoring.css" />
-    </resourceSet>
-
-    <resourceSet name="requestmonitoringjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/date.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/date.filter.js" />
-      <resource path="~/scripts/views/report/report.hrrequestmonitoring.js" />
-    </resourceSet>
-
+    
     <resourceSet name="jobtitlecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />

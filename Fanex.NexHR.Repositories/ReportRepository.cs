@@ -50,24 +50,6 @@
             return listAttendance;
         }
 
-        public IList<RequestsMonitoring> GetRequestMonitoring(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var entity = db.Query<RequestsMonitoring, Employee, Team, RequestsMonitoring>(
-                        (r, e, t) =>
-                        {
-                            e.Team = t;
-                            r.Requester = e;
-                            return r;
-                        },
-                        splitOn: "Id,GroupId",
-                        parameterValues: criteria.GetSpParams());
-
-                return entity.ToList();
-            }
-        }
-
         public IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

@@ -10,8 +10,6 @@
     {
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria);
 
-        IList<RequestsMonitoring> GetRequestMonitoring(ICriteria criteria);
-
         IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria);
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(ICriteria criteria);

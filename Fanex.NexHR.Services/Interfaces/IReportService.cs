@@ -22,8 +22,6 @@
 
         IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(GetTotalWorkingHourWeeklyCriteria criteria);
 
-        IList<RequestsMonitoring> GetRequestMonitoring(GetRequestMonitoringCriteria criteria);
-
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria);
 
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria);

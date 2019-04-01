@@ -136,7 +136,6 @@
     <Compile Include="Request\LeaveDetailModel.cs" />
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveSummaryByTeam.cs" />
-    <Compile Include="RequestsMonitoring.cs" />
     <Compile Include="Overtime\OvertimeTypeModel.cs" />
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
