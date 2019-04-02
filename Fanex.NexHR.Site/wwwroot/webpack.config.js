@@ -24,7 +24,7 @@ module.exports = env => {
         mode: env,
         stats: { modules: false },
         resolve: {
-            extensions: ['.js']
+            extensions: ['.js', '.jsx']
         },
         output: {
             filename: '[name].js',

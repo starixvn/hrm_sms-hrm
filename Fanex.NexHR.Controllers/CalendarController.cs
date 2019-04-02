@@ -50,27 +50,10 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ArrangeSchedule()
         {
-            var currentDate = DateTime.Now;
-            DateTime fromDate = GetStartOfWeek(currentDate);
-            DateTime toDate = GetEndOfWeek(currentDate);
+            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
-            IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
-            var criteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> jobTitles = lookupDataService.GetAll(criteria);
-            var model = new ScheduleArrangeFilterViewModel
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                Groups = teams,
-                JobTitles = jobTitles
-            };
-
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
-
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -104,40 +87,6 @@
             };
 
             return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult ArrangeScheduleDetail(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
-        {
-            var criteria = new GetWorkingCalendarsForShiftArrangeCriteria
-            {
-                SupervisorId = CurrentUser.Id,
-                Fromtime = fromDate,
-                Totime = toDate,
-                GroupIds = groupIds,
-                JobTitleId = jobTitles,
-                EmpId = employeeId
-            };
-            IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(criteria);
-            var scheduleArranges = new List<ScheduleArrangeViewModel>();
-
-            if (workingCalendars.Any())
-            {
-                scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars).ToList();
-            }
-
-            var scheduleViewModel = new ScheduleViewModel
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                ScheduleArranges = scheduleArranges
-            };
-
-            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
-
-            return View(scheduleViewModel);
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
@@ -233,21 +182,6 @@
             IList<EmployeeShiftModel> employeeShifts = workingCalendarService.GetEmployeeShift(criteria);
 
             return View(employeeShifts);
-        }
-
-        public ActionResult GetEmployeesByShiftMonitor(string query)
-        {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria
-            {
-                EmpId = this.CurrentUser.Id,
-                Role = (int)RoleSystem.ShiftManager,
-                RequestType = null,
-                Query = query.Trim(),
-                IncludeLoginUser = false
-            };
-
-            IList<SupervisorNameModel> employees = employeeService.GetSupervisorByQuery(criteria);
-            return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetShift(string query, bool isShowOff = false)
@@ -441,100 +375,6 @@
                     }
                 }
             }
-        }
-
-        [NonAction]
-        private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
-        {
-            var scheduleModels = new List<ScheduleArrangeViewModel>();
-
-            var employees = workingCalendars.GroupBy(x => x.Employee.Id).Select(x => x.Key);
-
-            foreach (var employeeId in employees)
-            {
-                var scheduleArrangeModel = HandleConvertWorkingCalendarToScheduleModel(employeeId, fromDate, toDate, workingCalendars);
-                scheduleModels.Add(scheduleArrangeModel);
-            }
-
-            return scheduleModels;
-        }
-
-        private ScheduleArrangeViewModel HandleConvertWorkingCalendarToScheduleModel(int employeeId, DateTime fromDate, DateTime toDate, IList<WorkingCalendarModel> workingCalendars)
-        {
-            var numberDays = (toDate - fromDate).Days + 1;
-            IEnumerable<WorkingCalendarModel> employeeWorkingCalendars = null;
-            WorkingCalendarModel workingCalendar = null;
-            ScheduleArrangeViewModel scheduleArrangeModel = null;
-            var workingDate = DateTime.Now.Date;
-            var scheduleHasInfo = false;
-            for (int i = 0; i < numberDays; i++)
-            {
-                workingDate = fromDate.AddDays(i);
-                employeeWorkingCalendars = workingCalendars.Where(
-                    t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
-
-                if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
-                {
-                    workingCalendar = employeeWorkingCalendars.FirstOrDefault();
-
-                    if (!scheduleHasInfo)
-                    {
-                        scheduleArrangeModel = new ScheduleArrangeViewModel
-                        {
-                            EmployeeId = workingCalendar.Employee.Id,
-                            NickName = workingCalendar.Employee.NickName,
-                            TeamName = workingCalendar.Employee.Team.Name,
-                            TeamCode = workingCalendar.Employee.Team.Code
-                        };
-
-                        scheduleHasInfo = true;
-                    }
-
-                    SetWorkingCalendarForDayOfWeek(scheduleArrangeModel, workingCalendar);
-                }
-            }
-
-            return scheduleArrangeModel;
-        }
-
-        [NonAction]
-        private ScheduleArrangeViewModel SetWorkingCalendarForDayOfWeek(ScheduleArrangeViewModel scheduleModel, WorkingCalendarModel workingCalendar)
-        {
-            switch (workingCalendar.Weekday - 1)
-            {
-                case (int)DayOfWeek.Monday:
-                    scheduleModel.MondaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Tuesday:
-                    scheduleModel.TuesdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Wednesday:
-                    scheduleModel.WednesdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Thursday:
-                    scheduleModel.ThursdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Friday:
-                    scheduleModel.FridaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Saturday:
-                    scheduleModel.SaturdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Sunday:
-                    scheduleModel.SundaySchedule = workingCalendar;
-                    break;
-
-                default:
-                    return scheduleModel;
-            }
-
-            return scheduleModel;
         }
     }
 }

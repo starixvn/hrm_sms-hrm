@@ -1,91 +1,21 @@
-﻿@model ScheduleArrangeFilterViewModel
-@{
+﻿@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.ScheduleArrange;
-    var hasPermission = (bool)ViewBag.HasPermission;
+    var isHost = (bool)ViewBag.IsHost;
+    var isSARole = (bool)ViewBag.IsSARole;
 }
 @section css{
-    @Url.CombresLink("schedulearrangecss")
+    <link href="~/wwwroot/dist/styles/schedule.arrange.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("schedulearrangejs")
+    <script src="~/wwwroot/dist/js/schedule.arrange.js"></script>
 }
 @section Breadcrumb {
     <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
 
-<div class="container_24 bunhat">
-    <div class="row">
-        <div class="grid_2 gridlabel">
-            @Labels.Team
-        </div>
-        <div class="grid_8">
-            <select id="GroupId" multiple="multiple" class="dropdown" name="GroupId" title="@Labels.Team">
-                @foreach (Team team in Model.Groups)
-                {
-                    <option value="@team.Id">@team.Name</option>
-                }
-            </select>
-        </div>
+<h2 class="page-title">@ViewBag.Title</h2>
 
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.EmployeeId)
-        </div>
-        <div class="grid_8">
-            @Html.TextBox("Employee", Model.Employee, new { placeholder = @Messages.SearchEmployeeWatermark })
-            @Html.HiddenFor(model => model.EmployeeId)
-        </div>
-    </div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="row">
-        <div class="grid_2 gridlabel">
-            @Labels.JobTitle
-        </div>
-        <div class="grid_8">
-            <select id="JobTitle" class="dropdown" multiple="multiple" name="JobTitle">
-                @foreach (LookupData jobTitle in Model.JobTitles)
-                {
-                    <option value="@jobTitle.Id">@jobTitle.Name</option>
-                }
-            </select>
-        </div>
-        <div class="grid_2 gridlabel">
-            @Html.Label("Week")
-        </div>
-        <div class="grid_8">
-            @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(), new { @class = "startDateOfWeek", @readonly = "readonly" })
-            @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(), new { @class = "endDateOfWeek", @readonly = "readonly" })
-            <img class="weekPickerImg" src="~/images/calendar.png" />
-            <div class="week-picker"></div>
-        </div>
-    </div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="row">
-        <div class="grid_2 prefix_2">
-            <input type="button" value="@Labels.Submit" id="btnSubmit" />
-        </div>
-        <div class="grid_3">
-            <input style="width:115px;" type="button" value="Current Week" id="btnCurrentWeek" />
-        </div>
-        @if (hasPermission)
-        {
-            <div class="grid_2">
-                <input type="button" value="@Labels.Save" id="btnSave" />
-            </div>
-        }
-        <div class="clear"></div>
-    </div>
-    @Html.Hidden("CurrentStartDateOfWeek", Model.FromDate.ToDateMonthYearFormatedDate())
-    @Html.Hidden("CurrentEndDateOfWeek", Model.ToDate.ToDateMonthYearFormatedDate())
-</div>
-<div class="clear"></div>
-<div class="space"></div>
-<div class="clear"></div>
-<div class="space"></div>
-<div id="scheduleContent"></div>
+<input type="checkbox" hidden id="IsHost" @(isHost ? "checked" : string.Empty) />
+<input type="checkbox" hidden id="IsSARole" @(isSARole ? "checked" : string.Empty) />
+<div id="schedule-wrapper"></div>

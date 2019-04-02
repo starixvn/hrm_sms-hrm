@@ -1,0 +1,12 @@
+﻿.weekpicker-wrapper {
+    .fromDate, .toDate {
+        display: inline;
+        width: 80px !important;
+        padding: 0 2px !important;
+    }
+
+    .ui-datepicker {
+        position: absolute;
+        z-index: 1;
+    }
+}

@@ -39,10 +39,7 @@ module.exports = env => {
             ]
         },
         entry: {
-            vendor: [
-                'jquery/dist/jquery.js',
-                'bootstrap/dist/js/bootstrap.min.js'
-            ]
+            react: ['react', 'react-dom']
         },
         output: {
             filename: '[name].js',

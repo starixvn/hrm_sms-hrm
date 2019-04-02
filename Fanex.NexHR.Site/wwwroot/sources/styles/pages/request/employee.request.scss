@@ -1,6 +1,11 @@
 ﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
 @import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
 
+@import '../../vendors/multiselect';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/buttons';
+
 #dialogProcessRequest {
     form {
         > .formrow {
@@ -37,19 +42,5 @@
             border: 1px solid #ccc;
             border-bottom-color: #ccc;
         }
-    }
-}
-
-button.ui-multiselect {
-    background: #fff !important;
-    border: 1px solid #C8C8C8;
-    text-align: left;
-    padding: 4px 4px 4px 4px;
-    line-height: 15px;
-
-    span {
-        color: #222;
-        text-align: left;
-        text-shadow: none;
     }
 }

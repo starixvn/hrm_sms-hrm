@@ -1,10 +1,74 @@
-﻿#FromDate, #ToDate {
-    width: 80px;
+﻿@import '~@9softstudio/react-multiselect/dist/style.css';
+
+@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../vendors/multiselect';
+@import '../../vendors/weekpicker';
+@import '../../vendors/autocomplete';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/buttons';
+
+.form-horizontal {
+    .button-group {
+        .button {
+            margin-right: 5px;
+
+            &.currentWeek {
+                width: 100px;
+            }
+        }
+    }
 }
 
 .summary {
     display: none;
     text-align: center;
+}
+
+.table {
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .header-control {
+        th {
+            position: relative;
+            padding: 5px 10px;
+        }
+
+        .save {
+            height: 25px;
+            line-height: 25px;
+            padding: 0 4px;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+
+        .prev-week, .next-week {
+            background: #f1f1f1;
+            color: #5e7485;
+            margin-right: 5px;
+            padding: 0 4px;
+            height: 25px;
+            line-height: 25px;
+            @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 2px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.1));
+        }
+
+        .label-week {
+            padding: 4px 12px;
+            vertical-align: middle;
+            @include border-radius(40px);
+            color: #fff;
+            background: #1e88e5;
+        }
+    }
 }
 
 table.table.table-custom {

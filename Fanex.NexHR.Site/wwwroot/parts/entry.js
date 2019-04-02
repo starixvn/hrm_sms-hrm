@@ -7,7 +7,7 @@ module.exports = {
     client: {
         [`${styleDistPath}/main`]: `${styleSourcePath}/main.scss`,
         [`${styleDistPath}/main_new`]: `${styleSourcePath}/main_new.scss`,
-        [`${styleDistPath}/schedulearrange`]: `${styleSourcePath}/pages/calendar/schedulearrange.scss`,
+        [`${styleDistPath}/schedule.arrange`]: `${styleSourcePath}/pages/calendar/schedulearrange.scss`,
         [`${styleDistPath}/shiftstatistic`]: `${styleSourcePath}/pages/calendar/shiftstatistic.scss`,
         [`${styleDistPath}/workingcalendars`]: `${styleSourcePath}/pages/calendar/workingcalendars.scss`,
         [`${styleDistPath}/employee.details`]: `${styleSourcePath}/pages/employee/employee.details.scss`,
@@ -18,6 +18,7 @@ module.exports = {
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
-        [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`
+        [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
+        [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`
     }
 };
