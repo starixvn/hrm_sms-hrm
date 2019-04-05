@@ -827,9 +827,12 @@
     <Content Include="wwwroot\parts\entry.js" />
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\schedulearrange.common.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
@@ -1154,6 +1157,7 @@
     <Content Include="combres.readme" />
     <Content Include="wwwroot\sources\styles\main_new.scss" />
     <Content Include="wwwroot\sources\js\shared\common.functions.js" />
+    <Content Include="wwwroot\sources\styles\components\_checkbox.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

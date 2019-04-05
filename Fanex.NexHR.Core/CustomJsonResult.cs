@@ -8,7 +8,7 @@
 
     public class CustomJsonResult : JsonResult
     {
-        private const string DateFormat = "dd-MM-yyyy HH:mm:ss";
+        private const string DateFormat = "dd MMM, yyyy HH:mm:ss";
 
         public override void ExecuteResult(ControllerContext context)
         {

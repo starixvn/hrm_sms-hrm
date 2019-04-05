@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./sources/styles/pages/calendar/shiftstatistic.scss"],"names":[],"mappings":"AAAA;AACA,cAAc;;AAEd;AACA,aAAa","file":"styles/shiftstatistic.css","sourcesContent":["#FromDate, #ToDate {\n  width: 80px; }\n\n.chooseweek {\n  color: red; }\n"],"sourceRoot":""}

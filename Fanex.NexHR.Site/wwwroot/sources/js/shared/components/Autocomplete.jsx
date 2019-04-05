@@ -1,6 +1,23 @@
 ﻿import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Autocomplete extends Component {
+    static propTypes = {
+        sources: PropTypes.arrayOf(PropTypes.object),
+        className: PropTypes.string,
+        isDisabled: PropTypes.bool,
+        onInput: PropTypes.func,
+        onChange: PropTypes.func
+    };
+
+    static defaultProps = {
+        sources: [],
+        classname: '',
+        isDisabled: false,
+        onInput: function () { },
+        onChange: function () { }
+    };
+
     componentDidMount() {
         this.$el = $(this.el);
         this.updateAutocomplete();
@@ -22,7 +39,7 @@ export default class Autocomplete extends Component {
         const sources = this.props.sources;
         this.$el.autocomplete({
             source: sources,
-            minLength: 1,
+            minLength: 2,
             select: (event, ui) => this.handleChange(event, ui),
             change: (event, ui) => this.handleChange(event, ui)
         });
@@ -53,7 +70,9 @@ export default class Autocomplete extends Component {
         return (
             <input
                 ref={el => this.el = el}
-                className="form-control"
+                type="text"
+                className={this.props.className}
+                disabled={this.props.isDisabled}
                 onInput={this.handleInput}
             />
         );

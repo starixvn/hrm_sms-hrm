@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using System;
-
     public class Shift : EntityBase<int>
     {
         public string BeginCheckInTime { get; set; }

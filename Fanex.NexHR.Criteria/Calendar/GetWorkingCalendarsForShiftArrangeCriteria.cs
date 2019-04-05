@@ -19,14 +19,8 @@
 
         public bool? IsDebug { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "ShiftMng_GetShiftSchedule";
-        }
+        public override string GetSettingKey() => "ShiftMng_GetShiftSchedule";
 
-        public override bool IsValid()
-        {
-            return SupervisorId > 0;
-        }
+        public override bool IsValid() => SupervisorId > 0 && Totime.DayOfYear - Fromtime.DayOfYear == 6;
     }
 }

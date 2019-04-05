@@ -38,7 +38,7 @@
 
         public bool IsPublic { get; set; }
 
-        public string ShiftMultipleID { get; set; }
+        public string ShiftMultipleId { get; set; }
 
         public string ShiftMultipleCode { get; set; }
 

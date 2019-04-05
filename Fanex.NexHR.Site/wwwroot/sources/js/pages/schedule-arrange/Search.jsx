@@ -61,7 +61,7 @@ export default class Search extends Component {
                         </div>
                         <div className="select-form">
                             <Autocomplete
-                                displayValue={this.props.filter.employee.label}
+                                className="form-control"
                                 sources={this.props.employeeOptions}
                                 onInput={this.props.onSearchEmployees}
                                 onChange={this.handleEmployeeChange}
@@ -86,7 +86,7 @@ export default class Search extends Component {
                 </div>
                 <div className="form-horizontal clearfix">
                     <div className="button-group">
-                        <input className="button" type="button" value="Submit" />
+                        <input className="button" type="button" value="Submit" onClick={this.props.onSubmit} />
                         <input className="button currentWeek" type="button" value="Current Week" />
                     </div>
                 </div>

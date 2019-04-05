@@ -102,17 +102,7 @@
                 scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars).ToList();
             }
 
-            var scheduleViewModel = new ScheduleViewModel
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                ScheduleArranges = scheduleArranges
-            };
-
-            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
-
-            return new CustomJsonResult { Data = scheduleViewModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = scheduleArranges, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private static DateTime GetStartOfWeek(DateTime currentDate)
