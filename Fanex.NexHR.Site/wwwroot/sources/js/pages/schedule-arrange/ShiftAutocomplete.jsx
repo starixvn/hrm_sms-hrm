@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Autocomplete from 'react-autocomplete';
 
-export default class ShiftAutocomplete extends Component {
+export default class ShiftAutocomplete extends PureComponent {
     static propTypes = {
         value: PropTypes.string,
         shiftOptions: PropTypes.arrayOf(PropTypes.object),

@@ -4,7 +4,10 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import moment from 'moment';
+import { cloneDeep, isEqual, unset } from 'lodash';
 
+import AlertModal from '../../shared/components/AlertModal';
+import ShiftMultipleModal from './ShiftMultipleModal';
 import Search from './Search';
 import Table from './table/table';
 
@@ -21,7 +24,12 @@ export default class App extends Component {
                 employee: { value: 0, label: '' }
             },
             schedules: [],
-            employeeOptions: []
+            employeeOptions: [],
+            showShiftMultipleModal: false,
+            alertModal: {
+                show: false,
+                message: ''
+            }
         };
 
         this.originalSchedules = [];
@@ -72,6 +80,44 @@ export default class App extends Component {
 
                 this.setState({ filter: filter });
             });
+
+        window.addEventListener('beforeunload', this.checkDirtyData);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.checkDirtyData);
+    }
+
+    checkDirtyData = event => {
+        let isDirtyData = false;
+        let schedules = cloneDeep(this.state.schedules);
+        let originalSchedules = cloneDeep(this.originalSchedules);
+        const totalItems = schedules.length;
+
+        for (let index = 0; index < totalItems; index++) {
+            if (!this.isDirtyObject(originalSchedules[index], schedules[index])) {
+                isDirtyData = true;
+                break;
+            }
+        }
+
+        if (!isDirtyData) {
+            return undefined;
+        }
+
+        var confirmationMessage = 'It looks like you have been editing something. '
+            + 'If you leave before saving, your changes will be lost.';
+
+        (event || window.event).returnValue = confirmationMessage;
+
+        return confirmationMessage;
+    }
+
+    isDirtyObject = (schedule, originalSchedule) => {
+        unset(originalSchedule, 'selectWeekDays');
+        unset(schedule, 'selectWeekDays');
+
+        return isEqual(originalSchedule, schedule);
     }
 
     handleFilterChange = (name, value) => {
@@ -130,12 +176,38 @@ export default class App extends Component {
 
                 return schedule;
             });
-            this.setState({ schedules: this.originalSchedules });
+            this.setState({ schedules: cloneDeep(this.originalSchedules) });
         });
     }
 
     handleGetSheduleArranges = () => {
         this.getSheduleArranges(this.state.filter);
+    }
+
+    handleGetPreviousWeekSchedule = () => {
+        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
+        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
+        const filter = Object.assign({}, this.state.filter, {
+            fromDate: fromDate,
+            toDate: toDate
+        });
+
+        this.getSheduleArranges(filter);
+
+        this.setState({ filter: filter });
+    }
+
+    handleGetNextWeekSchedule = () => {
+        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
+        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
+        const filter = Object.assign({}, this.state.filter, {
+            fromDate: fromDate,
+            toDate: toDate
+        });
+
+        this.getSheduleArranges(filter);
+
+        this.setState({ filter: filter });
     }
 
     handleChangeSelectWeekDay = (employeeId, scheduleAttrName, isChecked) => {
@@ -185,7 +257,8 @@ export default class App extends Component {
         const index = schedules.findIndex(item => item.employeeId === employeeId);
 
         if (index >= 0) {
-            let schedule = { ...schedules[index] };
+            let schedule = cloneDeep(schedules[index]);
+
             if (shift !== null) {
                 const isOffDay = shift.id === -1;
 
@@ -243,30 +316,199 @@ export default class App extends Component {
         }
     }
 
-    handleGetPreviousWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+    handleChangeOffNoshift = () => {
+        let schedules = this.state.schedules.slice();
+        let selectedSchedules = schedules
+            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
+            .map(schedule => schedule.employeeId);
+        const totalItems = selectedSchedules.length;
 
-        this.getSheduleArranges(filter);
+        if (totalItems > 0) {
+            for (let index = 0; index < totalItems; index++) {
+                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectWeekDays = schedule.selectWeekDays;
 
-        this.setState({ filter: filter });
+                Object.keys(selectWeekDays).forEach(objectKey => {
+                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
+                        schedule[objectKey].isOffDay = true;
+                        schedule[objectKey].shift = null;
+                    }
+                });
+
+                schedules[index] = schedule;
+            }
+
+            this.setState({ schedules });
+        } else {
+            this.setState({
+                alertModal: {
+                    show: true,
+                    message: 'Please choose at least one day to off!'
+                }
+            });
+        }
     }
 
-    handleGetNextWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
+    handleChangeOffdayOT = () => {
+        let schedules = this.state.schedules.slice();
+        let selectedSchedules = schedules
+            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
+            .map(schedule => schedule.employeeId);
+        const totalItems = selectedSchedules.length;
+
+        if (totalItems > 0) {
+            for (let index = 0; index < totalItems; index++) {
+                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectWeekDays = schedule.selectWeekDays;
+                let isChanged = false;
+
+                Object.keys(selectWeekDays).forEach(objectKey => {
+                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday && schedule[objectKey].shift !== null) {
+                        schedule[objectKey].isOffDay = true;
+                        isChanged = true;
+                    }
+                });
+
+                if (isChanged) {
+                    schedules[index] = schedule;
+                }
+            }
+
+            this.setState({ schedules });
+        } else {
+            this.setState({
+                alertModal: {
+                    show: true,
+                    message: 'Please choose at least one day to off!'
+                }
+            });
+        }
+    }
+
+    handleChangeWorkday = () => {
+        let schedules = this.state.schedules.slice();
+        let selectedSchedules = schedules
+            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
+            .map(schedule => schedule.employeeId);
+        const totalItems = selectedSchedules.length;
+
+        if (totalItems > 0) {
+            for (let index = 0; index < totalItems; index++) {
+                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectWeekDays = schedule.selectWeekDays;
+                let isChanged = false;
+
+                Object.keys(selectWeekDays).forEach(objectKey => {
+                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday && schedule[objectKey].isOffDay) {
+                        schedule[objectKey].isOffDay = false;
+                        isChanged = true;
+                    }
+                });
+
+                if (isChanged) {
+                    schedules[index] = schedule;
+                }
+            }
+
+            this.setState({ schedules });
+        } else {
+            this.setState({
+                alertModal: {
+                    show: true,
+                    message: 'Please choose at least one day to work!'
+                }
+            });
+        }
+    }
+
+    handleShiftMultiple = () => {
+        let schedules = this.state.schedules.slice();
+        let selectedSchedules = schedules
+            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
+            .map(schedule => schedule.employeeId);
+        const totalItems = selectedSchedules.length;
+
+        if (totalItems > 0) {
+            this.setState({ showShiftMultipleModal: true });
+        } else {
+            this.setState({
+                alertModal: {
+                    show: true,
+                    message: 'Please choose at least one day to continue!'
+                }
+            });
+        }
+    }
+
+    handleChangeMultipleShift = (shift, isOffday) => {
+        let schedules = this.state.schedules.slice();
+        let selectedSchedules = schedules
+            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
+            .map(schedule => schedule.employeeId);
+        const totalItems = selectedSchedules.length;
+
+        if (totalItems > 0) {
+            for (let index = 0; index < totalItems; index++) {
+                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectWeekDays = schedule.selectWeekDays;
+                let isChanged = false;
+
+                Object.keys(selectWeekDays).forEach(objectKey => {
+                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
+                        schedule[objectKey].isOffDay = isOffday;
+                        schedule[objectKey].shift = shift;
+
+                        isChanged = true;
+                    }
+                });
+
+                if (isChanged) {
+                    schedules[index] = schedule;
+                }
+            }
+
+            this.setState({ schedules });
+        }
+
+        this.handleCloseShiftMultipleModal();
+    }
+
+    handleSave = () => {
+        let scheduleArranges = [];
+        let shiftMultiples = [];
+        let schedules = cloneDeep(this.state.schedules);
+        let originalSchedules = cloneDeep(this.originalSchedules);
+        const totalItems = schedules.length;
+
+        for (let index = 0; index < totalItems; index++) {
+            if (!this.isDirtyObject(originalSchedules[index], schedules[index])) {
+                Object.keys(schedules[index].selectWeekDays).forEach(objectKey => {
+                    scheduleArranges.push({
+                        employeeId: schedules[index].employeeId,
+                        workDate: schedules[index][objectKey].workDate,
+                        shiftId: schedules[index][objectKey].shift !== null ? schedules[index][objectKey].shift.id : '',
+                        isHoliday: schedules[index][objectKey].isHoliday,
+                        isOffDay: schedules[index][objectKey].isOffDay,
+                        isPublic: schedules[index].isPublic
+                    });
+                });
+            }
+        }
+
+        console.log(scheduleArranges);
+    }
+
+    handleCloseShiftMultipleModal = () => {
+        this.setState({ showShiftMultipleModal: false });
+    }
+
+    handleCloseAlertModal = () => {
+        this.setState({
+            alertModal: {
+                show: false,
+                message: ''
+            }
         });
-
-        this.getSheduleArranges(filter);
-
-        this.setState({ filter: filter });
     }
 
     render() {
@@ -295,7 +537,27 @@ export default class App extends Component {
                     onChangeShift={this.handleChangeShift}
                     onChangeDefaultShift={this.handleChangeDefaultShift}
                     onChangePublics={this.handleChangePublics}
+                    onChangeOffNoShift={this.handleChangeOffNoshift}
+                    onChangeOffdayOT={this.handleChangeOffdayOT}
+                    onChangeWorkday={this.handleChangeWorkday}
+                    onShiftMultiple={this.handleShiftMultiple}
+                    onSave={this.handleSave}
                 />
+                {
+                    this.state.showShiftMultipleModal &&
+                    <ShiftMultipleModal show={this.state.showShiftMultipleModal}
+                        onHide={this.handleCloseShiftMultipleModal}
+                        shiftOptions={this.shiftOptions}
+                        onSubmit={this.handleChangeMultipleShift}
+                    />
+                }
+                {
+                    this.state.alertModal.show &&
+                    <AlertModal show={this.state.alertModal.show}
+                        message={this.state.alertModal.message}
+                        onHide={this.handleCloseAlertModal}
+                    />
+                }
             </Fragment>
         );
     }

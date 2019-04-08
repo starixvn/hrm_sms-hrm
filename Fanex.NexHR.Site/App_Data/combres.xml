@@ -308,7 +308,7 @@
     </resourceSet>
     <resourceSet name="schedulearrangecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/wwwroot/dist/styles/schedulearrange.css" />
+      <resource path="~/wwwroot/dist/styles/schedule.arrange.css" />
     </resourceSet>
     <resourceSet name="schedulearrangedetailjs" type="js">
       <resource path="~/scripts/views/Calendar/schedulearrangedetail.js" />

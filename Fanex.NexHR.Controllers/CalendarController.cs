@@ -80,8 +80,8 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             object response = new
             {
-                IsSuccessful = result.IsSuccessful,
-                Message = result.Message,
+                result.IsSuccessful,
+                result.Message,
                 ModifiedBy = CurrentUser.NickName,
                 ModifiedDate = DateTime.Now.ToShortFormatedDate()
             };

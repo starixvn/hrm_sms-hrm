@@ -1,18 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import Row from './Row';
 
-export default class Table extends Component {
-    //shouldComponentUpdate(nextProps) {
-    //    return this.props.isHost !== nextProps.isHost
-    //        || this.props.isSARole !== nextProps.isSARole
-    //        || this.props.fromDate !== nextProps.fromDate
-    //        || this.props.toDate !== nextProps.toDate
-    //        || this.props.shiftOptions !== nextProps.shiftOptions
-    //        || this.props.data !== nextProps.data;
-    //}
-
+export default class Table extends PureComponent {
     dayOfWeeks = [
         { name: 'mondaySchedule', value: 0 },
         { name: 'tuesdaySchedule', value: 1 },
@@ -23,12 +14,9 @@ export default class Table extends Component {
         { name: 'sundaySchedule', value: 6 }
     ];
 
-    handleSave = () => {
-    }
-
     render() {
         console.log('table');
-        const totalCols = 15;
+        const totalCols = 13;
         const { isHost, isSARole, fromDate, toDate, shiftOptions, data } = this.props;
 
         return (
@@ -40,7 +28,7 @@ export default class Table extends Component {
                                 isHost &&
                                 <div className="left">
                                     <span
-                                        onClick={this.handleSave}
+                                        onClick={this.props.onSave}
                                         className="btn save glyphicon glyphicon-floppy-disk"
                                         title="Save"
                                     />
@@ -52,10 +40,10 @@ export default class Table extends Component {
                                             <label htmlFor={`ckb-checkAllWeekDays`}> Check/Uncheck all</label>
                                         </div>
                                     </div>
-                                    <span className="btn offNoshift">Off No Shift</span>
-                                    <span className="btn offDayOT">Offday OT</span>
-                                    <span className="btn workday">Workday</span>
-                                    <span className="btn shiftMultiple">Shift Multiple</span>
+                                    <span className="btn offNoshift" onClick={this.props.onChangeOffNoShift}>Off No Shift</span>
+                                    <span className="btn offdayOT" onClick={this.props.onChangeOffdayOT}>Offday OT</span>
+                                    <span className="btn workday" onClick={this.props.onChangeWorkday}>Workday</span>
+                                    <span className="btn shiftMultiple" onClick={this.props.onShiftMultiple}>Shift Multiple</span>
                                 </div>
                             }
                             <div className="right">

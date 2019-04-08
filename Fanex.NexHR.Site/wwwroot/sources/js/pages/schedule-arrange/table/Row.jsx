@@ -1,17 +1,11 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import ShiftAutocomplete from '../ShiftAutocomplete';
+import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
-export default class Row extends Component {
-    shouldComponentUpdate(nextProps) {
-        return this.props.isHost !== nextProps.isHost
-            || this.props.isSARole !== nextProps.isSARole
-            || this.props.shiftOptions !== nextProps.shiftOptions
-            || this.props.data !== nextProps.data;
-    }
-
+export default class Row extends PureComponent {
     handleChangePublic = event => {
         const employeeId = this.props.data.employeeId;
         this.props.onChangePublics(employeeId, event.target.checked);
@@ -34,23 +28,18 @@ export default class Row extends Component {
 
     render() {
         const { isHost, isSARole, shiftOptions, data } = this.props;
-        console.log('a');
+        console.log('row');
 
         return (
             <tr>
-                <td />
+                <td className="col-index" />
                 <td className="col-section" title={data.teamName}>{data.teamCode}</td>
                 <td className="col-nickname">{data.nickName}</td>
-                <td className="col-shift">
-                    <div className="shift-autocomplete-wrapper">
-                        <ShiftAutocomplete
-                            value={data.defaultShift !== null ? data.defaultShift.code : ''}
-                            isDisabled={!isHost}
-                            shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}
-                            onChange={this.handleChangeDefaultShift}
-                        />
-                    </div>
-                </td>
+                <ColDefaultShift isHost={isHost} employeeId={data.employeeId}
+                    shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}
+                    data={data.defaultShift}
+                    onChangeDefaultShift={this.props.onChangeDefaultShift}
+                />
                 <ColShift
                     isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.mondaySchedule}
@@ -115,7 +104,7 @@ export default class Row extends Component {
                         <label htmlFor={`ckb-public${data.employeeId}`} />
                     </div>
                 </td>
-                <td title={moment(data.mondaySchedule.modifiedDate).format('DD MMM, YYYY HH:mm')}>
+                <td className="col-modifier" title={moment(data.mondaySchedule.modifiedDate).format('DD MMM, YYYY HH:mm')}>
                     {data.mondaySchedule.modifierName}
                 </td>
             </tr>

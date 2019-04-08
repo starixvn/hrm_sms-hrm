@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import ShiftAutocomplete from '../ShiftAutocomplete';
 
-export default class ColShift extends Component {
+export default class ColShift extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -27,7 +27,7 @@ export default class ColShift extends Component {
     }
 
     renderShiftAutocomplete = () => {
-        const { employeeId, data, isHost, isSARole, scheduleAttrName } = this.props;
+        const { employeeId, data, isHost, isSARole, scheduleAttrName, shiftOptions } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
         let isDisabled = false;
@@ -35,6 +35,7 @@ export default class ColShift extends Component {
         let isShowAddShiftInLeaveHalfday = false;
         let shiftCodeForHalfday = '';
         let classOfleavetype = '';
+        let isHoliday = false;
 
         if (data.isLeaveOffDay) {
             valueOfInput = 'Off';
@@ -49,6 +50,7 @@ export default class ColShift extends Component {
             if (data.isHoliday) {
                 valueOfInput = 'PH';
                 classOfInput = 'holiday';
+                isHoliday = true;
             } else if (data.isOffDay) {
                 valueOfInput = 'Off';
                 classOfInput = 'offday';
@@ -69,6 +71,7 @@ export default class ColShift extends Component {
                 }
             }
         } else if (data.isHoliday) {
+            isHoliday = true;
             classOfInput = 'shift holiday';
             if (data.shift !== null && data.shift.id !== -1) {
                 valueOfInput = data.shift.code;
@@ -155,7 +158,7 @@ export default class ColShift extends Component {
                     name={scheduleAttrName}
                     className={classOfInput}
                     isDisabled={isDisabled}
-                    shiftOptions={this.props.shiftOptions}
+                    shiftOptions={isHoliday ? shiftOptions.filter(shift => shift.id !== -1) : shiftOptions}
                     onChange={this.handleChangeShift}
                 />
                 {
@@ -169,7 +172,7 @@ export default class ColShift extends Component {
                 }
                 {
                     !isShowCheckBox && isShowAddShiftInLeaveHalfday &&
-                    <a className="addHalfdayShift" href="javascript:;">+</a>
+                    <a className="addHalfdayShift" href="javascript:;" title={shiftCodeForHalfday}>+</a>
                 }
             </div>
         );
