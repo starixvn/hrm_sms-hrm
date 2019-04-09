@@ -12,16 +12,14 @@ export default class ColDefaultShift extends PureComponent {
         const { isHost, shiftOptions, data } = this.props;
 
         return (
-            <td className="col-shift">
-                <div className="shift-autocomplete-wrapper">
-                    <ShiftAutocomplete
-                        value={data !== null ? data.code : ''}
-                        isDisabled={!isHost}
-                        shiftOptions={shiftOptions}
-                        onChange={this.handleChangeDefaultShift}
-                    />
-                </div>
-            </td>
+            <div className="table-cell cell-shift">
+                <ShiftAutocomplete
+                    value={data !== null ? data.code : ''}
+                    isDisabled={!isHost}
+                    shiftOptions={shiftOptions}
+                    onChange={this.handleChangeDefaultShift}
+                />
+            </div>
         );
     }
 }

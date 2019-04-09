@@ -1,7 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
-import ShiftAutocomplete from '../ShiftAutocomplete';
 import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
@@ -26,15 +25,33 @@ export default class Row extends PureComponent {
         this.props.onChangeDefaultShift(employeeId, shift);
     }
 
+    renderIndexCell = () => {
+        const { data } = this.props;
+        const numberOffDefault = data.mondaySchedule.offDaysbyWeek;
+        let numberOffCurrent = 0;
+        Object.keys(data.selectWeekDays).forEach(objectKey => {
+            if (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay) {
+                numberOffCurrent++;
+            }
+        });
+
+        if (numberOffDefault < numberOffCurrent) {
+            return <span className="glyphicon glyphicon-alert" />;
+        }
+
+        return '';
+    }
+
     render() {
         const { isHost, isSARole, shiftOptions, data } = this.props;
-        console.log('row');
 
         return (
-            <tr>
-                <td className="col-index" />
-                <td className="col-section" title={data.teamName}>{data.teamCode}</td>
-                <td className="col-nickname">{data.nickName}</td>
+            <div className="table-row">
+                <div className="table-cell cell-index">
+                    {this.renderIndexCell()}
+                </div>
+                <div className="table-cell cell-section" title={data.teamName}>{data.teamCode}</div>
+                <div className="table-cell cell-nickname">{data.nickName}</div>
                 <ColDefaultShift isHost={isHost} employeeId={data.employeeId}
                     shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}
                     data={data.defaultShift}
@@ -96,18 +113,18 @@ export default class Row extends PureComponent {
                     onChangeShift={this.handleChangeShift}
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
-                <td className="col-public">
+                <div className="table-cell cell-public">
                     <div className="checkbox">
                         <input type="checkbox" className={`checkbox-custom`} id={`ckb-public${data.employeeId}`}
                             checked={data.isPublic} disabled={!isHost} onChange={this.handleChangePublic}
                         />
                         <label htmlFor={`ckb-public${data.employeeId}`} />
                     </div>
-                </td>
-                <td className="col-modifier" title={moment(data.mondaySchedule.modifiedDate).format('DD MMM, YYYY HH:mm')}>
+                </div>
+                <div className="table-cell cell-modifier" title={moment(data.mondaySchedule.modifiedDate).format('DD MMM, YYYY HH:mm')}>
                     {data.mondaySchedule.modifierName}
-                </td>
-            </tr>
+                </div>
+            </div>
         );
     }
 }

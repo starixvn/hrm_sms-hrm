@@ -301,19 +301,6 @@
       <resource path="~/scripts/views/myworkingschedule.js" />
     </resourceSet>
 
-    <resourceSet name="schedulearrangejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Calendar/schedulearrange.js" />
-      <resource path="~/scripts/views/Calendar/schedulearrange.common.js" />
-    </resourceSet>
-    <resourceSet name="schedulearrangecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/dist/styles/schedule.arrange.css" />
-    </resourceSet>
-    <resourceSet name="schedulearrangedetailjs" type="js">
-      <resource path="~/scripts/views/Calendar/schedulearrangedetail.js" />
-    </resourceSet>
-
     <resourceSet name="shiftstatisticjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/Calendar/report.shiftstatistic.js" />
@@ -496,7 +483,7 @@
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
-    
+
     <resourceSet name="jobtitlecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/employee.defaultschedule.css" />

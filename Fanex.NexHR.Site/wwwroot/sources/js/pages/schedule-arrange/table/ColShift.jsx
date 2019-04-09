@@ -26,14 +26,26 @@ export default class ColShift extends PureComponent {
         this.props.onChangeShift(scheduleAttrName, shift);
     }
 
-    renderShiftAutocomplete = () => {
+    handleMouseOver = () => {
+        if (!this.state.isShowCheckbox) {
+            this.setState({ isShowCheckbox: true });
+        }
+    }
+
+    handleMouseLeave = () => {
+        if (this.state.isShowCheckbox && !this.props.isChecked) {
+            this.setState({ isShowCheckbox: false });
+        }
+    }
+
+    render() {
         const { employeeId, data, isHost, isSARole, scheduleAttrName, shiftOptions } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
         let isDisabled = false;
         let isShowCheckBox = isHost;
-        let isShowAddShiftInLeaveHalfday = false;
-        let shiftCodeForHalfday = '';
+        let isLeaveHalfday = false;
+        let leaveCodeHalfday = '';
         let classOfleavetype = '';
         let isHoliday = false;
 
@@ -56,11 +68,12 @@ export default class ColShift extends PureComponent {
                 classOfInput = 'offday';
             } else if (data.leaveDay === 0.5) {
                 classOfInput += ' shift';
-                valueOfInput = data.leaveType.code + '½';
-                isShowAddShiftInLeaveHalfday = true;
+                leaveCodeHalfday = data.leaveType.code + ' ½';
+                isLeaveHalfday = true;
+                isDisabled = false;
 
                 if (data.shift !== null) {
-                    shiftCodeForHalfday = data.shift.code;
+                    valueOfInput = data.shift.code;
                 }
             } else {
                 if (data.leaveType2 === null) {
@@ -137,8 +150,7 @@ export default class ColShift extends PureComponent {
             }
         }
 
-        //classOfInput += ' tooltip';
-        if (classOfleavetype !== '') {
+        if (classOfleavetype !== '' && !isLeaveHalfday) {
             classOfInput += ' ' + classOfleavetype;
         }
 
@@ -152,49 +164,31 @@ export default class ColShift extends PureComponent {
         }
 
         return (
-            <div className="shift-autocomplete-wrapper">
-                <ShiftAutocomplete
-                    value={valueOfInput}
-                    name={scheduleAttrName}
-                    className={classOfInput}
-                    isDisabled={isDisabled}
-                    shiftOptions={isHoliday ? shiftOptions.filter(shift => shift.id !== -1) : shiftOptions}
-                    onChange={this.handleChangeShift}
-                />
-                {
-                    isShowCheckBox && this.state.isShowCheckbox &&
-                    <div className="checkbox">
-                        <input type="checkbox" className={`checkbox-custom ${scheduleAttrName}`} checked={this.props.isChecked}
-                            id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleCheckWeekDay}
-                        />
-                        <label htmlFor={`ckb-${scheduleAttrName}${employeeId}`} />
-                    </div>
-                }
-                {
-                    !isShowCheckBox && isShowAddShiftInLeaveHalfday &&
-                    <a className="addHalfdayShift" href="javascript:;" title={shiftCodeForHalfday}>+</a>
-                }
+            <div className="table-cell cell-shift" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+                <div className={`cell-shift-wrapper ${isLeaveHalfday ? 'leavehalfday' : ''}`}>
+                    {
+                        isLeaveHalfday &&
+                        <span className={`halfdaycode ${classOfleavetype}`} title={leaveCodeHalfday}>{leaveCodeHalfday}</span>
+                    }
+                    <ShiftAutocomplete
+                        value={valueOfInput}
+                        name={scheduleAttrName}
+                        className={classOfInput}
+                        isDisabled={isDisabled}
+                        shiftOptions={isHoliday || isLeaveHalfday ? shiftOptions.filter(shift => shift.id !== -1) : shiftOptions}
+                        onChange={this.handleChangeShift}
+                    />
+                    {
+                        isShowCheckBox && this.state.isShowCheckbox &&
+                        <div className="checkbox">
+                            <input type="checkbox" className={`checkbox-custom ${scheduleAttrName}`} checked={this.props.isChecked}
+                                id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleCheckWeekDay}
+                            />
+                            <label htmlFor={`ckb-${scheduleAttrName}${employeeId}`} />
+                        </div>
+                    }
+                </div>
             </div>
-        );
-    }
-
-    handleMouseOver = () => {
-        if (!this.state.isShowCheckbox) {
-            this.setState({ isShowCheckbox: true });
-        }
-    }
-
-    handleMouseLeave = () => {
-        if (this.state.isShowCheckbox && !this.props.isChecked) {
-            this.setState({ isShowCheckbox: false });
-        }
-    }
-
-    render() {
-        return (
-            <td className="col-shift" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-                {this.renderShiftAutocomplete()}
-            </td>
         );
     }
 }

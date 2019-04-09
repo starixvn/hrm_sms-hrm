@@ -48,6 +48,8 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     handleSelect = (value, item) => {
+        this.setState({ value });
+
         this.props.onChange(this.props.name, item);
     }
 
@@ -71,6 +73,7 @@ export default class ShiftAutocomplete extends PureComponent {
                 items={shiftOptions}
                 shouldItemRender={(item, value) => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''))}
                 getItemValue={item => item.code}
+                wrapperProps={{ className: 'shift-autocomplete-wrapper' }}
                 wrapperStyle={{ display: 'block' }}
                 renderInput={(props) => <input type="text" {...props} />}
                 renderMenu={(items, value, style) => <div className="items" children={items} />}

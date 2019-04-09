@@ -6,7 +6,6 @@
 @import '../../vendors/weekpicker';
 @import '../../vendors/autocomplete';
 @import '../../layout/filter';
-@import '../../layout/table';
 @import '../../layout/toastify';
 @import '../../components/buttons';
 @import '../../components/checkbox';
@@ -24,11 +23,6 @@
     }
 }
 
-.summary {
-    display: none;
-    text-align: center;
-}
-
 .shift-autocomplete-wrapper {
     width: 120px;
     position: relative;
@@ -39,6 +33,7 @@
         position: absolute;
         width: 100%;
         max-height: 240px;
+        min-width: 120px;
         overflow-y: auto;
         border: 1px solid #c5c5c5;
         background: #fff;
@@ -59,123 +54,174 @@
     }
 }
 
-.table {
-    //table-layout: fixed;
-    //width: 1500px !important;
+.table-wrapper {
+    width: 1500px;
+    margin: 10px 0;
 
-    .left {
-        float: left;
-    }
+    .cell-index {
+        width: 40px;
+        text-align: center;
 
-    .right {
-        float: right;
-    }
-
-    .header-control {
-        th {
-            position: relative;
-            padding: 5px 10px;
-        }
-
-        .save, .checkAllWeekDays, .offNoshift, .offdayOT, .workday, .shiftMultiple, .prev-week, .next-week {
-            background: #f1f1f1;
-            color: #5e7485;
-            margin-right: 5px;
-            padding: 0 4px;
-            height: 25px;
-            line-height: 25px;
-            @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 2px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.1));
-        }
-
-        .label-week {
-            padding: 4px 12px;
-            vertical-align: middle;
-            @include border-radius(40px);
-            color: #fff;
-            background: #1e88e5;
+        .glyphicon-alert {
+            color: #ff8c00;
+            font-size: 14px;
         }
     }
 
-    .shift-autocomplete-wrapper {
-        width: 100%;
+    .cell-public {
+        width: 50px;
+    }
 
-        input[type="text"] {
-            width: 100%;
-            height: 40px;
-            padding: 0 5px;
-            text-align: center;
-            font-size: 12px;
-            border: unset;
+    .cell-section, .cell-nickname, .cell-modifier {
+        width: 150px;
+    }
 
-            &:focus {
-                border-bottom: 1px solid #66afe9;
-                outline: none;
-            }
+    .cell-shift {
+        width: 120px;
+    }
 
-            &::placeholder {
+    .table-header {
+        background: #343c4e;
+        color: #fff;
+
+        &.fixed {
+            position: fixed;
+            top: 70px;
+            z-index: 5;
+        }
+
+        .header-control {
+            padding: 5px 7px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #d2d2d2;
+
+            .save, .checkAllWeekDays, .offNoshift, .offdayOT, .workday, .shiftMultiple, .prev-week, .next-week {
+                background: #f1f1f1;
                 color: #5e7485;
-                opacity: 0.5;
+                margin-right: 5px;
+                padding: 0 4px;
+                height: 25px;
+                line-height: 25px;
+                @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 2px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.1));
             }
 
-            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-                color: #5e7485;
-                opacity: 0.5;
-            }
-
-            &::-ms-input-placeholder { /* Microsoft Edge */
-                color: #5e7485;
-                opacity: 0.5;
+            .label-week {
+                padding: 4px 12px;
+                vertical-align: middle;
+                @include border-radius(40px);
+                color: #fff;
+                background: #1e88e5;
             }
         }
 
-        .checkbox {
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
+        .header {
+            display: table-row;
 
-        input[type="checkbox"] {
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
+            .table-cell {
+                display: table-cell;
+                border-left: 1px solid #d2d2d2;
+                padding: 5px 7px;
+                vertical-align: middle;
+                text-align: center;
 
-        .addHalfdayShift {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding-right: 4px;
+                &:first-child {
+                    border-left: none;
+                }
+            }
         }
     }
 
-    tbody {
-        tr {
-            &:hover {
-                background: unset !important;
-            }
+    .table-body {
+        .table-row {
+            display: table-row;
 
-            &:nth-child(odd) {
-                background: unset;
-            }
+            .table-cell {
+                display: table-cell;
+                border-left: 1px solid #d2d2d2;
+                border-bottom: 1px solid #d2d2d2;
+                padding: 0 7px;
 
-            td {
-                &.col-index {
-                    width: 40px;
+                &:last-child {
+                    border-right: 1px solid #d2d2d2;
                 }
 
-                &.col-public {
-                    width: 50px;
+                &.cell-shift {
+                    padding: 0;
                 }
 
-                &.col-section, &.col-nickname, &.col-modifier {
-                    width: 150px;
-                    text-align: left !important;
+                &.cell-public {
+                    text-align: center;
+                }
+            }
+
+            .cell-shift-wrapper {
+                position: relative;
+
+                &.leavehalfday {
+                    display: table-row;
+
+                    .halfdaycode {
+                        background: #e1e1e1;
+                        display: table-cell;
+                        width: 35px;
+                        text-align: center;
+                        padding: 0 3px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .shift-autocomplete-wrapper {
+                        display: table-cell;
+                        width: calc(100% -35px);
+                    }
                 }
 
-                &.col-shift {
-                    width: 120px;
-                    padding: 0 !important;
-                    vertical-align: bottom !important;
+                .checkbox {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+
+                input[type="checkbox"] {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+            }
+
+            .shift-autocomplete-wrapper {
+                width: 100%;
+
+                input[type="text"] {
+                    width: 100%;
+                    height: 40px;
+                    padding: 0 5px;
+                    text-align: center;
+                    font-size: 12px;
+                    border: unset;
+
+                    &:focus {
+                        border-bottom: 1px solid #66afe9;
+                        outline: none;
+                    }
+
+                    &::placeholder {
+                        color: #5e7485;
+                        opacity: 0.5;
+                    }
+
+                    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                        color: #5e7485;
+                        opacity: 0.5;
+                    }
+
+                    &::-ms-input-placeholder { /* Microsoft Edge */
+                        color: #5e7485;
+                        opacity: 0.5;
+                    }
                 }
             }
         }
@@ -190,30 +236,8 @@
     }
 }
 
-#colordef {
-    .grid_2 {
-        height: 22px;
-        text-align: center;
-        line-height: 22px;
-        border: solid 1px #555;
-        border-radius: 3px;
-    }
-
-    .grid_4 {
-        height: 22px;
-        text-align: center;
-        line-height: 22px;
-        border: solid 1px #555;
-        border-radius: 3px;
-    }
-}
-
 .offday {
     background-color: #f8f89c !important;
-}
-
-.keepinviewday, .changeshift, .leaveday {
-    color: #ed4646 !important;
 }
 
 .holiday {
@@ -238,17 +262,4 @@
 
 .weddingleave {
     background-color: #7cd3e9 !important;
-}
-
-.heightcroll {
-    height: 500px;
-    overflow: auto;
-}
-
-.overOffdayInWeek {
-    background: #F9CDA2;
-}
-
-.upOffdayInWeek {
-    background: #BFF7F6;
 }

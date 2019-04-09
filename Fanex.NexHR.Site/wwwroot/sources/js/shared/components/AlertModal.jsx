@@ -1,8 +1,8 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 
-export default class AlertModal extends Component {
+export default class AlertModal extends PureComponent {
     static propTypes = {
         message: PropTypes.string,
         show: PropTypes.bool,

@@ -19,19 +19,33 @@
 
     .btn {
         background-image: none;
+        height: unset;
+        width: unset;
         text-shadow: none;
         box-shadow: none;
+        padding: 6px 12px;
+        vertical-align: middle;
+        font-size: 14px !important;
+        line-height: 1.42857;
 
         &.btn-default {
             background: none;
-            height: unset;
-            width: unset;
             color: #333 !important;
             border-color: #ccc;
-            padding: 6px 12px;
-            font-size: 14px !important;
-            line-height: 1.42857;
-            vertical-align: middle;
+        }
+
+        &.btn-primary {
+            color: #fff !important;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+
+            &:focus, &:hover {
+                background-image: none;
+                color: #fff;
+                background-color: #286090;
+                border-color: #122b40;
+                //border-color: #204d74;
+            }
         }
     }
 }

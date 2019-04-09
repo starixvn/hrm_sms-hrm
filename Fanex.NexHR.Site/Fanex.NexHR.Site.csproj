@@ -252,7 +252,6 @@
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\Calendar\schedulearrange.common.js" />
     <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
     <Content Include="Scripts\Views\Department\department.edit.js" />
@@ -334,8 +333,6 @@
     <Content Include="Scripts\Views\Overtime\overtime.request.js" />
     <Content Include="Scripts\Views\Report\report.leavesumary.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghours.js" />
-    <Content Include="Scripts\Views\Calendar\schedulearrange.js" />
-    <Content Include="Scripts\Views\Calendar\schedulearrangedetail.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\Team\team.edit.js" />
@@ -827,8 +824,8 @@
     <Content Include="wwwroot\parts\entry.js" />
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\schedulearrange.common.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftMultipleModal.jsx" />
@@ -836,6 +833,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColShift.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
@@ -1023,7 +1021,6 @@
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
     <Content Include="Views\Calendar\ArrangeSchedule.cshtml" />
-    <Content Include="Views\Calendar\ArrangeScheduleDetail.cshtml" />
     <Content Include="Views\Calendar\ShiftStatistic.cshtml" />
     <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />

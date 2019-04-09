@@ -8,8 +8,9 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import AlertModal from '../../shared/components/AlertModal';
 import ToastLayout from '../../shared/layouts/ToastLayout';
+import AlertModal from '../../shared/components/AlertModal';
+import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import Search from './Search';
 import Table from './table/table';
@@ -28,6 +29,7 @@ export default class App extends Component {
             schedules: [],
             employeeOptions: [],
             showShiftMultipleModal: false,
+            showConfirmRefreshDataModal: false,
             alertModal: {
                 show: false,
                 message: ''
@@ -158,7 +160,7 @@ export default class App extends Component {
 
             this.originalSchedules = response.data.map(schedule => {
                 schedule.defaultShift = {
-                    id: schedule.mondaySchedule.shiftMultipleId,
+                    id: parseInt(schedule.mondaySchedule.shiftMultipleId, 10),
                     code: schedule.mondaySchedule.shiftMultipleCode
                 };
                 schedule.isPublic = schedule.mondaySchedule.isPublic;
@@ -179,33 +181,45 @@ export default class App extends Component {
     }
 
     handleGetSheduleArranges = () => {
-        this.getSheduleArranges(this.state.filter);
+        if (this.isDirtyData()) {
+            this.handleShowConfirmRefreshDataModal();
+        } else {
+            this.getSheduleArranges(this.state.filter);
+        }
     }
 
     handleGetPreviousWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+        if (this.isDirtyData()) {
+            this.handleShowConfirmRefreshDataModal();
+        } else {
+            const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
+            const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
+            const filter = Object.assign({}, this.state.filter, {
+                fromDate: fromDate,
+                toDate: toDate
+            });
 
-        this.getSheduleArranges(filter);
+            this.getSheduleArranges(filter);
 
-        this.setState({ filter: filter });
+            this.setState({ filter: filter });
+        }
     }
 
     handleGetNextWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+        if (this.isDirtyData()) {
+            this.handleShowConfirmRefreshDataModal();
+        } else {
+            const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
+            const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
+            const filter = Object.assign({}, this.state.filter, {
+                fromDate: fromDate,
+                toDate: toDate
+            });
 
-        this.getSheduleArranges(filter);
+            this.getSheduleArranges(filter);
 
-        this.setState({ filter: filter });
+            this.setState({ filter: filter });
+        }
     }
 
     handleChangeSelectWeekDay = (employeeId, scheduleAttrName, isChecked) => {
@@ -453,8 +467,8 @@ export default class App extends Component {
 
                 Object.keys(selectWeekDays).forEach(objectKey => {
                     if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
-                        schedule[objectKey].isOffDay = isOffday;
-                        schedule[objectKey].shift = shift;
+                        schedule[objectKey].isOffDay = shift !== null && shift.id === -1 ? true : isOffday;
+                        schedule[objectKey].shift = shift !== null ? { ...schedule[attrName].shift, id: shift.id, code: shift.code } : null;
 
                         isChanged = true;
                     }
@@ -543,6 +557,19 @@ export default class App extends Component {
         });
     }
 
+    handleShowConfirmRefreshDataModal = () => {
+        this.setState({ showConfirmRefreshDataModal: true });
+    }
+
+    handleCloseConfirmRefreshDataModal = () => {
+        this.setState({ showConfirmRefreshDataModal: false });
+    }
+
+    handleSubmitRefreshData = () => {
+        this.getSheduleArranges(this.state.filter);
+        this.handleCloseConfirmRefreshDataModal();
+    }
+
     render() {
         return (
             <Fragment>
@@ -588,6 +615,13 @@ export default class App extends Component {
                     <AlertModal show={this.state.alertModal.show}
                         message={this.state.alertModal.message}
                         onHide={this.handleCloseAlertModal}
+                    />
+                }
+                {
+                    this.state.showConfirmRefreshDataModal &&
+                    <ConfirmRefreshDataModal show={this.state.showConfirmRefreshDataModal}
+                        onHide={this.handleCloseConfirmRefreshDataModal}
+                        onSubmit={this.handleSubmitRefreshData}
                     />
                 }
             </Fragment>
