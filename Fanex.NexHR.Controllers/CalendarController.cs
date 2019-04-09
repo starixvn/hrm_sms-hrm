@@ -56,39 +56,6 @@
             return View();
         }
 
-        [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult ArrangeSchedule(string scheduleArranges, string shiftMultiples)
-        {
-            var scheduleArrangeDetail = JsonConverter.FromJsonArray<ScheduleModel>(scheduleArranges);
-            var shiftMultipleDetail = JsonConverter.FromJsonArray<ShiftMultipleModel>(shiftMultiples);
-            var scheduleArrangeModel = new ScheduleArrangeModel
-            {
-                ScheduleModels = scheduleArrangeDetail,
-                ShiftMultipleModels = shiftMultipleDetail,
-                ModifiedBy = CurrentUser.Id,
-                ModifiedDate = DateTime.Now,
-            };
-
-            var criteria = new InsertOrUpdateWorkingCalendarsCriteria
-            {
-                ModifiedDate = scheduleArrangeModel.ModifiedDate,
-                ModifiedBy = scheduleArrangeModel.ModifiedBy,
-                ScheduleList = scheduleArrangeModel.ScheduleModelXML,
-                ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            object response = new
-            {
-                result.IsSuccessful,
-                result.Message,
-                ModifiedBy = CurrentUser.NickName,
-                ModifiedDate = DateTime.Now.ToShortFormatedDate()
-            };
-
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {

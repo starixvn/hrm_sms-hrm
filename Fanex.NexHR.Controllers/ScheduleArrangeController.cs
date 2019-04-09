@@ -7,9 +7,9 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -22,23 +22,17 @@
     {
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly ITeamService teamService;
-        private readonly IShiftService shiftService;
-        private readonly ILookupDataService lookupDataService;
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
 
         public ScheduleArrangeController(
             IWorkingCalendarService workingCalendarService,
             ITeamService teamService,
-            IShiftService shiftService,
-            ILookupDataService lookupDataService,
             IEmployeeService employeeService,
             IBaseService baseService)
         {
             this.workingCalendarService = workingCalendarService;
             this.teamService = teamService;
-            this.shiftService = shiftService;
-            this.lookupDataService = lookupDataService;
             this.employeeService = employeeService;
             this.baseService = baseService;
         }
@@ -49,19 +43,13 @@
             var currentDate = DateTime.Now;
             DateTime fromDate = GetStartOfWeek(currentDate);
             DateTime toDate = GetEndOfWeek(currentDate);
-
             IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
-            var criteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> jobTitles = lookupDataService.GetAll(criteria);
+
             var model = new ScheduleArrangeFilterViewModel
             {
                 FromDate = fromDate,
                 ToDate = toDate,
-                Groups = teams,
-                JobTitles = jobTitles
+                Groups = teams
             };
 
             return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -103,6 +91,31 @@
             }
 
             return new CustomJsonResult { Data = scheduleArranges, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult Edit(IList<ScheduleModel> scheduleArranges, IList<ShiftMultipleModel> shiftMultiples)
+        {
+            var scheduleArrangeModel = new ScheduleArrangeModel
+            {
+                ScheduleModels = scheduleArranges,
+                ShiftMultipleModels = shiftMultiples,
+                ModifiedBy = CurrentUser.Id,
+                ModifiedDate = DateTime.Now,
+            };
+
+            var criteria = new InsertOrUpdateWorkingCalendarsCriteria
+            {
+                ModifiedDate = scheduleArrangeModel.ModifiedDate,
+                ModifiedBy = scheduleArrangeModel.ModifiedBy,
+                ScheduleList = scheduleArrangeModel.ScheduleModelXML,
+                ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
+            };
+
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private static DateTime GetStartOfWeek(DateTime currentDate)

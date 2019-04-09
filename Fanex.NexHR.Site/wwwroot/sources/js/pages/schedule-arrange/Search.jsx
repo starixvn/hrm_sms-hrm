@@ -9,10 +9,6 @@ export default class Search extends Component {
         this.props.onChange('groupIds', selectedItemsKey);
     }
 
-    handleJobTitleChange = (selectedItem, selectedItemsKey) => {
-        this.props.onChange('jobTitleIds', selectedItemsKey);
-    }
-
     handleEmployeeChange = (value) => {
         this.props.onChange('employee', value);
     }
@@ -53,8 +49,6 @@ export default class Search extends Component {
                             />
                         </div>
                     </div>
-                </div>
-                <div className="form-horizontal clearfix">
                     <div className="form-group form-group--m">
                         <div className="label-form">
                             <label className="control-label">Employee</label>
@@ -65,21 +59,6 @@ export default class Search extends Component {
                                 sources={this.props.employeeOptions}
                                 onInput={this.props.onSearchEmployees}
                                 onChange={this.handleEmployeeChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="form-group form-group--m">
-                        <div className="label-form">
-                            <label className="control-label">Job Title</label>
-                        </div>
-                        <div className="select-form">
-                            <MultipleSelect
-                                dataSource={this.props.jobTitleOptions}
-                                keyField="id"
-                                valueField="name"
-                                statusField="checked"
-                                onChange={this.handleJobTitleChange}
-                                hasSearchBox
                             />
                         </div>
                     </div>

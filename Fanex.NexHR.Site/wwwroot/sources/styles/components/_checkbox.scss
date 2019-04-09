@@ -5,6 +5,8 @@
 .checkbox-custom {
     position: absolute; // take it out of document flow
     opacity: 0; // hide it
+    margin-right: 20px;
+
     & + label {
         position: relative;
         cursor: pointer;

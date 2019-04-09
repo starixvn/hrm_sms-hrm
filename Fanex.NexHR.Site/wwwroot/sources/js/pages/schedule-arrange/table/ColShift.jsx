@@ -56,7 +56,7 @@ export default class ColShift extends PureComponent {
                 classOfInput = 'offday';
             } else if (data.leaveDay === 0.5) {
                 classOfInput += ' shift';
-                valueOfInput = data.leaveType.code + '&#189;';
+                valueOfInput = data.leaveType.code + '½';
                 isShowAddShiftInLeaveHalfday = true;
 
                 if (data.shift !== null) {

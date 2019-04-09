@@ -2,11 +2,14 @@
 
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import moment from 'moment';
+import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
 import AlertModal from '../../shared/components/AlertModal';
+import ToastLayout from '../../shared/layouts/ToastLayout';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import Search from './Search';
 import Table from './table/table';
@@ -20,7 +23,6 @@ export default class App extends Component {
                 fromDate: '',
                 toDate: '',
                 groupIds: '',
-                jobTitleIds: '',
                 employee: { value: 0, label: '' }
             },
             schedules: [],
@@ -34,7 +36,6 @@ export default class App extends Component {
 
         this.originalSchedules = [];
         this.groupOptions = [];
-        this.jobTitleOptions = [];
         this.shiftOptions = [];
         this.currentWeek = {
             fromDate: '',
@@ -62,7 +63,6 @@ export default class App extends Component {
         Promise.all(promises)
             .then(([filterResponse, shiftResponse]) => {
                 this.groupOptions = filterResponse.data.groups.map(group => { group.checked = true; return group; });
-                this.jobTitleOptions = filterResponse.data.jobTitles.map(job => { job.checked = true; return job; });
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code }; });
                 const fromDate = moment(filterResponse.data.fromDate).format('DD MMM, YYYY');
                 const toDate = moment(filterResponse.data.toDate).format('DD MMM, YYYY');
@@ -72,8 +72,7 @@ export default class App extends Component {
                 const filter = Object.assign({}, this.state.filter, {
                     fromDate: fromDate,
                     toDate: toDate,
-                    groupIds: this.groupOptions.map(group => group.id).join(','),
-                    jobTitleIds: this.jobTitleOptions.map(job => job.id).join(',')
+                    groupIds: this.groupOptions.map(group => group.id).join(',')
                 });
 
                 this.getSheduleArranges(filter);
@@ -81,31 +80,19 @@ export default class App extends Component {
                 this.setState({ filter: filter });
             });
 
-        window.addEventListener('beforeunload', this.checkDirtyData);
+        window.addEventListener('beforeunload', this.onLeavingPageEventListener);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('beforeunload', this.checkDirtyData);
+        window.removeEventListener('beforeunload', this.onLeavingPageEventListener);
     }
 
-    checkDirtyData = event => {
-        let isDirtyData = false;
-        let schedules = cloneDeep(this.state.schedules);
-        let originalSchedules = cloneDeep(this.originalSchedules);
-        const totalItems = schedules.length;
-
-        for (let index = 0; index < totalItems; index++) {
-            if (!this.isDirtyObject(originalSchedules[index], schedules[index])) {
-                isDirtyData = true;
-                break;
-            }
-        }
-
-        if (!isDirtyData) {
+    onLeavingPageEventListener = event => {
+        if (!this.isDirtyData()) {
             return undefined;
         }
 
-        var confirmationMessage = 'It looks like you have been editing something. '
+        const confirmationMessage = 'It looks like you have been editing something. '
             + 'If you leave before saving, your changes will be lost.';
 
         (event || window.event).returnValue = confirmationMessage;
@@ -113,11 +100,23 @@ export default class App extends Component {
         return confirmationMessage;
     }
 
-    isDirtyObject = (schedule, originalSchedule) => {
-        unset(originalSchedule, 'selectWeekDays');
-        unset(schedule, 'selectWeekDays');
+    isDirtyData = () => {
+        let isDirty = false;
+        let schedules = cloneDeep(this.state.schedules);
+        let originalSchedules = cloneDeep(this.originalSchedules);
+        const totalItems = schedules.length;
 
-        return isEqual(originalSchedule, schedule);
+        for (let index = 0; index < totalItems; index++) {
+            unset(originalSchedules[index], 'selectWeekDays');
+            unset(schedules[index], 'selectWeekDays');
+
+            if (!isEqual(originalSchedules[index], schedules[index])) {
+                isDirty = true;
+                break;
+            }
+        }
+
+        return isDirty;
     }
 
     handleFilterChange = (name, value) => {
@@ -152,7 +151,6 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
-                jobTitleIds: filter.jobTitleIds,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             }
         }).then(response => {
@@ -481,21 +479,55 @@ export default class App extends Component {
         const totalItems = schedules.length;
 
         for (let index = 0; index < totalItems; index++) {
-            if (!this.isDirtyObject(originalSchedules[index], schedules[index])) {
-                Object.keys(schedules[index].selectWeekDays).forEach(objectKey => {
+            unset(originalSchedules[index], 'selectWeekDays');
+            unset(schedules[index], 'selectWeekDays');
+
+            if (!isEqual(originalSchedules[index], schedules[index])) {
+                const schedule = this.state.schedules[index];
+
+                shiftMultiples.push({
+                    employeeId: schedule.employeeId,
+                    forDate: schedule.mondaySchedule.workDate,
+                    shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : 0
+                });
+
+                Object.keys(schedule.selectWeekDays).forEach(objectKey => {
                     scheduleArranges.push({
-                        employeeId: schedules[index].employeeId,
-                        workDate: schedules[index][objectKey].workDate,
-                        shiftId: schedules[index][objectKey].shift !== null ? schedules[index][objectKey].shift.id : '',
-                        isHoliday: schedules[index][objectKey].isHoliday,
-                        isOffDay: schedules[index][objectKey].isOffDay,
-                        isPublic: schedules[index].isPublic
+                        employeeId: schedule.employeeId,
+                        workDate: schedule[objectKey].workDate,
+                        shiftId: schedule[objectKey].shift !== null ? schedule[objectKey].shift.id : '',
+                        isHoliday: schedule[objectKey].isHoliday,
+                        isOffDay: schedule[objectKey].isOffDay,
+                        isPublic: schedule.isPublic
                     });
                 });
             }
         }
 
-        console.log(scheduleArranges);
+        if (scheduleArranges.length > 0) {
+            axios({
+                url: _global.root + 'ScheduleArrange/edit',
+                method: 'POST',
+                data: stringify({
+                    scheduleArranges: scheduleArranges,
+                    shiftMultiples: shiftMultiples
+                }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let data = response.data;
+
+                if (data.isSuccessful) {
+                    toast.success('Updated Successfully!');
+
+                    this.getSheduleArranges(this.state.filter);
+                } else {
+                    toast.error(data.message);
+                }
+            });
+        }
     }
 
     handleCloseShiftMultipleModal = () => {
@@ -514,9 +546,9 @@ export default class App extends Component {
     render() {
         return (
             <Fragment>
+                <ToastLayout />
                 <Search
                     groupOptions={this.groupOptions}
-                    jobTitleOptions={this.jobTitleOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
                     onSearchEmployees={this.getEmployees}
