@@ -18,6 +18,10 @@ export default class Search extends Component {
         this.props.onChange('toDate', toDate);
     }
 
+    handleSubmit = event => {
+        this.props.onSubmit(event.target.name === 'currentWeek');
+    }
+
     render() {
         return (
             <div className="filter">
@@ -65,8 +69,8 @@ export default class Search extends Component {
                 </div>
                 <div className="form-horizontal clearfix">
                     <div className="button-group">
-                        <input className="button" type="button" value="Submit" onClick={this.props.onSubmit} />
-                        <input className="button currentWeek" type="button" value="Current Week" />
+                        <input className="button" type="button" value="Submit" onClick={this.handleSubmit} />
+                        <input className="button currentWeek" type="button" value="Current Week" name="currentWeek" onClick={this.handleSubmit} />
                     </div>
                 </div>
             </div>

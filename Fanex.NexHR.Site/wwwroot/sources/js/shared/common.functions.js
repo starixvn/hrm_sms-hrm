@@ -112,4 +112,12 @@ function floatingHeader() {
     });
 }
 
-export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader };
+function blockUI() {
+    document.getElementById('loadingProcess').style.display = 'block';
+}
+
+function unblockUI() {
+    document.getElementById('loadingProcess').style.display = 'none';
+}
+
+export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI };

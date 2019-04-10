@@ -8,6 +8,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
+import { blockUI, unblockUI } from '../../shared/common.functions';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import AlertModal from '../../shared/components/AlertModal';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
@@ -147,6 +148,7 @@ export default class App extends Component {
     getSheduleArranges = filter => {
         const fromDate = moment(filter.fromDate).format('DD MMM, YYYY');
         const toDate = moment(filter.toDate).format('DD MMM, YYYY');
+        blockUI();
 
         axios(_global.root + 'ScheduleArrange/ScheduleArrangeDetails', {
             params: {
@@ -177,14 +179,22 @@ export default class App extends Component {
                 return schedule;
             });
             this.setState({ schedules: cloneDeep(this.originalSchedules) });
-        });
+        }).then(() => unblockUI());
     }
 
-    handleGetSheduleArranges = () => {
+    handleGetSheduleArranges = (isCurrentWeek) => {
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
-            this.getSheduleArranges(this.state.filter);
+            const filter = isCurrentWeek
+                ? Object.assign({}, this.state.filter, {
+                    fromDate: this.currentWeek.fromDate,
+                    toDate: this.currentWeek.toDate
+                }) : this.state.filter;
+
+            this.setState({ filter });
+
+            this.getSheduleArranges(filter);
         }
     }
 
