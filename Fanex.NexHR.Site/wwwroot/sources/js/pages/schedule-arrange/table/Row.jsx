@@ -43,7 +43,7 @@ export default class Row extends PureComponent {
     }
 
     render() {
-        const { isHost, isSARole, shiftOptions, data } = this.props;
+        const { isHost, shiftOptions, data } = this.props;
 
         return (
             <div className="table-row">
@@ -58,7 +58,7 @@ export default class Row extends PureComponent {
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.mondaySchedule}
                     scheduleAttrName={'mondaySchedule'}
                     isChecked={data.selectWeekDays.mondaySchedule}
@@ -66,7 +66,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.tuesdaySchedule}
                     scheduleAttrName={'tuesdaySchedule'}
                     isChecked={data.selectWeekDays.tuesdaySchedule}
@@ -74,7 +74,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.wednesdaySchedule}
                     scheduleAttrName={'wednesdaySchedule'}
                     isChecked={data.selectWeekDays.wednesdaySchedule}
@@ -82,7 +82,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.thursdaySchedule}
                     scheduleAttrName={'thursdaySchedule'}
                     isChecked={data.selectWeekDays.thursdaySchedule}
@@ -90,7 +90,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.fridaySchedule}
                     scheduleAttrName={'fridaySchedule'}
                     isChecked={data.selectWeekDays.fridaySchedule}
@@ -98,7 +98,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.saturdaySchedule}
                     scheduleAttrName={'saturdaySchedule'}
                     isChecked={data.selectWeekDays.saturdaySchedule}
@@ -106,7 +106,7 @@ export default class Row extends PureComponent {
                     onCheckWeekDay={this.handleCheckWeekDay}
                 />
                 <ColShift
-                    isHost={isHost} isSARole={isSARole} shiftOptions={shiftOptions}
+                    isHost={isHost} shiftOptions={shiftOptions}
                     employeeId={data.employeeId} data={data.sundaySchedule}
                     scheduleAttrName={'sundaySchedule'}
                     isChecked={data.selectWeekDays.sundaySchedule}

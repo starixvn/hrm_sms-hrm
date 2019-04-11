@@ -1,5 +1,4 @@
 ﻿import React, { PureComponent } from 'react';
-import moment from 'moment';
 
 import ShiftAutocomplete from '../ShiftAutocomplete';
 
@@ -39,7 +38,7 @@ export default class ColShift extends PureComponent {
     }
 
     render() {
-        const { employeeId, data, isHost, isSARole, scheduleAttrName, shiftOptions } = this.props;
+        const { employeeId, data, isHost, scheduleAttrName, shiftOptions } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
         let isDisabled = false;
@@ -154,12 +153,8 @@ export default class ColShift extends PureComponent {
             classOfInput += ' ' + classOfleavetype;
         }
 
-        if (!isSARole && moment(data.workDate) <= moment().add(-28, 'days')) {
-            isShowCheckBox = false;
-            isDisabled = true;
-        }
-
         if (!isHost) {
+            isShowCheckBox = false;
             isDisabled = true;
         }
 

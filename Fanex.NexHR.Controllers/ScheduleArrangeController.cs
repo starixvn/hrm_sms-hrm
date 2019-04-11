@@ -40,15 +40,10 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public CustomJsonResult GetFilter()
         {
-            var currentDate = DateTime.Now;
-            DateTime fromDate = GetStartOfWeek(currentDate);
-            DateTime toDate = GetEndOfWeek(currentDate);
             IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
 
             var model = new ScheduleArrangeFilterViewModel
             {
-                FromDate = fromDate,
-                ToDate = toDate,
                 Groups = teams
             };
 
@@ -71,23 +66,22 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
-        public CustomJsonResult ScheduleArrangeDetails(DateTime fromDate, DateTime toDate, string groupIds, string jobTitles, int? employeeId = null)
+        public CustomJsonResult ScheduleArrangeDetails(ScheduleArrangeFilterViewModel filter)
         {
             var criteria = new GetWorkingCalendarsForShiftArrangeCriteria
             {
                 SupervisorId = CurrentUser.Id,
-                Fromtime = fromDate,
-                Totime = toDate,
-                GroupIds = groupIds,
-                JobTitleId = jobTitles,
-                EmpId = employeeId
+                Fromtime = filter.FromDate,
+                Totime = filter.ToDate,
+                GroupIds = filter.GroupIds,
+                EmpId = filter.EmployeeId
             };
             IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(criteria);
             var scheduleArranges = new List<ScheduleArrangeViewModel>();
 
             if (workingCalendars.Any())
             {
-                scheduleArranges = ConvertWorkingCalendarToScheduleModel(fromDate, toDate, workingCalendars).ToList();
+                scheduleArranges = ConvertWorkingCalendarToScheduleModel(filter.FromDate, filter.ToDate, workingCalendars).ToList();
             }
 
             return new CustomJsonResult { Data = scheduleArranges, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -116,22 +110,6 @@
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        private static DateTime GetStartOfWeek(DateTime currentDate)
-        {
-            int subDays = currentDate.DayOfWeek - DayOfWeek.Monday;
-            if (subDays < 0)
-            {
-                subDays += 7;
-            }
-
-            return currentDate.AddDays(-1 * subDays).Date;
-        }
-
-        private static DateTime GetEndOfWeek(DateTime currentDate)
-        {
-            return GetStartOfWeek(currentDate).AddDays(6);
         }
 
         private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(

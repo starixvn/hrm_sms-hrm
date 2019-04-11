@@ -6,16 +6,10 @@
 
     public class ScheduleArrangeFilterViewModel
     {
-        public int EmployeeId { get; set; }
-
-        public string Employee { get; set; }
-
+        public int? EmployeeId { get; set; }
         public DateTime FromDate { get; set; }
-
         public DateTime ToDate { get; set; }
-
+        public string GroupIds { get; set; }
         public IList<Team> Groups { get; set; }
-
-        public IList<LookupData> JobTitles { get; set; }
     }
 }

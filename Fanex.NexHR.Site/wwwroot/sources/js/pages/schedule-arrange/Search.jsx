@@ -50,6 +50,7 @@ export default class Search extends Component {
                                 statusField="checked"
                                 onChange={this.handleGroupChange}
                                 hasSearchBox
+                                maxDisplayItemCount={0}
                             />
                         </div>
                     </div>

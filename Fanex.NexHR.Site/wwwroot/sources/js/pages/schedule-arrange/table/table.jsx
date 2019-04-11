@@ -37,7 +37,7 @@ export default class Table extends PureComponent {
     }
 
     render() {
-        const { isHost, isSARole, fromDate, toDate, shiftOptions, data } = this.props;
+        const { isHost, fromDate, toDate, shiftOptions, data } = this.props;
 
         return (
             <Fragment>
@@ -57,12 +57,17 @@ export default class Table extends PureComponent {
                     </div>
                     <div className="table-body">
                         {
+                            data.length === 0 &&
+                            <div className="nodata">
+                                No information available
+                            </div>
+                        }
+                        {
                             data.length > 0 &&
                             data.map(item => {
                                 return (
                                     <Row key={item.employeeId}
                                         isHost={isHost}
-                                        isSARole={isSARole}
                                         data={item}
                                         shiftOptions={shiftOptions}
                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}

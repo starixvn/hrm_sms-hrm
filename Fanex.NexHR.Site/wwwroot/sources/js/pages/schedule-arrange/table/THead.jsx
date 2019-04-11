@@ -18,28 +18,30 @@ export default class THead extends PureComponent {
         return (
             <Fragment>
                 <div className="header-control">
-                    {
-                        isHost &&
-                        <div>
-                            <span
-                                onClick={this.props.onSave}
-                                className="btn save glyphicon glyphicon-floppy-disk"
-                                title="Save"
-                            />
-                            <div className="btn checkAllWeekDays">
-                                <div className="checkbox">
-                                    <input type="checkbox" className={`checkbox-custom`} id={`ckb-checkAllWeekDays`}
-                                        onChange={event => this.props.onChangeSelectWeekDays(null, event.target.checked)}
-                                    />
-                                    <label htmlFor={`ckb-checkAllWeekDays`}> Check/Uncheck all</label>
+                    <div>
+                        {
+                            isHost &&
+                            <Fragment>
+                                <span
+                                    onClick={this.props.onSave}
+                                    className="btn save glyphicon glyphicon-floppy-disk"
+                                    title="Save"
+                                />
+                                <div className="btn checkAllWeekDays">
+                                    <div className="checkbox">
+                                        <input type="checkbox" className={`checkbox-custom`} id={`ckb-checkAllWeekDays`}
+                                            onChange={event => this.props.onChangeSelectWeekDays(null, event.target.checked)}
+                                        />
+                                        <label htmlFor={`ckb-checkAllWeekDays`}> Check/Uncheck all</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <span className="btn offNoshift" onClick={this.props.onChangeOffNoShift}>Off No Shift</span>
-                            <span className="btn offdayOT" onClick={this.props.onChangeOffdayOT}>Offday OT</span>
-                            <span className="btn workday" onClick={this.props.onChangeWorkday}>Workday</span>
-                            <span className="btn shiftMultiple" onClick={this.props.onShiftMultiple}>Shift Multiple</span>
-                        </div>
-                    }
+                                <span className="btn offNoshift" onClick={this.props.onChangeOffNoShift}>Off No Shift</span>
+                                <span className="btn offdayOT" onClick={this.props.onChangeOffdayOT}>Offday OT</span>
+                                <span className="btn workday" onClick={this.props.onChangeWorkday}>Workday</span>
+                                <span className="btn shiftMultiple" onClick={this.props.onShiftMultiple}>Shift Multiple</span>
+                            </Fragment>
+                        }
+                    </div>
                     <div>
                         <span className="btn prev-week glyphicon glyphicon-chevron-left" onClick={this.props.onPrevious} />
                         <span className="btn next-week glyphicon glyphicon-chevron-right" onClick={this.props.onNext} />

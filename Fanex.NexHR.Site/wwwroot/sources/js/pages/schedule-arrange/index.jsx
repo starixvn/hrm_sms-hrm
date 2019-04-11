@@ -20,10 +20,13 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
+        let fromDate = moment().day('Monday').format('DD MMM, YYYY');
+        let toDate = moment(fromDate).add(6, 'days').format('DD MMM, YYYY');
+
         this.state = {
             filter: {
-                fromDate: '',
-                toDate: '',
+                fromDate: fromDate,
+                toDate: toDate,
                 groupIds: '',
                 employee: { value: 0, label: '' }
             },
@@ -40,14 +43,8 @@ export default class App extends Component {
         this.originalSchedules = [];
         this.groupOptions = [];
         this.shiftOptions = [];
-        this.currentWeek = {
-            fromDate: '',
-            toDate: ''
-        };
-        this.selectedWeek = {
-            fromDate: moment().day('Monday').format('DD MMM, YYYY'),
-            toDate: moment().day('Sunday').format('DD MMM, YYYY')
-        };
+        this.currentWeek = { fromDate, toDate };
+        this.selectedWeek = { fromDate, toDate };
         this.isHost = document.getElementById('IsHost').checked;
         this.isSARole = document.getElementById('IsSARole').checked;
     }
@@ -67,14 +64,8 @@ export default class App extends Component {
             .then(([filterResponse, shiftResponse]) => {
                 this.groupOptions = filterResponse.data.groups.map(group => { group.checked = true; return group; });
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code }; });
-                const fromDate = moment(filterResponse.data.fromDate).format('DD MMM, YYYY');
-                const toDate = moment(filterResponse.data.toDate).format('DD MMM, YYYY');
-
-                this.currentWeek = { fromDate, toDate };
 
                 const filter = Object.assign({}, this.state.filter, {
-                    fromDate: fromDate,
-                    toDate: toDate,
                     groupIds: this.groupOptions.map(group => group.id).join(',')
                 });
 
@@ -148,6 +139,7 @@ export default class App extends Component {
     getSheduleArranges = filter => {
         const fromDate = moment(filter.fromDate).format('DD MMM, YYYY');
         const toDate = moment(filter.toDate).format('DD MMM, YYYY');
+
         blockUI();
 
         axios(_global.root + 'ScheduleArrange/ScheduleArrangeDetails', {
@@ -581,6 +573,12 @@ export default class App extends Component {
     }
 
     render() {
+        let isHost = this.isHost;
+
+        if (!moment(this.state.filter.fromDate).isAfter(this.currentWeek.toDate) && !this.isSARole) {
+            isHost = false;
+        }
+
         return (
             <Fragment>
                 <ToastLayout />
@@ -593,8 +591,7 @@ export default class App extends Component {
                     onSubmit={this.handleGetSheduleArranges}
                 />
                 <Table
-                    isHost={this.isHost}
-                    isSARole={this.isSARole}
+                    isHost={isHost}
                     fromDate={this.selectedWeek.fromDate}
                     toDate={this.selectedWeek.toDate}
                     data={this.state.schedules}
