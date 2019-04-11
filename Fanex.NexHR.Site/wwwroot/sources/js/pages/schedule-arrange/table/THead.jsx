@@ -19,28 +19,21 @@ export default class THead extends PureComponent {
             <Fragment>
                 <div className="header-control">
                     <div>
-                        {
-                            isHost &&
-                            <Fragment>
-                                <span
-                                    onClick={this.props.onSave}
-                                    className="btn save glyphicon glyphicon-floppy-disk"
-                                    title="Save"
+                        <button className="btn save glyphicon glyphicon-floppy-disk"
+                            title="Save" onClick={this.props.onSave} disabled={!isHost}
+                        />
+                        <div className="btn checkAllWeekDays">
+                            <div className="checkbox">
+                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-checkAllWeekDays`} disabled={!isHost}
+                                    onChange={event => this.props.onChangeSelectWeekDays(null, event.target.checked)}
                                 />
-                                <div className="btn checkAllWeekDays">
-                                    <div className="checkbox">
-                                        <input type="checkbox" className={`checkbox-custom`} id={`ckb-checkAllWeekDays`}
-                                            onChange={event => this.props.onChangeSelectWeekDays(null, event.target.checked)}
-                                        />
-                                        <label htmlFor={`ckb-checkAllWeekDays`}> Check/Uncheck all</label>
-                                    </div>
-                                </div>
-                                <span className="btn offNoshift" onClick={this.props.onChangeOffNoShift}>Off No Shift</span>
-                                <span className="btn offdayOT" onClick={this.props.onChangeOffdayOT}>Offday OT</span>
-                                <span className="btn workday" onClick={this.props.onChangeWorkday}>Workday</span>
-                                <span className="btn shiftMultiple" onClick={this.props.onShiftMultiple}>Shift Multiple</span>
-                            </Fragment>
-                        }
+                                <label htmlFor={`ckb-checkAllWeekDays`}> Check/Uncheck all</label>
+                            </div>
+                        </div>
+                        <button className="btn offNoshift" onClick={this.props.onChangeOffNoShift} disabled={!isHost}>Off No Shift</button>
+                        <button className="btn offdayOT" onClick={this.props.onChangeOffdayOT} disabled={!isHost}>Offday OT</button>
+                        <button className="btn workday" onClick={this.props.onChangeWorkday} disabled={!isHost}>Workday</button>
+                        <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>
                     <div>
                         <span className="btn prev-week glyphicon glyphicon-chevron-left" onClick={this.props.onPrevious} />
@@ -58,30 +51,24 @@ export default class THead extends PureComponent {
                             return (
                                 <div className="table-cell cell-shift" key={`dayOfWeeks${item.value}`}>
                                     {moment(fromDate).add(item.value, 'days').format('D MMM, ddd')}
-                                    {
-                                        isHost &&
-                                        <div className="checkbox">
-                                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-${item.name}`}
-                                                onChange={event => this.props.onChangeSelectWeekDays(item.name, event.target.checked)}
-                                            />
-                                            <label htmlFor={`ckb-${item.name}`} />
-                                        </div>
-                                    }
+                                    <div className="checkbox">
+                                        <input type="checkbox" className={`checkbox-custom`} id={`ckb-${item.name}`} disabled={!isHost}
+                                            onChange={event => this.props.onChangeSelectWeekDays(item.name, event.target.checked)}
+                                        />
+                                        <label htmlFor={`ckb-${item.name}`} />
+                                    </div>
                                 </div>
                             );
                         })
                     }
                     <div className="table-cell cell-public">
                         Public
-                            {
-                            isHost &&
-                            <div className="checkbox">
-                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`}
-                                    onChange={event => this.props.onChangePublics(null, event.target.checked)}
-                                />
-                                <label htmlFor={`ckb-publicAll`} />
-                            </div>
-                        }
+                        <div className="checkbox">
+                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`} disabled={!isHost}
+                                onChange={event => this.props.onChangePublics(null, event.target.checked)}
+                            />
+                            <label htmlFor={`ckb-publicAll`} />
+                        </div>
                     </div>
                     <div className="table-cell cell-modifier">Modified by</div>
                 </div>

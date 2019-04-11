@@ -830,6 +830,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftMultipleModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColDefaultShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColIndex.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColShift.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />

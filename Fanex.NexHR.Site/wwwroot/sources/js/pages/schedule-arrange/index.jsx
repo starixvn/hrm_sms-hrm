@@ -575,7 +575,7 @@ export default class App extends Component {
     render() {
         let isHost = this.isHost;
 
-        if (!moment(this.state.filter.fromDate).isAfter(this.currentWeek.toDate) && !this.isSARole) {
+        if (moment(this.selectedWeek.toDate).isBefore(moment(this.currentWeek.fromDate).add(-28, 'days')) && !this.isSARole) {
             isHost = false;
         }
 

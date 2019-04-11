@@ -1,6 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
+import ColIndex from './ColIndex';
 import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
@@ -25,31 +26,12 @@ export default class Row extends PureComponent {
         this.props.onChangeDefaultShift(employeeId, shift);
     }
 
-    renderIndexCell = () => {
-        const { data } = this.props;
-        const numberOffDefault = data.mondaySchedule.offDaysbyWeek;
-        let numberOffCurrent = 0;
-        Object.keys(data.selectWeekDays).forEach(objectKey => {
-            if (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay) {
-                numberOffCurrent++;
-            }
-        });
-
-        if (numberOffDefault < numberOffCurrent) {
-            return <span className="glyphicon glyphicon-alert" />;
-        }
-
-        return '';
-    }
-
     render() {
         const { isHost, shiftOptions, data } = this.props;
 
         return (
             <div className="table-row">
-                <div className="table-cell cell-index">
-                    {this.renderIndexCell()}
-                </div>
+                <ColIndex data={data} />
                 <div className="table-cell cell-section" title={data.teamName}>{data.teamCode}</div>
                 <div className="table-cell cell-nickname">{data.nickName}</div>
                 <ColDefaultShift isHost={isHost} employeeId={data.employeeId}
