@@ -160,7 +160,7 @@
             CreateCellContentWithLeftAlign(row, rowIndex, 2, totalWorkingHourMonthly.Section.Trim());
             CreateCellContentWithLeftAlign(row, rowIndex, 3, totalWorkingHourMonthly.FullNameNick.Trim());
             CreateCellContentWithLeftAlign(row, rowIndex, 4, totalWorkingHourMonthly.Nick.Trim());
-            CreateCellContentWithCenterAlign(row, rowIndex, 5, totalWorkingHourMonthly.CountWorkDay.ToString("0.0"));
+            CreateCellDecimalContent(row, rowIndex, 5, (double)totalWorkingHourMonthly.CountWorkDay);
 
             for (int i = 0; i < totalWorkingHourMonthly.WorkingHours.Count; i++)
             {
@@ -180,6 +180,14 @@
             ICell cellBody = row.CreateCell(columnIndex);
             cellBody.CellStyle = rowIndex % 2 == 0 ? _oddCellStyleWithCenterAlign : _evenCellStyleWithCenterAlign;
             cellBody.SetCellValue(content);
+        }
+
+        private void CreateCellDecimalContent(IRow row, int rowIndex, int columnIndex, double value)
+        {
+            ICell cellBody = row.CreateCell(columnIndex);
+            cellBody.CellStyle = rowIndex % 2 == 0 ? _oddCellStyleWithCenterAlign : _evenCellStyleWithCenterAlign;
+            cellBody.CellStyle.DataFormat = _workbook.CreateDataFormat().GetFormat("#,##0.0");
+            cellBody.SetCellValue(value);
         }
 
         private void RemoveHeaderRecord()
