@@ -97,7 +97,7 @@ export default class WeekPicker extends Component {
                     className="toDate form-control" readOnly
                 />
                 <div className="calendar" ref={node => this.el = node} />
-                <i className="icon-calendar glyphicon glyphicon-calendar" onClick={this.handleShowCalendar} />
+                <i className="icon-calendar fa fa-calendar" onClick={this.handleShowCalendar} />
             </div>
         );
     }

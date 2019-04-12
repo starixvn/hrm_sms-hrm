@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -13,6 +12,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -20,18 +20,18 @@
 
     public class ScheduleArrangeController : BaseController
     {
-        private readonly IWorkingCalendarService workingCalendarService;
+        private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly ITeamService teamService;
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
 
         public ScheduleArrangeController(
-            IWorkingCalendarService workingCalendarService,
+            IScheduleArrangeService scheduleArrangeService,
             ITeamService teamService,
             IEmployeeService employeeService,
             IBaseService baseService)
         {
-            this.workingCalendarService = workingCalendarService;
+            this.scheduleArrangeService = scheduleArrangeService;
             this.teamService = teamService;
             this.employeeService = employeeService;
             this.baseService = baseService;
@@ -66,25 +66,12 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
-        public CustomJsonResult ScheduleArrangeDetails(ScheduleArrangeFilterViewModel filter)
+        public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
-            var criteria = new GetWorkingCalendarsForShiftArrangeCriteria
-            {
-                SupervisorId = CurrentUser.Id,
-                Fromtime = filter.FromDate,
-                Totime = filter.ToDate,
-                GroupIds = filter.GroupIds,
-                EmpId = filter.EmployeeId
-            };
-            IList<WorkingCalendarModel> workingCalendars = workingCalendarService.GetWorkingCalendarsForShiftArrange(criteria);
-            var scheduleArranges = new List<ScheduleArrangeViewModel>();
+            filter.SupervisorId = CurrentUser.Id;
+            IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
 
-            if (workingCalendars.Any())
-            {
-                scheduleArranges = ConvertWorkingCalendarToScheduleModel(filter.FromDate, filter.ToDate, workingCalendars).ToList();
-            }
-
-            return new CustomJsonResult { Data = scheduleArranges, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = weeklySchedules, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -112,103 +99,13 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private IList<ScheduleArrangeViewModel> ConvertWorkingCalendarToScheduleModel(
-            DateTime fromDate,
-            DateTime toDate,
-            IList<WorkingCalendarModel> workingCalendars)
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult EditRemark(int employeeId, string remark)
         {
-            var scheduleModels = new List<ScheduleArrangeViewModel>();
-            var employees = workingCalendars.GroupBy(x => x.Employee.Id).Select(x => x.Key);
+            CommandResult commandResult = scheduleArrangeService.EditRemark(CurrentUser.Id, employeeId, remark);
 
-            foreach (var employeeId in employees)
-            {
-                var scheduleArrangeModel = HandleConvertWorkingCalendarToScheduleModel(employeeId, fromDate, toDate, workingCalendars);
-                scheduleModels.Add(scheduleArrangeModel);
-            }
-
-            return scheduleModels;
-        }
-
-        private ScheduleArrangeViewModel HandleConvertWorkingCalendarToScheduleModel(
-            int employeeId,
-            DateTime fromDate,
-            DateTime toDate,
-            IList<WorkingCalendarModel> workingCalendars)
-        {
-            var numberDays = (toDate - fromDate).Days + 1;
-            IEnumerable<WorkingCalendarModel> employeeWorkingCalendars = null;
-            WorkingCalendarModel workingCalendar = null;
-            ScheduleArrangeViewModel scheduleArrangeModel = null;
-            var workingDate = DateTime.Now.Date;
-            var scheduleHasInfo = false;
-            for (int i = 0; i < numberDays; i++)
-            {
-                workingDate = fromDate.AddDays(i);
-                employeeWorkingCalendars = workingCalendars.Where(
-                    t => (t.WorkDate.Date == workingDate && t.Employee.Id == employeeId));
-
-                if (employeeWorkingCalendars != null && employeeWorkingCalendars.Any())
-                {
-                    workingCalendar = employeeWorkingCalendars.FirstOrDefault();
-
-                    if (!scheduleHasInfo)
-                    {
-                        scheduleArrangeModel = new ScheduleArrangeViewModel
-                        {
-                            EmployeeId = workingCalendar.Employee.Id,
-                            NickName = workingCalendar.Employee.NickName,
-                            TeamName = workingCalendar.Employee.Team.Name,
-                            TeamCode = workingCalendar.Employee.Team.Code
-                        };
-
-                        scheduleHasInfo = true;
-                    }
-
-                    SetWorkingCalendarForDayOfWeek(scheduleArrangeModel, workingCalendar);
-                }
-            }
-
-            return scheduleArrangeModel;
-        }
-
-        private static void SetWorkingCalendarForDayOfWeek(
-            ScheduleArrangeViewModel scheduleModel,
-            WorkingCalendarModel workingCalendar)
-        {
-            switch (workingCalendar.Weekday - 1)
-            {
-                case (int)DayOfWeek.Monday:
-                    scheduleModel.MondaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Tuesday:
-                    scheduleModel.TuesdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Wednesday:
-                    scheduleModel.WednesdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Thursday:
-                    scheduleModel.ThursdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Friday:
-                    scheduleModel.FridaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Saturday:
-                    scheduleModel.SaturdaySchedule = workingCalendar;
-                    break;
-
-                case (int)DayOfWeek.Sunday:
-                    scheduleModel.SundaySchedule = workingCalendar;
-                    break;
-
-                default:
-                    // nothing
-                    break;
-            }
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

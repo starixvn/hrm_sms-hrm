@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IWorkingCalendarRepository, WorkingCalendarRepository>();
             container.RegisterType<IDisciplineRepository, DisciplineRepository>();
             container.RegisterType<IMenuRepository, MenuRepository>();
+            container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();
@@ -45,6 +46,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ILateInEarlyOutRequestService, LateInEarlyOutRequestService>();
             container.RegisterType<ILeaveRequestService, LeaveRequestService>();
             container.RegisterType<IDisciplineService, DisciplineService>();
+            container.RegisterType<IScheduleArrangeService, ScheduleArrangeService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

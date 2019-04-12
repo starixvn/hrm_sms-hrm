@@ -30,27 +30,6 @@
             }
         }
 
-        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var workingCalendarList = db.Query<WorkingCalendarModel, Employee, Team, Shift, LeaveType, LeaveType, WorkingCalendarModel>(
-                    (w, e, t, s, lv, lv2) =>
-                    {
-                        e.Team = t;
-                        w.Employee = e;
-                        w.Shift = s;
-                        w.LeaveType = lv;
-                        w.LeaveType2 = lv2;
-                        return w;
-                    },
-                    splitOn: "EmpId, GroupId, ShiftId, LeaveTypeId, LeaveTypeId2",
-                    parameterValues: criteria.GetSpParams());
-
-                return workingCalendarList.ToList();
-            }
-        }
-
         public IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

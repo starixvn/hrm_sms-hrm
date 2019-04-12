@@ -3,7 +3,7 @@
 export default class ColIndex extends PureComponent {
     render() {
         const { data } = this.props;
-        const numberOffDefault = data.mondaySchedule.offDaysbyWeek;
+        const numberOffDefault = data.offDaysbyWeek;
         let numberOffCurrent = 0;
         Object.keys(data.selectWeekDays).forEach(objectKey => {
             if (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay) {

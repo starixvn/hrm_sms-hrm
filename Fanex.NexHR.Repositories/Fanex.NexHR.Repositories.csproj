@@ -87,6 +87,8 @@
     <Compile Include="Interfaces\ITeamRepository.cs" />
     <Compile Include="Interfaces\IReportRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
+    <Compile Include="Interfaces\IScheduleArrangeRepository.cs" />
+    <Compile Include="ScheduleArrangeRepository.cs" />
     <Compile Include="MenuRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>

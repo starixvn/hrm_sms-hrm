@@ -255,10 +255,12 @@
     <Compile Include="Interfaces\IShiftService.cs" />
     <Compile Include="Interfaces\ILeaveTypeService.cs" />
     <Compile Include="Implement\LeaveTypeService.cs" />
+    <Compile Include="Interfaces\IScheduleArrangeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implement\RequestService.cs" />
     <Compile Include="Implement\ShiftService.cs" />
     <Compile Include="Implement\WorkingCalendarService.cs" />
+    <Compile Include="Implement\ScheduleArrangeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

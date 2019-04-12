@@ -37,7 +37,8 @@ export default class App extends Component {
             alertModal: {
                 show: false,
                 message: ''
-            }
+            },
+            showRemarkPopover: false
         };
 
         this.originalSchedules = [];
@@ -63,7 +64,7 @@ export default class App extends Component {
         Promise.all(promises)
             .then(([filterResponse, shiftResponse]) => {
                 this.groupOptions = filterResponse.data.groups.map(group => { group.checked = true; return group; });
-                this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code }; });
+                this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
 
                 const filter = Object.assign({}, this.state.filter, {
                     groupIds: this.groupOptions.map(group => group.id).join(',')
@@ -142,7 +143,7 @@ export default class App extends Component {
 
         blockUI();
 
-        axios(_global.root + 'ScheduleArrange/ScheduleArrangeDetails', {
+        axios(_global.root + 'ScheduleArrange/GetWeeklySchedule', {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -153,10 +154,6 @@ export default class App extends Component {
             this.selectedWeek = { fromDate, toDate };
 
             this.originalSchedules = response.data.map(schedule => {
-                schedule.defaultShift = {
-                    id: parseInt(schedule.mondaySchedule.shiftMultipleId, 10),
-                    code: schedule.mondaySchedule.shiftMultipleCode
-                };
                 schedule.isPublic = schedule.mondaySchedule.isPublic;
                 schedule.selectWeekDays = {
                     mondaySchedule: false,
@@ -285,7 +282,7 @@ export default class App extends Component {
                     }
                 } else {
                     schedule[attrName].isOffDay = false;
-                    schedule[attrName].shift = { ...schedule[attrName].shift, id: shift.id, code: shift.code };
+                    schedule[attrName].shift = shift;
                 }
             } else {
                 schedule[attrName].isOffDay = false;
@@ -470,7 +467,7 @@ export default class App extends Component {
                 Object.keys(selectWeekDays).forEach(objectKey => {
                     if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
                         schedule[objectKey].isOffDay = shift !== null && shift.id === -1 ? true : isOffday;
-                        schedule[objectKey].shift = shift !== null ? { ...schedule[attrName].shift, id: shift.id, code: shift.code } : null;
+                        schedule[objectKey].shift = shift;
 
                         isChanged = true;
                     }
@@ -524,10 +521,7 @@ export default class App extends Component {
             axios({
                 url: _global.root + 'ScheduleArrange/edit',
                 method: 'POST',
-                data: stringify({
-                    scheduleArranges: scheduleArranges,
-                    shiftMultiples: shiftMultiples
-                }),
+                data: stringify({ scheduleArranges, shiftMultiples }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -572,6 +566,40 @@ export default class App extends Component {
         this.handleCloseConfirmRefreshDataModal();
     }
 
+    handleChangeShowRemarkPopover = show => {
+        this.setState({ showRemarkPopover: show });
+    }
+
+    handleUpdateRemark = (employeeId, remark) => {
+        axios({
+            url: _global.root + 'ScheduleArrange/EditRemark',
+            method: 'POST',
+            data: stringify({ employeeId, remark }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            let data = response.data;
+
+            if (data.isSuccessful) {
+                toast.success('Updated Successfully!');
+
+                let schedules = cloneDeep(this.state.schedules);
+                const index = schedules.findIndex(schedule => schedule.employeeId === employeeId);
+
+                if (index >= 0) {
+                    schedules[index].remark = remark;
+                    this.originalSchedules[index].remark = remark;
+
+                    this.setState({ schedules });
+                }
+            } else {
+                toast.error(data.message);
+            }
+        });
+    }
+
     render() {
         let isHost = this.isHost;
 
@@ -596,6 +624,7 @@ export default class App extends Component {
                     toDate={this.selectedWeek.toDate}
                     data={this.state.schedules}
                     shiftOptions={this.shiftOptions}
+                    showRemarkPopover={this.state.showRemarkPopover}
                     onPrevious={this.handleGetPreviousWeekSchedule}
                     onNext={this.handleGetNextWeekSchedule}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
@@ -607,6 +636,8 @@ export default class App extends Component {
                     onChangeOffdayOT={this.handleChangeOffdayOT}
                     onChangeWorkday={this.handleChangeWorkday}
                     onShiftMultiple={this.handleShiftMultiple}
+                    onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
+                    onUpdateRemark={this.handleUpdateRemark}
                     onSave={this.handleSave}
                 />
                 {

@@ -70,10 +70,13 @@ export default class Table extends PureComponent {
                                         isHost={isHost}
                                         data={item}
                                         shiftOptions={shiftOptions}
+                                        showRemarkPopover={this.props.showRemarkPopover}
                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                                         onChangeShift={this.props.onChangeShift}
                                         onChangeDefaultShift={this.props.onChangeDefaultShift}
                                         onChangePublics={this.props.onChangePublics}
+                                        onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
+                                        onUpdateRemark={this.props.onUpdateRemark}
                                     />
                                 );
                             })

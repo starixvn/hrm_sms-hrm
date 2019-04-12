@@ -217,14 +217,6 @@
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="ShiftMng_GetShiftSchedule" SpName="ShiftMng_GetShiftSchedule" DbName="nexhrx" Plain="0">
-      <Mapping DataField="IsKeepInView" ObjectProperty="IsKeepInViewDay" />
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="ShiftId" ObjectProperty="Id" />
-      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-      <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
-    </Setting>
     <Setting Key="ShiftMng_Set_ShiftSchedule" SpName="ShiftMng_Set_ShiftSchedule" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ShiftMng_RptShiftSchedule" SpName="ShiftMng_RptShiftSchedule" DbName="nexhrx" Plain="0">
       <Mapping DataField="Code" ObjectProperty="ShiftCode" />
@@ -469,11 +461,21 @@
     <Setting Key="Menu_Delete" SpName="Menu_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="MailDeliver">
-    <Setting Key="MailRecorder_GetSetting" SpName="MailRecorder_GetSetting" DbName="DBMA.bodb_Maintenance.bodbAdminNet" >
+    <Setting Key="MailRecorder_GetSetting" SpName="MailRecorder_GetSetting" DbName="DBMA.bodb_Maintenance.bodbAdminNet">
       <Mapping DataField="SettingID" ObjectProperty="AppId" />
     </Setting>
-    <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="DBMA.bodb_Maintenance.bodbAdminNet"  />
-    <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="DBMA.bodb_Maintenance.bodbAdminNet"  />
-    <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="DBMA.bodb_Maintenance.bodbAdminNet"  />
+    <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+    <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+    <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+  </Function>
+  <Function Name="Schedule Arrange">
+    <Setting Key="ScheduleArrangement_GetWeekly" SpName="ScheduleArrangement_GetWeekly" DbName="nexhrx" Plain="0">
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="DefaultShiftId" ObjectProperty="Id" />
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

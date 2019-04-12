@@ -19,7 +19,7 @@ export default class THead extends PureComponent {
             <Fragment>
                 <div className="header-control">
                     <div>
-                        <button className="btn save glyphicon glyphicon-floppy-disk"
+                        <button className="btn save fa fa-floppy-o"
                             title="Save" onClick={this.props.onSave} disabled={!isHost}
                         />
                         <div className="btn checkAllWeekDays">
@@ -36,8 +36,8 @@ export default class THead extends PureComponent {
                         <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>
                     <div>
-                        <span className="btn prev-week glyphicon glyphicon-chevron-left" onClick={this.props.onPrevious} />
-                        <span className="btn next-week glyphicon glyphicon-chevron-right" onClick={this.props.onNext} />
+                        <span className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} />
+                        <span className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} />
                         <span className="label-week">{`${fromDate} - ${toDate}`}</span>
                     </div>
                 </div>

@@ -10,8 +10,6 @@
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria);
 
-        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(ICriteria criteria);
-
         IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);

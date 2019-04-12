@@ -2,6 +2,7 @@
 import moment from 'moment';
 
 import ColIndex from './ColIndex';
+import ColNickname from './ColNickname';
 import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
@@ -27,13 +28,20 @@ export default class Row extends PureComponent {
     }
 
     render() {
-        const { isHost, shiftOptions, data } = this.props;
+        const { isHost, shiftOptions, data, showRemarkPopover } = this.props;
 
         return (
             <div className="table-row">
                 <ColIndex data={data} />
-                <div className="table-cell cell-section" title={data.teamName}>{data.teamCode}</div>
-                <div className="table-cell cell-nickname">{data.nickName}</div>
+                <div className="table-cell cell-section" title={data.team.name}>{data.team.code}</div>
+                <ColNickname isHost={isHost}
+                    employeeId={data.employeeId}
+                    nickname={data.nickname}
+                    remark={data.remark}
+                    showRemarkPopover={showRemarkPopover}
+                    onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
+                    onUpdateRemark={this.props.onUpdateRemark}
+                />
                 <ColDefaultShift isHost={isHost} employeeId={data.employeeId}
                     shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}
                     data={data.defaultShift}

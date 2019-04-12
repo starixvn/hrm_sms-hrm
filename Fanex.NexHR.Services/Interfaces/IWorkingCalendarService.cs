@@ -11,8 +11,6 @@
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria);
 
-        IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria);
-
         IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
 
         IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria);

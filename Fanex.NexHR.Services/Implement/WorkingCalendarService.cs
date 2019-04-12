@@ -36,18 +36,6 @@
             return calendars;
         }
 
-        public IList<WorkingCalendarModel> GetWorkingCalendarsForShiftArrange(GetWorkingCalendarsForShiftArrangeCriteria criteria)
-        {
-            IList<WorkingCalendarModel> workingCalendarModels = null;
-
-            if (criteria.IsValid())
-            {
-                workingCalendarModels = workingCalendarRepository.GetWorkingCalendarsForShiftArrange(criteria);
-            }
-
-            return workingCalendarModels ?? new List<WorkingCalendarModel>();
-        }
-
         public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)
         {
             IList<ShiftStatisticModel> shiftStatisticModels = null;

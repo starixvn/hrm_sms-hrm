@@ -118,6 +118,9 @@
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
     <Compile Include="Request\VerifierAndApproverForRequest.cs" />
+    <Compile Include="ScheduleArrange\DailySchedule.cs" />
+    <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
+    <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
     <Compile Include="Section\SectionModel.cs" />
     <Compile Include="Supervisor\SupervisorReportGroupModel.cs" />
     <Compile Include="Supervisor\SupervisorReportModel.cs" />
