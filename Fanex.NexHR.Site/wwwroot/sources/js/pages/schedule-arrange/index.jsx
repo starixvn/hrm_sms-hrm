@@ -485,18 +485,32 @@ export default class App extends Component {
     }
 
     handleSave = () => {
+        let isValidData = true;
         let weeklySchedules = [];
         let defaultShifts = [];
         let schedules = cloneDeep(this.state.schedules);
         let originalSchedules = cloneDeep(this.originalSchedules);
         const totalItems = schedules.length;
+        const weekDayAttrNames = originalSchedules.length > 0 ? Object.keys(originalSchedules[0].selectWeekDays) : [];
 
         for (let index = 0; index < totalItems; index++) {
             unset(originalSchedules[index], 'selectWeekDays');
             unset(schedules[index], 'selectWeekDays');
 
             if (!isEqual(originalSchedules[index], schedules[index])) {
-                const schedule = this.state.schedules[index];
+                const schedule = schedules[index];
+
+                let totalOffDays = 0;
+                weekDayAttrNames.forEach(objectKey => {
+                    if (schedule[objectKey].isOffDay || schedule[objectKey].isLeaveOffDay) {
+                        totalOffDays++;
+                    }
+                });
+
+                if (schedule.offDaysbyWeek < totalOffDays && !this.isSARole) {
+                    isValidData = false;
+                    break;
+                } 
 
                 defaultShifts.push({
                     employeeId: schedule.employeeId,
@@ -504,7 +518,7 @@ export default class App extends Component {
                     shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
                 });
 
-                Object.keys(schedule.selectWeekDays).forEach(objectKey => {
+                weekDayAttrNames.forEach(objectKey => {
                     weeklySchedules.push({
                         employeeId: schedule.employeeId,
                         workDate: schedule[objectKey].workDate,
@@ -515,6 +529,17 @@ export default class App extends Component {
                     });
                 });
             }
+        }
+
+        if (!isValidData && !this.isSARole) {
+            this.setState({
+                alertModal: {
+                    show: true,
+                    message: 'Some employees have a larger number of days off during the week according to the setting.'
+                }
+            });
+
+            return;
         }
 
         if (weeklySchedules.length > 0 || defaultShifts.length > 0) {

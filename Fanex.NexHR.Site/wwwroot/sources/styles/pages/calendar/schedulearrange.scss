@@ -7,17 +7,21 @@
 @import '../../vendors/autocomplete';
 @import '../../layout/filter';
 @import '../../layout/toastify';
-@import '../../components/buttons';
 @import '../../components/checkbox';
 @import '../../components/modal';
 
 .form-horizontal {
-    .button-group {
-        .button {
-            margin-right: 5px;
+    .multiple-select-container {
+        .multiple-select-label {
+            padding-left: 8px;
+            @include border-radius(4px);
+        }
+    }
 
+    .button-group {
+        .btn {
             &.currentWeek {
-                width: 100px;
+                margin-left: 5px;
             }
         }
     }

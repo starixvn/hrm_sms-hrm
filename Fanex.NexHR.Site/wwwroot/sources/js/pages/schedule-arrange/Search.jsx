@@ -70,8 +70,8 @@ export default class Search extends Component {
                 </div>
                 <div className="form-horizontal clearfix">
                     <div className="button-group">
-                        <input className="button" type="button" value="Submit" onClick={this.handleSubmit} />
-                        <input className="button currentWeek" type="button" value="Current Week" name="currentWeek" onClick={this.handleSubmit} />
+                        <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                        <button className="btn btn-primary currentWeek" name="currentWeek" onClick={this.handleSubmit}>Current Week</button>
                     </div>
                 </div>
             </div>
