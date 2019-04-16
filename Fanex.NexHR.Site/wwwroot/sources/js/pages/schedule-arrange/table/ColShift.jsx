@@ -38,9 +38,10 @@ export default class ColShift extends PureComponent {
     }
 
     render() {
-        const { employeeId, data, isHost, scheduleAttrName, shiftOptions } = this.props;
+        const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
+        let placeholder = '';
         let isDisabled = false;
         let isShowCheckBox = isHost;
         let isLeaveHalfday = false;
@@ -124,6 +125,11 @@ export default class ColShift extends PureComponent {
             classOfInput = 'shift';
         }
 
+        if (data.shift !== null && defaultShift !== null && valueOfInput === data.shift.code && valueOfInput === defaultShift.code) {
+            valueOfInput = '';
+            placeholder = data.shift.code;
+        }
+
         if (data.isOvertime || data.isChangeShift) {
             isDisabled = true;
             isShowCheckBox = false;
@@ -169,6 +175,7 @@ export default class ColShift extends PureComponent {
                         value={valueOfInput}
                         name={scheduleAttrName}
                         className={classOfInput}
+                        placeholder={placeholder}
                         isDisabled={isDisabled}
                         shiftOptions={isHoliday || isLeaveHalfday ? shiftOptions.filter(shift => shift.id !== -1) : shiftOptions}
                         onChange={this.handleChangeShift}

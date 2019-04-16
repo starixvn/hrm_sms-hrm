@@ -119,6 +119,8 @@
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
     <Compile Include="Request\VerifierAndApproverForRequest.cs" />
     <Compile Include="ScheduleArrange\DailySchedule.cs" />
+    <Compile Include="ScheduleArrange\EditDailySchedule.cs" />
+    <Compile Include="ScheduleArrange\EditDefaultShift.cs" />
     <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
     <Compile Include="Section\SectionModel.cs" />
@@ -143,9 +145,7 @@
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
     <Compile Include="Request\RequestTypeModel.cs" />
-    <Compile Include="Calendar\ScheduleArrangeModel.cs" />
     <Compile Include="Calendar\ScheduleModel.cs" />
-    <Compile Include="Calendar\ShiftMultipleModel.cs" />
     <Compile Include="Supervisor\SupervisorModel.cs" />
     <Compile Include="Supervisor\SupervisorNameModel.cs" />
     <Compile Include="Team.cs" />

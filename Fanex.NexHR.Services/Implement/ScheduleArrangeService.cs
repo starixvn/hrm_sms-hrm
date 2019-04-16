@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.ScheduleArrange;
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Repositories;
@@ -32,6 +33,18 @@
             };
 
             return scheduleArrangeRepository.GetWeeklySchedule(criteria);
+        }
+
+        public CommandResult EditWeekly(int actorId, IList<EditDailySchedule> weeklySchedules, IList<EditDefaultShift> defaultShifts)
+        {
+            var criteria = new EditWeeklyScheduleCriteria
+            {
+                ActorId = actorId,
+                WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
+                DefaultShiftXml = defaultShifts.ToXML().ToString()
+            };
+
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public CommandResult EditRemark(int actorId, int employeeId, string remark)

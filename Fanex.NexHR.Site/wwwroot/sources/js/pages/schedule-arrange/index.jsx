@@ -485,8 +485,8 @@ export default class App extends Component {
     }
 
     handleSave = () => {
-        let scheduleArranges = [];
-        let shiftMultiples = [];
+        let weeklySchedules = [];
+        let defaultShifts = [];
         let schedules = cloneDeep(this.state.schedules);
         let originalSchedules = cloneDeep(this.originalSchedules);
         const totalItems = schedules.length;
@@ -498,17 +498,17 @@ export default class App extends Component {
             if (!isEqual(originalSchedules[index], schedules[index])) {
                 const schedule = this.state.schedules[index];
 
-                shiftMultiples.push({
+                defaultShifts.push({
                     employeeId: schedule.employeeId,
-                    forDate: schedule.mondaySchedule.workDate,
-                    shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : 0
+                    fromDate: schedule.mondaySchedule.workDate,
+                    shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
                 });
 
                 Object.keys(schedule.selectWeekDays).forEach(objectKey => {
-                    scheduleArranges.push({
+                    weeklySchedules.push({
                         employeeId: schedule.employeeId,
                         workDate: schedule[objectKey].workDate,
-                        shiftId: schedule[objectKey].shift !== null ? schedule[objectKey].shift.id : '',
+                        shiftId: schedule[objectKey].shift !== null ? schedule[objectKey].shift.id : null,
                         isHoliday: schedule[objectKey].isHoliday,
                         isOffDay: schedule[objectKey].isOffDay,
                         isPublic: schedule.isPublic
@@ -517,11 +517,11 @@ export default class App extends Component {
             }
         }
 
-        if (scheduleArranges.length > 0) {
+        if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
             axios({
-                url: _global.root + 'ScheduleArrange/edit',
+                url: _global.root + 'ScheduleArrange/EditWeekly',
                 method: 'POST',
-                data: stringify({ scheduleArranges, shiftMultiples }),
+                data: stringify({ weeklySchedules, defaultShifts }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'

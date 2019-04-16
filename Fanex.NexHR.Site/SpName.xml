@@ -217,7 +217,6 @@
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="ShiftMng_Set_ShiftSchedule" SpName="ShiftMng_Set_ShiftSchedule" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ShiftMng_RptShiftSchedule" SpName="ShiftMng_RptShiftSchedule" DbName="nexhrx" Plain="0">
       <Mapping DataField="Code" ObjectProperty="ShiftCode" />
       <Mapping DataField="Monday" ObjectProperty="WorkMonday" />
@@ -476,6 +475,7 @@
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="ScheduleArrangement_UpdateWeekly" SpName="ScheduleArrangement_UpdateWeekly" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

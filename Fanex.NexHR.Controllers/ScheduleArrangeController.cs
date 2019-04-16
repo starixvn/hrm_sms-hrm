@@ -1,14 +1,11 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -23,18 +20,15 @@
         private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly ITeamService teamService;
         private readonly IEmployeeService employeeService;
-        private readonly IBaseService baseService;
 
         public ScheduleArrangeController(
             IScheduleArrangeService scheduleArrangeService,
             ITeamService teamService,
-            IEmployeeService employeeService,
-            IBaseService baseService)
+            IEmployeeService employeeService)
         {
             this.scheduleArrangeService = scheduleArrangeService;
             this.teamService = teamService;
             this.employeeService = employeeService;
-            this.baseService = baseService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
@@ -76,25 +70,9 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult Edit(IList<ScheduleModel> scheduleArranges, IList<ShiftMultipleModel> shiftMultiples)
+        public ActionResult EditWeekly(IList<EditDailySchedule> weeklySchedules, IList<EditDefaultShift> defaultShifts)
         {
-            var scheduleArrangeModel = new ScheduleArrangeModel
-            {
-                ScheduleModels = scheduleArranges,
-                ShiftMultipleModels = shiftMultiples,
-                ModifiedBy = CurrentUser.Id,
-                ModifiedDate = DateTime.Now,
-            };
-
-            var criteria = new InsertOrUpdateWorkingCalendarsCriteria
-            {
-                ModifiedDate = scheduleArrangeModel.ModifiedDate,
-                ModifiedBy = scheduleArrangeModel.ModifiedBy,
-                ScheduleList = scheduleArrangeModel.ScheduleModelXML,
-                ShiftMultipleList = scheduleArrangeModel.ShiftMultipleXML
-            };
-
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = scheduleArrangeService.EditWeekly(CurrentUser.Id, weeklySchedules, defaultShifts);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

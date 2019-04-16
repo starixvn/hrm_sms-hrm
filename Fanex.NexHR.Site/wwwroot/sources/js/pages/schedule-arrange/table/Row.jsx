@@ -49,7 +49,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.mondaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.mondaySchedule}
                     scheduleAttrName={'mondaySchedule'}
                     isChecked={data.selectWeekDays.mondaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -57,7 +57,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.tuesdaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.tuesdaySchedule}
                     scheduleAttrName={'tuesdaySchedule'}
                     isChecked={data.selectWeekDays.tuesdaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -65,7 +65,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.wednesdaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.wednesdaySchedule}
                     scheduleAttrName={'wednesdaySchedule'}
                     isChecked={data.selectWeekDays.wednesdaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -73,7 +73,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.thursdaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.thursdaySchedule}
                     scheduleAttrName={'thursdaySchedule'}
                     isChecked={data.selectWeekDays.thursdaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -81,7 +81,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.fridaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.fridaySchedule}
                     scheduleAttrName={'fridaySchedule'}
                     isChecked={data.selectWeekDays.fridaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -89,7 +89,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.saturdaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.saturdaySchedule}
                     scheduleAttrName={'saturdaySchedule'}
                     isChecked={data.selectWeekDays.saturdaySchedule}
                     onChangeShift={this.handleChangeShift}
@@ -97,7 +97,7 @@ export default class Row extends PureComponent {
                 />
                 <ColShift
                     isHost={isHost} shiftOptions={shiftOptions}
-                    employeeId={data.employeeId} data={data.sundaySchedule}
+                    employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.sundaySchedule}
                     scheduleAttrName={'sundaySchedule'}
                     isChecked={data.selectWeekDays.sundaySchedule}
                     onChangeShift={this.handleChangeShift}

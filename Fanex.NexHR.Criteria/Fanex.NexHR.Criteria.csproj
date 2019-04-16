@@ -77,7 +77,6 @@
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarByDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
-    <Compile Include="Calendar\InsertOrUpdateWorkingCalendarsCriteria.cs" />
     <Compile Include="Department\GetParentByDepartmentCriteria.cs" />
     <Compile Include="Department\UpdateDepartmentCriteria.cs" />
     <Compile Include="Department\InsertDepartmentCriteria.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Role\GetRolesByUserIdCriteria.cs" />
     <Compile Include="Role\GetRolesCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\GetWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />

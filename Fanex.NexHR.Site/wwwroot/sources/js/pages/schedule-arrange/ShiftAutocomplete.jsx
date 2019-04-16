@@ -9,6 +9,7 @@ export default class ShiftAutocomplete extends PureComponent {
         shiftOptions: PropTypes.arrayOf(PropTypes.object),
         name: PropTypes.string,
         className: PropTypes.string,
+        placeholder: PropTypes.string,
         isDisabled: PropTypes.bool,
         onChange: PropTypes.func
     };
@@ -18,6 +19,7 @@ export default class ShiftAutocomplete extends PureComponent {
         shiftOptions: [],
         name: '',
         className: '',
+        placeholder: '',
         isDisabled: false,
         onChange: function () { }
     };
@@ -65,7 +67,7 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     render() {
-        const { name, className, isDisabled, shiftOptions } = this.props;
+        const { name, className, isDisabled, placeholder, shiftOptions } = this.props;
         const { value } = this.state;
 
         return (
@@ -78,7 +80,7 @@ export default class ShiftAutocomplete extends PureComponent {
                 renderInput={(props) => <input type="text" {...props} />}
                 renderMenu={(items, value, style) => <div className="items" children={items} />}
                 renderItem={(item) => <div className="item" key={item.id}>{item.code}</div>}
-                inputProps={{ name: name, className: className, disabled: isDisabled, onBlur: this.handleInputBlur }}
+                inputProps={{ name: name, className: className, placeholder: placeholder, disabled: isDisabled, onBlur: this.handleInputBlur }}
                 value={value}
                 onChange={this.handleChange}
                 onSelect={this.handleSelect}

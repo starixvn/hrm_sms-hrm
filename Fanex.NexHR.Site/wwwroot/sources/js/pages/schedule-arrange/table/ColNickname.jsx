@@ -22,6 +22,7 @@ export default class ColNickname extends PureComponent {
 
     handleHidePopover = () => {
         this.setState({ showPopover: false });
+        this.props.onChangeShowRemarkPopover(false);
     }
 
     handleChangeRemark = event => {
