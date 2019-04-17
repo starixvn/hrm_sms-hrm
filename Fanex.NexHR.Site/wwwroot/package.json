@@ -27,10 +27,11 @@
     "jquery-validation-unobtrusive": "^3.2.11",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
-    "react": "^16.4.2",
+    "react": "^16.8.6",
     "react-autocomplete": "^1.8.1",
+    "react-beautiful-dnd": "^11.0.0",
     "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.4.2",
+    "react-dom": "16.8.6",
     "react-toastify": "^5.0.0",
     "tipsy": "^1.0.0"
   },

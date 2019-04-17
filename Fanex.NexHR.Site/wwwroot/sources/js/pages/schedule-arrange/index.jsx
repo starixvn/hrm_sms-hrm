@@ -532,12 +532,7 @@ export default class App extends Component {
         }
 
         if (!isValidData && !this.isSARole) {
-            this.setState({
-                alertModal: {
-                    show: true,
-                    message: 'Some employees have a larger number of days off during the week according to the setting.'
-                }
-            });
+            toast.error('Some employees have a larger number of days off during the week according to the setting.');
 
             return;
         }
