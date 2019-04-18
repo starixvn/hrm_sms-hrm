@@ -38,7 +38,9 @@ export default class App extends Component {
                 show: false,
                 message: ''
             },
-            showRemarkPopover: false
+            showRemarkPopover: false,
+            isOrderMode: false,
+            showConfirmSwitchOrderModeModal: false
         };
 
         this.originalSchedules = [];
@@ -70,7 +72,7 @@ export default class App extends Component {
                     groupIds: this.groupOptions.map(group => group.id).join(',')
                 });
 
-                this.getSheduleArranges(filter);
+                this.getWeeklyShedules(filter);
 
                 this.setState({ filter: filter });
             });
@@ -102,10 +104,12 @@ export default class App extends Component {
         const totalItems = schedules.length;
 
         for (let index = 0; index < totalItems; index++) {
-            unset(originalSchedules[index], 'selectWeekDays');
-            unset(schedules[index], 'selectWeekDays');
+            const schedule = schedules[index];
+            const originalSchedule = originalSchedules.filter(item => item.employeeId === schedule.employeeId)[0];
+            unset(schedule, 'selectWeekDays');
+            unset(originalSchedule, 'selectWeekDays');
 
-            if (!isEqual(originalSchedules[index], schedules[index])) {
+            if (!isEqual(schedule, originalSchedule)) {
                 isDirty = true;
                 break;
             }
@@ -137,7 +141,7 @@ export default class App extends Component {
         });
     }
 
-    getSheduleArranges = filter => {
+    getWeeklyShedules = filter => {
         const fromDate = moment(filter.fromDate).format('DD MMM, YYYY');
         const toDate = moment(filter.toDate).format('DD MMM, YYYY');
 
@@ -148,12 +152,14 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
+                employeeId: filter.employee.value === 0 ? null : filter.employee.value,
+                isOrderMode: this.state.isOrderMode
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
 
-            this.originalSchedules = response.data.map(schedule => {
+            this.originalSchedules = response.data.map((schedule, index) => {
+                schedule.displayOrder = index + 1;
                 schedule.isPublic = schedule.mondaySchedule.isPublic;
                 schedule.selectWeekDays = {
                     mondaySchedule: false,
@@ -171,7 +177,7 @@ export default class App extends Component {
         }).then(() => unblockUI());
     }
 
-    handleGetSheduleArranges = (isCurrentWeek) => {
+    handleGetWeeklyShedules = (isCurrentWeek) => {
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
@@ -183,7 +189,7 @@ export default class App extends Component {
 
             this.setState({ filter });
 
-            this.getSheduleArranges(filter);
+            this.getWeeklyShedules(filter);
         }
     }
 
@@ -198,7 +204,7 @@ export default class App extends Component {
                 toDate: toDate
             });
 
-            this.getSheduleArranges(filter);
+            this.getWeeklyShedules(filter);
 
             this.setState({ filter: filter });
         }
@@ -215,7 +221,7 @@ export default class App extends Component {
                 toDate: toDate
             });
 
-            this.getSheduleArranges(filter);
+            this.getWeeklyShedules(filter);
 
             this.setState({ filter: filter });
         }
@@ -510,7 +516,7 @@ export default class App extends Component {
                 if (schedule.offDaysbyWeek < totalOffDays && !this.isSARole) {
                     isValidData = false;
                     break;
-                } 
+                }
 
                 defaultShifts.push({
                     employeeId: schedule.employeeId,
@@ -552,7 +558,7 @@ export default class App extends Component {
                 if (data.isSuccessful) {
                     toast.success('Updated Successfully!');
 
-                    this.getSheduleArranges(this.state.filter);
+                    this.getWeeklyShedules(this.state.filter);
                 } else {
                     toast.error(data.message);
                 }
@@ -582,7 +588,7 @@ export default class App extends Component {
     }
 
     handleSubmitRefreshData = () => {
-        this.getSheduleArranges(this.state.filter);
+        this.getWeeklyShedules(this.state.filter);
         this.handleCloseConfirmRefreshDataModal();
     }
 
@@ -620,8 +626,98 @@ export default class App extends Component {
         });
     }
 
+    handleChangeOrderMode = isChecked => {
+        if (isChecked) {
+            if (this.isDirtyData()) {
+                this.setState({ showConfirmSwitchOrderModeModal: true });
+            } else {
+                this.handleConfirmSwitchOrderMode();
+            }
+        } else {
+            this.setState({ isOrderMode: false }, () => this.getWeeklyShedules(this.state.filter));
+        }
+    }
+
+    handleCloseConfirmSwitchOrderModeModal = () => {
+        this.setState({ showConfirmSwitchOrderModeModal: false });
+    }
+
+    handleConfirmSwitchOrderMode = () => {
+        const filter = Object.assign({}, this.state.filter, {
+            groupIds: this.groupOptions.map(group => group.id).join(','),
+            employee: { value: 0, label: '' }
+        });
+        this.setState({ isOrderMode: true }, () => this.getWeeklyShedules(filter));
+    }
+
+    handleEditDisplayOrder = () => {
+        if (this.isDirtyData()) {
+            let displayOrders = [];
+            let schedules = cloneDeep(this.state.schedules);
+            const totalItems = schedules.length;
+
+            for (let index = 0; index < totalItems; index++) {
+                const schedule = schedules[index];
+                displayOrders.push({
+                    employeeId: schedule.employeeId,
+                    displayOrder: schedule.displayOrder
+                });
+            }
+
+            if (displayOrders.length > 0) {
+                axios({
+                    url: _global.root + 'ScheduleArrange/EditDisplayOrder',
+                    method: 'POST',
+                    data: stringify({ displayOrders }),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).then(response => {
+                    let data = response.data;
+
+                    if (data.isSuccessful) {
+                        this.originalSchedules = schedules;
+                    } else {
+                        toast.error(data.message);
+                    }
+                });
+            }
+        }
+    }
+
+    reorder = (schedules, startIndex, endIndex) => {
+        const [removed] = schedules.splice(startIndex, 1);
+        schedules.splice(endIndex, 0, removed);
+
+        return schedules;
+    }
+
+    handleDragEnd = result => {
+        if (!result.destination) {
+            return;
+        }
+
+        let schedules = this.reorder(cloneDeep(this.state.schedules), result.source.index, result.destination.index);
+        schedules = schedules.map((schedule, index) => {
+            schedule.displayOrder = index + 1;
+
+            return schedule;
+        });
+
+        this.setState({ schedules }, () => this.handleEditDisplayOrder());
+    }
+
     render() {
         let isHost = this.isHost;
+        const {
+            showShiftMultipleModal,
+            showConfirmRefreshDataModal,
+            showRemarkPopover,
+            isOrderMode,
+            showConfirmSwitchOrderModeModal,
+            schedules
+        } = this.state;
 
         if (moment(this.selectedWeek.toDate).isBefore(moment(this.currentWeek.fromDate).add(-28, 'days')) && !this.isSARole) {
             isHost = false;
@@ -631,20 +727,22 @@ export default class App extends Component {
             <Fragment>
                 <ToastLayout />
                 <Search
+                    isOrderMode={isOrderMode}
                     groupOptions={this.groupOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
                     onSearchEmployees={this.getEmployees}
                     onChange={this.handleFilterChange}
-                    onSubmit={this.handleGetSheduleArranges}
+                    onSubmit={this.handleGetWeeklyShedules}
                 />
                 <Table
                     isHost={isHost}
+                    isOrderMode={isOrderMode}
                     fromDate={this.selectedWeek.fromDate}
                     toDate={this.selectedWeek.toDate}
-                    data={this.state.schedules}
+                    data={schedules}
                     shiftOptions={this.shiftOptions}
-                    showRemarkPopover={this.state.showRemarkPopover}
+                    showRemarkPopover={showRemarkPopover}
                     onPrevious={this.handleGetPreviousWeekSchedule}
                     onNext={this.handleGetNextWeekSchedule}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
@@ -658,11 +756,13 @@ export default class App extends Component {
                     onShiftMultiple={this.handleShiftMultiple}
                     onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
                     onUpdateRemark={this.handleUpdateRemark}
+                    onChangeOrderMode={this.handleChangeOrderMode}
+                    onDragEnd={this.handleDragEnd}
                     onSave={this.handleSave}
                 />
                 {
-                    this.state.showShiftMultipleModal &&
-                    <ShiftMultipleModal show={this.state.showShiftMultipleModal}
+                    showShiftMultipleModal &&
+                    <ShiftMultipleModal show={showShiftMultipleModal}
                         onHide={this.handleCloseShiftMultipleModal}
                         shiftOptions={this.shiftOptions}
                         onSubmit={this.handleChangeMultipleShift}
@@ -676,10 +776,17 @@ export default class App extends Component {
                     />
                 }
                 {
-                    this.state.showConfirmRefreshDataModal &&
-                    <ConfirmRefreshDataModal show={this.state.showConfirmRefreshDataModal}
+                    showConfirmRefreshDataModal &&
+                    <ConfirmRefreshDataModal show={showConfirmRefreshDataModal}
                         onHide={this.handleCloseConfirmRefreshDataModal}
                         onSubmit={this.handleSubmitRefreshData}
+                    />
+                }
+                {
+                    showConfirmSwitchOrderModeModal &&
+                    <ConfirmRefreshDataModal show={showConfirmSwitchOrderModeModal}
+                        onHide={this.handleCloseConfirmSwitchOrderModeModal}
+                        onSubmit={this.handleConfirmSwitchOrderMode}
                     />
                 }
             </Fragment>

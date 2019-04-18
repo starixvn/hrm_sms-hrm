@@ -8,8 +8,10 @@
     {
         IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter);
 
-        CommandResult EditWeekly(int actorId, IList<EditDailySchedule> weeklySchedules, IList<EditDefaultShift> defaultShifts);
+        CommandResult EditWeekly(int actorId, IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts);
 
         CommandResult EditRemark(int actorId, int employeeId, string remark);
+
+        CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders);
     }
 }

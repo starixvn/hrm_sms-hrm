@@ -70,7 +70,7 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult EditWeekly(IList<EditDailySchedule> weeklySchedules, IList<EditDefaultShift> defaultShifts)
+        public ActionResult EditWeekly(IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts)
         {
             CommandResult commandResult = scheduleArrangeService.EditWeekly(CurrentUser.Id, weeklySchedules, defaultShifts);
 
@@ -82,6 +82,15 @@
         public ActionResult EditRemark(int employeeId, string remark)
         {
             CommandResult commandResult = scheduleArrangeService.EditRemark(CurrentUser.Id, employeeId, remark);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult EditDisplayOrder(IEnumerable<EditDisplayOrder> displayOrders)
+        {
+            CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(CurrentUser.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

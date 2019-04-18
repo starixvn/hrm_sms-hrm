@@ -29,13 +29,14 @@
                 ToTime = filter.ToDate,
                 SupervisorId = filter.SupervisorId,
                 EmpId = filter.EmployeeId,
-                GroupIds = filter.GroupIds
+                GroupIds = filter.GroupIds,
+                IsOrderMode = filter.IsOrderMode
             };
 
             return scheduleArrangeRepository.GetWeeklySchedule(criteria);
         }
 
-        public CommandResult EditWeekly(int actorId, IList<EditDailySchedule> weeklySchedules, IList<EditDefaultShift> defaultShifts)
+        public CommandResult EditWeekly(int actorId, IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts)
         {
             var criteria = new EditWeeklyScheduleCriteria
             {
@@ -54,6 +55,17 @@
                 ActorId = actorId,
                 EmployeeId = employeeId,
                 Remark = remark
+            };
+
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders)
+        {
+            var criteria = new EditDisplayOrderCriteria
+            {
+                ActorId = actorId,
+                DisplayOrderXml = displayOrders.ToXML().ToString()
             };
 
             return baseService.ExecuteNonQuery(criteria);

@@ -13,7 +13,9 @@ export default class WeekPicker extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return this.props.fromDate !== nextProps.fromDate || this.props.toDate !== nextProps.toDate;
+        return this.props.fromDate !== nextProps.fromDate
+            || this.props.toDate !== nextProps.toDate
+            || this.props.isDisabled !== nextProps.isDisabled;
     }
 
     componentDidUpdate() {
@@ -81,20 +83,26 @@ export default class WeekPicker extends Component {
     }
 
     handleShowCalendar = () => {
-        this.$el.toggle();
+        if (!this.props.isDisabled) {
+            this.$el.toggle();
+        }
     }
 
     render() {
+        const { isDisabled } = this.props;
+
         return (
             <div className="weekpicker-wrapper" ref={node => this.wrapperRef = node}>
                 <input
                     value={this.props.fromDate}
                     onClick={this.handleShowCalendar}
                     className="fromDate form-control" readOnly
+                    disabled={isDisabled}
                 />
                 <input value={this.props.toDate}
                     onClick={this.handleShowCalendar}
                     className="toDate form-control" readOnly
+                    disabled={isDisabled}
                 />
                 <div className="calendar" ref={node => this.el = node} />
                 <i className="icon-calendar fa fa-calendar" onClick={this.handleShowCalendar} />

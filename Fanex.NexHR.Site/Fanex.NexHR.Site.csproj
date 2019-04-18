@@ -1163,6 +1163,7 @@
     <Content Include="wwwroot\sources\styles\components\_checkbox.scss" />
     <Content Include="wwwroot\sources\styles\components\_modal.scss" />
     <Content Include="wwwroot\sources\styles\layout\_toastify.scss" />
+    <Content Include="wwwroot\sources\styles\components\_checbox-switch.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

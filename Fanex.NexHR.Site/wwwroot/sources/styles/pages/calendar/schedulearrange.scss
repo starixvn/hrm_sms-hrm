@@ -8,13 +8,33 @@
 @import '../../layout/filter';
 @import '../../layout/toastify';
 @import '../../components/checkbox';
+@import '../../components/checbox-switch';
 @import '../../components/modal';
 
 .form-horizontal {
     .multiple-select-container {
         .multiple-select-label {
-            padding-left: 8px;
+            padding-left: 5px;
             @include border-radius(4px);
+
+            .caret {
+                right: 5px;
+            }
+        }
+    }
+
+    .ordermode {
+        .section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 27px;
+            background: #eee;
+            color: #555;
+            border: 1px solid #c8c8c8;
+            @include border-radius(4px);
+            padding: 0 5px;
+            cursor: not-allowed;
         }
     }
 
@@ -59,7 +79,7 @@
 }
 
 .table-wrapper {
-    width: 1500px;
+    width: 1520px;
     margin: 10px 0;
 
     .cell-index {
@@ -73,11 +93,16 @@
     }
 
     .cell-public {
-        width: 50px;
+        width: 70px;
     }
 
-    .cell-section, .cell-nickname, .cell-modifier {
-        width: 150px;
+    .cell-section, .cell-modifier {
+        width: 140px;
+        vertical-align: middle;
+    }
+
+    .cell-nickname {
+        width: 170px;
         vertical-align: middle;
     }
 
@@ -127,13 +152,19 @@
             .table-cell {
                 display: table-cell;
                 border-left: 1px solid #d2d2d2;
-                padding: 5px 7px;
+                padding: 8px;
                 vertical-align: middle;
                 text-align: center;
 
                 &:first-child {
                     border-left: none;
                 }
+            }
+
+            .cell-control-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }
         }
     }
@@ -148,6 +179,11 @@
 
         .table-row {
             display: table-row;
+
+            &.dragging {
+                background: #fff;
+                box-shadow: 0 0 4px 2px #1e88e5;
+            }
 
             .table-cell {
                 display: table-cell;
@@ -301,17 +337,14 @@
 
                     &::placeholder {
                         color: #5e7485;
-                        opacity: 0.4;
                     }
 
                     &:-ms-input-placeholder { /* Internet Explorer 10-11 */
                         color: #5e7485;
-                        opacity: 0.4;
                     }
 
                     &::-ms-input-placeholder { /* Microsoft Edge */
                         color: #5e7485;
-                        opacity: 0.4;
                     }
                 }
             }

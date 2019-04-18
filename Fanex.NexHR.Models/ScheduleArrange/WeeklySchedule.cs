@@ -7,6 +7,7 @@
         public string FullName { get; set; }
         public EntityBase<int> Team { get; set; }
         public string Remark { get; set; }
+        public int DisplayOrder { get; set; }
         public EntityBase<int> DefaultShift { get; set; }
         public short OffDaysbyWeek { get; set; }
 

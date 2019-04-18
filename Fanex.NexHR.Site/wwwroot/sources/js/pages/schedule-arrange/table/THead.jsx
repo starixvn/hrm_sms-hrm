@@ -13,7 +13,7 @@ export default class THead extends PureComponent {
     ];
 
     render() {
-        const { isHost, fromDate, toDate } = this.props;
+        const { isHost, isOrderMode, fromDate, toDate } = this.props;
 
         return (
             <Fragment>
@@ -36,38 +36,54 @@ export default class THead extends PureComponent {
                         <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>
                     <div>
-                        <span className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} />
-                        <span className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} />
+                        <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} disabled={isOrderMode} />
+                        <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} disabled={isOrderMode} />
                         <span className="label-week">{`${fromDate} - ${toDate}`}</span>
                     </div>
                 </div>
                 <div className="header">
                     <div className="table-cell cell-index" />
                     <div className="table-cell cell-section">Dept./Section</div>
-                    <div className="table-cell cell-nickname">Nickname</div>
+                    <div className="table-cell cell-nickname">
+                        <div className="cell-control-wrapper">
+                            <div>Nickname</div>
+                            <div className="checkbox checbox-switch" title="Order Mode">
+                                <label>
+                                    <input type="checkbox" checked={isOrderMode} disabled={!isHost && !isOrderMode}
+                                        onChange={event => this.props.onChangeOrderMode(event.target.checked)}
+                                    />
+                                    <span />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div className="table-cell cell-shift">Default Shift</div>
                     {
                         this.dayOfWeeks.map(item => {
                             return (
                                 <div className="table-cell cell-shift" key={`dayOfWeeks${item.value}`}>
-                                    {moment(fromDate).add(item.value, 'days').format('D MMM, ddd')}
-                                    <div className="checkbox">
-                                        <input type="checkbox" className={`checkbox-custom`} id={`ckb-${item.name}`} disabled={!isHost}
-                                            onChange={event => this.props.onChangeSelectWeekDays(item.name, event.target.checked)}
-                                        />
-                                        <label htmlFor={`ckb-${item.name}`} />
+                                    <div className="cell-control-wrapper">
+                                        <div>{moment(fromDate).add(item.value, 'days').format('D MMM, ddd')}</div>
+                                        <div className="checkbox">
+                                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-${item.name}`} disabled={!isHost}
+                                                onChange={event => this.props.onChangeSelectWeekDays(item.name, event.target.checked)}
+                                            />
+                                            <label htmlFor={`ckb-${item.name}`} />
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })
                     }
                     <div className="table-cell cell-public">
-                        Public
-                        <div className="checkbox">
-                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`} disabled={!isHost}
-                                onChange={event => this.props.onChangePublics(null, event.target.checked)}
-                            />
-                            <label htmlFor={`ckb-publicAll`} />
+                        <div className="cell-control-wrapper">
+                            <div>Public</div>
+                            <div className="checkbox">
+                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`} disabled={!isHost}
+                                    onChange={event => this.props.onChangePublics(null, event.target.checked)}
+                                />
+                                <label htmlFor={`ckb-publicAll`} />
+                            </div>
                         </div>
                     </div>
                     <div className="table-cell cell-modifier">Modified by</div>

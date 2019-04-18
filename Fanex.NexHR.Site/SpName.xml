@@ -477,5 +477,6 @@
     </Setting>
     <Setting Key="ScheduleArrangement_UpdateWeekly" SpName="ScheduleArrangement_UpdateWeekly" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="ScheduleArrangement_UpdateDisplayOrder" SpName="ScheduleArrangement_UpdateDisplayOrder" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

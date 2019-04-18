@@ -30,7 +30,7 @@ export default class ConfirmRefreshDataModal extends PureComponent {
                     <Modal.Title>SMS HRM</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    It looks like you have been editing something. If you refresh before saving, your changes will be lost.
+                    <p>It looks like you have been editing something. If you refresh before saving, your changes will be lost.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onSubmit} bsStyle="primary">Ok</Button>

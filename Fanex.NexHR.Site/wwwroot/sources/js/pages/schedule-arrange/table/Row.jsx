@@ -28,10 +28,12 @@ export default class Row extends PureComponent {
     }
 
     render() {
-        const { isHost, shiftOptions, data, showRemarkPopover } = this.props;
+        const { isHost, shiftOptions, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
 
         return (
-            <div className="table-row">
+            <div className={`table-row ${isDragging ? 'dragging' : ''}`}
+                ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} {...draggableProvided.dragHandleProps}
+            >
                 <ColIndex data={data} />
                 <div className="table-cell cell-section" title={data.team.name}>{data.team.code}</div>
                 <ColNickname isHost={isHost}

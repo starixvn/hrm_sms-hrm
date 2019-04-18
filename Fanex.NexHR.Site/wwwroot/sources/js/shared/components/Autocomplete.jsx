@@ -12,7 +12,7 @@ export default class Autocomplete extends Component {
 
     static defaultProps = {
         sources: [],
-        classname: '',
+        className: '',
         isDisabled: false,
         onInput: function () { },
         onChange: function () { }
@@ -24,7 +24,9 @@ export default class Autocomplete extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return this.props.sources !== nextProps.sources;
+        return this.props.sources !== nextProps.sources
+            || this.props.className !== nextProps.className
+            || this.props.isDisabled !== nextProps.isDisabled;
     }
 
     componentDidUpdate() {
