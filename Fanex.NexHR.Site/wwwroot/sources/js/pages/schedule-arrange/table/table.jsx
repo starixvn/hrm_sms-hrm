@@ -79,7 +79,7 @@ export default class Table extends PureComponent {
                                                             {
                                                                 (provided, snapshot) =>
                                                                     <Row draggableProvided={provided}
-                                                                        isHost={isHost && !isOrderMode} data={item}
+                                                                        isHost={isHost && !isOrderMode} isOrderMode={isOrderMode} data={item}
                                                                         shiftOptions={shiftOptions}
                                                                         isDragging={snapshot.isDragging}
                                                                         showRemarkPopover={this.props.showRemarkPopover}
@@ -89,6 +89,7 @@ export default class Table extends PureComponent {
                                                                         onChangePublics={this.props.onChangePublics}
                                                                         onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                                                                         onUpdateRemark={this.props.onUpdateRemark}
+                                                                        onCustomizeOrder={this.props.onCustomizeOrder}
                                                                     />
                                                             }
                                                         </Draggable>

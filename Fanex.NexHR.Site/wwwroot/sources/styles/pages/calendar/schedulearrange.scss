@@ -9,6 +9,7 @@
 @import '../../layout/toastify';
 @import '../../components/checkbox';
 @import '../../components/checbox-switch';
+@import '../../components/icon';
 @import '../../components/modal';
 
 .form-horizontal {
@@ -241,6 +242,12 @@
             }
 
             .cell-nickname {
+                .cell-nickname-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
                 .nickname {
                     font-weight: 600;
                 }
@@ -260,7 +267,7 @@
 
                     .remark {
                         display: inline-block;
-                        width: 100px;
+                        width: 110px;
                         font-size: 12px;
                         white-space: nowrap;
                         overflow: hidden;
@@ -314,6 +321,19 @@
                                 margin-left: 10px;
                                 font-size: 12px;
                             }
+                        }
+                    }
+                }
+
+                .customize-order {
+                    .dropdown {
+                        .dropdown-toggle {
+                            box-shadow: unset;
+                        }
+
+                        .dropdown-menu {
+                            min-width: 60px;
+                            z-index: 4;
                         }
                     }
                 }
@@ -388,11 +408,11 @@
     background-color: #7cd3e9 !important;
 }
 
-.popover {
+.tooltip {
     white-space: pre-wrap;
     overflow-wrap: break-word;
 
-    .popover-content {
+    .tooltip-content {
         padding: 6px 8px;
     }
 }

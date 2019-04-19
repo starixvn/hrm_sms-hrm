@@ -1,1 +1,14 @@
-﻿
+﻿.icon {
+    display: inline-block;
+    vertical-align: middle;
+    transition: 0.2s ease all;
+    text-rendering: optimizeLegibility;
+    cursor: pointer;
+
+    &.icon-sortable {
+        width: 20px;
+        height: 25px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfjAxMGDg29t2ysAAAAmElEQVQoz53QMQ4BcRTE4S8IjRBaOrUoFLIKEldQKpzBQZzCJVTajWQVNC7gApJt5a8hgl3EdO+935tJhrsiGw25ipwFSR4ydBYEQaL5fCqibOagomVlr+yY7bIURO/rgi/KAroSi09AVV/7j4iTnfQbfi8tWP4cUXyZp+Ymeko6BrYurw918a301DjbsyYWpEb5sTXrR+lXQ3QhEyZStpAAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMDMtMTlUMDU6MTQ6MTMrMDE6MDC9Le/0AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTAzLTE5VDA1OjE0OjEzKzAxOjAwzHBXSAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=") no-repeat center;
+        opacity: .7;
+    }
+}

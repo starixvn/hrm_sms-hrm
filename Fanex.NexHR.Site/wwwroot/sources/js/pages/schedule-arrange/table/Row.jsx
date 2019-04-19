@@ -28,7 +28,7 @@ export default class Row extends PureComponent {
     }
 
     render() {
-        const { isHost, shiftOptions, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
+        const { isHost, isOrderMode, shiftOptions, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
 
         return (
             <div className={`table-row ${isDragging ? 'dragging' : ''}`}
@@ -36,13 +36,14 @@ export default class Row extends PureComponent {
             >
                 <ColIndex data={data} />
                 <div className="table-cell cell-section" title={data.team.name}>{data.team.code}</div>
-                <ColNickname isHost={isHost}
+                <ColNickname isHost={isHost} isOrderMode={isOrderMode}
                     employeeId={data.employeeId}
                     nickname={data.nickname}
                     remark={data.remark}
                     showRemarkPopover={showRemarkPopover}
                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                     onUpdateRemark={this.props.onUpdateRemark}
+                    onCustomizeOrder={this.props.onCustomizeOrder}
                 />
                 <ColDefaultShift isHost={isHost} employeeId={data.employeeId}
                     shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}

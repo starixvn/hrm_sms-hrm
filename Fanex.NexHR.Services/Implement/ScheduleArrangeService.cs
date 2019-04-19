@@ -29,8 +29,7 @@
                 ToTime = filter.ToDate,
                 SupervisorId = filter.SupervisorId,
                 EmpId = filter.EmployeeId,
-                GroupIds = filter.GroupIds,
-                IsOrderMode = filter.IsOrderMode
+                GroupIds = filter.GroupIds
             };
 
             return scheduleArrangeRepository.GetWeeklySchedule(criteria);

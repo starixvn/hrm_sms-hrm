@@ -39,8 +39,7 @@ export default class App extends Component {
                 message: ''
             },
             showRemarkPopover: false,
-            isOrderMode: false,
-            showConfirmSwitchOrderModeModal: false
+            isOrderMode: false
         };
 
         this.originalSchedules = [];
@@ -152,8 +151,7 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value,
-                isOrderMode: this.state.isOrderMode
+                employeeId: filter.employee.value === 0 ? null : filter.employee.value
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
@@ -627,27 +625,7 @@ export default class App extends Component {
     }
 
     handleChangeOrderMode = isChecked => {
-        if (isChecked) {
-            if (this.isDirtyData()) {
-                this.setState({ showConfirmSwitchOrderModeModal: true });
-            } else {
-                this.handleConfirmSwitchOrderMode();
-            }
-        } else {
-            this.setState({ isOrderMode: false }, () => this.getWeeklyShedules(this.state.filter));
-        }
-    }
-
-    handleCloseConfirmSwitchOrderModeModal = () => {
-        this.setState({ showConfirmSwitchOrderModeModal: false });
-    }
-
-    handleConfirmSwitchOrderMode = () => {
-        const filter = Object.assign({}, this.state.filter, {
-            groupIds: this.groupOptions.map(group => group.id).join(','),
-            employee: { value: 0, label: '' }
-        });
-        this.setState({ isOrderMode: true }, () => this.getWeeklyShedules(filter));
+        this.setState({ isOrderMode: isChecked });
     }
 
     handleEditDisplayOrder = () => {
@@ -708,6 +686,39 @@ export default class App extends Component {
         this.setState({ schedules }, () => this.handleEditDisplayOrder());
     }
 
+    handleCustomizeOrder = (key, employeeId) => {
+        const totalItems = this.state.schedules.length;
+        let sourceIndex = this.state.schedules.findIndex(schedule => schedule.employeeId === employeeId);
+        let destinationIndex = 0;
+
+        switch (key) {
+            case 'up':
+                destinationIndex = sourceIndex - 1 < 0 ? 0 : sourceIndex - 1;
+                break;
+
+            case 'down':
+                destinationIndex = sourceIndex + 1 > totalItems ? totalItems : sourceIndex + 1;
+                break;
+
+            case 'top':
+                destinationIndex = 0;
+                break;
+
+            case 'bottom':
+                destinationIndex = totalItems;
+                break;
+        }
+
+        let schedules = this.reorder(cloneDeep(this.state.schedules), sourceIndex, destinationIndex);
+        schedules = schedules.map((schedule, index) => {
+            schedule.displayOrder = index + 1;
+
+            return schedule;
+        });
+
+        this.setState({ schedules }, () => this.handleEditDisplayOrder());
+    }
+
     render() {
         let isHost = this.isHost;
         const {
@@ -715,7 +726,6 @@ export default class App extends Component {
             showConfirmRefreshDataModal,
             showRemarkPopover,
             isOrderMode,
-            showConfirmSwitchOrderModeModal,
             schedules
         } = this.state;
 
@@ -758,6 +768,7 @@ export default class App extends Component {
                     onUpdateRemark={this.handleUpdateRemark}
                     onChangeOrderMode={this.handleChangeOrderMode}
                     onDragEnd={this.handleDragEnd}
+                    onCustomizeOrder={this.handleCustomizeOrder}
                     onSave={this.handleSave}
                 />
                 {
@@ -780,13 +791,6 @@ export default class App extends Component {
                     <ConfirmRefreshDataModal show={showConfirmRefreshDataModal}
                         onHide={this.handleCloseConfirmRefreshDataModal}
                         onSubmit={this.handleSubmitRefreshData}
-                    />
-                }
-                {
-                    showConfirmSwitchOrderModeModal &&
-                    <ConfirmRefreshDataModal show={showConfirmSwitchOrderModeModal}
-                        onHide={this.handleCloseConfirmSwitchOrderModeModal}
-                        onSubmit={this.handleConfirmSwitchOrderMode}
                     />
                 }
             </Fragment>
