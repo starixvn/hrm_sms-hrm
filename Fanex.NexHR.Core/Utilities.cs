@@ -410,7 +410,12 @@
             return dateRange;
         }
 
-        public static string RenderFloatNumber(float number)
+        public static string DisplayEmptyFloatNumber(float number)
+        {
+            return number <= 0 ? "-" : number.ToString("0.0");
+        }
+
+        public static string DisplayFloatNumber(float number)
         {
             return number.ToString("0.0");
         }

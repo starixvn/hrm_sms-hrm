@@ -126,59 +126,59 @@
 
                 cellBody = row.CreateCell(10);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.AnnualLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.AnnualLeave));
 
                 cellBody = row.CreateCell(11);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.BusinessTrip));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BusinessTrip));
 
                 cellBody = row.CreateCell(12);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.BereavementLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BereavementLeave));
 
                 cellBody = row.CreateCell(13);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.Compensationleave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.Compensationleave));
 
                 cellBody = row.CreateCell(14);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.WeddingLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.WeddingLeave));
 
                 cellBody = row.CreateCell(15);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.TotalPaymentWorkingDay));
+                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.TotalPaymentWorkingDay));
 
                 cellBody = row.CreateCell(16);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.UnpaidLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.UnpaidLeave));
 
                 cellBody = row.CreateCell(17);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
 
                 cellBody = row.CreateCell(18);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.PeternityLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.PeternityLeave));
 
                 cellBody = row.CreateCell(19);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.MaternityLeave));
+                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.MaternityLeave));
 
                 cellBody = row.CreateCell(20);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
+                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
 
                 cellBody = row.CreateCell(21);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.OTNormalHours));
+                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTNormalHours));
 
                 cellBody = row.CreateCell(22);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.OTOffHours));
+                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTOffHours));
 
                 cellBody = row.CreateCell(23);
                 cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.RenderFloatNumber(totalWorkingHour.OTPublicHours));
+                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTPublicHours));
 
                 cellBody = row.CreateCell(24);
                 cellBody.CellStyle = bodyStyle;
