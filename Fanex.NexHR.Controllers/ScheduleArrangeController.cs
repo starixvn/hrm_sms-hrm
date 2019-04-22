@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -13,6 +14,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.ScheduleArrange;
     using Fanex.NexHR.Web.Providers;
 
     public class ScheduleArrangeController : BaseController
@@ -64,8 +66,16 @@
         {
             filter.SupervisorId = CurrentUser.Id;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
+            IEnumerable<WeeklyScheduleViewModel> groups = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
+                .Select(x => new WeeklyScheduleViewModel
+                {
+                    GroupId = x.Key.Id,
+                    Name = x.Key.Name,
+                    Code = x.Key.Code,
+                    Members = x
+                });
 
-            return new CustomJsonResult { Data = weeklySchedules, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -91,6 +101,15 @@
         public ActionResult EditDisplayOrder(IEnumerable<EditDisplayOrder> displayOrders)
         {
             CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(CurrentUser.Id, displayOrders);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult EditGroupOrder(IEnumerable<EditGroupOrder> displayOrders)
+        {
+            CommandResult commandResult = scheduleArrangeService.EditGroupOrder(CurrentUser.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

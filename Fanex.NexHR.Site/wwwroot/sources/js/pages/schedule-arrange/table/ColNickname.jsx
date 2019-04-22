@@ -39,24 +39,23 @@ export default class ColNickname extends PureComponent {
     }
 
     handleMoveUp = () => {
-        const { employeeId } = this.props;
-
-        this.props.onCustomizeOrder('up', employeeId);
+        const { groupId, employeeId } = this.props;
+        this.props.onChangeOrder('up', groupId, employeeId);
     }
 
     handleMoveDown = () => {
-        const { employeeId } = this.props;
-        this.props.onCustomizeOrder('down', employeeId);
+        const { groupId, employeeId } = this.props;
+        this.props.onChangeOrder('down', groupId, employeeId);
     }
 
     handleMoveTop = () => {
-        const { employeeId } = this.props;
-        this.props.onCustomizeOrder('top', employeeId);
+        const { groupId, employeeId } = this.props;
+        this.props.onChangeOrder('top', groupId, employeeId);
     }
 
     handleMoveBottom = () => {
-        const { employeeId } = this.props;
-        this.props.onCustomizeOrder('bottom', employeeId);
+        const { groupId, employeeId } = this.props;
+        this.props.onChangeOrder('bottom', groupId, employeeId);
     }
 
     render() {
@@ -94,23 +93,21 @@ export default class ColNickname extends PureComponent {
                     </div>
                     {
                         isOrderMode &&
-                        <div className="customize-order">
-                            <Dropdown id={`dropdown${employeeId}`} componentClass="div">
-                                <Dropdown.Toggle noCaret useAnchor>
-                                    <OverlayTrigger trigger={['hover']} placement={'top'}
-                                        overlay={<Tooltip id={`customizeOrder${employeeId}`}>Customize order</Tooltip>}
-                                    >
-                                        <i className="icon icon-sortable" />
-                                    </OverlayTrigger>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
-                                    <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
-                                    <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
-                                    <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
+                        <Dropdown id={`dropdown${employeeId}`} componentClass="div">
+                            <Dropdown.Toggle noCaret useAnchor>
+                                <OverlayTrigger trigger={['hover']} placement={'top'}
+                                    overlay={<Tooltip id={`customizeOrder${employeeId}`}>Customize order</Tooltip>}
+                                >
+                                    <i className="icon icon-sortable" />
+                                </OverlayTrigger>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
+                                <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
+                                <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
+                                <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     }
                 </div>
             </div>

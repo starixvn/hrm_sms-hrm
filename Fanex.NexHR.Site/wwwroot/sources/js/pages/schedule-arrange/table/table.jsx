@@ -1,8 +1,8 @@
 ﻿import React, { PureComponent, Fragment } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import THead from './THead';
-import Row from './Row';
+import DroppableSection from './DroppableSection';
 
 export default class Table extends PureComponent {
     constructor(props) {
@@ -44,7 +44,7 @@ export default class Table extends PureComponent {
             <Fragment>
                 <div className="table-wrapper">
                     <div className={`table-header ${this.state.isFixedHeader ? 'fixed' : ''}`}>
-                        <THead fromDate={fromDate} toDate={toDate} isHost={isHost && !isOrderMode} isOrderMode={isOrderMode}
+                        <THead fromDate={fromDate} toDate={toDate} isHost={isHost} isOrderMode={isOrderMode}
                             onSave={this.props.onSave}
                             onChangeSelectWeekDays={this.props.onChangeSelectWeekDays}
                             onChangeOffNoShift={this.props.onChangeOffNoShift}
@@ -67,38 +67,18 @@ export default class Table extends PureComponent {
                         {
                             data.length > 0 &&
                             <DragDropContext onDragEnd={this.props.onDragEnd}>
-                                <Droppable droppableId="droppable" isDropDisabled={!isOrderMode}>
-                                    {
-                                        provided =>
-                                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                {
-                                                    data.map((item, index) =>
-                                                        <Draggable key={item.employeeId} draggableId={item.employeeId}
-                                                            index={index} isDragDisabled={!isOrderMode}
-                                                        >
-                                                            {
-                                                                (provided, snapshot) =>
-                                                                    <Row draggableProvided={provided}
-                                                                        isHost={isHost && !isOrderMode} isOrderMode={isOrderMode} data={item}
-                                                                        shiftOptions={shiftOptions}
-                                                                        isDragging={snapshot.isDragging}
-                                                                        showRemarkPopover={this.props.showRemarkPopover}
-                                                                        onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
-                                                                        onChangeShift={this.props.onChangeShift}
-                                                                        onChangeDefaultShift={this.props.onChangeDefaultShift}
-                                                                        onChangePublics={this.props.onChangePublics}
-                                                                        onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
-                                                                        onUpdateRemark={this.props.onUpdateRemark}
-                                                                        onCustomizeOrder={this.props.onCustomizeOrder}
-                                                                    />
-                                                            }
-                                                        </Draggable>
-                                                    )
-                                                }
-                                                {provided.placeholder}
-                                            </div>
-                                    }
-                                </Droppable>
+                                <DroppableSection isHost={isHost} isOrderMode={isOrderMode} data={data}
+                                    shiftOptions={shiftOptions}
+                                    showRemarkPopover={this.props.showRemarkPopover}
+                                    onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
+                                    onChangeShift={this.props.onChangeShift}
+                                    onChangeDefaultShift={this.props.onChangeDefaultShift}
+                                    onChangePublics={this.props.onChangePublics}
+                                    onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
+                                    onUpdateRemark={this.props.onUpdateRemark}
+                                    onChangeSectionOrder={this.props.onChangeSectionOrder}
+                                    onChangeOrder={this.props.onChangeOrder}
+                                />
                             </DragDropContext>
                         }
                     </div>

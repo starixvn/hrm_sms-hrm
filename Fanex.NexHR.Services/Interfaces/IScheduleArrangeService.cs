@@ -13,5 +13,7 @@
         CommandResult EditRemark(int actorId, int employeeId, string remark);
 
         CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders);
+
+        CommandResult EditGroupOrder(int actorId, IEnumerable<EditGroupOrder> displayOrders);
     }
 }

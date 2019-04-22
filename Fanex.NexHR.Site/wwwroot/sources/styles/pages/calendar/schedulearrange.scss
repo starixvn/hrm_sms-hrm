@@ -24,21 +24,6 @@
         }
     }
 
-    .ordermode {
-        .section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 27px;
-            background: #eee;
-            color: #555;
-            border: 1px solid #c8c8c8;
-            @include border-radius(4px);
-            padding: 0 5px;
-            cursor: not-allowed;
-        }
-    }
-
     .button-group {
         .btn {
             &.currentWeek {
@@ -80,7 +65,7 @@
 }
 
 .table-wrapper {
-    width: 1520px;
+    width: 1400px;
     margin: 10px 0;
 
     .cell-index {
@@ -97,13 +82,13 @@
         width: 70px;
     }
 
-    .cell-section, .cell-modifier {
+    .cell-modifier {
         width: 140px;
         vertical-align: middle;
     }
 
     .cell-nickname {
-        width: 170px;
+        width: 190px;
         vertical-align: middle;
     }
 
@@ -178,13 +163,29 @@
             border-top: 0;
         }
 
+        .dragging {
+            background: #fff;
+            box-shadow: 0 0 4px 2px #1e88e5;
+        }
+
+        .row-section {
+            background: #f2f2c2;
+            font-weight: bold;
+            border: 1px solid #d2d2d2;
+            border-top: none;
+
+            .row-section-wrapper {
+                width: 230px;
+                height: 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 7px;
+            }
+        }
+
         .table-row {
             display: table-row;
-
-            &.dragging {
-                background: #fff;
-                box-shadow: 0 0 4px 2px #1e88e5;
-            }
 
             .table-cell {
                 display: table-cell;
@@ -224,7 +225,6 @@
 
                     .shift-autocomplete-wrapper {
                         display: table-cell;
-                        width: calc(100% -35px);
                     }
                 }
 
@@ -267,7 +267,7 @@
 
                     .remark {
                         display: inline-block;
-                        width: 110px;
+                        width: 130px;
                         font-size: 12px;
                         white-space: nowrap;
                         overflow: hidden;

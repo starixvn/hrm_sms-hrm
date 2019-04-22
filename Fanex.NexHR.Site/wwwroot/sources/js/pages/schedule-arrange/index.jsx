@@ -49,6 +49,8 @@ export default class App extends Component {
         this.selectedWeek = { fromDate, toDate };
         this.isHost = document.getElementById('IsHost').checked;
         this.isSARole = document.getElementById('IsSARole').checked;
+        this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
+            'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
     }
 
     componentDidMount() {
@@ -102,15 +104,21 @@ export default class App extends Component {
         let originalSchedules = cloneDeep(this.originalSchedules);
         const totalItems = schedules.length;
 
-        for (let index = 0; index < totalItems; index++) {
-            const schedule = schedules[index];
-            const originalSchedule = originalSchedules.filter(item => item.employeeId === schedule.employeeId)[0];
-            unset(schedule, 'selectWeekDays');
-            unset(originalSchedule, 'selectWeekDays');
+        outerloop:
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+            const originalGroup = originalSchedules.find(item => item.groupId === schedules[gindex].groupId);
+            const totalSubItems = schedules[gindex].members.length;
 
-            if (!isEqual(schedule, originalSchedule)) {
-                isDirty = true;
-                break;
+            for (let eindex = 0; eindex < totalSubItems; eindex++) {
+                let schedule = schedules[gindex].members[eindex];
+                let originalSchedule = originalGroup.members.find(item => item.employeeId === schedule.employeeId);
+                unset(schedule, 'selectWeekDays');
+                unset(originalSchedule, 'selectWeekDays');
+
+                if (!isEqual(schedule, originalSchedule)) {
+                    isDirty = true;
+                    break outerloop;
+                }
             }
         }
 
@@ -156,20 +164,26 @@ export default class App extends Component {
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
 
-            this.originalSchedules = response.data.map((schedule, index) => {
-                schedule.displayOrder = index + 1;
-                schedule.isPublic = schedule.mondaySchedule.isPublic;
-                schedule.selectWeekDays = {
-                    mondaySchedule: false,
-                    tuesdaySchedule: false,
-                    wednesdaySchedule: false,
-                    thursdaySchedule: false,
-                    fridaySchedule: false,
-                    saturdaySchedule: false,
-                    sundaySchedule: false
-                };
+            this.originalSchedules = response.data.map((group, gindex) => {
+                group.displayOrder = gindex + 1;
 
-                return schedule;
+                group.members.map((schedule, eindex) => {
+                    schedule.displayOrder = eindex + 1;
+                    schedule.isPublic = schedule.mondaySchedule.isPublic;
+                    schedule.selectWeekDays = {
+                        mondaySchedule: false,
+                        tuesdaySchedule: false,
+                        wednesdaySchedule: false,
+                        thursdaySchedule: false,
+                        fridaySchedule: false,
+                        saturdaySchedule: false,
+                        sundaySchedule: false
+                    };
+
+                    return schedule;
+                });
+
+                return group;
             });
             this.setState({ schedules: cloneDeep(this.originalSchedules) });
         }).then(() => unblockUI());
@@ -225,135 +239,150 @@ export default class App extends Component {
         }
     }
 
-    handleChangeSelectWeekDay = (employeeId, scheduleAttrName, isChecked) => {
-        let schedules = this.state.schedules.slice();
-        const index = schedules.findIndex(item => item.employeeId === employeeId);
+    handleChangeSelectWeekDay = (groupId, employeeId, scheduleAttrName, isChecked) => {
+        let weeklySchedules = this.state.schedules.slice();
+        const gindex = weeklySchedules.findIndex(item => item.groupId === groupId);
+        const eindex = weeklySchedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+        weeklySchedules[gindex].members[eindex] = Object.assign({}, weeklySchedules[gindex].members[eindex], {
+            selectWeekDays: { ...weeklySchedules[gindex].members[eindex].selectWeekDays, [scheduleAttrName]: isChecked }
+        });
 
-        if (index >= 0) {
-            schedules[index] = Object.assign({}, schedules[index], {
-                selectWeekDays: { ...schedules[index].selectWeekDays, [scheduleAttrName]: isChecked }
-            });
-
-            this.setState({ schedules });
-        }
+        this.setState({ schedules: weeklySchedules });
     }
 
     handleChangeSelectWeekDays = (scheduleAttrName, isChecked) => {
-        let schedules = this.state.schedules.slice();
-        const totalItems = schedules.length;
+        let weeklySchedules = this.state.schedules.slice();
+        const totalItems = weeklySchedules.length;
 
         if (scheduleAttrName !== null) {
             for (let index = 0; index < totalItems; index++) {
-                schedules[index] = Object.assign({}, schedules[index], {
-                    selectWeekDays: { ...schedules[index].selectWeekDays, [scheduleAttrName]: isChecked }
-                });
+                const totalSubItems = weeklySchedules[index].members.length;
+                for (let subindex = 0; subindex < totalSubItems; subindex++) {
+                    weeklySchedules[index].members[subindex] = Object.assign({}, weeklySchedules[index].members[subindex], {
+                        selectWeekDays: { ...weeklySchedules[index].members[subindex].selectWeekDays, [scheduleAttrName]: isChecked }
+                    });
+                }
             }
         } else {
             for (let index = 0; index < totalItems; index++) {
-                schedules[index] = Object.assign({}, schedules[index], {
-                    selectWeekDays: {
-                        mondaySchedule: isChecked,
-                        tuesdaySchedule: isChecked,
-                        wednesdaySchedule: isChecked,
-                        thursdaySchedule: isChecked,
-                        fridaySchedule: isChecked,
-                        saturdaySchedule: isChecked,
-                        sundaySchedule: isChecked
-                    }
-                });
+                const totalSubItems = weeklySchedules[index].members.length;
+                for (let subindex = 0; subindex < totalSubItems; subindex++) {
+                    weeklySchedules[index].members[subindex] = Object.assign({}, weeklySchedules[index].members[subindex], {
+                        selectWeekDays: {
+                            mondaySchedule: isChecked,
+                            tuesdaySchedule: isChecked,
+                            wednesdaySchedule: isChecked,
+                            thursdaySchedule: isChecked,
+                            fridaySchedule: isChecked,
+                            saturdaySchedule: isChecked,
+                            sundaySchedule: isChecked
+                        }
+                    });
+                }
             }
         }
 
-        this.setState({ schedules });
+        this.setState({ schedules: weeklySchedules });
     }
 
-    handleChangeShift = (employeeId, attrName, shift) => {
-        let schedules = this.state.schedules.slice();
-        const index = schedules.findIndex(item => item.employeeId === employeeId);
+    handleChangeShift = (groupId, employeeId, attrName, shift) => {
+        let weeklySchedules = this.state.schedules.slice();
+        const gindex = weeklySchedules.findIndex(item => item.groupId === groupId);
+        const eindex = weeklySchedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+        let schedule = cloneDeep(weeklySchedules[gindex].members[eindex]);
 
-        if (index >= 0) {
-            let schedule = cloneDeep(schedules[index]);
+        if (shift !== null) {
+            const isOffDay = shift.id === -1;
 
-            if (shift !== null) {
-                const isOffDay = shift.id === -1;
-
-                if (isOffDay) {
-                    if (!schedule[attrName].isHoliday) {
-                        schedule[attrName].isOffDay = true;
-                        schedule[attrName].shift = null;
-                    } else {
-                        schedule[attrName].shift = null;
-                    }
+            if (isOffDay) {
+                if (!schedule[attrName].isHoliday) {
+                    schedule[attrName].isOffDay = true;
+                    schedule[attrName].shift = null;
                 } else {
-                    schedule[attrName].isOffDay = false;
-                    schedule[attrName].shift = shift;
+                    schedule[attrName].shift = null;
                 }
             } else {
                 schedule[attrName].isOffDay = false;
-                schedule[attrName].shift = null;
-            }
-
-            schedules[index] = schedule;
-
-            this.setState({ schedules });
-        }
-    }
-
-    handleChangeDefaultShift = (employeeId, shift) => {
-        let schedules = this.state.schedules.slice();
-        const index = schedules.findIndex(item => item.employeeId === employeeId);
-
-        if (index >= 0) {
-            schedules[index] = Object.assign({}, schedules[index], { defaultShift: shift });
-
-            this.setState({ schedules });
-        }
-    }
-
-    handleChangePublics = (employeeId, isChecked) => {
-        let schedules = this.state.schedules.slice();
-
-        if (employeeId !== null) {
-            const index = schedules.findIndex(item => item.employeeId === employeeId);
-
-            if (index >= 0) {
-                schedules[index] = Object.assign({}, schedules[index], { isPublic: isChecked });
-
-                this.setState({ schedules });
+                schedule[attrName].shift = shift;
             }
         } else {
-            const totalItems = schedules.length;
+            schedule[attrName].isOffDay = false;
+            schedule[attrName].shift = null;
+        }
+
+        weeklySchedules[gindex].members[eindex] = schedule;
+
+        this.setState({ schedules: weeklySchedules });
+    }
+
+    handleChangeDefaultShift = (groupId, employeeId, shift) => {
+        let weeklySchedules = this.state.schedules.slice();
+        const gindex = weeklySchedules.findIndex(item => item.groupId === groupId);
+        const eindex = weeklySchedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+        weeklySchedules[gindex].members[eindex].defaultShift = shift;
+
+        this.setState({ schedules: weeklySchedules });
+    }
+
+    handleChangePublics = (groupId, employeeId, isChecked) => {
+        let weeklySchedules = this.state.schedules.slice();
+
+        if (groupId !== null && employeeId !== null) {
+            const gindex = weeklySchedules.findIndex(item => item.groupId === groupId);
+            const eindex = weeklySchedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+            weeklySchedules[gindex].members[eindex] = Object.assign({}, weeklySchedules[gindex].members[eindex], { isPublic: isChecked });
+
+            this.setState({ schedules: weeklySchedules });
+        } else {
+            const totalItems = weeklySchedules.length;
             for (let index = 0; index < totalItems; index++) {
-                schedules[index] = Object.assign({}, schedules[index], { isPublic: isChecked });
+                const totalSubItems = weeklySchedules[index].members.length;
+                for (let subindex = 0; subindex < totalSubItems; subindex++) {
+                    weeklySchedules[index].members[subindex] = Object.assign({}, weeklySchedules[index].members[subindex], { isPublic: isChecked });
+                }
             }
 
-            this.setState({ schedules });
+            this.setState({ schedules: weeklySchedules });
         }
     }
 
-    handleChangeOffNoshift = () => {
-        let schedules = this.state.schedules.slice();
-        let selectedSchedules = schedules
-            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
-            .map(schedule => schedule.employeeId);
-        const totalItems = selectedSchedules.length;
+    getSelectedMembers = schedules => {
+        let selectedMembers = [];
+        let totalItems = schedules.length;
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+            const totalSubItems = schedules[gindex].members.length;
+            for (let eindex = 0; eindex < totalSubItems; eindex++) {
+                if (this.scheduleAttrNames.filter(attrName => schedules[gindex].members[eindex].selectWeekDays[attrName]).length > 0) {
+                    selectedMembers.push({ gindex, eindex });
+                }
+            }
+        }
+
+        return selectedMembers;
+    }
+
+    handleChangeOffNoShift = () => {
+        let weeklySchedules = this.state.schedules.slice();
+        const selectedMembers = this.getSelectedMembers(weeklySchedules);
+        const totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
-                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectedMember = selectedMembers[index];
+                let schedule = cloneDeep(weeklySchedules[selectedMember.gindex].members[selectedMember.eindex]);
                 const selectWeekDays = schedule.selectWeekDays;
 
-                Object.keys(selectWeekDays).forEach(objectKey => {
-                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
-                        schedule[objectKey].isOffDay = true;
-                        schedule[objectKey].shift = null;
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (selectWeekDays[attrName] && !schedule[attrName].isHoliday) {
+                        schedule[attrName].isOffDay = true;
+                        schedule[attrName].shift = null;
                     }
                 });
 
-                schedules[index] = schedule;
+                weeklySchedules[selectedMember.gindex].members[selectedMember.eindex] = schedule;
             }
 
-            this.setState({ schedules });
+            this.setState({ schedules: weeklySchedules });
         } else {
             this.setState({
                 alertModal: {
@@ -365,31 +394,30 @@ export default class App extends Component {
     }
 
     handleChangeOffdayOT = () => {
-        let schedules = this.state.schedules.slice();
-        let selectedSchedules = schedules
-            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
-            .map(schedule => schedule.employeeId);
-        const totalItems = selectedSchedules.length;
+        let weeklySchedules = this.state.schedules.slice();
+        const selectedMembers = this.getSelectedMembers(weeklySchedules);
+        const totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
-                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectedMember = selectedMembers[index];
+                let schedule = cloneDeep(weeklySchedules[selectedMember.gindex].members[selectedMember.eindex]);
                 const selectWeekDays = schedule.selectWeekDays;
                 let isChanged = false;
 
-                Object.keys(selectWeekDays).forEach(objectKey => {
-                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday && schedule[objectKey].shift !== null) {
-                        schedule[objectKey].isOffDay = true;
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (selectWeekDays[attrName] && !schedule[attrName].isHoliday && schedule[attrName].shift !== null) {
+                        schedule[attrName].isOffDay = true;
                         isChanged = true;
                     }
                 });
 
                 if (isChanged) {
-                    schedules[index] = schedule;
+                    weeklySchedules[selectedMember.gindex].members[selectedMember.eindex] = schedule;
                 }
             }
 
-            this.setState({ schedules });
+            this.setState({ schedules: weeklySchedules });
         } else {
             this.setState({
                 alertModal: {
@@ -401,31 +429,30 @@ export default class App extends Component {
     }
 
     handleChangeWorkday = () => {
-        let schedules = this.state.schedules.slice();
-        let selectedSchedules = schedules
-            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
-            .map(schedule => schedule.employeeId);
-        const totalItems = selectedSchedules.length;
+        let weeklySchedules = this.state.schedules.slice();
+        const selectedMembers = this.getSelectedMembers(weeklySchedules);
+        const totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
-                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectedMember = selectedMembers[index];
+                let schedule = cloneDeep(weeklySchedules[selectedMember.gindex].members[selectedMember.eindex]);
                 const selectWeekDays = schedule.selectWeekDays;
                 let isChanged = false;
 
-                Object.keys(selectWeekDays).forEach(objectKey => {
-                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday && schedule[objectKey].isOffDay) {
-                        schedule[objectKey].isOffDay = false;
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (selectWeekDays[attrName] && !schedule[attrName].isHoliday && schedule[attrName].isOffDay) {
+                        schedule[attrName].isOffDay = false;
                         isChanged = true;
                     }
                 });
 
                 if (isChanged) {
-                    schedules[index] = schedule;
+                    weeklySchedules[selectedMember.gindex].members[selectedMember.eindex] = schedule;
                 }
             }
 
-            this.setState({ schedules });
+            this.setState({ schedules: weeklySchedules });
         } else {
             this.setState({
                 alertModal: {
@@ -437,11 +464,8 @@ export default class App extends Component {
     }
 
     handleShiftMultiple = () => {
-        let schedules = this.state.schedules.slice();
-        let selectedSchedules = schedules
-            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
-            .map(schedule => schedule.employeeId);
-        const totalItems = selectedSchedules.length;
+        const selectedMembers = this.getSelectedMembers(this.state.schedules);
+        const totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             this.setState({ showShiftMultipleModal: true });
@@ -456,33 +480,32 @@ export default class App extends Component {
     }
 
     handleChangeMultipleShift = (shift, isOffday) => {
-        let schedules = this.state.schedules.slice();
-        let selectedSchedules = schedules
-            .filter(schedule => Object.keys(schedule.selectWeekDays).filter(objectKey => schedule.selectWeekDays[objectKey]).length > 0)
-            .map(schedule => schedule.employeeId);
-        const totalItems = selectedSchedules.length;
+        let weeklySchedules = this.state.schedules.slice();
+        const selectedMembers = this.getSelectedMembers(weeklySchedules);
+        const totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
-                let schedule = cloneDeep(schedules.find(item => item.employeeId === selectedSchedules[index]));
+                const selectedMember = selectedMembers[index];
+                let schedule = cloneDeep(weeklySchedules[selectedMember.gindex].members[selectedMember.eindex]);
                 const selectWeekDays = schedule.selectWeekDays;
                 let isChanged = false;
 
-                Object.keys(selectWeekDays).forEach(objectKey => {
-                    if (selectWeekDays[objectKey] && !schedule[objectKey].isHoliday) {
-                        schedule[objectKey].isOffDay = shift !== null && shift.id === -1 ? true : isOffday;
-                        schedule[objectKey].shift = shift;
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (selectWeekDays[attrName] && !schedule[attrName].isHoliday) {
+                        schedule[attrName].isOffDay = shift !== null && shift.id === -1 ? true : isOffday;
+                        schedule[attrName].shift = shift;
 
                         isChanged = true;
                     }
                 });
 
                 if (isChanged) {
-                    schedules[index] = schedule;
+                    weeklySchedules[selectedMember.gindex].members[selectedMember.eindex] = schedule;
                 }
             }
 
-            this.setState({ schedules });
+            this.setState({ schedules: weeklySchedules });
         }
 
         this.handleCloseShiftMultipleModal();
@@ -495,43 +518,48 @@ export default class App extends Component {
         let schedules = cloneDeep(this.state.schedules);
         let originalSchedules = cloneDeep(this.originalSchedules);
         const totalItems = schedules.length;
-        const weekDayAttrNames = originalSchedules.length > 0 ? Object.keys(originalSchedules[0].selectWeekDays) : [];
 
-        for (let index = 0; index < totalItems; index++) {
-            unset(originalSchedules[index], 'selectWeekDays');
-            unset(schedules[index], 'selectWeekDays');
+        outerloop:
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+            const originalGroup = originalSchedules.find(item => item.groupId === schedules[gindex].groupId);
+            const totalSubItems = schedules[gindex].members.length;
 
-            if (!isEqual(originalSchedules[index], schedules[index])) {
-                const schedule = schedules[index];
+            for (let eindex = 0; eindex < totalSubItems; eindex++) {
+                let schedule = schedules[gindex].members[eindex];
+                let originalSchedule = originalGroup.members.find(item => item.employeeId === schedule.employeeId);
+                unset(schedule, 'selectWeekDays');
+                unset(originalSchedule, 'selectWeekDays');
 
-                let totalOffDays = 0;
-                weekDayAttrNames.forEach(objectKey => {
-                    if (schedule[objectKey].isOffDay || schedule[objectKey].isLeaveOffDay) {
-                        totalOffDays++;
-                    }
-                });
-
-                if (schedule.offDaysbyWeek < totalOffDays && !this.isSARole) {
-                    isValidData = false;
-                    break;
-                }
-
-                defaultShifts.push({
-                    employeeId: schedule.employeeId,
-                    fromDate: schedule.mondaySchedule.workDate,
-                    shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
-                });
-
-                weekDayAttrNames.forEach(objectKey => {
-                    weeklySchedules.push({
-                        employeeId: schedule.employeeId,
-                        workDate: schedule[objectKey].workDate,
-                        shiftId: schedule[objectKey].shift !== null ? schedule[objectKey].shift.id : null,
-                        isHoliday: schedule[objectKey].isHoliday,
-                        isOffDay: schedule[objectKey].isOffDay,
-                        isPublic: schedule.isPublic
+                if (!isEqual(schedule, originalSchedule)) {
+                    let totalOffDays = 0;
+                    this.scheduleAttrNames.forEach(attrName => {
+                        if (schedule[attrName].isOffDay || schedule[attrName].isLeaveOffDay) {
+                            totalOffDays++;
+                        }
                     });
-                });
+
+                    if (schedule.offDaysbyWeek < totalOffDays && !this.isSARole) {
+                        isValidData = false;
+                        break outerloop;
+                    }
+
+                    defaultShifts.push({
+                        employeeId: schedule.employeeId,
+                        fromDate: schedule.mondaySchedule.workDate,
+                        shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
+                    });
+
+                    this.scheduleAttrNames.forEach(attrName => {
+                        weeklySchedules.push({
+                            employeeId: schedule.employeeId,
+                            workDate: schedule[attrName].workDate,
+                            shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
+                            isHoliday: schedule[attrName].isHoliday,
+                            isOffDay: schedule[attrName].isOffDay,
+                            isPublic: schedule.isPublic
+                        });
+                    });
+                }
             }
         }
 
@@ -628,39 +656,72 @@ export default class App extends Component {
         this.setState({ isOrderMode: isChecked });
     }
 
+    handleEditGroupOrder = () => {
+        let displayOrders = [];
+        let schedules = this.state.schedules;
+        const totalItems = schedules.length;
+
+        for (let index = 0; index < totalItems; index++) {
+            displayOrders.push({
+                groupId: schedules[index].groupId,
+                displayOrder: schedules[index].displayOrder
+            });
+        }
+
+        if (displayOrders.length > 0) {
+            axios({
+                url: _global.root + 'ScheduleArrange/EditGroupOrder',
+                method: 'POST',
+                data: stringify({ displayOrders }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let data = response.data;
+
+                if (data.isSuccessful) {
+                    this.originalSchedules = cloneDeep(schedules);
+                } else {
+                    toast.error(data.message);
+                }
+            });
+        }
+    }
+
     handleEditDisplayOrder = () => {
-        if (this.isDirtyData()) {
-            let displayOrders = [];
-            let schedules = cloneDeep(this.state.schedules);
-            const totalItems = schedules.length;
+        let displayOrders = [];
+        let schedules = this.state.schedules;
+        const totalItems = schedules.length;
 
-            for (let index = 0; index < totalItems; index++) {
-                const schedule = schedules[index];
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+            const totalSubItems = schedules[gindex].members.length;
+            for (let eindex = 0; eindex < totalSubItems; eindex++) {
                 displayOrders.push({
-                    employeeId: schedule.employeeId,
-                    displayOrder: schedule.displayOrder
+                    employeeId: schedules[gindex].members[eindex].employeeId,
+                    displayOrder: schedules[gindex].members[eindex].displayOrder
                 });
             }
+        }
 
-            if (displayOrders.length > 0) {
-                axios({
-                    url: _global.root + 'ScheduleArrange/EditDisplayOrder',
-                    method: 'POST',
-                    data: stringify({ displayOrders }),
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }).then(response => {
-                    let data = response.data;
+        if (displayOrders.length > 0) {
+            axios({
+                url: _global.root + 'ScheduleArrange/EditDisplayOrder',
+                method: 'POST',
+                data: stringify({ displayOrders }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let data = response.data;
 
-                    if (data.isSuccessful) {
-                        this.originalSchedules = schedules;
-                    } else {
-                        toast.error(data.message);
-                    }
-                });
-            }
+                if (data.isSuccessful) {
+                    this.originalSchedules = cloneDeep(schedules);
+                } else {
+                    toast.error(data.message);
+                }
+            });
         }
     }
 
@@ -672,51 +733,91 @@ export default class App extends Component {
     }
 
     handleDragEnd = result => {
-        if (!result.destination) {
+        if (!result.destination || result.source.index === result.destination.index) {
             return;
         }
 
-        let schedules = this.reorder(cloneDeep(this.state.schedules), result.source.index, result.destination.index);
-        schedules = schedules.map((schedule, index) => {
-            schedule.displayOrder = index + 1;
+        const resultType = result.type;
+        let weeklySchedules = this.state.schedules.slice();
 
-            return schedule;
-        });
-
-        this.setState({ schedules }, () => this.handleEditDisplayOrder());
+        if (resultType === 'droppableSection') {
+            let schedules = this.reorder(weeklySchedules, result.source.index, result.destination.index);
+            this.setState({ schedules }, () => this.handleEditGroupOrder());
+        } else if (resultType.includes('droppableMember')) {
+            const groupId = parseInt(resultType.split('-')[1]);
+            const index = weeklySchedules.findIndex(x => x.groupId === groupId);
+            weeklySchedules[index].members = this.reorder(weeklySchedules[index].members.slice(), result.source.index, result.destination.index);
+            this.setState({ schedules: weeklySchedules }, () => this.handleEditDisplayOrder());
+        }
     }
 
-    handleCustomizeOrder = (key, employeeId) => {
-        const totalItems = this.state.schedules.length;
-        let sourceIndex = this.state.schedules.findIndex(schedule => schedule.employeeId === employeeId);
+    handleChangeSectionOrder = (key, groupId) => {
+        let weeklySchedules = this.state.schedules.slice();
+        const sourceIndex = weeklySchedules.findIndex(x => x.groupId === groupId);
+        const totalItems = weeklySchedules.length;
         let destinationIndex = 0;
 
         switch (key) {
             case 'up':
-                destinationIndex = sourceIndex - 1 < 0 ? 0 : sourceIndex - 1;
+                destinationIndex = sourceIndex - 1;
                 break;
-
             case 'down':
-                destinationIndex = sourceIndex + 1 > totalItems ? totalItems : sourceIndex + 1;
+                destinationIndex = sourceIndex + 1;
                 break;
-
             case 'top':
                 destinationIndex = 0;
                 break;
-
             case 'bottom':
                 destinationIndex = totalItems;
                 break;
         }
 
-        let schedules = this.reorder(cloneDeep(this.state.schedules), sourceIndex, destinationIndex);
+        if (destinationIndex < 0 || destinationIndex >= totalItems || sourceIndex === destinationIndex) {
+            return;
+        }
+
+        let schedules = this.reorder(weeklySchedules, sourceIndex, destinationIndex);
         schedules = schedules.map((schedule, index) => {
             schedule.displayOrder = index + 1;
-
             return schedule;
         });
 
-        this.setState({ schedules }, () => this.handleEditDisplayOrder());
+        this.setState({ schedules }, () => this.handleEditGroupOrder());
+    }
+
+    handleChangeOrder = (key, groupId, employeeId) => {
+        let weeklySchedules = this.state.schedules.slice();
+        const index = weeklySchedules.findIndex(x => x.groupId === groupId);
+        const totalItems = weeklySchedules[index].members.length;
+        let sourceIndex = weeklySchedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
+        let destinationIndex = 0;
+
+        switch (key) {
+            case 'up':
+                destinationIndex = sourceIndex - 1;
+                break;
+            case 'down':
+                destinationIndex = sourceIndex + 1;
+                break;
+            case 'top':
+                destinationIndex = 0;
+                break;
+            case 'bottom':
+                destinationIndex = totalItems;
+                break;
+        }
+
+        if (destinationIndex < 0 || destinationIndex >= totalItems || sourceIndex === destinationIndex) {
+            return;
+        }
+
+        let schedules = this.reorder(weeklySchedules[index].members.slice(), sourceIndex, destinationIndex);
+        weeklySchedules[index].members = schedules.map((schedule, index) => {
+            schedule.displayOrder = index + 1;
+            return schedule;
+        });
+
+        this.setState({ schedules: weeklySchedules }, () => this.handleEditDisplayOrder());
     }
 
     render() {
@@ -737,7 +838,6 @@ export default class App extends Component {
             <Fragment>
                 <ToastLayout />
                 <Search
-                    isOrderMode={isOrderMode}
                     groupOptions={this.groupOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
@@ -746,13 +846,10 @@ export default class App extends Component {
                     onSubmit={this.handleGetWeeklyShedules}
                 />
                 <Table
-                    isHost={isHost}
-                    isOrderMode={isOrderMode}
-                    fromDate={this.selectedWeek.fromDate}
-                    toDate={this.selectedWeek.toDate}
+                    isHost={isHost} isOrderMode={isOrderMode}
+                    fromDate={this.selectedWeek.fromDate} toDate={this.selectedWeek.toDate}
                     data={schedules}
-                    shiftOptions={this.shiftOptions}
-                    showRemarkPopover={showRemarkPopover}
+                    shiftOptions={this.shiftOptions} showRemarkPopover={showRemarkPopover}
                     onPrevious={this.handleGetPreviousWeekSchedule}
                     onNext={this.handleGetNextWeekSchedule}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
@@ -760,7 +857,7 @@ export default class App extends Component {
                     onChangeShift={this.handleChangeShift}
                     onChangeDefaultShift={this.handleChangeDefaultShift}
                     onChangePublics={this.handleChangePublics}
-                    onChangeOffNoShift={this.handleChangeOffNoshift}
+                    onChangeOffNoShift={this.handleChangeOffNoShift}
                     onChangeOffdayOT={this.handleChangeOffdayOT}
                     onChangeWorkday={this.handleChangeWorkday}
                     onShiftMultiple={this.handleShiftMultiple}
@@ -768,7 +865,8 @@ export default class App extends Component {
                     onUpdateRemark={this.handleUpdateRemark}
                     onChangeOrderMode={this.handleChangeOrderMode}
                     onDragEnd={this.handleDragEnd}
-                    onCustomizeOrder={this.handleCustomizeOrder}
+                    onChangeSectionOrder={this.handleChangeSectionOrder}
+                    onChangeOrder={this.handleChangeOrder}
                     onSave={this.handleSave}
                 />
                 {

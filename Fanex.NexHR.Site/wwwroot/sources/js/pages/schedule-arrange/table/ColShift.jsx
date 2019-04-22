@@ -17,8 +17,8 @@ export default class ColShift extends PureComponent {
         }
     }
 
-    handleCheckWeekDay = (event) => {
-        this.props.onCheckWeekDay(this.props.scheduleAttrName, event.target.checked);
+    handleChangeSelectWeekDay = (event) => {
+        this.props.onChangeSelectWeekDay(this.props.scheduleAttrName, event.target.checked);
     }
 
     handleChangeShift = (scheduleAttrName, shift) => {
@@ -184,7 +184,7 @@ export default class ColShift extends PureComponent {
                         isShowCheckBox && this.state.isShowCheckbox &&
                         <div className="checkbox">
                             <input type="checkbox" className={`checkbox-custom ${scheduleAttrName}`} checked={this.props.isChecked}
-                                id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleCheckWeekDay}
+                                id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleChangeSelectWeekDay}
                             />
                             <label htmlFor={`ckb-${scheduleAttrName}${employeeId}`} />
                         </div>

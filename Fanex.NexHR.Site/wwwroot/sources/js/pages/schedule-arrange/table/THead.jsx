@@ -12,6 +12,10 @@ export default class THead extends PureComponent {
         { name: 'sundaySchedule', value: 6 }
     ];
 
+    handleChangePublics = event => {
+        this.props.onChangePublics(null, null, event.target.checked);
+    }
+
     render() {
         const { isHost, isOrderMode, fromDate, toDate } = this.props;
 
@@ -36,20 +40,19 @@ export default class THead extends PureComponent {
                         <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>
                     <div>
-                        <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} disabled={isOrderMode} />
-                        <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} disabled={isOrderMode} />
+                        <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} />
+                        <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} />
                         <span className="label-week">{`${fromDate} - ${toDate}`}</span>
                     </div>
                 </div>
                 <div className="header">
                     <div className="table-cell cell-index" />
-                    <div className="table-cell cell-section">Dept./Section</div>
                     <div className="table-cell cell-nickname">
                         <div className="cell-control-wrapper">
                             <div>Nickname</div>
                             <div className="checkbox checbox-switch" title="Order Mode">
                                 <label>
-                                    <input type="checkbox" checked={isOrderMode} disabled={!isHost && !isOrderMode}
+                                    <input type="checkbox" checked={isOrderMode} disabled={!isHost}
                                         onChange={event => this.props.onChangeOrderMode(event.target.checked)}
                                     />
                                     <span />
@@ -80,7 +83,7 @@ export default class THead extends PureComponent {
                             <div>Public</div>
                             <div className="checkbox">
                                 <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`} disabled={!isHost}
-                                    onChange={event => this.props.onChangePublics(null, event.target.checked)}
+                                    onChange={this.handleChangePublics}
                                 />
                                 <label htmlFor={`ckb-publicAll`} />
                             </div>

@@ -69,5 +69,16 @@
 
             return baseService.ExecuteNonQuery(criteria);
         }
+
+        public CommandResult EditGroupOrder(int actorId, IEnumerable<EditGroupOrder> displayOrders)
+        {
+            var criteria = new EditGroupOrderCriteria
+            {
+                ActorId = actorId,
+                DisplayOrderXml = displayOrders.ToXML().ToString()
+            };
+
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

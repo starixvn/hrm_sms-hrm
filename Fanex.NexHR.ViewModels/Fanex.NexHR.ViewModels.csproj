@@ -100,6 +100,7 @@
     <Compile Include="Overtime\OvertimeExcelReportViewModel.cs" />
     <Compile Include="Request\ProcessRequestViewModel.cs" />
     <Compile Include="RoleFunctionViewModel.cs" />
+    <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Shifts\ShiftViewModel.cs" />
     <Compile Include="Report\TimeRecordViewModel.cs" />
