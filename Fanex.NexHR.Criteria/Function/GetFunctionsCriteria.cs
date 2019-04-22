@@ -8,5 +8,10 @@
         {
             return "Function_GetFunctions";
         }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 }

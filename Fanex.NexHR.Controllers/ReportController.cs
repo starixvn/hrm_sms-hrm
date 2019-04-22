@@ -10,7 +10,6 @@
     using Criteria;
     using Criteria.Lookup;
     using Criteria.Report;
-    using Criteria.Request;
     using Criteria.Supervisor;
     using Criteria.Team;
     using Criteria.Time;
@@ -23,7 +22,6 @@
     using Services.ExportExcel;
     using ViewModels;
     using ViewModels.Report;
-    using ViewModels.Request;
     using Web.Providers;
 
     [ValidateInput(false)]
@@ -187,7 +185,7 @@
             var model = new ReportFilterViewModel
             {
                 FromDate = new DateTime(year, month, 1),
-                ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
+                ToDate = DateTime.Now,
                 EmployeeId = -1,
                 DateOption = 5
             };

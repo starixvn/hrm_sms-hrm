@@ -1575,4 +1575,46 @@
   <data name="TestSendMail" xml:space="preserve">
     <value>Test Send Mail</value>
   </data>
+  <data name="WorkingDaysMonth" xml:space="preserve">
+    <value>Working Days/Month</value>
+  </data>
+  <data name="HoursPerDay" xml:space="preserve">
+    <value>Hours/Day</value>
+  </data>
+  <data name="ExcelTotalDays" xml:space="preserve">
+    <value>Total Days</value>
+  </data>
+  <data name="AL" xml:space="preserve">
+    <value>AL</value>
+  </data>
+  <data name="BusinessTrip" xml:space="preserve">
+    <value>BT</value>
+  </data>
+  <data name="ShortBereavementLeave" xml:space="preserve">
+    <value>BL</value>
+  </data>
+  <data name="ShortCompensationLeave" xml:space="preserve">
+    <value>CL</value>
+  </data>
+  <data name="ShortWeddingLeave" xml:space="preserve">
+    <value>WD</value>
+  </data>
+  <data name="Maternity" xml:space="preserve">
+    <value>Maternity</value>
+  </data>
+  <data name="Paternity" xml:space="preserve">
+    <value>Paternity</value>
+  </data>
+  <data name="ExcelSick" xml:space="preserve">
+    <value>Sick(i)</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="ShortOTPublicHours" xml:space="preserve">
+    <value>PH</value>
+  </data>
+  <data name="Tax" xml:space="preserve">
+    <value>Tax</value>
+  </data>
 </root>

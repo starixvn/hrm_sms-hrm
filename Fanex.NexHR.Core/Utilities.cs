@@ -409,5 +409,10 @@
 
             return dateRange;
         }
+
+        public static string RenderFloatNumber(float number)
+        {
+            return number.ToString("0.0");
+        }
     }
 }

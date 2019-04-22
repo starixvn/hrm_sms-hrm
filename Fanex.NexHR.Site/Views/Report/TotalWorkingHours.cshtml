@@ -117,23 +117,43 @@
         </div>
         <div class="clear"></div>
     </div>
-}
+                    }
 <table class="table table-custom persist-area">
-    <thead>
-        <tr class="persist-header">
-            <th>@Labels.SymbolCount</th>
+    <thead class="persist-header">
+        <tr>
+            <th colspan="5">Employee Info</th>
+            <th colspan="2">Contract Working Agreement</th>
+            <th colspan="2">Actual Working Time in/out</th>
+            <th colspan="7">Total Working Days for Salary Payment</th>
+            <th colspan="5">Unpaid Leave</th>
+            <th colspan="4">Over Time</th>
+        <tr>
+        <tr>
+            <th rowspan="2">@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
             <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
             <th>@Labels.Section</th>
-            <th>@Labels.WorkigDay</th>
-            <th>@Labels.ActualWorkingDay</th>
-            <th>@Labels.LeaveTaken</th>
-            <th>@Labels.UnpaidLeave</th>
-            <th>@Labels.LateIn</th>
-            <th>@Labels.EarlyOut</th>
-            <th>@Labels.TotalHours</th>
-            <th>Average Hours</th>
+            <th>@Labels.WorkingDaysMonth</th>
+            <th>@Labels.HoursPerDay</th>
+            <th>@Labels.TotalOvertimeHours</th>
+            <th>@Labels.ExcelTotalDays</th>
+            <th>@Labels.WorkingDays</th>
+            <th>@Labels.AL</th>
+            <th>@Labels.BusinessTrip</th>
+            <th>@Labels.ShortBereavementLeave</th>
+            <th>@Labels.ShortCompensationLeave</th>
+            <th>@Labels.ShortWeddingLeave</th>
+            <th>@Labels.ExcelTotalDays</th>
+            <th>@Labels.UPL</th>
+            <th>@Labels.ExcelSick</th>
+            <th>@Labels.Paternity</th>
+            <th>@Labels.Maternity</th>
+            <th>@Labels.ExcelTotalDays</th>
+            <th>@Labels.Normal</th>
+            <th>@Labels.Off</th>
+            <th>@Labels.ShortOTPublicHours</th>
+            <th>@Labels.Tax</th>
         </tr>
     </thead>
     @if (ViewBag.EntityList.Count > 0)
@@ -163,30 +183,42 @@
                     <td>@item.Employee.NickName</td>
                     <td>@item.Employee.Team.Name</td>
                     <td>@item.WorkingDay</td>
-                    <td>@item.ActualWorkingDay</td>
-                    <td>@item.LeaveTaken.ToString("0.0")</td>
+                    <td>@item.WorkingHours</td>
+                    <td>@Utilities.RenderFloatNumber(item.TotalHours)</td>
+                    <td>@Utilities.RenderFloatNumber(item.ActualWorkingDay)</td>
+                    <td>@Utilities.RenderFloatNumber(item.PaymentWorkingDay)</td>
+                    <td>@Utilities.RenderFloatNumber(item.AnnualLeave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.BusinessTrip)</td>
+                    <td>@Utilities.RenderFloatNumber(item.BereavementLeave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.Compensationleave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.WeddingLeave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.TotalPaymentWorkingDay)</td>
                     <td>
                         @if (item.UnpaidLeave > 0 && hasPermission)
                         {
                             <a href="@Url.Action("hrview", "request", requestModel)">
-                                @item.UnpaidLeave.ToString("0.0")
+                                @Utilities.RenderFloatNumber(item.UnpaidLeave)
                             </a>
                         }
                         else
                         {
-                            @item.UnpaidLeave.ToString("0.0")
+                            @Utilities.RenderFloatNumber(item.UnpaidLeave)
                         }
                     </td>
-                    <td>@Utilities.MinuteToTime(item.LateInMins)</td>
-                    <td>@Utilities.MinuteToTime(item.EarlyOutMins)</td>
-                    <td>@Utilities.TotalHoursToTime(item.TotalHours)</td>
-                    <td>@Utilities.TotalHoursToTime(item.AverageHours)</td>
+                    <td>@Utilities.RenderFloatNumber(item.TotalUnpaidLeaveInsurance)</td>
+                    <td>@Utilities.RenderFloatNumber(item.PeternityLeave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.MaternityLeave)</td>
+                    <td>@Utilities.RenderFloatNumber(item.TotalUnpaidLeaveInsurance)</td>
+                    <td>@Utilities.RenderFloatNumber(item.OTNormalHours)</td>
+                    <td>@Utilities.RenderFloatNumber(item.OTOffHours)</td>
+                    <td>@Utilities.RenderFloatNumber(item.OTPublicHours)</td>
+                    <td></td>
                 </tr>
             }
         </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 13);
-    }
+                }
+                else
+                {
+                    @RazorHelper.DisplayNoInformation(colspan: 13);
+                }
 </table>
