@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap';
 
 import DroppableMember from './DroppableMember';
 
-export default class RowSection extends Component {
+export default class RowSection extends PureComponent {
     handleMoveUp = () => {
         const { groupId } = this.props.data;
         this.props.onChangeSectionOrder('up', groupId);

@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import Row from './Row';
 
-export default class DroppableMember extends Component {
+export default class DroppableMember extends PureComponent {
     render() {
         const { isHost, isOrderMode, shiftOptions, groupId, data } = this.props;
 

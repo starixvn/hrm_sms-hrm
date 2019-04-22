@@ -31,10 +31,12 @@ export default class ColNickname extends PureComponent {
 
     handleUpdateRemark = () => {
         const remark = this.state.remark.trim();
+        const { groupId, employeeId } = this.props;
+
         if (remark.length > 0) {
             this.handleHidePopover();
             this.props.onChangeShowRemarkPopover(false);
-            this.props.onUpdateRemark(this.props.employeeId, this.state.remark.trim());
+            this.props.onUpdateRemark(groupId, employeeId, this.state.remark.trim());
         }
     }
 

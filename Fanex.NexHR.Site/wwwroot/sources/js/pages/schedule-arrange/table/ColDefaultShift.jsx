@@ -4,7 +4,7 @@ import ShiftAutocomplete from '../ShiftAutocomplete';
 
 export default class ColDefaultShift extends PureComponent {
     handleChangeDefaultShift = (name, shift) => {
-        const { groupId, employeeId } = this.props.employeeId;
+        const { groupId, employeeId } = this.props;
         this.props.onChangeDefaultShift(groupId, employeeId, shift);
     }
 
