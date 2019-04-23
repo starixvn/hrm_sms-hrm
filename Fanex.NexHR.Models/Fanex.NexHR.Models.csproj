@@ -103,7 +103,6 @@
     <Compile Include="EmployeeRole.cs" />
     <Compile Include="FunctionModel.cs" />
     <Compile Include="HRLeaderDashboardModel.cs" />
-    <Compile Include="MemberOrderModel.cs" />
     <Compile Include="MenuModel.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MySpaceModel.cs" />

@@ -241,9 +241,7 @@
     <Setting Key="EmployeeSupervisor_InsertEmpMngShiftList" SpName="EmployeeSupervisor_InsertEmpMngShiftList" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeSupervisor_UpdateOrderShiftArrange" SpName="EmployeeSupervisor_UpdateOrderShiftArrange" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0">
-    </Setting>
+    <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_LogEmployeeLogin" SpName="Employee_LogEmployeeLogin" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Group">
@@ -423,9 +421,6 @@
       <Mapping DataField="ManagerId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
-  </Function>
-  <Function Name="Calendar">
-    <Setting Key="EmployeeSupervisor_GetEmployeeByShiftManagement" SpName="EmployeeSupervisor_GetEmployeeByShiftManagement" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Discipline">
     <Setting Key="EmployeeDiscipline_GetOtherDiscipline" SpName="EmployeeDiscipline_GetOtherDiscipline" DbName="nexhrx" Plain="0"></Setting>

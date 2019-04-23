@@ -71,7 +71,6 @@
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
-    <Compile Include="Calendar\GetEmployeeByShiftManagementCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
@@ -144,7 +143,6 @@
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
     <Compile Include="Supervisor\InsertShiftManagerCriteria.cs" />
-    <Compile Include="Supervisor\UpdateOrderShiftArrangeCriteria.cs" />
     <Compile Include="Supervisor\UpdateSupervisorCriteria.cs" />
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />

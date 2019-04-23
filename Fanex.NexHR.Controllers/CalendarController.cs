@@ -5,18 +5,13 @@
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.Web.Providers;
@@ -28,22 +23,19 @@
         private readonly IShiftService shiftService;
         private readonly ILookupDataService lookupDataService;
         private readonly IEmployeeService employeeService;
-        private readonly IBaseService baseService;
 
         public CalendarController(
             IWorkingCalendarService workingCalendarService,
             ITeamService teamService,
             IShiftService shiftService,
             ILookupDataService lookupDataService,
-            IEmployeeService employeeService,
-            IBaseService baseService)
+            IEmployeeService employeeService)
         {
             this.workingCalendarService = workingCalendarService;
             this.teamService = teamService;
             this.shiftService = shiftService;
             this.lookupDataService = lookupDataService;
             this.employeeService = employeeService;
-            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -245,39 +237,6 @@
             };
 
             return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
-        }
-
-        public ActionResult MemberScheduleInOrder()
-        {
-            var criteria = new GetEmployeeByShiftManagementCriteria
-            {
-                EmpId = CurrentUser.Id,
-            };
-            IList<SupervisorModel> shiftManagerModel = workingCalendarService.GetEmployeeByShiftManagement(criteria);
-
-            var model = new ShiftManagerViewModel
-            {
-                ShiftManagerList = shiftManagerModel,
-                EmployeeId = CurrentUser.Id,
-                SupervisorRole = (short)RoleSystem.ShiftManager
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult MemberScheduleInOrder(string employeeOrders)
-        {
-            var employeeOrdersDetail = JsonConverter.FromJsonArray<MemberOrderModel>(employeeOrders);
-
-            var criteria = new UpdateOrderShiftArrangeCriteria
-            {
-                MemberOrders = employeeOrdersDetail,
-                SupervisorId = CurrentUser.Id
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private static DateTime GetStartOfWeek(DateTime currentDate)

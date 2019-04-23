@@ -7,7 +7,6 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.ViewModels;
 
@@ -82,18 +81,6 @@
             }
 
             return workingCalendarList;
-        }
-
-        public IList<SupervisorModel> GetEmployeeByShiftManagement(GetEmployeeByShiftManagementCriteria criteria)
-        {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            IList<SupervisorModel> supervisors = null;
-            if (criteria.IsValid())
-            {
-                supervisors = baseService.GetData<SupervisorModel>(criteria).ToList();
-            }
-
-            return supervisors;
         }
     }
 }

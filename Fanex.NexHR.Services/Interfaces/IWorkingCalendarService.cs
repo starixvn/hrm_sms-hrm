@@ -4,7 +4,6 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
 
     public interface IWorkingCalendarService
@@ -18,7 +17,5 @@
         IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria);
-
-        IList<SupervisorModel> GetEmployeeByShiftManagement(GetEmployeeByShiftManagementCriteria criteria);
     }
 }

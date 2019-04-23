@@ -252,7 +252,6 @@
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\Calendar\schedulearrange.sort.js" />
     <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
     <Content Include="Scripts\Views\Department\department.edit.js" />
     <Content Include="Scripts\Views\Department\department.js" />
@@ -1057,7 +1056,6 @@
     <Content Include="Views\ExtensionNo\Edit.cshtml" />
     <Content Include="Views\Report\TotalWorkingHourMonthly.cshtml" />
     <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />
-    <Content Include="Views\Calendar\MemberScheduleInOrder.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
     <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
