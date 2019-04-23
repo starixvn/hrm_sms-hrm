@@ -29,7 +29,6 @@ export default class Row extends PureComponent {
 
     render() {
         const { isHost, isOrderMode, shiftOptions, groupId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
-        console.log('row');
 
         return (
             <div className={`table-row ${isDragging ? 'dragging' : ''}`}
