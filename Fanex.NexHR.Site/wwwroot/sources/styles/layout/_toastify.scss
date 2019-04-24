@@ -5,7 +5,7 @@
 
     .Toastify__toast {
         min-height: 50px;
-        border-radius: 5px;
+        @include border-radius(5px);
         padding: 8px 12px 14px;
     }
 
@@ -18,7 +18,7 @@
     }
 
     .Toastify__close-button {
-        width: unset;
+        /*width: unset;
         height: unset;
         line-height: unset;
         color: #fff !important;
@@ -31,7 +31,7 @@
         padding: 0;
         text-shadow: none;
         box-shadow: none;
-        vertical-align: middle;
+        vertical-align: middle;*/
 
         &:hover, &:active, &:focus {
             background: transparent;

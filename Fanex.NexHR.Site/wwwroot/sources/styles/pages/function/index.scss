@@ -1,0 +1,31 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/checkbox';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/toastr';
+
+.filter {
+    width: 600px;
+}
+
+.table-custom {
+    width: auto !important;
+    min-width: 600px;
+
+    tbody {
+        tr {
+            &.root-row {
+                background: #ececec;
+            }
+
+            &.child-row {
+                background: unset !important;
+            }
+        }
+
+        .icon-child-level {
+            padding: 0 4px;
+        }
+    }
+}

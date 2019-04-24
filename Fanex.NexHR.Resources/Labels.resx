@@ -1617,4 +1617,19 @@
   <data name="Tax" xml:space="preserve">
     <value>Tax</value>
   </data>
+  <data name="FunctionManagement" xml:space="preserve">
+    <value>Function Management</value>
+  </data>
+  <data name="Function" xml:space="preserve">
+    <value>Function</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="RolePermission" xml:space="preserve">
+    <value>Role Permission</value>
+  </data>
 </root>

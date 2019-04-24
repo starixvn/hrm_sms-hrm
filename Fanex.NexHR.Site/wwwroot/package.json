@@ -33,7 +33,8 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "16.8.6",
     "react-toastify": "^5.0.0",
-    "tipsy": "^1.0.0"
+    "tipsy": "^1.0.0",
+    "toastr": "^2.1.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

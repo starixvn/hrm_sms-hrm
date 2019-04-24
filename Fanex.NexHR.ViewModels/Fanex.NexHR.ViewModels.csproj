@@ -83,6 +83,7 @@
     <Compile Include="Discipline\AddOtherDisciplineViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
     <Compile Include="Employee\UserManagementViewModel.cs" />
+    <Compile Include="Function\TreeFunctionViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="Overtime\OvertimeDetailReportViewModel.cs" />
     <Compile Include="Overtime\YearlyOvertimeReportViewModel.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Report\TotalWorkingHourWeeklyViewModel.cs" />
     <Compile Include="Overtime\OvertimeExcelReportViewModel.cs" />
     <Compile Include="Request\ProcessRequestViewModel.cs" />
-    <Compile Include="RoleFunctionViewModel.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Shifts\ShiftViewModel.cs" />

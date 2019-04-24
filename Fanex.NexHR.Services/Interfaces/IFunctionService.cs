@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Function;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Function;
 
     public interface IFunctionService
     {
@@ -13,6 +13,6 @@
 
         IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId);
 
-        CommandResult AssignFunctionsToRole(AssignFunctionToRoleCriteria criteria);
+        CommandResult AssignFunctionsToRole(int actorId, int roleId, IEnumerable<FunctionPermission> permissions);
     }
 }

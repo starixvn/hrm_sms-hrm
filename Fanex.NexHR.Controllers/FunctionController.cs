@@ -3,13 +3,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Function;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Function;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Function;
     using Fanex.NexHR.Web.Providers;
 
     public class FunctionController : BaseController
@@ -26,36 +27,57 @@
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
-        public ActionResult Index()
+        public ActionResult Index(int? roleId = null)
         {
-            ViewBag.roles = roleService.GetRoles();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host);
-
-            return View();
-        }
-
-        [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
-        public ActionResult GetFunctionByRoleId(int roleId)
-        {
-            IEnumerable<FunctionModel> functions = functionService.GetFunctionsByRoleId(roleId);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host);
-
-            return PartialView("_GetFunctionByRoleId", functions);
-        }
-
-        [HRAuthorize(Policy.Host, FunctionKey.FunctionManagement)]
-        public JsonResult AssignFunctionToRole(RoleFunctionViewModel roleFunction)
-        {
-            var criteria = new AssignFunctionToRoleCriteria
+            IEnumerable<SystemRoleModel> systemRoles = roleService.GetRoles();
+            IEnumerable<FunctionModel> functions = functionService.GetFunctionsByRoleId(roleId ?? systemRoles.First().RoleId);
+            var functionTrees = new TreeFunctionViewModel
             {
-                Functions = roleFunction.Functions.ToList(),
-                RoleId = roleFunction.RoleId,
-                ModifiedBy = CurrentUser.Id
+                RoleId = roleId ?? systemRoles.First().RoleId,
+                IsHost = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host),
+                Functions = GetFunctionTrees(functions)
             };
 
-            CommandResult commandResult = functionService.AssignFunctionsToRole(criteria);
+            ViewBag.SystemRoles = systemRoles;
 
-            return Json(new { success = commandResult.IsSuccessful });
+            return View(functionTrees);
+        }
+
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.FunctionManagement)]
+        public CustomJsonResult AssignPermission(int roleId, IEnumerable<FunctionPermission> permissions)
+        {
+            CommandResult commandResult = functionService.AssignFunctionsToRole(CurrentUser.Id, roleId, permissions);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private IEnumerable<FunctionModel> GetFunctionTrees(IEnumerable<FunctionModel> functions)
+        {
+            IEnumerable<FunctionModel> functionTrees = functions.Where(func => !func.ParentFunctionId.HasValue);
+
+            foreach (FunctionModel function in functionTrees)
+            {
+                function.Level = 0;
+                GetChildFunctions(function, functions);
+            }
+
+            return functionTrees;
+        }
+
+        private void GetChildFunctions(FunctionModel function, IEnumerable<FunctionModel> functions)
+        {
+            IEnumerable<FunctionModel> functionItems = functions.Where(x => x.ParentFunctionId == function.FunctionId);
+
+            if (functionItems.Any())
+            {
+                foreach (FunctionModel item in functionItems)
+                {
+                    item.Level = function.Level + 1;
+                    function.Childs.Add(item);
+                    GetChildFunctions(item, functions);
+                }
+            }
         }
     }
 }

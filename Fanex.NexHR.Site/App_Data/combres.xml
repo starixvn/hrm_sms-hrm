@@ -673,10 +673,6 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/department/department.edit.js" />
     </resourceSet>
-    <resourceSet name="functionjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/function.js" />
-    </resourceSet>
     <resourceSet name="disciplinecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/discipline.css" />

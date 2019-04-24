@@ -4,8 +4,10 @@
     using System.Linq;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Function;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Function;
 
     public class FunctionService : IFunctionService
     {
@@ -37,8 +39,15 @@
             return functions;
         }
 
-        public CommandResult AssignFunctionsToRole(AssignFunctionToRoleCriteria criteria)
+        public CommandResult AssignFunctionsToRole(int actorId, int roleId, IEnumerable<FunctionPermission> permissions)
         {
+            var criteria = new AssignFunctionToRoleCriteria
+            {
+                RoleId = roleId,
+                ActorId = actorId,
+                PermissionXml = permissions.ToXML().ToString()
+            };
+
             return baseService.ExecuteNonQuery(criteria);
         }
     }

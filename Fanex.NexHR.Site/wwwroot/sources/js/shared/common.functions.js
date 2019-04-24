@@ -85,9 +85,9 @@ function updateTableHeaders() {
         });
 
         let i = 0;
-        $('table .persist-header th').each(function () {
+        $('table.persist-area thead th').each(function () {
             let x = $(this).width();
-            $($('table .floatingHeader th')[i]).width(x);
+            $($('table.persist-area .floatingHeader th')[i]).width(x);
             i++;
         });
     }
@@ -96,12 +96,11 @@ function updateTableHeaders() {
 function floatingHeader() {
     let clonedHeaderRow;
     $('.persist-area').each(function () {
-        clonedHeaderRow = $('.persist-header', this);
+        clonedHeaderRow = $('thead', this);
         clonedHeaderRow
             .before(clonedHeaderRow.clone())
             .css('width', clonedHeaderRow.width())
-            .addClass('floatingHeader')
-            .removeClass('persist-header');
+            .addClass('floatingHeader');
     });
 
     $('.content_scroll')
@@ -120,4 +119,20 @@ function unblockUI() {
     document.getElementById('loadingProcess').style.display = 'none';
 }
 
-export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI };
+function toastOptions() {
+    return {
+        tapToDismiss: false,
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-center',
+        showDuration: 0,
+        hideDuration: 0,
+        timeOut: 3000,
+        extendedTimeOut: 0,
+        closeOnHover: false,
+        preventDuplicates: true,
+        closeHtml: '<button type="button">x</button>'
+    };
+}
+
+export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions };

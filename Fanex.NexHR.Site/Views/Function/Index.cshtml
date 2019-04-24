@@ -1,41 +1,63 @@
-﻿@using Fanex.NexHR.Models;
+﻿@using Fanex.NexHR.ViewModels.Function
+@using Fanex.NexHR.Models
 
-@model IEnumerable<FunctionModel>
+@model TreeFunctionViewModel
+
 @{
-    ViewBag.Title = "Function Management";
-    var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
-    var hasPermission = (bool)ViewBag.HasPermission;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.FunctionManagement;
+    var systemRoles = (IEnumerable<SystemRoleModel>)ViewBag.SystemRoles;
 }
 
 @section css{
-    @Url.CombresLink("jobtitlecss")
+    <link href="~/wwwroot/dist/styles/function.index.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("functionjs")
+    <script src="~/wwwroot/dist/js/function.index.js"></script>
 }
 @section Breadcrumb {
-    <a class="step" href="#">@ViewBag.Title</a>
+    <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-<div class="container_24 bunhat">
-    @using (Html.BeginForm())
+
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<div class="filter">
+    <form class="form-horizontal clearfix" id="formFilter">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">Role</label>
+            </div>
+            <div class="select-form">
+                @Html.DropDownList("RoleId", new SelectList(systemRoles, "RoleId", "RoleName"), new { @class = "form-control" })
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="table table-custom persist-area" id="functionTable">
+    <thead>
+        <tr>
+            <th rowspan="2">@Labels.Function</th>
+            <th colspan="2">@Labels.RolePermission</th>
+        </tr>
+        <tr>
+            <th>@Labels.Read</th>
+            <th>@Labels.Host</th>
+        </tr>
+    </thead>
+    @if (Model.Functions.Any())
     {
-        <div class="grid_1 gridlabel">
-            @Labels.Role
-        </div>
-        <div class="grid_2">
-            @Html.DropDownList("Role", new SelectList(roles, "RoleId", "RoleName"))
-        </div>
+        <tbody>
+            @Html.Partial("_FunctionTrees", Model)
+        </tbody>
     }
-</div>
-<div class="clear">
-</div>
-<div id="list-functions"></div>
-@if (hasPermission)
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 3);
+    }
+</table>
+
+@if (Model.IsHost)
 {
-    <div class="menu">
-        <div class="input">
-            <input type="button" value="Save" class="space" id="save" disabled />
-        </div>
-    </div>
+    <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Save</button>
 }

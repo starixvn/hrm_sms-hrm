@@ -15,10 +15,12 @@ module.exports = {
         [`${styleDistPath}/employee.shift.manager`]: `${styleSourcePath}/pages/employee/employee.shift.manager.scss`,
         [`${styleDistPath}/employee.request`]: `${styleSourcePath}/pages/request/employee.request.scss`,
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
+        [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
-        [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`
+        [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
+        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`
     }
 };
