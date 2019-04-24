@@ -796,7 +796,7 @@
             ViewBag.JobTitles = GetAllJobTitle();
 
             ViewBag.Marriages = Utilities.Marriages;
-            ViewBag.Roles = roleService.GetRoles().Where(i => !i.RoleCode.Equals(RoleSystem.Member.ToString()));
+            ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
         }
 
         private IList<Team> GetAllTeam()

@@ -1,7 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.ScheduleArrange;
-    var isHost = (bool)ViewBag.IsHost;
     var isSARole = (bool)ViewBag.IsSARole;
 }
 @section css{
@@ -16,6 +15,5 @@
 
 <h2 class="page-title">@ViewBag.Title</h2>
 
-<input type="checkbox" hidden id="IsHost" @(isHost ? "checked" : string.Empty) />
 <input type="checkbox" hidden id="IsSARole" @(isSARole ? "checked" : string.Empty) />
 <div id="schedule-wrapper"></div>

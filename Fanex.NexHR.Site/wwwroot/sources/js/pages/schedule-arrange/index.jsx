@@ -24,6 +24,7 @@ export default class App extends Component {
         let toDate = moment(fromDate).add(6, 'days').format('DD MMM, YYYY');
 
         this.state = {
+            isHost: false,
             filter: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -47,7 +48,6 @@ export default class App extends Component {
         this.shiftOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
-        this.isHost = document.getElementById('IsHost').checked;
         this.isSARole = document.getElementById('IsSARole').checked;
         this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
             'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
@@ -163,8 +163,9 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
+            let { isHost, schedules } = response.data;
 
-            this.originalSchedules = response.data.map((group, gindex) => {
+            this.originalSchedules = schedules.map((group, gindex) => {
                 group.displayOrder = gindex + 1;
 
                 group.members.map((schedule, eindex) => {
@@ -185,7 +186,8 @@ export default class App extends Component {
 
                 return group;
             });
-            this.setState({ schedules: cloneDeep(this.originalSchedules) });
+
+            this.setState({ isHost, schedules: cloneDeep(this.originalSchedules) });
         }).then(() => unblockUI());
     }
 
@@ -841,18 +843,14 @@ export default class App extends Component {
     }
 
     render() {
-        let isHost = this.isHost;
         const {
+            isHost,
+            schedules,
             showShiftMultipleModal,
             showConfirmRefreshDataModal,
             showRemarkPopover,
-            isOrderMode,
-            schedules
+            isOrderMode
         } = this.state;
-
-        if (moment(this.selectedWeek.toDate).isBefore(moment(this.currentWeek.fromDate).add(-28, 'days')) && !this.isSARole) {
-            isHost = false;
-        }
 
         return (
             <Fragment>

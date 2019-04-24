@@ -170,25 +170,6 @@
             }
         }
 
-        public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo culture = null)
-        {
-            CultureInfo cultureInfo = culture ?? CultureInfo.CurrentCulture;
-
-            DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDayInWeek = dayInWeek.Date;
-            while (firstDayInWeek.DayOfWeek != firstDay)
-            {
-                firstDayInWeek = firstDayInWeek.AddDays(-1);
-            }
-
-            return firstDayInWeek;
-        }
-
-        public static DateTime LastDayOfWeek(DateTime dayInWeek)
-        {
-            return DateTime.Now.AddDays(6 - Convert.ToDouble(dayInWeek.DayOfWeek));
-        }
-
         public static IList<SelectListItem> MinuteSteps(int step)
         {
             var list = new List<SelectListItem>();

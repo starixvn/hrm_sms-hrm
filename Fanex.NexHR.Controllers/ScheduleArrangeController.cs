@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -64,9 +65,9 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
-            filter.SupervisorId = CurrentUser.Id;
+            filter.ActorId = CurrentUser.Id;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
-            IEnumerable<WeeklyScheduleViewModel> groups = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
+            IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
                 .Select(x => new WeeklyScheduleViewModel
                 {
                     GroupId = x.Key.Id,
@@ -75,7 +76,10 @@
                     Members = x
                 });
 
-            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            bool isHost = CheckPermission(filter.FromDate);
+            var data = new { isHost, schedules };
+
+            return new CustomJsonResult { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -112,6 +116,33 @@
             CommandResult commandResult = scheduleArrangeService.EditGroupOrder(CurrentUser.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private bool CheckPermission(DateTime fromDate)
+        {
+            bool isHost = false;
+            DateTime firstDayOfWeek = DateTime.Now.FirstDayOfWeek();
+
+            if (CurrentUser.HasPermission(FunctionKey.EditScheduleUnlimited, Policy.Host))
+            {
+                isHost = true;
+            }
+            else if (CurrentUser.HasPermission(FunctionKey.EditScheduleFrom4WeeksAgo, Policy.Host))
+            {
+                const int FourWeeksAgo = 28;
+                isHost = fromDate.Date >= firstDayOfWeek.AddDays(-FourWeeksAgo);
+            }
+            else if (CurrentUser.HasPermission(FunctionKey.EditScheduleFromNextWeek, Policy.Host))
+            {
+                const int NextWeek = 7;
+                isHost = fromDate.Date >= firstDayOfWeek.AddDays(NextWeek);
+            }
+            else
+            {
+                isHost = false;
+            }
+
+            return isHost;
         }
     }
 }

@@ -163,6 +163,7 @@
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="CustomJsonResult.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\Command.cs" />

@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
@@ -43,7 +44,6 @@
         public ActionResult ArrangeSchedule()
         {
             ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return View();
         }
@@ -51,16 +51,13 @@
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
-            var currentDate = DateTime.Now;
-            var fromDate = GetStartOfWeek(currentDate);
-            var toDate = GetEndOfWeek(currentDate);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
 
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
-                FromDate = fromDate,
-                ToDate = toDate,
+                FromDate = DateTime.Now.FirstDayOfWeek(),
+                ToDate = DateTime.Now.LastDayOfWeek(),
                 Teams = teams
             };
 
@@ -184,8 +181,8 @@
 
             var model = new WorkingCalendarFilterViewModel
             {
-                FromDate = GetStartOfWeek(DateTime.Now),
-                ToDate = GetEndOfWeek(DateTime.Now),
+                FromDate = DateTime.Now.FirstDayOfWeek(),
+                ToDate = DateTime.Now.LastDayOfWeek(),
                 Sections = sections,
                 JobTitles = jobTitles
             };
@@ -237,22 +234,6 @@
             };
 
             return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
-        }
-
-        private static DateTime GetStartOfWeek(DateTime currentDate)
-        {
-            int subDays = currentDate.DayOfWeek - DayOfWeek.Monday;
-            if (subDays < 0)
-            {
-                subDays += 7;
-            }
-
-            return currentDate.AddDays(-1 * subDays).Date;
-        }
-
-        private static DateTime GetEndOfWeek(DateTime currentDate)
-        {
-            return GetStartOfWeek(currentDate).AddDays(6);
         }
 
         private static void CheckChangeShiff(IList<WorkingCalendarsViewModel> models, IList<UserChangedShift> userChangeShift, DateTime fromDate)

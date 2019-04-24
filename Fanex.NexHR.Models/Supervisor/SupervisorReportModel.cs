@@ -24,7 +24,7 @@
         {
             get
             {
-                return (Roles == null || !Roles.Any()) ? string.Empty : string.Join(", ", Roles.Select(i => i.RoleName));
+                return (Roles == null || !Roles.Any()) ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
             }
         }
 

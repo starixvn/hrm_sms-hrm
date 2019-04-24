@@ -25,9 +25,9 @@
         {
             var criteria = new GetWeeklyScheduleCriteria
             {
+                ActorId = filter.ActorId,
                 FromTime = filter.FromDate,
                 ToTime = filter.ToDate,
-                SupervisorId = filter.SupervisorId,
                 EmpId = filter.EmployeeId,
                 GroupIds = filter.GroupIds
             };

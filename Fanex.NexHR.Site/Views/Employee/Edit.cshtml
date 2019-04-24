@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "Edit";
     var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
-    var roleItemList = roles.Select(i => new SelectListItem() { Text = i.RoleName, Value = i.RoleId.ToString() });
+    var roleItemList = roles.Select(i => new SelectListItem() { Text = i.Name, Value = i.RoleId.ToString() });
 }
 @section css{
     @Url.CombresLink("employeeeditcss")

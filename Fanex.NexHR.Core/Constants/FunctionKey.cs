@@ -61,5 +61,11 @@
         public const string RequestStatisticMember = "RequestStatisticMember";
 
         public const string RequestStatisticEmployee = "RequestStatisticEmployee";
+
+        public const string ViewPersonalScheduleData = "ViewPersonalScheduleData";
+        public const string ViewFullScheduleData = "ViewFullScheduleData";
+        public const string EditScheduleUnlimited = "EditScheduleUnlimited";
+        public const string EditScheduleFrom4WeeksAgo = "EditScheduleFrom4WeeksAgo";
+        public const string EditScheduleFromNextWeek = "EditScheduleFromNextWeek";
     }
 }

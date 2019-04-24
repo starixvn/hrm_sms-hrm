@@ -188,7 +188,7 @@
         {
             get
             {
-                return Roles == null ? string.Empty : string.Join(", ", Roles.Select(i => i.RoleName));
+                return Roles == null ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
             }
         }
 
