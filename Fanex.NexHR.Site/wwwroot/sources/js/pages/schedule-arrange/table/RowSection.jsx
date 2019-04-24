@@ -1,5 +1,5 @@
 ﻿import React, { PureComponent } from 'react';
-import { OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 
 import DroppableMember from './DroppableMember';
 
@@ -37,13 +37,9 @@ export default class RowSection extends PureComponent {
                         <div>{name}</div>
                         {
                             isOrderMode &&
-                            <Dropdown id={`dropdownSection${groupId}`} componentClass="div">
+                            <Dropdown id={`dropdownSection${groupId}`} componentClass="div" className="customize-order">
                                 <Dropdown.Toggle noCaret useAnchor>
-                                    <OverlayTrigger trigger={['hover']} placement={'top'}
-                                        overlay={<Tooltip id={`customizeSectionOrder${groupId}`}>Customize order</Tooltip>}
-                                    >
-                                        <i className="icon icon-sortable" />
-                                    </OverlayTrigger>
+                                    <i className="icon icon-sortable" title="Customize order" />
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>

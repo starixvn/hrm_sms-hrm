@@ -184,6 +184,15 @@
             }
         }
 
+        .customize-order {
+            &.dropdown {
+                .dropdown-menu {
+                    min-width: 100px;
+                    z-index: 4;
+                }
+            }
+        }
+
         .table-row {
             display: table-row;
 
@@ -324,19 +333,6 @@
                         }
                     }
                 }
-
-                .customize-order {
-                    .dropdown {
-                        .dropdown-toggle {
-                            box-shadow: unset;
-                        }
-
-                        .dropdown-menu {
-                            min-width: 60px;
-                            z-index: 4;
-                        }
-                    }
-                }
             }
 
             .shift-autocomplete-wrapper {
@@ -412,7 +408,8 @@
     white-space: pre-wrap;
     overflow-wrap: break-word;
 
-    .tooltip-content {
+    .tooltip-inner {
         padding: 6px 8px;
+        text-align: left;
     }
 }

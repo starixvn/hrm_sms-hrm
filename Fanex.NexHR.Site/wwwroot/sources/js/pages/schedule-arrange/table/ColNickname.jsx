@@ -95,13 +95,9 @@ export default class ColNickname extends PureComponent {
                     </div>
                     {
                         isOrderMode &&
-                        <Dropdown id={`dropdown${employeeId}`} componentClass="div">
+                        <Dropdown id={`dropdown${employeeId}`} componentClass="div" className="customize-order">
                             <Dropdown.Toggle noCaret useAnchor>
-                                <OverlayTrigger trigger={['hover']} placement={'top'}
-                                    overlay={<Tooltip id={`customizeOrder${employeeId}`}>Customize order</Tooltip>}
-                                >
-                                    <i className="icon icon-sortable" />
-                                </OverlayTrigger>
+                                <i className="icon icon-sortable" title="Customize order" />
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
