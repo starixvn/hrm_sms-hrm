@@ -226,7 +226,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveApprove_UpdateCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByWeekly.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveReject_RollbackCalendar.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetEmployeeByShiftManagement.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeDashBoard.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeTotalWorkingHourByMonth.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_TmpKIVLeaveBalance.sql" />
@@ -242,9 +241,7 @@
     <Build Include="dbo\Stored Procedures\Shift_GetShifts.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetShiftsByShiftID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForEmpId.sql" />
-    <Build Include="dbo\Stored Procedures\ShiftMng_GetShiftSchedule.sql" />
     <Build Include="dbo\Stored Procedures\ShiftMng_RptShiftSchedule.sql" />
-    <Build Include="dbo\Stored Procedures\ShiftMng_Set_ShiftSchedule.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportData.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioAdmin.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest.sql" />
@@ -263,7 +260,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_7.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_ResetMultipleTransactions.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_UpdateOrderShiftArrange.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_AvaibleBalanceLeave.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_RollbackTransferAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctions.sql" />
@@ -453,6 +449,14 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_UpdateIsConfirmedDiscipline.sql" />
     <Build Include="dbo\Tables\EmployeeLoginLog.sql" />
     <Build Include="dbo\Stored Procedures\Employee_LogEmployeeLogin.sql" />
+    <Build Include="dbo\Tables\ScheduleArrangementGroupOrder.sql" />
+    <Build Include="dbo\Tables\ScheduleArrangementDefaultShift.sql" />
+    <Build Include="dbo\Tables\ScheduleArrangement.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateWeekly.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateRemark.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateGroupOrder.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateDisplayOrder.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetWeekly.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
