@@ -61,7 +61,7 @@ export default class ColNickname extends PureComponent {
     }
 
     render() {
-        const { isOrderMode, employeeId, nickname, remark } = this.props;
+        const { isHost, employeeId, nickname, remark } = this.props;
 
         return (
             <div className="table-cell cell-nickname">
@@ -94,7 +94,7 @@ export default class ColNickname extends PureComponent {
                         </div>
                     </div>
                     {
-                        isOrderMode &&
+                        isHost &&
                         <Dropdown id={`dropdown${employeeId}`} componentClass="div" className="customize-order">
                             <Dropdown.Toggle noCaret useAnchor>
                                 <i className="icon icon-sortable" title="Customize order" />

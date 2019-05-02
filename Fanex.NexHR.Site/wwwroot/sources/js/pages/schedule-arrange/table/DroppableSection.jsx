@@ -5,23 +5,23 @@ import RowSection from './RowSection';
 
 export default class DroppableSection extends PureComponent {
     render() {
-        const { isHost, isOrderMode, shiftOptions, data } = this.props;
+        const { isHost, shiftOptions, data } = this.props;
 
         return (
-            <Droppable droppableId="droppable" isDropDisabled={!isOrderMode} type="droppableSection">
+            <Droppable droppableId="droppable" isDropDisabled={!isHost} type="droppableSection">
                 {
                     (provided, snapshot) =>
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((section, gindex) =>
                                     <Draggable key={`section${section.groupId}`} draggableId={`section${section.groupId}`}
-                                        index={gindex} isDragDisabled={!isOrderMode}
+                                        index={gindex} isDragDisabled={!isHost}
                                     >
                                         {
                                             (provided, snapshot) =>
                                                 <div>
                                                     <RowSection draggableProvided={provided}
-                                                        isHost={isHost} isOrderMode={isOrderMode} data={section}
+                                                        isHost={isHost} data={section}
                                                         shiftOptions={shiftOptions} isDragging={snapshot.isDragging}
                                                         showRemarkPopover={this.props.showRemarkPopover}
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}

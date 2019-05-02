@@ -28,7 +28,8 @@ export default class ShiftAutocomplete extends PureComponent {
         super(props);
 
         this.state = {
-            value: props.value === null ? '' : props.value
+            value: props.value === null ? '' : props.value,
+            options: []
         };
     }
 
@@ -41,8 +42,14 @@ export default class ShiftAutocomplete extends PureComponent {
     handleChange = event => {
         const value = event.target.value;
         const oldvalue = this.state.value.trim();
+        const shiftOptions = this.props.shiftOptions;
+        let options = [];
 
-        this.setState({ value }, () => {
+        if (value.trim().length > 0) {
+            options = shiftOptions.filter(item => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, '')));
+        }
+
+        this.setState({ value, options }, () => {
             if (value.trim().length === 0 && oldvalue.length > 0) {
                 this.props.onChange(this.props.name, null);
             }
@@ -67,12 +74,12 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     render() {
-        const { name, className, isDisabled, placeholder, shiftOptions } = this.props;
-        const { value } = this.state;
+        const { name, className, isDisabled, placeholder } = this.props;
+        const { value, options } = this.state;
 
         return (
             <Autocomplete
-                items={shiftOptions}
+                items={options}
                 shouldItemRender={(item, value) => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''))}
                 getItemValue={item => item.code}
                 wrapperProps={{ className: 'shift-autocomplete-wrapper' }}

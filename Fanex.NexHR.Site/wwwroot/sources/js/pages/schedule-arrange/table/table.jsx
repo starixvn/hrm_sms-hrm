@@ -38,13 +38,13 @@ export default class Table extends PureComponent {
     }
 
     render() {
-        const { isHost, isOrderMode, fromDate, toDate, shiftOptions, data } = this.props;
+        const { isHost, fromDate, toDate, shiftOptions, data } = this.props;
 
         return (
             <Fragment>
                 <div className="table-wrapper">
                     <div className={`table-header ${this.state.isFixedHeader ? 'fixed' : ''}`}>
-                        <THead fromDate={fromDate} toDate={toDate} isHost={isHost} isOrderMode={isOrderMode}
+                        <THead fromDate={fromDate} toDate={toDate} isHost={isHost}
                             onSave={this.props.onSave}
                             onChangeSelectWeekDays={this.props.onChangeSelectWeekDays}
                             onChangeOffNoShift={this.props.onChangeOffNoShift}
@@ -54,7 +54,6 @@ export default class Table extends PureComponent {
                             onChangePublics={this.props.onChangePublics}
                             onPrevious={this.props.onPrevious}
                             onNext={this.props.onNext}
-                            onChangeOrderMode={this.props.onChangeOrderMode}
                         />
                     </div>
                     <div className="table-body">
@@ -67,7 +66,7 @@ export default class Table extends PureComponent {
                         {
                             data.length > 0 &&
                             <DragDropContext onDragEnd={this.props.onDragEnd}>
-                                <DroppableSection isHost={isHost} isOrderMode={isOrderMode} data={data}
+                                <DroppableSection isHost={isHost} data={data}
                                     shiftOptions={shiftOptions}
                                     showRemarkPopover={this.props.showRemarkPopover}
                                     onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}

@@ -5,23 +5,23 @@ import Row from './Row';
 
 export default class DroppableMember extends PureComponent {
     render() {
-        const { isHost, isOrderMode, shiftOptions, groupId, data } = this.props;
+        const { isHost, shiftOptions, groupId, data } = this.props;
 
         return (
-            <Droppable droppableId={`dropable${groupId}`} isDropDisabled={!isOrderMode} type={`droppableMember-${groupId}`}>
+            <Droppable droppableId={`dropable${groupId}`} isDropDisabled={!isHost} type={`droppableMember-${groupId}`}>
                 {
                     (provided, snapshot) =>
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((member, eindex) =>
                                     <Draggable key={`member${member.employeeId}`} draggableId={`member${member.employeeId}`}
-                                        index={eindex} isDragDisabled={!isOrderMode}
+                                        index={eindex} isDragDisabled={!isHost}
                                     >
                                         {
                                             (provided, snapshot) =>
                                                 <div>
                                                     <Row draggableProvided={provided}
-                                                        isHost={isHost} isOrderMode={isOrderMode} groupId={groupId} data={member}
+                                                        isHost={isHost} groupId={groupId} data={member}
                                                         shiftOptions={shiftOptions} isDragging={snapshot.isDragging}
                                                         showRemarkPopover={this.props.showRemarkPopover}
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}

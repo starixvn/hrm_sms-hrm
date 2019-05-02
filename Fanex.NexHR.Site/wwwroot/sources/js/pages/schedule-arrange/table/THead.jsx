@@ -17,7 +17,7 @@ export default class THead extends PureComponent {
     }
 
     render() {
-        const { isHost, isOrderMode, fromDate, toDate } = this.props;
+        const { isHost, fromDate, toDate } = this.props;
 
         return (
             <Fragment>
@@ -48,17 +48,7 @@ export default class THead extends PureComponent {
                 <div className="header">
                     <div className="table-cell cell-index" />
                     <div className="table-cell cell-nickname">
-                        <div className="cell-control-wrapper">
-                            <div>Nickname</div>
-                            <div className="checkbox checbox-switch" title="Order Mode">
-                                <label>
-                                    <input type="checkbox" checked={isOrderMode} disabled={!isHost}
-                                        onChange={event => this.props.onChangeOrderMode(event.target.checked)}
-                                    />
-                                    <span />
-                                </label>
-                            </div>
-                        </div>
+                        Nickname
                     </div>
                     <div className="table-cell cell-shift">Default Shift</div>
                     {

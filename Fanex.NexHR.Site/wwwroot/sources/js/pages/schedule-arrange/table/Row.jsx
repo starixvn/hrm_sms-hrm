@@ -28,14 +28,14 @@ export default class Row extends PureComponent {
     }
 
     render() {
-        const { isHost, isOrderMode, shiftOptions, groupId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
+        const { isHost, shiftOptions, groupId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
 
         return (
             <div className={`table-row ${isDragging ? 'dragging' : ''}`}
                 ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} {...draggableProvided.dragHandleProps}
             >
                 <ColIndex data={data} />
-                <ColNickname isHost={isHost} isOrderMode={isOrderMode}
+                <ColNickname isHost={isHost}
                     groupId={groupId} employeeId={data.employeeId} nickname={data.nickname} remark={data.remark}
                     showRemarkPopover={showRemarkPopover}
                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}

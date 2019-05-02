@@ -39,8 +39,7 @@ export default class App extends Component {
                 show: false,
                 message: ''
             },
-            showRemarkPopover: false,
-            isOrderMode: false
+            showRemarkPopover: false
         };
 
         this.originalSchedules = [];
@@ -674,10 +673,6 @@ export default class App extends Component {
         });
     }
 
-    handleChangeOrderMode = isChecked => {
-        this.setState({ isOrderMode: isChecked });
-    }
-
     handleEditGroupOrder = () => {
         let displayOrders = [];
         let schedules = this.state.schedules;
@@ -848,8 +843,7 @@ export default class App extends Component {
             schedules,
             showShiftMultipleModal,
             showConfirmRefreshDataModal,
-            showRemarkPopover,
-            isOrderMode
+            showRemarkPopover
         } = this.state;
 
         return (
@@ -864,7 +858,7 @@ export default class App extends Component {
                     onSubmit={this.handleGetWeeklyShedules}
                 />
                 <Table
-                    isHost={isHost} isOrderMode={isOrderMode}
+                    isHost={isHost}
                     fromDate={this.selectedWeek.fromDate} toDate={this.selectedWeek.toDate}
                     data={schedules}
                     shiftOptions={this.shiftOptions} showRemarkPopover={showRemarkPopover}
@@ -881,7 +875,6 @@ export default class App extends Component {
                     onShiftMultiple={this.handleShiftMultiple}
                     onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
                     onUpdateRemark={this.handleUpdateRemark}
-                    onChangeOrderMode={this.handleChangeOrderMode}
                     onDragEnd={this.handleDragEnd}
                     onChangeSectionOrder={this.handleChangeSectionOrder}
                     onChangeOrder={this.handleChangeOrder}

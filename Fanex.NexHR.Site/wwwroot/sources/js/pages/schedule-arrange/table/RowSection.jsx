@@ -25,7 +25,7 @@ export default class RowSection extends PureComponent {
     }
 
     render() {
-        const { isHost, isOrderMode, draggableProvided, isDragging, shiftOptions } = this.props;
+        const { isHost, draggableProvided, isDragging, shiftOptions } = this.props;
         const { groupId, name, members } = this.props.data;
 
         return (
@@ -36,7 +36,7 @@ export default class RowSection extends PureComponent {
                     <div className="row-section-wrapper">
                         <div>{name}</div>
                         {
-                            isOrderMode &&
+                            isHost &&
                             <Dropdown id={`dropdownSection${groupId}`} componentClass="div" className="customize-order">
                                 <Dropdown.Toggle noCaret useAnchor>
                                     <i className="icon icon-sortable" title="Customize order" />
@@ -51,7 +51,7 @@ export default class RowSection extends PureComponent {
                         }
                     </div>
                 </div>
-                <DroppableMember isHost={isHost} isOrderMode={isOrderMode}
+                <DroppableMember isHost={isHost}
                     groupId={groupId} data={members}
                     shiftOptions={shiftOptions}
                     showRemarkPopover={this.props.showRemarkPopover}
