@@ -94,7 +94,7 @@
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, model.EmployeeId))
             {
-                return RedirectToAction("AccessDenied", "Home");
+                return RedirectToAction("AccessDenied", "Error");
             }
 
             model.UnavailDates = GetUnavailDate(model);

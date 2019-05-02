@@ -1,101 +1,102 @@
 ﻿
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Insert_weekly] @empid INT = NULL
+CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Insert_weekly] @EmpId INT = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-	DECLARE @fromdate DATETIME
-		,@todate DATETIME
+	DECLARE @fromdate DATE = GETDATE()
+		,@todate DATE = DATEADD(DD, 120, GETDATE())
 
-	SELECT @fromdate = GETDATE()
-		,@todate = DATEADD(DD, 120, GETDATE())
-
-	SET @fromdate = convert(VARCHAR(10), @fromdate, 111)
-	SET @todate = convert(VARCHAR(10), @todate, 111)
-
-	DECLARE @tblCalendare TABLE (
-		WorkDate SMALLDATETIME
-		,IsEnabled BIT
-		)
+	CREATE TABLE #tblCalendar (WorkDate DATE)
 
 	WHILE @fromdate <= @todate
 	BEGIN
-		INSERT INTO @tblCalendare (
-			WorkDate
-			,IsEnabled
-			)
-		VALUES (
-			@fromdate
-			,1
-			)
+		INSERT INTO #tblCalendar (WorkDate)
+		VALUES (@fromdate)
 
-		SET @fromdate = dateadd(d, 1, @fromdate)
+		SET @fromdate = DATEADD(d, 1, @fromdate)
 	END
 
-	-- insert vao working calendar
 	INSERT INTO dbo.EmployeeCalendar (
-		EmpID
+		EmpId
 		,WorkDate
-		,ShiftID
-		,isOffDay
+		,ShiftId
+		,IsOffDay
 		,IsHoliday
 		,IsPublic
 		)
-	SELECT DISTINCT s.empid
-		,tblCalendare.WorkDate AS WorkDate
-		,CASE 
-			WHEN datepart(dw, tblCalendare.WorkDate) = 1 THEN SunShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 2 THEN MonShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 3 THEN TueShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 4 THEN WedShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 5 THEN ThuShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 6 THEN FriShift
-			WHEN datepart(dw, tblCalendare.WorkDate) = 7 THEN SatShift
-			END AS ShiftID
-		,CASE 
-			WHEN es.IsLocal = 1
+	SELECT DISTINCT e.EmpId
+		,tblc.WorkDate
+		,(CASE 
+			WHEN (
+					es.IsLocal = 1
+					OR (
+						es.IsLocal = 0
+						AND es.IsExpatUseHoliday = 1
+						)
+					)
+				AND hld.Id IS NOT NULL THEN NULL
+			WHEN datepart(dw, tblc.WorkDate) = 1 THEN SunShift
+			WHEN datepart(dw, tblc.WorkDate) = 2 THEN MonShift
+			WHEN datepart(dw, tblc.WorkDate) = 3 THEN TueShift
+			WHEN datepart(dw, tblc.WorkDate) = 4 THEN WedShift
+			WHEN datepart(dw, tblc.WorkDate) = 5 THEN ThuShift
+			WHEN datepart(dw, tblc.WorkDate) = 6 THEN FriShift
+			WHEN datepart(dw, tblc.WorkDate) = 7 THEN SatShift END
+			) AS ShiftId
+		,(CASE 
+			WHEN (
+					es.IsLocal = 1
+					OR (
+						es.IsLocal = 0
+						AND es.IsExpatUseHoliday = 1
+						)
+					)
 				AND hld.Id IS NOT NULL THEN 0
-			WHEN datepart(dw, tblCalendare.WorkDate) = 1
+			WHEN datepart(dw, tblc.WorkDate) = 1
 				AND SunShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 2
+			WHEN datepart(dw, tblc.WorkDate) = 2
 				AND MonShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 3
+			WHEN datepart(dw, tblc.WorkDate) = 3
 				AND TueShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 4
+			WHEN datepart(dw, tblc.WorkDate) = 4
 				AND WedShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 5
+			WHEN datepart(dw, tblc.WorkDate) = 5
 				AND ThuShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 6
+			WHEN datepart(dw, tblc.WorkDate) = 6
 				AND FriShift IS NULL THEN 1
-			WHEN datepart(dw, tblCalendare.WorkDate) = 7
+			WHEN datepart(dw, tblc.WorkDate) = 7
 				AND SatShift IS NULL THEN 1
-			ELSE 0
-			END AS isOffDay
-		,CASE 
-			WHEN es.IsLocal = 1
+			ELSE 0 END
+			) AS IsOffDay
+		,(CASE 
+			WHEN (
+					es.IsLocal = 1
+					OR (
+						es.IsLocal = 0
+						AND es.IsExpatUseHoliday = 1
+						)
+					)
 				AND hld.Id IS NOT NULL THEN 1
-			ELSE 0
-			END AS isHoliday
+			ELSE 0 END
+			) AS IsHoliday
 		,1
-	FROM dbo.EmployeeDefaultShift s WITH (NOLOCK)
-		INNER JOIN dbo.Employee e WITH (NOLOCK) ON e.empid = s.empid
-		INNER JOIN @tblCalendare tblCalendare ON tblCalendare.IsEnabled = e.Enabled
-		INNER JOIN dbo.EmployeeSummary es WITH (NOLOCK) ON es.empid = s.empid
-		LEFT JOIN EmployeeCalendar c ON e.EmpId = c.EmpId
-		AND c.WorkDate = tblCalendare.WorkDate
-		LEFT JOIN dbo.Holiday hld WITH (NOLOCK) ON tblCalendare.WorkDate BETWEEN hld.FromDate
-			AND hld.ToDate
-	WHERE es.IsLocal = 1
+	FROM dbo.EmployeeDefaultShift AS s WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = s.EmpID
+		AND e.[Enabled] = 1
+		AND ISNULL(e.IsDeleted, 0) = 0
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
 		AND es.IsDefaultSchedule = 1
-		AND isnull(IsDeleted, 0) = 0
-		AND (
-			@empid IS NULL
-			OR s.empid = @empid
+		,#tblCalendar AS tblc
+		LEFT JOIN dbo.Holiday AS hld WITH (NOLOCK) ON tblc.WorkDate BETWEEN hld.FromDate
+			AND hld.ToDate
+	WHERE (
+			@EmpId IS NULL
+			OR e.EmpId = @EmpId
 			)
-		AND c.EmpId IS NULL
 		AND (
 			s.SunShift IS NOT NULL
 			OR s.MonShift IS NOT NULL
@@ -105,11 +106,18 @@ BEGIN
 			OR s.FriShift IS NOT NULL
 			OR s.SatShift IS NOT NULL
 			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeCalendar AS ec WITH (NOLOCK)
+			WHERE e.EmpId = ec.EmpId
+				AND tblc.WorkDate = ec.WorkDate
+			)
 
 	IF @@ERROR <> 0
+	BEGIN
 		SELECT @ErrCode = 100
 			,@ErrMsg = N'Create Default Calendar for employee failed'
-	ELSE
-		SELECT @ErrCode = 0
-			,@ErrMsg = ''
+	END
+
+	DROP TABLE #tblCalendar
 END

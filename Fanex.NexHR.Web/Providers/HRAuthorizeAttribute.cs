@@ -24,7 +24,7 @@
             var result = AuthorizeCore(filterContext.HttpContext);
             if (!result)
             {
-                filterContext.Result = new RedirectResult("~/home/accessdenied?url=" + filterContext.RequestContext.HttpContext.Request.Url.AbsoluteUri);
+                filterContext.Result = new RedirectResult("~/Error/AccessDenied?url=" + filterContext.RequestContext.HttpContext.Request.Url.AbsoluteUri);
             }
         }
 

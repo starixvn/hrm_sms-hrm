@@ -7,6 +7,7 @@ module.exports = {
     client: {
         [`${styleDistPath}/main`]: `${styleSourcePath}/main.scss`,
         [`${styleDistPath}/main_new`]: `${styleSourcePath}/main_new.scss`,
+        [`${styleDistPath}/error`]: `${styleSourcePath}/pages/error.scss`,
         [`${styleDistPath}/schedule.arrange`]: `${styleSourcePath}/pages/calendar/schedulearrange.scss`,
         [`${styleDistPath}/shiftstatistic`]: `${styleSourcePath}/pages/calendar/shiftstatistic.scss`,
         [`${styleDistPath}/workingcalendars`]: `${styleSourcePath}/pages/calendar/workingcalendars.scss`,

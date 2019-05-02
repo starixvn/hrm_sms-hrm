@@ -135,4 +135,30 @@ function toastOptions() {
     };
 }
 
-export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions };
+function axiosError(error) {
+    if (error.response) {
+        let url;
+
+        switch (error.response.status) {
+            case 401:
+                url = 'auth/login';
+                break;
+
+            case 404:
+                url = 'error/PageNotFound';
+                break;
+
+            case 405:
+                url = 'error/AccessDenied';
+                break;
+
+            case 500:
+                url = 'error/InternalError';
+                break;
+        }
+
+        window.location = _global.root + url;
+    }
+}
+
+export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions, axiosError };

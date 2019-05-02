@@ -18,8 +18,8 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @fromDate NVARCHAR(100)
-		,@toDate NVARCHAR(100)
+	DECLARE @fromDate DATE = @fromtime
+		,@toDate DATE = @totime
 		,@FromTime1 DATETIME = GETDATE()
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 		,@ShiftManagerRoleId TINYINT = 4
@@ -37,14 +37,7 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	SELECT @fromDate = CONVERT(VARCHAR(10), @fromtime, 111) + ' 00:00:00'
-		,@toDate = CONVERT(VARCHAR(10), @totime, 111) + ' 00:00:00'
-
-	CREATE TABLE #Calendar (
-		WorkDate DATE
-		,[Enabled] BIT
-		,IsDeleted BIT
-		)
+	CREATE TABLE #Calendar (WorkDate DATE)
 
 	CREATE TABLE #tmpCalendar (
 		EmpId INT
@@ -108,21 +101,13 @@ BEGIN
 
 	WHILE (@fromDate <= @toDate)
 	BEGIN
-		INSERT INTO #Calendar (
-			WorkDate
-			,[Enabled]
-			,IsDeleted
-			)
-		VALUES (
-			@fromDate
-			,1
-			,0
-			)
+		INSERT INTO #Calendar (WorkDate)
+		VALUES (@fromDate)
 
-		SET @fromDate = CONVERT(VARCHAR(10), CONVERT(DATETIME, @fromDate) + 1, 111) + ' 00:00:00'
+		SET @fromDate = DATEADD(d, 1, @fromDate)
 	END
 
-	SELECT @fromDate = CONVERT(VARCHAR(10), @fromtime, 111) + ' 00:00:00'
+	SET @fromDate = @fromtime
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
@@ -136,8 +121,6 @@ BEGIN
 		SELECT GroupId
 		FROM dbo.[Group] WITH (NOLOCK)
 	END
-
-	PRINT DATEDIFF(MILLISECOND, @FromTime1, GETDATE())
 
 	INSERT INTO #tmpCalendar (
 		EmpId
@@ -167,7 +150,8 @@ BEGIN
 		,IsPublic
 		,ModifiedBy
 		,ModifiedDate
-	FROM dbo.EmployeeCalendar WITH (NOLOCK)
+	FROM dbo.EmployeeCalendar AS ec WITH (NOLOCK)
+		INNER JOIN #tblEmployeeSupervisor AS es ON ec.EmpId = es.OwnerId
 	WHERE WorkDate BETWEEN @fromDate
 			AND @toDate
 
@@ -274,8 +258,7 @@ BEGIN
 		,lv2.[Name]
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN #tblEmployeeSupervisor AS es ON e.EmpId = es.OwnerId
-		INNER JOIN #Calendar AS tmp ON e.[Enabled] = tmp.[Enabled]
-		AND e.[IsDeleted] = tmp.[IsDeleted]
+		CROSS JOIN #Calendar AS tmp
 		LEFT JOIN #tmpCalendar AS ec ON ec.WorkDate = tmp.WorkDate
 		AND e.EmpId = ec.EmpId
 		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = e.EmpId
@@ -338,7 +321,9 @@ BEGIN
 		) spwkr ON spwkr.WorkDate = tmp.WorkDate
 		AND spwkr.EmpId = e.EmpId
 		LEFT JOIN dbo.LeaveType AS lv1 WITH (NOLOCK) ON spwkr.LeaveType = lv1.LeaveTypeId
-	WHERE (
+	WHERE e.[Enabled] = 1
+		AND e.isDeleted = 0
+		AND (
 			@EmpId IS NULL
 			OR e.EmpId = @EmpId
 			)
@@ -351,8 +336,6 @@ BEGIN
 			)
 	ORDER BY e.NickName
 		,tmp.WorkDate
-
-	PRINT DATEDIFF(MILLISECOND, @FromTime1, GETDATE())
 
 	DROP TABLE #tblGroupIds
 

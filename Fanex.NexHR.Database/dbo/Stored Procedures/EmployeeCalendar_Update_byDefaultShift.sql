@@ -1,66 +1,75 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[EmployeeCalendar_Update_byDefaultShift]
-	@empid int,
-	@ErrCode int=0 OUTPUT,
-	@ErrMsg varchar(200)='' OUTPUT
+﻿
+CREATE PROCEDURE [dbo].[EmployeeCalendar_Update_byDefaultShift] @EmpId INT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2013-10-23
 Task: Update Shift of Employee Calendar
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 
 */
-SET NOCOUNT ON
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-DECLARE	
-	@fromdate datetime, 
-	@todate datetime	
+	DECLARE @fromdate DATE = GETDATE(), @ModifiedDate DATETIME = GETDATE()
 
-SELECT @fromdate = GETDATE()
+	UPDATE ec
+	SET ec.ShiftId = CASE 
+			WHEN datepart(dw, ec.WorkDate) = 1 THEN SunShift
+			WHEN datepart(dw, ec.WorkDate) = 2 THEN MonShift
+			WHEN datepart(dw, ec.WorkDate) = 3 THEN TueShift
+			WHEN datepart(dw, ec.WorkDate) = 4 THEN WedShift
+			WHEN datepart(dw, ec.WorkDate) = 5 THEN ThuShift
+			WHEN datepart(dw, ec.WorkDate) = 6 THEN FriShift
+			WHEN datepart(dw, ec.WorkDate) = 7 THEN SatShift
+			END
+		,ec.IsOffDay = CASE 
+			WHEN es.IsLocal = 1
+				AND hld.Id IS NOT NULL THEN 0
+			WHEN datepart(dw, ec.WorkDate) = 1
+				AND SunShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 2
+				AND MonShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 3
+				AND TueShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 4
+				AND WedShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 5
+				AND ThuShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 6
+				AND FriShift IS NULL THEN 1
+			WHEN datepart(dw, ec.WorkDate) = 7
+				AND SatShift IS NULL THEN 1
+			ELSE 0
+			END
+		,ec.IsHoliday = CASE 
+			WHEN es.IsLocal = 1
+				AND hld.Id IS NOT NULL THEN 1
+			ELSE 0
+			END
+		,ec.ModifiedDate = @ModifiedDate
+	FROM dbo.EmployeeCalendar AS ec WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN EmployeeSummary AS es WITH (NOLOCK) ON ec.EmpId = es.EmpId
+		INNER JOIN Employee AS ee WITH (NOLOCK) ON ee.EmpId = es.EmpId
+		LEFT JOIN dbo.EmployeeDefaultShift AS s WITH (NOLOCK) ON ec.EmpId = s.EmpID
+		LEFT JOIN dbo.Holiday AS hld WITH (NOLOCK) ON ec.WorkDate BETWEEN hld.FromDate
+			AND hld.ToDate
+	WHERE es.IsDefaultSchedule = 1
+		AND ISNULL(ee.IsDeleted, 0) = 0
+		AND ec.EmpId = @EmpId
+		AND ec.WorkDate >= @fromdate
 
-set @fromdate = convert(varchar(10),@fromdate,111)
+	EXECUTE dbo.DBA_Job_EmployeeCalendar_Insert_weekly @EmpId = @EmpId
 
-UPDATE ec 
-SET 
-	ec.ShiftID = case when datepart(dw, ec.WorkDate)=1 then SunShift
-				when datepart(dw, ec.WorkDate)=2 then MonShift
-				when datepart(dw, ec.WorkDate)=3 then TueShift
-				when datepart(dw, ec.WorkDate)=4 then WedShift
-				when datepart(dw, ec.WorkDate)=5 then ThuShift
-				when datepart(dw, ec.WorkDate)=6 then FriShift
-				when datepart(dw, ec.WorkDate)=7 then SatShift
-			end ,
-	ec.isOffDay =	case when es.IsLocal =1 AND hld.Id IS NOT NULL then 0 
-				when datepart(dw, ec.WorkDate)=1 and SunShift is null then 1 
-				when datepart(dw, ec.WorkDate)=2 and MonShift is null then 1
-				when datepart(dw, ec.WorkDate)=3 and TueShift is null then 1
-				when datepart(dw, ec.WorkDate)=4 and WedShift is null then 1
-				when datepart(dw, ec.WorkDate)=5 and ThuShift is null then 1
-				when datepart(dw, ec.WorkDate)=6 and FriShift is null then 1
-				when datepart(dw, ec.WorkDate)=7 and SatShift is null then 1
-				else 0
-			end ,
-	ec.isHoliday	=	case when es.IsLocal =1 AND  hld.Id IS NOT NULL then 1 else 0 end,
-	ec.ModifiedDate = GETDATE()
- FROM EmployeeCalendar ec 
-LEFT JOIN dbo.EmployeeDefaultShift s WITH(NOLOCK) 	ON ec.EmpId = s.EmpID 
-inner join  EmployeeSummary es WITH(NOLOCK) on ec.EmpId = es.EmpId
-inner join Employee ee WITH(NOLOCK) on ee.EmpId = es.EmpId
-LEFT JOIN dbo.Holiday hld WITH(NOLOCK)  ON WorkDate between hld.FromDate and hld.ToDate
-
-where es.IsLocal = 1
-	and es.IsDefaultSchedule = 1
-	and isnull(IsDeleted,0)=0 
-	and(ec.empid=@empid)
-	and ec.WorkDate >=@fromdate
-
-EXECUTE dbo.DBA_Job_EmployeeCalendar_Insert_weekly @empid = @empid
-
- IF @@ERROR <> 0 
-	SELECT @ErrCode=100,@ErrMsg=N'Create Default Calendar for employee failed'
-ELSE 
-	SELECT @ErrCode=0,@ErrMsg=''
+	IF @@ERROR <> 0
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Create Default Calendar for employee failed'
+	END
+END

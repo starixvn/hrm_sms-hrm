@@ -8,7 +8,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import { blockUI, unblockUI } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import AlertModal from '../../shared/components/AlertModal';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
@@ -76,7 +76,7 @@ export default class App extends Component {
                 this.getWeeklyShedules(filter);
 
                 this.setState({ filter: filter });
-            });
+            }).catch(axiosError);
 
         window.addEventListener('beforeunload', this.onLeavingPageEventListener);
     }
@@ -145,7 +145,7 @@ export default class App extends Component {
             });
 
             this.setState({ employeeOptions: employeeOptions });
-        });
+        }).catch(axiosError);
     }
 
     getWeeklyShedules = filter => {
@@ -188,7 +188,7 @@ export default class App extends Component {
             });
 
             this.setState({ isHost, schedules: cloneDeep(this.originalSchedules) });
-        }).then(() => unblockUI());
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     handleGetWeeklyShedules = (isCurrentWeek) => {
@@ -610,7 +610,7 @@ export default class App extends Component {
                 } else {
                     toast.error(data.message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -707,7 +707,7 @@ export default class App extends Component {
                 } else {
                     toast.error(data.message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -743,7 +743,7 @@ export default class App extends Component {
                 } else {
                     toast.error(data.message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 

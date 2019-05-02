@@ -764,7 +764,6 @@
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
-    <Content Include="Styles\Images\cancel.png" />
     <Content Include="Styles\Images\drop.png" />
     <Content Include="Styles\Images\footer.jpg" />
     <Content Include="Styles\Images\home.png" />
@@ -846,6 +845,19 @@
     <Content Include="wwwroot\sources\js\pages\request\employee.request.js" />
     <Content Include="wwwroot\sources\js\shared\layouts\ToastLayout.jsx" />
     <Content Include="wwwroot\sources\styles\fonts\font.css" />
+    <Content Include="wwwroot\sources\styles\images\404\404.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\balloon.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\cloud-big.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\cloud-small.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\wind.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\door.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\seal.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\short-seal.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\signage.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\bluscreen.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\desktop.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\Error.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
@@ -910,7 +922,6 @@
     <Content Include="Views\Employee\Create.cshtml" />
     <Content Include="Views\Holiday\Index.cshtml" />
     <Content Include="Views\Holiday\Edit.cshtml" />
-    <Content Include="Views\Home\AccessDenied.cshtml" />
     <Content Include="Views\CheckInOut\Create.cshtml" />
     <Content Include="Views\Holiday\Create.cshtml" />
     <Content Include="Views\Memo\Index.cshtml" />
@@ -959,9 +970,6 @@
     <Folder Include="wwwroot\dist\js\" />
     <Folder Include="wwwroot\dist\styles\" />
     <Folder Include="wwwroot\dist\vendors\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\AccountSuspended.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Request\ViewHistory.cshtml" />
@@ -1045,7 +1053,6 @@
     <Content Include="Views\Overtime\SharedHrStatus.cshtml" />
     <Content Include="Views\Overtime\MemberOvertimeViewByLeader.cshtml" />
     <Content Include="Views\Overtime\_HRMonthlyReportDetails.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\_OTExcelReportDetails.cshtml" />
     <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
@@ -1167,11 +1174,15 @@
     <Content Include="Views\Function\_FunctionTrees.cshtml" />
     <Content Include="wwwroot\sources\styles\layout\_toastr.scss" />
     <Content Include="Views\Function\Index.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\InternalError.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\function\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\error.scss" />
     <None Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />

@@ -117,7 +117,7 @@
             RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
             {
-                return RedirectToAction("AccessDenied", "Home");
+                return RedirectToAction("AccessDenied", "Error");
             }
             else
             {

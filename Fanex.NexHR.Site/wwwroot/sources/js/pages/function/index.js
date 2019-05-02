@@ -3,7 +3,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { floatingHeader, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatingHeader, toastOptions } from '../../shared/common.functions';
 
 let assignPermissionToRole = (function ($) {
     let $functionTable,
@@ -134,7 +134,7 @@ let assignPermissionToRole = (function ($) {
                     } else {
                         toastr.error(data.message, '', toastOptions());
                     }
-                });
+                }).catch(axiosError);
             }
         });
     }
