@@ -817,6 +817,40 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="wwwroot\dist\js\employee.request.js" />
+    <Content Include="wwwroot\dist\js\function.index.js" />
+    <Content Include="wwwroot\dist\js\main.js" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\styles\employee.details.css" />
+    <Content Include="wwwroot\dist\styles\employee.details.js" />
+    <Content Include="wwwroot\dist\styles\employee.edit.css" />
+    <Content Include="wwwroot\dist\styles\employee.edit.js" />
+    <Content Include="wwwroot\dist\styles\employee.request.css" />
+    <Content Include="wwwroot\dist\styles\employee.request.js" />
+    <Content Include="wwwroot\dist\styles\employee.shift.manager.css" />
+    <Content Include="wwwroot\dist\styles\employee.shift.manager.js" />
+    <Content Include="wwwroot\dist\styles\error.css" />
+    <Content Include="wwwroot\dist\styles\error.js" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\short-seal.svg" />
+    <Content Include="wwwroot\dist\styles\function.index.css" />
+    <Content Include="wwwroot\dist\styles\function.index.js" />
+    <Content Include="wwwroot\dist\styles\images\sprite_btn.png" />
+    <Content Include="wwwroot\dist\styles\images\sprite_ico_2012-05-15.png" />
+    <Content Include="wwwroot\dist\styles\main.css" />
+    <Content Include="wwwroot\dist\styles\main.js" />
+    <Content Include="wwwroot\dist\styles\main_new.css" />
+    <Content Include="wwwroot\dist\styles\main_new.js" />
+    <Content Include="wwwroot\dist\styles\report.attendance.css" />
+    <Content Include="wwwroot\dist\styles\report.attendance.js" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.css" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\styles\shiftstatistic.css" />
+    <Content Include="wwwroot\dist\styles\shiftstatistic.js" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.css" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.js" />
+    <Content Include="wwwroot\dist\vendors\react.js" />
     <Content Include="wwwroot\parts\constant.js" />
     <Content Include="wwwroot\parts\entry.js" />
     <Content Include="wwwroot\sources\js\date.js" />
@@ -965,11 +999,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\dist\js\" />
-    <Folder Include="wwwroot\dist\styles\" />
-    <Folder Include="wwwroot\dist\vendors\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Request\ViewHistory.cshtml" />
@@ -1177,6 +1206,35 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\InternalError.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="wwwroot\dist\js\employee.request.js.map" />
+    <Content Include="wwwroot\dist\js\function.index.js.map" />
+    <Content Include="wwwroot\dist\js\main.js.map" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.details.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.request.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.shift.manager.js.map" />
+    <Content Include="wwwroot\dist\styles\error.js.map" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.woff2" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.woff2" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="wwwroot\dist\styles\function.index.js.map" />
+    <Content Include="wwwroot\dist\styles\main.js.map" />
+    <Content Include="wwwroot\dist\styles\main_new.js.map" />
+    <Content Include="wwwroot\dist\styles\report.attendance.js.map" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.js.map" />
+    <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
+    <Content Include="wwwroot\dist\vendors\react-manifest.json" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

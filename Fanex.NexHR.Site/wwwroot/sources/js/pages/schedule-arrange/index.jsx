@@ -10,7 +10,6 @@ import { cloneDeep, isEqual, unset } from 'lodash';
 
 import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
 import ToastLayout from '../../shared/layouts/ToastLayout';
-import AlertModal from '../../shared/components/AlertModal';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import Search from './Search';
@@ -35,10 +34,6 @@ export default class App extends Component {
             employeeOptions: [],
             showShiftMultipleModal: false,
             showConfirmRefreshDataModal: false,
-            alertModal: {
-                show: false,
-                message: ''
-            },
             showRemarkPopover: false
         };
 
@@ -54,7 +49,7 @@ export default class App extends Component {
 
     componentDidMount() {
         const promises = [
-            axios(_global.root + 'ScheduleArrange/getFilter'),
+            axios(_global.root + 'ScheduleArrange/GetGroups'),
             axios(_global.root + 'Calendar/GetShift', {
                 params: {
                     query: '',
@@ -64,8 +59,8 @@ export default class App extends Component {
         ];
 
         Promise.all(promises)
-            .then(([filterResponse, shiftResponse]) => {
-                this.groupOptions = filterResponse.data.groups.map(group => { group.checked = true; return group; });
+            .then(([groupResponse, shiftResponse]) => {
+                this.groupOptions = groupResponse.data.map(group => { group.checked = true; return group; });
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
 
                 const filter = Object.assign({}, this.state.filter, {
@@ -131,15 +126,16 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
-        axios(_global.root + 'ScheduleArrange/GetEmployeesByShiftMonitor', {
+        axios(_global.root + 'ScheduleArrange/GetEmployees', {
             params: {
+                groupIds: this.state.filter.groupIds,
                 query: query
             }
         }).then(response => {
             let employeeOptions = response.data.map(item => {
                 return {
-                    id: item.ownerId,
-                    value: `${item.nickName} (${item.fullName})`
+                    id: item.employeeId,
+                    value: `${item.nickname} (${item.fullName})`
                 };
             });
 
@@ -397,12 +393,7 @@ export default class App extends Component {
 
             this.setState({ schedules });
         } else {
-            this.setState({
-                alertModal: {
-                    show: true,
-                    message: 'Please choose at least one day to off!'
-                }
-            });
+            toast.warn('Please choose at least one day to off!');
         }
     }
 
@@ -434,12 +425,7 @@ export default class App extends Component {
 
             this.setState({ schedules });
         } else {
-            this.setState({
-                alertModal: {
-                    show: true,
-                    message: 'Please choose at least one day to off!'
-                }
-            });
+            toast.warn('Please choose at least one day to off!');
         }
     }
 
@@ -471,12 +457,7 @@ export default class App extends Component {
 
             this.setState({ schedules });
         } else {
-            this.setState({
-                alertModal: {
-                    show: true,
-                    message: 'Please choose at least one day to work!'
-                }
-            });
+            toast.warn('Please choose at least one day to work!');
         }
     }
 
@@ -487,12 +468,7 @@ export default class App extends Component {
         if (totalItems > 0) {
             this.setState({ showShiftMultipleModal: true });
         } else {
-            this.setState({
-                alertModal: {
-                    show: true,
-                    message: 'Please choose at least one day to continue!'
-                }
-            });
+            toast.warn('Please choose at least one day to continue!');
         }
     }
 
@@ -615,15 +591,6 @@ export default class App extends Component {
 
     handleCloseShiftMultipleModal = () => {
         this.setState({ showShiftMultipleModal: false });
-    }
-
-    handleCloseAlertModal = () => {
-        this.setState({
-            alertModal: {
-                show: false,
-                message: ''
-            }
-        });
     }
 
     handleShowConfirmRefreshDataModal = () => {
@@ -789,7 +756,7 @@ export default class App extends Component {
                 break;
         }
 
-        if (destinationIndex < 0 || destinationIndex >= totalItems || sourceIndex === destinationIndex) {
+        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
             return;
         }
 
@@ -824,7 +791,7 @@ export default class App extends Component {
                 break;
         }
 
-        if (destinationIndex < 0 || destinationIndex >= totalItems || sourceIndex === destinationIndex) {
+        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
             return;
         }
 
@@ -886,13 +853,6 @@ export default class App extends Component {
                         onHide={this.handleCloseShiftMultipleModal}
                         shiftOptions={this.shiftOptions}
                         onSubmit={this.handleChangeMultipleShift}
-                    />
-                }
-                {
-                    this.state.alertModal.show &&
-                    <AlertModal show={this.state.alertModal.show}
-                        message={this.state.alertModal.message}
-                        onHide={this.handleCloseAlertModal}
                     />
                 }
                 {

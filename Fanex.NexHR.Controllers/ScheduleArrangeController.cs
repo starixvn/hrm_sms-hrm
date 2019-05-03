@@ -8,56 +8,32 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.ScheduleArrange;
     using Fanex.NexHR.Web.Providers;
 
     public class ScheduleArrangeController : BaseController
     {
         private readonly IScheduleArrangeService scheduleArrangeService;
-        private readonly ITeamService teamService;
-        private readonly IEmployeeService employeeService;
 
-        public ScheduleArrangeController(
-            IScheduleArrangeService scheduleArrangeService,
-            ITeamService teamService,
-            IEmployeeService employeeService)
+        public ScheduleArrangeController(IScheduleArrangeService scheduleArrangeService)
         {
             this.scheduleArrangeService = scheduleArrangeService;
-            this.teamService = teamService;
-            this.employeeService = employeeService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
-        public CustomJsonResult GetFilter()
+        public CustomJsonResult GetGroups()
         {
-            IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
+            IEnumerable<EntityBase<int>> groups = scheduleArrangeService.GetGroups(CurrentUser.Id);
 
-            var model = new ScheduleArrangeFilterViewModel
-            {
-                Groups = teams
-            };
-
-            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public CustomJsonResult GetEmployeesByShiftMonitor(string query)
+        public CustomJsonResult GetEmployees(string groupIds, string query)
         {
-            var criteria = new GetEmployeeSupervisorByQueryCriteria
-            {
-                EmpId = CurrentUser.Id,
-                Role = (int)RoleSystem.ShiftManager,
-                RequestType = null,
-                Query = query.Trim(),
-                IncludeLoginUser = false
-            };
-            IList<SupervisorNameModel> employees = employeeService.GetSupervisorByQuery(criteria);
+            IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(CurrentUser.Id, groupIds, query);
 
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

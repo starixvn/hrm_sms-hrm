@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@fromtime DATE
 	,@totime DATE
 	,@EmpId INT = NULL
-	,@groupIds VARCHAR(max) = ''
+	,@GroupIds VARCHAR(MAX) = ''
 AS
 /*
 Created: Tim.Trinh@2019-04-12
@@ -85,6 +85,7 @@ BEGIN
 				AND f.IsActive = 1
 				INNER JOIN dbo.EmployeeRole AS erole WITH (NOLOCK) ON rf.RoleId = erole.RoleId
 				AND erole.EmployeeId = @ActorId
+			WHERE rf.IsRead = 1
 			)
 	BEGIN
 		INSERT INTO #tblEmployeeSupervisor (OwnerId)
@@ -111,15 +112,16 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
-	IF ISNULL(@groupids, '') <> ''
+	IF ISNULL(@GroupIds, '') <> ''
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT g.val
-		FROM fnc_strSplit(@groupids, ',') AS g
+		FROM dbo.fnc_strSplit(@GroupIds, ',') AS g
 	ELSE
 	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT GroupId
 		FROM dbo.[Group] WITH (NOLOCK)
+		WHERE IsDeleted = 0
 	END
 
 	INSERT INTO #tmpCalendar (
@@ -194,13 +196,10 @@ BEGIN
 			@EmpId IS NULL
 			OR e.EmpId = @EmpId
 			)
-		AND (
-			ISNULL(@groupids, '') = ''
-			OR EXISTS (
-				SELECT 1
-				FROM #tblGroupIds AS tblgr
-				WHERE e.GroupId = tblgr.GroupId
-				)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tblgr
+			WHERE e.GroupId = tblgr.GroupId
 			)
 	ORDER BY ISNULL(gorder.DisplayOrder, 0)
 		,g.Code
@@ -327,12 +326,10 @@ BEGIN
 			@EmpId IS NULL
 			OR e.EmpId = @EmpId
 			)
-		AND (
-			ISNULL(@groupids, '') = ''
-			OR e.GroupId IN (
-				SELECT GroupId
-				FROM #tblGroupIds
-				)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tblgr
+			WHERE e.GroupId = tblgr.GroupId
 			)
 	ORDER BY e.NickName
 		,tmp.WorkDate

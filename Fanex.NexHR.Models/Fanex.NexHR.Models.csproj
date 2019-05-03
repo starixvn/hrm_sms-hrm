@@ -101,6 +101,7 @@
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="EmployeeRole.cs" />
+    <Compile Include="EmployeeSuggestion.cs" />
     <Compile Include="Function\FunctionModel.cs" />
     <Compile Include="Function\FunctionPermission.cs" />
     <Compile Include="HRLeaderDashboardModel.cs" />

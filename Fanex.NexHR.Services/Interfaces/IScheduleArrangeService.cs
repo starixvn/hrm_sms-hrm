@@ -2,10 +2,15 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
 
     public interface IScheduleArrangeService
     {
+        IEnumerable<EntityBase<int>> GetGroups(int actorId);
+
+        IEnumerable<EmployeeSuggestion> GetEmployees(int actorId, string groupIds, string query);
+
         IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter);
 
         CommandResult EditWeekly(int actorId, IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts);

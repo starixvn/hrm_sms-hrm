@@ -119,6 +119,8 @@
     <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrderCriteria.cs" />
     <Compile Include="ScheduleArrange\EditWeeklyScheduleCriteria.cs" />
+    <Compile Include="ScheduleArrange\GetGroupCriteria.cs" />
+    <Compile Include="ScheduleArrange\GetEmployeeCriteria.cs" />
     <Compile Include="ScheduleArrange\GetWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />

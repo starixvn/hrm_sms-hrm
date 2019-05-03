@@ -362,7 +362,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_3.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_4.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetDailyReport.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_5.sql" />
@@ -373,7 +372,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update.sql" />
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_UpdateWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_1.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
@@ -457,6 +455,8 @@
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateGroupOrder.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateDisplayOrder.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetWeekly.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetEmployee.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

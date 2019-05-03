@@ -8,9 +8,14 @@
 @import '../../layout/filter';
 @import '../../layout/toastify';
 @import '../../components/checkbox';
-@import '../../components/checbox-switch';
 @import '../../components/icon';
 @import '../../components/modal';
+
+.btn {
+    font-size: inherit;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
 
 .form-horizontal {
     .multiple-select-container {
@@ -115,7 +120,7 @@
 
             .save, .checkAllWeekDays, .offNoshift, .offdayOT, .workday, .shiftMultiple, .prev-week, .next-week {
                 background: #f1f1f1;
-                color: #5e7485;
+                color: #000;
                 margin-right: 5px;
                 padding: 0 6px;
                 height: 25px;

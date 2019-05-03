@@ -120,7 +120,6 @@
     <Compile Include="Overtime\MemberOvertimeDailyViewModel.cs" />
     <Compile Include="Overtime\MemberOvertimeViewModel.cs" />
     <Compile Include="Request\RequestViewModel.cs" />
-    <Compile Include="Supervisor\ScheduleArrangeFilterViewModel.cs" />
     <Compile Include="Request\ChangeShiftDetailViewModel.cs" />
     <Compile Include="Supervisor\ShiftManagerViewModel.cs" />
     <Compile Include="Calendar\ShiftStatisticContentViewModel.cs" />
