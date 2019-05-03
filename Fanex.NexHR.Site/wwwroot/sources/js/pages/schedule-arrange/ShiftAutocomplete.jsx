@@ -62,6 +62,10 @@ export default class ShiftAutocomplete extends PureComponent {
         this.props.onChange(this.props.name, item);
     }
 
+    handleInputFocus = event => {
+        event.target.select();
+    }
+
     handleInputBlur = event => {
         const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
 
@@ -92,6 +96,7 @@ export default class ShiftAutocomplete extends PureComponent {
                     className: className,
                     placeholder: placeholder,
                     disabled: isDisabled,
+                    onFocus: this.handleInputFocus,
                     onBlur: this.handleInputBlur
                 }}
                 value={value}
