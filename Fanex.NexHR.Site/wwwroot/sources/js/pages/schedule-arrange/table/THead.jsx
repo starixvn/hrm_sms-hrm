@@ -35,7 +35,7 @@ export default class THead extends PureComponent {
                             </div>
                         </div>
                         <button className="btn offNoshift" onClick={this.props.onChangeOffNoShift} disabled={!isHost}>Off No Shift</button>
-                        <button className="btn offdayOT" onClick={this.props.onChangeOffdayOT} disabled={!isHost}>Offday OT</button>
+                        <button className="btn offdayOT" onClick={this.props.onChangeOffdayOT} disabled={!isHost}>Off Day OT</button>
                         <button className="btn workday" onClick={this.props.onChangeWorkday} disabled={!isHost}>Workday</button>
                         <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>

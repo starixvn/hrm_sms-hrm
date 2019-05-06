@@ -64,6 +64,7 @@ export default class ShiftAutocomplete extends PureComponent {
 
     handleInputFocus = event => {
         event.target.select();
+        this.setState({ options: [] });
     }
 
     handleInputBlur = event => {
