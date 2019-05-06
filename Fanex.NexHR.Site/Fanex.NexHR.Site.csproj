@@ -249,6 +249,14 @@
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
@@ -260,6 +268,7 @@
     <Content Include="Scripts\Views\Employee\employee.index.js" />
     <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
+    <Content Include="Scripts\Views\Postnatal\postnatal.js" />
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
@@ -1206,6 +1215,11 @@
     <Content Include="Views\Function\Index.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\InternalError.cshtml" />
+    <Content Include="Views\Postnatal\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Postnatal\_ListPostnatal.cshtml" />
+    <Content Include="Views\Postnatal\_Create.cshtml" />
+    <Content Include="Views\Postnatal\_Edit.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="wwwroot\dist\js\employee.request.js.map" />
     <Content Include="wwwroot\dist\js\function.index.js.map" />

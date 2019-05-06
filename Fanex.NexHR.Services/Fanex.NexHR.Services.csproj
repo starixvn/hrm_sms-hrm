@@ -217,6 +217,7 @@
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\MenuService.cs" />
+    <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Interfaces\IMenuService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
+    <Compile Include="Interfaces\IPostnatalService.cs" />
     <Compile Include="Interfaces\IRequestMailService.cs" />
     <Compile Include="Interfaces\IRoleService.cs" />
     <Compile Include="Interfaces\IWorkingCalendarService.cs" />

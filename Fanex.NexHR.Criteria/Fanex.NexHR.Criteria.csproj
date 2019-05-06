@@ -113,6 +113,12 @@
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />
     <Compile Include="Overtime\GetMemberOvertimeByLeaderCriteria.cs" />
+    <Compile Include="Postnatal\DeletePostnatalCriteria.cs" />
+    <Compile Include="Postnatal\GetMemberToAddPostnatalCriteria.cs" />
+    <Compile Include="Postnatal\UpdatePostnatalCriteria.cs" />
+    <Compile Include="Postnatal\GetPostnatalByIdCriteria.cs" />
+    <Compile Include="Postnatal\GetPostnatalCriteria.cs" />
+    <Compile Include="Postnatal\InsertPostnatalCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />

@@ -3,6 +3,8 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.MailDeliver;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.ExportExcel;
+    using Implement;
+    using Interfaces;
     using Unity;
 
     public static class ServiceDIExtensions
@@ -48,6 +50,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IDisciplineService, DisciplineService>();
             container.RegisterType<IScheduleArrangeService, ScheduleArrangeService>();
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
+            container.RegisterType<IPostnatalService, PostnatalService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

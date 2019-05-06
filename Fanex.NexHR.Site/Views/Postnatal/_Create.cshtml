@@ -1,0 +1,59 @@
+﻿@using Fanex.NexHR.Core.Constants;
+@model Fanex.NexHR.ViewModels.Postnatal.PostnatalViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+@section css{
+    @Url.CombresLink("disciplinecss")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.EmployeeManagement</a>
+    <a class="step">Postnatal</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<div>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "create-form" }))
+    {
+        @Html.ValidationSummary()
+
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Employee)
+                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.ValidationMessageFor(model => model.EmployeeId)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.FromDate, Labels.FromDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.FromDate)
+                <span class="time hide">
+                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                </span>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ToDate, Labels.ToDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ToDate)
+                <span class="time hide">
+                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                </span>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    }
+</div>

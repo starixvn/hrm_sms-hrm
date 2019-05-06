@@ -1,0 +1,42 @@
+﻿@section css{
+    @Url.CombresLink("myrequestcss")
+}
+@section js{
+    @Url.CombresLink("postnataljs")
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step">@Labels.EmployeeManagement</a>
+    <a class="step">@ViewBag.Title</a>
+}
+@{
+    ViewBag.Title = "Employee Postnatal";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container_24 bunhat">
+        <div class="grid_1 gridlabel">
+            <label for="Year">@Labels.Year</label>
+        </div>
+        <div class="grid_2">
+            @Html.YearPicker("Year", 2010, DateTime.Now.Year)
+        </div>
+        <div class="grid_2">
+            <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
+        </div>
+        <div class="grid_5">
+            <div class="button-icon" id="add-postnatal">
+                <span class="icon plus"></span><a>Add Postnatal</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear">
+    </div>
+}
+
+<div id="list-postnatal">
+</div>
+<div id="dialogAddPostnatal"></div>
+<div id="dialogEditPostnatal"></div>
