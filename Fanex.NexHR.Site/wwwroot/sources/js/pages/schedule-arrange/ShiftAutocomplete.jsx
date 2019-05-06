@@ -29,7 +29,8 @@ export default class ShiftAutocomplete extends PureComponent {
 
         this.state = {
             value: props.value === null ? '' : props.value,
-            options: []
+            options: [],
+            isPasted: false
         };
     }
 
@@ -42,14 +43,19 @@ export default class ShiftAutocomplete extends PureComponent {
     handleChange = event => {
         const value = event.target.value;
         const oldvalue = this.state.value.trim();
+        const isPasted = this.state.isPasted;
         const shiftOptions = this.props.shiftOptions;
         let options = [];
 
-        if (value.trim().length > 0) {
+        if (value.trim().length > 0 && !isPasted) {
             options = shiftOptions.filter(item => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, '')));
         }
 
-        this.setState({ value, options }, () => {
+        this.setState({
+            value,
+            options,
+            isPasted: false
+        }, () => {
             if (value.trim().length === 0 && oldvalue.length > 0) {
                 this.props.onChange(this.props.name, null);
             }
@@ -65,6 +71,10 @@ export default class ShiftAutocomplete extends PureComponent {
     handleInputFocus = event => {
         event.target.select();
         this.setState({ options: [] });
+    }
+
+    handleInputPaste = event => {
+        this.setState({ isPasted: true });
     }
 
     handleInputBlur = event => {
@@ -98,6 +108,7 @@ export default class ShiftAutocomplete extends PureComponent {
                     placeholder: placeholder,
                     disabled: isDisabled,
                     onFocus: this.handleInputFocus,
+                    onPaste: this.handleInputPaste,
                     onBlur: this.handleInputBlur
                 }}
                 value={value}
