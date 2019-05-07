@@ -21,6 +21,7 @@ BEGIN
 	DECLARE @fromDate DATE = @fromtime
 		,@toDate DATE = @totime
 		,@FromTime1 DATETIME = GETDATE()
+		,@SpecialUserGroupId INT = 44
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 		,@ShiftManagerRoleId TINYINT = 4
 		,@GeneralLeaveId TINYINT = 0
@@ -57,24 +58,57 @@ BEGIN
 
 	CREATE TABLE #tblEmployeeSupervisor (OwnerId INT)
 
+	CREATE TABLE #tblGroupIds (GroupId INT)
+
+	IF ISNULL(@GroupIds, '') <> ''
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT GroupId
+		FROM dbo.[Group] WITH (NOLOCK)
+		WHERE IsDeleted = 0
+	END
+
+	DELETE
+	FROM #tblGroupIds
+	WHERE GroupId = @SpecialUserGroupId
+
 	INSERT INTO #tblEmployeeSupervisor (OwnerId)
 	SELECT OwnerId
-	FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+	FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 	WHERE EmpId = @ActorId
 		AND ActionType = @ShiftManagerRoleId
 		AND ISNULL(IsDeleted, 0) = 0
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.Employee AS e WITH (NOLOCK)
+				INNER JOIN #tblGroupIds AS gr ON e.GroupId = gr.GroupId
+			WHERE e.[Enabled] = 1
+				AND e.isDeleted = 0
+				AND es.OwnerId = e.EmpId
+			)
 
 	INSERT INTO #tblEmployeeSupervisor (OwnerId)
-	SELECT esu.EmpId
+	SELECT e.EmpId
 	FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS esu WITH (NOLOCK) ON gs.GroupId = esu.GroupId
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
 	WHERE gs.OwnerId = @ActorId
 		AND gs.ActionType = @ShiftManagerRoleId
 		AND ISNULL(gs.IsDeleted, 0) = 0
+		AND e.[Enabled] = 1
+		AND e.isDeleted = 0
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS gr
+			WHERE e.GroupId = gr.GroupId
+			)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM #tblEmployeeSupervisor AS tbl
-			WHERE tbl.OwnerId = esu.EmpId
+			WHERE tbl.OwnerId = e.EmpId
 			)
 
 	IF EXISTS (
@@ -90,13 +124,18 @@ BEGIN
 	BEGIN
 		INSERT INTO #tblEmployeeSupervisor (OwnerId)
 		SELECT EmpId
-		FROM dbo.Employee AS emp WITH (NOLOCK)
+		FROM dbo.Employee AS e WITH (NOLOCK)
 		WHERE [Enabled] = 1
 			AND isDeleted = 0
+			AND EXISTS (
+				SELECT 1
+				FROM #tblGroupIds AS gr
+				WHERE e.GroupId = gr.GroupId
+				)
 			AND NOT EXISTS (
 				SELECT 1
 				FROM #tblEmployeeSupervisor AS tbl
-				WHERE emp.EmpId = tbl.OwnerId
+				WHERE e.EmpId = tbl.OwnerId
 				)
 	END
 
@@ -109,20 +148,6 @@ BEGIN
 	END
 
 	SET @fromDate = @fromtime
-
-	CREATE TABLE #tblGroupIds (GroupId INT)
-
-	IF ISNULL(@GroupIds, '') <> ''
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT g.val
-		FROM dbo.fnc_strSplit(@GroupIds, ',') AS g
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
-	END
 
 	INSERT INTO #tmpCalendar (
 		EmpId
@@ -163,6 +188,8 @@ BEGIN
 		,ISNULL(esum.OffDaysbyWeek, 0) AS OffDaysbyWeek
 		,arrange.Remark
 		,arrange.DisplayOrder
+		,modifier.NickName AS Modifier
+		,ec.ModifiedDate
 		,g.GroupId
 		,g.Code
 		,g.[Name]
@@ -175,7 +202,7 @@ BEGIN
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 		LEFT JOIN dbo.ScheduleArrangement AS arrange WITH (NOLOCK) ON e.EmpId = arrange.EmployeeId
 		LEFT JOIN dbo.ScheduleArrangementGroupOrder AS gorder WITH (NOLOCK) ON g.GroupId = gorder.GroupId
-		LEFT JOIN (
+		OUTER APPLY (
 		SELECT tbl.EmployeeId
 			,spl.ShiftId
 		FROM (
@@ -188,8 +215,24 @@ BEGIN
 			) tbl
 			LEFT JOIN dbo.ScheduleArrangementDefaultShift AS spl WITH (NOLOCK) ON tbl.FromDate = spl.FromDate
 			AND tbl.EmployeeId = spl.EmployeeId
-		) defaultshift ON defaultshift.EmployeeId = e.EmpId
+		WHERE tbl.EmployeeId = e.EmpId
+		) defaultshift
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON defaultshift.ShiftId = shift.ShiftId
+		OUTER APPLY (
+		SELECT DISTINCT ec.EmpId
+			,ec.ModifiedBy
+			,ec.ModifiedDate
+		FROM #tmpCalendar AS ec
+		WHERE ec.EmpId = e.EmpId
+			AND ec.ModifiedBy IS NOT NULL
+			AND ec.ModifiedDate IS NOT NULL
+			AND ec.ModifiedDate = (
+				SELECT MAX(ec1.ModifiedDate)
+				FROM #tmpCalendar AS ec1
+				WHERE ec.EmpId = ec1.EmpId
+				)
+		) AS ec
+		LEFT JOIN dbo.Employee AS modifier WITH (NOLOCK) ON ec.ModifiedBy = modifier.EmpId
 	WHERE e.[Enabled] = 1
 		AND e.isDeleted = 0
 		AND (
@@ -244,8 +287,6 @@ BEGIN
 			ELSE ec.LeaveDay END
 			) AS LeaveDay
 		,ec.IsPublic
-		,modifier.NickName AS ModifierName
-		,ec.ModifiedDate
 		,ec.ShiftId
 		,s.Code
 		,s.[Name]
@@ -276,7 +317,6 @@ BEGIN
 					AND hld.ToDate
 				)
 			)
-		LEFT JOIN dbo.Employee AS modifier WITH (NOLOCK) ON ec.ModifiedBy = modifier.EmpId
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ec.ShiftId
 		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON ec.LeaveTypeId2 = lv2.LeaveTypeId
 		LEFT JOIN (

@@ -15,7 +15,8 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ShiftManagerRoleId TINYINT = 4
+	DECLARE @SpecialUserGroupId INT = 44
+		,@ShiftManagerRoleId TINYINT = 4
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 		,@q NVARCHAR(258) = '%' + ISNULL(@Query, '') + '%'
 
@@ -43,6 +44,7 @@ BEGIN
 			e.NickName LIKE @q
 			OR e.FullName LIKE @q
 			)
+		AND e.GroupId <> @SpecialUserGroupId
 		AND EXISTS (
 			SELECT 1
 			FROM #tblGroupIds AS tblgr

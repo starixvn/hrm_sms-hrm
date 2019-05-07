@@ -13,7 +13,8 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ShiftManagerRoleId TINYINT = 4
+	DECLARE @SpecialUserGroupId INT = 44
+		,@ShiftManagerRoleId TINYINT = 4
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 
 	SELECT gr.GroupId
@@ -21,6 +22,7 @@ BEGIN
 		,gr.[Name]
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
 	WHERE gr.IsDeleted = 0
+		AND gr.GroupId <> @SpecialUserGroupId
 		AND (
 			EXISTS (
 				SELECT 1

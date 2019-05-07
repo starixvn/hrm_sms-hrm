@@ -465,6 +465,14 @@ input[type="text"] {
     }
 }
 
+.modal-weekly-default-shift {
+    width: 880px;
+
+    .table-weekly-default-shift {
+        width: 840px;
+    }
+}
+
 .holiday {
     background: #f3aa4b !important;
 }

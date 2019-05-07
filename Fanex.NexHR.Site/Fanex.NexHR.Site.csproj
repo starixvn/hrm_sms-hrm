@@ -861,6 +861,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftMultipleModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColNickname.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColDefaultShift.jsx" />
