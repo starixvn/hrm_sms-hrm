@@ -224,6 +224,10 @@ form {
     font-weight: bold;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 label.error {
     margin-bottom: 3px;
 }

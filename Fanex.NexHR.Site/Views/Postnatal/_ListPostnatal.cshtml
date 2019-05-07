@@ -9,9 +9,12 @@
                 <th>@Labels.NickName</th>
                 <th>@Labels.From</th>
                 <th>@Labels.To</th>
-                <th>Creator</th>
+                <th>@Labels.CreatedBy</th>
                 <th>@Labels.CreatedDate</th>
-                <th>@Labels.Action</th>
+                @if (ViewBag.IsHost)
+                {
+                    <th>@Labels.Action</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -30,14 +33,17 @@
                         <td>@postnatal.ToDate.ToString("dd MMM yyyy")</td>
                         <td>@postnatal.Creator</td>
                         <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
-                        <td>
-                            <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="Edit">
-                                <i class="fa fa-pencil fa-lg icon-edit"></i>
-                            </a>
-                            <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="Delete">
-                                <i class="fa fa-trash fa-lg icon-delete"></i>
-                            </a>
-                        </td>
+                        @if (ViewBag.IsHost)
+                        {
+                            <td>
+                                <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="Edit">
+                                    <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
+                                </a>
+                                <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="Delete">
+                                    <i class="fa fa-trash fa-lg icon-delete pointer"></i>
+                                </a>
+                            </td>
+                        }
                     </tr>
                 }
             }

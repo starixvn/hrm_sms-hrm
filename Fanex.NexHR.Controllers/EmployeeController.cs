@@ -119,6 +119,8 @@
                 ItemsPerPage = Constants.ItemsPerPage
             };
 
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+
             return View(model);
         }
 

@@ -4,11 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Core.Constants;
+    using Core.Enums;
     using Core.Models;
     using Criteria.Postnatal;
     using Models;
     using Services.Interfaces;
     using ViewModels.Postnatal;
+    using Web.Providers;
 
     public class PostnatalController : BaseController
     {
@@ -19,17 +22,22 @@
             this.postnatalService = postnatalService;
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
             return View();
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult ListPostnatal(int year)
         {
             var postnatals = postnatalService.GetAll(year);
+            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_ListPostnatal", postnatals);
         }
 
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
             var model = new PostnatalViewModel
@@ -41,7 +49,7 @@
         }
 
         [HttpPost]
-        [ValidateInput(true)]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create(PostnatalViewModel model)
         {
             var result = new CommandResult();
@@ -66,6 +74,7 @@
             return Json(result);
         }
 
+        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
             var postnatal = postnatalService.GetById(id);
@@ -80,6 +89,7 @@
         }
 
         [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Update(int id, PostnatalViewModel model)
         {
             var result = new CommandResult();
@@ -106,6 +116,7 @@
         }
 
         [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(int id)
         {
             var result = postnatalService.Delete(id);

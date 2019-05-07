@@ -1635,4 +1635,7 @@
   <data name="PickupRemark" xml:space="preserve">
     <value>Pickup Remark</value>
   </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created By</value>
+  </data>
 </root>
