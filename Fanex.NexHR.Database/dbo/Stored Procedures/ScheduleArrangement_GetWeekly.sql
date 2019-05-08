@@ -21,7 +21,6 @@ BEGIN
 	DECLARE @fromDate DATE = @fromtime
 		,@toDate DATE = @totime
 		,@FromTime1 DATETIME = GETDATE()
-		,@SpecialUserGroupId INT = 44
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 		,@ShiftManagerRoleId TINYINT = 4
 		,@GeneralLeaveId TINYINT = 0
@@ -61,20 +60,11 @@ BEGIN
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
 	IF ISNULL(@GroupIds, '') <> ''
+	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
 	END
-
-	DELETE
-	FROM #tblGroupIds
-	WHERE GroupId = @SpecialUserGroupId
 
 	INSERT INTO #tblEmployeeSupervisor (OwnerId)
 	SELECT OwnerId
@@ -139,6 +129,15 @@ BEGIN
 				)
 	END
 
+	DELETE e
+	FROM #tblEmployeeSupervisor AS e
+	WHERE EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary AS esum WITH (NOLOCK)
+			WHERE e.OwnerId = esum.EmpId
+				AND esum.IsTopManager = 1
+			)
+
 	WHILE (@fromDate <= @toDate)
 	BEGIN
 		INSERT INTO #Calendar (WorkDate)
@@ -188,6 +187,7 @@ BEGIN
 		,ISNULL(esum.OffDaysbyWeek, 0) AS OffDaysbyWeek
 		,arrange.Remark
 		,arrange.DisplayOrder
+		,esum.IsDefaultSchedule AS IsUsedWeeklyDefaultShift
 		,modifier.NickName AS Modifier
 		,ec.ModifiedDate
 		,g.GroupId
@@ -198,7 +198,7 @@ BEGIN
 		,shift.[Name]
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN #tblEmployeeSupervisor AS es ON e.EmpId = es.OwnerId
-		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = e.EmpId
+		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON e.EmpId = esum.EmpId
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 		LEFT JOIN dbo.ScheduleArrangement AS arrange WITH (NOLOCK) ON e.EmpId = arrange.EmployeeId
 		LEFT JOIN dbo.ScheduleArrangementGroupOrder AS gorder WITH (NOLOCK) ON g.GroupId = gorder.GroupId
@@ -373,6 +373,31 @@ BEGIN
 			)
 	ORDER BY e.NickName
 		,tmp.WorkDate
+
+	SELECT e.OwnerId AS EmployeeId
+		,ISNULL(monshift.ShiftID, -1) AS MonShiftId
+		,ISNULL(monshift.Code, 'Off') AS MonShiftCode
+		,ISNULL(tueshift.ShiftID, -1) AS TueShiftId
+		,ISNULL(tueshift.Code, 'Off') AS TueShiftCode
+		,ISNULL(wedshift.ShiftID, -1) AS WedShiftId
+		,ISNULL(wedshift.Code, 'Off') AS WedShiftCode
+		,ISNULL(thushift.ShiftID, -1) AS ThuShiftId
+		,ISNULL(thushift.Code, 'Off') AS ThuShiftCode
+		,ISNULL(frishift.ShiftID, -1) AS FriShiftId
+		,ISNULL(frishift.Code, 'Off') AS FriShiftCode
+		,ISNULL(satshift.ShiftID, -1) AS SatShiftId
+		,ISNULL(satshift.Code, 'Off') AS SatShiftCode
+		,ISNULL(sunshift.ShiftID, -1) AS SunShiftId
+		,ISNULL(sunshift.Code, 'Off') AS SunShiftCode
+	FROM #tblEmployeeSupervisor AS e
+		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpID = e.OwnerId
+		LEFT JOIN dbo.Shift AS monshift WITH (NOLOCK) ON eds.MonShift = monshift.ShiftID
+		LEFT JOIN dbo.Shift AS tueshift WITH (NOLOCK) ON eds.TueShift = tueshift.ShiftID
+		LEFT JOIN dbo.Shift AS wedshift WITH (NOLOCK) ON eds.WedShift = wedshift.ShiftID
+		LEFT JOIN dbo.Shift AS thushift WITH (NOLOCK) ON eds.ThuShift = thushift.ShiftID
+		LEFT JOIN dbo.Shift AS frishift WITH (NOLOCK) ON eds.FriShift = frishift.ShiftID
+		LEFT JOIN dbo.Shift AS satshift WITH (NOLOCK) ON eds.SatShift = satshift.ShiftID
+		LEFT JOIN dbo.Shift AS sunshift WITH (NOLOCK) ON eds.SunShift = sunshift.ShiftID
 
 	DROP TABLE #tblGroupIds
 

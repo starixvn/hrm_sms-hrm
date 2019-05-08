@@ -15,23 +15,17 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @SpecialUserGroupId INT = 44
-		,@ShiftManagerRoleId TINYINT = 4
+	DECLARE @ShiftManagerRoleId TINYINT = 4
 		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
 		,@q NVARCHAR(258) = '%' + ISNULL(@Query, '') + '%'
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
 	IF ISNULL(@GroupIds, '') <> ''
+	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
 	END
 
 	SELECT e.EmpId AS EmployeeId
@@ -44,7 +38,12 @@ BEGIN
 			e.NickName LIKE @q
 			OR e.FullName LIKE @q
 			)
-		AND e.GroupId <> @SpecialUserGroupId
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary AS esum WITH (NOLOCK)
+			WHERE esum.EmpId = e.EmpId
+				AND esum.IsTopManager = 1
+			)
 		AND EXISTS (
 			SELECT 1
 			FROM #tblGroupIds AS tblgr
