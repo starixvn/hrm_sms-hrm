@@ -27,5 +27,7 @@
         public string Modifier { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
+
+        public string Remark { get; set; }
     }
 }

@@ -457,6 +457,13 @@
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetWeekly.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetEmployee.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetGroup.sql" />
+    <Build Include="dbo\Tables\EmployeePostnatal.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_GetMember.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Postnatal_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

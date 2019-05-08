@@ -61,7 +61,8 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    CreatedBy = CurrentUser.Id
+                    CreatedBy = CurrentUser.Id,
+                    Remark = model.Remark
                 };
 
                 result = postnatalService.Insert(criteria);
@@ -83,7 +84,8 @@
                 EmployeeId = postnatal.EmpId,
                 Employee = string.Format("{0} ({1})", postnatal.Nickname, postnatal.Fullname),
                 FromDate = postnatal.FromDate,
-                ToDate = postnatal.ToDate
+                ToDate = postnatal.ToDate,
+                Remark = postnatal.Remark
             };
             return PartialView("_Edit", model);
         }
@@ -102,7 +104,8 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = CurrentUser.Id
+                    ModifiedBy = CurrentUser.Id,
+                    Remark = model.Remark
                 };
 
                 result = postnatalService.Update(criteria);

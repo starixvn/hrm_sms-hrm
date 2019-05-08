@@ -11,6 +11,7 @@
                 <th>@Labels.To</th>
                 <th>@Labels.CreatedBy</th>
                 <th>@Labels.CreatedDate</th>
+                <th>@Labels.Remark</th>
                 @if (ViewBag.IsHost)
                 {
                     <th>@Labels.Action</th>
@@ -33,6 +34,16 @@
                         <td>@postnatal.ToDate.ToString("dd MMM yyyy")</td>
                         <td>@postnatal.Creator</td>
                         <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
+                        @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
+                    {
+                            <td class="tooltip" title="@postnatal.Remark">
+                                <span class="icon remark" alt="remark" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
                         @if (ViewBag.IsHost)
                         {
                             <td>

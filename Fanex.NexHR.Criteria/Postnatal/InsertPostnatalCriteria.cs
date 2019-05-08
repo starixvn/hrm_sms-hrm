@@ -13,6 +13,8 @@
 
         public int CreatedBy { get; set; }
 
+        public string Remark { get; set; }
+
         public override string GetSettingKey()
         {
             return "Postnatal_Insert";

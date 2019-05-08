@@ -20,5 +20,7 @@
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime ToDate { get; set; }
+
+        public string Remark { get; set; }
     }
 }

@@ -15,6 +15,13 @@ var postnatal = (function ($) {
             $(domElement.Table).html(data);
             initEditEvent();
             initDeleteEvent();
+            initToolTip();
+        });
+    }
+
+    function initToolTip() {
+        $('.tooltip').tipsy({
+            gravity: $.fn.tipsy.autoNS
         });
     }
 

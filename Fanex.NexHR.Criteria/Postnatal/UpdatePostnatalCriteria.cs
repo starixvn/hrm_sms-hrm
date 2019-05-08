@@ -15,6 +15,8 @@
 
         public int ModifiedBy { get; set; }
 
+        public string Remark { get; set; }
+
         public override string GetSettingKey()
         {
             return "Postnatal_Update";
