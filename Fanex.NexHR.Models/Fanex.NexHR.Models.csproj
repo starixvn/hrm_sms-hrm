@@ -104,6 +104,7 @@
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
+    <Compile Include="EmployeePaternity.cs" />
     <Compile Include="EmployeePostnatal.cs" />
     <Compile Include="EmployeeRole.cs" />
     <Compile Include="EmployeeSuggestion.cs" />

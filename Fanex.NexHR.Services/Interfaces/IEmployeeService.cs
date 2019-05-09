@@ -72,5 +72,7 @@
         IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria);
 
         IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria);
+
+        IList<Employee> GetEmployeeByGender(string query, int gender);
     }
 }

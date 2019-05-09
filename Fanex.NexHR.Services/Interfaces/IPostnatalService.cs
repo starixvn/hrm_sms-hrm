@@ -16,7 +16,5 @@
         CommandResult Delete(int id);
 
         EmployeePostnatal GetById(int id);
-
-        IList<Employee> GetEmployeeToAddPostnatal(GetMemberToAddPostnatalCriteria criteria);
     }
 }

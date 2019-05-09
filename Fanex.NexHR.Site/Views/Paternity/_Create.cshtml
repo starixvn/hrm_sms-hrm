@@ -1,0 +1,64 @@
+﻿@using Fanex.NexHR.Core.Constants;
+@model Fanex.NexHR.ViewModels.Paternity.PaternityViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.EmployeeManagement</a>
+    <a class="step">Patenrity</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<div>
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "create-form" }))
+    {
+        @Html.ValidationSummary()
+
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Employee)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Employee)
+                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.ValidationMessageFor(model => model.EmployeeId)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ChildBornDate)
+            </div>
+            <div class="input">
+                @Html.DatePickerFor(model => model.ChildBornDate)
+                <span class="time hide">
+                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
+                </span>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.LeaveDay)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.LeaveDay)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Remark)
+            </div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.Remark)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    }
+</div>

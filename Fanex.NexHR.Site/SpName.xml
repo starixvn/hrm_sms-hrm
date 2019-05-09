@@ -242,6 +242,7 @@
     <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_LogEmployeeLogin" SpName="Employee_LogEmployeeLogin" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Group">
     <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
@@ -489,6 +490,12 @@
     <Setting Key="Postnatal_Insert" SpName="Postnatal_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Postnatal_Update" SpName="Postnatal_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Postnatal_Delete" SpName="Postnatal_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Postnatal_GetMember" SpName="Postnatal_GetMember" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
+  <Function Name="Paternity">
+    <Setting Key="Paternity_Get" SpName="Paternity_Get" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Paternity_GetById" SpName="Paternity_GetById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Paternity_Insert" SpName="Paternity_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Paternity_Update" SpName="Paternity_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Paternity_Delete" SpName="Paternity_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

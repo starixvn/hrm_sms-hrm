@@ -605,6 +605,12 @@
             return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetMemberByGender(string keyword, int gender)
+        {
+            var employees = employeeService.GetEmployeeByGender(keyword, gender);
+            return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetNewEmployeeCode()
         {
             var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();

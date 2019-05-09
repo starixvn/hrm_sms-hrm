@@ -213,9 +213,10 @@ var postnatal = (function ($) {
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'postnatal/GetMemberToAddPostnatal',
+                    url: _global.root + 'employee/GetMemberByGender',
                     data: {
-                        keyword: request.term
+                        keyword: request.term,
+                        gender: 0 //female
                     },
                     success: function (data) {
                         response($.map(data, function (item) {

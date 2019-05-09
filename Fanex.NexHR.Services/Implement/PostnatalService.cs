@@ -57,16 +57,5 @@
         {
             return baseService.ExecuteNonQuery(criteria);
         }
-
-        public IList<Employee> GetEmployeeToAddPostnatal(GetMemberToAddPostnatalCriteria criteria)
-        {
-            IList<Employee> employees = null;
-            if (criteria.IsValid())
-            {
-                employees = baseService.GetData<Employee>(criteria).ToList();
-            }
-
-            return employees ?? new List<Employee>();
-        }
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="Overtime\OvertimeDetailReportViewModel.cs" />
     <Compile Include="Overtime\YearlyOvertimeReportViewModel.cs" />
     <Compile Include="PagerOptionModel.cs" />
+    <Compile Include="Paternity\PaternityViewModel.cs" />
     <Compile Include="Postnatal\PostnatalViewModel.cs" />
     <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />

@@ -1,14 +1,12 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using Core.Constants;
     using Core.Enums;
     using Core.Models;
     using Criteria.Postnatal;
-    using Models;
     using Services.Interfaces;
     using ViewModels.Postnatal;
     using Web.Providers;
@@ -123,25 +121,8 @@
         public ActionResult Delete(int id)
         {
             var result = postnatalService.Delete(id);
-            if (result.IsSuccessful)
-            {
-                return RedirectToAction("Index");
-            }
 
             return Json(result);
-        }
-
-        public JsonResult GetMemberToAddPostnatal(string keyword)
-        {
-            var criteria = new GetMemberToAddPostnatalCriteria
-            {
-                SupervisorId = CurrentUser.Id,
-                Query = keyword
-            };
-
-            IList<Employee> employees = postnatalService.GetEmployeeToAddPostnatal(criteria);
-
-            return Json(employees, JsonRequestBehavior.AllowGet);
         }
     }
 }

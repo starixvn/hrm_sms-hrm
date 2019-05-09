@@ -51,6 +51,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IScheduleArrangeService, ScheduleArrangeService>();
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
             container.RegisterType<IPostnatalService, PostnatalService>();
+            container.RegisterType<IPaternityService, PaternityService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

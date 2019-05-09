@@ -260,6 +260,7 @@
     <Content Include="Scripts\Views\Employee\employee.index.js" />
     <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
+    <Content Include="Scripts\Views\Paternity\paternity.js" />
     <Content Include="Scripts\Views\Postnatal\postnatal.js" />
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
@@ -1243,6 +1244,10 @@
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="wwwroot\dist\vendors\react-manifest.json" />
     <Content Include="ExcelTemplates\DriverPickup.xlsx" />
+    <Content Include="Views\Paternity\_Create.cshtml" />
+    <Content Include="Views\Paternity\_Edit.cshtml" />
+    <Content Include="Views\Paternity\_ListPaternity.cshtml" />
+    <Content Include="Views\Paternity\Index.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

@@ -300,5 +300,16 @@
 
             return 1;
         }
+
+        public IList<Employee> GetEmployeeByGender(string query, int gender)
+        {
+            var criteria = new GetMemberByGenderCriteria
+            {
+                Query = query,
+                Gender = gender
+            };
+
+            return baseService.GetData<Employee>(criteria).ToList();
+        }
     }
 }
