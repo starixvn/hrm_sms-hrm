@@ -7,13 +7,29 @@
 @import '../../components/validation';
 @import '../../components/buttons';
 
+form {
+    .button {
+        width: 100px;
+    }
+}
+
 .dialog-form {
     .form-horizontal {
+        .label-form {
+            width: 8rem;
+        }
+
         .form-group--m {
             width: 400px;
+
+            .input-form {
+                width: calc(100% - 8rem);
+            }
         }
 
         .calendar-form {
+            width: calc(100% - 8rem) !important;
+
             .form-control {
                 width: 300px !important;
             }

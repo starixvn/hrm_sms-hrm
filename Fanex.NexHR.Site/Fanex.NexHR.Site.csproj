@@ -260,8 +260,6 @@
     <Content Include="Scripts\Views\Employee\employee.index.js" />
     <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
-    <Content Include="Scripts\Views\Paternity\paternity.js" />
-    <Content Include="Scripts\Views\Postnatal\postnatal.js" />
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
@@ -858,6 +856,7 @@
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
+    <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
@@ -1330,6 +1329,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

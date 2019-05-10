@@ -13,7 +13,7 @@
 
         [Required(ErrorMessage = "From Date is required.")]
         [DataType(DataType.Date)]
-        [Display(Name = "Child's Born Date")]
+        [Display(Name = "Child's Born")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime ChildBornDate { get; set; }
 

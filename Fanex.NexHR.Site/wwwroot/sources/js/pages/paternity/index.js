@@ -4,8 +4,7 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 
-import { floatingHeader, showMessage, fadeOutMessage, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
-import '../../date';
+import { showMessage, fadeOutMessage, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
 
 var paternity = (function ($) {
     var domElement = {
@@ -50,31 +49,26 @@ var paternity = (function ($) {
         });
     }
 
-    function validateAddPaternity() {
+    function validateAddPaternity(form) {
         var isValid = true,
             errorMsg = '',
-            empId = $(domElement.CreateDialog).find('#EmployeeId').val(),
-            fromDate = $(domElement.CreateDialog).find('#FromDate').val(),
-            toDate = $(domElement.CreateDialog).find('#ToDate').val()
-
+            empId = $(form).find('#EmployeeId').val(),
+            bornDate = $(form).find('#ChildBornDate').val(),
+            leaveDay = $(form).find('#LeaveDay').val();
         if (empId && parseInt(empId, 10) <= 0) {
             errorMsg += '<li>The Employee field is required.</li>';
         }
 
-        if (fromDate === null || fromDate === '') {
-            errorMsg += '<li>From date field is required.</li>';
+        if (bornDate === null || bornDate === '') {
+            errorMsg += "<li>To Child's born date field is required.</li>";
         }
 
-        if (toDate === null || toDate === '') {
-            errorMsg += '<li>To date field is required.</li>';
-        }
-
-        if (fromDate > toDate) {
-            errorMsg += '<li>From date must be less than to date.</li>';
+        if (parseInt(leaveDay <= 0)) {
+            errorMsg += '<li>Leave day must be more than zero.</li>';
         }
 
         if (errorMsg.length > 0) {
-            showErrorMsg($(domElement.CreateDialog), errorMsg);
+            showErrorMsg($(form), errorMsg);
             isValid = false;
         }
 
@@ -92,15 +86,18 @@ var paternity = (function ($) {
     }
 
     function initDatePicker($dialog) {
-        if ($('.datepicker').length > 0) {
-            // get minDate, maxDate, disabledDates
-            var mindate = $('.datepicker').attr('mindate');
-            var maxdate = $('.datepicker').attr('maxdate');
+        if ($dialog.find('.datepicker').length > 0) {
+            var today = new Date();
+            var mindate = new Date(2010, 1, 1);
+            var maxdate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
             var disabledDates = $('.datepicker').attr('disabledDate');
 
             if (disabledDates.length > 0) {
                 $('.datepicker').datepicker({
                     dateFormat: "dd M, yy",
+                    minDate: mindate,
+                    maxDate: maxdate,
                     beforeShowDay: checkBadDates,
                     changeMonth: true,
                     changeYear: true
@@ -109,6 +106,8 @@ var paternity = (function ($) {
             else {
                 $('.datepicker').datepicker({
                     dateFormat: "dd M, yy",
+                    minDate: mindate,
+                    maxDate: maxdate,
                     changeMonth: true,
                     changeYear: true
                 });
@@ -140,25 +139,16 @@ var paternity = (function ($) {
                                 type: 'POST',
                                 url: _global.root + 'Paternity/Create',
                                 data: $(domElement.CreateForm).serialize(),
-                                beforeSend: function () {
-                                    showMessage('Processing');
-                                    blockUI();
-                                },
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.CreateDialog).dialog('close');
-                                        alert('Create employee paternity successfully!');
-                                        query();
+                                        alert('Create employee paternity successfully!', query);
                                     } else {
                                         showErrorMsg($(domElement.CreateDialog), '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     alert(textStatus + ': ' + errorThrown);
-                                },
-                                complete: function () {
-                                    fadeOutMessage();
-                                    unblockUI();
                                 }
                             });
                         }
@@ -171,11 +161,6 @@ var paternity = (function ($) {
                     }
                 }
             ],
-            close: function () {
-                if ($('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked')) {
-                    query();
-                }
-            },
             show: {
                 effect: 'fade',
                 duration: 300
@@ -222,25 +207,17 @@ var paternity = (function ($) {
                                 type: 'POST',
                                 url: _global.root + 'Paternity/Update/' + PaternityId,
                                 data: $(domElement.EditForm).serialize(),
-                                beforeSend: function () {
-                                    showMessage('Processing');
-                                    blockUI();
-                                },
+
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.EditDialog).dialog('close');
-                                        alert('Update employee paternity successfully!');
-                                        query();
+                                        alert('Update employee paternity successfully!', query);
                                     } else {
                                         showErrorMsg($(domElement.EditDialog), '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     alert(textStatus + ': ' + errorThrown);
-                                },
-                                complete: function () {
-                                    fadeOutMessage();
-                                    unblockUI();
                                 }
                             });
                         }
@@ -253,11 +230,6 @@ var paternity = (function ($) {
                     }
                 }
             ],
-            close: function () {
-                if ($(domElement.EditForm).find('#IsSuccessful').prop('checked')) {
-                    query();
-                }
-            },
             show: {
                 effect: 'fade',
                 duration: 300
@@ -336,8 +308,11 @@ var paternity = (function ($) {
                     type: 'POST',
                     url: _global.root + 'Paternity/delete/' + PaternityId,
                     success: function (result) {
-                        alert('Remove employee Paternity successfully!');
-                        query();
+                        if (result.IsSuccessful) {
+                            alert('Remove employee Paternity successfully!', query);
+                        } else {
+                            alert(result.message);
+                        }
                     }
                 });
             });

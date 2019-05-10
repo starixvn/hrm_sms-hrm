@@ -51,12 +51,12 @@ var postnatal = (function ($) {
         });
     }
 
-    function validateAddPostnatal() {
+    function validateAddPostnatal(form) {
         var isValid = true,
             errorMsg = '',
-            empId = $(domElement.CreateDialog).find('#EmployeeId').val(),
-            fromDate = $(domElement.CreateDialog).find('#FromDate').val(),
-            toDate = $(domElement.CreateDialog).find('#ToDate').val();
+            empId = $(form).find('#EmployeeId').val(),
+            fromDate = $(form).find('#FromDate').val(),
+            toDate = $(form).find('#ToDate').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
             errorMsg += '<li>The Employee field is required.</li>';
@@ -70,12 +70,8 @@ var postnatal = (function ($) {
             errorMsg += '<li>To date field is required.</li>';
         }
 
-        if (fromDate > toDate) {
-            errorMsg += '<li>From date must be less than to date.</li>';
-        }
-
         if (errorMsg.length > 0) {
-            showErrorMsg($(domElement.CreateDialog), errorMsg);
+            showErrorMsg($(form), errorMsg);
             isValid = false;
         }
 
@@ -93,7 +89,7 @@ var postnatal = (function ($) {
     }
 
     function initDatePicker($dialog) {
-        if ($('.datepicker').length > 0) {
+        if ($dialog.find('.datepicker').length > 0) {
             var disabledDates = $('.datepicker').attr('disabledDate');
 
             if (disabledDates.length > 0) {
@@ -133,30 +129,21 @@ var postnatal = (function ($) {
                     text: 'Submit',
                     click: function (e) {
                         removeMsg($(domElement.CreateDialog));
-                        if (validateAddPostnatal()) {
+                        if (validateAddPostnatal(domElement.CreateDialog)) {
                             $.ajax({
                                 type: 'POST',
                                 url: _global.root + 'postnatal/Create',
                                 data: $(domElement.CreateForm).serialize(),
-                                beforeSend: function () {
-                                    showMessage('Processing');
-                                    blockUI();
-                                },
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.CreateDialog).dialog('close');
-                                        alert('Create employee postnatal successfully!');
-                                        getPostnatal();
+                                        alert('Create employee postnatal successfully!', getPostnatal);
                                     } else {
                                         showErrorMsg($(domElement.CreateDialog), '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     alert(textStatus + ': ' + errorThrown);
-                                },
-                                complete: function () {
-                                    fadeOutMessage();
-                                    unblockUI();
                                 }
                             });
                         }
@@ -169,11 +156,6 @@ var postnatal = (function ($) {
                     }
                 }
             ],
-            close: function () {
-                if ($('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked')) {
-                    getPostnatal();
-                }
-            },
             show: {
                 effect: 'fade',
                 duration: 300
@@ -215,31 +197,22 @@ var postnatal = (function ($) {
                     text: 'Submit',
                     click: function () {
                         removeMsg($(domElement.EditDialog));
-                        if (validateAddPostnatal()) {
+                        if (validateAddPostnatal(domElement.EditDialog)) {
                             $.ajax({
                                 type: 'POST',
                                 url: _global.root + 'postnatal/Update/' + postnatalId,
                                 data: $(domElement.EditForm).serialize(),
-                                beforeSend: function () {
-                                    showMessage('Processing');
-                                    blockUI();
-                                },
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.EditDialog).dialog('close');
-                                        alert('Update employee postnatal successfully!');
-                                        getPostnatal();
+                                        alert('Update employee postnatal successfully!', getPostnatal);
                                     } else {
                                         showErrorMsg($(domElement.EditDialog), '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     alert(textStatus + ': ' + errorThrown);
-                                },
-                                complete: function () {
-                                    fadeOutMessage();
-                                    unblockUI();
-                                },
+                                }
                             });
                         }
                     }
@@ -251,11 +224,6 @@ var postnatal = (function ($) {
                     }
                 }
             ],
-            close: function () {
-                if ($(domElement.EditForm).find('#IsSuccessful').prop('checked')) {
-                    getPostnatal();
-                }
-            },
             show: {
                 effect: 'fade',
                 duration: 300
@@ -335,11 +303,10 @@ var postnatal = (function ($) {
                     url: _global.root + 'postnatal/delete/' + postnatalId,
                     success: function (result) {
                         if (result.IsSuccessful) {
-                            alert('Remove employee postnatal successfully!');
+                            alert('Remove employee postnatal successfully!', getPostnatal);
                         } else {
                             alert(result.message);
                         }
-                        getPostnatal();
                     }
                 });
             });

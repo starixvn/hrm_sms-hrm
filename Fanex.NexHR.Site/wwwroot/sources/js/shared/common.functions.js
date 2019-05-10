@@ -50,7 +50,7 @@ function confirm(message, callback, options) {
     $confirm.dialog($.extend({}, defaults, options));
 }
 
-function alert(message) {
+function alert(message, callback) {
     const defaults = {
         title: 'SMSHRM',
         modal: true,
@@ -58,6 +58,7 @@ function alert(message) {
         buttons: {
             OK: function () {
                 $(this).dialog('close');
+                if (callback) callback();
                 return false;
             }
         },
