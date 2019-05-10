@@ -110,7 +110,7 @@
             }
             else
             {
-                result.Message = ModelState.Values.FirstOrDefault().Errors.FirstOrDefault().ErrorMessage;
+                result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
             }
 
             return Json(result);

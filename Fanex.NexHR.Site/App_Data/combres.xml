@@ -356,18 +356,6 @@
       <resource path="~/scripts/views/Request/leave.byemployee.js" />
     </resourceSet>
 
-    <resourceSet name="postnataljs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Postnatal/postnatal.js" />
-    </resourceSet>
-
-    <resourceSet name="paternityjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Paternity/paternity.js" />
-    </resourceSet>
-
     <resourceSet name="managercheckinoutjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/checkinout.bymanager.js" />

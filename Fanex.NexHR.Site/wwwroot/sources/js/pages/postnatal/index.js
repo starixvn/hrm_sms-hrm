@@ -1,36 +1,62 @@
-﻿'use strict';
-var paternity = (function ($) {
+﻿import $ from 'jquery/dist/jquery';
+import 'bootstrap/dist/js/bootstrap';
+import 'jquery-ui-bundle/jquery-ui';
+import 'tipsy/src/javascripts/jquery.tipsy';
+import 'jquery-contextmenu/dist/jquery.contextMenu';
+
+import { floatingHeader, showMessage, fadeOutMessage, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import '../../date';
+
+var postnatal = (function ($) {
     var domElement = {
-        AddButton: '#add-paternity',
-        Table: '#list-paternity',
-        CreateDialog: '#dialogAddPaternity',
-        EditDialog: '#dialogEditPaternity',
+        AddButton: '#add-postnatal',
+        Table: '#list-postnatal',
+        CreateDialog: '#dialogAddPostnatal',
+        EditDialog: '#dialogEditPostnatal',
         CreateForm: '#create-form',
         EditForm: '#edit-form'
     };
 
-    function query() {
-        var url = _global.root + "paternity/ListPaternity?year=" + $("#Year").val();
-        $.get(url, function (data) {
-            $(domElement.Table).html(data);
-            initEditEvent();
-            initDeleteEvent();
-            initToolTip();
+    function getPostnatal() {
+        var url = _global.root + "postnatal/ListPostnatal?year=" + $("#Year").val();
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'html',
+            beforeSend: function () {
+                showMessage('Processing');
+                blockUI();
+            },
+            success: function (data) {
+                $(domElement.Table).html(data);
+                floatingHeader();
+                initEditEvent();
+                initDeleteEvent();
+                initToolTip();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            },
+            complete: function () {
+                fadeOutMessage();
+                unblockUI();
+            }
         });
     }
 
     function initToolTip() {
-        $('.tooltip').tipsy({
-            gravity: $.fn.tipsy.autoNS
+        $('.tooltip-tipsy').tipsy({
+            html: true,
+            gravity: 'e'
         });
     }
 
-    function validateAddPaternity() {
+    function validateAddPostnatal() {
         var isValid = true,
-        errorMsg = '',
-        empId = $(domElement.CreateDialog).find('#EmployeeId').val(),
-        fromDate = $(domElement.CreateDialog).find('#FromDate').val(),
-        toDate = $(domElement.CreateDialog).find('#ToDate').val()
+            errorMsg = '',
+            empId = $(domElement.CreateDialog).find('#EmployeeId').val(),
+            fromDate = $(domElement.CreateDialog).find('#FromDate').val(),
+            toDate = $(domElement.CreateDialog).find('#ToDate').val();
 
         if (empId && parseInt(empId, 10) <= 0) {
             errorMsg += '<li>The Employee field is required.</li>';
@@ -59,53 +85,78 @@ var paternity = (function ($) {
     function initAddEvent() {
         $(domElement.AddButton).on("click", function (e) {
             e.preventDefault();
-            $.get(_global.root + "Paternity/create", function (data) {
+            $.get(_global.root + "postnatal/create", function (data) {
                 $(domElement.CreateDialog).html(data);
-                initEventAddPaternityModal();
+                initEventAddPostnatalModal();
             });
         });
     }
 
     function initDatePicker($dialog) {
-        var mindate = $dialog.find('.datepicker').attr('mindate');
+        if ($('.datepicker').length > 0) {
+            var disabledDates = $('.datepicker').attr('disabledDate');
 
-        $dialog.find('.datepicker').datepicker({
-            dateFormat: 'dd M, yy',
-            showOn: 'button',
-            buttonImageOnly: true,
-            changeMonth: true,
-            changeYear: true,
-            buttonImage: _global.root + 'images/calendar.png'
-        });
+            if (disabledDates.length > 0) {
+                $('.datepicker').datepicker({
+                    dateFormat: "dd M, yy",
+                    beforeShowDay: checkBadDates,
+                    changeMonth: true,
+                    changeYear: true
+                });
+            }
+            else {
+                $('.datepicker').datepicker({
+                    dateFormat: "dd M, yy",
+                    changeMonth: true,
+                    changeYear: true
+                });
+            }
 
-        if (mindate !== 'null') {
-            mindate = mindate.split('/');
-            $dialog.find('.datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+            $('.datepicker').attr('readonly', 'readonly');
+            $('.datepicker').keydown(function (e) {
+                var tab = 9, enter = 13;
+                if (e.keyCode === tab || e.keyCode === enter) {
+                    return true;
+                }
+
+                return false;
+            });
         }
     }
 
-    function initAddPaternityDialog() {
+    function initAddPostnatalDialog() {
         $(domElement.CreateDialog).dialog({
             modal: true,
-            title: 'Add Employee Paternity',
+            title: 'Add Employee Postnatal',
             buttons: [
                 {
                     text: 'Submit',
-                    click: function () {
+                    click: function (e) {
                         removeMsg($(domElement.CreateDialog));
-                        if (validateAddPaternity()) {
+                        if (validateAddPostnatal()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'Paternity/Create',
+                                url: _global.root + 'postnatal/Create',
                                 data: $(domElement.CreateForm).serialize(),
+                                beforeSend: function () {
+                                    showMessage('Processing');
+                                    blockUI();
+                                },
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.CreateDialog).dialog('close');
-                                        alert('Create employee paternity successfully!');
-                                        query();
+                                        alert('Create employee postnatal successfully!');
+                                        getPostnatal();
                                     } else {
                                         showErrorMsg($(domElement.CreateDialog), '<li>' + result.Message + '</li>');
                                     }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(textStatus + ': ' + errorThrown);
+                                },
+                                complete: function () {
+                                    fadeOutMessage();
+                                    unblockUI();
                                 }
                             });
                         }
@@ -120,7 +171,7 @@ var paternity = (function ($) {
             ],
             close: function () {
                 if ($('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked')) {
-                    query();
+                    getPostnatal();
                 }
             },
             show: {
@@ -133,7 +184,7 @@ var paternity = (function ($) {
             },
             minWidth: 460,
             dialogClass: 'modal-shadow'
-        })
+        });
     }
 
     function removeMsg($dialog) {
@@ -146,38 +197,49 @@ var paternity = (function ($) {
             .show().addClass('validation-summary-errors').find('ul:first').append(msg);
     }
 
-    function initEditModel(PaternityId) {
-        $.get(_global.root + "Paternity/edit/" + PaternityId, function (data) {
+    function initEditModel(postnatalId) {
+        $.get(_global.root + "postnatal/edit/" + postnatalId, function (data) {
             $(domElement.EditDialog).html(data);
-            initEventEditPaternity(PaternityId);
+            initEventEditPostnatal(postnatalId);
             initDatePicker($(domElement.EditDialog));
             initAutoComplete($(domElement.EditDialog));
         });
     }
 
-    function initEventEditPaternity(PaternityId) {
+    function initEventEditPostnatal(postnatalId) {
         $(domElement.EditDialog).dialog({
             modal: true,
-            title: 'Edit Employee Paternity',
+            title: 'Edit Employee Postnatal',
             buttons: [
                 {
                     text: 'Submit',
                     click: function () {
                         removeMsg($(domElement.EditDialog));
-                        if (validateAddPaternity()) {
+                        if (validateAddPostnatal()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'Paternity/Update/' + PaternityId,
+                                url: _global.root + 'postnatal/Update/' + postnatalId,
                                 data: $(domElement.EditForm).serialize(),
+                                beforeSend: function () {
+                                    showMessage('Processing');
+                                    blockUI();
+                                },
                                 success: function (result) {
                                     if (result.IsSuccessful) {
                                         $(domElement.EditDialog).dialog('close');
-                                        alert('Update employee paternity successfully!');
-                                        query();
+                                        alert('Update employee postnatal successfully!');
+                                        getPostnatal();
                                     } else {
                                         showErrorMsg($(domElement.EditDialog), '<li>' + result.Message + '</li>');
                                     }
-                                }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    alert(textStatus + ': ' + errorThrown);
+                                },
+                                complete: function () {
+                                    fadeOutMessage();
+                                    unblockUI();
+                                },
                             });
                         }
                     }
@@ -191,7 +253,7 @@ var paternity = (function ($) {
             ],
             close: function () {
                 if ($(domElement.EditForm).find('#IsSuccessful').prop('checked')) {
-                    query();
+                    getPostnatal();
                 }
             },
             show: {
@@ -204,19 +266,19 @@ var paternity = (function ($) {
             },
             minWidth: 460,
             dialogClass: 'modal-shadow'
-        })
+        });
     }
 
     function initAutoComplete($dialog) {
         var $selectorName = $dialog.find('#Employee'),
-                    $selectorId = $dialog.find('#EmployeeId');
+            $selectorId = $dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'Employee/GetMemberByGender',
+                    url: _global.root + 'employee/GetMemberByGender',
                     data: {
                         keyword: request.term,
-                        gender: 1 //male
+                        gender: 0 //female
                     },
                     success: function (data) {
                         response($.map(data, function (item) {
@@ -254,48 +316,60 @@ var paternity = (function ($) {
     }
 
     function initEditEvent() {
-        var $selector = $('.edit-paternity');
+        var $selector = $('.edit-postnatal');
         $selector.on('click', function (event) {
             event.preventDefault();
-            var PaternityId = $(this).data("id");
-            initEditModel(PaternityId);
+            var postnatalId = $(this).data("id");
+            initEditModel(postnatalId);
         });
     }
 
     function initDeleteEvent() {
-        var $selector = $('.delete-paternity');
+        var $selector = $('.delete-postnatal');
         $selector.on('click', function (event) {
             event.preventDefault();
-            var PaternityId = $(this).data('id');
+            var postnatalId = $(this).data('id');
             confirm("Are you sure you want to remove this?", function () {
                 $.ajax({
                     type: 'POST',
-                    url: _global.root + 'Paternity/delete/' + PaternityId,
+                    url: _global.root + 'postnatal/delete/' + postnatalId,
                     success: function (result) {
-                        alert('Remove employee Paternity successfully!');
-                        query();
+                        if (result.IsSuccessful) {
+                            alert('Remove employee postnatal successfully!');
+                        } else {
+                            alert(result.message);
+                        }
+                        getPostnatal();
                     }
                 });
             });
         });
     }
 
-    function initEventAddPaternityModal() {
-        initAddPaternityDialog($(domElement.CreateDialog));
+    function initEventAddPostnatalModal() {
+        initAddPostnatalDialog($(domElement.CreateDialog));
         initAutoComplete($(domElement.CreateDialog));
         initDatePicker($(domElement.CreateDialog));
     }
 
-    function initPaternity() {
-        query();
+    function initSubmitFiler() {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            getPostnatal();
+        });
+    }
+
+    function initPostnatal() {
+        initSubmitFiler();
+        getPostnatal();
         initAddEvent();
     }
 
     return {
-        initPaternity
-    }
+        initPostnatal
+    };
 })(jQuery);
 
 $(document).ready(function () {
-    paternity.initPaternity();
+    postnatal.initPostnatal();
 })

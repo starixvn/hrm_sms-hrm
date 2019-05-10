@@ -1,44 +1,40 @@
-﻿@section css{
-    @Url.CombresLink("myrequestcss")
+﻿@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Employee Postnatal";
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/employee.postnatal.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("postnataljs")
+    <script src="~/wwwroot/dist/js/employee.postnatal.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a class="step" href="/employee/usermanagement">@Labels.EmployeeManagement</a>
     <a class="step">@ViewBag.Title</a>
 }
-@{
-    ViewBag.Title = "Employee Postnatal";
-}
+<div class="filter">
 
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            <label for="Year">@Labels.Year</label>
-        </div>
-        <div class="grid_2">
-            @Html.YearPicker("Year", 2010, DateTime.Now.Year)
-        </div>
-        <div class="grid_2">
-            <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
-        </div>
-        @if (ViewBag.IsHost)
-        {
-            <div class="grid_5">
-                <div class="button-icon" id="add-postnatal">
-                    <span class="icon plus"></span><a>Add Postnatal</a>
+    @using (Html.BeginGetForm())
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--s">
+                <div class="label-form">
+                    @Html.Label(@Labels.Year, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.YearPicker("Year", 2010, DateTime.Now.Year)
                 </div>
             </div>
-        }
-    </div>
-
-    <div class="clear">
-    </div>
-}
-
+            <div class="form-group form-group--l">
+                <div class="button-group">
+                    <input class="button" type="submit" id="submit" value="@Labels.Submit" />
+                    <input class="button" id="add-postnatal" value="Add" type="button" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
 <div id="list-postnatal">
 </div>
 <div id="dialogAddPostnatal"></div>

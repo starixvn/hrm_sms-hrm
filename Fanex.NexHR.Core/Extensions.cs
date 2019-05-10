@@ -139,7 +139,7 @@
                 });
             }
 
-            var dropDownList = htmlHelper.DropDownList(name, list, new { @class = "yearpicker" });
+            var dropDownList = htmlHelper.DropDownList(name, list, new { @class = "yearpicker form-control" });
             return MvcHtmlString.Create(dropDownList.ToString());
         }
 

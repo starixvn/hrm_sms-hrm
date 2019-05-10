@@ -1,0 +1,26 @@
+﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
+@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
+
+@import '../../vendors/multiselect';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/validation';
+@import '../../components/buttons';
+
+.dialog-form {
+    .form-horizontal {
+        .form-group--m {
+            width: 400px;
+        }
+
+        .calendar-form {
+            .form-control {
+                width: 300px !important;
+            }
+        }
+
+        textarea.form-control {
+            height: 100px;
+        }
+    }
+}

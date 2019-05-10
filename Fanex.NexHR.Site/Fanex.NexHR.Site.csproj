@@ -858,6 +858,7 @@
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
+    <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
@@ -1248,12 +1249,14 @@
     <Content Include="Views\Paternity\_Edit.cshtml" />
     <Content Include="Views\Paternity\_ListPaternity.cshtml" />
     <Content Include="Views\Paternity\Index.cshtml" />
+    <Content Include="wwwroot\sources\styles\components\_validation.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\function\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\error.scss" />
+    <Content Include="wwwroot\sources\styles\pages\postnatal\postnatal.scss" />
     <None Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />

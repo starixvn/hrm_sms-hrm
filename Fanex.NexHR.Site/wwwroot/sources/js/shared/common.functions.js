@@ -50,6 +50,28 @@ function confirm(message, callback, options) {
     $confirm.dialog($.extend({}, defaults, options));
 }
 
+function alert(message) {
+    const defaults = {
+        title: 'SMSHRM',
+        modal: true,
+        resizable: false,
+        buttons: {
+            OK: function () {
+                $(this).dialog('close');
+                return false;
+            }
+        },
+        minHeight: 50,
+        dialogClass: 'modal-shadow'
+    };
+
+    let $alert = $.getOrCreateDialog('alert');
+    // set message
+    $('p', $alert).html(message);
+    // init dialog
+    $alert.dialog($.extend({}, defaults));
+}
+
 function updateTableHeaders() {
     if ($('.persist-area').val() !== undefined) {
         let widthspace = $('.persist-area').width() + 18;
@@ -161,4 +183,4 @@ function axiosError(error) {
     }
 }
 
-export { showMessage, fadeOutMessage, confirm, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions, axiosError };
+export { showMessage, fadeOutMessage, confirm, alert, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions, axiosError };

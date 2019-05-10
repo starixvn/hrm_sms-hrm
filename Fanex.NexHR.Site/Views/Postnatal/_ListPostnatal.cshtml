@@ -35,9 +35,9 @@
                         <td>@postnatal.Creator</td>
                         <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
                         @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
-                    {
-                            <td class="tooltip" title="@postnatal.Remark">
-                                <span class="icon remark" alt="remark" />
+                        {
+                            <td>
+                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
                             </td>
                         }
                         else
@@ -60,7 +60,7 @@
             }
             else
             {
-                @RazorHelper.DisplayNoInformation(colspan: 8);
+                @RazorHelper.DisplayNoInformation(colspan: 9);
             }
         </tbody>
     </table>

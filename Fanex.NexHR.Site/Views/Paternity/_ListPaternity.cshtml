@@ -34,16 +34,18 @@
                         <td>@paternity.LeaveDay</td>
                         <td>@paternity.Creator</td>
                         <td>@paternity.CreatedDate.ToString("dd MMM yyyy")</td>
-                        @if (!string.IsNullOrWhiteSpace(paternity.Remark))
-                    {
-                            <td class="tooltip" title="@paternity.Remark">
-                                <span class="icon remark" alt="remark" />
-                            </td>
-                        }
-                        else
-                        {
-                            <td>-</td>
-                        }
+
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(paternity.Remark))
+                            {
+                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+
                         @if (ViewBag.IsHost)
                         {
                             <td>

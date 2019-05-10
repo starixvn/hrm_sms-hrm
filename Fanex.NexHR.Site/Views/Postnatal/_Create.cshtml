@@ -13,56 +13,54 @@
     <a class="step">@ViewBag.Title</a>
 }
 <div>
-    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "create-form" }))
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "create-form", @class = "dialog-form" }))
     {
         @Html.ValidationSummary()
 
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Employee)
-                @Html.HiddenFor(model => model.EmployeeId)
-                @Html.ValidationMessageFor(model => model.EmployeeId)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FromDate, Labels.FromDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.FromDate)
-                <span class="time hide">
-                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
-                </span>
-            </div>
-            <div class="clear">
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                    @Html.HiddenFor(model => model.EmployeeId)
+                </div>
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ToDate, Labels.ToDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.ToDate)
-                <span class="time hide">
-                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
-                </span>
-            </div>
-            <div class="clear">
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "", @readonly = "readonly" })
+                    <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
+                </div>
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Remark)
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = DateTime.Now.ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "", @readonly = "readonly" })
+                    <i class="icon-calendar glyphicon glyphicon-calendar trigger-todate"></i>
+                </div>
             </div>
-            <div class="input">
-                @Html.TextAreaFor(model => model.Remark)
-            </div>
-            <div class="clear">
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+                </div>
             </div>
         </div>
     }

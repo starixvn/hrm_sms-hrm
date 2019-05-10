@@ -15,6 +15,7 @@ module.exports = {
         [`${styleDistPath}/employee.edit`]: `${styleSourcePath}/pages/employee/employee.edit.scss`,
         [`${styleDistPath}/employee.shift.manager`]: `${styleSourcePath}/pages/employee/employee.shift.manager.scss`,
         [`${styleDistPath}/employee.request`]: `${styleSourcePath}/pages/request/employee.request.scss`,
+        [`${styleDistPath}/employee.postnatal`]: `${styleSourcePath}/pages/postnatal/postnatal.scss`,
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
 
@@ -22,6 +23,8 @@ module.exports = {
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
-        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`
+        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`,
+        [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
+        [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`
     }
 };
