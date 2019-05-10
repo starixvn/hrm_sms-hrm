@@ -64,7 +64,6 @@ input[type="text"] {
                 position: unset;
                 top: unset;
                 right: unset;
-            }
         }
     }
 }
@@ -479,6 +478,14 @@ input[type="text"] {
 
 .offday {
     background-color: #f8f89c !important;
+}
+
+.offdayreplacement {
+    background-color: #ffff00 !important;
+}
+
+.keepinviewday, .changeshift, .leaveday {
+    color: #ed4646 !important;
 }
 
 .offdayreplacement {

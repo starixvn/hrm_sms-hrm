@@ -75,7 +75,8 @@ export default class ShiftAutocomplete extends PureComponent {
     handleInputBlur = event => {
         const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
 
-        if (value.length > 0) {
+        if (value.length > 0
+            && (this.props.value === null || value !== this.props.value.toLowerCase().replace(/ /g, ''))) {
             const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === value);
             if (index >= 0) {
                 this.props.onChange(this.props.name, this.props.shiftOptions[index]);
