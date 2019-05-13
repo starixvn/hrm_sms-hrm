@@ -55,11 +55,11 @@
         <div class="grid_3">
             @{
                 var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"},
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
+                                    {
+                                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                        new SelectListItem() {Text = "Expat", Value = "0"},
+                                        new SelectListItem() {Text = "Local", Value = "1"},
+                                    };
             }
             @Html.DropDownList("category", category, new { @class = "category" })
         </div>
@@ -86,14 +86,15 @@
         <div class="grid_3">
             <input type="button" id="detailsExcel" value="Excel - Details Info" style="width: 115px" />
         </div>
-        <div class="clear"></div>
-        <div style="text-align: center">
-            <div class="grid_2">
-                <a href="/Postnatal/Index" class="button">Postnatal</a>
-            </div>
-            <div class="grid_2">
-                <a href="/Paternity/Index" class="button">Paternity</a>
-            </div>
+        <div class="grid_2">
+            <a href="/Postnatal/Index">
+                <input type="button" value="Postnatal" />
+            </a>
+        </div>
+        <div class="grid_2">
+            <a href="/Paternity/Index">
+                <input type="button" value="Paternity" />
+            </a>
         </div>
     </form>
 </div>
