@@ -1,21 +1,22 @@
 ﻿namespace Fanex.NexHR.Models
 {
     using System;
+    using System.Collections.Generic;
 
     public class Team : EntityBase<int>
     {
         public Team()
         {
             Department = new Department();
-            Leader = new Employee();
-            AssistantLeader = new Employee();
+            Leaders = new List<Employee>();
+            AssistantLeaders = new List<Employee>();
         }
 
         public Department Department { get; set; }
 
-        public Employee Leader { get; set; }
+        public IList<Employee> Leaders { get; set; }
 
-        public Employee AssistantLeader { get; set; }
+        public IList<Employee> AssistantLeaders { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 

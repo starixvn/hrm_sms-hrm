@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Team
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class InsertNewGroupCriteria : CriteriaBase
@@ -13,9 +12,9 @@
 
         public string MailGroup { get; set; }
 
-        public int LeaderId { get; set; }
+        public string LeaderIds { get; set; }
 
-        public int? AssistantLeaderId { get; set; }
+        public string AssistantLeaderIds { get; set; }
 
         public int CreatedBy { get; set; }
 
@@ -26,7 +25,9 @@
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
+            return !string.IsNullOrWhiteSpace(Code)
+                && !string.IsNullOrWhiteSpace(Name)
+                && !string.IsNullOrWhiteSpace(LeaderIds);
         }
     }
 }

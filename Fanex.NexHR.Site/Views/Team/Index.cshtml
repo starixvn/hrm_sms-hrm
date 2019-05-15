@@ -55,24 +55,47 @@
                 <td>@team.Code</td>
                 <td>@team.Name</td>
                 <td>@team.Department.Name</td>
-                @if (team.Leader != null)
+                @if (team.Leaders.Any())
                 {
-                    <td class="tooltip" title="@team.Leader.FullName">
-                        @team.Leader.NickName
+                    <td>
+                        @{
+                            var count = 0;
+                            foreach (var leader in team.Leaders)
+                            {
+                                <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                if (count < team.Leaders.Count - 1)
+                                {
+                                    <span>,</span>
+                                }
+                                count ++;
+                            }
+                        }
                     </td>
-                }
-                else
-                {
+                                    }
+                                    else
+                                    {
                     <td></td>
                 }
-                @if (team.AssistantLeader != null)
+                @if (team.AssistantLeaders.Any())
                 {
-                    <td class="tooltip" title="@team.AssistantLeader.FullName">
-                        @team.AssistantLeader.NickName
+                    <td>
+                        @{
+                            var count = 0;
+                            foreach (var leader in team.AssistantLeaders)
+                            {
+                                <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                if (count < team.AssistantLeaders.Count - 1)
+                                {
+                                    <span>,</span>
+                                }
+                                count++;
+                            }
+                        }
                     </td>
-                }
-                else
-                {
+                   
+                        }
+                        else
+                        {
                     <td></td>
                 }
                 <td class="align-left">@team.MailGroup</td>

@@ -3,104 +3,43 @@
 
 (function () {
     function initSearchLeader() {
-        $("#Leader").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: _global.root + 'employee/getemployees',
-                    data: {
-                        query: request.term,
-                        enable: true,
-                        isDelete: false,
-                        $top: 10
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                event.preventDefault();
-                $('#Leader').val(ui.item.label);
-                $('#LeaderId').val(ui.item.value);
-            },
-            focus: function (event, ui) {
-                event.preventDefault();
-                $('#Leader').val(ui.item.label);
-                $('#LeaderId').val(ui.item.value);
-            },
-            change: function (event, ui) {
-                event.preventDefault();
-                if (ui && ui.item) {
-                    $('#Leader').val(ui.item.label);
-                    $('#LeaderId').val(ui.item.value);
-                } else {
-                    if ($('#Leader').val() === '') {
-                        $('#LeaderId').val('');
-                    } else {
-                        $('#LeaderId').val('0');
-                    }
-                }
-            }
+        var leaderIds = $('#LeaderIds').val();
+        if (leaderIds) {
+            var arrValues = leaderIds.split(",");
+            $('#Leaders').val(arrValues);
+        }
+        $("#Leaders").chosen();
+
+        $("#Leaders").rules("add", {
+            required: true,
+            messages: { required: "The Leader field is required" }
+        });
+
+        $('#Leaders').on("change", function () {
+            var values = $(this).val();
+            var leaderIds = values ? values.join(',') : '';
+            $('#LeaderIds').val(leaderIds);
         });
     }
 
     function initSearchAssistantLeader() {
-        $("#AssistantLeader").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: _global.root + 'employee/getemployees',
-                    data: {
-                        query: request.term,
-                        enable: true,
-                        isDelete: false,
-                        $top: 10
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                event.preventDefault();
-                $('#AssistantLeader').val(ui.item.label);
-                $('#AssistantLeaderId').val(ui.item.value);
-            },
-            focus: function (event, ui) {
-                event.preventDefault();
-                $('#AssistantLeader').val(ui.item.label);
-                $('#AssistantLeaderId').val(ui.item.value);
-            },
-            change: function (event, ui) {
-                event.preventDefault();
-                if (ui && ui.item) {
-                    $('#AssistantLeader').val(ui.item.label);
-                    $('#AssistantLeaderId').val(ui.item.value);
-                } else {
-                    if ($('#AssistantLeader').val() === '') {
-                        $('#AssistantLeaderId').val('');
-                    } else {
-                        $('#AssistantLeaderId').val('0');
-                    }
-                }
-            }
+        var assistIds = $('#AssistantLeaderIds').val();
+        if (assistIds) {
+            var arrValues = assistIds.split(",");
+            console.log(arrValues);
+            $('#AssistantLeaders').val(arrValues);
+        }
+        $("#AssistantLeaders").chosen();
+        $('#AssistantLeaders').on("change", function () {
+            var values = $(this).val();
+            var assistLeaderIds = values ? values.join(',') : '';
+            $('#AssistantLeaderIds').val(assistLeaderIds);
         });
     }
 
     $(document).ready(function () {
         //Validation Leader field
-        $("#Leader").rules("add", {
+        $("#LeaderIds").rules("add", {
             required: true,
             messages: { required: "The Leader field is required" }
         });

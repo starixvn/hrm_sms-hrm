@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.ViewModels.EmployeeGroup
 {
-    using Fanex.NexHR.Core.Attributes;
-    using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Attributes;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
 
     public class TeamViewModel
     {
@@ -28,16 +28,16 @@
         [Email]
         public string MailGroup { get; set; }
 
-        [Required]
         [Display(Name = "Leader", ResourceType = typeof(Labels))]
-        public string Leader { get; set; }
+        public IList<Employee> Leaders { get; set; }
 
-        public int LeaderId { get; set; }
+        [Required]
+        public string LeaderIds { get; set; }
 
         [Display(Name = "Assistant Leader")]
-        public string AssistantLeader { get; set; }
+        public IList<Employee> AssistantLeaders { get; set; } = new List<Employee>();
 
-        public int? AssistantLeaderId { get; set; }
+        public string AssistantLeaderIds { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
@@ -50,5 +50,7 @@
         public int ModifiedBy { get; set; }
 
         public IList<Department> Departments { get; set; }
+
+        public IList<Employee> Employees { get; set; }
     }
 }

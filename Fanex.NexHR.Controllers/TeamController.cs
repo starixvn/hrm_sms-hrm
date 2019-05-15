@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -9,6 +10,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Department;
+    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -24,15 +26,18 @@
         private readonly ITeamService teamService;
         private readonly IDepartmentService departmentService;
         private readonly IBaseService baseService;
+        private readonly IEmployeeService employeeService;
 
         public TeamController(
             ITeamService teamService,
             IDepartmentService departmentService,
-            IBaseService baseService)
+            IBaseService baseService,
+            IEmployeeService employeeService)
         {
             this.teamService = teamService;
             this.departmentService = departmentService;
             this.baseService = baseService;
+            this.employeeService = employeeService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
@@ -51,7 +56,8 @@
         {
             var model = new TeamViewModel
             {
-                Departments = GetAllDepartment(isActive: true)
+                Departments = GetAllDepartment(isActive: true),
+                Employees = GetAllEmployees()
             };
             return View(model);
         }
@@ -61,7 +67,7 @@
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
-
+            model.Employees = GetAllEmployees();
             if (ModelState.IsValid)
             {
                 var criteria = new InsertNewGroupCriteria
@@ -69,9 +75,9 @@
                     Code = model.TeamCode,
                     Name = model.TeamName,
                     DepartmentId = model.DepartmentId,
+                    LeaderIds = model.LeaderIds,
+                    AssistantLeaderIds = model.AssistantLeaderIds,
                     MailGroup = model.MailGroup,
-                    LeaderId = model.LeaderId,
-                    AssistantLeaderId = model.AssistantLeaderId,
                     CreatedBy = CurrentUser.Id
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -106,15 +112,17 @@
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
-                Leader = team.Leader != null ? team.Leader.DisplayName : string.Empty,
-                LeaderId = team.Leader != null ? team.Leader.Id : 0,
-                AssistantLeader = team.AssistantLeader != null ? team.AssistantLeader.DisplayName : string.Empty,
-                AssistantLeaderId = team.AssistantLeader != null ? team.AssistantLeader.Id : 0,
+                Leaders = team.Leaders,
+                LeaderIds = string.Join(",", team.Leaders.Select(e => e.Id)),
+                AssistantLeaders = team.AssistantLeaders,
+                AssistantLeaderIds = string.Join(",", team.AssistantLeaders.Select(e => e.Id)),
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = this.CurrentUser.Id,
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
-                Departments = GetAllDepartment(isActive: true)
+                Departments = GetAllDepartment(isActive: true),
+                Employees = GetAllEmployees()
             };
+
             return View(model);
         }
 
@@ -125,7 +133,7 @@
             if (model != null)
             {
                 model.Departments = GetAllDepartment(isActive: true);
-
+                model.Employees = GetAllEmployees();
                 if (ModelState.IsValid)
                 {
                     var criteria = new UpdateGroupCriteria
@@ -135,8 +143,8 @@
                         Name = model.TeamName,
                         DepartmentId = model.DepartmentId,
                         MailGroup = model.MailGroup,
-                        LeaderId = model.LeaderId,
-                        AssistantLeaderId = model.AssistantLeaderId,
+                        LeaderIds = model.LeaderIds,
+                        AssistantLeaderIds = model.AssistantLeaderIds,
                         ModifiedBy = CurrentUser.Id
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -314,6 +322,23 @@
             IList<Department> departments = departmentService.GetDepartment(criteria);
 
             return departments;
+        }
+
+        private IList<Employee> GetAllEmployees()
+        {
+            var getEmployeeCriteria = new GetAllEmployeeCriteria
+            {
+                Query = null,
+                GroupIds = null,
+                EnableUser = true,
+                IsDeleteUser = null,
+                TitleId = null,
+                IsLocalUser = null
+            };
+
+            IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria).ToList();
+
+            return employees;
         }
 
         private IList<Team> GetAllTeam()

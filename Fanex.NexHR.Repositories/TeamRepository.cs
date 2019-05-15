@@ -12,18 +12,30 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var team = db.QueryEntity<Team, Department, Employee, Employee, Team>(
-                        (t, de, ld, asld) =>
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    var team = multi.Read<Team, Department, Team>(
+                             (t, de) =>
+                             {
+                                 t.Department = de;
+                                 return t;
+                             },
+                             "DepartmentId")
+                             .FirstOrDefault();
+
+                    var employees = multi.Read<TeamLeader, Employee, TeamLeader>(
+                        (t, e) =>
                         {
-                            t.Department = de;
-                            t.Leader = ld;
-                            t.AssistantLeader = asld;
+                            t.Employee = e;
                             return t;
                         },
-                        splitOn: "DepartmentId, leaderID, AssistantLeaderId",
-                        parameters: criteria.GetSpParams());
+                        "EmployeeId").ToList();
 
-                return team;
+                    team.Leaders = employees.Where(e => e.IsLeader).Select(l => l.Employee).ToList();
+                    team.AssistantLeaders = employees.Where(e => !e.IsLeader).Select(l => l.Employee).ToList();
+
+                    return team;
+                }
             }
         }
 
@@ -31,18 +43,32 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var teams = db.Query<Team, Department, Employee, Employee, Team>(
-                        (t, de, ld, asld) =>
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    var teams = multi.Read<Team, Department, Team>(
+                            (t, de) =>
+                            {
+                                t.Department = de;
+                                return t;
+                            },
+                            "DepartmentId"
+                            ).ToList();
+
+                    var employees = multi.Read<TeamLeader, Employee, TeamLeader>(
+                        (t, e) =>
                         {
-                            t.Department = de;
-                            t.Leader = ld;
-                            t.AssistantLeader = asld;
+                            t.Employee = e;
                             return t;
                         },
-                        splitOn: "DepartmentId, leaderID, AssistantLeaderId",
-                        parameterValues: criteria.GetSpParams()).ToList();
+                        "EmployeeId").ToList();
 
-                return teams;
+                    foreach (var team in teams)
+                    {
+                        team.Leaders = employees.Where(e => e.Id == team.Id && e.IsLeader).Select(l => l.Employee).ToList();
+                        team.AssistantLeaders = employees.Where(e => e.Id == team.Id && !e.IsLeader).Select(l => l.Employee).ToList();
+                    }
+                    return teams;
+                }
             }
         }
     }

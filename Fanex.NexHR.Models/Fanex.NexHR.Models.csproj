@@ -142,6 +142,7 @@
     <Compile Include="Supervisor\TeamSupervisorModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorReportModel.cs" />
     <Compile Include="SystemRole.cs" />
+    <Compile Include="TeamLeader.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="TotalWorkingHourMonthly.cs" />
     <Compile Include="ExtensionNoModel.cs" />

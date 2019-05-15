@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Team
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class UpdateGroupCriteria : CriteriaBase
@@ -15,9 +14,9 @@
 
         public string MailGroup { get; set; }
 
-        public int LeaderId { get; set; }
+        public string LeaderIds { get; set; }
 
-        public int? AssistantLeaderId { get; set; }
+        public string AssistantLeaderIds { get; set; }
 
         public int ModifiedBy { get; set; }
 
@@ -28,7 +27,10 @@
 
         public override bool IsValid()
         {
-            return GroupId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
+            return GroupId > 0 &&
+                !string.IsNullOrWhiteSpace(Code) &&
+                !string.IsNullOrWhiteSpace(Name) &&
+                !string.IsNullOrWhiteSpace(LeaderIds);
         }
     }
 }

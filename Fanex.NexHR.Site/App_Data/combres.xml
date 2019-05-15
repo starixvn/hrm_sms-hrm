@@ -29,6 +29,7 @@
       <resource path="~/Scripts/MultiSelect/prettify.css" />
       <resource path="~/Libs/FontAwesome/css/font-awesome.min.css" />
       <resource path="~/Libs/SimplePagination/simplePagination.css" />
+      <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="sitejs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
@@ -436,6 +437,7 @@
     <resourceSet name="teameditjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/team/team.edit.js" />
+      <resource path="~/scripts/chosen/chosen.jquery.js" />
     </resourceSet>
 
     <resourceSet name="teamsupervisorcss" type="css">

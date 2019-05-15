@@ -6,6 +6,7 @@
 }
 @section css{
     @Url.CombresLink("sitecss")
+
 }
 @section js{
     @Url.CombresLink("teameditjs")
@@ -59,23 +60,31 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Leader, "Head")
+                @Html.LabelFor(model => model.Leaders, "Head")
             </div>
             <div class="input">
-                @Html.TextBox("Leader", Model.Leader, new { placeholder = Messages.SearchEmployeeWatermark })
-                @Html.ValidationMessage("Leader")
-                @Html.HiddenFor(model => model.Leader)
-                @Html.HiddenFor(model => model.LeaderId)
+                @Html.HiddenFor(model => model.LeaderIds)
+                <select id="Leaders" data-placeholder="Choose leaders..." multiple class="chosen-select">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
+                    }
+                </select>
+                @Html.ValidationMessage("LeaderIds")
             </div>
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.AssistantLeader, "Assist Head")
+                @Html.LabelFor(model => model.AssistantLeaders, "Assist Head")
             </div>
             <div class="input">
-                @Html.TextBox("AssistantLeader", Model.AssistantLeader, new { placeholder = Messages.SearchEmployeeWatermark })
-                @Html.HiddenFor(model => model.AssistantLeader)
-                @Html.HiddenFor(model => model.AssistantLeaderId)
+                @Html.HiddenFor(model => model.AssistantLeaderIds)
+                <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="chosen-select">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id" selected="@Model.AssistantLeaders.Any(l => l.Id == employee.Id)">@(employee.NickName + " (" + employee.FullName + ")")</option>
+                    }
+                </select>
             </div>
         </div>
         <div class="formrow">
