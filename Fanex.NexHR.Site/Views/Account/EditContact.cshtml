@@ -1,0 +1,90 @@
+﻿@using Fanex.NexHR.ViewModels.Employee
+@model EmployeeContactViewModel
+
+@{
+    ViewBag.Title = "Edit Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string message = ViewBag.Message;
+}
+@section css{
+    @Url.CombresLink("sitecss")
+}
+@section Breadcrumb {
+    <a class="step" href="/Account/Index">Personal</a><span class="step">@ViewBag.Title</span>
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("EditContact", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary();
+
+    if (!string.IsNullOrWhiteSpace(message))
+    {
+        <div class="success">@message</div>
+    }
+    <div class="container_24 bunhat" style="min-width:400px">
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.ChineseName)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.ChineseName)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Email)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Phone)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Phone)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Skype)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Skype)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Yahoo)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Yahoo)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Address)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Address)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.CurrentAddress)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.CurrentAddress)
+            </div>
+        </div>
+
+        <div class="formrow">
+            <div class="label">&nbsp;</div>
+            <div class="input">
+                <input type="submit" value="Submit" />
+            </div>
+        </div>
+    </div>
+}

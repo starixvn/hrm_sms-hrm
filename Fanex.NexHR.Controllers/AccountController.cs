@@ -90,6 +90,54 @@
             return Json(result);
         }
 
+        public ActionResult EditContact()
+        {
+            var criteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
+            Employee employee = employeeService.GetEmployeeById(criteria);
+            var model = new EmployeeContactViewModel
+            {
+                ChineseName = employee.ChineseName,
+                Email = employee.Email,
+                Phone = employee.Phone,
+                Skype = employee.Skype,
+                Yahoo = employee.Yahoo,
+                Address = employee.Address,
+                CurrentAddress = employee.CurrentAddress
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditContact(EmployeeContactViewModel model)
+        {
+            if (model != null && ModelState.IsValid)
+            {
+                var criteria = new SelfUpdateContactCriteria
+                {
+                    EmpId = CurrentUser.Id,
+                    ChineseName = model.ChineseName,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Skype = model.Skype,
+                    Yahoo = model.Yahoo,
+                    Address = model.Address,
+                    CurrentAddress = model.CurrentAddress
+                };
+
+                var result = baseService.ExecuteNonQuery(criteria);
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Message = result.Message;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+            }
+            return View(model);
+        }
+
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult ResetPassword(int id)

@@ -1249,6 +1249,7 @@
     <Content Include="Views\Paternity\_ListPaternity.cshtml" />
     <Content Include="Views\Paternity\Index.cshtml" />
     <Content Include="wwwroot\sources\styles\components\_validation.scss" />
+    <Content Include="Views\Account\EditContact.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

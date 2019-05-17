@@ -82,6 +82,7 @@
     <Compile Include="Discipline\DisciplineSummaryViewModel.cs" />
     <Compile Include="Discipline\AddOtherDisciplineViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />
+    <Compile Include="Employee\EmployeeContactViewModel.cs" />
     <Compile Include="Employee\UserManagementViewModel.cs" />
     <Compile Include="Function\TreeFunctionViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
