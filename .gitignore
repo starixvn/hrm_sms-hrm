@@ -33,6 +33,7 @@ $tf*/
 /Fanex.NexHR.Controllers/obj
 /Fanex.NexHR.Controllers/bin
 /Fanex.NexHR.Site/Logs
+/Fanex.NexHR.Site/file/uploads/profile
 *.Publish.xml
 packages/
 *.orig
