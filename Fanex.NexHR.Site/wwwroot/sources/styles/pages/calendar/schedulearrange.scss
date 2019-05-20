@@ -428,7 +428,6 @@ input[type="text"] {
                     &:disabled {
                         background: transparent;
                     }
-
                     &::placeholder, &.same-default-shift {
                         color: rgba(51, 51, 51, .4);
                     }
@@ -441,7 +440,6 @@ input[type="text"] {
                     &.offday, &.offdayreplacement, &.keepinviewday, &.changeshift, &.overtime, &.holiday {
                         color: inherit;
                         background-image: unset;
-                    }
                 }
             }
         }
@@ -478,10 +476,6 @@ input[type="text"] {
 
 .offday {
     background-color: #f8f89c !important;
-}
-
-.offdayreplacement {
-    background-color: #ffff00 !important;
 }
 
 .keepinviewday, .changeshift, .leaveday {

@@ -26,7 +26,8 @@
                 worksheet.DefaultRowHeight = DefaultRowHeight;
                 var columns = new List<string>
                 {
-                    "ID"
+                    "ID",
+                    "Nickname"
                 };
                 for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
                 {
@@ -51,6 +52,11 @@
                     int col = 1;
 
                     worksheet.Cells[row, col].Value = weeklySchedule.Code;
+                    worksheet.Cells[row, col].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[row, col].Style.Font.Size = DefaultFontSize;
+                    col++;
+
+                    worksheet.Cells[row, col].Value = weeklySchedule.Nickname;
                     worksheet.Cells[row, col].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells[row, col].Style.Font.Size = DefaultFontSize;
                     col++;
