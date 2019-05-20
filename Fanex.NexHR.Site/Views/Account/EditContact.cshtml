@@ -13,7 +13,8 @@
     <a class="step" href="/Account/Index">Personal</a><span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("EditContact", "Account", FormMethod.Post))
+@using (Html.BeginForm("EditContact", "Account", FormMethod.Post, new
+{ enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken();
     @Html.ValidationSummary();
@@ -79,6 +80,32 @@
                 @Html.EditorFor(model => model.CurrentAddress)
             </div>
         </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Attachments)
+            </div>
+            <div class="input">
+                <input type="file" name="Attachments" id="Attachments" multiple />
+            </div>
+        </div>
+        @if (Model.FileUploaded.Any())
+        {
+            <div class="formrow">
+                <div class="label">
+                    @Html.LabelFor(model => model.FileUploaded)
+                </div>
+                <div class="input">
+                    <ul>
+                        @foreach (var file in Model.FileUploaded)
+                        {
+                            <li>
+                                <a href="@file.FileLocation">@file.FileName</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
 
         <div class="formrow">
             <div class="label">&nbsp;</div>

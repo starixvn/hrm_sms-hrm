@@ -97,6 +97,7 @@
     <Compile Include="Discipline\InsertWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
+    <Compile Include="Employee\GetUploadedFileCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
     <Compile Include="Employee\SelfUpdateContactCriteria.cs" />
     <Compile Include="Function\AssignFunctionToRoleCriteria.cs" />

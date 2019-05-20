@@ -1,7 +1,11 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Web;
+    using System.Web.Hosting;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -22,6 +26,8 @@
     {
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
+
+        private const int FileMaxSize = 5 * 1024 * 1024; //5MB
 
         public AccountController(
             IEmployeeService employeeService,
@@ -102,7 +108,8 @@
                 Skype = employee.Skype,
                 Yahoo = employee.Yahoo,
                 Address = employee.Address,
-                CurrentAddress = employee.CurrentAddress
+                CurrentAddress = employee.CurrentAddress,
+                FileUploaded = GetEmployeeUploadFile()
             };
             return View(model);
         }
@@ -111,8 +118,17 @@
         [ValidateAntiForgeryToken]
         public ActionResult EditContact(EmployeeContactViewModel model)
         {
+            if (model != null && model.Attachments != null &&
+                model.Attachments.Any(file => file != null &&
+                !IsValidFile(file)))
+            {
+                ModelState.AddModelError(nameof(model.Attachments), "The file(s) uploaded invalid.");
+            }
+
             if (model != null && ModelState.IsValid)
             {
+                string filePaths = HandleImageUpload(model.Attachments);
+
                 var criteria = new SelfUpdateContactCriteria
                 {
                     EmpId = CurrentUser.Id,
@@ -122,10 +138,12 @@
                     Skype = model.Skype,
                     Yahoo = model.Yahoo,
                     Address = model.Address,
-                    CurrentAddress = model.CurrentAddress
+                    CurrentAddress = model.CurrentAddress,
+                    FilePath = filePaths
                 };
 
                 var result = baseService.ExecuteNonQuery(criteria);
+
                 if (result.IsSuccessful)
                 {
                     ViewBag.Message = result.Message;
@@ -134,8 +152,64 @@
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
+                model.FileUploaded = GetEmployeeUploadFile();
             }
             return View(model);
+        }
+
+        private static bool IsValidFile(HttpPostedFileBase file)
+        {
+            bool isValid = true;
+            string extension = file.ContentType;
+            string[] allowedExtentions = new[] { "application/pdf" };
+            if (file.ContentLength < 0 || file.ContentLength > FileMaxSize)
+            {
+                isValid = false;
+            }
+
+            if (!extension.StartsWith("image/") && !allowedExtentions.Contains(extension))
+            {
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        private string HandleImageUpload(IEnumerable<HttpPostedFileBase> files)
+        {
+            var filePaths = new StringBuilder();
+            if (files != null && files.Any(f => f != null))
+            {
+                int index = 0;
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    if (!Directory.Exists(HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + CurrentUser.Code))
+                    {
+                        Directory.CreateDirectory(HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + CurrentUser.Code);
+                    }
+                    var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), CurrentUser.Code, fileName);
+                    file.SaveAs(path);
+                    if (index != 0)
+                    {
+                        filePaths.Append("|");
+                    }
+                    filePaths.Append(fileName);
+                    index++;
+                }
+            }
+
+            return filePaths.ToString();
+        }
+
+        private IEnumerable<EmployeeFileUpload> GetEmployeeUploadFile()
+        {
+            var criteria = new GetUploadedFileCriteria
+            {
+                EmpId = CurrentUser.Id
+            };
+
+            return baseService.GetData<EmployeeFileUpload>(criteria);
         }
 
         [HttpPost]

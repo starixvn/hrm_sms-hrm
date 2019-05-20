@@ -20,6 +20,8 @@
 
         public string CurrentAddress { get; set; }
 
+        public string FilePath { get; set; }
+
         public override string GetSettingKey()
         {
             return "Employee_SelfUpdateInfo";

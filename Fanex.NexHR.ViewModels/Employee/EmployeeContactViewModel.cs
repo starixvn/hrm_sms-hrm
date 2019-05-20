@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.ViewModels.Employee
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web;
     using Fanex.NexHR.Resources;
 
     public class EmployeeContactViewModel
@@ -28,5 +30,10 @@
 
         [StringLength(250, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]
         public string CurrentAddress { get; set; }
+
+        public IEnumerable<HttpPostedFileBase> Attachments { get; set; }
+
+        [Display(Name = "Uploaded file(s)")]
+        public IEnumerable<EmployeeFileUpload> FileUploaded { get; set; }
     }
 }
