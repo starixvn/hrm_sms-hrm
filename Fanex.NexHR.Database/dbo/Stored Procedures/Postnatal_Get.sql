@@ -28,6 +28,7 @@ BEGIN
 		,creator.NickName as Creator
 		,modifier.EmpId
 		,modifier.NickName as Modifier
+		,ep.Remark
 	FROM dbo.EmployeePostnatal AS ep WITH (NOLOCK)
 	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON ep.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId

@@ -6,6 +6,7 @@ CREATE PROCEDURE [dbo].[Postnatal_Insert]
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@CreatedBy INT
+	,@Remark NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -46,6 +47,7 @@ BEGIN
 		,ToDate
 		,CreatedBy
 		,CreatedDate
+		,Remark
 		)
 	VALUES (
 		@EmpId
@@ -53,6 +55,7 @@ BEGIN
 		,@ToDate
 		,@CreatedBy
 		,GETDATE()
+		,@Remark
 		)
 
 	IF @@ERROR <> 0

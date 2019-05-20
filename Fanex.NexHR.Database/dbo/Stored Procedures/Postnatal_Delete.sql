@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[Postnatal_Delete]
 AS
 /*
 Created: 20190429@Oliver.Dang
-Task: Insert Postnatal.
+Task: Delete Postnatal.
 DB: NexEPA
 Original: 
 
@@ -32,7 +32,7 @@ BEGIN
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'The postnatal of this employee do not exists'
+			,@ErrMsg = N'The postnatal of this employee does not exists'
 
 		RETURN
 	END

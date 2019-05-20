@@ -6,6 +6,7 @@ CREATE PROCEDURE [dbo].[Postnatal_Update] @PostnatalId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@ModifiedBy INT
+	,@Remark NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -43,6 +44,20 @@ BEGIN
 		RETURN
 	END
 
+	IF (
+			NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePostnatal WITH (NOLOCK)
+				WHERE PostnatalId = @PostnatalId
+				)
+			)
+	BEGIN
+		SELECT @ErrCode = 1
+			,@ErrMsg = N'The postnatal of this employee does not exists'
+
+		RETURN
+	END
+
 	UPDATE dbo.EmployeePostnatal
 	WITH (
 			ROWLOCK
@@ -54,6 +69,7 @@ BEGIN
 		,ToDate = @ToDate
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = GETDATE()
+		,Remark = @Remark
 	WHERE PostnatalId = @PostnatalId
 
 	IF @@ERROR <> 0

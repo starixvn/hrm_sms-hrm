@@ -21,6 +21,7 @@ BEGIN
 		  ,ep.FromDate
 		  ,ep.ToDate
 		  ,ep.EmpId
+		  ,ep.Remark
 		  ,e.NickName
 		  ,e.FullName
 	FROM dbo.EmployeePostnatal As ep WITH (NOLOCK)
