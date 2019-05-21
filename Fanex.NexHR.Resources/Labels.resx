@@ -1638,4 +1638,7 @@
   <data name="CreatedBy" xml:space="preserve">
     <value>Created By</value>
   </data>
+  <data name="LetsTalk" xml:space="preserve">
+    <value>Let's Talk</value>
+  </data>
 </root>

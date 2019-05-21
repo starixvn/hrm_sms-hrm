@@ -106,7 +106,7 @@
                 Email = employee.Email,
                 Phone = employee.Phone,
                 Skype = employee.Skype,
-                Yahoo = employee.Yahoo,
+                LetsTalk = employee.LetsTalk,
                 Address = employee.Address,
                 CurrentAddress = employee.CurrentAddress,
                 FileUploaded = GetEmployeeUploadFile()
@@ -136,7 +136,7 @@
                     Email = model.Email,
                     Phone = model.Phone,
                     Skype = model.Skype,
-                    Yahoo = model.Yahoo,
+                    Yahoo = model.LetsTalk,
                     Address = model.Address,
                     CurrentAddress = model.CurrentAddress,
                     FilePath = filePaths
@@ -331,7 +331,7 @@
                 Phone = employeeModel.Phone,
                 Gender = employeeModel.Gender,
                 Skype = employeeModel.Skype,
-                Yahoo = employeeModel.Yahoo,
+                Yahoo = employeeModel.LetsTalk,
                 ChineseName = employeeModel.ChineseName,
                 Marriage = employeeModel.Marriage,
                 PermanentAddress = employeeModel.Address,

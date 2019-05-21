@@ -373,16 +373,16 @@
                 </li>
                 <li class="list-group-item">
                     <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Yahoo:
+                        @Labels.LetsTalk:
                     </div>
                     <div class="pcontent">
                         @if (Model.AllowEditPersonalInformation)
                         {
-                            @Html.TextBoxFor(model => model.Yahoo)
+                            @Html.TextBoxFor(model => model.LetsTalk)
                         }
                         else
                         {
-                            <a href="ymsgr:SendIM?@(Model.Yahoo)">@Model.Yahoo</a>
+                            <a>@Model.LetsTalk</a>
                         }
                     </div>
                     <div class="clear"></div>
@@ -488,66 +488,7 @@
                 </li>
             </ul>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                ATTENDANCE REPORT
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div class="label2">@Labels.AnualLeaveBalance:</div>
-                    <div class="pcontent">
-                        @Model.AnnualLeaveBalance day(s)
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label2">@Labels.KeepInViewBalance:</div>
-                    <div class="pcontent">
-                        @Model.KeepInViewBalance day(s)
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                @if (Model.IsDefaultSchedule)
-                {
-                    <li class="list-group-item">
-                        <div class="label2">
-                            Default Working Calendar:
-                        </div>
-                        <div class="pcontent">
-                            <div class="schedule">
-                                <div class="day">@Labels.Mon</div>
-                                <div class="shift">@ViewBag.Mon</div>
-                            </div>
-                            <div class="schedule">
-                                <div class="day">Tue</div>
-                                <div class="shift">@ViewBag.Tue</div>
-                            </div>
-                            <div class="schedule">
-                                <div class="day">@Labels.Wed</div>
-                                <div class="shift">@ViewBag.Wed</div>
-                            </div>
-                            <div class="schedule">
-                                <div class="day">@Labels.Thu</div>
-                                <div class="shift">@ViewBag.Thu</div>
-                            </div>
-                            <div class="schedule">
-                                <div class="day">@Labels.Fri</div>
-                                <div class="shift">@ViewBag.Fri</div>
-                            </div>
-                            <div class="scheduleoff">
-                                <div class="day">@Labels.Sat</div>
-                                <div class="shift">@ViewBag.Sat</div>
-                            </div>
-                            <div class="scheduleoff">
-                                <div class="day">@Labels.Sun</div>
-                                <div class="shift">@ViewBag.Sun</div>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
-                    </li>
-                }
-            </ul>
-        </div>
+        
         @if (Model.AllowEditPersonalInformation)
         {
             <div class="submitWrapper">

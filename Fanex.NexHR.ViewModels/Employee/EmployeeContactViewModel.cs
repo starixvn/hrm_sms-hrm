@@ -23,7 +23,8 @@
         public string Skype { get; set; }
 
         [StringLength(100, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]
-        public string Yahoo { get; set; }
+        [Display(Name = "Let's Talk")]
+        public string LetsTalk { get; set; }
 
         [StringLength(250, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]
         public string Address { get; set; }
