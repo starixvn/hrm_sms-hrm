@@ -465,6 +465,16 @@
     <Build Include="dbo\Stored Procedures\Postnatal_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Get.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_GetUploadedFile.sql" />
+    <Build Include="dbo\Tables\EmployeeUploadFile.sql" />
+    <Build Include="dbo\Tables\EmployeePaternity.sql" />
+    <Build Include="dbo\Stored Procedures\Paternity_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Paternity_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Paternity_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Paternity_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Paternity_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_SelfUpdateInfo.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_GetMemberByGender.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
