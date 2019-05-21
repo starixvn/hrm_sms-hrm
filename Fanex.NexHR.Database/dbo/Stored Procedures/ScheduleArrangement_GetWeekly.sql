@@ -182,7 +182,8 @@ BEGIN
 			AND @toDate
 
 	SELECT e.EmpId AS EmployeeId
-		,e.NickName AS Nickname
+		,e.Code
+		,e.NickName
 		,e.FullName
 		,ISNULL(esum.OffDaysbyWeek, 0) AS OffDaysbyWeek
 		,arrange.Remark
@@ -196,6 +197,10 @@ BEGIN
 		,shift.ShiftId AS DefaultShiftId
 		,shift.Code
 		,shift.[Name]
+		,shift.BeginCheckInTime AS CheckIn
+		,shift.BeginCheckOutTime AS CheckOut
+		,shift.IsInAfterDay
+		,shift.IsOutAfterDay
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN #tblEmployeeSupervisor AS es ON e.EmpId = es.OwnerId
 		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON e.EmpId = esum.EmpId
@@ -218,6 +223,7 @@ BEGIN
 		WHERE tbl.EmployeeId = e.EmpId
 		) defaultshift
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON defaultshift.ShiftId = shift.ShiftId
+		AND ISNULL(shift.IsDisabled, 0) = 0
 		OUTER APPLY (
 		SELECT DISTINCT ec.EmpId
 			,ec.ModifiedBy
@@ -273,7 +279,7 @@ BEGIN
 						AND esum.IsExpatUseHoliday = 1
 						)
 					)
-				AND hld.HolidayName IS NOT NULL THEN 1
+				AND hld.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			) AS IsHoliday
 		,ec.IsOffDay
@@ -287,12 +293,22 @@ BEGIN
 			ELSE ec.LeaveDay END
 			) AS LeaveDay
 		,ec.IsPublic
-		,ec.ShiftId
-		,s.Code
-		,s.[Name]
+		,(CASE 
+			WHEN offrep.EmployeeId IS NOT NULL THEN 1
+			ELSE 0 END
+			) AS IsOffDayReplacement
+		,shift.ShiftId
+		,shift.Code
+		,shift.[Name]
+		,shift.BeginCheckInTime AS CheckIn
+		,shift.BeginCheckOutTime AS CheckOut
+		,shift.IsInAfterDay
+		,shift.IsOutAfterDay
 		,lv1.LeaveTypeId
 		,lv1.Code
 		,lv1.[Name]
+		,spwkr.FromTime
+		,spwkr.ToTime
 		,lv2.LeaveTypeId AS LeaveTypeId2
 		,lv2.Code
 		,lv2.[Name]
@@ -317,7 +333,7 @@ BEGIN
 					AND hld.ToDate
 				)
 			)
-		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ec.ShiftId
+		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON shift.ShiftId = ec.ShiftId
 		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON ec.LeaveTypeId2 = lv2.LeaveTypeId
 		LEFT JOIN (
 		SELECT tmp.WorkDate
@@ -328,6 +344,8 @@ BEGIN
 				WHEN 1 THEN 0.5
 				ELSE 1 END
 				) AS TotalDays
+			,lrd.FromTime AS FromTime
+			,lrd.ToTime AS ToTime
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
 			INNER JOIN #Calendar AS tmp ON lrd.OnDate = tmp.WorkDate
@@ -342,6 +360,8 @@ BEGIN
 			,lr.EmpId
 			,@LeaveDay AS WorkType
 			,1 AS TotalDays
+			,NULL AS FromTime
+			,NULL AS ToTime
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.LeaveType <> @GeneralLeaveId
 			AND wkr.RequestId = lr.RequestId
@@ -360,6 +380,8 @@ BEGIN
 		) spwkr ON spwkr.WorkDate = tmp.WorkDate
 		AND spwkr.EmpId = e.EmpId
 		LEFT JOIN dbo.LeaveType AS lv1 WITH (NOLOCK) ON spwkr.LeaveType = lv1.LeaveTypeId
+		LEFT JOIN dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK) ON ec.EmpId = offrep.EmployeeId
+		AND ec.WorkDate = offrep.WorkDate
 	WHERE e.[Enabled] = 1
 		AND e.isDeleted = 0
 		AND (
@@ -375,29 +397,29 @@ BEGIN
 		,tmp.WorkDate
 
 	SELECT e.OwnerId AS EmployeeId
-		,ISNULL(monshift.ShiftID, -1) AS MonShiftId
-		,ISNULL(monshift.Code, 'Off') AS MonShiftCode
-		,ISNULL(tueshift.ShiftID, -1) AS TueShiftId
-		,ISNULL(tueshift.Code, 'Off') AS TueShiftCode
-		,ISNULL(wedshift.ShiftID, -1) AS WedShiftId
-		,ISNULL(wedshift.Code, 'Off') AS WedShiftCode
-		,ISNULL(thushift.ShiftID, -1) AS ThuShiftId
-		,ISNULL(thushift.Code, 'Off') AS ThuShiftCode
-		,ISNULL(frishift.ShiftID, -1) AS FriShiftId
-		,ISNULL(frishift.Code, 'Off') AS FriShiftCode
-		,ISNULL(satshift.ShiftID, -1) AS SatShiftId
-		,ISNULL(satshift.Code, 'Off') AS SatShiftCode
-		,ISNULL(sunshift.ShiftID, -1) AS SunShiftId
-		,ISNULL(sunshift.Code, 'Off') AS SunShiftCode
+		,ISNULL(monshift.ShiftID, - 1) AS MonShiftId
+		,ISNULL(tueshift.ShiftID, - 1) AS TueShiftId
+		,ISNULL(wedshift.ShiftID, - 1) AS WedShiftId
+		,ISNULL(thushift.ShiftID, - 1) AS ThuShiftId
+		,ISNULL(frishift.ShiftID, - 1) AS FriShiftId
+		,ISNULL(satshift.ShiftID, - 1) AS SatShiftId
+		,ISNULL(sunshift.ShiftID, - 1) AS SunShiftId
 	FROM #tblEmployeeSupervisor AS e
 		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpID = e.OwnerId
 		LEFT JOIN dbo.Shift AS monshift WITH (NOLOCK) ON eds.MonShift = monshift.ShiftID
+		AND ISNULL(monshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS tueshift WITH (NOLOCK) ON eds.TueShift = tueshift.ShiftID
+		AND ISNULL(tueshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS wedshift WITH (NOLOCK) ON eds.WedShift = wedshift.ShiftID
+		AND ISNULL(wedshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS thushift WITH (NOLOCK) ON eds.ThuShift = thushift.ShiftID
+		AND ISNULL(thushift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS frishift WITH (NOLOCK) ON eds.FriShift = frishift.ShiftID
+		AND ISNULL(frishift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS satshift WITH (NOLOCK) ON eds.SatShift = satshift.ShiftID
+		AND ISNULL(satshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS sunshift WITH (NOLOCK) ON eds.SunShift = sunshift.ShiftID
+		AND ISNULL(sunshift.IsDisabled, 0) = 0
 
 	DROP TABLE #tblGroupIds
 

@@ -1,5 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateWeekly] @ActorId INT
+	,@FromDate DATE
+	,@ToDate DATE
 	,@WeeklyScheduleXml VARCHAR(MAX) = ''
 	,@DefaultShiftXml VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
@@ -229,7 +231,7 @@ BEGIN
 		FROM dbo.ScheduleArrangementDefaultShift AS ds WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN #tblDefaultShift AS tblds ON ds.FromDate = tblds.FromDate
 			AND ds.EmployeeId = tblds.EmployeeId
-			AND ISNULL(ds.ShiftId, -1) <> ISNULL(tblds.ShiftId, -1)
+			AND ISNULL(ds.ShiftId, - 1) <> ISNULL(tblds.ShiftId, - 1)
 
 		DELETE tblds
 		FROM #tblDefaultShift AS tblds
@@ -254,6 +256,12 @@ BEGIN
 			,@ModifiedDate
 		FROM #tblDefaultShift
 		WHERE ShiftId IS NOT NULL
+
+		EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+			,@FromDate = @FromDate
+			,@ToDate = @ToDate
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END TRY
 
 	BEGIN CATCH
@@ -261,7 +269,7 @@ BEGIN
 			,@ErrMsg = 'Updated unsuccessfully!'
 
 		RETURN
-	END CATCH;
+	END CATCH
 
 	DROP TABLE #tblWeeklySchedule
 

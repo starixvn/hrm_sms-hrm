@@ -89,7 +89,6 @@
     <Build Include="dbo\Tables\WorkingTimeRequest.sql" />
     <Build Include="dbo\Tables\WorkingTimeRequestHistory.sql" />
     <Build Include="dbo\Tables\EmployeeDiscipline.sql" />
-    <Build Include="dbo\Tables\ShiftArrangementOrder.sql" />
     <Build Include="dbo\Tables\MessageEmployee.sql" />
     <Build Include="dbo\Tables\MessageGroup.sql" />
     <Build Include="dbo\Tables\GroupSupervisor.sql" />
@@ -108,7 +107,6 @@
     <Build Include="dbo\Tables\tmpEmployeeAttendace.sql" />
     <Build Include="dbo\Tables\EmployeeDefaultShift.sql" />
     <Build Include="dbo\Tables\EmployeeGroup.sql" />
-    <Build Include="dbo\Tables\EmployeeScheduleShiftMultiple.sql" />
     <Build Include="dbo\Tables\EmployeeSummary.sql" />
     <Build Include="dbo\Tables\Menu.sql" />
     <Build Include="dbo\Tables\EmployeeSupervisor.sql" />
@@ -475,6 +473,10 @@
     <Build Include="dbo\Stored Procedures\Paternity_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Employee_SelfUpdateInfo.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetMemberByGender.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateOffDayReplacement.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertDefaultShift.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertWeeklyDefaultShift.sql" />
+    <Build Include="dbo\Tables\ScheduleArrangementOffDayReplacement.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
