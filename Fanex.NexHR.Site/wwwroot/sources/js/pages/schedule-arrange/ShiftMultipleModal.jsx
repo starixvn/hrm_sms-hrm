@@ -22,33 +22,33 @@ export default class ShiftMultipleModal extends Component {
 
         this.state = {
             shift: null,
-            isOffday: false
+            isOffDay: false
         };
     }
 
     handleSubmit = event => {
         event.preventDefault();
 
-        const { shift, isOffday } = this.state;
+        const { shift, isOffDay } = this.state;
 
-        this.props.onSubmit(shift, isOffday);
+        this.props.onSubmit(shift, isOffDay);
     }
 
     handleChangeShift = (name, shift) => {
         this.setState({ shift });
     }
 
-    handleChangeOffday = event => {
-        this.setState({ isOffday: event.target.checked });
+    handleChangeOffDay = event => {
+        this.setState({ isOffDay: event.target.checked });
     }
 
     render() {
-        const { shift, isOffday } = this.state;
+        const { shift, isOffDay } = this.state;
 
         return (
             <Modal keyboard={false} backdrop="static"
                 show={this.props.show} onHide={this.props.onHide}
-                dialogClassName="shift-multiple-modal modal-dialog-centered"
+                dialogClassName="modal-shift-multiple modal-dialog-centered"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Shift Multiple</Modal.Title>
@@ -60,22 +60,20 @@ export default class ShiftMultipleModal extends Component {
                                 <label className="control-label">Shift</label>
                             </div>
                             <div className="input-form">
-                                <div className="shift-autocomplete-wrapper">
-                                    <ShiftAutocomplete
-                                        className="form-control"
-                                        value={shift !== null ? shift.code : ''}
-                                        shiftOptions={this.props.shiftOptions}
-                                        onChange={this.handleChangeShift}
-                                    />
-                                </div>
+                                <ShiftAutocomplete
+                                    className="form-control"
+                                    value={shift !== null ? shift.code : ''}
+                                    shiftOptions={this.props.shiftOptions}
+                                    onChange={this.handleChangeShift}
+                                />
                             </div>
                         </div>
                         <div className="form-group">
                             <div className="checkbox">
-                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-isOffday`}
-                                    checked={isOffday} onChange={this.handleChangeOffday}
+                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-isOffDay`}
+                                    checked={isOffDay} onChange={this.handleChangeOffDay}
                                 />
-                                <label htmlFor={`ckb-isOffday`}> Is Offday</label>
+                                <label htmlFor={`ckb-isOffDay`}> Is Off Day</label>
                             </div>
                         </div>
                     </Modal.Body>

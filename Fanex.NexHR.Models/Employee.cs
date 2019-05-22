@@ -218,7 +218,7 @@
 
         private string[] GetRoles2Array()
         {
-            return (Roles != null ? Roles.Select(i => i.RoleId.ToString()).ToArray() : null);
+            return Roles?.Select(i => i.RoleId.ToString()).ToArray();
         }
     }
 }

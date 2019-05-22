@@ -12,6 +12,7 @@ import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
+import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
 import Table from './table/table';
 
@@ -34,7 +35,15 @@ export default class App extends Component {
             employeeOptions: [],
             showShiftMultipleModal: false,
             showConfirmRefreshDataModal: false,
-            showRemarkPopover: false
+            showRemarkPopover: false,
+            editWeeklyDefaultShift: {
+                show: false,
+                groupId: 0,
+                employeeId: 0,
+                nickname: '',
+                data: null,
+                isUsedWeeklyDefaultShift: false
+            }
         };
 
         this.originalSchedules = [];
@@ -45,6 +54,7 @@ export default class App extends Component {
         this.isSARole = document.getElementById('IsSARole').checked;
         this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
             'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+        this.offDayShiftId = -1;
     }
 
     componentDidMount() {
@@ -296,7 +306,7 @@ export default class App extends Component {
         let member = { ...members[eindex] };
 
         if (shift !== null) {
-            const isOffDay = shift.id === -1;
+            const isOffDay = shift.id === this.offDayShiftId;
 
             if (isOffDay) {
                 if (!member[attrName].isHoliday) {
@@ -489,7 +499,7 @@ export default class App extends Component {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday) {
                         member[attrName] = {
                             ...member[attrName],
-                            isOffDay: shift !== null && shift.id === -1 ? true : isOffday,
+                            isOffDay: shift !== null && shift.id === this.offDayShiftId ? true : isOffday,
                             shift
                         };
                         isChanged = true;
@@ -608,6 +618,100 @@ export default class App extends Component {
 
     handleChangeShowRemarkPopover = show => {
         this.setState({ showRemarkPopover: show });
+    }
+
+    handleShowWeeklyDefaultShiftModal = (groupId, employeeId) => {
+        const schedules = this.state.schedules;
+        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+
+        this.setState({
+            editWeeklyDefaultShift: {
+                show: true,
+                groupId,
+                employeeId,
+                nickname: schedules[gindex].members[eindex].nickname,
+                data: schedules[gindex].members[eindex].weeklyDefaultShift,
+                isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
+            }
+        });
+    }
+
+    handleCloseWeeklyDefaultShiftModal = () => {
+        this.setState({
+            editWeeklyDefaultShift: {
+                show: false,
+                groupId: 0,
+                employeeId: 0,
+                nickname: '',
+                data: null,
+                isUsedWeeklyDefaultShift: false
+            }
+        });
+    }
+
+    updateWeeklyDefaultShift = (gindex, eindex, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+        let schedules = this.state.schedules.slice();
+        let members = schedules[gindex].members.slice();
+        members[eindex] = { ...members[eindex], weeklyDefaultShift, isUsedWeeklyDefaultShift };
+        this.originalSchedules[gindex].members[eindex] = {
+            ...this.originalSchedules[gindex].members[eindex],
+            weeklyDefaultShift,
+            isUsedWeeklyDefaultShift
+        };
+
+        if (isUsedWeeklyDefaultShift) {
+            this.scheduleAttrNames.forEach(attrName => {
+                const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}ShiftId`];
+                const shiftCode = weeklyDefaultShift[`${attrName.substring(0, 3)}ShiftCode`];
+                const shift = shiftId === this.offDayShiftId ? null : { id: shiftId, code: shiftCode };
+
+                if (moment(members[eindex][attrName].workDate).isSameOrAfter(moment().format('DD MMM, YYYY'))
+                    && !members[eindex][attrName].isHoliday) {
+                    members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay: shiftId === this.offDayShiftId };
+                    this.originalSchedules[gindex].members[eindex][attrName] = {
+                        ...this.originalSchedules[gindex].members[eindex][attrName],
+                        shift,
+                        isOffDay: shiftId === this.offDayShiftId
+                    };
+                }
+            });
+        }
+
+        schedules[gindex] = { ...schedules[gindex], members };
+        this.setState({ schedules });
+    }
+
+    handleChangeWeeklyDefaultShift = (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+        const { groupId, employeeId } = this.state.editWeeklyDefaultShift;
+        let schedules = this.state.schedules;
+        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        let members = schedules[gindex].members;
+        const eindex = members.findIndex(item => item.employeeId === employeeId);
+
+        if (schedules[gindex].members[eindex].isUsedWeeklyDefaultShift !== isUsedWeeklyDefaultShift
+            || !isEqual(members[eindex].isUsedWeeklyDefaultShift.weeklyDefaultShift, weeklyDefaultShift)) {
+            axios({
+                url: _global.root + 'ScheduleArrange/EditWeeklyDefaultShift',
+                method: 'POST',
+                data: stringify({ weeklyDefaultShift, isUsedWeeklyDefaultShift }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let data = response.data;
+
+                if (data.isSuccessful) {
+                    toast.success('Updated Successfully!');
+                    this.updateWeeklyDefaultShift(gindex, eindex, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+
+                    this.handleCloseWeeklyDefaultShiftModal();
+                } else {
+                    toast.error(data.message);
+                }
+            });
+        }
     }
 
     handleUpdateRemark = (groupId, employeeId, remark) => {
@@ -810,7 +914,8 @@ export default class App extends Component {
             schedules,
             showShiftMultipleModal,
             showConfirmRefreshDataModal,
-            showRemarkPopover
+            showRemarkPopover,
+            editWeeklyDefaultShift
         } = this.state;
 
         return (
@@ -841,6 +946,7 @@ export default class App extends Component {
                     onChangeWorkday={this.handleChangeWorkday}
                     onShiftMultiple={this.handleShiftMultiple}
                     onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
+                    onShowWeeklyDefaultShift={this.handleShowWeeklyDefaultShiftModal}
                     onUpdateRemark={this.handleUpdateRemark}
                     onDragEnd={this.handleDragEnd}
                     onChangeSectionOrder={this.handleChangeSectionOrder}
@@ -860,6 +966,16 @@ export default class App extends Component {
                     <ConfirmRefreshDataModal show={showConfirmRefreshDataModal}
                         onHide={this.handleCloseConfirmRefreshDataModal}
                         onSubmit={this.handleSubmitRefreshData}
+                    />
+                }
+                {
+                    editWeeklyDefaultShift.show &&
+                    <WeeklyDefaultShiftModal show={editWeeklyDefaultShift.show}
+                        isHost={isHost} nickname={editWeeklyDefaultShift.nickname}
+                        data={editWeeklyDefaultShift.data} isUsedWeeklyDefaultShift={editWeeklyDefaultShift.isUsedWeeklyDefaultShift}
+                        shiftOptions={this.shiftOptions}
+                        onHide={this.handleCloseWeeklyDefaultShiftModal}
+                        onSubmit={this.handleChangeWeeklyDefaultShift}
                     />
                 }
             </Fragment>

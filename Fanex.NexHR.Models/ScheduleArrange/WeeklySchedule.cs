@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.ScheduleArrange
 {
+    using System;
+
     public class WeeklySchedule
     {
         public int EmployeeId { get; set; }
@@ -10,6 +12,11 @@
         public int DisplayOrder { get; set; }
         public EntityBase<int> DefaultShift { get; set; }
         public short OffDaysbyWeek { get; set; }
+        public bool IsUsedWeeklyDefaultShift { get; set; }
+        public WeeklyDefaultShift WeeklyDefaultShift { get; set; }
+
+        public string Modifier { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
         public DailySchedule MondaySchedule { get; set; }
         public DailySchedule TuesdaySchedule { get; set; }

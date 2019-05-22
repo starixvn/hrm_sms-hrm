@@ -94,6 +94,15 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [HttpPost]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult EditWeeklyDefaultShift(WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
+        {
+            CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(CurrentUser.Id, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         private bool CheckPermission(DateTime fromDate)
         {
             bool isHost = false;

@@ -71,7 +71,11 @@
 
 .table-wrapper {
     width: 1400px;
-    margin: 10px 0;
+    margin-top: 10px;
+}
+
+.table-wrapper, .table-weekly-default-shift {
+    margin-bottom: 10px;
 
     .cell-index {
         width: 40px;
@@ -94,11 +98,13 @@
 
     .cell-nickname {
         width: 190px;
+        min-width: 190px;
         vertical-align: middle;
     }
 
     .cell-shift {
         width: 120px;
+        min-width: 120px;
     }
 
     .table-header {
@@ -189,15 +195,6 @@
             }
         }
 
-        .customize-order {
-            &.dropdown {
-                .dropdown-menu {
-                    min-width: 100px;
-                    z-index: 4;
-                }
-            }
-        }
-
         .table-row {
             display: table-row;
 
@@ -281,7 +278,7 @@
 
                     .remark {
                         display: inline-block;
-                        width: 130px;
+                        width: 110px;
                         font-size: 12px;
                         white-space: nowrap;
                         overflow: hidden;
@@ -338,6 +335,17 @@
                         }
                     }
                 }
+
+                .customize-order {
+                    display: inline-block;
+
+                    &.dropdown {
+                        .dropdown-menu {
+                            min-width: 100px;
+                            z-index: 4;
+                        }
+                    }
+                }
             }
 
             .shift-autocomplete-wrapper {
@@ -373,11 +381,19 @@
     }
 }
 
-.shift-multiple-modal {
+.modal-shift-multiple {
     width: 450px;
 
     .modal-body {
         display: flex;
+    }
+}
+
+.modal-weekly-default-shift {
+    width: 880px;
+
+    .table-weekly-default-shift {
+        width: 840px;
     }
 }
 

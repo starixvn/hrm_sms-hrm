@@ -124,6 +124,7 @@
     <Compile Include="ScheduleArrange\EditDefaultShift.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrder.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrder.cs" />
+    <Compile Include="ScheduleArrange\WeeklyDefaultShift.cs" />
     <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
     <Compile Include="Section\SectionModel.cs" />

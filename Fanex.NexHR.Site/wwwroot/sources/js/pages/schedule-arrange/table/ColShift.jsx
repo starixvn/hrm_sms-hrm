@@ -38,7 +38,7 @@ export default class ColShift extends PureComponent {
     }
 
     render() {
-        const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions } = this.props;
+        const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions, isUsedWeeklyDefaultShift } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
         let placeholder = '';
@@ -125,7 +125,11 @@ export default class ColShift extends PureComponent {
             classOfInput = 'shift';
         }
 
-        if (data.shift !== null && defaultShift !== null && valueOfInput === data.shift.code && valueOfInput === defaultShift.code) {
+        if (data.shift !== null
+            && defaultShift !== null
+            && valueOfInput === data.shift.code
+            && valueOfInput === defaultShift.code
+            && !isUsedWeeklyDefaultShift) {
             valueOfInput = '';
             placeholder = data.shift.code;
         }

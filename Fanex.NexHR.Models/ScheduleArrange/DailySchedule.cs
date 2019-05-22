@@ -31,8 +31,5 @@
         public EntityBase<int> LeaveType2 { get; set; }
 
         public bool IsPublic { get; set; }
-
-        public string ModifierName { get; set; }
-        public DateTime ModifiedDate { get; set; }
     }
 }

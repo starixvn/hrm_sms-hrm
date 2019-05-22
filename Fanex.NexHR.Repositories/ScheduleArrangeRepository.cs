@@ -37,7 +37,9 @@
                         },
                         splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2");
 
-                    MappingData(weeklySchedules, dailySchedules);
+                    IEnumerable<WeeklyDefaultShift> weeklyDefaultShifts = multi.Read<WeeklyDefaultShift>();
+
+                    MappingData(weeklySchedules, dailySchedules, weeklyDefaultShifts);
 
                     return weeklySchedules;
                 }
@@ -46,10 +48,12 @@
 
         private static void MappingData(
             IEnumerable<WeeklySchedule> weeklySchedules,
-            IEnumerable<DailySchedule> dailySchedules)
+            IEnumerable<DailySchedule> dailySchedules,
+            IEnumerable<WeeklyDefaultShift> weeklyDefaultShifts)
         {
             foreach (WeeklySchedule weeklySchedule in weeklySchedules)
             {
+                weeklySchedule.WeeklyDefaultShift = weeklyDefaultShifts.FirstOrDefault(x => x.EmployeeId == weeklySchedule.EmployeeId);
                 IEnumerable<DailySchedule> memberDailySchedules = dailySchedules.Where(x => x.EmployeeId == weeklySchedule.EmployeeId);
 
                 foreach (DailySchedule dailySchedule in memberDailySchedules)

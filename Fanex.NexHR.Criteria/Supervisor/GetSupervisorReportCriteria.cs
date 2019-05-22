@@ -12,14 +12,8 @@
 
         public byte? IsLocal { get; set; }
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeSupervisor_Get";
-        }
+        public override string GetSettingKey() => "EmployeeSupervisor_Get";
     }
 }

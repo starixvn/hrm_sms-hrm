@@ -74,6 +74,7 @@ export default class Table extends PureComponent {
                                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                                     onChangePublics={this.props.onChangePublics}
                                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
+                                    onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                     onUpdateRemark={this.props.onUpdateRemark}
                                     onChangeSectionOrder={this.props.onChangeSectionOrder}
                                     onChangeOrder={this.props.onChangeOrder}

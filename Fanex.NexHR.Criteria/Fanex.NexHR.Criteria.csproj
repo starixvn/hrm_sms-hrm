@@ -118,6 +118,7 @@
     <Compile Include="Role\GetRolesCriteria.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrderCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditWeeklyDefaultShiftCriteria.cs" />
     <Compile Include="ScheduleArrange\EditWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\GetGroupCriteria.cs" />
     <Compile Include="ScheduleArrange\GetEmployeeCriteria.cs" />

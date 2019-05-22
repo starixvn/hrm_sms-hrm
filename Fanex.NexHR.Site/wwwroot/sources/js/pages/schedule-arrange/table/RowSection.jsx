@@ -60,6 +60,7 @@ export default class RowSection extends PureComponent {
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                     onChangePublics={this.props.onChangePublics}
                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
+                    onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                     onUpdateRemark={this.props.onUpdateRemark}
                     onChangeOrder={this.props.onChangeOrder}
                 />

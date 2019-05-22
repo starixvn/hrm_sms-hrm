@@ -10,14 +10,8 @@
 
         public string ExcludeIds { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_GetByRole";
-        }
+        public override string GetSettingKey() => "Employee_GetByRole";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

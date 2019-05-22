@@ -25,6 +25,11 @@ export default class ColNickname extends PureComponent {
         this.props.onChangeShowRemarkPopover(false);
     }
 
+    handleShowWeeklyDefaultShiftModal = () => {
+        const { groupId, employeeId } = this.props;
+        this.props.onShowWeeklyDefaultShift(groupId, employeeId);
+    }
+
     handleChangeRemark = event => {
         this.setState({ remark: event.target.value });
     }
@@ -93,20 +98,25 @@ export default class ColNickname extends PureComponent {
                             }
                         </div>
                     </div>
-                    {
-                        isHost &&
-                        <Dropdown id={`dropdown${employeeId}`} componentClass="div" className="customize-order">
-                            <Dropdown.Toggle noCaret useAnchor>
-                                <i className="icon icon-sortable" title="Customize order" />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
-                                <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
-                                <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
-                                <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    }
+                    <div className="action">
+                        <i className="icon icon-default-shift" title="Weekly default shift"
+                            onClick={this.handleShowWeeklyDefaultShiftModal}
+                        />
+                        {
+                            isHost &&
+                            <Dropdown id={`dropdown${employeeId}`} componentClass="div" className="customize-order">
+                                <Dropdown.Toggle noCaret useAnchor>
+                                    <i className="icon icon-sortable" title="Customize order" />
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
+                                    <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
+                                    <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
+                                    <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        }
+                    </div>
                 </div>
             </div>
         );
