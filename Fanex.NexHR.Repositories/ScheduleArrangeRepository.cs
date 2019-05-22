@@ -16,7 +16,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    IEnumerable<WeeklySchedule> weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, EntityBase<int>, WeeklySchedule>(
+                    IEnumerable<WeeklySchedule> weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, ShiftBase, WeeklySchedule>(
                         (weeklySchedule, team, defaultShift) =>
                         {
                             weeklySchedule.Team = team;
@@ -26,7 +26,7 @@
                         },
                         splitOn: "GroupId, DefaultShiftId");
 
-                    IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, EntityBase<int>, EntityBase<int>, EntityBase<int>, DailySchedule>(
+                    IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                         (dailySchedule, shift, leave, leave2) =>
                         {
                             dailySchedule.Shift = shift;

@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
@@ -13,7 +14,12 @@
 
         IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter);
 
-        CommandResult EditWeekly(int actorId, IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts);
+        CommandResult EditWeekly(
+            int actorId,
+            DateTime fromDate,
+            DateTime toDate,
+            IEnumerable<EditDailySchedule> weeklySchedules,
+            IEnumerable<EditDefaultShift> defaultShifts);
 
         CommandResult EditRemark(int actorId, int employeeId, string remark);
 

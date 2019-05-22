@@ -168,6 +168,10 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
+            const filter = Object.assign({}, this.state.filter, {
+                fromDate: fromDate,
+                toDate: toDate
+            });
             let { isHost, schedules } = response.data;
 
             this.originalSchedules = schedules.map((group, gindex) => {
@@ -192,8 +196,31 @@ export default class App extends Component {
                 return group;
             });
 
-            this.setState({ isHost, schedules: cloneDeep(this.originalSchedules) });
+            this.setState({ filter, isHost, schedules: cloneDeep(this.originalSchedules) });
         }).catch(axiosError).then(() => unblockUI());
+    }
+
+    handleExportExcel = () => {
+        const filter = this.state.filter;
+        const fromDate = moment(filter.fromDate).format('DD-MMM-YYYY');
+        const toDate = moment(filter.toDate).format('DD-MMM-YYYY');
+
+        axios(_global.root + 'ScheduleArrange/ExportExcel', {
+            params: {
+                fromDate: fromDate,
+                toDate: toDate,
+                groupIds: filter.groupIds,
+                employeeId: filter.employee.value === 0 ? null : filter.employee.value
+            },
+            responseType: 'blob'
+        }).then(response => {
+            let url = window.URL.createObjectURL(new Blob([response.data]));
+            let link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Working shift ${fromDate} to ${toDate}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+        }).catch(axiosError);
     }
 
     handleGetWeeklyShedules = (isCurrentWeek) => {
@@ -213,36 +240,34 @@ export default class App extends Component {
     }
 
     handleGetPreviousWeekSchedule = () => {
+        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
+        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
+        const filter = Object.assign({}, this.state.filter, {
+            fromDate: fromDate,
+            toDate: toDate
+        });
+        this.setState({ filter });
+
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
-            const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
-            const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
-            const filter = Object.assign({}, this.state.filter, {
-                fromDate: fromDate,
-                toDate: toDate
-            });
-
             this.getWeeklyShedules(filter);
-
-            this.setState({ filter: filter });
         }
     }
 
     handleGetNextWeekSchedule = () => {
+        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
+        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
+        const filter = Object.assign({}, this.state.filter, {
+            fromDate: fromDate,
+            toDate: toDate
+        });
+        this.setState({ filter });
+
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
-            const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
-            const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
-            const filter = Object.assign({}, this.state.filter, {
-                fromDate: fromDate,
-                toDate: toDate
-            });
-
             this.getWeeklyShedules(filter);
-
-            this.setState({ filter: filter });
         }
     }
 
@@ -304,26 +329,16 @@ export default class App extends Component {
         let members = schedules[gindex].members.slice();
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         let member = { ...members[eindex] };
+        const isOffDay = shift === null ? member[attrName].isOffDay : shift.id === this.offDayShiftId;
 
-        if (shift !== null) {
-            const isOffDay = shift.id === this.offDayShiftId;
-
-            if (isOffDay) {
-                if (!member[attrName].isHoliday) {
-                    member[attrName] = { ...member[attrName], isOffDay: true, shift: null };
-                } else {
-                    member[attrName] = { ...member[attrName], shift: null };
-                }
-            } else {
-                member[attrName] = { ...member[attrName], isOffDay: false, shift: shift };
-            }
-        } else {
-            member[attrName] = { ...member[attrName], isOffDay: false, shift: null };
-        }
+        member[attrName] = {
+            ...member[attrName],
+            isOffDay,
+            shift: shift !== null && shift.id === this.offDayShiftId ? null : shift
+        };
 
         members[eindex] = member;
         schedules[gindex] = { ...schedules[gindex], members };
-
         this.setState({ schedules });
     }
 
@@ -454,7 +469,7 @@ export default class App extends Component {
 
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday && member[attrName].isOffDay) {
-                        member[attrName] = { ...member[attrName], isOffDay: false };
+                        member[attrName] = { ...member[attrName], isOffDay: false, isOffDayReplacement: false };
                         isChanged = true;
                     }
                 });
@@ -525,6 +540,7 @@ export default class App extends Component {
         let schedules = cloneDeep(this.state.schedules);
         let originalSchedules = cloneDeep(this.originalSchedules);
         const totalItems = schedules.length;
+        const { fromDate, toDate } = this.selectedWeek;
 
         outerloop:
         for (let gindex = 0; gindex < totalItems; gindex++) {
@@ -538,14 +554,15 @@ export default class App extends Component {
                 unset(originalSchedule, 'selectWeekDays');
 
                 if (!isEqual(schedule, originalSchedule)) {
+                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDaysReplacement;
                     let totalOffDays = 0;
                     this.scheduleAttrNames.forEach(attrName => {
-                        if (schedule[attrName].isOffDay || schedule[attrName].isLeaveOffDay) {
+                        if (!schedule[attrName].isHoliday && (schedule[attrName].isOffDay || schedule[attrName].isLeaveOffDay)) {
                             totalOffDays++;
                         }
                     });
 
-                    if (schedule.offDaysbyWeek < totalOffDays && !this.isSARole) {
+                    if (totalOffDaysDefault < totalOffDays && !this.isSARole) {
                         isValidData = false;
                         break outerloop;
                     }
@@ -577,10 +594,12 @@ export default class App extends Component {
         }
 
         if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
+            blockUI();
+
             axios({
                 url: _global.root + 'ScheduleArrange/EditWeekly',
                 method: 'POST',
-                data: stringify({ weeklySchedules, defaultShifts }),
+                data: stringify({ fromDate, toDate, weeklySchedules, defaultShifts }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -595,7 +614,7 @@ export default class App extends Component {
                 } else {
                     toast.error(data.message);
                 }
-            }).catch(axiosError);
+            }).catch(axiosError).then(() => unblockUI());
         }
     }
 
@@ -608,7 +627,14 @@ export default class App extends Component {
     }
 
     handleCloseConfirmRefreshDataModal = () => {
-        this.setState({ showConfirmRefreshDataModal: false });
+        const fromDate = moment(this.selectedWeek.fromDate).format('DD MMM, YYYY');
+        const toDate = moment(this.selectedWeek.toDate).format('DD MMM, YYYY');
+        const filter = Object.assign({}, this.state.filter, {
+            fromDate: fromDate,
+            toDate: toDate
+        });
+
+        this.setState({ filter, showConfirmRefreshDataModal: false });
     }
 
     handleSubmitRefreshData = () => {
@@ -662,18 +688,15 @@ export default class App extends Component {
 
         if (isUsedWeeklyDefaultShift) {
             this.scheduleAttrNames.forEach(attrName => {
-                const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}ShiftId`];
-                const shiftCode = weeklyDefaultShift[`${attrName.substring(0, 3)}ShiftCode`];
-                const shift = shiftId === this.offDayShiftId ? null : { id: shiftId, code: shiftCode };
+                const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id;
+                const isOffDay = shiftId === this.offDayShiftId;
+                const shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+                const workDate = moment(members[eindex][attrName].workDate);
 
-                if (moment(members[eindex][attrName].workDate).isSameOrAfter(moment().format('DD MMM, YYYY'))
-                    && !members[eindex][attrName].isHoliday) {
-                    members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay: shiftId === this.offDayShiftId };
-                    this.originalSchedules[gindex].members[eindex][attrName] = {
-                        ...this.originalSchedules[gindex].members[eindex][attrName],
-                        shift,
-                        isOffDay: shiftId === this.offDayShiftId
-                    };
+                if (workDate.isSameOrAfter(moment().format('DD MMM, YYYY')) && !members[eindex][attrName].isHoliday) {
+                    members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay };
+                    this.originalSchedules[gindex].members[eindex][attrName] =
+                        { ...this.originalSchedules[gindex].members[eindex][attrName], shift, isOffDay };
                 }
             });
         }
@@ -690,7 +713,7 @@ export default class App extends Component {
         const eindex = members.findIndex(item => item.employeeId === employeeId);
 
         if (schedules[gindex].members[eindex].isUsedWeeklyDefaultShift !== isUsedWeeklyDefaultShift
-            || !isEqual(members[eindex].isUsedWeeklyDefaultShift.weeklyDefaultShift, weeklyDefaultShift)) {
+            || !isEqual(members[eindex].weeklyDefaultShift, weeklyDefaultShift)) {
             axios({
                 url: _global.root + 'ScheduleArrange/EditWeeklyDefaultShift',
                 method: 'POST',
@@ -928,6 +951,7 @@ export default class App extends Component {
                     onSearchEmployees={this.getEmployees}
                     onChange={this.handleFilterChange}
                     onSubmit={this.handleGetWeeklyShedules}
+                    onExportExcel={this.handleExportExcel}
                 />
                 <Table
                     isHost={isHost}

@@ -14,5 +14,117 @@
         {
             return dt.FirstDayOfWeek().AddDays(6);
         }
+
+        public static string ToFormatedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToFormatedDate();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToFormatedDate(this DateTime date)
+        {
+            return date.ToString("dd MMM, yyyy hh:mm tt");
+        }
+
+        public static string ToShortFormatedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToShortFormatedDate();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToShortFormatedDate(this DateTime date)
+        {
+            string dateStr = date.ToString(@"dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
+            return dateStr;
+        }
+
+        public static string ToDetailFormatedDate(this DateTime date)
+        {
+            string dateStr = date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
+            return dateStr;
+        }
+
+        public static string ToMonthAndDayFormatedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToMonthAndDayFormatedDate();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToMonthAndDayFormatedDate(this DateTime date)
+        {
+            return date.ToString("dd MMM");
+        }
+
+        public static string ToMonthAndYearFormatedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToMonthAndYearFormatedDate();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToMonthAndYearFormatedDate(this DateTime date)
+        {
+            return date.ToString("MMM-yyyy");
+        }
+
+        public static string ToDayOfWeekFormatedDate(this DateTime date)
+        {
+            return date.ToString("ddd, dd MMM, yyyy");
+        }
+
+        public static string ToDateMonthYearFormatedDate(this DateTime date)
+        {
+            return date.ToString("dd MMM, yyyy");
+        }
+
+        public static string ToDateMonthYearFormatedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToDateMonthYearFormatedDate();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToDateOfWeek(this DateTime date)
+        {
+            return date.ToString("d MMM, ddd");
+        }
+
+        public static string ToDateOfWeek(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                return date.Value.ToDateOfWeek();
+            }
+
+            return string.Empty;
+        }
+
+        public static string ToShortTime(this DateTime date)
+        {
+            return date.ToString("HH:mm");
+        }
+
+        public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)
+        {
+            return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
+        }
     }
 }

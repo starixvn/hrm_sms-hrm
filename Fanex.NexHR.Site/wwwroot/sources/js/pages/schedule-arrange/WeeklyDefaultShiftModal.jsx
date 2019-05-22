@@ -45,9 +45,8 @@ export default class WeeklyDefaultShiftModal extends Component {
     }
 
     handleChangeShift = (name, shift) => {
-        const shiftId = shift !== null ? shift.id : -1;
-        const shiftCode = shift !== null ? shift.code : 'Off';
-        let data = { ...this.state.data, [name + 'ShiftId']: shiftId, [name + 'ShiftCode']: shiftCode };
+        const offday = { id: -1, code: 'Off' };
+        let data = { ...this.state.data, [name + 'Shift']: shift !== null ? shift : offday };
 
         this.setState({ data });
     }
@@ -85,57 +84,57 @@ export default class WeeklyDefaultShiftModal extends Component {
                         <div className="table-body">
                             <div className="table-row">
                                 <div className="table-cell cell-shift">
-                                    <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.monShiftId === offDayShiftId ? 'offday' : ''}`} name="mon"
-                                        value={data !== null ? data.monShiftCode : ''}
+                                    <ShiftAutocomplete isDisabled={!this.props.isHost}
+                                        className={`${data !== null && data.monShift.id === offDayShiftId ? 'offday' : ''}`} name="mon"
+                                        value={data !== null ? data.monShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.tueShiftId === offDayShiftId ? 'offday' : ''}`} name="tue"
-                                        value={data !== null ? data.tueShiftCode : ''}
+                                        className={`${data !== null && data.tueShift.id === offDayShiftId ? 'offday' : ''}`} name="tue"
+                                        value={data !== null ? data.tueShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.wedShiftId === offDayShiftId ? 'offday' : ''}`} name="wed"
-                                        value={data !== null ? data.wedShiftCode : ''}
+                                        className={`${data !== null && data.wedShift.id === offDayShiftId ? 'offday' : ''}`} name="wed"
+                                        value={data !== null ? data.wedShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.thuShiftId === offDayShiftId ? 'offday' : ''}`} name="thu"
-                                        value={data !== null ? data.thuShiftCode : ''}
+                                        className={`${data !== null && data.thuShift.id === offDayShiftId ? 'offday' : ''}`} name="thu"
+                                        value={data !== null ? data.thuShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.friShiftId === offDayShiftId ? 'offday' : ''}`} name="fri"
-                                        value={data !== null ? data.friShiftCode : ''}
+                                        className={`${data !== null && data.friShift.id === offDayShiftId ? 'offday' : ''}`} name="fri"
+                                        value={data !== null ? data.friShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.satShiftId === offDayShiftId ? 'offday' : ''}`} name="sat"
-                                        value={data !== null ? data.satShiftCode : ''}
+                                        className={`${data !== null && data.satShift.id === offDayShiftId ? 'offday' : ''}`} name="sat"
+                                        value={data !== null ? data.satShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.sunShiftId === offDayShiftId ? 'offday' : ''}`} name="sun"
-                                        value={data !== null ? data.sunShiftCode : ''}
+                                        className={`${data !== null && data.sunShift.id === offDayShiftId ? 'offday' : ''}`} name="sun"
+                                        value={data !== null ? data.sunShift.code : ''}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
                                     />

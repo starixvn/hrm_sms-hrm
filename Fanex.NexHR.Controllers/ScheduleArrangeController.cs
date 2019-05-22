@@ -17,10 +17,14 @@
     public class ScheduleArrangeController : BaseController
     {
         private readonly IScheduleArrangeService scheduleArrangeService;
+        private readonly IExportExcelScheduleService exportExcelService;
 
-        public ScheduleArrangeController(IScheduleArrangeService scheduleArrangeService)
+        public ScheduleArrangeController(
+            IScheduleArrangeService scheduleArrangeService,
+            IExportExcelScheduleService exportExcelService)
         {
             this.scheduleArrangeService = scheduleArrangeService;
+            this.exportExcelService = exportExcelService;
         }
 
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
@@ -60,9 +64,18 @@
 
         [HttpPost]
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult EditWeekly(IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts)
+        public ActionResult EditWeekly(
+            DateTime fromDate,
+            DateTime toDate,
+            IEnumerable<EditDailySchedule> weeklySchedules,
+            IEnumerable<EditDefaultShift> defaultShifts)
         {
-            CommandResult commandResult = scheduleArrangeService.EditWeekly(CurrentUser.Id, weeklySchedules, defaultShifts);
+            CommandResult commandResult = scheduleArrangeService.EditWeekly(
+                CurrentUser.Id,
+                fromDate,
+                toDate,
+                weeklySchedules,
+                defaultShifts);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -101,6 +114,18 @@
             CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(CurrentUser.Id, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpGet]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        public ActionResult ExportExcel(WeeklyScheduleFilter filter)
+        {
+            filter.ActorId = CurrentUser.Id;
+            IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
+            byte[] bytes = exportExcelService.Export(filter, weeklySchedules);
+
+            var fileName = $"Working shift {filter.FromDate.ToString("dd-MMM-yyyy")} to {filter.ToDate.ToString("dd-MMM-yyyy")}.xlsx";
+            return File(bytes, "application/xlsx", fileName);
         }
 
         private bool CheckPermission(DateTime fromDate)

@@ -3,17 +3,17 @@
 export default class ColIndex extends PureComponent {
     render() {
         const { data } = this.props;
-        const numberOffDefault = data.offDaysbyWeek;
-        let numberOffCurrent = 0;
+        const totalOffDaysDefault = data.offDaysbyWeek + data.totalOffDaysReplacement;
+        let totalOffDays = 0;
         Object.keys(data.selectWeekDays).forEach(objectKey => {
-            if (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay) {
-                numberOffCurrent++;
+            if (!data[objectKey].isHoliday && (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay)) {
+                totalOffDays++;
             }
         });
 
         return (
             <div className="table-cell cell-index">
-                {numberOffDefault < numberOffCurrent ? <span className="glyphicon glyphicon-alert" /> : ''}
+                {totalOffDaysDefault < totalOffDays ? <span className="glyphicon glyphicon-alert" /> : ''}
             </div>
         );
     }

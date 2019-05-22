@@ -5,12 +5,13 @@
     public class WeeklySchedule
     {
         public int EmployeeId { get; set; }
+        public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
         public EntityBase<int> Team { get; set; }
         public string Remark { get; set; }
         public int DisplayOrder { get; set; }
-        public EntityBase<int> DefaultShift { get; set; }
+        public ShiftBase DefaultShift { get; set; }
         public short OffDaysbyWeek { get; set; }
         public bool IsUsedWeeklyDefaultShift { get; set; }
         public WeeklyDefaultShift WeeklyDefaultShift { get; set; }
@@ -25,5 +26,17 @@
         public DailySchedule FridaySchedule { get; set; }
         public DailySchedule SaturdaySchedule { get; set; }
         public DailySchedule SundaySchedule { get; set; }
+
+        public int TotalOffDaysReplacement
+            => GetOffDayReplacement(MondaySchedule)
+            + GetOffDayReplacement(TuesdaySchedule)
+            + GetOffDayReplacement(WednesdaySchedule)
+            + GetOffDayReplacement(ThursdaySchedule)
+            + GetOffDayReplacement(FridaySchedule)
+            + GetOffDayReplacement(SaturdaySchedule)
+            + GetOffDayReplacement(SundaySchedule);
+
+        private static int GetOffDayReplacement(DailySchedule dailySchedule)
+            => dailySchedule != null && dailySchedule.IsOffDayReplacement ? 1 : 0;
     }
 }

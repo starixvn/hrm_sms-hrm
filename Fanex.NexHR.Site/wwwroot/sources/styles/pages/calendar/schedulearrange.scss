@@ -15,6 +15,19 @@
     font-size: inherit;
     padding-top: 4px;
     padding-bottom: 4px;
+
+    &.btn-excel {
+        background: #549f3b;
+        color: #fff;
+        border: 1px solid #549f3b;
+        transition: all .2s ease-in;
+
+        &:hover, &:focus, &:active {
+            color: #fff;
+            background: lighten(#549f3b, 10%);
+            border-color: lighten(#549f3b, 10%);
+        }
+    }
 }
 
 .form-horizontal {
@@ -31,9 +44,7 @@
 
     .button-group {
         .btn {
-            &.currentWeek {
-                margin-left: 5px;
-            }
+            margin-right: 5px;
         }
     }
 }
@@ -79,21 +90,13 @@
 
     .cell-index {
         width: 40px;
+        min-width: 40px;
         text-align: center;
 
         .glyphicon-alert {
             color: #ff8c00;
             font-size: 14px;
         }
-    }
-
-    .cell-public {
-        width: 70px;
-    }
-
-    .cell-modifier {
-        width: 140px;
-        vertical-align: middle;
     }
 
     .cell-nickname {
@@ -105,6 +108,15 @@
     .cell-shift {
         width: 120px;
         min-width: 120px;
+    }
+
+    .cell-public {
+        width: 70px;
+    }
+
+    .cell-modifier {
+        width: 140px;
+        vertical-align: middle;
     }
 
     .table-header {
@@ -364,16 +376,8 @@
                         outline: none;
                     }
 
-                    &::placeholder {
-                        color: #5e7485;
-                    }
-
-                    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
-                        color: #5e7485;
-                    }
-
-                    &::-ms-input-placeholder { /* Microsoft Edge */
-                        color: #5e7485;
+                    &.same-defaultshift {
+                        color: rgba(51, 51, 51, .4);
                     }
                 }
             }
@@ -399,6 +403,14 @@
 
 .offday {
     background-color: #f8f89c !important;
+}
+
+.offdayreplacement {
+    background-color: #fdfd45 !important;
+}
+
+.keepinviewday, .changeshift, .leaveday {
+    color: #ed4646 !important;
 }
 
 .holiday {

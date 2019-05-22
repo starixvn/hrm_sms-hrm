@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
@@ -16,13 +17,16 @@
     {
         private readonly IScheduleArrangeRepository scheduleArrangeRepository;
         private readonly IBaseService baseService;
+        private readonly IShiftService shiftService;
 
         public ScheduleArrangeService(
             IScheduleArrangeRepository scheduleArrangeRepository,
-            IBaseService baseService)
+            IBaseService baseService,
+            IShiftService shiftService)
         {
             this.scheduleArrangeRepository = scheduleArrangeRepository;
             this.baseService = baseService;
+            this.shiftService = shiftService;
         }
 
         public IEnumerable<EntityBase<int>> GetGroups(int actorId)
@@ -59,16 +63,29 @@
             };
 
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);
-            MappingDefaultShift(weeklySchedules);
+            IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
+            MappingWeeklyDefaultShift(weeklySchedules, shifts);
+
+            if (filter.ToDate > DateTime.Now.LastDayOfWeek())
+            {
+                MappingDefaultShift(weeklySchedules);
+            }
 
             return weeklySchedules;
         }
 
-        public CommandResult EditWeekly(int actorId, IEnumerable<EditDailySchedule> weeklySchedules, IEnumerable<EditDefaultShift> defaultShifts)
+        public CommandResult EditWeekly(
+            int actorId,
+            DateTime fromDate,
+            DateTime toDate,
+            IEnumerable<EditDailySchedule> weeklySchedules,
+            IEnumerable<EditDefaultShift> defaultShifts)
         {
             var criteria = new EditWeeklyScheduleCriteria
             {
                 ActorId = actorId,
+                FromDate = fromDate,
+                ToDate = toDate,
                 WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
                 DefaultShiftXml = defaultShifts.ToXML().ToString()
             };
@@ -117,13 +134,13 @@
                 ActorId = actorId,
                 EmployeeId = weeklyDefaultShift.EmployeeId,
                 FromDate = DateTime.Now.Date,
-                MonShiftId = GetShiftId(weeklyDefaultShift.MonShiftId),
-                TueShiftId = GetShiftId(weeklyDefaultShift.TueShiftId),
-                WedShiftId = GetShiftId(weeklyDefaultShift.WedShiftId),
-                ThuShiftId = GetShiftId(weeklyDefaultShift.ThuShiftId),
-                FriShiftId = GetShiftId(weeklyDefaultShift.FriShiftId),
-                SatShiftId = GetShiftId(weeklyDefaultShift.SatShiftId),
-                SunShiftId = GetShiftId(weeklyDefaultShift.SunShiftId),
+                MonShiftId = GetShiftId(weeklyDefaultShift.MonShift.Id),
+                TueShiftId = GetShiftId(weeklyDefaultShift.TueShift.Id),
+                WedShiftId = GetShiftId(weeklyDefaultShift.WedShift.Id),
+                ThuShiftId = GetShiftId(weeklyDefaultShift.ThuShift.Id),
+                FriShiftId = GetShiftId(weeklyDefaultShift.FriShift.Id),
+                SatShiftId = GetShiftId(weeklyDefaultShift.SatShift.Id),
+                SunShiftId = GetShiftId(weeklyDefaultShift.SunShift.Id),
                 IsUsedWeeklyDefaultShift = isUsedWeeklyDefaultShift
             };
 
@@ -135,12 +152,37 @@
             return shiftId.HasValue && shiftId.Value != Constants.OffDayShiftId ? shiftId.Value : (int?)null;
         }
 
+        private static void MappingWeeklyDefaultShift(IEnumerable<WeeklySchedule> weeklySchedules, IList<Shift> shifts)
+        {
+            IEnumerable<ShiftBase> shiftBases = shifts.Select(x => new ShiftBase
+            {
+                Id = x.Id,
+                Code = x.Code,
+                Name = x.Name,
+                CheckIn = x.BeginCheckInTime,
+                CheckOut = x.BeginCheckOutTime,
+                IsInAfterDay = x.IsInAfterDay,
+                IsOutAfterDay = x.IsOutAfterDay
+            });
+
+            foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+            {
+                weeklySchedule.WeeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.MonShiftId);
+                weeklySchedule.WeeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.TueShiftId);
+                weeklySchedule.WeeklyDefaultShift.WedShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.WedShiftId);
+                weeklySchedule.WeeklyDefaultShift.ThuShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.ThuShiftId);
+                weeklySchedule.WeeklyDefaultShift.FriShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.FriShiftId);
+                weeklySchedule.WeeklyDefaultShift.SatShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.SatShiftId);
+                weeklySchedule.WeeklyDefaultShift.SunShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.SunShiftId);
+            }
+        }
+
         private static void MappingDefaultShift(IEnumerable<WeeklySchedule> weeklySchedules)
         {
             foreach (WeeklySchedule weeklySchedule in weeklySchedules)
             {
                 WeeklyDefaultShift weeklyDefaultShift = weeklySchedule.WeeklyDefaultShift;
-                EntityBase<int> defaultShift = weeklySchedule.DefaultShift;
+                ShiftBase defaultShift = weeklySchedule.DefaultShift;
 
                 MappingDailyDefaultShift(
                     weeklySchedule.MondaySchedule,
@@ -160,39 +202,39 @@
             }
         }
 
-        private static EntityBase<int> GetDefaultShift(WeeklyDefaultShift weeklyDefaultShift, int weekday)
+        private static ShiftBase GetDefaultShift(WeeklyDefaultShift weeklyDefaultShift, int weekday)
         {
-            EntityBase<int> shift = null;
+            ShiftBase shift = null;
             if (weeklyDefaultShift != null)
             {
                 switch (weekday - 1)
                 {
                     case (int)DayOfWeek.Monday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.MonShiftId, Code = weeklyDefaultShift.MonShiftCode };
+                        shift = weeklyDefaultShift.MonShift;
                         break;
 
                     case (int)DayOfWeek.Tuesday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.TueShiftId, Code = weeklyDefaultShift.TueShiftCode };
+                        shift = weeklyDefaultShift.TueShift;
                         break;
 
                     case (int)DayOfWeek.Wednesday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.WedShiftId, Code = weeklyDefaultShift.WedShiftCode };
+                        shift = weeklyDefaultShift.WedShift;
                         break;
 
                     case (int)DayOfWeek.Thursday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.ThuShiftId, Code = weeklyDefaultShift.ThuShiftCode };
+                        shift = weeklyDefaultShift.ThuShift;
                         break;
 
                     case (int)DayOfWeek.Friday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.FriShiftId, Code = weeklyDefaultShift.FriShiftCode };
+                        shift = weeklyDefaultShift.FriShift;
                         break;
 
                     case (int)DayOfWeek.Saturday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.SatShiftId, Code = weeklyDefaultShift.SatShiftCode };
+                        shift = weeklyDefaultShift.SatShift;
                         break;
 
                     case (int)DayOfWeek.Sunday:
-                        shift = new EntityBase<int> { Id = weeklyDefaultShift.SunShiftId, Code = weeklyDefaultShift.SunShiftCode };
+                        shift = weeklyDefaultShift.SunShift;
                         break;
 
                     default:
@@ -204,15 +246,15 @@
             return shift;
         }
 
-        private static void MappingDailyDefaultShift(DailySchedule dailySchedule, EntityBase<int> defaultShift)
+        private static void MappingDailyDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
         {
-            if (!(dailySchedule.IsHoliday || dailySchedule.IsOffDay || dailySchedule.IsKeepInViewDay || dailySchedule.IsChangeShift))
+            if (!(dailySchedule.IsHoliday || dailySchedule.IsOffDay || dailySchedule.IsKeepInView || dailySchedule.IsChangeShift))
             {
                 MappingDefaultShift(dailySchedule, defaultShift);
             }
         }
 
-        private static void MappingDefaultShift(DailySchedule dailySchedule, EntityBase<int> defaultShift)
+        private static void MappingDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
         {
             if (dailySchedule.Shift == null && defaultShift != null)
             {
