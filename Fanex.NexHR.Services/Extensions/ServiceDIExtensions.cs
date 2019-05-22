@@ -47,6 +47,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ILeaveRequestService, LeaveRequestService>();
             container.RegisterType<IDisciplineService, DisciplineService>();
             container.RegisterType<IScheduleArrangeService, ScheduleArrangeService>();
+            container.RegisterType<IBackgroundJobService, BackgroundJobService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

@@ -25,6 +25,8 @@
 
             var connectionString = Cryptography.DeCryptConnectionString(WebConfigurationManager.ConnectionStrings["nexhrx"].ConnectionString);
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+
+            HangfireJobScheduler.ScheduleRecurringJobs();
         }
 
         [ValidateInput(false)]

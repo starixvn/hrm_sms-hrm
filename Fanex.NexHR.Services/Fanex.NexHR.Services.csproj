@@ -179,6 +179,7 @@
   <ItemGroup>
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
+    <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
     <Compile Include="ExportExcel\Attendance\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Attendance\IExportExcelAttendanceReportService.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\MenuService.cs" />
     <Compile Include="Implement\RoleService.cs" />
+    <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveSummaryService.cs" />

@@ -70,6 +70,8 @@
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />
+    <Compile Include="BackgroundJob\InsertScheduleByWeeklyDefaultShiftCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />
