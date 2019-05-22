@@ -25,5 +25,7 @@
         public LeaveRequest LeaveType2 { get; set; }
 
         public bool IsPublic { get; set; }
+
+        public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == 0.5M;
     }
 }

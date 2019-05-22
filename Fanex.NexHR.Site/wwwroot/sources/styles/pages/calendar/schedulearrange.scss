@@ -236,7 +236,6 @@
                     display: table-row;
 
                     .halfdaycode {
-                        background: #cbcbcb;
                         display: table-cell;
                         width: 35px;
                         text-align: center;
@@ -372,11 +371,14 @@
                     border: 0;
 
                     &:focus {
-                        //border-bottom: 1px solid #66afe9;
                         outline: none;
                     }
 
-                    &.same-defaultshift {
+                    &:disabled {
+                        background: transparent;
+                    }
+
+                    &::placeholder, &.same-defaultshift {
                         color: rgba(51, 51, 51, .4);
                     }
                 }
@@ -409,32 +411,44 @@
     background-color: #fdfd45 !important;
 }
 
-.keepinviewday, .changeshift, .leaveday {
-    color: #ed4646 !important;
+.keepinviewday {
+    background: #ffacaa !important;
+}
+
+.changeshift {
+    background: #fbaa5e !important;
 }
 
 .holiday {
-    background-color: #f3aa4b !important;
+    background: #f3aa4b !important;
 }
 
 .leavehalfday2 {
-    background-color: #d4e5d5 !important;
+    background: #d4e5d5 !important;
+}
+
+.leaveday {
+    background: #a9a7a7 !important;
 }
 
 .annualleave {
-    background-color: #c7f391 !important;
+    background: #c7f391 !important;
 }
 
 .unpaidleave {
-    background-color: #eacded !important;
+    background: #eacded !important;
 }
 
 .businesstrip {
-    background-color: #c1d6ed !important;
+    background: #c1d6ed !important;
 }
 
 .weddingleave {
-    background-color: #7cd3e9 !important;
+    background: #7cd3e9 !important;
+}
+
+.overtime {
+    background: #b37574 !important;
 }
 
 .tooltip {

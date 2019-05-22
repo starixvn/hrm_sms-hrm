@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -65,11 +64,7 @@
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);
             IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
             MappingWeeklyDefaultShift(weeklySchedules, shifts);
-
-            if (filter.ToDate > DateTime.Now.LastDayOfWeek())
-            {
-                MappingDefaultShift(weeklySchedules);
-            }
+            MappingDefaultShift(weeklySchedules);
 
             return weeklySchedules;
         }
@@ -248,10 +243,17 @@
 
         private static void MappingDailyDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
         {
-            if (!(dailySchedule.IsHoliday || dailySchedule.IsOffDay || dailySchedule.IsKeepInView || dailySchedule.IsChangeShift))
+            if (dailySchedule.IsLeaveOffDay || (dailySchedule.IsLeaveDay && !dailySchedule.IsLeaveHalfDay) || dailySchedule.IsHoliday)
             {
-                MappingDefaultShift(dailySchedule, defaultShift);
+                return;
             }
+
+            if (dailySchedule.IsOffDay || dailySchedule.IsKeepInView || dailySchedule.IsChangeShift || dailySchedule.IsOvertime)
+            {
+                return;
+            }
+
+            MappingDefaultShift(dailySchedule, defaultShift);
         }
 
         private static void MappingDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)

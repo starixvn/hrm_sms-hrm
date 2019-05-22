@@ -72,10 +72,7 @@ export default class App extends Component {
             .then(([groupResponse, shiftResponse]) => {
                 this.groupOptions = groupResponse.data.map(group => { group.checked = true; return group; });
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
-
-                const filter = Object.assign({}, this.state.filter, {
-                    groupIds: this.groupOptions.map(group => group.id).join(',')
-                });
+                const filter = { ...this.state.filter, groupIds: this.groupOptions.map(group => group.id).join(',') };
 
                 this.getWeeklyShedules(filter);
 
@@ -130,9 +127,7 @@ export default class App extends Component {
     }
 
     handleFilterChange = (name, value) => {
-        this.setState({
-            filter: Object.assign({}, this.state.filter, { [name]: value })
-        });
+        this.setState({ filter: { ...this.state.filter, [name]: value } });
     }
 
     getEmployees = query => {
@@ -168,10 +163,7 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
-            const filter = Object.assign({}, this.state.filter, {
-                fromDate: fromDate,
-                toDate: toDate
-            });
+            const filter = { ...this.state.filter, fromDate, toDate };
             let { isHost, schedules } = response.data;
 
             this.originalSchedules = schedules.map((group, gindex) => {
@@ -228,10 +220,8 @@ export default class App extends Component {
             this.handleShowConfirmRefreshDataModal();
         } else {
             const filter = isCurrentWeek
-                ? Object.assign({}, this.state.filter, {
-                    fromDate: this.currentWeek.fromDate,
-                    toDate: this.currentWeek.toDate
-                }) : this.state.filter;
+                ? { ...this.state.filter, fromDate: this.currentWeek.fromDate, toDate: this.currentWeek.toDate }
+                : this.state.filter;
 
             this.setState({ filter });
 
@@ -242,10 +232,7 @@ export default class App extends Component {
     handleGetPreviousWeekSchedule = () => {
         const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
         const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+        const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
         if (this.isDirtyData()) {
@@ -258,10 +245,7 @@ export default class App extends Component {
     handleGetNextWeekSchedule = () => {
         const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
         const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+        const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
         if (this.isDirtyData()) {
@@ -329,7 +313,14 @@ export default class App extends Component {
         let members = schedules[gindex].members.slice();
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         let member = { ...members[eindex] };
-        const isOffDay = shift === null ? member[attrName].isOffDay : shift.id === this.offDayShiftId;
+
+        if (isEqual(member[attrName].shift, shift)) {
+            return;
+        }
+
+        const defaultShift = member.defaultShift !== null ? { ...member.defaultShift } : null;
+        shift = shift === null ? defaultShift : shift;
+        const isOffDay = shift !== null && shift.id === this.offDayShiftId;
 
         member[attrName] = {
             ...member[attrName],
@@ -347,7 +338,29 @@ export default class App extends Component {
         const gindex = schedules.findIndex(item => item.groupId === groupId);
         let members = schedules[gindex].members.slice();
         const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const originalDefaultShift = members[eindex].defaultShift;
         members[eindex] = { ...members[eindex], defaultShift };
+
+        if (defaultShift !== null) {
+            this.scheduleAttrNames.forEach(attrName => {
+                if (!members[eindex][attrName].isLeaveOffDay
+                    && !(members[eindex][attrName].isLeaveDay && !members[eindex][attrName].isLeaveHalfDay)
+                    && !members[eindex][attrName].isKeepInView
+                    && !members[eindex][attrName].isChangeShift
+                    && !members[eindex][attrName].isOvertime) {
+                    if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
+                        if (members[eindex][attrName].shift !== null && isEqual(originalDefaultShift, members[eindex][attrName].shift)) {
+                            members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift };
+                        }
+                    } else {
+                        if (members[eindex][attrName].shift === null || isEqual(originalDefaultShift, members[eindex][attrName].shift)) {
+                            members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift };
+                        }
+                    }
+                }
+            });
+        }
+
         schedules[gindex] = { ...schedules[gindex], members };
 
         this.setState({ schedules });
@@ -360,7 +373,7 @@ export default class App extends Component {
             const gindex = schedules.findIndex(item => item.groupId === groupId);
             let members = schedules[gindex].members.slice();
             const eindex = members.findIndex(item => item.employeeId === employeeId);
-            members[eindex] = Object.assign({}, members[eindex], { isPublic: isChecked });
+            members[eindex] = { ...members[eindex], isPublic: isChecked };
             schedules[gindex] = { ...schedules[gindex], members };
 
             this.setState({ schedules });
@@ -370,7 +383,7 @@ export default class App extends Component {
                 let members = schedules[gindex].members.slice();
                 const totalSubItems = members.length;
                 for (let subindex = 0; subindex < totalSubItems; subindex++) {
-                    members[subindex] = Object.assign({}, members[subindex], { isPublic: isChecked });
+                    members[subindex] = { ...members[subindex], isPublic: isChecked };
                 }
                 schedules[gindex] = { ...schedules[gindex], members };
             }
@@ -629,10 +642,7 @@ export default class App extends Component {
     handleCloseConfirmRefreshDataModal = () => {
         const fromDate = moment(this.selectedWeek.fromDate).format('DD MMM, YYYY');
         const toDate = moment(this.selectedWeek.toDate).format('DD MMM, YYYY');
-        const filter = Object.assign({}, this.state.filter, {
-            fromDate: fromDate,
-            toDate: toDate
-        });
+        const filter = { ...this.state.filter, fromDate, toDate };
 
         this.setState({ filter, showConfirmRefreshDataModal: false });
     }

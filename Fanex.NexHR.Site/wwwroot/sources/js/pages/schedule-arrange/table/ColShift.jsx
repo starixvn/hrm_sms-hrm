@@ -54,13 +54,12 @@ export default class ColShift extends PureComponent {
 
         if (data.isLeaveOffDay) {
             valueOfInput = 'Off';
-            classOfInput = 'offday';
+            classOfInput = 'leave offday';
             isDisabled = true;
             isShowCheckBox = false;
         } else if (data.isLeaveDay) {
             isDisabled = true;
             isShowCheckBox = false;
-            classOfInput = 'leaveday';
 
             if (data.isHoliday) {
                 valueOfInput = 'PH';
@@ -68,43 +67,48 @@ export default class ColShift extends PureComponent {
             } else if (data.isOffDay) {
                 valueOfInput = 'Off';
                 classOfInput = 'offday';
-            } else if (data.leaveDay === 0.5) {
-                leaveCodeHalfday = data.leaveType.code + ' ½';
-                fromTime = moment(data.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
-                toTime = moment(data.leaveType.toTime).format('DD MMM, YYYY HH:mm');
-                isLeaveHalfday = true;
-                isDisabled = false;
-
-                if (data.shift !== null) {
-                    valueOfInput = data.shift.code;
-                }
             } else {
-                valueOfInput = data.leaveType.code;
-                if (data.leaveType2 !== null && data.leaveType.code !== data.leaveType2.code) {
-                    classOfInput += ' leavehalfday2';
-                    valueOfInput = data.leaveType.code + ' / ' + data.leaveType2.code;
-                }
-            }
+                if (data.isLeaveHalfDay) {
+                    leaveCodeHalfday = data.leaveType.code + ' ½';
+                    fromTime = moment(data.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
+                    toTime = moment(data.leaveType.toTime).format('DD MMM, YYYY HH:mm');
+                    isLeaveHalfday = true;
+                    isDisabled = false;
 
-            if (data.leaveType !== null && data.leaveType2 === null) {
-                switch (data.leaveType.id) {
-                    case 2:
-                        classOfleavetype = 'annualleave';
-                        break;
-                    case 25:
-                        classOfleavetype = 'unpaidleave';
-                        break;
-                    case 9:
-                        classOfleavetype = 'businesstrip';
-                        break;
-                    case 6:
-                        classOfleavetype = 'weddingleave';
-                        break;
+                    if (data.shift !== null) {
+                        valueOfInput = data.shift.code;
+                    }
+                } else {
+                    valueOfInput = data.leaveType.code;
+                    if (data.leaveType2 !== null && data.leaveType.code !== data.leaveType2.code) {
+                        classOfInput = 'leaveday leavehalfday2';
+                        valueOfInput = data.leaveType.code + ' / ' + data.leaveType2.code;
+                    }
                 }
-            }
 
-            if (classOfleavetype !== '' && !isLeaveHalfday) {
-                classOfInput += ' ' + classOfleavetype;
+                if (data.leaveType !== null && (data.leaveType2 === null || data.leaveType.code === data.leaveType2.code)) {
+                    switch (data.leaveType.id) {
+                        case 2:
+                            classOfleavetype = 'annualleave';
+                            break;
+                        case 25:
+                            classOfleavetype = 'unpaidleave';
+                            break;
+                        case 9:
+                            classOfleavetype = 'businesstrip';
+                            break;
+                        case 6:
+                            classOfleavetype = 'weddingleave';
+                            break;
+                        default:
+                            classOfleavetype = 'leaveday';
+                            break;
+                    }
+                }
+
+                if (classOfleavetype !== '' && !isLeaveHalfday) {
+                    classOfInput = classOfleavetype;
+                }
             }
         } else if (data.isHoliday) {
             classOfInput = `holiday ${data.isKeepInView ? 'keepinviewday' : ''}`;
@@ -122,10 +126,11 @@ export default class ColShift extends PureComponent {
         } else if (data.isChangeShift) {
             classOfInput = 'changeshift';
             valueOfInput = data.shift.code;
+        } else if (data.isOvertime) {
+            classOfInput = 'overtime';
+            valueOfInput = data.shift.code;
         } else {
-            if (data.shift !== null) {
-                valueOfInput = data.shift.code;
-            }
+            valueOfInput = data.shift !== null ? data.shift.code : '';
         }
 
         if (data.shift !== null
@@ -133,6 +138,7 @@ export default class ColShift extends PureComponent {
             && valueOfInput === data.shift.code
             && valueOfInput === defaultShift.code
             && !isUsedWeeklyDefaultShift) {
+            placeholder = valueOfInput;
             classOfInput += ' same-defaultshift';
         }
 
