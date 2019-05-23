@@ -28,7 +28,6 @@ var editAccount = (function ($) {
         if (files === undefined) {
             return;
         }
-        var fileNames = [];
 
         var fd = new FormData();
 
@@ -41,7 +40,6 @@ var editAccount = (function ($) {
             }
 
             fd.append('files[' + i + ']', file);
-            fileNames.push(files[i].name);
         }
 
         $.ajax({
