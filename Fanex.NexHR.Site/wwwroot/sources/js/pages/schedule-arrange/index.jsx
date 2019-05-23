@@ -722,7 +722,23 @@ export default class App extends Component {
         let members = schedules[gindex].members;
         const eindex = members.findIndex(item => item.employeeId === employeeId);
 
-        if (schedules[gindex].members[eindex].isUsedWeeklyDefaultShift !== isUsedWeeklyDefaultShift
+        let totalOffDays = 0;
+        this.scheduleAttrNames.forEach(attrName => {
+            const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id;
+            const isOffDay = shiftId === this.offDayShiftId;
+
+            if (isOffDay) {
+                totalOffDays++;
+            }
+        });
+
+        if (totalOffDays > members[eindex].offDaysbyWeek) {
+            toast.error('Employee has a larger number of days off during the week according to the setting.');
+
+            return;
+        }
+
+        if (members[eindex].isUsedWeeklyDefaultShift !== isUsedWeeklyDefaultShift
             || !isEqual(members[eindex].weeklyDefaultShift, weeklyDefaultShift)) {
             axios({
                 url: _global.root + 'ScheduleArrange/EditWeeklyDefaultShift',
