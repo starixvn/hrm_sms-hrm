@@ -1,6 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
+import { DateTimeFormat, OffDayShiftId } from '../../../shared/constants';
 import ColIndex from './ColIndex';
 import ColNickname from './ColNickname';
 import ColDefaultShift from './ColDefaultShift';
@@ -45,7 +46,7 @@ export default class Row extends PureComponent {
                 />
                 <ColDefaultShift isHost={isHost} groupId={groupId} employeeId={data.employeeId}
                     isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift} data={data.defaultShift}
-                    shiftOptions={shiftOptions.filter(shift => shift.id !== -1)}
+                    shiftOptions={shiftOptions.filter(shift => shift.id !== OffDayShiftId)}
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                 />
                 <ColShift isHost={isHost} shiftOptions={shiftOptions} isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift}
@@ -108,7 +109,7 @@ export default class Row extends PureComponent {
                 <div className="table-cell cell-modifier">
                     {
                         data.modifier &&
-                        <span title={moment(data.modifiedDate).format('DD MMM, YYYY HH:mm')}>
+                        <span title={moment(data.modifiedDate).format(DateTimeFormat)}>
                             {data.modifier}
                         </span>
                     }

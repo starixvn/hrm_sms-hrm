@@ -2,6 +2,7 @@
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import moment from 'moment';
 
+import { OffDayShiftId } from '../../../shared/constants';
 import ShiftAutocomplete from '../ShiftAutocomplete';
 
 export default class ColShift extends PureComponent {
@@ -172,7 +173,7 @@ export default class ColShift extends PureComponent {
                         className={classOfInput}
                         placeholder={placeholder}
                         isDisabled={isDisabled}
-                        shiftOptions={isLeaveHalfday ? shiftOptions.filter(shift => shift.id !== -1) : shiftOptions}
+                        shiftOptions={isLeaveHalfday ? shiftOptions.filter(shift => shift.id !== OffDayShiftId) : shiftOptions}
                         onChange={this.handleChangeShift}
                     />
                     {

@@ -9,6 +9,7 @@ import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
 import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
+import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
@@ -20,8 +21,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        let fromDate = moment().day('Monday').format('DD MMM, YYYY');
-        let toDate = moment(fromDate).add(6, 'days').format('DD MMM, YYYY');
+        let fromDate = moment().day('Monday').format(DateFormat);
+        let toDate = moment(fromDate).add(6, 'days').format(DateFormat);
 
         this.state = {
             isHost: false,
@@ -54,7 +55,6 @@ export default class App extends Component {
         this.isSARole = document.getElementById('IsSARole').checked;
         this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
             'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
-        this.offDayShiftId = -1;
     }
 
     componentDidMount() {
@@ -149,8 +149,8 @@ export default class App extends Component {
     }
 
     getWeeklyShedules = filter => {
-        const fromDate = moment(filter.fromDate).format('DD MMM, YYYY');
-        const toDate = moment(filter.toDate).format('DD MMM, YYYY');
+        const fromDate = moment(filter.fromDate).format(DateFormat);
+        const toDate = moment(filter.toDate).format(DateFormat);
 
         blockUI();
 
@@ -230,8 +230,8 @@ export default class App extends Component {
     }
 
     handleGetPreviousWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format('DD MMM, YYYY');
+        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format(DateFormat);
+        const toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format(DateFormat);
         const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
@@ -243,8 +243,8 @@ export default class App extends Component {
     }
 
     handleGetNextWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format('DD MMM, YYYY');
+        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format(DateFormat);
+        const toDate = moment(this.selectedWeek.toDate).add(7, 'days').format(DateFormat);
         const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
@@ -320,12 +320,12 @@ export default class App extends Component {
 
         const defaultShift = member.defaultShift !== null ? { ...member.defaultShift } : null;
         shift = shift === null ? defaultShift : shift;
-        const isOffDay = shift !== null && shift.id === this.offDayShiftId;
+        const isOffDay = shift !== null && shift.id === OffDayShiftId;
 
         member[attrName] = {
             ...member[attrName],
             isOffDay,
-            shift: shift !== null && shift.id === this.offDayShiftId ? null : shift
+            shift: shift !== null && shift.id === OffDayShiftId ? null : shift
         };
 
         members[eindex] = member;
@@ -527,7 +527,7 @@ export default class App extends Component {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday) {
                         member[attrName] = {
                             ...member[attrName],
-                            isOffDay: shift !== null && shift.id === this.offDayShiftId ? true : isOffday,
+                            isOffDay: shift !== null && shift.id === OffDayShiftId ? true : isOffday,
                             shift
                         };
                         isChanged = true;
@@ -640,8 +640,8 @@ export default class App extends Component {
     }
 
     handleCloseConfirmRefreshDataModal = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).format('DD MMM, YYYY');
-        const toDate = moment(this.selectedWeek.toDate).format('DD MMM, YYYY');
+        const fromDate = moment(this.selectedWeek.fromDate).format(DateFormat);
+        const toDate = moment(this.selectedWeek.toDate).format(DateFormat);
         const filter = { ...this.state.filter, fromDate, toDate };
 
         this.setState({ filter, showConfirmRefreshDataModal: false });
@@ -699,11 +699,11 @@ export default class App extends Component {
         if (isUsedWeeklyDefaultShift) {
             this.scheduleAttrNames.forEach(attrName => {
                 const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id;
-                const isOffDay = shiftId === this.offDayShiftId;
+                const isOffDay = shiftId === OffDayShiftId;
                 const shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
                 const workDate = moment(members[eindex][attrName].workDate);
 
-                if (workDate.isSameOrAfter(moment().format('DD MMM, YYYY')) && !members[eindex][attrName].isHoliday) {
+                if (workDate.isSameOrAfter(moment().format(DateFormat)) && !members[eindex][attrName].isHoliday) {
                     members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay };
                     this.originalSchedules[gindex].members[eindex][attrName] =
                         { ...this.originalSchedules[gindex].members[eindex][attrName], shift, isOffDay };
@@ -725,7 +725,7 @@ export default class App extends Component {
         let totalOffDays = 0;
         this.scheduleAttrNames.forEach(attrName => {
             const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id;
-            const isOffDay = shiftId === this.offDayShiftId;
+            const isOffDay = shiftId === OffDayShiftId;
 
             if (isOffDay) {
                 totalOffDays++;

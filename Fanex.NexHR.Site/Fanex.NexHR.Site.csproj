@@ -876,6 +876,7 @@
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
+    <Content Include="wwwroot\sources\js\shared\constants.js" />
     <Content Include="wwwroot\sources\js\shared\employee.search.in.team.js" />
     <Content Include="wwwroot\sources\js\pages\request\date.filter.new.js" />
     <Content Include="wwwroot\sources\js\pages\request\employee.request.js" />
