@@ -18,6 +18,7 @@ module.exports = {
         [`${styleDistPath}/employee.postnatal`]: `${styleSourcePath}/pages/postnatal/postnatal.scss`,
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
+        [`${styleDistPath}/account.editprofile`]: `${styleSourcePath}/pages/account/profile-edit.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -25,6 +26,7 @@ module.exports = {
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`,
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
-        [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`
+        [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,
+        [`${jsDistPath}/account.edit`]: `${jsSourcePath}/account/profile-edit.js`
     }
 };

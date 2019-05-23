@@ -72,6 +72,11 @@
       <resource path="~/scripts/views/account.js" />
     </resourceSet>
 
+    <resourceSet name="editcontactjs" type="js">
+      <resource reference="sitejs" />
+      <resource path="~/scripts/views/edit-account.js" />
+    </resourceSet>
+
     <resourceSet name="employeecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />

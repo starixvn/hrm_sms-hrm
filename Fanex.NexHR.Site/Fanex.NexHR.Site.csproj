@@ -250,6 +250,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Views\edit-account.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
     <Content Include="Scripts\Views\menu.js" />
@@ -855,6 +856,7 @@
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\account\profile-edit.js" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
     <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
@@ -1250,6 +1252,8 @@
     <Content Include="Views\Paternity\Index.cshtml" />
     <Content Include="wwwroot\sources\styles\components\_validation.scss" />
     <Content Include="Views\Account\EditContact.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\account\profile-edit.scss" />
+    <Content Include="Views\Account\_ListFileUploaded.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

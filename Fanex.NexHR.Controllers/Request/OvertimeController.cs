@@ -238,13 +238,11 @@
         [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
-            DateTime monthDefault = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
             var criteria = new GetMemberOvertimeCriteria
             {
                 SupervisorId = CurrentUser.Id,
-                FromDate = (month.HasValue) ? month.Value : monthDefault,
-                ToDate = (month.HasValue) ? month.Value : monthDefault,
+                FromDate = month != null ? month.Value : month,
+                ToDate = month != null ? month.Value : month,
                 EmployeeId = employeeId,
                 GroupIds = teamIds,
                 Status = statusId
@@ -456,7 +454,8 @@
             var memberOvertimeViewModel = new MemberOvertimeViewModel
             {
                 Teams = teams,
-                Month = month
+                Month = month,
+                StatusId = 3
             };
 
             return memberOvertimeViewModel;

@@ -1501,6 +1501,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file does not exists.
+        /// </summary>
+        public static string FileDoesNotExists {
+            get {
+                return ResourceManager.GetString("FileDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For Info.
         /// </summary>
         public static string ForInfo {
@@ -4305,6 +4314,15 @@ namespace Fanex.NexHR.Resources {
         public static string UPLAbsent {
             get {
                 return ResourceManager.GetString("UPLAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; has already exists. Please delete old file or rename the new file before upload.
+        /// </summary>
+        public static string UploadFileExists {
+            get {
+                return ResourceManager.GetString("UploadFileExists", resourceCulture);
             }
         }
         

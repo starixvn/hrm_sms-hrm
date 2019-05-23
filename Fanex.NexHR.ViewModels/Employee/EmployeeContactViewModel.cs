@@ -35,6 +35,8 @@
         public IEnumerable<HttpPostedFileBase> Attachments { get; set; }
 
         [Display(Name = "Uploaded file(s)")]
-        public IEnumerable<EmployeeFileUpload> FileUploaded { get; set; }
+        public IEnumerable<string> FileUploaded { get; set; }
+
+        public string BaseFileLocation { get; set; }
     }
 }

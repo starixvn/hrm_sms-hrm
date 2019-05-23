@@ -57,5 +57,7 @@
         public const int TotalWeekendLeaveLimit = 14;
 
         public const int OffDayShiftId = -1;
+
+        public const string ProfileUploadPath = "/file/uploads/profile/";
     }
 }

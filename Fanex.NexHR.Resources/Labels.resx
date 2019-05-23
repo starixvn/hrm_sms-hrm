@@ -1641,4 +1641,10 @@
   <data name="LetsTalk" xml:space="preserve">
     <value>Let's Talk</value>
   </data>
+  <data name="FileDoesNotExists" xml:space="preserve">
+    <value>The file does not exists</value>
+  </data>
+  <data name="UploadFileExists" xml:space="preserve">
+    <value>The file '{0}' has already exists. Please delete old file or rename the new file before upload</value>
+  </data>
 </root>

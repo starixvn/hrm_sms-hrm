@@ -2,116 +2,135 @@
 @model EmployeeContactViewModel
 
 @{
-    ViewBag.Title = "Edit Contact";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    string message = ViewBag.Message;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Edit Profile";
+    var message = ViewBag.Message;
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/account.editprofile.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/account.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step" href="/Account/Index">Personal</a><span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("EditContact", "Account", FormMethod.Post, new
-{ enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken();
-    @Html.ValidationSummary();
-
-    if (!string.IsNullOrWhiteSpace(message))
+<div>
+    @using (Html.BeginForm("EditContact", "Account", FormMethod.Post))
     {
-        <div class="success">@message</div>
-    }
-    <div class="container_24 bunhat" style="min-width:400px">
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ChineseName)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.ChineseName)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Email)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Email)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Phone)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Phone)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Skype)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Skype)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.LetsTalk)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.LetsTalk)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Address)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Address)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.CurrentAddress)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.CurrentAddress)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Attachments)
-            </div>
-            <div class="input">
-                <input type="file" name="Attachments" id="Attachments" multiple />
-            </div>
-        </div>
-        @if (Model.FileUploaded.Any())
-        {
-            <div class="formrow">
-                <div class="label">
-                    @Html.LabelFor(model => model.FileUploaded)
-                </div>
-                <div class="input">
-                    <ul>
-                        @foreach (var file in Model.FileUploaded)
-                        {
-                            <li>
-                                <a href="@file.FileLocation">@file.FileName</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        }
+        @Html.AntiForgeryToken();
+        @Html.ValidationSummary();
 
-        <div class="formrow">
-            <div class="label">&nbsp;</div>
-            <div class="input">
-                <input type="submit" value="Submit" />
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            <div class="success">@message</div>
+        }
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ChineseName, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("ChineseName", Model.ChineseName, new { @class = "form-control" })
+                </div>
             </div>
         </div>
-    </div>
-}
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Email", Model.Email, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Phone", Model.Phone, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Skype, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Skype", Model.Skype, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.LetsTalk, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("LetsTalk", Model.LetsTalk, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Address", Model.Address, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.CurrentAddress, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("CurrentAddress", Model.CurrentAddress, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">Attachments</label>
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Attachments", null, new { @class = "form-control", @type = "file", @multiple = "multiple" })
+                    <p class="note">* The file(s) upload must be less than 5 MB</p>
+                    <p class="note">* Accept file type: .jpg; .png; .jpeg; .pdf, .doc, .docx, .xls, .xlxs</p>
+                    <p class="note">* Rename the file to meaningful name before upload</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">Uploaded file(s)</label>
+                </div>
+                <div class="input-form">
+                    <ul class="upload-file-list" id="upload-list" data-base-url="@Model.BaseFileLocation"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-group--l">
+            <div class="button-group">
+                <input class="button" type="submit" id="submit" value="@Labels.Submit" />
+            </div>
+        </div>
+    }
+</div>

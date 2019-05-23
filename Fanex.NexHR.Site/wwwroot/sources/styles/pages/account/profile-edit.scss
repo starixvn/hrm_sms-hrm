@@ -1,0 +1,66 @@
+﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
+@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
+
+@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/filter';
+@import '../../layout/toastr';
+@import '../../components/buttons';
+@import '../../components/validation';
+
+.form-horizontal {
+    .label-form {
+        padding-bottom: 5px;
+        width: 10rem !important;
+        font-weight: bold;
+    }
+
+    .form-group--m {
+        width: 400px !important;
+
+        .input-form {
+            width: calc(100% - 8rem);
+        }
+    }
+
+    textarea.form-control {
+        height: 100px;
+    }
+
+    .note {
+        color: #878787;
+        font-size: 11px;
+        font-style: italic;
+        margin: 0;
+        line-height: 1.2;
+    }
+}
+
+.upload-file-list {
+    list-style: none;
+    padding: 0;
+
+    li {
+        padding: 3px;
+
+        .file-name {
+            display: inline-block;
+            max-width: 230px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.no-file {
+    text-align: center;
+    color: red;
+    font-style: italic;
+}
+
+.delete-file-upload {
+    color: red;
+    float: right;
+    cursor: pointer;
+}
