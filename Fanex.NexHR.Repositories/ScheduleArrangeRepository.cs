@@ -58,33 +58,33 @@
 
                 foreach (DailySchedule dailySchedule in memberDailySchedules)
                 {
-                    switch (dailySchedule.Weekday - 1)
+                    switch (dailySchedule.WorkDate.DayOfWeek)
                     {
-                        case (int)DayOfWeek.Monday:
+                        case DayOfWeek.Monday:
                             weeklySchedule.MondaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Tuesday:
+                        case DayOfWeek.Tuesday:
                             weeklySchedule.TuesdaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Wednesday:
+                        case DayOfWeek.Wednesday:
                             weeklySchedule.WednesdaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Thursday:
+                        case DayOfWeek.Thursday:
                             weeklySchedule.ThursdaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Friday:
+                        case DayOfWeek.Friday:
                             weeklySchedule.FridaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Saturday:
+                        case DayOfWeek.Saturday:
                             weeklySchedule.SaturdaySchedule = dailySchedule;
                             break;
 
-                        case (int)DayOfWeek.Sunday:
+                        case DayOfWeek.Sunday:
                             weeklySchedule.SundaySchedule = dailySchedule;
                             break;
 

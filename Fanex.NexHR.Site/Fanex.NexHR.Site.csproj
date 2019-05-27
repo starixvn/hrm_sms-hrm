@@ -1238,6 +1238,7 @@
     <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="wwwroot\dist\vendors\react-manifest.json" />
+    <Content Include="ExcelTemplates\DriverPickup.xlsx" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

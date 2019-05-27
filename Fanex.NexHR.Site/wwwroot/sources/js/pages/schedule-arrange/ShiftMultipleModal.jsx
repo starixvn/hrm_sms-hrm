@@ -22,7 +22,8 @@ export default class ShiftMultipleModal extends Component {
 
         this.state = {
             shift: null,
-            isOffDay: false
+            isOffDay: false,
+            isValid: true
         };
     }
 
@@ -31,11 +32,17 @@ export default class ShiftMultipleModal extends Component {
 
         const { shift, isOffDay } = this.state;
 
-        this.props.onSubmit(shift, isOffDay);
+        if (shift === null) {
+            this.setState({ isValid: false });
+        } else {
+            this.props.onSubmit(shift, isOffDay);
+        }
     }
 
     handleChangeShift = (name, shift) => {
-        this.setState({ shift });
+        const isValid = shift !== null;
+
+        this.setState({ shift, isValid });
     }
 
     handleChangeOffDay = event => {
@@ -43,7 +50,7 @@ export default class ShiftMultipleModal extends Component {
     }
 
     render() {
-        const { shift, isOffDay } = this.state;
+        const { shift, isOffDay, isValid } = this.state;
 
         return (
             <Modal keyboard={false} backdrop="static"
@@ -61,7 +68,7 @@ export default class ShiftMultipleModal extends Component {
                             </div>
                             <div className="input-form">
                                 <ShiftAutocomplete
-                                    className="form-control"
+                                    className={`form-control ${isValid ? '' : 'input-validation-error'}`}
                                     value={shift !== null ? shift.code : ''}
                                     shiftOptions={this.props.shiftOptions}
                                     onChange={this.handleChangeShift}

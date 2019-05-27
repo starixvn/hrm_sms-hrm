@@ -12,6 +12,7 @@ export default class WeeklyDefaultShiftModal extends Component {
         nickname: PropTypes.string,
         data: PropTypes.object,
         isUsedWeeklyDefaultShift: PropTypes.bool,
+        fromDate: PropTypes.string,
         shiftOptions: PropTypes.arrayOf(PropTypes.object),
         onHide: PropTypes.func,
         onSubmit: PropTypes.func
@@ -23,6 +24,7 @@ export default class WeeklyDefaultShiftModal extends Component {
         nickname: '',
         data: null,
         isUsedWeeklyDefaultShift: false,
+        fromDate: '',
         shiftOptions: [],
         onHide: function () { },
         onSubmit: function () { }
@@ -146,7 +148,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                         <input type="checkbox" className={`checkbox-custom`} id={`ckb-weeklyDefaultShift`}
                             checked={isUsedWeeklyDefaultShift} disabled={!isHost} onChange={this.handleChangeCheckbox}
                         />
-                        <label htmlFor={`ckb-weeklyDefaultShift`}> Use weekly default shift.</label>
+                        <label htmlFor={`ckb-weeklyDefaultShift`}> Use weekly default shift (apply from <strong>{this.props.fromDate}</strong>).</label>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

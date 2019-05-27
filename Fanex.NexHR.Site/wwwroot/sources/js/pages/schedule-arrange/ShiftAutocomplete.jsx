@@ -83,6 +83,11 @@ export default class ShiftAutocomplete extends PureComponent {
             const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === value);
             if (index >= 0) {
                 this.props.onChange(this.props.name, this.props.shiftOptions[index]);
+            } else {
+                this.setState(
+                    { value: '' },
+                    () => this.props.onChange(this.props.name, null)
+                );
             }
         } else {
             this.props.onChange(this.props.name, null);

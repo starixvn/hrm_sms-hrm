@@ -30,6 +30,13 @@
     }
 }
 
+input[type="text"] {
+    &.input-validation-error {
+        border-color: #ff4545;
+        @include box-shadow(0 0 2px 2px rgba(255,0,0, .2));
+    }
+}
+
 .form-horizontal {
     .multiple-select-container {
         .multiple-select-label {
@@ -45,6 +52,19 @@
     .button-group {
         .btn {
             margin-right: 5px;
+        }
+    }
+
+    .dropdown {
+        display: inline-block;
+
+        .dropdown-toggle {
+            .caret {
+                opacity: 1;
+                position: unset;
+                top: unset;
+                right: unset;
+            }
         }
     }
 }
@@ -222,6 +242,11 @@
 
                 &.cell-shift {
                     padding: 0;
+
+                    &.weekly-default-shift {
+                        background-image: linear-gradient(45deg, rgba(200,200,200,.4) 25%, rgba(222,222,222,.4) 25%, rgba(222,222,222,.4) 50%, rgba(200,200,200,.4) 50%, rgba(200,200,200,.4) 75%, rgba(222,222,222,.4) 75%, rgba(222,222,222,.4) 100%);
+                        background-size: 11.31px 11.31px;
+                    }
                 }
 
                 &.cell-public {

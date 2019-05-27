@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 
 import MultipleSelect from '@9softstudio/react-multiselect';
 import Autocomplete from '../../shared/components/Autocomplete';
@@ -74,9 +75,15 @@ export default class Search extends Component {
                         <button className="btn btn-primary" name="currentWeek" onClick={this.handleSubmit}>
                             Current Week
                         </button>
-                        <button className="btn btn-excel" onClick={this.props.onExportExcel}>
-                            Excel
-                        </button>
+                        <Dropdown id={`dropdownExportExcel`} componentClass="div">
+                            <Dropdown.Toggle useAnchor className="btn btn-excel">
+                                Excel
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <MenuItem onClick={this.props.onExportExcel}>Upload</MenuItem>
+                                <MenuItem onClick={this.props.onExportExcelDriverPickup}>Driver Pickup</MenuItem>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
                 </div>
             </div>

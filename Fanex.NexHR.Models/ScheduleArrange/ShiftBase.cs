@@ -15,5 +15,11 @@
 
         [JsonIgnore]
         public bool IsOutAfterDay { get; set; }
+
+        [JsonIgnore]
+        public string BackgroundColor { get; set; }
+
+        [JsonIgnore]
+        public bool IsShift { get; set; }
     }
 }

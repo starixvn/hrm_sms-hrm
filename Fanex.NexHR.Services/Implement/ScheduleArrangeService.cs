@@ -181,54 +181,67 @@
 
                 MappingDailyDefaultShift(
                     weeklySchedule.MondaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.MondaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.TuesdaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.TuesdaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.WednesdaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.WednesdaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.ThursdaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.ThursdaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.FridaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.FridaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.SaturdaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.SaturdaySchedule.Weekday) : defaultShift);
-                MappingDailyDefaultShift(weeklySchedule.SundaySchedule,
-                    weeklySchedule.IsUsedWeeklyDefaultShift ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.SundaySchedule.Weekday) : defaultShift);
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.MondaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.TuesdaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.TuesdaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.WednesdaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.WednesdaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.ThursdaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.ThursdaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.FridaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.FridaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.SaturdaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.SaturdaySchedule.WorkDate.DayOfWeek) : defaultShift);
+                MappingDailyDefaultShift(
+                    weeklySchedule.SundaySchedule,
+                    weeklySchedule.IsUsedWeeklyDefaultShift
+                    ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.SundaySchedule.WorkDate.DayOfWeek) : defaultShift);
             }
         }
 
-        private static ShiftBase GetDefaultShift(WeeklyDefaultShift weeklyDefaultShift, int weekday)
+        private static ShiftBase GetDefaultShift(WeeklyDefaultShift weeklyDefaultShift, DayOfWeek dayOfWeek)
         {
             ShiftBase shift = null;
             if (weeklyDefaultShift != null)
             {
-                switch (weekday - 1)
+                switch (dayOfWeek)
                 {
-                    case (int)DayOfWeek.Monday:
+                    case DayOfWeek.Monday:
                         shift = weeklyDefaultShift.MonShift;
                         break;
 
-                    case (int)DayOfWeek.Tuesday:
+                    case DayOfWeek.Tuesday:
                         shift = weeklyDefaultShift.TueShift;
                         break;
 
-                    case (int)DayOfWeek.Wednesday:
+                    case DayOfWeek.Wednesday:
                         shift = weeklyDefaultShift.WedShift;
                         break;
 
-                    case (int)DayOfWeek.Thursday:
+                    case DayOfWeek.Thursday:
                         shift = weeklyDefaultShift.ThuShift;
                         break;
 
-                    case (int)DayOfWeek.Friday:
+                    case DayOfWeek.Friday:
                         shift = weeklyDefaultShift.FriShift;
                         break;
 
-                    case (int)DayOfWeek.Saturday:
+                    case DayOfWeek.Saturday:
                         shift = weeklyDefaultShift.SatShift;
                         break;
 
-                    case (int)DayOfWeek.Sunday:
+                    case DayOfWeek.Sunday:
                         shift = weeklyDefaultShift.SunShift;
                         break;
 

@@ -16,6 +16,7 @@
 
     public class ScheduleArrangeController : BaseController
     {
+        private const string DateFormat = "dd-MMM-yyyy";
         private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly IExportExcelScheduleService exportExcelService;
 
@@ -124,7 +125,25 @@
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             byte[] bytes = exportExcelService.Export(filter, weeklySchedules);
 
-            var fileName = $"Working shift {filter.FromDate.ToString("dd-MMM-yyyy")} to {filter.ToDate.ToString("dd-MMM-yyyy")}.xlsx";
+            var fileName = $"Working shift {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}.xlsx";
+            return File(bytes, "application/xlsx", fileName);
+        }
+
+        [HttpGet]
+        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        public ActionResult ExportExcelDriverPickup(WeeklyScheduleFilter filter)
+        {
+            Actor actor = new Actor
+            {
+                ActorId = CurrentUser.Id,
+                Nickname = CurrentUser.NickName,
+                FullName = CurrentUser.FullName
+            };
+            filter.ActorId = CurrentUser.Id;
+            IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
+            byte[] bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
+
+            var fileName = $"Schedule for Driver {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}.xlsx";
             return File(bytes, "application/xlsx", fileName);
         }
 

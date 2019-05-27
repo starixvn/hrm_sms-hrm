@@ -5,12 +5,8 @@
     public class DailySchedule
     {
         public int EmployeeId { get; set; }
-
         public DateTime WorkDate { get; set; }
-        public int Weekday { get; set; }
-
         public ShiftBase Shift { get; set; }
-
         public bool IsHoliday { get; set; }
         public bool IsOffDay { get; set; }
         public bool IsLeaveDay { get; set; }

@@ -11,6 +11,12 @@
         [StringValue("Annual Leave")]
         AnnualLeave = 2,
 
+        [StringValue("Employee Wedding (3 Days)")]
+        WeddingLeave = 6,
+
+        [StringValue("Business Trip")]
+        BusinessTrip = 9,
+
         [StringValue("Unpaid Leave")]
         UnpaidLeave = 25
     }

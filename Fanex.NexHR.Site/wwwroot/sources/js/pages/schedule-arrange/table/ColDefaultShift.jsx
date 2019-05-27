@@ -12,7 +12,7 @@ export default class ColDefaultShift extends PureComponent {
         const { isHost, shiftOptions, data, isUsedWeeklyDefaultShift } = this.props;
 
         return (
-            <div className="table-cell cell-shift">
+            <div className={`table-cell cell-shift ${isUsedWeeklyDefaultShift ? 'weekly-default-shift' : ''}`}>
                 {
                     !isUsedWeeklyDefaultShift &&
                     <ShiftAutocomplete
