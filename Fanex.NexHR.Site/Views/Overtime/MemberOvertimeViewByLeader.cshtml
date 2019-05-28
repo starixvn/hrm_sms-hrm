@@ -7,7 +7,7 @@
     <table class="table table-custom">
         <thead>
             <tr>
-                <th colspan="11">
+                <th colspan="12">
                     <div style="float:right;">
                         @if (hasApprovePermision && hasVerfifyPermision)
                         {
@@ -71,7 +71,7 @@
                             @item.Employee.Team.Code
                         </td>
                         <td>
-                            @item.RequestedDate.ToString("MM-YYYY")
+                            @item.RequestedDate.ToString("MM-yyyy")
                         </td>
                         <td>
                             @if (item.NormalHours > 0)
@@ -96,8 +96,22 @@
                                 @Labels.View
                             </a>
                         </td>
-                        @Html.Partial("SharedVerifierStatus", item)
-                        @Html.Partial("SharedApproverStatus", item)
+                        <td>
+                            <span class="tooltip-tipsy" original-title="@item.VerifiedBy.FullName">@item.VerifiedBy.NickName</span>
+                            @if (item.VerifiedStatus == 2)
+                            {
+                                <i class="fa fa-check-circle green-checked-icon"></i>
+                            }
+                        </td>
+                        <td>
+                            <span class="tooltip-tipsy" original-title="@item.ApprovedBy.FullName">@item.ApprovedBy.NickName</span>
+                            @if (item.ApprovedStatus == 2)
+                            {
+                                <i class="fa fa-check-circle green-checked-icon"></i>
+                            }
+                        </td>
+                        @*@Html.Partial("SharedVerifierStatus", item)
+                            @Html.Partial("SharedApproverStatus", item)*@
                         <td>
                             @if (item.IsShowWarning)
                             {

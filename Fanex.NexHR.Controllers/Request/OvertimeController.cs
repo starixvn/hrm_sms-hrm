@@ -453,7 +453,7 @@
             var memberOvertimeViewModel = new MemberOvertimeViewModel
             {
                 Teams = teams,
-                StatusId = 1
+                StatusId = -1
             };
 
             return memberOvertimeViewModel;
