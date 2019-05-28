@@ -104,10 +104,10 @@
       <Mapping DataField="Team" ObjectProperty="Name" />
       <Mapping DataField="TeamCode" ObjectProperty="Code" />
       <Mapping DataField="VerifierID" ObjectProperty="Id" />
-      <Mapping DataField="NickNameVerifier" ObjectProperty="NickName" />
+      <Mapping DataField="VerifierBy" ObjectProperty="NickName" />
       <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
       <Mapping DataField="ApproverID" ObjectProperty="Id" />
-      <Mapping DataField="NickNameApprover" ObjectProperty="NickName" />
+      <Mapping DataField="ApproverBy" ObjectProperty="NickName" />
       <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
       <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />

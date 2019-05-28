@@ -25,6 +25,13 @@ function requestToCalculateOTHours() {
     $("#sumpublic").text(sumPublic.toFixed(2));
 }
 
+function initToolTip() {
+    $('.tooltip-tipsy').tipsy({
+        html: true,
+        gravity: 'e'
+    });
+}
+
 var MemberOvertime = (function ($) {
     return {
         dialogMail: null,
@@ -49,7 +56,7 @@ var MemberOvertime = (function ($) {
                 MemberOvertime.submitEvent();
             });
 
-            MemberOvertime.bindMemberOvertimeDetail();
+            MemberOvertime.submitEvent();
 
             MemberOvertime.dialogMail.dialog({
                 autoOpen: false,
@@ -108,6 +115,8 @@ var MemberOvertime = (function ($) {
                 }
             });
 
+            $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
+
             $('.row').hover(
                 function () {
                     $(this).addClass('rowhover');
@@ -136,7 +145,7 @@ var MemberOvertime = (function ($) {
                 "month": month,
                 "employeeId": ((employeeId === 0) ? null : employeeId),
                 "teamIds": teamIds,
-                "statusId": statusId === undefined ? $('#statusId').val() : statusId
+                "statusId": statusId
             };
 
             if (memberOvertimeContainer.length > 0) {
@@ -145,6 +154,8 @@ var MemberOvertime = (function ($) {
                         memberOvertimeContainer.empty();
                         memberOvertimeContainer.html(content);
                         requestToCalculateOTHours();
+                        initToolTip();
+                        floatThead(memberOvertimeContainer.find('table'));
                     });
             }
         }

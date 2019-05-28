@@ -1,76 +1,76 @@
 ﻿.title {
-    font-family: Abel, Arial,Helvetica, "myriad Pro", Tahoma;
-    font-size: 1.8em;
-    margin-bottom: 10px;
-    text-shadow: 0 0 1px #ddd;
-    color: #000;
-    font-weight: bold;
+	font-family: Abel, Arial,Helvetica, "myriad Pro", Tahoma;
+	font-size: 1.8em;
+	margin-bottom: 10px;
+	text-shadow: 0 0 1px #ddd;
+	color: #000;
+	font-weight: bold;
 }
 
 span.hyperlink {
-    color: #0789D1;
+	color: #0789D1;
 }
 
 select#Calendar {
-    min-width: 100px;
+	min-width: 100px;
 }
 
 input#Employee {
-    width: 180px;
+	width: 180px;
 }
 
 .container_24 .grid_24 {
-    width: 1000px;
+	width: 1000px;
 }
 
 #SubmitMonthlyReport {
-    margin-left: 100px;
+	margin-left: 100px;
 }
 
 #roundbar-blue {
-    clear: left;
-    float: left;
-    overflow: hidden;
-    margin-bottom: 10px;
-    font-size: 13px;
+	clear: left;
+	float: left;
+	overflow: hidden;
+	margin-bottom: 10px;
+	font-size: 13px;
 }
 
-    #roundbar-blue ul {
-        clear: left;
-        float: left;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        text-align: center;
-    }
+	#roundbar-blue ul {
+		clear: left;
+		float: left;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		text-align: center;
+	}
 
-        #roundbar-blue ul li {
-            display: block;
-            float: left;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
+		#roundbar-blue ul li {
+			display: block;
+			float: left;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			position: relative;
+		}
 
 .first {
-    border-right: 1px solid #49A9FF;
+	border-right: 1px solid #49A9FF;
 }
 
 #roundbar-blue ul li a {
-    display: block;
-    margin: 0;
-    padding-right: .8em;
-    padding-left: .8em;
-    text-decoration: none;
-    line-height: 1.3em;
+	display: block;
+	margin: 0;
+	padding-right: .8em;
+	padding-left: .8em;
+	text-decoration: none;
+	line-height: 1.3em;
 }
 
 .active {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 #submitOTDetails {
-    margin-left: 30px;
+	margin-left: 30px;
 }

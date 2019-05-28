@@ -1,31 +1,34 @@
-﻿.container_24
-{
-    line-height: 26px;
-}
-.ui-corner-all
-{
-    padding-top: 3px !important;
-}
-.status
-{
-    padding-right: 12px;
-}
-.float-right
-{
-    float: right;
-}
-.leftinfo
-{
-    text-decoration: underline;
-    font-style: italic;
+﻿.container_24 {
+	line-height: 26px;
 }
 
-#txtSubjectMail
-{
-    width: 350px;
+.ui-corner-all {
+	padding-top: 3px !important;
 }
-#txtContentMail
-{
-    width: 350px;
-    height: 118px;
+
+.status {
+	padding-right: 12px;
+}
+
+.float-right {
+	float: right;
+}
+
+.leftinfo {
+	text-decoration: underline;
+	font-style: italic;
+}
+
+#txtSubjectMail {
+	width: 350px;
+}
+
+#txtContentMail {
+	width: 350px;
+	height: 118px;
+}
+
+.green-checked-icon {
+	float: right;
+	color: mediumseagreen;
 }

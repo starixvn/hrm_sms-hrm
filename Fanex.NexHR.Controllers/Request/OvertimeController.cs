@@ -448,14 +448,12 @@
         [NonAction]
         private MemberOvertimeViewModel GetMemberOvertimeViewModel()
         {
-            var month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             var getAllGroupCriteria = new GetAllGroupCriteria();
             IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
             var memberOvertimeViewModel = new MemberOvertimeViewModel
             {
                 Teams = teams,
-                Month = month,
-                StatusId = 3
+                StatusId = 1
             };
 
             return memberOvertimeViewModel;
