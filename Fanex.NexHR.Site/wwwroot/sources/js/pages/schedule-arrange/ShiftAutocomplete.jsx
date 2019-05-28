@@ -5,7 +5,7 @@ import Autocomplete from 'react-autocomplete';
 
 export default class ShiftAutocomplete extends PureComponent {
     static propTypes = {
-        value: PropTypes.string,
+        shift: PropTypes.object,
         shiftOptions: PropTypes.arrayOf(PropTypes.object),
         name: PropTypes.string,
         className: PropTypes.string,
@@ -15,7 +15,7 @@ export default class ShiftAutocomplete extends PureComponent {
     };
 
     static defaultProps = {
-        value: '',
+        shift: null,
         shiftOptions: [],
         name: '',
         className: '',
@@ -28,15 +28,15 @@ export default class ShiftAutocomplete extends PureComponent {
         super(props);
 
         this.state = {
-            value: props.value === null ? '' : props.value,
+            value: props.shift === null ? '' : props.shift.code,
             options: [],
             isPasted: false
         };
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.value !== prevProps.value) {
-            this.setState({ value: this.props.value === null ? '' : this.props.value });
+        if (this.props.shift !== prevProps.shift) {
+            this.setState({ value: this.props.shift === null ? '' : this.props.shift.code });
         }
     }
 
@@ -54,10 +54,6 @@ export default class ShiftAutocomplete extends PureComponent {
             value,
             options,
             isPasted: false
-        }, () => {
-            if (value.trim().length === 0) {
-                this.props.onChange(this.props.name, null);
-            }
         });
     }
 

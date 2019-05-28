@@ -67,10 +67,8 @@ export default class ShiftMultipleModal extends Component {
                                 <label className="control-label">Shift</label>
                             </div>
                             <div className="input-form">
-                                <ShiftAutocomplete
-                                    className={`form-control ${isValid ? '' : 'input-validation-error'}`}
-                                    value={shift !== null ? shift.code : ''}
-                                    shiftOptions={this.props.shiftOptions}
+                                <ShiftAutocomplete className={`form-control ${isValid ? '' : 'input-validation-error'}`}
+                                    shift={shift} shiftOptions={this.props.shiftOptions}
                                     onChange={this.handleChangeShift}
                                 />
                             </div>

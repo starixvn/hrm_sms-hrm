@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -128,7 +129,7 @@
             {
                 ActorId = actorId,
                 EmployeeId = weeklyDefaultShift.EmployeeId,
-                FromDate = DateTime.Now.Date,
+                FromDate = DateTime.Now.LastDayOfWeek().AddDays(1),
                 MonShiftId = GetShiftId(weeklyDefaultShift.MonShift.Id),
                 TueShiftId = GetShiftId(weeklyDefaultShift.TueShift.Id),
                 WedShiftId = GetShiftId(weeklyDefaultShift.WedShift.Id),

@@ -112,14 +112,14 @@ export default class ColShift extends PureComponent {
                 }
             }
         } else if (data.isHoliday) {
-            classOfInput = `holiday ${data.isKeepInView ? 'keepinviewday' : ''}`;
+            classOfInput = `holiday ${data.isKeepInView ? 'iskeepinview' : data.isOvertime ? 'isovertime' : ''}`;
             if (data.isOffDay) {
                 valueOfInput = 'Off';
             } else {
                 valueOfInput = data.shift !== null ? data.shift.code : 'PH';
             }
         } else if (data.isOffDay) {
-            classOfInput = `offday ${data.isKeepInView ? 'keepinviewday' : ''}`;
+            classOfInput = `offday ${data.isKeepInView ? 'iskeepinview' : data.isOvertime ? 'isovertime' : ''}`;
             valueOfInput = data.shift !== null ? data.shift.code : 'Off';
         } else if (data.isKeepInView) {
             classOfInput = 'keepinviewday';
@@ -140,14 +140,18 @@ export default class ColShift extends PureComponent {
             && valueOfInput === defaultShift.code
             && !isUsedWeeklyDefaultShift) {
             placeholder = valueOfInput;
-            classOfInput += ' same-defaultshift';
+            classOfInput += ' same-default-shift';
         }
 
         if (data.isOffDayReplacement) {
             classOfInput += ' offdayreplacement';
         }
 
-        if (!isHost || data.isOvertime || data.isChangeShift || data.isKeepInView) {
+        if (!data.isModified) {
+            classOfInput += ' is-default-shift';
+        }
+
+        if (!isHost || data.isOvertime || data.isChangeShift) {
             isDisabled = true;
             isShowCheckBox = false;
         }
@@ -168,7 +172,7 @@ export default class ColShift extends PureComponent {
                         </OverlayTrigger>
                     }
                     <ShiftAutocomplete
-                        value={valueOfInput}
+                        shift={{ code: valueOfInput }}
                         name={scheduleAttrName}
                         className={classOfInput}
                         placeholder={placeholder}

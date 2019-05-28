@@ -16,6 +16,7 @@
         public bool IsKeepInView { get; set; }
         public bool IsChangeShift { get; set; }
         public bool IsOffDayReplacement { get; set; }
+        public bool IsModified { get; set; }
 
         public LeaveRequest LeaveType { get; set; }
         public LeaveRequest LeaveType2 { get; set; }

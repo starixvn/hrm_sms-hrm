@@ -334,7 +334,7 @@ export default class App extends Component {
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         let member = { ...members[eindex] };
 
-        if (isEqual(member[attrName].shift, shift)) {
+        if (shift !== null && isEqual(member[attrName].shift, shift)) {
             return;
         }
 
@@ -362,8 +362,7 @@ export default class App extends Component {
         const gindex = schedules.findIndex(item => item.groupId === groupId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId);
-        const originalDefaultShift = members[eindex].defaultShift;
-        members[eindex] = { ...members[eindex], defaultShift };
+        const originalDefaultShift = { ...members[eindex].defaultShift };
 
         if (defaultShift !== null) {
             this.scheduleAttrNames.forEach(attrName => {
@@ -385,6 +384,7 @@ export default class App extends Component {
             });
         }
 
+        members[eindex] = { ...members[eindex], defaultShift };
         schedules[gindex] = { ...schedules[gindex], members };
 
         this.setState({ schedules });
@@ -739,6 +739,23 @@ export default class App extends Component {
                         { ...this.originalSchedules[ogindex].members[oeindex][attrName], shift, isOffDay };
                 }
             });
+        } else {
+            const defaultShift = members[eindex].defaultShift;
+
+            if (defaultShift !== null) {
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (!members[eindex][attrName].isLeaveOffDay
+                        && !(members[eindex][attrName].isLeaveDay && !members[eindex][attrName].isLeaveHalfDay)
+                        && !members[eindex][attrName].isKeepInView
+                        && !members[eindex][attrName].isChangeShift
+                        && !members[eindex][attrName].isOvertime
+                        && !members[eindex][attrName].isHoliday
+                        && !members[eindex][attrName].isOffDay
+                        && members[eindex][attrName].shift === null) {
+                        members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift };
+                    }
+                });
+            }
         }
 
         schedules[gindex] = { ...schedules[gindex], members };

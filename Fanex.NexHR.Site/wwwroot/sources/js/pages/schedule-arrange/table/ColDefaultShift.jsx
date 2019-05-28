@@ -12,13 +12,11 @@ export default class ColDefaultShift extends PureComponent {
         const { isHost, shiftOptions, data, isUsedWeeklyDefaultShift } = this.props;
 
         return (
-            <div className={`table-cell cell-shift ${isUsedWeeklyDefaultShift ? 'weekly-default-shift' : ''}`}>
+            <div className={`table-cell cell-shift cell-default-shift ${isUsedWeeklyDefaultShift ? 'is-weekly' : ''}`}>
                 {
                     !isUsedWeeklyDefaultShift &&
-                    <ShiftAutocomplete
-                        value={data !== null ? data.code : ''}
-                        isDisabled={!isHost}
-                        shiftOptions={shiftOptions}
+                    <ShiftAutocomplete isDisabled={!isHost}
+                        shift={data} shiftOptions={shiftOptions}
                         onChange={this.handleChangeDefaultShift}
                     />
                 }
