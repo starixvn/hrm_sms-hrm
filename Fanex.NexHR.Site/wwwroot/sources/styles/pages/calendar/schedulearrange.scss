@@ -89,7 +89,7 @@ input[type="text"] {
         .item {
             padding: 3px;
 
-            &:hover {
+            &.highlighted {
                 border: 1px solid #003eff;
                 background: #007fff;
                 font-weight: normal;
@@ -265,7 +265,7 @@ input[type="text"] {
                         display: table-cell;
                         width: 35px;
                         text-align: center;
-                        padding: 0 3px;
+                        padding: 0 6px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
@@ -412,6 +412,11 @@ input[type="text"] {
                         background-image: linear-gradient(45deg, rgba(200,200,200,.4) 25%, rgba(222,222,222,.4) 25%, rgba(222,222,222,.4) 50%, rgba(200,200,200,.4) 50%, rgba(200,200,200,.4) 75%, rgba(222,222,222,.4) 75%, rgba(222,222,222,.4) 100%);
                         background-size: 11.31px 11.31px;
                     }
+
+                    &.offday, &.offdayreplacement, &.keepinviewday, &.changeshift, &.overtime, &.holiday {
+                        color: inherit;
+                        background-image: unset;
+                    }
                 }
             }
         }
@@ -450,6 +455,10 @@ input[type="text"] {
     background: #fbaa5e !important;
 }
 
+.overtime {
+    background: #b37574 !important;
+}
+
 .holiday {
     background: #f3aa4b !important;
 }
@@ -476,10 +485,6 @@ input[type="text"] {
 
 .weddingleave {
     background: #7cd3e9 !important;
-}
-
-.overtime {
-    background: #b37574 !important;
 }
 
 .tooltip {

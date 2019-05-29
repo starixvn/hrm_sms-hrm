@@ -103,7 +103,7 @@ export default class ShiftAutocomplete extends PureComponent {
                 wrapperStyle={{ display: 'block' }}
                 renderInput={(props) => <input type="text" {...props} />}
                 renderMenu={(items, value, style) => <div className="items" children={items} />}
-                renderItem={(item) => <div className="item" key={item.id}>{item.code}</div>}
+                renderItem={(item, isHighlighted) => <div className={`item ${isHighlighted ? 'highlighted' : ''}`} key={item.id}>{item.code}</div>}
                 inputProps={{
                     name: name,
                     className: className,

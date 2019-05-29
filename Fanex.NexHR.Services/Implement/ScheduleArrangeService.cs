@@ -257,12 +257,12 @@
 
         private static void MappingDailyDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
         {
-            if (dailySchedule.IsLeaveOffDay || (dailySchedule.IsLeaveDay && !dailySchedule.IsLeaveHalfDay) || dailySchedule.IsHoliday)
+            if (dailySchedule.IsModified || dailySchedule.IsLeaveOffDay || (dailySchedule.IsLeaveDay && !dailySchedule.IsLeaveHalfDay))
             {
                 return;
             }
 
-            if (dailySchedule.IsOffDay || dailySchedule.IsKeepInView || dailySchedule.IsChangeShift || dailySchedule.IsOvertime)
+            if (dailySchedule.IsHoliday || dailySchedule.IsOffDay || dailySchedule.IsChangeShift || dailySchedule.IsOvertime)
             {
                 return;
             }

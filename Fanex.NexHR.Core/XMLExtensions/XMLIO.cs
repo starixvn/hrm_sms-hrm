@@ -14,6 +14,11 @@
         {
             var lambda = GetElement<T>(typeof(T));
 
+            if(source == null)
+            {
+                return new XElement("Root");
+            }
+
             return new XElement("Root", source.Select(lambda).ToArray());
         }
 

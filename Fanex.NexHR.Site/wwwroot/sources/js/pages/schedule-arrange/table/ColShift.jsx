@@ -123,7 +123,6 @@ export default class ColShift extends PureComponent {
             valueOfInput = data.shift !== null ? data.shift.code : 'Off';
         } else if (data.isKeepInView) {
             classOfInput = 'keepinviewday';
-            valueOfInput = 'KIV';
         } else if (data.isChangeShift) {
             classOfInput = 'changeshift';
             valueOfInput = data.shift.code;
