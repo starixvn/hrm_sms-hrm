@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByHR] @SupervisorID INT = NULL
+﻿
+/****** Object:  Stored Procedure dbo.OverTime_GetRequestMonthlyByHR    Script Date: 7/20/2016 10:19:15 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_GetRequestMonthlyByHR    Script Date: 7/19/2016 5:22:18 PM ******/
+CREATE PROCEDURE [dbo].[OverTime_GetRequestMonthlyByHR] @SupervisorID INT = NULL
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(max) = ''
 	,@fromdate DATETIME
@@ -16,8 +19,14 @@ Revisions:
 Param's Explanation:
 */
 BEGIN
-	SELECT @fromdate = CONVERT(VARCHAR(10), @fromDate, 111) + ' 00:00:00'
-		,@todate = CONVERT(VARCHAR(10), @toDate, 111) + ' 23:59:59'
+	IF (
+			@fromdate IS NOT NULL
+			AND @todate IS NOT NULL
+			)
+	BEGIN
+		SELECT @fromdate = CONVERT(VARCHAR(10), @fromDate, 111) + ' 00:00:00'
+			,@todate = CONVERT(VARCHAR(10), @toDate, 111) + ' 23:59:59'
+	END
 
 	CREATE TABLE #status (Currentstatus TINYINT)
 
@@ -70,7 +79,8 @@ BEGIN
 		,NULL Remark
 		,r.ModifiedDate
 		,CONVERT(BIT, CASE 
-				WHEN OTD.RequestId IS NOT NULL THEN 1
+				WHEN OTD.RequestId IS NOT NULL
+					THEN 1
 				ELSE 0
 				END) IsShowWarning
 		,e.EmpId AS RequesterID
@@ -92,25 +102,25 @@ BEGIN
 		,e_m.NickName AS ModifiedBy
 		,e_m.FullName AS FullNameModified
 	FROM [dbo].[OTMonthlyRequest] AS r WITH (NOLOCK)
-		LEFT JOIN [dbo].Employee AS ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
-		LEFT JOIN [dbo].Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
-		LEFT JOIN [dbo].Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
-		LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = r.empID
+	LEFT JOIN [dbo].Employee AS ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
+	LEFT JOIN [dbo].Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
+	LEFT JOIN [dbo].Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
+	LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
+	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = r.empID
 		AND ISNULL(e.isDeleted, 0) = 0
 		AND ISNULL(e.[Enabled], 1) = 1
-		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID
+	LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID
 		AND ISNULL(g.IsDeleted, 0) = 0
-		LEFT JOIN (
+	LEFT JOIN (
 		SELECT DISTINCT ot.RequestId
 		FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
-			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ot.Schedule = s.ShiftID
-			LEFT JOIN dbo.EmployeeAttendance AS at WITH (NOLOCK) ON at.AttendanceDate = ot.OvertimeDate
+		LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ot.Schedule = s.ShiftID
+		LEFT JOIN dbo.EmployeeAttendance AS at WITH (NOLOCK) ON at.AttendanceDate = ot.OvertimeDate
 			AND at.EmpId = ot.EmpId
 		WHERE ot.TotalHours - ISNULL(at.LateIn, 0) / 60 >= s.TotalHours + 1
 		) AS OTD ON OTD.RequestId = r.RequestId
-	WHERE r.[Month] BETWEEN @fromdate
-			AND @todate
+	WHERE ((@fromdate IS NULL AND @todate IS NULL) OR (r.[Month] BETWEEN @fromdate
+			AND @todate))
 		AND (
 			@EmpId IS NULL
 			OR r.EmpId = @EmpId
@@ -130,11 +140,11 @@ BEGIN
 				FROM #Group
 				)
 			)
-		--AND (
-		--	r.VerifierId = @SupervisorID
-		--	OR r.ApproverId = @SupervisorID
-		--	)
-	
+
+	--AND (
+	--	r.VerifierId = @SupervisorID
+	--	OR r.ApproverId = @SupervisorID
+	--	)
 	DROP TABLE #Group
 
 	DROP TABLE #status

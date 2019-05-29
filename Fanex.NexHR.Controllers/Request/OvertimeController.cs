@@ -214,13 +214,11 @@
         [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
-            DateTime monthDefault = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
             var criteria = new GetMemberOvertimeByLeaderCriteria
             {
                 SupervisorId = CurrentUser.Id,
-                FromDate = (month.HasValue) ? month.Value : monthDefault,
-                ToDate = (month.HasValue) ? month.Value : monthDefault,
+                FromDate = month != null ? month.Value : month,
+                ToDate = month != null ? month.Value : month,
                 EmployeeId = employeeId,
                 GroupIds = teamIds,
                 Status = statusId
