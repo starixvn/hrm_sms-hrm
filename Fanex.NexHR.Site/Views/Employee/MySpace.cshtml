@@ -28,16 +28,16 @@
                 @Labels.CheckInOut
             </td>
             <td>
-                @Model.TotalCheckInOutRequest
+                @RazorHelper.DisplayZeroCell(Model.TotalCheckInOutRequest)
             </td>
             <td>
                 @if (Model.TotalPendingCheckInOutRequest > 0)
-                { 
+                {
                     @Html.ActionLink(Model.TotalPendingCheckInOutRequest.ToString(), "employeeView", "checkinout")
                 }
                 else
-                { 
-                    <span>0</span>
+                {
+                    <span>-</span>
                 }
             </td>
             <td>
@@ -49,17 +49,10 @@
                 @Labels.LateInEarlyOut
             </td>
             <td>
-                @Model.TotalLateInEarlyOutRequest
+                @RazorHelper.DisplayZeroCell(Model.TotalLateInEarlyOutRequest)
             </td>
             <td>
-                @if (Model.TotalPendingLateInEarlyOutRequest > 0)
-                { 
-                    @Html.ActionLink(Model.TotalPendingLateInEarlyOutRequest.ToString(), "employeeView", "lateinearlyout")
-                }
-                else
-                { 
-                    <span>0</span>
-                }
+                @RazorHelper.DisplayZeroCell(Model.TotalPendingLateInEarlyOutRequest)
             </td>
             <td>
                 @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
@@ -70,16 +63,16 @@
                 @Labels.ChangeShift
             </td>
             <td>
-                @Model.TotalChangedShiftRequest
+                @RazorHelper.DisplayZeroCell(Model.TotalChangedShiftRequest)
             </td>
             <td>
                 @if (Model.TotalPendingChangedShiftRequest > 0)
-                { 
+                {
                     @Html.ActionLink(Model.TotalPendingChangedShiftRequest.ToString(), "employeeView", "changeshift")
                 }
                 else
-                { 
-                    <span>0</span>
+                {
+                    <span>-</span>
                 }
             </td>
             <td>
@@ -91,16 +84,16 @@
                 @Labels.Leave
             </td>
             <td>
-                @Model.TotalLeaveRequest
+                @RazorHelper.DisplayZeroCell(Model.TotalLeaveRequest)
             </td>
             <td>
                 @if (Model.TotalPendingLeaveRequest > 0)
-                { 
+                {
                     @Html.ActionLink(Model.TotalPendingLeaveRequest.ToString(), "employeeView", "leave")
                 }
                 else
-                { 
-                    <span>0</span>
+                {
+                    <span>-</span>
                 }
             </td>
             <td>
@@ -112,16 +105,16 @@
                 @Labels.KeepInView
             </td>
             <td>
-                @Model.TotalKivRequest
+                @RazorHelper.DisplayZeroCell(Model.TotalKivRequest)
             </td>
             <td>
                 @if (Model.TotalPendingKivRequest > 0)
-                { 
+                {
                     @Html.ActionLink(Model.TotalPendingKivRequest.ToString(), "employeeView", "KeepInView")
                 }
                 else
-                { 
-                    <span>0</span>
+                {
+                    <span>-</span>
                 }
             </td>
             <td>
@@ -135,12 +128,12 @@
             <td>-</td>
             <td>
                 @if (Model.TotalPendingOverTimeRequest > 0)
-                { 
+                {
                     @Html.ActionLink(Model.TotalPendingOverTimeRequest.ToString(), "employeeView", "overtime")
                 }
                 else
-                { 
-                    <span>0</span>
+                {
+                    <span>-</span>
                 }
             </td>
             <td>

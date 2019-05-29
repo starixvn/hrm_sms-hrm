@@ -77,37 +77,37 @@
 }
 @helper StatusDisplayByHR(long statusId, Fanex.NexHR.Models.Request.RequestStatus status)
 {
-if (status.Id != (byte)CurrentRequestStatus.Rejected)
-{
+    if (status.Id != (byte)CurrentRequestStatus.Rejected)
+    {
         <td>
             <a requestid="@statusId" href="javascript:;" class="@status.Name tooltip">@status.Name</a>
         </td>
-}
-else
-{
+    }
+    else
+    {
         <td>
             @status.Name
         </td>
-}
+    }
 }
 
 @helper ModifierDisplay(string nickName, string fullName, DateTime? modifiedDate, long requestId)
 {
-if (!string.IsNullOrWhiteSpace(nickName))
-{
-    if (modifiedDate > new DateTime(2010, 1, 1))
+    if (!string.IsNullOrWhiteSpace(nickName))
     {
+        if (modifiedDate > new DateTime(2010, 1, 1))
+        {
             <td id="pb@(requestId)">@nickName, @modifiedDate.ToShortFormatedDate()</td>
+        }
+        else
+        {
+            <td id="pb@(requestId)">@nickName</td>
+        }
     }
     else
     {
-            <td id="pb@(requestId)">@nickName</td>
-    }
-}
-else
-{
         <td id="pb@(requestId)">N/A</td>
-}
+    }
 }
 @helper TeamDropDownList(List<Fanex.NexHR.Models.Team> teamList, string controlName = "team")
 {
@@ -175,14 +175,14 @@ else
 }
 @helper LateInEarlyOutTimeFormat(int mins, short type)
 {
-if (type == (byte)RequestType.LateIn)
-{
+    if (type == (byte)RequestType.LateIn)
+    {
         <span>+@mins'</span>
-}
-else
-{
+    }
+    else
+    {
         <span>-@mins'</span>
-}
+    }
 }
 @helper VerifierAndApproverMenu()
 {
@@ -469,4 +469,16 @@ else
         <option value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
         <option value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
     </select>
+}
+
+@helper DisplayZeroCell(decimal value)
+{
+    if (value > 0)
+    {
+        <span>@value</span>
+    }
+    else
+    {
+        <span>-</span>
+    }
 }
