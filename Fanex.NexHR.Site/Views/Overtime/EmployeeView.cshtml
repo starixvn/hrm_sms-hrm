@@ -45,6 +45,11 @@
                 <th>@Labels.NormalDay</th>
                 <th>@Labels.OffDay</th>
                 <th>@Labels.PublicHoliday</th>
+                <th>@Labels.Verifier</th>
+                <th>@Labels.VerifiedDate</th>
+                <th>@Labels.Approver</th>
+                <th>@Labels.ApprovedDate</th>
+                <th>@Labels.Status</th>
                 <th>@Labels.Details</th>
                 <th>@Labels.Edit</th>
             </tr>
@@ -83,37 +88,64 @@
                             }
                         </td>
                         <td>
+                            @if (request.VerifiedBy != null)
+                            {
+                                @request.VerifiedBy.NickName
+                            }
+                        </td>
+                        <td>
+                            @if (request.VerifiedDate != null)
+                            {
+                                @request.VerifiedDate.Value.ToShortFormatedDate()
+                            }
+                        </td>
+                        <td>
+                            @if (request.ApprovedBy != null)
+                            {
+                                @request.ApprovedBy.NickName
+                            }
+                        </td>
+                        <td>
+                            @if (request.ApprovedDate != null)
+                            {
+                                @request.ApprovedDate.Value.ToShortFormatedDate()
+                            }
+                        </td>
+                        <td>
+                            <span>@request.Status</span>
+                        </td>
+                        <td>
                             <a href="@Url.Action("ViewDetail", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
                                 View
                             </a>
                         </td>
                         <td>
                             @{
-                            var currentDate = DateTime.Now.Date;
-                            var requestDate = request.RequestedDate.Date;
-                            var requestDatePreviousOneMonth = requestDate.AddMonths(-1).Date;
-                            var canEditFrom = new DateTime();
-                            if (requestDate.Month == 1)
-                            {
-                                canEditFrom = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
-                            }
-                            else
-                            {
-                                canEditFrom = new DateTime(requestDate.Year, requestDate.AddMonths(-1).Month, 10);
-                            }
-                            var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
-                            var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
+                                var currentDate = DateTime.Now.Date;
+                                var requestDate = request.RequestedDate.Date;
+                                var requestDatePreviousOneMonth = requestDate.AddMonths(-1).Date;
+                                var canEditFrom = new DateTime();
+                                if (requestDate.Month == 1)
+                                {
+                                    canEditFrom = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
+                                }
+                                else
+                                {
+                                    canEditFrom = new DateTime(requestDate.Year, requestDate.AddMonths(-1).Month, 10);
+                                }
+                                var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
+                                var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
 
-                            if (request.Status == null || (int)(request.Status.Id) == 1)
-                            {
-                                <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
-                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                </a>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
+                                if (request.Status == null || (int)(request.Status.Id) == 1)
+                                {
+                                    <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
+                                        <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
                             }
                         </td>
                     </tr>
@@ -131,9 +163,14 @@
                     @Labels.TotalOvertimeHours:
                 </td>
                 <td id="sumtotal"></td>
-                <td id="sumnormal">@Model.TotalRequest.Sum(t=>t.NormalHours).ToString("0.00")</td>
+                <td id="sumnormal">@Model.TotalRequest.Sum(t => t.NormalHours).ToString("0.00")</td>
                 <td id="sumoff">@Model.TotalRequest.Sum(t => t.OffHours).ToString("0.00")</td>
                 <td id="sumpublic">@Model.TotalRequest.Sum(t => t.PublicHours).ToString("0.00")</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>

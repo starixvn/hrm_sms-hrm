@@ -4354,6 +4354,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verified Date.
+        /// </summary>
+        public static string VerifiedDate {
+            get {
+                return ResourceManager.GetString("VerifiedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verifier.
         /// </summary>
         public static string Verifier {

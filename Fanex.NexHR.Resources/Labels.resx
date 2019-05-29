@@ -1647,4 +1647,7 @@
   <data name="UploadFileExists" xml:space="preserve">
     <value>The file '{0}' has already exists. Please delete old file or rename the new file before upload</value>
   </data>
+  <data name="VerifiedDate" xml:space="preserve">
+    <value>Verified Date</value>
+  </data>
 </root>
