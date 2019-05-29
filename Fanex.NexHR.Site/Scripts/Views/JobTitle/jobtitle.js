@@ -22,6 +22,10 @@ var JobTitle = (function ($) {
         return valid;
     };
 
+    var exportExcel = function (keyword) {
+        window.location.href = "/jobTitle/ExportExcel?keyword=" + keyword;
+    };
+
     var getJobTitle = function (value) {
         $.post(urlRoot + "jobTitle/GetJobTitles", { jobTitle: value }, function (data) {
             jobTitleTableBody.html(data);
@@ -50,22 +54,26 @@ var JobTitle = (function ($) {
             getJobTitle(keyword.val());
         });
 
+        $(".js-btn-exportExcel").on("click", function () {
+            exportExcel(keyword.val());
+        });
+
         jobTitleTableBody.on("click", ".ls-link-delete-job", function () {
             var jobTitleId = $(this).attr("data-id");
 
             confirm('Are you sure you want to delete?', function () {
                 $.post(urlRoot + 'JobTitle/Delete',
-                { id: jobTitleId },
-                function (response) {
-                    if (response.IsSuccessful) {
-                        getJobTitle(keyword.val());
-                    }
-                    else {
-                        alert(response.Message);
-                    }
-                }).error(function () {
-                    alert(messages.errorTryAgain);
-                });
+                    { id: jobTitleId },
+                    function (response) {
+                        if (response.IsSuccessful) {
+                            getJobTitle(keyword.val());
+                        }
+                        else {
+                            alert(response.Message);
+                        }
+                    }).error(function () {
+                        alert(messages.errorTryAgain);
+                    });
             });
         });
 
@@ -105,35 +113,35 @@ var JobTitle = (function ($) {
                     if (bValid) {
                         if (parseInt($("#isUpdate").val(), 10) === UPDATE_JOB) {
                             $.post(urlRoot + 'JobTitle/Update',
-                            { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
-                            function (response) {
-                                if (response.IsSuccessful) {
-                                    getJobTitle(keyword.val());
-                                }
-                                else {
-                                    alert(response.Message);
-                                }
-                            }).error(function () {
-                                alert(messages.errorTryAgain);
-                            }).always(function () {
-                                dialogForm.dialog("close");
-                            });
+                                { id: $("#jobtitleId").val(), name: $("#name").val(), categoryId: $("#category").val() },
+                                function (response) {
+                                    if (response.IsSuccessful) {
+                                        getJobTitle(keyword.val());
+                                    }
+                                    else {
+                                        alert(response.Message);
+                                    }
+                                }).error(function () {
+                                    alert(messages.errorTryAgain);
+                                }).always(function () {
+                                    dialogForm.dialog("close");
+                                });
                         }
                         else {
                             $.post(urlRoot + 'JobTitle/Insert',
-                            { name: $("#name").val(), categoryId: $("#category").val() },
-                            function (response) {
-                                if (response.IsSuccessful) {
-                                    getJobTitle(keyword.val());
-                                }
-                                else {
-                                    alert(response.Message);
-                                }
-                            }).error(function () {
-                                alert(messages.errorTryAgain);
-                            }).always(function () {
-                                dialogForm.dialog("close");
-                            });
+                                { name: $("#name").val(), categoryId: $("#category").val() },
+                                function (response) {
+                                    if (response.IsSuccessful) {
+                                        getJobTitle(keyword.val());
+                                    }
+                                    else {
+                                        alert(response.Message);
+                                    }
+                                }).error(function () {
+                                    alert(messages.errorTryAgain);
+                                }).always(function () {
+                                    dialogForm.dialog("close");
+                                });
                         }
                     }
                 },

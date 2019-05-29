@@ -3,6 +3,7 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.MailDeliver;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.Services.ExportExcel.JobTitle;
     using Implement;
     using Interfaces;
     using Unity;
@@ -70,6 +71,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
             container.RegisterType<IExportWeekendLeaveSummaryService, ExportWeekendLeaveSummaryService>();
             container.RegisterType<IExportExcelScheduleService, ExportExcelScheduleService>();
+            container.RegisterType<IJobTitleExportService, JobTitleExportService>();
         }
     }
 }

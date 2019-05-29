@@ -9,19 +9,23 @@
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel.JobTitle;
     using Fanex.NexHR.Web.Providers;
     using Resources;
 
-    public class JobTitleController : BaseController
+    public class JobTitleController : BaseExportController
     {
         private readonly ILookupDataService lookupDataService;
+        private readonly IJobTitleExportService jobTitleExportService;
         private readonly IBaseService baseService;
 
         public JobTitleController(
             ILookupDataService lookupDataService,
+            IJobTitleExportService jobTitleExportService,
             IBaseService baseService)
         {
             this.lookupDataService = lookupDataService;
+            this.jobTitleExportService = jobTitleExportService;
             this.baseService = baseService;
         }
 
@@ -43,6 +47,17 @@
             ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
+        }
+
+        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
+        public ActionResult ExportExcel(string jobTitle)
+        {
+            var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };
+            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(criteria);
+
+            jobTitleExportService.ExportJobTitle(jobTitles);
+
+            return new EmptyResult();
         }
 
         [HttpPost]

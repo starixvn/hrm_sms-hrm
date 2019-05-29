@@ -1254,6 +1254,7 @@
     <Content Include="Views\Account\EditContact.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\account\profile-edit.scss" />
     <Content Include="Views\Account\_ListFileUploaded.cshtml" />
+    <Content Include="ExcelTemplates\JobTitleSummary.xls" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

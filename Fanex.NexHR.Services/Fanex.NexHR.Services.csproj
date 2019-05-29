@@ -177,6 +177,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportExcel\JobTitle\IJobTitleExportService.cs" />
+    <Compile Include="ExportExcel\JobTitle\JobTitleExportService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
