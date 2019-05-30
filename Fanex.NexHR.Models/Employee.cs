@@ -216,6 +216,9 @@
             }
         }
 
+        [Display(Name = "Pickup Remark")]
+        public string PickupRemark { get; set; }
+
         private string[] GetRoles2Array()
         {
             return Roles?.Select(i => i.RoleId.ToString()).ToArray();

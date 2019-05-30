@@ -871,7 +871,8 @@
                 TaxCode = model.TaxCode,
                 SocialInsuranceNo = model.SocialInsuranceNo,
                 RegisteredHospital = model.RegisteredHospital,
-                IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday
+                IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
+                PickupRemark = model.PickupRemark
             };
 
             return criteria;

@@ -3031,6 +3031,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pickup Remark.
+        /// </summary>
+        public static string PickupRemark {
+            get {
+                return ResourceManager.GetString("PickupRemark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place Of Birth.
         /// </summary>
         public static string PlaceOfBirth {

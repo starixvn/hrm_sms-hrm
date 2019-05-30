@@ -151,7 +151,9 @@
                         WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.ThursdaySchedule);
                         WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.FridaySchedule);
                         WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SaturdaySchedule);
-                        WriteDailyCells(worksheet.Cells[rowIndex, colIndex], weeklySchedule.SundaySchedule);
+                        WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SundaySchedule);
+
+                        worksheet.Cells[rowIndex, colIndex].Value = weeklySchedule.PickupRemark;
 
                         rowIndex++;
                     }

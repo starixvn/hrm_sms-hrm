@@ -158,6 +158,8 @@
 
         public string History { get; set; }
 
+        public string PickupRemark { get; set; }
+
         public override string GetSettingKey()
         {
             return "Employee_UpdateEmployee";

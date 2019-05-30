@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.ScheduleArrange
 {
     using System;
+    using Newtonsoft.Json;
 
     public class WeeklySchedule
     {
@@ -10,6 +11,9 @@
         public string FullName { get; set; }
         public EntityBase<int> Team { get; set; }
         public string Remark { get; set; }
+
+        [JsonIgnore]
+        public string PickupRemark { get; set; }
         public int DisplayOrder { get; set; }
         public ShiftBase DefaultShift { get; set; }
         public short OffDaysbyWeek { get; set; }

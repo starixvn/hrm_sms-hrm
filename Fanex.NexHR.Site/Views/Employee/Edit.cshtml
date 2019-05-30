@@ -294,6 +294,15 @@
             </li>
             <li class="list-group-item">
                 <div class="label">
+                    @Html.LabelFor(model => model.PickupRemark, Labels.PickupRemark)
+                </div>
+                <div class="input">
+                    @Html.TextAreaFor(model => model.PickupRemark, new { maxlength=200 })
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">
                     @Html.LabelFor(model => model.Skype)
                 </div>
                 <div class="input">

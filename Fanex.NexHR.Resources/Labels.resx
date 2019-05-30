@@ -1632,4 +1632,7 @@
   <data name="RolePermission" xml:space="preserve">
     <value>Role Permission</value>
   </data>
+  <data name="PickupRemark" xml:space="preserve">
+    <value>Pickup Remark</value>
+  </data>
 </root>
