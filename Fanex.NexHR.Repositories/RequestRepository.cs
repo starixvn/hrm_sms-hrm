@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Common.Extensions;
     using Fanex.Data;
@@ -141,7 +140,6 @@
             return entityList;
         }
 
-        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private RequestEntity FillDataEntity(IDataReader reader)
         {
             var entity = new RequestEntity

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Core;
@@ -24,7 +23,6 @@
     using ViewModels;
     using Web.Providers;
 
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class OvertimeController : BaseController
     {
         private readonly ILookupDataService lookupDataService;

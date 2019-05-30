@@ -28,7 +28,15 @@
             this.exportExcelService = exportExcelService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HttpGet]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
+        public ActionResult Index()
+        {
+            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
+
+            return View();
+        }
+
         public CustomJsonResult GetGroups()
         {
             IEnumerable<EntityBase<int>> groups = scheduleArrangeService.GetGroups(CurrentUser.Id);
@@ -43,7 +51,7 @@
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
             filter.ActorId = CurrentUser.Id;
@@ -118,7 +126,7 @@
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ExportExcel(WeeklyScheduleFilter filter)
         {
             filter.ActorId = CurrentUser.Id;
@@ -130,7 +138,7 @@
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ExportExcelDriverPickup(WeeklyScheduleFilter filter)
         {
             Actor actor = new Actor

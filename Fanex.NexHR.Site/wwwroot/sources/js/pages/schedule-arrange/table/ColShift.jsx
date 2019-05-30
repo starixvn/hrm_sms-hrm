@@ -155,6 +155,15 @@ export default class ColShift extends PureComponent {
             isShowCheckBox = false;
         }
 
+        let shift;
+        if (data.shift === null) {
+            shift = { code: valueOfInput, name: valueOfInput };
+        } else if (data.shift.code !== valueOfInput) {
+            shift = { ...data.shift, code: valueOfInput, name: valueOfInput };
+        } else {
+            shift = data.shift;
+        }
+
         return (
             <div className="table-cell cell-shift" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
                 <div className={`cell-shift-wrapper ${isLeaveHalfday ? 'leavehalfday' : ''}`}>
@@ -171,7 +180,7 @@ export default class ColShift extends PureComponent {
                         </OverlayTrigger>
                     }
                     <ShiftAutocomplete
-                        shift={{ code: valueOfInput }}
+                        shift={shift}
                         name={scheduleAttrName}
                         className={classOfInput}
                         placeholder={placeholder}

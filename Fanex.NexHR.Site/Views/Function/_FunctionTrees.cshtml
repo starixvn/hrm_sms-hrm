@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models
 @using Fanex.NexHR.ViewModels.Function
 
 @model TreeFunctionViewModel
@@ -9,7 +10,7 @@
 
 @foreach (FunctionModel function in Model.Functions)
 {
-    <tr class="@(function.Level == 0 ? "root-row" : "child-row")">
+    <tr class="@(function.Level == 0 ? "root-row" : "child-row")" data-fid="@function.FunctionId">
         <td class="align-left">
             @if (function.Level > 0)
             {
@@ -22,15 +23,18 @@
             @function.Name
         </td>
         <td>
-            <div class="checkbox">
-                <input type="checkbox" class="checkbox-custom" name="criteria.funcRead" id="funcRead@(function.FunctionId)"
-                       data-pid="@function.ParentFunctionId" data-fid="@function.FunctionId"
-                       @(function.IsRead ? "checked" : string.Empty) @disabled />
-                <label for="funcRead@(function.FunctionId)"></label>
-            </div>
+            @if (function.Policy == (int)Policy.None || function.Policy == (int)Policy.Read)
+            {
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" name="criteria.funcRead" id="funcRead@(function.FunctionId)"
+                           data-pid="@function.ParentFunctionId" data-fid="@function.FunctionId"
+                           @(function.IsRead ? "checked" : string.Empty) @disabled />
+                    <label for="funcRead@(function.FunctionId)"></label>
+                </div>
+            }
         </td>
         <td>
-            @if (!function.IsReadOnly)
+            @if (function.Policy == (int)Policy.None || function.Policy == (int)Policy.Host)
             {
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" name="criteria.funcHost" id="funcHost@(function.FunctionId)"

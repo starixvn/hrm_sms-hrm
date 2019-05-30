@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
@@ -12,7 +11,6 @@
     using NPOI.SS.Util;
     using Resources;
 
-    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class TotalWorkingHourExportService : IExportService
     {
         private readonly IList<TotalWorkingHours> totalWorkingHours;

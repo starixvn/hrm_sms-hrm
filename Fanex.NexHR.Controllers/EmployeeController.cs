@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -32,7 +31,6 @@
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
 
-    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Ok.")]
     public class EmployeeController : BaseController
     {
         private readonly ITeamService teamService;
@@ -818,7 +816,6 @@
             return jobTitles;
         }
 
-        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)
         {
             var criteria = new UpdateEmployeeCriteria

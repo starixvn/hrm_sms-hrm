@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -15,7 +14,6 @@
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelService : IExportExcelService
     {
         private const int _RowStartBodyLeaveSummary = 4;
@@ -120,8 +118,6 @@
             return hssfworkbook;
         }
 
-        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Ok.")]
-        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Ok.")]
         public HSSFWorkbook ExportEmployeeOvertimeRecord(IList<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
         {
             int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;

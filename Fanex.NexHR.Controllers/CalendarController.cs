@@ -39,15 +39,6 @@
             this.employeeService = employeeService;
         }
 
-        [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult ArrangeSchedule()
-        {
-            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-
-            return View();
-        }
-
         [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {

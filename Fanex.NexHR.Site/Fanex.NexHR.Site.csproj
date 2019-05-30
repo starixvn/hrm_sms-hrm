@@ -834,6 +834,7 @@
     <Content Include="wwwroot\dist\styles\error.js" />
     <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.svg" />
     <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\pantone.svg" />
     <Content Include="wwwroot\dist\styles\fonts\short-seal.svg" />
     <Content Include="wwwroot\dist\styles\function.index.css" />
     <Content Include="wwwroot\dist\styles\function.index.js" />
@@ -896,6 +897,7 @@
     <Content Include="wwwroot\sources\styles\images\500\Error.svg" />
     <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\pantone.svg" />
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
@@ -1064,7 +1066,7 @@
     <Content Include="Views\KeepInView\EmployeeView.cshtml" />
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
-    <Content Include="Views\Calendar\ArrangeSchedule.cshtml" />
+    <Content Include="Views\ScheduleArrange\Index.cshtml" />
     <Content Include="Views\Calendar\ShiftStatistic.cshtml" />
     <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />

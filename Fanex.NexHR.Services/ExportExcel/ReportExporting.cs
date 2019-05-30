@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -12,7 +11,6 @@
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
 
-    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ReportExporting
     {
         private const int _RowStartBodyWorkingCalendarSummary = 5;

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Criteria.Message;
@@ -49,7 +48,6 @@
         }
 
         [NonAction]
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Reviewed. Suppression is OK here.")]
         public IEnumerable<MenuModel> GetNagivationData()
         {
             return CurrentUser.Menus;

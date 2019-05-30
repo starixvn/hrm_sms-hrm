@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web;
     using ExportExcel;
@@ -10,7 +9,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
 
-    [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
     public class ExportExcelManpowerService : IExportExcelManpowerService
     {
         public const int RowStartHeader = 2;
@@ -145,7 +143,6 @@
             return record;
         }
 
-        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Ok.")]
         private void FillContentRowFooterReport(IList<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
         {
             int month = 1;
