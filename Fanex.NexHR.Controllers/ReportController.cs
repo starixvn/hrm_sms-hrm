@@ -116,7 +116,7 @@
             {
                 Fromtime = fromDate,
                 Totime = toDate,
-                AttendanceType = model.TimeSheetType,
+                AttendanceType = 0, //show All
                 EmpId = model.EmpId,
                 ExcludeUserDelete = 1
             };
