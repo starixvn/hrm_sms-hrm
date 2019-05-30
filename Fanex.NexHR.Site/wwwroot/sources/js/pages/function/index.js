@@ -97,24 +97,16 @@ let assignPermissionToRole = (function ($) {
         $btnSubmit.on('click', function () {
             let roleId = $('#RoleId').val(),
                 model = [],
-                els = [],
-                totalItems;
-
-            els = $functionTable.find('input[type=checkbox][name=' + attrRead + ']:not(:disabled)');
-            totalItems = els.length;
+                els = $functionTable.find('tbody tr'),
+                totalItems = els.length;
 
             for (let i = 0; i < totalItems; i++) {
                 let el = $(els[i]),
                     functionId = el.data('fid'),
-                    isRead = el.prop('checked'),
-                    isHost = $functionTable
-                        .find('input[type=checkbox][name=' + attrHost + '][data-fid=' + functionId + ']:not(:disabled)').prop('checked');
+                    isRead = el.find('input[type=checkbox][name=' + attrRead + '][data-fid=' + functionId + ']:not(:disabled)').prop('checked'),
+                    isHost = el.find('input[type=checkbox][name=' + attrHost + '][data-fid=' + functionId + ']:not(:disabled)').prop('checked');
 
-                model.push({
-                    functionId,
-                    isRead,
-                    isHost
-                });
+                model.push({ functionId, isRead, isHost });
             }
 
             if (totalItems > 0) {
