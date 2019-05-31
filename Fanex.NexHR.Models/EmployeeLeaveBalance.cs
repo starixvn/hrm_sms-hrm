@@ -9,5 +9,7 @@
         public decimal KeepInViewBalance { get; set; }
 
         public decimal CurrentLeaveBalanceDay { get; set; }
+
+        public decimal WeekedLeaveDayTaken { get; set; }
     }
 }

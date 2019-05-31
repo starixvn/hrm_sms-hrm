@@ -12,6 +12,7 @@
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -220,7 +221,7 @@
                     break;
 
                 case (int)RequestType.Leave:
-                    model.LeaveDetails = GetLeaveRequestDetailToIgnoreById(model.RequestId);
+                    model.LeaveDisciplines = GetLeaveRequestDetailToIgnoreById(model.RequestId);
                     break;
 
                 default:
@@ -296,7 +297,7 @@
             return teams;
         }
 
-        private List<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
+        private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
         {
             var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria
             {
@@ -307,16 +308,16 @@
             return changeShiftDetails.ToList();
         }
 
-        private List<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(long requestId)
+        private IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId)
         {
             var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria
             {
                 RequestId = requestId
             };
 
-            IList<LeaveDetailModel> leaveRequestDetail = requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
+            IList<LeaveDisciplineModel> disciplines = requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
 
-            return leaveRequestDetail.ToList();
+            return disciplines;
         }
 
         private CommandResult ApproveRequest(ProcessRequestViewModel model)

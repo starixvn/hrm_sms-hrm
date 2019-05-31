@@ -1156,7 +1156,7 @@
     <value>#</value>
   </data>
   <data name="Absent" xml:space="preserve">
-    <value>Absent</value>
+    <value>AL Absent</value>
   </data>
   <data name="AddOtherDiscipline" xml:space="preserve">
     <value>Add Other Discipline</value>
@@ -1500,11 +1500,11 @@
   <data name="AverageHours" xml:space="preserve">
     <value>Average Hours</value>
   </data>
-  <data name="ApproverDeduction" xml:space="preserve">
-    <value>Approver Deduction</value>
+  <data name="DisciplineByApprover" xml:space="preserve">
+    <value>Discipline by Approver</value>
   </data>
-  <data name="SystemDeduction" xml:space="preserve">
-    <value>System Deduction</value>
+  <data name="TotalScore" xml:space="preserve">
+    <value>Total Score</value>
   </data>
   <data name="ViolationIgnored" xml:space="preserve">
     <value>Violation Ignored</value>
@@ -1527,8 +1527,8 @@
   <data name="SymbolHalfYear" xml:space="preserve">
     <value>H - </value>
   </data>
-  <data name="NotFollowingLeaveProcedures" xml:space="preserve">
-    <value>Not Following Leave Procedures</value>
+  <data name="LateRequestLeave" xml:space="preserve">
+    <value>Late Request Leave</value>
   </data>
   <data name="WeekendLeave" xml:space="preserve">
     <value>Weekend Leave</value>
@@ -1574,6 +1574,42 @@
   </data>
   <data name="TestSendMail" xml:space="preserve">
     <value>Test Send Mail</value>
+  </data>
+  <data name="DisciplinePoint" xml:space="preserve">
+    <value>Discipline Point</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>Last Year</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>This Year</value>
+  </data>
+  <data name="Ignore" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="UnpaidLeaveAbsent" xml:space="preserve">
+    <value>Unpaid Leave Absent</value>
+  </data>
+  <data name="Violation1" xml:space="preserve">
+    <value>Violation 1</value>
+  </data>
+  <data name="Violation2" xml:space="preserve">
+    <value>Violation 2</value>
+  </data>
+  <data name="ByDay" xml:space="preserve">
+    <value>By Day</value>
+  </data>
+  <data name="ByHour" xml:space="preserve">
+    <value>By Hour</value>
+  </data>
+  <data name="KIVType" xml:space="preserve">
+    <value>KIV Type</value>
+  </data>
+  <data name="NewKeepInViewRequest" xml:space="preserve">
+    <value>New Keep In View Request</value>
   </data>
   <data name="WorkingDaysMonth" xml:space="preserve">
     <value>Working Days/Month</value>

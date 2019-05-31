@@ -54,7 +54,7 @@
 
         public const string WorkingTimeRequestGetRequestHistory = "WorkingTimeRequest_GetRequestHistory";
 
-        public const int TotalWeekendLeaveLimit = 14;
+        public const int TotalWeekendLeaveLimit = 16;
 
         public const int OffDayShiftId = -1;
 

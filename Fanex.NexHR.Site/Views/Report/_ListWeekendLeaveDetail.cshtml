@@ -13,6 +13,8 @@
             <th>@Labels.LeaveDate</th>
             <th>@Labels.LeaveType</th>
             <th>@Labels.LeaveDay</th>
+            <th>@Labels.EmployeeComment</th>
+            <th>@Labels.ApproverComment</th>
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -22,26 +24,28 @@
             @foreach (WeekendLeaveDetail item in Model)
                 {
                     index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@item.GroupName</td>
-                    <td>@item.Code</td>
-                    <td>@item.NickName</td>
-                    <td class="align-left">@item.FullName</td>
-                    <td>
-                        @if (item.IsLocal)
-                        {
-                            <span>@Labels.Local</span>
-                        }
-                        else
-                        {
-                            <span>@Labels.Expat</span>
-                        }
-                    </td>
-                    <td>@item.LeaveDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@item.LeaveType</td>
-                    <td>@item.LeaveDay</td>
-                </tr>
+            <tr>
+                <td>@index</td>
+                <td>@item.GroupName</td>
+                <td>@item.Code</td>
+                <td>@item.NickName</td>
+                <td class="align-left">@item.FullName</td>
+                <td>
+                    @if (item.IsLocal)
+                    {
+                        <span>@Labels.Local</span>
+                    }
+                    else
+                    {
+                        <span>@Labels.Expat</span>
+                    }
+                </td>
+                <td>@item.LeaveDate.ToDateMonthYearFormatedDate()</td>
+                <td>@item.LeaveType</td>
+                <td>@item.LeaveDay</td>
+                <td class="align-left">@item.Remark</td>
+                <td class="align-left">@item.ApproverComment</td>
+            </tr>
                 }
         </tbody>
                 }

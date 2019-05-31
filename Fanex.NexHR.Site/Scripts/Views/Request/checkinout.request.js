@@ -93,33 +93,13 @@ $(document).ready(function () {
         var attendantDate = new Date($("#AttendantDate").val());
         var requestDate = new Date($("#ForDate").val());
         var dayDiff = (requestDate - attendantDate) / 1000 / 60 / 60 / 24;
-        var IsInAfterDay = $('#IsInAfterDay').val();
-        var IsOutAfterDay = $('#IsOutAfterDay').val();
 
-        if ($("#RequestType_1").attr("checked") === "checked") {
-            checkConstraintDate(e, IsInAfterDay, dayDiff);
-        }
-
-        if ($("#RequestType_2").attr("checked") === "checked") {
-            checkConstraintDate(e, IsOutAfterDay, dayDiff);
+        if (dayDiff < 0) {
+            event.preventDefault();
+            alert('Request date must be equal or greater than Attendant date!');
         }
 
     });
-
-    var checkConstraintDate = function (event, requesType, dayDiff) {
-        if (requesType === "true") {
-            if (dayDiff <= 0) {
-                event.preventDefault();
-                alert('Cross date shift. Request date must be greater than Attendant date!');
-            }
-        }
-        else {
-            if (dayDiff < 0) {
-                event.preventDefault();
-                alert('Request date must be equal or greater than Attendant date!');
-            }
-        }
-    };
 
     $("#Employee").blur(function () {
         $.getJSON(_global.root + 'employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },

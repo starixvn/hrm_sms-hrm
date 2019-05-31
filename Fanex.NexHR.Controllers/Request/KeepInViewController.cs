@@ -22,20 +22,17 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
-        private readonly IEmployeeService employeeService;
 
         public KeepInViewController(
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IShiftService shiftService,
-            IEmployeeService employeeService)
+            IShiftService shiftService)
         {
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.shiftService = shiftService;
-            this.employeeService = employeeService;
         }
 
         public ActionResult Create()
@@ -54,7 +51,6 @@
                 Date = DateTime.Now.Date,
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ShiftId = (shift == null) ? 0 : shift.Id,
-                UnavailDates = GetUnavailDate(CurrentUser.Id),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
             ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -69,7 +65,8 @@
             if (model != null)
             {
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.UnavailDates = GetUnavailDate(model.EmployeeId);
+                var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
+                var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
 
                 if (ModelState.IsValid)
                 {
@@ -77,13 +74,12 @@
                     {
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
-                        RequestType = (int)RequestType.KeepInView,
                         RefNo = model.RefNo,
                         Remark = model.Remark,
-                        IsHalfDay = model.HalfDay,
                         ShiftId = model.ShiftId,
                         ShiftName = model.Shift,
-                        FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                        FromTime = (fromTime < toTime && model.CrossDay) ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
+                            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                         ToTime = model.CrossDay
                         ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
@@ -140,8 +136,7 @@
                     CrossDay = request.CrossDay,
                     FromTime = request.FromTime.ToString("HH:mm"),
                     ToTime = request.ToTime.ToString("HH:mm"),
-                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                    UnavailDates = GetUnavailDate(CurrentUser.Id)
+                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
                 };
                 ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
                     || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -156,7 +151,6 @@
             if (model != null)
             {
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -225,21 +219,6 @@
             IList<RequestEntity> entityList = requestService.GetRequests(criteria);
 
             return View(entityList);
-        }
-
-        private IList<DateTime> GetUnavailDate(int employeeId)
-        {
-            var fromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1);
-            var toDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1);
-            var criteria = new GetOffDateAndHolidayDateCriteria
-            {
-                EmpId = employeeId,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            IList<DateTime> unavailableDates = employeeService.GetNotOffOrHolidayDate(criteria);
-
-            return unavailableDates;
         }
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)

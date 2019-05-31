@@ -1,7 +1,8 @@
 ﻿@using Fanex.NexHR.ViewModels.Request
+@using Fanex.NexHR.Resources
 @model KeepInViewRequestViewModel
 @{
-    ViewBag.Title = "New Keep In View Request";
+    ViewBag.Title = Labels.NewKeepInViewRequest;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -23,33 +24,56 @@
 
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Messages.RequestCreated</div>
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@Model.Date.Year" />
+            <div class="success">@Messages.RequestCreated</div>
+            <input type="hidden" id="successed" value="true" />
+            <input type="hidden" id="year" value="@Model.Date.Year" />
         }
-        <div id="grbHalfDay" class="formrow">
+        <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.HalfDay)
+                @Html.LabelFor(model => model.KeepInViewType, Labels.KIVType)
             </div>
             <div class="input">
-                @Html.CheckBoxFor(model => model.HalfDay)
+                <div class="radio-form">
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(model => model.KeepInViewType, 1)
+                            @Labels.ByDay
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(model => model.KeepInViewType, 2)
+                            @Labels.ByHour
+                        </label>
+                    </div>
+                </div>
+                </div>
+                <div class="clear">
+                </div>
             </div>
-            <div class="clear">
-            </div>
-        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)
             </div>
             <div class="input">
                 @if (hasOnBehalfOthersPermission)
-                { 
+                {
                     @Html.EditorFor(model => model.Employee)
                 }
                 else
                 {
                     @Html.Label(Utilities.FormatString(Model.Employee))
                 }
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div id="grbHalfDay" class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.HalfDay)
+            </div>
+            <div class="input">
+                @Html.CheckBoxFor(model => model.HalfDay)
             </div>
             <div class="clear">
             </div>
@@ -132,7 +156,7 @@
                 @Html.HiddenFor(model => model.ShiftId)
             </div>
             <div class="input">
-                <input type="submit" value="@Labels.Request" class="button-primary submit"/>
+                <input type="submit" value="@Labels.Request" class="button-primary submit" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
             <div class="clear">

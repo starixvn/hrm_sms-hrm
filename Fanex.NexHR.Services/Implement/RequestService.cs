@@ -10,6 +10,7 @@
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
@@ -165,7 +166,7 @@
             {
                 request = requestRepository.GetRequestToIgnoreById(criteria);
             }
-
+            
             return request;
         }
 
@@ -174,9 +175,15 @@
             return baseService.GetData<ChangeShiftDetailModel>(criteria).ToList();
         }
 
-        public IList<LeaveDetailModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
+        public IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
         {
-            return baseService.GetData<LeaveDetailModel>(criteria).ToList();
+            IList<LeaveDisciplineModel> disciplines = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                disciplines = requestRepository.GetLeaveRequestToIgnoreById(criteria);
+            }
+
+            return disciplines ?? new List<LeaveDisciplineModel>();
         }
 
         private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)

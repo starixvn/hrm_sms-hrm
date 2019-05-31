@@ -170,6 +170,25 @@
             }
         }
 
+        public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo culture = null)
+        {
+            CultureInfo cultureInfo = culture ?? CultureInfo.CurrentCulture;
+
+            DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            DateTime firstDayInWeek = dayInWeek.Date;
+            while (firstDayInWeek.DayOfWeek != firstDay)
+            {
+                firstDayInWeek = firstDayInWeek.AddDays(-1);
+            }
+
+            return firstDayInWeek;
+        }
+
+        public static DateTime LastDayOfWeek(DateTime dayInWeek)
+        {
+            return DateTime.Now.AddDays(6 - Convert.ToDouble(dayInWeek.DayOfWeek));
+        }
+
         public static IList<SelectListItem> MinuteSteps(int step)
         {
             var list = new List<SelectListItem>();
@@ -367,7 +386,7 @@
             return statusName;
         }
 
-        public static IList<SelectListItem> GetDateRangeType()
+        public static IList<SelectListItem> GetDateRangeByQuarter()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
 
@@ -387,6 +406,26 @@
 
                 currentDate = currentDate.AddMonths(-6);
             }
+
+            return dateRange;
+        }
+
+        public static IList<SelectListItem> GetDateRangeByYear()
+        {
+            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
+
+            var currentDate = DateTime.Today;
+            dateRange.Add(new SelectListItem
+            {
+                Text = Labels.ThisYear,
+                Value = currentDate.Year.ToString()
+            });
+
+            dateRange.Add(new SelectListItem
+            {
+                Text = Labels.LastYear,
+                Value = (currentDate.Year - 1).ToString()
+            });
 
             return dateRange;
         }

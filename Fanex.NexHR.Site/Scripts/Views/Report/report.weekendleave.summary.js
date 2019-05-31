@@ -2,30 +2,14 @@
 
 function initEventForDateRangeDropdown() {
     $('form.form-filter #DateRange').on('change', function () {
-        var dateRange = $('form.form-filter #DateRange').val();
+        var year = $('form.form-filter #DateRange').val();
 
-        if (parseInt(dateRange) !== 0) {
-            var quarter = dateRange.charAt(0);
-            var year = dateRange.substring(1, dateRange.length);
-
+        if (parseInt(year) !== 0) {
             var fromDate = new Date($('form.form-filter #FromDate').val());
             var toDate = new Date($('form.form-filter #ToDate').val());
-            switch (parseInt(quarter)) {
-                case 1: // First Half Year 1H
-                    fromDate.setFullYear(parseInt(year), 0, 1);
-                    toDate.setFullYear(parseInt(year), 5, 30);
-                    break;
 
-                case 2: // Second Half Year 2H
-                    fromDate.setFullYear(parseInt(year), 6, 1);
-                    toDate.setFullYear(parseInt(year), 11, 31);
-                    break;
-
-                default:
-                    fromDate.setFullYear(parseInt(year), 0, 1);
-                    toDate.setFullYear(parseInt(year), 11, 31);
-                    break;
-            }
+            fromDate.setFullYear(parseInt(year), 0, 1);
+            toDate.setFullYear(parseInt(year), 11, 31);
 
             $('form.form-filter #FromDate').val(formatDate(fromDate));
             $('form.form-filter #ToDate').val(formatDate(toDate));

@@ -13,5 +13,7 @@
         public bool? IsHoliday { get; set; }
 
         public bool IsLeaveDuringWorking { get; set; }
+
+        public string Description { get; set; }
     }
 }

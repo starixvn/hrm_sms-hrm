@@ -94,7 +94,6 @@
     <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
     <Compile Include="Discipline\GetWeekendLeaveOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
-    <Compile Include="Discipline\InsertWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
@@ -129,6 +128,7 @@
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Role\GetRolesByUserIdCriteria.cs" />
     <Compile Include="Role\GetRolesCriteria.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />
@@ -155,7 +155,6 @@
     <Compile Include="Request\ChangeShift\GetChangeShiftDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\ChangeShiftCommand.cs" />
     <Compile Include="Request\GetCheckInOutRequestToIgnoreByIdCriteria.cs" />
-    <Compile Include="Request\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\GetVerifierAndApproverCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestToIgnoreByIdCriteria.cs" />

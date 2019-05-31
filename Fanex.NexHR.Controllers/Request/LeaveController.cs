@@ -56,7 +56,6 @@
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
                 LeaveTypeList = GetAllLeaveType(),
-                TotalRequest = GetNumberRequestInMonth(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
             };
@@ -405,6 +404,10 @@
                     Remark = request.Remark,
                     FromTime = request.FromTime.ToString("HH:mm"),
                     ToTime = request.ToTime.ToString("HH:mm"),
+                    FromTimeHour = request.FromTime.Hour,
+                    FromTimeMinute = request.FromTime.Minute,
+                    ToTimeHour = request.ToTime.Hour,
+                    ToTimeMinute = request.ToTime.Minute,
                     IsFromTimeAfterDay = request.FromDate.Date != request.FromTime.Date,
                     IsToTimeAfterDay = request.ToDate.Date != request.ToTime.Date,
                     Status = request.Status
@@ -439,23 +442,6 @@
 
             EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
             return employeeLeaveBalance;
-        }
-
-        private decimal GetNumberRequestInMonth()
-        {
-            var currentDate = DateTime.Now.Date;
-            var fromDate = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
-            var criteria = new GetNumberRequestInMonthCriteria
-            {
-                EmployeeId = CurrentUser.Id,
-                RequestType = (int)RequestType.Leave,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
-
-            return numberRequests;
         }
 
         private IList<DateTime> GetUnavailDate(LeaveRequestViewModel model)

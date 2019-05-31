@@ -128,6 +128,26 @@
             }
         }
 
+        public IList<LeaveDisciplineModel> GetLeaveRequestToIgnoreById(ICriteria criteria)
+        {
+            IList<LeaveDisciplineModel> disciplines = null;
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    IList<LeaveDisciplineDetailModel> leaveDetails;
+                    disciplines = multi.Read<LeaveDisciplineModel>().ToList();
+                    leaveDetails = multi.Read<LeaveDisciplineDetailModel>().ToList();
+                    foreach (var discipline in disciplines)
+                    {
+                        discipline.LeaveDetail = leaveDetails.Where(t => t.WorkDate == discipline.WorkDate).ToList();
+                    }
+                }
+            }
+
+            return disciplines;
+        }
+
         private IList<RequestEntity> FillData(IDataReader reader)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();

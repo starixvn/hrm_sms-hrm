@@ -29,6 +29,7 @@
                     margin: 0;
                     min-height: 80px;
                     width: 100%;
+                    border-color: #dddddd;
                 }
             }
         }
@@ -44,3 +45,57 @@
         }
     }
 }
+
+button.ui-multiselect {
+    background: #fff !important;
+    border: 1px solid #C8C8C8;
+    text-align: left;
+    padding: 4px 4px 4px 4px;
+    line-height: 15px;
+
+    span {
+        color: #222;
+        text-align: left;
+        text-shadow: none;
+    }
+}
+
+.shift-info {
+    color: #f1f7f4;
+    background-color: #736653;
+    padding: 3px;
+    line-height: 2;
+}
+
+.table-leave-discipline {
+    tbody {
+        tr {
+            td {
+                background-color: #ececec;
+                /*.violation-type {
+                    color: #f1f7f4;
+                    background-color: #627ff3;
+                    padding: 6px;
+                }*/
+            }
+
+            td.td-active {
+                background-color: #fff !important;
+                color: #000;
+            }
+
+            td.td-type {
+                background-color: #fffbcf !important;
+                color: #000;
+            }
+        }
+    }
+
+    input[type="radio"] {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.approver-comment {
+    font-size: 12px;

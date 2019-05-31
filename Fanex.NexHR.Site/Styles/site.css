@@ -1151,6 +1151,17 @@ table.data tr td.weekend {
     float: left;
 }
 
+.icon-info {
+    background: url(../Images/info.png) center no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+
 .request-area {
     float: right !important;
 }

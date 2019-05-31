@@ -25,13 +25,13 @@
 
         public RequestEntity LateInEarlyOutDetail { get; set; }
 
-        public List<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
+        public IList<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
 
-        public List<LeaveDetailModel> LeaveDetails { get; set; }
+        public IList<LeaveDisciplineModel> LeaveDisciplines { get; set; }
 
         public string IgnoredDisciplineDetails { get; set; }
 
-        public List<IgnoredDisciplineModel> IgnoredDisciplines
+        public IList<IgnoredDisciplineModel> IgnoredDisciplines
         {
             get
             {

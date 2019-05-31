@@ -6,7 +6,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_Update_LeaveMultiRequest";
+            return "LeaveRequest_Update";
         }
 
         public override bool IsValid()

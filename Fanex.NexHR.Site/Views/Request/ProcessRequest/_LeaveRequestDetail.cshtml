@@ -1,125 +1,235 @@
-﻿@model List<LeaveDetailModel>
-<table class="table table-custom">
-    <thead>
-        <tr>
-            <th>@Labels.Date</th>
-            <th>@Labels.ScheduleStatus</th>
-            <th>@Labels.LeaveTypeName</th>
-            <th>@Labels.HalfDay</th>
-            <th>@Labels.FromTime</th>
-            <th>@Labels.ToTime</th>
-            <th>@Labels.ViolationIgnored</th>
-            <th>@Labels.ViolationRecorded</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (LeaveDetailModel item in Model)
-        {
+﻿@model List<LeaveDisciplineModel>
+    @{
+        var isNotExistsWeekendLeave = !Model.Any(t => t.IsWeekendLeave);
+    }
+    <table class="table table-custom table-leave-discipline">
+        <thead>
             <tr>
-                <td>
-                    @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
-                </td>
-                <td>
-                    @item.ScheduleStatus
-                </td>
-                @if (!item.IsOffOrHoliday)
+                <th rowspan="2">@Labels.Date</th>
+                <th rowspan="2">@Labels.LeaveTypeName</th>
+                <th rowspan="2">@Labels.HalfDay</th>
+                <th rowspan="2">@Labels.FromTime</th>
+                <th rowspan="2">@Labels.ToTime</th>
+                @if (isNotExistsWeekendLeave)
                 {
-                    <td>
-                        @if (item.LeaveTypeId == 0) // general leave
-                        {
-                            <span>-</span>
-                        }
-                        else
-                        {
-                            @item.LeaveTypeName
-                        }
-                    </td>
-                    <td>
-                        @if (item.LeaveTypeId == 0)
-                        {
-                            <span>-</span>
-                        }
-                        else
-                        {
-                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @disabled = "disabled" })
-                        }
-                    </td>
-                    @*<td>
-                        @if (item.LeaveTypeId == 0)
-                        {
-                            <span>-</span>
-                        }
-                        else
-                        {
-                            double totalDays = item.ToTime.Subtract(item.FromTime).TotalDays + 1;
-                            @(item.IsHalfDay ? "0.5" : totalDays.ToString())
-                        }
-                    </td>*@
-                    <td>
-                        @if (item.IsHalfDay)
-                        {
-                            <div>
-                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @disabled = "disabled" })
-                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @disabled = "disabled", @title = "Is after day" })
-                            </div>
-                        }
-                    </td>
-                    <td>
-                        @if (item.IsHalfDay)
-                        {
-                            <div>
-                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @disabled = "disabled" })
-                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @disabled = "disabled", @title = "Is after day" })
-                            </div>
-                        }
-                    </td>
-                    <td class="violationIgnored">
-                        @if (item.IsUnpaidLeaveAbsent)
-                        {
-                            var disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
-                            <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                        }
-                        else if (item.IsAbsent)
-                        {
-                            var disciplinetypeId = (int)DisciplineType.Absent;
-                            <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                        }
-                        else if (item.IsUnplannedLeave)
-                        {
-                            var disciplinetypeId = (int)DisciplineType.UnplannedLeave;
-                            <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                        }
-                        else if (item.LeaveTypeId == 25)//unpaid leave
-                        {
-                            var disciplinetypeId = (int)DisciplineType.UnpaidLeave;
-                            <input type="radio" data-workdate="@item.LeaveDate.Date.ToString("d")" data-disciplinetypeid="@disciplinetypeId" />
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td class="violationRecorded">
-                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.LeaveTypeId == 25)
-                        {
-                            <input type="radio" />
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
+                    <th colspan="3">@Labels.Violation</th>
                 }
                 else
                 {
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <th colspan="3">@Labels.Violation1</th>
+                    <th colspan="3">@Labels.Violation2</th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+            <tr>
+                <th>@Labels.Type</th>
+                <th>@Labels.Ignore <br /><input class="chk-ignoreAll" type="radio" /></th>
+                <th>@Labels.Record <br /><input class="chk-recordAll" type="radio" /></th>
+
+                @if (!isNotExistsWeekendLeave)
+                {
+                    <th>@Labels.Type</th>
+                    <th>@Labels.Ignore <br /><input class="chk-weekend-ignoreAll" type="radio" /></th>
+                    <th>@Labels.Record <br /><input class="chk-weekend-recordAll" type="radio" /></th>
+                }
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (LeaveDisciplineModel item in Model)
+            {
+                var rowspan = item.LeaveDetail.Count();
+                if (rowspan == 0)
+                {
+                    rowspan = 1;
+                }
+                <tr>
+                    <td rowspan="@rowspan">
+                        @(item.WorkDate.ToDateMonthYearFormatedDate() + " (" + item.WorkDate.ToString("ddd") + ")")
+                        <br />
+                        <span class="shift-info">
+                            @item.ScheduleStatus
+                        </span>
+                    </td>
+
+                    @if (item.LeaveDetail.Count() > 0 && !item.IsOffDayOrHoliday)
+                    {
+                        var leaveDetail = item.LeaveDetail[0];
+                        <td>
+                            @if (leaveDetail.LeaveTypeId == 0) // general leave
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @leaveDetail.LeaveTypeName
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail.LeaveTypeId == 0)
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(m => leaveDetail.IsHalfDay, new { @disabled = "disabled" })
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail.IsHalfDay)
+                            {
+                                <div>
+                                    @leaveDetail.FromTime.ToShortTime()
+                                    @if (leaveDetail.IsFromAfterday)
+                                    {
+                                        <span>*</span>
+                                    }
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail.IsHalfDay)
+                            {
+                                <div>
+                                    @leaveDetail.ToTime.ToShortTime()
+                                    @if (leaveDetail.IsToAfterday)
+                                    {
+                                        <span>*</span>
+                                    }
+                                </div>
+                            }
+                        </td>
+                        <td rowspan="@rowspan" class="td-type">
+                            <span class="violation-type">
+                                @item.DisciplineTypeName
+                            </span>
+                        </td>
+                        <td rowspan="@rowspan" class="td-active">
+                            @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave)
+                            {
+                                <input class="chk-ignore" type="radio" data-workdate="@item.WorkDate.Date.ToString("d")" data-disciplinetypeid="@item.DisciplineTypeId" />
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td rowspan="@rowspan" class="td-active">
+                            @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave)
+                            {
+                                <input class="chk-record" type="radio" />
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        if (!isNotExistsWeekendLeave)
+                        {
+                            <td rowspan="@rowspan" class="td-type">
+                                @if (item.IsWeekendLeave)
+                                {
+                                    <span class="violation-type">
+                                        @Labels.WeekendLeave
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+
+                            </td>
+                            <td rowspan="@rowspan" class="td-active">
+                                @if (item.IsWeekendLeave)
+                                {
+                                    var disciplinetypeId = (int)DisciplineType.WeekendLeave;
+                                    <input class="chk-weekend-ignore" type="radio" data-workdate="@item.WorkDate.Date.ToString("d")" />
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td rowspan="@rowspan" class="td-active">
+                                @if (item.IsWeekendLeave)
+                                {
+                                    <input class="chk-weekend-record" type="radio" />
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="td-type">-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        if (!isNotExistsWeekendLeave)
+                        {
+                            <td class="td-type">-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        }
+                    }
+
+                </tr>
+                if (rowspan == 2)
+                {
+                    var leaveDetail2 = item.LeaveDetail[1];
+                    <tr>
+                        <td>
+                            @if (leaveDetail2.LeaveTypeId == 0) // general leave
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @leaveDetail2.LeaveTypeName
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail2.LeaveTypeId == 0)
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(m => leaveDetail2.IsHalfDay, new { @disabled = "disabled" })
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail2.IsHalfDay)
+                            {
+                                <div>
+                                    @leaveDetail2.FromTime.ToShortTime()
+                                    @if (leaveDetail2.IsFromAfterday)
+                                    {
+                                        <span>*</span>
+                                    }
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (leaveDetail2.IsHalfDay)
+                            {
+                                <div>
+                                    @leaveDetail2.ToTime.ToShortTime()
+                                    @if (leaveDetail2.IsToAfterday)
+                                    {
+                                        <span>*</span>
+                                    }
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>

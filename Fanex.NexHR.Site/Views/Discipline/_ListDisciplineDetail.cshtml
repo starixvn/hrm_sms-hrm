@@ -8,305 +8,314 @@
         @if (Model != null & Model.Any() && hasPermissionToEdit)
         {
             <tr>
-                <th colspan="21" style="text-align: left;">
+                <th colspan="23" style="text-align: left;">
                     <input type="button" id="saveChange" value="@Labels.Save" />
                 </th>
             </tr>
         }
-        <tr>
-            @if (hasPermissionToUpdateOutOfControlReason)
-            {
-                <th>@Labels.OutOfControlReason</th>
-            }
-            <th>@Labels.Nick</th>
-            <th>@Labels.Section</th>
-            <th>@Labels.Date</th>
-            <th>@Labels.Shift</th>
-            <th>@Labels.CheckIn</th>
-            <th>@Labels.CheckOut</th>
-            <th>@Labels.TotalHours</th>
-            <th class="width-80">@Labels.MissingCheckInOut</th>
-            <th class="width-80">@Labels.WorkingUnderTime</th>
-            <th>@Labels.LateIn</th>
-            <th>@Labels.EarlyOut</th>
-            <th>@Labels.Absent</th>
-            <th>@Labels.UPL</th>
-            <th>@Labels.UPLAbsent</th>
-            <th>@Labels.ChangeShift</th>
-            <th>@Labels.NotFollowingLeaveProcedures</th>
-            <th class="width-80">@Labels.SystemDeduction</th>
-            <th class="width-80">@Labels.ApproverDeduction</th>
-            <th class="width-80">@Labels.ApproverComment</th>
-            <th class="width-80">@Labels.EmployeeComment</th>
-        </tr>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                @if (hasPermissionToUpdateOutOfControlReason)
+                {
+                    <th>
+                        @Labels.OutOfControlReason
+                        <input id="checkAll" type="checkbox" />
+                    </th>
+                }
+                <th>@Labels.Date</th>
+                <th>@Labels.Section</th>
+                <th>@Labels.Nick</th>
+                <th>@Labels.Shift</th>
+                <th>@Labels.CheckIn</th>
+                <th>@Labels.CheckOut</th>
+                <th>@Labels.TotalHours</th>
+                <th class="width-80">@Labels.MissingCheckInOut</th>
+                <th class="width-80">@Labels.WorkingUnderTime</th>
+                <th>@Labels.LateIn</th>
+                <th>@Labels.EarlyOut</th>
+                <th>@Labels.Absent</th>
+                <th>@Labels.UPL</th>
+                <th>@Labels.UPLAbsent</th>
+                <th>@Labels.ChangeShift</th>
+                <th>@Labels.LateRequestLeave</th>
+                <th>@Labels.WeekendLeave</th>
+                <th class="width-80">@Labels.DisciplinePoint</th>
+                <th class="width-80">@Labels.DisciplineByApprover</th>
+                <th class="width-80">@Labels.ApproverComment</th>
+                <th class="width-80">@Labels.EmployeeComment</th>
+            </tr>
     </thead>
     @if (Model != null && Model.Any())
     {
+        int index = 0;
         <tbody>
             @foreach (DisciplineDetailModel item in Model)
             {
                 int disciplinetypeId;
-                <tr>
-                    @if (hasPermissionToUpdateOutOfControlReason)
+                index++;
+            <tr>
+                <td>@index</td>
+                @if (hasPermissionToUpdateOutOfControlReason)
+                {
+                    <td>
+                        <input class="outOfControlReason" type="checkbox" checked="@item.IsOutOfControlReason" data-changed="false" data-originchecked="@item.IsOutOfControlReason" />
+                    </td>
+                }
+
+                <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
+                <td>@item.Employee.GroupName</td>
+                <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
+                <td>@item.ShiftName</td>
+                <td>
+                    @if (item.CheckIn.HasValue)
                     {
-                        <td>
-                            <input class="outOfControlReason" type="checkbox" checked="@item.IsOutOfControlReason" data-changed="false" />
-                        </td>
+                        @item.CheckIn.Value.ToString("HH:mm")
                     }
-                    
-                    <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
-                    <td>@item.Employee.GroupName</td>
-                    <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
-                    <td>@item.ShiftName</td>
-                    <td>
-                        @if (item.CheckIn.HasValue)
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.CheckOut.HasValue)
+                    {
+                        @item.CheckOut.Value.ToString("HH:mm")
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.TotalHours))
+                    {
+                        @item.TotalHours
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.MissingCheckInOut.Value > 0)
+                    {
+                        <span class="float-left">@item.MissingCheckInOut.Value</span>
+                        if (item.MissingCheckInOut.HasViolated)
                         {
-                            @item.CheckIn.Value.ToString("HH:mm")
+                            disciplinetypeId = (int)DisciplineType.MissingCheckInOut;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.MissingCheckInOut.HasIgnored"
+                                   disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
+                                   data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.WorkingUnderTime.Value > 0)
+                    {
+                        <span class="float-left">1</span>
+                        if (item.WorkingUnderTime.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.WorkingUnderTime.HasIgnored"
+                                   disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
+                                   data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.LateIn.Value > 0)
+                    {
+                        <div class="float-left">@item.MinutesLateIn</div>
+                        if (item.LateIn.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.LateIn;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.LateIn.HasIgnored"
+                                   disabled="@item.LateIn.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
+                                   data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.EarlyOut.Value > 0)
+                    {
+                        <div class="float-left">@item.MinutesEarlyOut</div>
+                        if (item.EarlyOut.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.EarlyOut;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.EarlyOut.HasIgnored"
+                                   disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
+                                   data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.Absent.Value > 0)
+                    {
+                        <span class="float-left">@item.Absent.Value</span>
+                        if (item.Absent.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.Absent;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.Absent.HasIgnored"
+                                   disabled="@item.Absent.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
+                                   data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.UnpaidLeave.Value > 0)
+                    {
+                        <span class="float-left">@item.UnpaidLeave.Value</span>
+                        if (item.UnpaidLeave.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.UnpaidLeave;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeave.HasIgnored"
+                                   disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
+                                   data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.UnpaidLeaveAbsent.Value > 0)
+                    {
+                        <span class="float-left">@item.UnpaidLeaveAbsent.Value</span>
+                        if (item.UnpaidLeaveAbsent.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeaveAbsent.HasIgnored"
+                                   disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
+                                   data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.ChangeShift.Value > 0)
+                    {
+                        <span class="float-left">@item.ChangeShift.Value</span>
+                        if (item.ChangeShift.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.ChangeShift;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.ChangeShift.HasIgnored"
+                                   disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
+                                   data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td>
+                    @if (item.UnplannedLeave.Value > 0)
+                    {
+                        <span class="float-left">@item.UnplannedLeave.Value</span>
+                        if (item.UnplannedLeave.HasViolated)
+                        {
+                            disciplinetypeId = (int)DisciplineType.UnplannedLeave;
+                            <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnplannedLeave.HasIgnored"
+                                   disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
+                                   data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                   data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
+                                   data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
+                        }
+                    }
+                    else
+                    {
+                        <span class="float-left">-</span>
+                    }
+                </td>
+                <td></td>
+                <td>
+                    @if (item.SystemSubtractScore > 0)
+                    {
+                        <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                    }
+                    else
+                    {
+                        <span>@item.SystemSubtractScore.ToString("0.0")</span>
+                    }
+                </td>
+                <td class="approverSubtractScore">
+                    @if (item.ApproverSubtractScore > 0)
+                    {
+                        if (item.ApproverSubtractScore <= item.SystemSubtractScore)
+                        {
+                            <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
                         }
                         else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.CheckOut.HasValue)
-                        {
-                            @item.CheckOut.Value.ToString("HH:mm")
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(item.TotalHours))
-                        {
-                            @item.TotalHours
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.MissingCheckInOut.Value > 0)
-                        {
-                            <span class="float-left">@item.MissingCheckInOut.Value</span>
-                            if (item.MissingCheckInOut.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.MissingCheckInOut;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.MissingCheckInOut.HasIgnored"
-                                       disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
-                                       data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.WorkingUnderTime.Value > 0)
-                        {
-                            <span class="float-left">1</span>
-                            if (item.WorkingUnderTime.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.WorkingUnderTime.HasIgnored"
-                                       disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
-                                       data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.LateIn.Value > 0)
-                        {
-                            <div class="float-left">@item.MinutesLateIn</div>
-                            if (item.LateIn.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.LateIn;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.LateIn.HasIgnored"
-                                       disabled="@item.LateIn.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
-                                       data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.EarlyOut.Value > 0)
-                        {
-                            <div class="float-left">@item.MinutesEarlyOut</div>
-                            if (item.EarlyOut.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.EarlyOut;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.EarlyOut.HasIgnored"
-                                       disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
-                                       data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.Absent.Value > 0)
-                        {
-                            <span class="float-left">@item.Absent.Value</span>
-                            if (item.Absent.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.Absent;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.Absent.HasIgnored"
-                                       disabled="@item.Absent.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
-                                       data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.UnpaidLeave.Value > 0)
-                        {
-                            <span class="float-left">@item.UnpaidLeave.Value</span>
-                            if (item.UnpaidLeave.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.UnpaidLeave;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeave.HasIgnored"
-                                       disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
-                                       data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.UnpaidLeaveAbsent.Value > 0)
-                        {
-                            <span class="float-left">@item.UnpaidLeaveAbsent.Value</span>
-                            if (item.UnpaidLeaveAbsent.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnpaidLeaveAbsent.HasIgnored"
-                                       disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
-                                       data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.ChangeShift.Value > 0)
-                        {
-                            <span class="float-left">@item.ChangeShift.Value</span>
-                            if (item.ChangeShift.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.ChangeShift;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.ChangeShift.HasIgnored"
-                                       disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
-                                       data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.UnplannedLeave.Value > 0)
-                        {
-                            <span class="float-left">@item.UnplannedLeave.Value</span>
-                            if (item.UnplannedLeave.HasViolated)
-                            {
-                                disciplinetypeId = (int)DisciplineType.UnplannedLeave;
-                                <input class="float-right ignoredDiscipline" type="checkbox" checked="@item.UnplannedLeave.HasIgnored"
-                                       disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
-                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
-                                       data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
-                            }
-                        }
-                        else
-                        {
-                            <span class="float-left">-</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.SystemSubtractScore > 0)
                         {
                             <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
                         }
-                        else
-                        {
-                            <span>@item.SystemSubtractScore.ToString("0.0")</span>
-                        }
-                    </td>
-                    <td class="approverSubtractScore">
-                        @if (item.ApproverSubtractScore > 0)
-                        {
-                            if (item.ApproverSubtractScore <= item.SystemSubtractScore)
-                            {
-                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
-                            }
-                            else
-                            {
-                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
-                            }
-                        }
-                        else
-                        {
-                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
-                        }
-                    </td>
-                    @if (!string.IsNullOrEmpty(item.ApproverComment))
-                    {
-                        <td class="tooltip" title="@item.ApproverComment">
-                            <span class="icon remark"></span>
-                        </td>
                     }
                     else
                     {
-                        <td></td>
+                        <span>@item.ApproverSubtractScore.ToString("0.0")</span>
                     }
-                    @if (!string.IsNullOrEmpty(item.EmployeeComment))
-                    {
-                        <td class="tooltip" title="@item.EmployeeComment">
-                            <span class="icon remark"></span>
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                </tr>
+                </td>
+                @if (!string.IsNullOrEmpty(item.ApproverComment))
+                {
+                    <td class="tooltip" title="@item.ApproverComment">
+                        <span class="icon remark"></span>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                @if (!string.IsNullOrEmpty(item.EmployeeComment))
+                {
+                    <td class="tooltip" title="@item.EmployeeComment">
+                        <span class="icon remark"></span>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
             }
         </tbody>
     }

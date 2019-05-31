@@ -33,7 +33,9 @@ table.tabledata tfoot.footleavedetail tr td {
 }
 
 .infobalance {
-    color: #3A3AEF;
+    color: #232222;
+    font-style: italic;
+    font-weight: bold;
 }
 
 .numberbalance {
@@ -42,4 +44,22 @@ table.tabledata tfoot.footleavedetail tr td {
 
 table.tabledata td.tdleavedate {
     text-align: left;
+}
+
+.leave-info {
+    padding: 7px;
+    background-color: #edf1dc;
+    border: 1px solid;
+    border-color: #a5a0a0;
+    color: #f30c0c;
+    line-height:2;
+}
+
+.ddl-leavetype {
+    float:left;
+}
+
+#leavetype-info {
+    margin: 5px;
+    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 ﻿@using Fanex.NexHR.Core.Enums;
 @using Fanex.NexHR.Core;
 @using Fanex.NexHR.Resources;
+@using Fanex.NexHR.Models;
 
 @helper FormatDate(DateTime? date)
 {
@@ -468,6 +469,19 @@
     <select id="@inputId" name="@inputId">
         <option value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
         <option value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
+    </select>
+}
+
+@helper LeaveTypeDropDownList(string id, IList<LeaveType> leaveTypes, string className, int? currentValue)
+{
+    <select id="@id" class="@className">
+        @{
+            var value = currentValue != null ? currentValue.ToString() : string.Empty;
+        }
+        @foreach (var leaveType in leaveTypes)
+        {
+            <option value="@leaveType.Id" selected="@(leaveType.Id.ToString() == value)" title="@leaveType.Description">@leaveType.Name</option>
+        }
     </select>
 }
 

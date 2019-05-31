@@ -1,4 +1,5 @@
 ﻿@model LeaveRequestViewModel
+@using System.Web.Mvc.Html5
 @{
     ViewBag.Title = Labels.LeaveRequestDetail;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
@@ -53,8 +54,9 @@
             @Html.LabelFor(model => model.LeaveTypeId, Labels.LeaveType)
         </div>
         <div class="input">
-            @Html.DropDownListFor(model => model.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name"))
+            @RazorHelper.LeaveTypeDropDownList("LeaveTypeId", Model.LeaveTypeList, "ddl-leavetype", Model.LeaveTypeId)
             @Html.HiddenFor(model => model.LeaveTypeName)
+            <span id="leavetype-info" class="icon-info" title="@Model.LeaveTypeDescription"></span>
         </div>
         <div class="clear">
         </div>
@@ -77,6 +79,14 @@
             @Html.DatePickerFor(model => model.FromDate)
             <span class="time hide">
                 @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
+            </span>
+
+            <span class="time-businesstrip hide">
+                @Html.Html5Number(0, 23, 1, Model.FromTimeHour, new { Name = "Hour", MaxLength = "2", id = "FromTimeHour" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.FromTimeMinute, new { Name = "Minute", MaxLength = "2", id = "FromTimeMinute" })
+            </span>
+            <span class="time-isafterday hide">
                 @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
                 @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
             </span>
@@ -93,8 +103,10 @@
             <span class="time hide">
                 @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
             </span>
-            <span class="hide">
-                @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
+            <span class="time-businesstrip hide">
+                @Html.Html5Number(0, 23, 1, Model.ToTimeHour, new { Name = "Hour", MaxLength = "2", id = "ToTimeHour" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.ToTimeMinute, new { Name = "Minute", MaxLength = "2", id = "ToTimeMinute" })
             </span>
         </div>
         <div class="clear">

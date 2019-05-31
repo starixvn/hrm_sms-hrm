@@ -235,10 +235,10 @@
             if (model != null)
             {
                 var today = DateTime.Today;
-                model.FromDate = new DateTime(today.Year, today.Month, 1);
+                model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
-                model.DateRange = Utilities.GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeByYear();
             }
 
             return View(model);
@@ -267,12 +267,11 @@
             if (model != null)
             {
                 var today = DateTime.Today;
-                int currentMonth = today.Month;
 
-                model.FromDate = new DateTime(today.Year, currentMonth, 1);
+                model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
                 model.Teams = GetAllTeam();
-                model.DateRange = Utilities.GetDateRangeType();
+                model.DateRange = Utilities.GetDateRangeByYear();
             }
 
             return View(model);

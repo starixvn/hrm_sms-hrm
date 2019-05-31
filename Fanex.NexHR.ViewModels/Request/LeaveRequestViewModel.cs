@@ -6,6 +6,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using System.Linq;
 
     public class LeaveRequestViewModel : IValidatableObject
     {
@@ -37,6 +38,14 @@
 
         public string FromTime { get; set; }
 
+        public int FromTimeHour { get; set; }
+
+        public int FromTimeMinute { get; set; }
+
+        public int ToTimeHour { get; set; }
+
+        public int ToTimeMinute { get; set; }
+
         public bool IsFromTimeAfterDay { get; set; }
 
         public string ToTime { get; set; }
@@ -47,13 +56,22 @@
 
         public string LeaveTypeName { get; set; }
 
+        public string LeaveTypeDescription
+        {
+            get
+            {
+                return LeaveTypeList.FirstOrDefault(t => t.Id == LeaveTypeId).Description;
+
+            }
+        }
+
         public string RefNo { get; set; }
 
         public int VerifierId { get; set; }
 
         public int ApproverId { get; set; }
 
-        public decimal TotalRequest { get; set; }
+        public decimal TotalWeekendLeave { get; set; }
 
         public IEnumerable<DateTime> UnavailDates { get; set; }
 

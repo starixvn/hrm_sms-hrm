@@ -11,13 +11,9 @@
 
         public int EmpId { get; set; }
 
-        public short RequestType { get; set; }
-
         public string Remark { get; set; }
 
         public DateTime OnDate { get; set; }
-
-        public bool IsHalfDay { get; set; }
 
         public int ShiftId { get; set; }
 
@@ -38,7 +34,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_Insert_KeepInViewRequest";
+            return "KeepInViewRequest_Insert";
         }
 
         public override bool IsValid()

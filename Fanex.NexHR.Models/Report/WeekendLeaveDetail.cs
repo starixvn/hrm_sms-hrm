@@ -27,5 +27,9 @@
         public string LeaveType { get; set; }
 
         public int LeaveTypeId { get; set; }
+
+        public string Remark { get; set; }
+
+        public string ApproverComment { get; set; }
     }
 }

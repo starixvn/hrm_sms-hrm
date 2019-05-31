@@ -6,12 +6,17 @@ var LeaveRequest = (function ($) {
         verifierId: null,
         approverId: null,
         leaveTypeId: null,
+        leavetypeInfo: null,
         fromDate: null,
         toDate: null,
         employeeId: null,
         employee: null,
         fromTime: null,
         toTime: null,
+        fromTimeHour: null,
+        fromTimeMinute: null,
+        toTimeHour: null,
+        toTimeMinute: null,
         totalDays: null,
         halfDayOff: null,
         requestType: null,
@@ -31,16 +36,22 @@ var LeaveRequest = (function ($) {
             LeaveRequest.maternityLeaveType = "12";
             LeaveRequest.publicHolidayLeaveType = "13";
             LeaveRequest.compensationLeaveType = "27";
+            LeaveRequest.businessTripLeaveType = "9";
 
             LeaveRequest.verifierId = $("#VerifierId");
             LeaveRequest.approverId = $("#ApproverId");
             LeaveRequest.leaveTypeId = $("#LeaveTypeId");
+            LeaveRequest.leavetypeInfo = $("#leavetype-info");
             LeaveRequest.fromDate = $("#FromDate");
             LeaveRequest.toDate = $("#ToDate");
             LeaveRequest.employeeId = $("#EmployeeId");
             LeaveRequest.employee = $("#Employee");
             LeaveRequest.fromTime = $("#FromTime");
             LeaveRequest.toTime = $("#ToTime");
+            LeaveRequest.fromTimeHour = $("#FromTimeHour");
+            LeaveRequest.fromTimeMinute = $("#FromTimeMinute");
+            LeaveRequest.toTimeHour = $("#ToTimeHour");
+            LeaveRequest.toTimeMinute = $("#ToTimeMinute");
             LeaveRequest.totalDays = $("#TotalDays");
             LeaveRequest.halfDayOff = $("#HalfDayOff");
             LeaveRequest.requestType = $("#RequestType");
@@ -48,6 +59,7 @@ var LeaveRequest = (function ($) {
             LeaveRequest.annualBalance = $("#lblAnnualBalance");
             LeaveRequest.keepInViewBalance = $("#lblKeepInViewBalance");
             LeaveRequest.currentLeaveBalance = $("#lblCurrentLeaveBalance");
+            LeaveRequest.weekendLeaveTaken = $("#lblWeekendLeave");
             LeaveRequest.isFromTimeAfterDay = $("#IsFromTimeAfterDay");
             LeaveRequest.isToTimeAfterDay = $("#IsToTimeAfterDay");
 
@@ -181,14 +193,28 @@ var LeaveRequest = (function ($) {
                     });
                 }
                 else if (LeaveRequest.halfDayOff.prop('checked')) {
-                    fromTime = new Date(LeaveRequest.fromDate.val());
-                    toTime = new Date(LeaveRequest.fromDate.val());
+                    var fromDate = new Date(LeaveRequest.fromDate.val());
+                    var toDate = new Date(LeaveRequest.fromDate.val());
+                    var fromDateTime;
+                    var toDateTime;
+
                     if ($("#IsFromTimeAfterDay").prop('checked')) {
-                        fromTime.setDate(fromTime.getDate() + 1);
+                        fromDate.setDate(forDate.getDate() + 1);
                     }
 
                     if ($("#IsToTimeAfterDay").prop('checked')) {
-                        toTime.setDate(toTime.getDate() + 1);
+                        toDate.setDate(toDate.getDate() + 1);
+                    }
+
+                    if (LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveType) {
+                        fromDateTime = fromDate.format("dd mmm, yyyy") + " " + LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
+                            + ":" + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2);
+                        toDateTime = toDate.format("dd mmm, yyyy") + " " + LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
+                            + ":" + LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2);
+                    }
+                    else {
+                        fromDateTime = fromDate.format("dd mmm, yyyy") + " " + LeaveRequest.fromTime.val();
+                        toDateTime = toDate.format("dd mmm, yyyy") + " " + LeaveRequest.toTime.val();
                     }
 
                     requestDetails.push({
@@ -196,8 +222,8 @@ var LeaveRequest = (function ($) {
                         WorkType: 2,
                         LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                         IsHalfDay: true,
-                        FromTime: fromTime.format("dd mmm, yyyy") + " " + LeaveRequest.fromTime.val(),
-                        ToTime: toTime.format("dd mmm, yyyy") + " " + LeaveRequest.toTime.val()
+                        FromTime: fromDateTime,
+                        ToTime: toDateTime
                     });
                 }
 
@@ -250,6 +276,8 @@ var LeaveRequest = (function ($) {
             LeaveRequest.getLeaveBalance();
         },
         leaveTypeChange: function () {
+            var description = LeaveRequest.leaveTypeId.children("option:selected").attr("title");
+            LeaveRequest.leavetypeInfo.attr("title", description);
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
         },
@@ -265,12 +293,23 @@ var LeaveRequest = (function ($) {
             }
         },
         enableControlForHalfday: function () {
+            if (LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveType) {
+                $('.time-businesstrip').show();
+                $('.time').hide();
+            }
+            else {
+                $('.time-businesstrip').hide();
+                $('.time').show();
+            }
+
             LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
-            $('.time').show();
             LeaveRequest.toDate.prop('readonly', true).datepicker('disable').prop('disabled', false);
         },
         disableControlForHalfDay: function () {
             $('.time').hide();
+            $('.time-businesstrip').hide();
+            $('.time-isafterday').hide();
+
             LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
         },
         getTimeByShift: function () {
@@ -373,8 +412,7 @@ var LeaveRequest = (function ($) {
             }
 
             if (LeaveRequest.halfDayOff.attr("checked")) {
-                $('.time').show();
-                LeaveRequest.toDate.prop('readonly', true).datepicker('disable').prop('disabled', false);
+                LeaveRequest.enableControlForHalfday();
             }
         },
         bindLeaveRequestDetailForEdit: function () {
@@ -416,6 +454,18 @@ var LeaveRequest = (function ($) {
 
             if (toDate === null || toDate === "") {
                 errorString.push("To Date field is required.");
+            }
+
+            if (LeaveRequest.halfDayOff.prop('checked')) {
+                if (LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveType) {
+                    if (parseInt(LeaveRequest.fromTimeHour.val()) > 23
+                        || parseInt(LeaveRequest.fromTimeMinute.val()) > 59
+                        || parseInt(LeaveRequest.toTimeHour.val()) > 23
+                        || parseInt(LeaveRequest.toTimeMinute.val()) > 59
+                    ) {
+                        errorString.push("Time is not valid.");
+                    }
+                }
             }
 
             if (LeaveRequest.isTopManager === false) {
@@ -506,6 +556,7 @@ var LeaveRequest = (function ($) {
                     LeaveRequest.annualBalance.html(response.AnnualBalance);
                     LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
                     LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
+                    LeaveRequest.weekendLeaveTaken.html(response.WeekedLeaveDayTaken);
                 }
             });
         },
@@ -553,6 +604,8 @@ var LeaveRequest = (function ($) {
                 $("#grbHalfDay").hide();
                 $("#grbTotalDay").hide();
                 $('.time').hide();
+                $('.time-businesstrip').hide();
+                $('.time-isafterday').hide();
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 LeaveRequest.fromDate.attr("disabledDate", '2010-01-01');
                 LeaveRequest.toDate.attr("disabledDate", '2010-01-01');
@@ -604,6 +657,14 @@ var LeaveRequest = (function ($) {
                     LeaveRequest.getDateRange();
                 }
             }
+        },
+        leftPadding: function(i, l, s) {
+            var o = i.toString();
+            if (!s) { s = '0'; }
+            while (o.length < l) {
+                o = s + o;
+            }
+            return o;
         }
     };
 }(jQuery));

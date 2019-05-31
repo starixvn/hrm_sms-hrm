@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_AvaibleBalanceLeave";
+            return "LeaveRequest_GetLeaveBalance";
         }
 
         public override bool IsValid()

@@ -57,18 +57,33 @@ $(function () {
                         isValid = true;
 
                     $(this).find('table.table tbody tr').each(function () {
-                        let chkIgnored = $(this).find('td.violationIgnored input:radio'),
-                            chkNotIgnored = $(this).find('td.violationRecorded input:radio');
+                        let chkIgnore = $(this).find('.chk-ignore'),
+                            chkRecord = $(this).find('.chk-record'),
+                            chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
+                            chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
 
-                        if (chkIgnored.length === 1) {
-                            if (!chkIgnored.prop('checked') && !chkNotIgnored.prop('checked')) {
+                        if (chkIgnore.length === 1) {
+                            if (!chkIgnore.prop('checked') && !chkRecord.prop('checked')) {
                                 isValid = false;
                             } else {
                                 ignoredDisciplines.push({
-                                    WorkDate: chkIgnored.data('workdate'),
+                                    WorkDate: chkIgnore.data('workdate'),
                                     EmployeeId: employeeId,
-                                    DisciplineTypeId: chkIgnored.data('disciplinetypeid'),
-                                    IsIgnored: chkIgnored.prop('checked')
+                                    DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
+                                    IsIgnored: chkIgnore.prop('checked')
+                                });
+                            }
+                        }
+
+                        if (chkWeekendLeaveIgnore.length === 1) {
+                            if (!chkWeekendLeaveIgnore.prop('checked') && !chkWeekendLeaveRecord.prop('checked')) {
+                                isValid = false;
+                            } else {
+                                ignoredDisciplines.push({
+                                    WorkDate: chkWeekendLeaveIgnore.data('workdate'),
+                                    EmployeeId: employeeId,
+                                    DisciplineTypeId: 10,
+                                    IsIgnored: chkWeekendLeaveIgnore.prop('checked')
                                 });
                             }
                         }
@@ -109,19 +124,72 @@ $(function () {
 
                 initDialogProcessRequest(requestId, roleId, employeeId, command, title);
 
-                $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
-                    let chkIgnored = $(this).find('td.violationIgnored input:radio'),
-                        chkNotIgnored = $(this).find('td.violationRecorded input:radio');
+                let chkIgnoreAll = $('.chk-ignoreAll'),
+                    chkRecordAll = $('.chk-recordAll'),
+                    chkWeekendLeaveIgnoreAll = $('.chk-weekend-ignoreAll'),
+                    chkWeekendLeaveRecordAll = $('.chk-weekend-recordAll'),
+                    chkIgnores = $('.chk-ignore'),
+                    chkRecords = $('.chk-record'),
+                    chkWeekendLeaveIgnores = $('.chk-weekend-ignore'),
+                    chkWeekendLeaveRecords = $('.chk-weekend-record');
 
-                    chkIgnored.on('click', function () {
+
+                chkIgnoreAll.on('click', function () {
+                    let checked = $(this).prop('checked');
+                    chkRecordAll.prop('checked', !checked);
+                    chkIgnores.prop('checked', checked);
+                    chkRecords.prop('checked', !checked);
+                });
+
+                chkRecordAll.on('click', function () {
+                    let checked = $(this).prop('checked');
+                    chkIgnoreAll.prop('checked', !checked);
+                    chkRecords.prop('checked', checked);
+                    chkIgnores.prop('checked', !checked);
+                });
+
+                chkWeekendLeaveIgnoreAll.on('click', function () {
+                    let checked = $(this).prop('checked');
+                    chkWeekendLeaveRecordAll.prop('checked', !checked);
+                    chkWeekendLeaveIgnores.prop('checked', checked);
+                    chkWeekendLeaveRecords.prop('checked', !checked);
+                });
+
+                chkWeekendLeaveRecordAll.on('click', function () {
+                    let checked = $(this).prop('checked');
+                    chkWeekendLeaveIgnoreAll.prop('checked', !checked);
+                    chkWeekendLeaveRecords.prop('checked', checked);
+                    chkWeekendLeaveIgnores.prop('checked', !checked);
+                });
+
+                $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
+                    let chkIgnore = $(this).find('.chk-ignore'),
+                        chkRecord = $(this).find('.chk-record'),
+                        chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
+                        chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
+
+
+                    chkIgnore.on('click', function () {
                         if ($(this).prop('checked')) {
-                            chkNotIgnored.prop('checked', false);
+                            chkRecord.prop('checked', false);
                         }
                     });
 
-                    chkNotIgnored.on('click', function () {
+                    chkRecord.on('click', function () {
                         if ($(this).prop('checked')) {
-                            chkIgnored.prop('checked', false);
+                            chkIgnore.prop('checked', false);
+                        }
+                    });
+
+                    chkWeekendLeaveIgnore.on('click', function () {
+                        if ($(this).prop('checked')) {
+                            chkWeekendLeaveRecord.prop('checked', false);
+                        }
+                    });
+
+                    chkWeekendLeaveRecord.on('click', function () {
+                        if ($(this).prop('checked')) {
+                            chkWeekendLeaveIgnore.prop('checked', false);
                         }
                     });
                 });

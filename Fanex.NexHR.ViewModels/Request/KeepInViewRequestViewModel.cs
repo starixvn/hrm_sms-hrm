@@ -18,6 +18,8 @@
 
         public string RefNo { get; set; }
 
+        public int KeepInViewType { get; set; }
+
         public bool HalfDay { get; set; }
 
         [Required]

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.Request
+﻿namespace Fanex.NexHR.Criteria.Request.Leave
 {
     using Fanex.Data.Repository;
 
@@ -8,7 +8,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById";
+            return "LeaveRequest_GetDetailToIgnore";
         }
 
         public override bool IsValid()

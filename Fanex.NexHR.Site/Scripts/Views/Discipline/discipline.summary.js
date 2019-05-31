@@ -2,7 +2,7 @@
 /*global _global, autoIndex, noInformation, floatThead*/
 
 (function () {
-    var $disciplineTableBody, $dialogAddOtherDiscipline, $dialogViewOtherDiscipline, $btnAddOtherDiscipline, $btnAddWeekendLeave;
+    var $disciplineTableBody, $dialogAddOtherDiscipline, $dialogViewOtherDiscipline, $btnAddOtherDiscipline;
 
     function showSuccessMsg($dialog, msg) {
         $dialog.find('.validation-summary-valid')
@@ -46,33 +46,6 @@
 
         if (comment.trim().length === 0) {
             errorString += '<li>Comment field is required.</li>';
-        }
-
-        if (errorString.length > 0) {
-            showErrorMsg($dialogAddOtherDiscipline, errorString);
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-    function validateAddWeekendLeave() {
-        var isValid = true,
-            errorString = '',
-            empId = $dialogAddOtherDiscipline.find('#EmployeeId').val(),
-            workDate = $dialogAddOtherDiscipline.find('#WorkDate').datepicker('getDate'),
-            score = $dialogAddOtherDiscipline.find('#MinusScore').val();
-
-        if (empId && parseInt(empId, 10) <= 0) {
-            errorString += '<li>The Employee field is required.</li>';
-        }
-
-        if (workDate === null || workDate === '') {
-            errorString += '<li>Discipline Date field is required.</li>';
-        }
-
-        if (score.trim().length === 0 || parseFloat(score) <= 0) {
-            errorString += '<li>Score must be greater than 0.</li>';
         }
 
         if (errorString.length > 0) {
@@ -211,60 +184,6 @@
         });
     }
 
-    function initAddWeekendLeaveDialog() {
-        initAutocomplete($dialogAddOtherDiscipline);
-        initDatePicker($dialogAddOtherDiscipline);
-
-        $dialogAddOtherDiscipline.dialog({
-            modal: true,
-            title: 'Add Weekend Leave',
-            buttons: [
-                {
-                    text: 'Submit',
-                    click: function () {
-                        removeMsg($dialogAddOtherDiscipline);
-                        if (validateAddWeekendLeave()) {
-                            $.ajax({
-                                type: 'POST',
-                                url: _global.root + 'discipline/AddWeekendLeave',
-                                data: $('#frmAddWeekendLeave').serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        showSuccessMsg($dialogAddOtherDiscipline, 'Add Weekend Leave successfully!');
-                                        $('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked', true);
-                                    } else {
-                                        showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
-                                    }
-                                }
-                            });
-                        }
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    click: function () {
-                        $(this).dialog('close');
-                    }
-                }
-            ],
-            close: function () {
-                if ($('#frmAddWeekendLeave').find('#IsSuccessful').prop('checked')) {
-                    query();
-                }
-            },
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
-            minWidth: 460,
-            dialogClass: 'modal-shadow'
-        });
-    }
-
     function initEventForTeamDropdown() {
         $('form.form-filter #TeamId').on('change', function () {
             var teamId = $('form.form-filter #TeamId').val();
@@ -296,49 +215,6 @@
                         $dialogViewOtherDiscipline.dialog({
                             modal: true,
                             title: 'Other Discipline - ' + nickname,
-                            close: function () {
-                                if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
-                                    query();
-                                }
-                            },
-                            show: {
-                                effect: 'fade',
-                                duration: 300
-                            },
-                            hide: {
-                                effect: 'fade',
-                                duration: 200
-                            },
-                            minWidth: 500,
-                            dialogClass: 'modal-shadow'
-                        });
-                    }
-                });
-            }
-        });
-    }
-
-    function initEventViewWeekendLeave() {
-        $disciplineTableBody.find('a.viewWeekendLeave').on('click', function () {
-            var empId = parseInt($(this).data('empid'), 10),
-                nickname = $(this).data('nickname');
-
-            if (empId > 0) {
-                $.ajax({
-                    type: 'GET',
-                    url: _global.root + 'discipline/ViewWeekendLeave',
-                    dataType: 'html',
-                    data: {
-                        employeeId: empId,
-                        fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
-                        toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
-                    },
-                    success: function (data) {
-                        $dialogViewOtherDiscipline.html(data);
-                        initEventForDeleteWeekendLeave();
-                        $dialogViewOtherDiscipline.dialog({
-                            modal: true,
-                            title: 'Weekend Leave - ' + nickname,
                             close: function () {
                                 if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
                                     query();
@@ -402,29 +278,6 @@
         });
     }
 
-    function initEventForDeleteWeekendLeave() {
-        $dialogViewOtherDiscipline.find('a.deleteWeekendLeave').on('click', function () {
-            var empId = $(this).data('empid'),
-                workdate = $(this).data('workdate'),
-                rowIndex = $(this).data('row-index');
-
-            confirm('Are you sure you want to delete this weekend leave?', function () {
-                $.post(_global.root + 'discipline/DeleteWeekendLeave', {
-                    employeeId: empId,
-                    workDate: workdate
-                }, function () {
-                    $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true);
-                    $('#row_' + rowIndex).remove();
-                    autoIndex();
-
-                    if ($dialogViewOtherDiscipline.find('table.table tbody > tr').length === 0) {
-                        $(noInformation(4)).appendTo('#dialogViewOtherDiscipline table.table');
-                    }
-                });
-            });
-        });
-    }
-
     function initEventForDateRangeDropdown() {
         $('form.form-filter #DateRange').on('change', function () {
             var dateRange = $('form.form-filter #DateRange').val();
@@ -474,22 +327,6 @@
         });
     }
 
-    function initEventAddWeekendLeave() {
-        $btnAddWeekendLeave.on('click', function (event) {
-            event.preventDefault();
-
-            $.ajax({
-                type: 'GET',
-                url: _global.root + 'discipline/PartialAddWeekendLeave',
-                dataType: 'html',
-                success: function (data) {
-                    $dialogAddOtherDiscipline.html(data);
-                    initAddWeekendLeaveDialog();
-                }
-            });
-        });
-    }
-
     function formatDate(date) {
         var monthNames = [
           "Jan", "Feb", "Mar",
@@ -513,7 +350,6 @@
                 $disciplineTableBody.html(data);
 
                 initEventViewOtherDiscipline();
-                initEventViewWeekendLeave();
                 initEventForViewDisciplineDetail();
             }
         });
@@ -524,7 +360,6 @@
         $dialogAddOtherDiscipline = $('#dialogAddOtherDiscipline');
         $dialogViewOtherDiscipline = $('#dialogViewOtherDiscipline');
         $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
-        $btnAddWeekendLeave = $('#btnAddWeekendLeave');
 
         initEventForTeamDropdown();
         initEventForDateRangeDropdown();

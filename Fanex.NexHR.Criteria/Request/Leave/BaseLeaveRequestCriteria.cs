@@ -22,8 +22,6 @@
         [SpParam(Ignored = true)]
         public string EmployeeName { get; set; }
 
-        public short RequestType { get; set; }
-
         public string Remark { get; set; }
 
         public DateTime FromDate { get; set; }

@@ -20,5 +20,7 @@
         VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria);
 
         RequestEntity GetRequestToIgnoreById(ICriteria criteria);
+
+        IList<LeaveDisciplineModel> GetLeaveRequestToIgnoreById(ICriteria criteria);
     }
 }

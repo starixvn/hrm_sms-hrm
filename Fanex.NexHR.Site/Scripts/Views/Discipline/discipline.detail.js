@@ -56,6 +56,26 @@
             } else {
                 $(this).data('changed', false);
             }
+            });
+
+        $('#checkAll').on('click', function () {
+            var isChecked = $(this).prop('checked');
+
+            $('.outOfControlReason').each(function () {
+                var $this = $(this);
+                $this.prop('checked', isChecked);
+                var changed = isChecked !== ($(this).data('originchecked') === 'true' || $(this).data('originchecked') === 'True');
+
+                $(this).data('changed', changed);
+            });
+        });
+    }
+
+    function resetOriginChecked() {
+        $('.outOfControlReason').each(function () {
+            var $this = $(this);
+            var isChecked = $this.prop('checked');
+            $this.prop('originchecked', isChecked);
         });
     }
 
@@ -163,7 +183,7 @@
                             success: function (result) {
                                 if (result.IsSuccessful) {
                                     alert('Updated Successfully!');
-                                    query();
+                                    resetOriginChecked();
                                 } else {
                                     alert(result.Message);
                                 }
