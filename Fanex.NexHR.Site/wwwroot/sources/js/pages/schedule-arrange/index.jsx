@@ -1,4 +1,5 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
+import '../../jquery-weekpicker';
 
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';

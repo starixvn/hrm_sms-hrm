@@ -13,5 +13,12 @@
     .ui-datepicker {
         position: absolute;
         z-index: 1;
+
+        .ui-state-hover, td.ui-datepicker-current-day .ui-state-default {
+            border: 1px solid #003eff;
+            background: #007fff;
+            font-weight: normal;
+            color: #fff;
+        }
     }
 }

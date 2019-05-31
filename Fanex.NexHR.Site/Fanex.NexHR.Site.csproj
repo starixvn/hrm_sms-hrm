@@ -856,6 +856,7 @@
     <Content Include="wwwroot\parts\constant.js" />
     <Content Include="wwwroot\parts\entry.js" />
     <Content Include="wwwroot\sources\js\date.js" />
+    <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
