@@ -25,7 +25,7 @@ import moment from 'moment';
                 }
             }));
 
-            this._select(moment(date).format(this._dateFormat), this._picker, onSelect);
+            this._select(moment(date).format('MM/DD/YYYY'), this._picker, onSelect);
         },
 
         _initialDate: function () {
@@ -51,7 +51,7 @@ import moment from 'moment';
         },
 
         _setWeek: function (date) {
-            const selected = moment(date, this._dateFormat);
+            const selected = moment(date, 'YYYY-MM-DD');
 
             const fromDateClone = selected.clone();
             const from_date = fromDateClone.startOf('isoWeek'); // why use isoWeek - https://en.wikipedia.org/wiki/ISO_8601#Week_dates
@@ -67,9 +67,11 @@ import moment from 'moment';
         },
 
         setDate: function (date) {
-            this._picker.datepicker('setDate', moment(date).format(this._dateFormat));
+            this._setWeek(date);
+            this._picker.datepicker('setDate', $.datepicker.formatDate(this._dateFormat, date));
             this._picker.hide();
-            this._select(moment(date).format(this._dateFormat), this._picker, this.options.onSelect);
+            let onSelect = this.options.onSelect;
+            this._select(moment(date).format('DD/MM/YYYY'), this._picker, onSelect);
         }
     });
 })(jQuery);

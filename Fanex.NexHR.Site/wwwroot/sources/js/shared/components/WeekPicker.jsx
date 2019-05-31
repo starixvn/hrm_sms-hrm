@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import { DateFormat } from '../constants';
 
-export default class WeekPicker extends Component {
+export default class WeekPicker extends PureComponent {
     componentDidMount() {
         this.$el = $(this.el);
         this.updateWeekPicker();
@@ -14,13 +14,10 @@ export default class WeekPicker extends Component {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
-    shouldComponentUpdate(nextProps) {
-        return this.props.fromDate !== nextProps.fromDate
-            || this.props.toDate !== nextProps.toDate;
-    }
-
-    componentDidUpdate() {
-        this.updateWeekPicker();
+    componentDidUpdate(prevProps) {
+        if (this.props.fromDate !== prevProps.fromDate || this.props.toDate !== prevProps.toDate) {
+            this.updateWeekPicker();
+        }
     }
 
     componentWillUnmount() {
@@ -39,13 +36,13 @@ export default class WeekPicker extends Component {
 
         this.$el.weekpicker({
             firstDay: 1,
-            dateFormat: 'dd M, yy',
-            currentText: vm.props.fromDate,
             onSelect: function (dateText, startDateText, startDate, endDate, inst) {
                 vm.props.onChange(moment(startDate).format(DateFormat), moment(endDate).format(DateFormat));
                 vm.$el.hide();
             }
         });
+
+        this.$el.weekpicker('setDate', new Date(new Date(this.props.fromDate)));
     }
 
     handleShowCalendar = () => {
