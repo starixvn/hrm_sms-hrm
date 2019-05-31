@@ -40,7 +40,7 @@ export default class WeekPicker extends Component {
         this.$el.weekpicker({
             firstDay: 1,
             dateFormat: 'dd M, yy',
-            currentText: vm.props.startDate,
+            currentText: vm.props.fromDate,
             onSelect: function (dateText, startDateText, startDate, endDate, inst) {
                 vm.props.onChange(moment(startDate).format(DateFormat), moment(endDate).format(DateFormat));
                 vm.$el.hide();

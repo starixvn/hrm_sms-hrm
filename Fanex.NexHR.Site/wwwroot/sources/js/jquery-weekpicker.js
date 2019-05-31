@@ -30,7 +30,7 @@ import moment from 'moment';
 
         _initialDate: function () {
             if (this.options.currentText) {
-                return moment(this.options.currentText).format(this._dateFormat);
+                return $.datepicker.parseDate(this._dateFormat, this.options.currentText);
             } else {
                 return new Date;
             }
