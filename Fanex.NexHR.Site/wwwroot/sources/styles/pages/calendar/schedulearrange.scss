@@ -64,6 +64,7 @@ input[type="text"] {
                 position: unset;
                 top: unset;
                 right: unset;
+            }
         }
     }
 }
@@ -428,6 +429,7 @@ input[type="text"] {
                     &:disabled {
                         background: transparent;
                     }
+
                     &::placeholder, &.same-default-shift {
                         color: rgba(51, 51, 51, .4);
                     }
@@ -440,6 +442,7 @@ input[type="text"] {
                     &.offday, &.offdayreplacement, &.keepinviewday, &.changeshift, &.overtime, &.holiday {
                         color: inherit;
                         background-image: unset;
+                    }
                 }
             }
         }
@@ -462,28 +465,12 @@ input[type="text"] {
     }
 }
 
-.modal-weekly-default-shift {
-    width: 880px;
-
-    .table-weekly-default-shift {
-        width: 840px;
-    }
-}
-
 .holiday {
     background: #f3aa4b !important;
 }
 
 .offday {
     background-color: #f8f89c !important;
-}
-
-.offdayreplacement {
-    background-color: #fdfd45 !important;
-}
-
-.keepinviewday, .changeshift, .leaveday {
-    color: #ed4646 !important;
 }
 
 .offdayreplacement {

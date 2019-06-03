@@ -876,7 +876,6 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
