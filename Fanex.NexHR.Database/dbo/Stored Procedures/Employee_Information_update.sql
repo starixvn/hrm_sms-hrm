@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@Code VARCHAR(20)
 	,@DomainUsername VARCHAR(50) = ''
 	,@FullName NVARCHAR(50) = ''
@@ -40,7 +41,6 @@
 	,@WorkingHours INT
 	,@CompanyDate DATETIME = NULL
 	,@CountryCode VARCHAR(5) = NULL
-	,@IsDefaultSchedule BIT
 	,@IsTopManager BIT = 0
 	,@OffDaysbyWeek SMALLINT = 0
 	,@IsExpatUseHoliday BIT = 0
@@ -74,6 +74,7 @@
 	,@ToDate5 DATETIME = NULL
 	,@History NVARCHAR(500) = NULL
 	,@EmployeeCard VARCHAR(10) = ''
+	,@PickupRemark NVARCHAR(200) = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -104,7 +105,7 @@ BEGIN
 		,@FullName_exist = FullName
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpID <> @EmpID
-		AND (Code = @code) -- AND (isDeleted = 0 OR Enabled =1)
+		AND Code = @code
 
 	IF ISNULL(@EmpID_exist, 0) <> 0
 	BEGIN
@@ -118,14 +119,14 @@ BEGIN
 		,@NickName_exist = NickName
 		,@Code_exist = Code
 		,@IsDelete = isDeleted
-		,@Enabled_exist = Enabled
+		,@Enabled_exist = [Enabled]
 		,@FullName_exist = FullName
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpID <> @EmpID
-		AND (nickName = @nickName)
+		AND nickName = @nickName
 		AND (
 			isDeleted = 0
-			OR Enabled = 1
+			OR [Enabled] = 1
 			)
 
 	IF ISNULL(@EmpID_exist, 0) <> 0
@@ -210,6 +211,7 @@ BEGIN
 		,@ToDate5_old DATETIME = NULL
 		,@History_old NVARCHAR(500) = NULL
 		,@EmployeeCard_old VARCHAR(10) = ''
+		,@PickupRemark_old NVARCHAR(200) = NULL
 
 	SELECT TOP 1 @Code_Old = Code
 		,@DomainUsername_Old = DomainUsername
@@ -249,11 +251,12 @@ BEGIN
 		,@Qualification_Old = Qualification
 		,@Major_Old = Major
 		,@EmployeeCard_old = EmployeeCard
+		,@PickupRemark_old = PickupRemark
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpId = @EmpId
 
-	SELECT @Roles_old = COALESCE(@Roles_old + ',', '') + CONVERT(nvarchar(2),RoleId)
-	FROM dbo.EmployeeRole WITH(NOLOCK)
+	SELECT @Roles_old = COALESCE(@Roles_old + ',', '') + CONVERT(NVARCHAR(2), RoleId)
+	FROM dbo.EmployeeRole WITH (NOLOCK)
 	WHERE EmployeeId = @EmpId
 
 	SELECT TOP 1 @CanOT_old = [CanOT]
@@ -281,7 +284,7 @@ BEGIN
 			,DOB = @DOB
 			,Email = REPLACE(@Email, ' ', '')
 			,JobTitleId = @JobTitleId
-			,Enabled = @Enabled
+			,[Enabled] = @Enabled
 			,Phone = @Phone
 			,Gender = @Gender
 			,GroupId = @GroupId
@@ -312,12 +315,12 @@ BEGIN
 			,Qualification = @Qualification
 			,Major = @Major
 			,EmployeeCard = @EmployeeCard
+			,PickupRemark = @PickupRemark
 		WHERE EmpId = @EmpId
 
-		EXEC [dbo].[EmployeeRole_Update]
-                  @EmployeeId = @EmpId,
-                  @RoleIds = @Roles,
-                  @ModifiedBy = @ModifiedBy;
+		EXEC [dbo].[EmployeeRole_Update] @EmployeeId = @EmpId
+			,@RoleIds = @Roles
+			,@ModifiedBy = @ModifiedBy;
 
 		EXEC [dbo].[Employee_Summary_Update] @EmpID = @EmpID
 			,@AnnualLeaveBalance = @AnnualLeaveBalance
@@ -329,7 +332,7 @@ BEGIN
 			,@CompanyDate = @CompanyDate
 			,@CountryCode = @CountryCode
 			,@Unit = @Unit
-			,@IsDefaultSchedule = @IsDefaultSchedule
+			,@IsDefaultSchedule = @IsDefaultSchedule_old
 			,@IsTopManager = @IsTopManager
 			,@OffDaysbyWeek = @OffDaysbyWeek
 			,@IsExpatUseHoliday = @IsExpatUseHoliday
@@ -372,72 +375,66 @@ BEGIN
 		SELECT @ErrCode = 100
 			,@ErrMsg = N'Update failed';
 	END CATCH
-END
-DECLARE @LogSPData nvarchar(4000), @now datetime
-	set @now=getdate()
+	
+	DECLARE @LogSPData NVARCHAR(4000)
+		,@now DATETIME
+
+	SET @now = getdate()
+
 	--Log general info
-	Select @LogSPData = '<Employee_Information_update EmpId="'+ coalesce(cast(@EmpId as varchar(50)),space(1)) + '" ' +
-		'@DomainUsername="'+ coalesce(cast(@DomainUsername_Old as varchar(100)),space(1)) + '"#@#' +coalesce(cast(@DomainUsername as varchar(100)),space(1)) + '" ' +
-		'@FullName="'+ coalesce(cast(@FullName_Old as nvarchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@FullName as nvarchar(100)),space(1)) + '" ' +
-		'@NickName="'+ coalesce(cast(@NickName_Old as nvarchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@NickName as nvarchar(100)),space(1)) + '" ' +
-		'@EmployeeCard="'+ coalesce(cast(@EmployeeCard_old as nvarchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@EmployeeCard as nvarchar(100)),space(1)) + '" ' +
-		'@DOB="'+ coalesce(cast(@DOB_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@DOB as varchar(100)),space(1)) + '" ' +
-		'@Email="'+ coalesce(cast(@Email_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Email as varchar(100)),space(1)) + '" ' +
-		'@JobTitleId="'+ coalesce(cast(@JobTitleId_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@JobTitleId as varchar(100)),space(1)) + '" ' +
-		'@Enabled="'+ coalesce(cast(@Enabled_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Enabled as varchar(100)),space(1)) + '" ' +
+	SELECT @LogSPData = '<Employee_Information_update EmpId="' + coalesce(cast(@EmpId AS VARCHAR(50)), space(1)) + '" ' 
+		+ '@DomainUsername="' + coalesce(cast(@DomainUsername_Old AS VARCHAR(100)), space(1)) + '"#@#' + coalesce(cast(@DomainUsername AS VARCHAR(100)), space(1)) + '" '
+		+ '@FullName="' + coalesce(cast(@FullName_Old AS NVARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@FullName AS NVARCHAR(100)), space(1)) + '" '
+		+ '@NickName="' + coalesce(cast(@NickName_Old AS NVARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@NickName AS NVARCHAR(100)), space(1)) + '" '
+		+ '@EmployeeCard="' + coalesce(cast(@EmployeeCard_old AS NVARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@EmployeeCard AS NVARCHAR(100)), space(1)) + '" '
+		+ '@DOB="' + coalesce(cast(@DOB_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@DOB AS VARCHAR(100)), space(1)) + '" '
+		+ '@Email="' + coalesce(cast(@Email_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Email AS VARCHAR(100)), space(1)) + '" '
+		+ '@JobTitleId="' + coalesce(cast(@JobTitleId_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@JobTitleId AS VARCHAR(100)), space(1)) + '" '
+		+ '@Enabled="' + coalesce(cast(@Enabled_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Enabled AS VARCHAR(100)), space(1)) + '" '
+		+ '@Phone="' + coalesce(cast(@Phone_Old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Phone AS VARCHAR(100)), space(1)) + '" '
+		+ '@Gender="' + coalesce(cast(@Gender_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Gender AS VARCHAR(100)), space(1)) + '" '
+		+ '@GroupId="' + coalesce(cast(@GroupId_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@GroupId AS VARCHAR(100)), space(1)) + '" '
+		+ '@Roles="' + coalesce(cast(@Roles_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Roles AS VARCHAR(100)), space(1)) + '" '
+		+ '@ManagerId="' + coalesce(cast(@ManagerId_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@ManagerId AS VARCHAR(100)), space(1)) + '" '
+		+ '@JoinedDate="' + coalesce(cast(@JoinedDate_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@JoinedDate AS VARCHAR(100)), space(1)) + '" '
+		+ '@ConfirmedDate="' + coalesce(cast(@ConfirmedDate_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@ConfirmedDate AS VARCHAR(100)), space(1)) + '" '
+		+ '@ResignedDate="' + coalesce(cast(@ResignedDate_Old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@ResignedDate AS VARCHAR(100)), space(1)) + '" '
+		+ '@Skype="' + coalesce(cast(@Skype_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Skype AS VARCHAR(100)), space(1)) + '" '
+		+ '@Yahoo="' + coalesce(cast(@Yahoo_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Yahoo AS VARCHAR(100)), space(1)) + '" '
+		+ '@Marriage="' + coalesce(cast(@Marriage_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Marriage AS VARCHAR(100)), space(1)) + '" '
+		+ '@LastLogin="' + coalesce(cast(@LastLogin_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@LastLogin AS VARCHAR(100)), space(1)) + '" '
+		+ '@ModifiedBy="' + coalesce(cast(@ModifiedBy_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@ModifiedBy AS VARCHAR(100)), space(1)) + '" '
+		+ '@isDeleted="' + coalesce(cast(@isDeleted_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@isDeleted AS VARCHAR(100)), space(1)) + '" '
+		+ '@PermanentAddress="' + coalesce(cast(@PermanentAddress_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PermanentAddress AS NVARCHAR(250)), space(1)) + '" '
+		+ '@CurrentAddress="' + coalesce(cast(@CurrentAddress_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@CurrentAddress AS NVARCHAR(250)), space(1)) + '" '
+		+ '@IdCardNumber="' + coalesce(cast(@IdCardNumber_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@IdCardNumber AS VARCHAR(100)), space(1)) + '" '
+		+ '@PassportNo="' + coalesce(cast(@PassportNo_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PassportNo AS VARCHAR(100)), space(1)) + '" '
+		+ '@PassportExp="' + coalesce(cast(@PassportExp_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PassportExp AS VARCHAR(100)), space(1)) + '" '
+		+ '@ChineseName="' + coalesce(cast(@ChineseName_Old AS NVARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@ChineseName AS NVARCHAR(100)), space(1)) + '" '
+		+ '@PlaceOfbirth="' + coalesce(cast(@PlaceOfbirth_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PlaceOfbirth AS NVARCHAR(250)), space(1)) + '" '
+		+ '@Native="' + coalesce(cast(@Native_Old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Native AS VARCHAR(100)), space(1)) + '" '
+		+ '@Ethnic="' + coalesce(cast(@Ethnic_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Ethnic AS NVARCHAR(250)), space(1)) + '" '
+		+ '@Religion="' + coalesce(cast(@Religion_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Religion AS NVARCHAR(250)), space(1)) + '" '
+		+ '@DateOfIDCard="' + coalesce(cast(@DateOfIDCard_Old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@DateOfIDCard AS VARCHAR(100)), space(1)) + '" '
+		+ '@PlaceOfIDCard="' + coalesce(cast(@PlaceOfIDCard_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PlaceOfIDCard AS NVARCHAR(250)), space(1)) + '" '
+		+ '@HomePhone="' + coalesce(cast(@HomePhone_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PlaceOfIDCard AS NVARCHAR(250)), space(1)) + '" '
+		+ '@Qualification="' + coalesce(cast(@Qualification_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Qualification AS NVARCHAR(250)), space(1)) + '" '
+		+ '@Major="' + coalesce(cast(@Major_Old AS NVARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Major AS NVARCHAR(100)), space(1)) + '" '
+		+ '@CanOT="' + coalesce(cast(@CanOT_old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@CanOT AS VARCHAR(100)), space(1)) + '" '
+		+ '@IsLocal="' + coalesce(cast(@IsLocal_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@IsLocal AS VARCHAR(100)), space(1)) + '" '
+		+ '@WorkingDays="' + coalesce(cast(@WorkingDays_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@WorkingDays AS VARCHAR(100)), space(1)) + '" '
+		+ '@WorkingHours="' + coalesce(cast(@WorkingHours_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@WorkingHours AS VARCHAR(100)), space(1)) + '" '
+		+ '@IsTopManager="' + coalesce(cast(@IsTopManager_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@IsTopManager AS VARCHAR(100)), space(1)) + '" '
+		+ '@CompanyDate="' + coalesce(cast(@CompanyDate_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@CompanyDate AS VARCHAR(100)), space(1)) + '" '
+		+ '@CountryCode="' + coalesce(cast(@CountryCode_old AS NVARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@CountryCode AS VARCHAR(100)), space(1)) + '" '
+		+ '@Unit="' + coalesce(cast(@Unit_old AS NVARCHAR(2000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Unit AS NVARCHAR(2000)), space(1)) + '" '
+		+ '@IsExpatUseHoliday="' + coalesce(cast(@IsExpatUseHoliday_old AS NVARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@IsExpatUseHoliday AS VARCHAR(100)), space(1)) + '" '
+		+ '@PickupRemark="' + coalesce(cast(@PickupRemark_old AS NVARCHAR(200)), space(1)) + '" ' + '"#@#' + coalesce(cast(@PickupRemark AS NVARCHAR(200)), space(1)) + '" />'
 
-		'@Phone="'+ coalesce(cast(@Phone_Old as varchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Phone as varchar(100)),space(1)) + '" ' +
-		'@Gender="'+ coalesce(cast(@Gender_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Gender as varchar(100)),space(1)) + '" ' +
-		'@GroupId="'+ coalesce(cast(@GroupId_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@GroupId as varchar(100)),space(1)) + '" ' +
-		'@Roles="'+ coalesce(cast(@Roles_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Roles as varchar(100)),space(1)) + '" ' +
-		'@ManagerId="'+ coalesce(cast(@ManagerId_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@ManagerId as varchar(100)),space(1)) + '" ' +
-		'@JoinedDate="'+ coalesce(cast(@JoinedDate_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@JoinedDate as varchar(100)),space(1)) + '" ' +
-		'@ConfirmedDate="'+ coalesce(cast(@ConfirmedDate_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@ConfirmedDate as varchar(100)),space(1)) + '" ' +
-		
-		'@ResignedDate="'+ coalesce(cast(@ResignedDate_Old as varchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@ResignedDate as varchar(100)),space(1)) + '" ' +
-		'@Skype="'+ coalesce(cast(@Skype_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Skype as varchar(100)),space(1)) + '" ' +
-		'@Yahoo="'+ coalesce(cast(@Yahoo_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Yahoo as varchar(100)),space(1)) + '" ' +
-		'@Marriage="'+ coalesce(cast(@Marriage_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Marriage as varchar(100)),space(1)) + '" ' +
-		'@LastLogin="'+ coalesce(cast(@LastLogin_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@LastLogin as varchar(100)),space(1)) + '" ' +
-		'@ModifiedBy="'+ coalesce(cast(@ModifiedBy_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@ModifiedBy as varchar(100)),space(1)) + '" ' +
-		'@isDeleted="'+ coalesce(cast(@isDeleted_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@isDeleted as varchar(100)),space(1)) + '" ' +
-
-		'@PermanentAddress="'+ coalesce(cast(@PermanentAddress_Old as varchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PermanentAddress as varchar(100)),space(1)) + '" ' +
-		'@CurrentAddress="'+ coalesce(cast(@CurrentAddress_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@CurrentAddress as varchar(100)),space(1)) + '" ' +
-		'@IdCardNumber="'+ coalesce(cast(@IdCardNumber_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@IdCardNumber as varchar(100)),space(1)) + '" ' +
-		'@PassportNo="'+ coalesce(cast(@PassportNo_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PassportNo as varchar(100)),space(1)) + '" ' +
-		'@PassportExp="'+ coalesce(cast(@PassportExp_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PassportExp as varchar(100)),space(1)) + '" ' +
-		'@ChineseName="'+ coalesce(cast(@ChineseName_Old as nvarchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@ChineseName as nvarchar(100)),space(1)) + '" ' +
-		'@PlaceOfbirth="'+ coalesce(cast(@PlaceOfbirth_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PlaceOfbirth as varchar(100)),space(1)) + '" ' +
-
-		'@Native="'+ coalesce(cast(@Native_Old as varchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Native as varchar(100)),space(1)) + '" ' +
-		'@Ethnic="'+ coalesce(cast(@Ethnic_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@DomainUsername as varchar(100)),space(1)) + '" ' +
-		'@Religion="'+ coalesce(cast(@Religion_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Ethnic as varchar(100)),space(1)) + '" ' +
-		'@DateOfIDCard="'+ coalesce(cast(@DateOfIDCard_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@DateOfIDCard as varchar(100)),space(1)) + '" ' +
-		'@PlaceOfIDCard="'+ coalesce(cast(@PlaceOfIDCard_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PlaceOfIDCard as varchar(100)),space(1)) + '" ' +
-		'@HomePhone="'+ coalesce(cast(@HomePhone_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PlaceOfIDCard as varchar(100)),space(1)) + '" ' +
-		'@Qualification="'+ coalesce(cast(@PlaceOfIDCard_Old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@PlaceOfIDCard as varchar(100)),space(1)) + '" ' +
-		'@Major="'+ coalesce(cast(@Major_Old as nvarchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Major as nvarchar(100)),space(1)) + '" ' +
-		
-		'@CanOT="'+ coalesce(cast(@CanOT_old as varchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@CanOT as varchar(100)),space(1)) + '" ' +
-		'@IsLocal="'+ coalesce(cast(@IsLocal_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@IsLocal as varchar(100)),space(1)) + '" ' +
-		'@WorkingDays="'+ coalesce(cast(@WorkingDays_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@WorkingDays as varchar(100)),space(1)) + '" ' +
-		'@WorkingHours="'+ coalesce(cast(@WorkingHours_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@WorkingHours as varchar(100)),space(1)) + '" ' +
-		'@IsDefaultSchedule="'+ coalesce(cast(@IsDefaultSchedule_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@IsDefaultSchedule as varchar(100)),space(1)) + '" ' +
-		'@IsTopManager="'+ coalesce(cast(@IsTopManager_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@IsTopManager as varchar(100)),space(1)) + '" ' +
-		'@CompanyDate="'+ coalesce(cast(@CompanyDate_old as varchar(1000)),space(1)) + '" ' +'"#@#' +coalesce(cast(@CompanyDate as varchar(100)),space(1)) + '" ' +
-		'@CountryCode="'+ coalesce(cast(@CountryCode_old as nvarchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@CountryCode as varchar(100)),space(1)) + '" ' +
-		'@Unit="'+ coalesce(cast(@Unit_old as nvarchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@Unit as varchar(100)),space(1)) + '" ' +
-		'@IsExpatUseHoliday="'+ coalesce(cast(@IsExpatUseHoliday_old as nvarchar(100)),space(1)) + '" ' +'"#@#' +coalesce(cast(@IsExpatUseHoliday as varchar(100)),space(1)) + '" ' +
-
-		'ErrCode="'+ coalesce(cast(@ErrCode as varchar(50)),space(1)) + '" ' +
-		'ErrMsg="'+ coalesce(cast(@ErrMsg as varchar(4000)),space(1)) + '" />'	
-
-
-	EXEC dbo.Log_WriteLog
-		@LogActionID = 500,
-		@LogDate = @now,
-		@Description = 'Update Employee Information',
-		@TrackingValue = @LogSPData,
-		@UserID = @ModifiedBy,
-		@EmpId=@EmpId
+	EXEC dbo.Log_WriteLog @LogActionID = 500
+		,@LogDate = @now
+		,@Description = 'Update Employee Information'
+		,@TrackingValue = @LogSPData
+		,@UserID = @ModifiedBy
+		,@EmpId = @EmpId
+END

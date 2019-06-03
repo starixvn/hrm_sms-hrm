@@ -94,4 +94,3 @@ BEGIN
 			,@ErrMsg = N'Assign function to role unsuccessfully.'
 	END CATCH
 END
-

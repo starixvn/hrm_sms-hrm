@@ -14,7 +14,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @ShiftManagerRoleId TINYINT = 4
-		,@ViewFullDataFunctionKey VARCHAR(100) = 'ViewFullScheduleData'
+		,@EditScheduleUnlimited VARCHAR(100) = 'EditScheduleUnlimited'
 
 	SELECT gr.GroupId
 		,gr.Code
@@ -26,7 +26,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.RoleFunction AS rf WITH (NOLOCK)
 					INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
-					AND f.FunctionKey = @ViewFullDataFunctionKey
+					AND f.FunctionKey = @EditScheduleUnlimited
 					AND f.IsActive = 1
 					INNER JOIN dbo.EmployeeRole AS erole WITH (NOLOCK) ON rf.RoleId = erole.RoleId
 					AND erole.EmployeeId = @ActorId

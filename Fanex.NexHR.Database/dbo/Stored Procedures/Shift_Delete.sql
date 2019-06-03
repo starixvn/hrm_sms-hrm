@@ -65,5 +65,3 @@ BEGIN
 			,@ErrMsg = N'Delete shift failed.'
 	END
 END
-
-

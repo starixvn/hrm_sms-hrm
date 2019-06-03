@@ -65,5 +65,3 @@ BEGIN
 	FROM [dbo].[Shift] WITH (NOLOCK)
 	WHERE ShiftID = @ShiftId
 END
-
-

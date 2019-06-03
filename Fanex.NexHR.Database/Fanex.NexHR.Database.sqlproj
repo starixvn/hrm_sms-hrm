@@ -322,7 +322,6 @@
     <Build Include="dbo\Stored Procedures\Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftDetailToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeCalendar_Update_IsPublic.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_Shift_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestHistory.sql" />

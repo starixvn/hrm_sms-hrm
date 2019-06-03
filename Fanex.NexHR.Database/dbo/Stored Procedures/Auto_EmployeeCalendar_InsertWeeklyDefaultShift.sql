@@ -58,13 +58,13 @@ BEGIN
 						)
 					)
 				AND holiday.Id IS NOT NULL THEN NULL
-			WHEN datepart(dw, tblc.WorkDate) = 1 THEN shift.SunShift
-			WHEN datepart(dw, tblc.WorkDate) = 2 THEN shift.MonShift
-			WHEN datepart(dw, tblc.WorkDate) = 3 THEN shift.TueShift
-			WHEN datepart(dw, tblc.WorkDate) = 4 THEN shift.WedShift
-			WHEN datepart(dw, tblc.WorkDate) = 5 THEN shift.ThuShift
-			WHEN datepart(dw, tblc.WorkDate) = 6 THEN shift.FriShift
-			WHEN datepart(dw, tblc.WorkDate) = 7 THEN shift.SatShift END
+			WHEN DATEPART(dw, tblc.WorkDate) = 1 THEN shift.SunShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 2 THEN shift.MonShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 3 THEN shift.TueShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 4 THEN shift.WedShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 5 THEN shift.ThuShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 6 THEN shift.FriShift
+			WHEN DATEPART(dw, tblc.WorkDate) = 7 THEN shift.SatShift END
 			) AS ShiftId
 		,(CASE 
 			WHEN (
@@ -75,19 +75,19 @@ BEGIN
 						)
 					)
 				AND holiday.Id IS NOT NULL THEN 0
-			WHEN datepart(dw, tblc.WorkDate) = 1
+			WHEN DATEPART(dw, tblc.WorkDate) = 1
 				AND shift.SunShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 2
+			WHEN DATEPART(dw, tblc.WorkDate) = 2
 				AND shift.MonShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 3
+			WHEN DATEPART(dw, tblc.WorkDate) = 3
 				AND shift.TueShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 4
+			WHEN DATEPART(dw, tblc.WorkDate) = 4
 				AND shift.WedShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 5
+			WHEN DATEPART(dw, tblc.WorkDate) = 5
 				AND shift.ThuShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 6
+			WHEN DATEPART(dw, tblc.WorkDate) = 6
 				AND shift.FriShift IS NULL THEN 1
-			WHEN datepart(dw, tblc.WorkDate) = 7
+			WHEN DATEPART(dw, tblc.WorkDate) = 7
 				AND shift.SatShift IS NULL THEN 1
 			ELSE 0 END
 			) AS IsOffDay
@@ -133,6 +133,7 @@ BEGIN
 			)
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
+		,@EmployeeId = @EmployeeId
 		,@FromDate = @FromDate
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT

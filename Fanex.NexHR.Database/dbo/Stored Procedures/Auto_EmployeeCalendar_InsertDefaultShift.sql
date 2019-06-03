@@ -101,6 +101,7 @@ BEGIN
 			)
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
+		,@EmployeeId = @EmployeeId
 		,@FromDate = @FromDate
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT

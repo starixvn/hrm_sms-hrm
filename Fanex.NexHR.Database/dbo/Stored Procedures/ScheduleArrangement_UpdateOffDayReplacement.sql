@@ -265,8 +265,14 @@ BEGIN
 			WHEN holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			) AS IsHoliday
-		,empca.IsOffDay
-		,empca.IsKeepInView
+		,(CASE 
+			WHEN empca.IsOffDay IS NULL THEN 0
+			ELSE empca.IsOffDay END
+			) AS IsOffDay
+		,(CASE 
+			WHEN empca.IsKeepInView IS NULL THEN 0
+			ELSE empca.IsKeepInView END
+			) AS IsKeepInView
 		,(CASE 
 			WHEN lr.WorkDate IS NOT NULL THEN 1
 			ELSE 0 END
@@ -337,7 +343,9 @@ BEGIN
 		SET empca.IsOffDay = 0
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
-		--AND emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+			AND emp.FromDate = @FromDate
+			AND emp.ToDate = @ToDate
+			AND emp.TotalOffDaysUsed >= emp.OffDaysByWeek
 		WHERE EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
@@ -770,7 +778,7 @@ BEGIN
 				)
 	WHEN MATCHED THEN
 			UPDATE
-			SET IsOffDay = 1
+			SET [target].IsOffDay = 1
 	WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				EmpId

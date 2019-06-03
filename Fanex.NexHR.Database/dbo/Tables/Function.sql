@@ -4,7 +4,7 @@
     [Name]             NVARCHAR (200) NOT NULL,
     [ParentFunctionId] INT            NULL,
     [IsActive]         BIT            NULL,
-    [IsReadOnly]       BIT            NULL,
+    [Policy]       TINYINT            NULL,
     CONSTRAINT [PK_FunctionKey] PRIMARY KEY CLUSTERED ([FunctionId] ASC)
 );
 

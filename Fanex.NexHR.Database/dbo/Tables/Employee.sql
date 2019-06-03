@@ -42,6 +42,7 @@
     [Major]            NVARCHAR (300) NULL,
     [PasswordReset]    BIT            CONSTRAINT [DF_Employee_PasswordReset] DEFAULT ((0)) NULL,
     [EmployeeCard]     VARCHAR (10)   NULL,
+	[PickupRemark]     NVARCHAR(200)  NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 );
 

@@ -31,4 +31,4 @@ BEGIN
 	GROUP BY f.FunctionId
 		,f.FunctionKey
 		,f.[Name]
-END;
+END
