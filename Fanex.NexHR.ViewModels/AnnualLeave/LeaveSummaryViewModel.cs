@@ -1,7 +1,8 @@
 ﻿namespace Fanex.NexHR.ViewModels
 {
-    using Fanex.NexHR.Models;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
 
     public class LeaveSummaryViewModel
     {
@@ -18,6 +19,8 @@
         public int MinAnnualBalance { get; set; }
 
         public int? Category { get; set; }
+
+        public UnpaidLeaveType LeaveType { get; set; }
 
         public bool IsShowCloseBalance { get; set; }
     }

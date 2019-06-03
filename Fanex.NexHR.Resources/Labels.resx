@@ -1686,4 +1686,13 @@
   <data name="VerifiedDate" xml:space="preserve">
     <value>Verified Date</value>
   </data>
+  <data name="UnpaidLeaveInsurance" xml:space="preserve">
+    <value>Unpaid Leave (Insurance)</value>
+  </data>
+  <data name="PaternityLeave" xml:space="preserve">
+    <value>Paternity Leave</value>
+  </data>
+  <data name="MaternityLeave" xml:space="preserve">
+    <value>Maternity Leave</value>
+  </data>
 </root>

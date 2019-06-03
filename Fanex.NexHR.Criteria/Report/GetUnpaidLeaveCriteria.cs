@@ -14,6 +14,8 @@
 
         public int? SupervisorId { get; set; }
 
+        public int LeaveType { get; set; }
+
         public override string GetSettingKey()
         {
             return "Report_UnpaidLeaveSummary";

@@ -31,8 +31,11 @@
                         },
                         "EmployeeId").ToList();
 
-                    team.Leaders = employees.Where(e => e.IsLeader).Select(l => l.Employee).ToList();
-                    team.AssistantLeaders = employees.Where(e => !e.IsLeader).Select(l => l.Employee).ToList();
+                    if (team != null)
+                    {
+                        team.Leaders = employees.Where(e => e.IsLeader).Select(l => l.Employee).ToList();
+                        team.AssistantLeaders = employees.Where(e => !e.IsLeader).Select(l => l.Employee).ToList();
+                    }
 
                     return team;
                 }

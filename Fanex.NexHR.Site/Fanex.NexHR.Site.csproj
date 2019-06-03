@@ -904,6 +904,7 @@
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
+    <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
     <Content Include="wwwroot\webpack.config.vendor.js" />
@@ -1255,6 +1256,7 @@
     <Content Include="wwwroot\sources\styles\pages\account\profile-edit.scss" />
     <Content Include="Views\Account\_ListFileUploaded.cshtml" />
     <Content Include="ExcelTemplates\JobTitleSummary.xls" />
+    <Content Include="Views\Report\_ListLeaveSummary.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

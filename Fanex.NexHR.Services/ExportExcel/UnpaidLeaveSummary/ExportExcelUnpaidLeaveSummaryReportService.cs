@@ -6,6 +6,7 @@
     using System.Web;
     using ExportExcel;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
     public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
@@ -15,20 +16,21 @@
         private const int RowHighlight = 6;
         private const string UnpaidLeaveSummaryTemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
 
-        public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year)
+        public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, UnpaidLeaveType leaveType)
         {
             string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath);
-            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = leaveType.ToString() + "Summary_" + DateTime.Now.ToString("yyyyMMdd");
 
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
+            var writer = new ExcelTemplateWriter(templatePath, fileName, $"{Enumerations.GetStringValue(leaveType)} Summary Report");
 
             /// Fill report title.
             writer.CopyRows(0, 2);
+            writer.WriteCellRange(0, 1, 0, 16, $"{Enumerations.GetStringValue(leaveType)} Summary");
 
             /// Fill report header.
             writer.CopyRows(RowStartHeader, 2);
-            writer.WriteCellRange(2, 1, 3, 12, "Take Unpaid Leave " + year);
-            writer.WriteCellRange(2, 1, 15, 1, "Total Of UPL " + year);
+            writer.WriteCellRange(2, 1, 3, 12, $"Take {Enumerations.GetStringValue(leaveType)} {year}");
+            writer.WriteCellRange(2, 1, 15, 1, $"Total Of {Enumerations.GetStringValue(leaveType)} {year}");
 
             FillContentRowReport(leaveSummaries, ref writer);
 

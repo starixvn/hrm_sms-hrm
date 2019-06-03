@@ -2401,6 +2401,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maternity Leave.
+        /// </summary>
+        public static string MaternityLeave {
+            get {
+                return ResourceManager.GetString("MaternityLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May.
         /// </summary>
         public static string May {
@@ -3063,6 +3072,15 @@ namespace Fanex.NexHR.Resources {
         public static string Paternity {
             get {
                 return ResourceManager.GetString("Paternity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paternity Leave.
+        /// </summary>
+        public static string PaternityLeave {
+            get {
+                return ResourceManager.GetString("PaternityLeave", resourceCulture);
             }
         }
         
@@ -4341,6 +4359,15 @@ namespace Fanex.NexHR.Resources {
         public static string UnpaidLeaveAbsent {
             get {
                 return ResourceManager.GetString("UnpaidLeaveAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpaid Leave (Insurance).
+        /// </summary>
+        public static string UnpaidLeaveInsurance {
+            get {
+                return ResourceManager.GetString("UnpaidLeaveInsurance", resourceCulture);
             }
         }
         

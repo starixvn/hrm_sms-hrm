@@ -332,6 +332,34 @@
             return SelectExtensions.DropDownListFor(htmlHelper, expression, outputSelectList, htmlAttributes);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Reviewed. Suppression is OK here.")]
+        public static MvcHtmlString EnumDropDownFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TEnum>> expression, Func<TEnum, bool> predicate = null, string optionLabel = null, object htmlAttributes = null) where TEnum : struct, IConvertible
+        {
+            var enumList = predicate == null ? Enum.GetValues(typeof(TEnum))
+                .Cast<TEnum>()
+                : Enum.GetValues(typeof(TEnum))
+                    .Cast<TEnum>()
+                    .Where(e => predicate(e));
+
+            var selectList = enumList
+                .Select(e => new SelectListItem
+                {
+                    Value = Convert.ToUInt64(e).ToString(),
+                    Text = Enumerations.GetStringValue((Enum)(object)e),
+                }).ToList();
+            if (!string.IsNullOrEmpty(optionLabel))
+            {
+                selectList.Insert(0, new SelectListItem
+                {
+                    Text = optionLabel
+                });
+            }
+
+            return htmlAttributes == null
+                ? htmlHelper.DropDownListFor(expression, selectList)
+                : htmlHelper.DropDownListFor(expression, selectList, htmlAttributes);
+        }
+
         #endregion Business
 
         private static StringBuilder RenderCheckBoxList(

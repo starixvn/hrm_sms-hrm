@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Core
 {
     using System;
-    using System.ComponentModel;
     using System.Reflection;
     using Fanex.Common.Extensions;
 

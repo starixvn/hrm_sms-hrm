@@ -19,6 +19,7 @@ module.exports = {
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
         [`${styleDistPath}/account.editprofile`]: `${styleSourcePath}/pages/account/profile-edit.scss`,
+        [`${styleDistPath}/unpaidleave.index`]: `${styleSourcePath}/pages/unpaidleave/unpaid-leave.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',

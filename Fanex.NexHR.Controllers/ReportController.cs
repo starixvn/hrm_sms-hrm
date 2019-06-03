@@ -430,62 +430,45 @@
             }
         }
 
-        public ActionResult UnpaidLeaveSummary(
-            string sectionIds,
-            string employee,
-            int? year = null,
-            int? employeeId = null,
-            int? category = null)
+        public ActionResult UnpaidLeaveSummary()
         {
-            var model = new LeaveSummaryViewModel
-            {
-                Year = year.HasValue ? year.Value : DateTime.Now.Year,
-                SectionIds = sectionIds,
-                Employee = employee,
-                EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
-                Category = category
-            };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
-
-            return UnpaidLeaveSummary(model);
-        }
-
-        [HttpPost]
-        public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel leavingSummaryModel)
-        {
-            var model = leavingSummaryModel;
-            if (model == null)
-            {
-                model = new LeaveSummaryViewModel
-                {
-                    Year = DateTime.Now.Year,
-                    EmployeeId = -1
-                };
-            }
-
-            var criteria = new GetUnpaidLeaveCriteria
-            {
-                Year = model.Year,
-                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.SectionIds,
-                IsLocal = (byte?)model.Category,
-                SupervisorId = CurrentUser.Id
-            };
-            IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
-
             var getGroupCriteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = CurrentUser.Id
             };
-            IList<Team> sections = teamService.GetBySupervisor(getGroupCriteria);
-            model.Sections = sections;
-            ViewBag.EntityList = entityList;
 
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
-            ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
+            var model = new LeaveSummaryViewModel
+            {
+                Year = DateTime.Now.Year,
+                EmployeeId = -1,
+                Sections = teamService.GetBySupervisor(getGroupCriteria),
+                LeaveType = UnpaidLeaveType.UnpaidLeave
+            };
+            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
+                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
             return View(model);
+        }
+
+        public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel leavingSummaryModel)
+        {
+            var criteria = new GetUnpaidLeaveCriteria
+            {
+                Year = leavingSummaryModel.Year,
+                EmpId = leavingSummaryModel.EmployeeId != -1 ? new int?(leavingSummaryModel.EmployeeId) : null,
+                GroupIds = leavingSummaryModel.SectionIds,
+                IsLocal = (byte?)leavingSummaryModel.Category,
+                SupervisorId = CurrentUser.Id,
+                LeaveType = (int)leavingSummaryModel.LeaveType
+            };
+            IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
+
+            IList<Team> sections = teamService.GetBySupervisor(new GetGroupBySupervisorCriteria { SupervisorId = CurrentUser.Id });
+
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
+
+            ViewBag.HeaderTitle = string.Format("{0} {1}", Enumerations.GetStringValue(leavingSummaryModel.LeaveType), leavingSummaryModel.Year);
+            return PartialView("_ListLeaveSummary", leaveSummaryByTeamList);
         }
 
         public ActionResult OvertimeReport(int? month, int? year)
