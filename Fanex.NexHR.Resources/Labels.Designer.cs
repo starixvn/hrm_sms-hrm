@@ -2680,7 +2680,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nick Name.
+        ///   Looks up a localized string similar to Nickname.
         /// </summary>
         public static string NickName {
             get {

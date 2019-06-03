@@ -25,7 +25,6 @@
     <Setting Key="Employee_UpdateEmployee" SpName="Employee_Information_update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeShift_Update" SpName="Employee_Shift_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>

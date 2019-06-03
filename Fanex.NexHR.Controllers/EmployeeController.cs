@@ -35,7 +35,6 @@
     {
         private readonly ITeamService teamService;
         private readonly ILookupDataService lookupDataService;
-        private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
         private readonly IRoleService roleService;
@@ -44,14 +43,12 @@
             IEmployeeService employeeService,
             ITeamService teamService,
             ILookupDataService lookupDataService,
-            IShiftService shiftService,
             IBaseService baseService,
             IRoleService roleService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.lookupDataService = lookupDataService;
-            this.shiftService = shiftService;
             this.baseService = baseService;
             this.roleService = roleService;
         }
@@ -157,7 +154,6 @@
             }
 
             ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
-            ViewBag.HasPermissionToSchedule = CurrentUser.HasPermission(FunctionKey.ScheduleArrange, Policy.Host);
 
             return PartialView("_ListEmployee", employees);
         }
@@ -182,9 +178,8 @@
         [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
-            ViewBag.Shifts = shiftService.GetSelectList();
             IList<Team> teams = GetAllTeam();
-            ViewBag.TeamList = teams;
+            ViewBag.Teams = teams;
 
             return View(new CreateEmployeeViewModel());
         }
@@ -196,27 +191,15 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                ViewBag.Shifts = shiftService.GetSelectList();
-                IList<Team> teams = GetAllTeam();
-                ViewBag.TeamList = teams;
                 var criteria = new InsertEmployeeCriteria
                 {
                     Code = model.Code,
                     CreateBy = CurrentUser.Id,
-                    CreatedDate = DateTime.Now,
                     DomainUserName = model.DomainUsername,
-                    FriShift = model.FriShift,
                     FullName = model.FullName,
-                    IsDefaultSchedule = model.IsDefaultSchedule,
-                    MainGroupId = model.TeamId,
-                    MonShift = model.MonShift,
-                    NickName = model.NickName,
-                    Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Code),
-                    SatShift = model.SatShift,
-                    SunShift = model.SunShift,
-                    ThuShift = model.ThuShift,
-                    TueShift = model.TueShift,
-                    WedShift = model.WedShift
+                    Nickname = model.Nickname,
+                    GroupId = model.TeamId,
+                    Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Code)
                 };
 
                 CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
@@ -230,6 +213,8 @@
                 }
             }
 
+            IList<Team> teams = GetAllTeam();
+            ViewBag.Teams = teams;
             return View(model);
         }
 
@@ -305,66 +290,6 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
-        }
-
-        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult DefaultSchedule(int id)
-        {
-            Employee employee = GetEmployeeById(id);
-
-            ViewBag.Employee = employee;
-            ViewBag.Shifts = shiftService.GetSelectList();
-            ViewBag.Id = id;
-            if (employee.IsDefaultSchedule)
-            {
-                EmployeeShift model = GetEmployeeShift(id);
-                return View(model);
-            }
-            else
-            {
-                return View("MonthSchedule");
-            }
-        }
-
-        [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult DefaultSchedule(EmployeeShift model)
-        {
-            if (model != null)
-            {
-                if (ModelState.IsValid)
-                {
-                    var criteria = new UpdateEmployeeShiftCriteria
-                    {
-                        EmpId = model.EmpId,
-                        FriShift = model.FriShiftId,
-                        MonShift = model.MonShiftId,
-                        SatShift = model.SatShiftId,
-                        SunShift = model.SunShiftId,
-                        ThuShift = model.ThuShiftId,
-                        TueShift = model.TueShiftId,
-                        WedShift = model.WedShiftId
-                    };
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    ViewBag.Updated = result.IsSuccessful;
-                }
-
-                ViewBag.Employee = GetEmployeeById(model.EmpId);
-                ViewBag.Shifts = shiftService.GetSelectList();
-                ViewBag.Id = model.EmpId;
-            }
-
-            return View(model);
-        }
-
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult MonthSchedule(int id)
-        {
-            ViewBag.Id = id;
-            ViewBag.Employee = GetEmployeeById(id);
-            ViewBag.Shifts = shiftService.GetSelectList();
-
-            return View();
         }
 
         [AllowAnonymous]
@@ -852,7 +777,6 @@
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
                 CanOT = model.CanOT,
-                IsDefaultSchedule = model.IsDefaultSchedule,
                 WorkingDays = model.WorkingDays,
                 WorkingHours = model.WorkingHours,
                 IsTopManager = model.IsTopManager,

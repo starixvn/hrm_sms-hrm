@@ -133,15 +133,6 @@
       <resource path="~/scripts/views/employeeshiftmanager.js" />
     </resourceSet>
 
-    <resourceSet name="employeewscss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/employee.defaultschedule.css" />
-    </resourceSet>
-    <resourceSet name="employeewsjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.workingschedule.js" />
-    </resourceSet>
-
     <resourceSet name="manpowerreportcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report/report.manpower.css" />
@@ -340,17 +331,6 @@
       <resource reference="sitejs" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendarsummary.js" />
-    </resourceSet>
-
-    <resourceSet name="monthschedulecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/fullcalendar.css" />
-      <resource path="~/styles/employee.monthschedule.css" />
-    </resourceSet>
-    <resourceSet name="monthschedulejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/fullcalendar.js" />
-      <resource path="~/scripts/views/employee.monthschedule.js" />
     </resourceSet>
 
     <resourceSet name="monthpickcss" type="css">

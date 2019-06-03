@@ -365,7 +365,6 @@
     <Content Include="Styles\Images\tipsy.gif" />
     <Content Include="Styles\request.checkinout.css" />
     <Content Include="Styles\report.totalworkinghours.css" />
-    <Content Include="Styles\employee.monthschedule.css" />
     <Content Include="Styles\request.overtime.css" />
     <Content Include="Styles\style.css" />
     <Content Include="Styles\table.css" />
@@ -691,7 +690,6 @@
     <Content Include="Scripts\Views\fixtable.js" />
     <Content Include="Scripts\Views\language.js" />
     <Content Include="Scripts\Views\Report\report.timesheet.js" />
-    <Content Include="Scripts\Views\employee.monthschedule.js" />
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
     <Content Include="Scripts\Views\Request\checkinout.byemployee.js" />
     <Content Include="Scripts\Views\search.request.js" />
@@ -705,7 +703,6 @@
     <Content Include="Scripts\Views\memo.js" />
     <Content Include="Scripts\Views\memo.edit.js" />
     <Content Include="Scripts\Views\Report\report.attendance.js" />
-    <Content Include="Scripts\Views\employee.workingschedule.js" />
     <Content Include="Scripts\Views\Employee\employee.edit.js" />
     <Content Include="Scripts\Views\home.js" />
     <Content Include="SpName.xml">
@@ -957,7 +954,6 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
-    <Content Include="Views\Employee\DefaultSchedule.cshtml" />
     <Content Include="Views\Report\Attendance.cshtml" />
     <Content Include="Views\Employee\Create.cshtml" />
     <Content Include="Views\Holiday\Index.cshtml" />
@@ -979,7 +975,6 @@
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
     <Content Include="Views\ChangeShift\Update.cshtml" />
     <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
-    <Content Include="Views\Employee\MonthSchedule.cshtml" />
     <Content Include="Views\Report\Timesheet.cshtml" />
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
     <Content Include="Views\UI\Welcome.cshtml" />

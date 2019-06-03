@@ -92,8 +92,6 @@
 
         public string CountryCode { get; set; }
 
-        public bool IsDefaultSchedule { get; set; }
-
         public bool IsTopManager { get; set; }
 
         public decimal? OffDaysbyWeek { get; set; }
@@ -160,14 +158,8 @@
 
         public string PickupRemark { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_UpdateEmployee";
-        }
+        public override string GetSettingKey() => "Employee_UpdateEmployee";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }

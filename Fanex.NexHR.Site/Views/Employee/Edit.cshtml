@@ -89,7 +89,7 @@
             </li>
             <li class="list-group-item">
                 <div class="label">
-                    @Html.LabelFor(model => model.NickName)
+                    @Html.LabelFor(model => model.NickName, Labels.NickName)
                 </div>
                 <div class="input">
                     @Html.EditorFor(model => model.NickName)
@@ -538,22 +538,6 @@
                 </div>
                 <div class="input">
                     @Html.CheckBoxFor(model => model.IsExpatUseHoliday)
-                </div>
-                <div class="clear"></div>
-            </li>
-            <li class="list-group-item">
-                <div class="label marginlable">
-                    @Html.LabelFor(model => model.IsDefaultSchedule, Labels.ApplicableDefaultShift)
-                </div>
-                <div class="input">
-                    @Html.CheckBoxFor(model => model.IsDefaultSchedule)
-                </div>
-                <div class="clear"></div>
-            </li>
-            <li class="list-group-item">
-                <div class="label marginlable">@Labels.DefaultShift</div>
-                <div class="input">
-                    <a href="@Url.Action("defaultschedule", "employee", new { id = Model.Id })">View</a>
                 </div>
                 <div class="clear"></div>
             </li>

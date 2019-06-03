@@ -260,7 +260,6 @@
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\GetShiftStatisticCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />
-    <Compile Include="Shift\UpdateEmployeeShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />
     <Compile Include="Team\DeleteGroupCriteria.cs" />
     <Compile Include="Team\GetAllGroupCriteria.cs" />

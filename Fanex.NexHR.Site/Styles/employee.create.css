@@ -1,8 +1,4 @@
-﻿.shift select {
-	min-width: 50px !important;
-	/*width: 70px !important;*/
-}
-#DomainUsername, #Code
+﻿#DomainUsername, #Code
 {
 	width:157px;
 }

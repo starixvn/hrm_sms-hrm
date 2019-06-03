@@ -1,7 +1,9 @@
-﻿@using Fanex.NexHR.ViewModels.Employee
+﻿@using Fanex.NexHR.Models
+@using Fanex.NexHR.ViewModels.Employee
 @model CreateEmployeeViewModel
 @{
     ViewBag.Title = "Create account";
+    var teams = (IList<Team>)ViewBag.Teams;
 }
 @section css{
     @Url.CombresLink("employeecreatecss")
@@ -30,11 +32,11 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.NickName)
+                @Html.LabelFor(model => model.Nickname)
             </div>
             <div class="input">
-                @Html.EditorFor(model => model.NickName)
-                @Html.ValidationMessageFor(model => model.NickName)
+                @Html.EditorFor(model => model.Nickname)
+                @Html.ValidationMessageFor(model => model.Nickname)
             </div>
             <div class="clear">
             </div>
@@ -44,7 +46,6 @@
                 @Html.LabelFor(model => model.DomainUsername)
             </div>
             <div class="input">
-                @*<strong>@System.Configuration.ConfigurationManager.AppSettings["domain"]</strong>*@
                 @Html.EditorFor(model => model.DomainUsername)
                 @Html.ValidationMessageFor(model => model.DomainUsername)
             </div>
@@ -68,52 +69,7 @@
                 @Html.LabelFor(model => model.TeamId)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.TeamId, new SelectList(ViewBag.TeamList, "Id", "Name"))
-            </div>
-            <div class="formrow">
-                <div class="label">
-                    @Html.LabelFor(model=>model.IsDefaultSchedule)
-                </div>
-                <div class="input">
-                    @Html.CheckBoxFor(model => model.IsDefaultSchedule)
-                </div>
-            </div>
-            <div class="formrow" id="dfsCalendar">
-                <div class="label">
-                    Working schedule
-                </div>
-                <div class="input shift">
-                    <div class="grid_2 alpha">
-                        Sun<br />
-                        @RazorHelper.ShiftDropDownList("SunShift", Model.SunShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Mon<br />
-                        @RazorHelper.ShiftDropDownList("MonShift", Model.MonShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Tue<br />
-                        @RazorHelper.ShiftDropDownList("TueShift", Model.TueShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Wed<br />
-                        @RazorHelper.ShiftDropDownList("WedShift", Model.WedShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Thu<br />
-                        @RazorHelper.ShiftDropDownList("ThuShift", Model.ThuShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Fri<br />
-                        @RazorHelper.ShiftDropDownList("FriShift", Model.FriShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="grid_2">
-                        Sat<br />
-                        @RazorHelper.ShiftDropDownList("SatShift", Model.SatShift, (IList<SelectListItem>)ViewBag.Shifts)
-                    </div>
-                    <div class="clear">
-                    </div>
-                </div>
+                @Html.DropDownListFor(model => model.TeamId, new SelectList(teams, "Id", "Name"))
             </div>
             <div class="formrow">
                 <div class="label">
