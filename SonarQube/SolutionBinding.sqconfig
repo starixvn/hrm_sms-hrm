@@ -2,6 +2,7 @@
   "ServerUri": "http://sonarqube.nexdev.net/",
   "Organization": null,
   "ProjectKey": "SMSHRM",
+  "ProjectName": "Nexus / SMS HRM",
   "Profiles": {
     "CSharp": {
       "ProfileKey": "cs-sonar-way-80515",
