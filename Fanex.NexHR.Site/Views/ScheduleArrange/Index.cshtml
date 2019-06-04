@@ -1,7 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.ScheduleArrange;
-    var isSARole = (bool)ViewBag.IsSARole;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/schedule.arrange.css" rel="stylesheet" />
@@ -15,5 +14,4 @@
 
 <h2 class="page-title">@ViewBag.Title</h2>
 
-<input type="checkbox" hidden id="IsSARole" @(isSARole ? "checked" : string.Empty) />
 <div id="schedule-wrapper"></div>

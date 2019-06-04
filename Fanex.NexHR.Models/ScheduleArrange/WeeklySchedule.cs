@@ -30,17 +30,5 @@
         public DailySchedule FridaySchedule { get; set; }
         public DailySchedule SaturdaySchedule { get; set; }
         public DailySchedule SundaySchedule { get; set; }
-
-        public int TotalOffDaysReplacement
-            => GetOffDayReplacement(MondaySchedule)
-            + GetOffDayReplacement(TuesdaySchedule)
-            + GetOffDayReplacement(WednesdaySchedule)
-            + GetOffDayReplacement(ThursdaySchedule)
-            + GetOffDayReplacement(FridaySchedule)
-            + GetOffDayReplacement(SaturdaySchedule)
-            + GetOffDayReplacement(SundaySchedule);
-
-        private static int GetOffDayReplacement(DailySchedule dailySchedule)
-            => dailySchedule != null && dailySchedule.IsOffDayReplacement ? 1 : 0;
     }
 }

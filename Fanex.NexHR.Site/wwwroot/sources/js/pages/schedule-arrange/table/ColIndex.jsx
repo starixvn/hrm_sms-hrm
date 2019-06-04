@@ -3,10 +3,11 @@
 export default class ColIndex extends PureComponent {
     render() {
         const { data } = this.props;
-        const totalOffDaysDefault = data.offDaysbyWeek + data.totalOffDaysReplacement;
+        const totalOffDaysDefault = data.offDaysbyWeek;
         let totalOffDays = 0;
         Object.keys(data.selectWeekDays).forEach(objectKey => {
-            if (!data[objectKey].isHoliday && (data[objectKey].isOffDay || data[objectKey].isLeaveOffDay)) {
+            if (!data[objectKey].isHoliday
+                && (data[objectKey].isOffDay || data[objectKey].isOffDayReplacement || data[objectKey].isLeaveOffDay)) {
                 totalOffDays++;
             }
         });
