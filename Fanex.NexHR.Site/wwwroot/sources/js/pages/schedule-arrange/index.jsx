@@ -634,7 +634,7 @@ export default class App extends Component {
                     }
 
                     this.scheduleAttrNames.forEach(attrName => {
-                        if (!isEqual(originalSchedule[attrName], schedule[attrName])) {
+                        if (!isEqual(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
                             weeklySchedules.push({
                                 employeeId: schedule.employeeId,
                                 workDate: schedule[attrName].workDate,
