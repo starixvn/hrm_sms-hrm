@@ -74,9 +74,10 @@
                     {
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
+                        KeepInViewType = model.KeepInViewType,
+                        IsHalfDay = model.HalfDay,
                         RefNo = model.RefNo,
                         Remark = model.Remark,
-                        ShiftId = model.ShiftId,
                         ShiftName = model.Shift,
                         FromTime = (fromTime < toTime && model.CrossDay) ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
                             : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),

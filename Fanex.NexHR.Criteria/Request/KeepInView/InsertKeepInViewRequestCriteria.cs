@@ -3,6 +3,7 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
     using System;
+    using Fanex.NexHR.Core.Enums;
 
     public class InsertKeepInViewRequestCriteria : CriteriaBase
     {
@@ -13,7 +14,11 @@
 
         public string Remark { get; set; }
 
+        public int KeepInViewType { get; set; }
+
         public DateTime OnDate { get; set; }
+
+        public bool IsHalfDay { get; set; }
 
         public int ShiftId { get; set; }
 
@@ -34,7 +39,9 @@
 
         public override string GetSettingKey()
         {
-            return "KeepInViewRequest_Insert";
+            return KeepInViewType == (int)KeepInViewTypes.KeepInViewByDay
+                ? "KeepInViewRequestByDay_Insert"
+                : "KeepInViewRequestByHour_Insert";
         }
 
         public override bool IsValid()

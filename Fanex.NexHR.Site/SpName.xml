@@ -496,4 +496,8 @@
     <Setting Key="Paternity_Update" SpName="Paternity_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Paternity_Delete" SpName="Paternity_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
+  <Function Name="Keep In View">
+    <Setting Key="KeepInViewRequestByDay_Insert" SpName="KeepInViewRequestByDay_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="KeepInViewRequestByHour_Insert" SpName="KeepInViewRequestByHour_Insert" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
 </Functions>
