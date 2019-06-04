@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
@@ -25,7 +24,6 @@
 
         public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingCalendarModel> calendars = null;
             if (criteria.IsValid())
             {
@@ -61,7 +59,6 @@
 
         public IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingScheduleViewModel> workingSchedule = null;
             if (criteria.IsValid())
             {
@@ -73,7 +70,6 @@
 
         public IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<WorkingCalendarsViewModel> workingCalendarList = null;
             if (criteria.IsValid())
             {

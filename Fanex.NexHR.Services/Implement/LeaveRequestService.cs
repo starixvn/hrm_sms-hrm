@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using Common.Helper;
     using Core;
     using Core.Enums;
     using Criteria.Request;
@@ -29,26 +28,12 @@
 
         public IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            var detail = new List<LeaveDetailModel>();
-            if (criteria.IsValid())
-            {
-                detail = baseService.GetData<LeaveDetailModel>(criteria).ToList();
-            }
-
-            return detail;
+            return baseService.GetData<LeaveDetailModel>(criteria).ToList();
         }
 
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-            var employeeLeaveBalance = new EmployeeLeaveBalance();
-            if (criteria.IsValid())
-            {
-                employeeLeaveBalance = baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
-            }
-
-            return employeeLeaveBalance;
+            return baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
         }
 
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria)

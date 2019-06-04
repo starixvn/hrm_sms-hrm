@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Employee;
@@ -65,20 +64,11 @@
 
         public IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            if (criteria.IsValid())
-            {
-                IList<OvertimeDaily> overtimeRequests = baseService.GetData<OvertimeDaily>(criteria).ToList();
-                return overtimeRequests;
-            }
-
-            return null;
+            return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
         public IList<RequestEntity> GetOvertimeReportInYear(GetOvertimeReportInYearCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> requestEntities = null;
 
             if (criteria.IsValid())
@@ -91,7 +81,6 @@
 
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<OvertimeExcelReport> overtimeRecord = null;
 
             if (criteria.IsValid())
@@ -104,31 +93,16 @@
 
         public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            if (criteria.IsValid())
-            {
-                return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
-            }
-
-            return null;
+            return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
         }
 
         public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            if (criteria.IsValid())
-            {
-                return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
-            }
-
-            return null;
+            return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
         }
 
         public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> overtimeReports = new List<RequestEntity>();
 
             if (criteria.IsValid())
@@ -141,7 +115,6 @@
 
         public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> overtimeReports = new List<RequestEntity>();
 
             if (criteria.IsValid())
@@ -154,24 +127,12 @@
 
         public IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            IList<OvertimeDaily> overtimeRequest;
-
-            overtimeRequest = (criteria.IsValid()) ? baseService.GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
-
-            return overtimeRequest;
+            return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
         public IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            IList<OvertimeDaily> overtimeRequest;
-
-            overtimeRequest = (criteria.IsValid()) ? baseService.GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
-
-            return overtimeRequest;
+            return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
         public IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria)
@@ -198,12 +159,8 @@
 
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
-            IList<SupervisorNameModel> employees = null;
             var criteria = new GetListEmployeeClaimOvertimeCriteria();
-            if (criteria.IsValid())
-            {
-                employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
-            }
+            IList<SupervisorNameModel> employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
 
             if (employees != null)
             {
@@ -213,45 +170,34 @@
                 foreach (List<string> list in emails)
                 {
                     var mailTo = string.Join(";", list);
-                    this.emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                    emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
                 }
             }
         }
 
         public IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
-
-            IList<OvertimeDaily> reportDetails;
-            reportDetails = (criteria.IsValid()) ? baseService.GetData<OvertimeDaily>(criteria).ToList() : new List<OvertimeDaily>();
-
-            return reportDetails;
+            return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
         public bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             var isInvalid = false;
-
-            if (criteria.IsValid())
+            IEnumerable<OvertimeDaily> rawOvertime = baseService.GetData<OvertimeDaily>(criteria);
+            if (rawOvertime == null)
             {
-                IEnumerable<OvertimeDaily> rawOvertime = baseService.GetData<OvertimeDaily>(criteria);
+                return isInvalid;
+            }
 
-                if (rawOvertime == null)
+            IList<OvertimeDaily> overtimes = rawOvertime.ToList();
+
+            if (overtimes != null && overtimes.Any())
+            {
+                var index = 0;
+                while (!isInvalid && index < overtimes.Count())
                 {
-                    return isInvalid;
-                }
-
-                IList<OvertimeDaily> overtimes = rawOvertime.ToList();
-
-                if (overtimes != null && overtimes.Any())
-                {
-                    var index = 0;
-                    while (!isInvalid && index < overtimes.Count())
-                    {
-                        isInvalid = CheckInvalidOvertimes(overtimes[index]);
-                        index++;
-                    }
+                    isInvalid = CheckInvalidOvertimes(overtimes[index]);
+                    index++;
                 }
             }
 

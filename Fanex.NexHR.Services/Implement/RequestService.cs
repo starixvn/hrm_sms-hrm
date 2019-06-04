@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
-    using Fanex.Common.Helper;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
@@ -90,7 +89,6 @@
 
         public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             RequestEntity request = null;
             if (criteria.IsValid())
             {
@@ -102,7 +100,6 @@
 
         public IList<RequestEntity> GetRequests(GetRequestCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> entityList = null;
             if (criteria.IsValid())
             {
@@ -114,7 +111,6 @@
 
         public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             decimal number = 0;
             if (criteria.IsValid())
             {
@@ -126,7 +122,6 @@
 
         public IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria)
         {
-            Check.Argument.IsNotNull(criteria, "criteria");
             IList<RequestEntity> histories = null;
             if (criteria.IsValid())
             {
@@ -166,7 +161,7 @@
             {
                 request = requestRepository.GetRequestToIgnoreById(criteria);
             }
-            
+
             return request;
         }
 

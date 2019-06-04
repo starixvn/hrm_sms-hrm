@@ -25,8 +25,6 @@
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
 
-        private const int FileMaxSize = 5 * 1024 * 1024; //5MB
-
         public AccountController(
             IEmployeeService employeeService,
             IBaseService baseService)
