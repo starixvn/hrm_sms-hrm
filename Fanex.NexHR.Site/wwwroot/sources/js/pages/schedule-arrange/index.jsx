@@ -53,7 +53,6 @@ export default class App extends Component {
         this.shiftOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
-        this.isSARole = document.getElementById('IsSARole').checked;
         this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
             'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
     }
@@ -612,15 +611,16 @@ export default class App extends Component {
                 unset(originalSchedule, 'selectWeekDays');
 
                 if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDaysReplacement;
+                    const totalOffDaysDefault = schedule.offDaysbyWeek;
                     let totalOffDays = 0;
                     this.scheduleAttrNames.forEach(attrName => {
-                        if (!schedule[attrName].isHoliday && (schedule[attrName].isOffDay || schedule[attrName].isLeaveOffDay)) {
+                        if (!schedule[attrName].isHoliday
+                            && (schedule[attrName].isOffDay || schedule[attrName].isOffDayReplacement || schedule[attrName].isLeaveOffDay)) {
                             totalOffDays++;
                         }
                     });
 
-                    if (totalOffDaysDefault < totalOffDays && !this.isSARole) {
+                    if (totalOffDaysDefault < totalOffDays) {
                         isValidData = false;
                         break outerloop;
                     }
@@ -649,7 +649,7 @@ export default class App extends Component {
             }
         }
 
-        if (!isValidData && !this.isSARole) {
+        if (!isValidData) {
             toast.error('Some employees have a larger number of days off during the week according to the setting.');
 
             return;

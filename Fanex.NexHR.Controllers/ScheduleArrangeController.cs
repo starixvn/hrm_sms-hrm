@@ -32,8 +32,6 @@
         [HRAuthorize(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult Index()
         {
-            ViewBag.IsSARole = CurrentUser.Roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin);
-
             return View();
         }
 
