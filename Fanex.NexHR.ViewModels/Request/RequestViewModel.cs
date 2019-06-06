@@ -23,6 +23,7 @@
             TeamIds = null;
             EmployeeId = -1;
             RequestType = (int)RequestFilter.All;
+            LeaveType = null;
         }
 
         public int DateOption { get; set; }
@@ -49,6 +50,11 @@
         public string Team { get; set; }
 
         public int RequestType { get; set; }
+
+        [Display(Name = "Section")]
+        public int? LeaveType { get; set; }
+
+        public IList<LeaveType> LeaveTypeCollection { get; set; }
 
         [Display(Name = "Section")]
         public IList<Team> TeamCollection { get; set; }

@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
+    using System;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
-    using System;
 
     public class GetRequestCriteria : CriteriaBase
     {
@@ -51,6 +51,8 @@
 
         [SpParam(Ignored = true)]
         public RequestViewType RequestViewType { get; set; }
+
+        public int? LeaveTypeId { get; set; }
 
         public override string GetSettingKey()
         {

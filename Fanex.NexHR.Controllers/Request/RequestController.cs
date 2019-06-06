@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -28,6 +29,7 @@
         private readonly IShiftService shiftService;
         private readonly IRequestService requestService;
         private readonly IRequestMailService requestMailService;
+        private readonly ILeaveTypeService leaveTypeService;
         private readonly ITeamService teamService;
         private readonly IBaseService baseService;
 
@@ -36,6 +38,7 @@
             IShiftService shiftService,
             IRequestService requestService,
             IRequestMailService requestMailService,
+            ILeaveTypeService leaveTypeService,
             ITeamService teamService,
             IBaseService baseService)
         {
@@ -45,6 +48,7 @@
             this.requestMailService = requestMailService;
             this.teamService = teamService;
             this.baseService = baseService;
+            this.leaveTypeService = leaveTypeService;
         }
 
         [HttpPost]
@@ -87,6 +91,16 @@
             GetRequests(request);
 
             return View("EmployeeRequest", request);
+        }
+
+        private IList<LeaveType> GetLeaveType()
+        {
+            var criteria = new GetLeaveTypeCriteria
+            {
+                ExcludeNotShown = true
+            };
+            IList<LeaveType> leaveTypes = leaveTypeService.GetAll(criteria);
+            return leaveTypes;
         }
 
         public ActionResult DailyView(RequestViewModel request)
@@ -247,6 +261,7 @@
         {
             request.TeamCollection = GetGroupBySupervisor();
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
+            request.LeaveTypeCollection = GetLeaveType();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {
@@ -265,7 +280,8 @@
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
                 SupervisorId = CurrentUser.Id,
-                IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
+                IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
+                LeaveTypeId = request.LeaveType
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);

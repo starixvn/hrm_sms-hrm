@@ -133,7 +133,6 @@ $(function () {
                     chkWeekendLeaveIgnores = $('.chk-weekend-ignore'),
                     chkWeekendLeaveRecords = $('.chk-weekend-record');
 
-
                 chkIgnoreAll.on('click', function () {
                     let checked = $(this).prop('checked');
                     chkRecordAll.prop('checked', !checked);
@@ -167,7 +166,6 @@ $(function () {
                         chkRecord = $(this).find('.chk-record'),
                         chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
                         chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
-
 
                     chkIgnore.on('click', function () {
                         if ($(this).prop('checked')) {
@@ -361,9 +359,10 @@ $(function () {
                     + '&FromDate=' + $('#FromDate').val()
                     + '&ToDate=' + $('#ToDate').val()
                     + '&StatusId=' + $('#statusId').val()
-                    + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val()
+                    + '&RequestType=' + $("#RequestType").val()
                     + '&IsLocal=' + $('#IsLocal').val()
-                    + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val();
+                    + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val()
+                    + '&leaveType=' + $('#LeaveType').val();
 
                 location.href = url;
             }
