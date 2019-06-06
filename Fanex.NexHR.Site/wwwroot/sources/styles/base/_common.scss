@@ -39,6 +39,17 @@ body {
 }
 
 .section-content {
+    &.iframe {
+        .content_wrap {
+            border-left-width: 0;
+            top: 0;
+
+            .content_scroll {
+                top: 0;
+            }
+        }
+    }
+
     .content_wrap {
         left: 190px;
         right: 0;
@@ -60,17 +71,6 @@ body {
         }
     }
 }
-
-/*.section_breadcrumb {
-    position: fixed;
-    right: 0;
-    left: 191px;
-    z-index: 9;
-}*/
-
-/*.section_body {
-    padding-top: 25px;
-}*/
 
 .content_wrap .content_scroll {
     padding: 10px;

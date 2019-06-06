@@ -818,6 +818,7 @@
     <Content Include="wwwroot\dist\js\employee.request.js" />
     <Content Include="wwwroot\dist\js\function.index.js" />
     <Content Include="wwwroot\dist\js\main.js" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js" />
     <Content Include="wwwroot\dist\styles\employee.details.css" />
     <Content Include="wwwroot\dist\styles\employee.details.js" />
@@ -857,6 +858,15 @@
     <Content Include="wwwroot\sources\js\main.js" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\Search.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColDefaultShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColIndex.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColNickname.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
@@ -1233,6 +1243,9 @@
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="wwwroot\dist\vendors\react-manifest.json" />
     <Content Include="ExcelTemplates\DriverPickup.xlsx" />
+    <Content Include="Views\Shared\_IFrame.cshtml" />
+    <Content Include="Views\ScheduleArrange\IFrame.cshtml" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />

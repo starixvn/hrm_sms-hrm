@@ -128,6 +128,7 @@
     <Compile Include="ScheduleArrange\EditDefaultShift.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrder.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrder.cs" />
+    <Compile Include="ScheduleArrange\GetEmployeeFilter.cs" />
     <Compile Include="ScheduleArrange\LeaveRequest.cs" />
     <Compile Include="ScheduleArrange\ShiftBase.cs" />
     <Compile Include="ScheduleArrange\SumEmployeeWorkingOnShift.cs" />

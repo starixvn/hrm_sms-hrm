@@ -29,23 +29,25 @@
             this.shiftService = shiftService;
         }
 
-        public IEnumerable<EntityBase<int>> GetGroups(int actorId)
+        public IEnumerable<EntityBase<int>> GetGroups(int actorId, bool isIFrame = false)
         {
             var criteria = new GetGroupCriteria
             {
-                ActorId = actorId
+                ActorId = actorId,
+                IsIFrame = isIFrame
             };
 
             return baseService.GetData<EntityBase<int>>(criteria);
         }
 
-        public IEnumerable<EmployeeSuggestion> GetEmployees(int actorId, string groupIds, string query)
+        public IEnumerable<EmployeeSuggestion> GetEmployees(GetEmployeeFilter filter)
         {
             var criteria = new GetEmployeeCriteria
             {
-                ActorId = actorId,
-                GroupIds = groupIds,
-                Query = query
+                ActorId = filter.ActorId,
+                GroupIds = filter.GroupIds,
+                Query = filter.Query,
+                IsIFrame = filter.IsIFrame
             };
 
             return baseService.GetData<EmployeeSuggestion>(criteria);
@@ -59,7 +61,8 @@
                 FromTime = filter.FromDate,
                 ToTime = filter.ToDate,
                 EmpId = filter.EmployeeId,
-                GroupIds = filter.GroupIds
+                GroupIds = filter.GroupIds,
+                IsIFrame = filter.IsIFrame
             };
 
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);

@@ -5,9 +5,10 @@
     public class GetGroupCriteria : CriteriaBase
     {
         public int ActorId { get; set; }
+        public bool IsIFrame { get; set; }
 
         public override string GetSettingKey() => "ScheduleArrangement_GetGroup";
 
-        public override bool IsValid() => ActorId > 0;
+        public override bool IsValid() => true;
     }
 }

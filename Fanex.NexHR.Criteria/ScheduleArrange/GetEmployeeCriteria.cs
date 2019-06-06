@@ -7,9 +7,10 @@
         public int ActorId { get; set; }
         public string GroupIds { get; set; }
         public string Query { get; set; }
+        public bool IsIFrame { get; set; }
 
         public override string GetSettingKey() => "ScheduleArrangement_GetEmployee";
 
-        public override bool IsValid() => ActorId > 0;
+        public override bool IsValid() => true;
     }
 }

@@ -167,7 +167,6 @@ export default class App extends Component {
 
             this.originalSchedules = schedules.map(group => {
                 group.members.map(schedule => {
-                    schedule.isPublic = schedule.mondaySchedule.isPublic;
                     schedule.selectWeekDays = {
                         mondaySchedule: false,
                         tuesdaySchedule: false,
