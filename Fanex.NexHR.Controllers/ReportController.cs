@@ -14,6 +14,8 @@
     using Criteria.Team;
     using Criteria.Time;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
     using Models;
     using Models.Report;
     using Models.Supervisor;
@@ -22,7 +24,6 @@
     using Services.ExportExcel;
     using ViewModels;
     using ViewModels.Report;
-    using Web.Providers;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -33,10 +34,11 @@
         private readonly ILookupDataService lookupDataService;
 
         public ReportController(
+            ISessionService sessionService,
             IReportService reportSevice,
             ITeamService teamService,
             IExportExcelService exportExcelService,
-            ILookupDataService lookupDataService)
+            ILookupDataService lookupDataService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.teamService = teamService;
@@ -44,7 +46,7 @@
             this.lookupDataService = lookupDataService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
+        [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult Index()
         {
             return View();
@@ -54,7 +56,7 @@
         {
             var getGroupCriteria = new GetGroupBySupervisorCriteria
             {
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             ViewBag.Groups = teamService.GetBySupervisor(getGroupCriteria);
@@ -65,7 +67,7 @@
                 GroupIds = string.Empty,
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             return View(model);
@@ -97,7 +99,7 @@
             var model = new TimesheetViewModel
             {
                 Year = DateTime.Now.Year,
-                EmpId = CurrentUser.Id
+                EmpId = sessionService.Employee.Id
             };
 
             return View(model);
@@ -138,18 +140,18 @@
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             return View(model);
         }
 
         public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
-            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.TimeRecord, Policy.Host);
+            bool hasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
             int? employeeId = null;
             if (!hasPermissionToEdit)
             {
-                employeeId = this.CurrentUser.Id;
+                employeeId = sessionService.Employee.Id;
             }
 
             var criteria = new GetTimeRecordCriteria
@@ -225,7 +227,7 @@
             var totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             ViewBag.EntityList = totalWorkingHours;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ProcessRequest, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ProcessRequest, Policy.Host);
 
             return View(model);
         }
@@ -254,7 +256,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 MinTotalLeave = model.MinTotalLeave,
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
@@ -287,7 +289,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 LeaveTypeId = model.LeaveTypeId,
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
@@ -444,8 +446,8 @@
                 Sections = teamService.GetBySupervisor(getGroupCriteria),
                 LeaveType = UnpaidLeaveType.UnpaidLeave
             };
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
             return View(model);
         }
@@ -458,12 +460,12 @@
                 EmpId = leavingSummaryModel.EmployeeId != -1 ? new int?(leavingSummaryModel.EmployeeId) : null,
                 GroupIds = leavingSummaryModel.SectionIds,
                 IsLocal = (byte?)leavingSummaryModel.Category,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id
                 LeaveType = (int)leavingSummaryModel.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
 
-            IList<Team> sections = teamService.GetBySupervisor(new GetGroupBySupervisorCriteria { SupervisorId = CurrentUser.Id });
+            IList<Team> sections = teamService.GetBySupervisor(new GetGroupBySupervisorCriteria { SupervisorId = sessionService.Employee.Id });
 
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
 

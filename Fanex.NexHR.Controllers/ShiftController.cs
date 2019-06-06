@@ -6,11 +6,11 @@
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Shifts;
-    using Fanex.NexHR.Web.Providers;
 
     public class ShiftController : BaseController
     {
@@ -20,14 +20,15 @@
         private readonly IBaseService baseService;
 
         public ShiftController(
+            ISessionService sessionService,
             IBaseService baseService,
-            IShiftService shiftService)
+            IShiftService shiftService) : base(sessionService)
         {
             this.baseService = baseService;
             this.shiftService = shiftService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.ShiftManagement)]
         public ActionResult Index(int? statusId = (int)ShiftStatus.Active)
         {
             var model = new ShiftByStatusViewModel
@@ -36,12 +37,12 @@
                 Shifts = shiftService.GetAll(statusId.Value)
             };
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
             var model = new ShiftViewModel();
@@ -51,7 +52,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -63,7 +64,7 @@
                     CheckOutTime = model.TimeOut,
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
-                    CreatedBy = CurrentUser.Id,
+                    CreatedBy = sessionService.Employee.Id,
                     CreatedDate = DateTime.Now
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -81,7 +82,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int shiftId)
         {
             var criteria = new GetShiftByIdCriteria { ShiftId = shiftId };
@@ -106,14 +107,14 @@
             }
 
             ViewBag.Successed = false;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(ShiftViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -126,7 +127,7 @@
                     CheckOutTime = model.TimeOut,
                     IsInAfterDay = model.IsInAfterDay,
                     IsOutAfterDay = model.IsOutAfterDay,
-                    ModifiedBy = CurrentUser.Id,
+                    ModifiedBy = sessionService.Employee.Id,
                     ModifiedDate = DateTime.Now,
                     IsDisabled = model.IsDisabled
                 };
@@ -142,13 +143,13 @@
                 }
             }
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ShiftManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public JsonResult Delete(int shiftId)
         {
             var criteria = new DeleteShiftCriteria { ShiftId = shiftId };

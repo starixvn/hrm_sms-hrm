@@ -25,11 +25,12 @@
         private readonly IEmployeeService employeeService;
 
         public CheckInOutController(
+            ISessionService sessionService,
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IEmployeeService employeeService,
-            IShiftService shiftService)
+            IShiftService shiftService) : base(sessionService)
         {
             this.checkInOutRequestService = checkInOutRequestService;
             this.requestService = requestService;
@@ -50,13 +51,13 @@
             ViewBag.Year = year;
             var criteria = new GetRequestCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.CheckInOut,
                 IsQueryByCreatedDate = false,
                 RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = null
             };
 
@@ -68,15 +69,15 @@
         {
             var viewModel = new CheckInOutRequestViewModel
             {
-                Employee = CurrentUser.NickName,
-                EmployeeId = CurrentUser.Id,
-                ForDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
-                AttendantDate = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
+                Employee = sessionService.Employee.Nickname,
+                EmployeeId = sessionService.Employee.Id,
+                ForDate = suggestedDate ?? DateTime.Today,
+                AttendantDate = suggestedDate ?? DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 RequestType = (isMissingCheckIn.HasValue && isMissingCheckIn.Value) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id)
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
+                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id)
             };
 
             Shift shift = GetShiftByDate(DateTime.Now);
@@ -105,7 +106,7 @@
                         RequestType = model.RequestType,
                         RefNo = model.RefNO,
                         Remark = model.Remark,
-                        CreatedBy = CurrentUser.Id,
+                        CreatedBy = sessionService.Employee.Id,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
                         Shift = model.Shift
@@ -134,7 +135,7 @@
                 RequestId = id
             };
             RequestEntity request = requestService.GetRequestById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -145,8 +146,8 @@
                 {
                     RequestId = request.Id,
                     RequestType = request.RequestType.Id,
-                    Employee = CurrentUser.NickName,
-                    EmployeeId = CurrentUser.Id,
+                    Employee = sessionService.Employee.Nickname,
+                    EmployeeId = sessionService.Employee.Id,
                     ForDate = request.RequestedDate.Date,
                     Hour = request.RequestedDate.Hour,
                     Minute = request.RequestedDate.Minute,
@@ -156,7 +157,7 @@
                     RefNO = request.RefNO,
                     AttendantDate = request.FromDate,
                     Remark = request.Remark,
-                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
                 };
 
                 return View(viewModel);
@@ -182,7 +183,7 @@
                         RequestType = model.RequestType,
                         RefNo = model.RefNO,
                         Remark = model.Remark,
-                        ModifiedBy = CurrentUser.Id,
+                        ModifiedBy = sessionService.Employee.Id,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
                         Shift = model.Shift
@@ -233,7 +234,7 @@
         {
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = sessionService.Employee.Id,
                 Date = date
             };
             Shift shift = shiftService.GetByDate(getShiftByDateCriteria);

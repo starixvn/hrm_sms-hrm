@@ -15,13 +15,13 @@
     using Criteria.Supervisor;
     using Criteria.Team;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Filters;
     using Hangfire;
     using Models;
     using Models.Request;
     using Models.Supervisor;
     using Services;
     using ViewModels;
-    using Web.Providers;
 
     public class OvertimeController : BaseController
     {
@@ -33,12 +33,13 @@
         private readonly IBaseService baseService;
 
         public OvertimeController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
             ITeamService teamService,
             IOvertimeRequestService overtimeService,
             ILookupDataService lookupDataService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
@@ -53,8 +54,8 @@
         {
             var model = new OvertimeReportViewModel
             {
-                Employee = CurrentUser.NickName,
-                EmpId = CurrentUser.Id,
+                Employee = sessionService.Employee.Nickname,
+                EmpId = sessionService.Employee.Id,
                 Year = DateTime.Now.Year
             };
             return EmployeeView(model);
@@ -133,7 +134,7 @@
             var criteria = new UpdateOvertimeRequestCriteria
             {
                 EmployeeId = model.EmpId,
-                ProcessedBy = CurrentUser.Id,
+                ProcessedBy = sessionService.Employee.Id,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList()
@@ -147,7 +148,7 @@
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 Role = (int)RoleSystem.ActingSupervisor,
                 RequestType = null,
                 Query = string.IsNullOrWhiteSpace(query) ? string.Empty : query.Trim(),
@@ -159,7 +160,9 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public JsonResult ProcessSingle(string command, long requestId, int roleId)
         {
             var criteria = new ProcessSingleOvertimeCriteria
@@ -167,7 +170,7 @@
                 CommandProcess = command,
                 RequestId = requestId,
                 RoleId = roleId,
-                ProcessedBy = CurrentUser.Id,
+                ProcessedBy = sessionService.Employee.Id,
                 ProcessedDate = DateTime.Now
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -176,14 +179,16 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public JsonResult ProcessMultiple(string command, string requestIds)
         {
             var criteria = new ProcessMultipleOvertimeCriteria
             {
                 CommandProcess = command,
                 ListRequestId = requestIds,
-                ProcessedBy = this.CurrentUser.Id,
+                ProcessedBy = sessionService.Employee.Id,
                 ProcessedDate = DateTime.Now
             };
             criteria.RoleId = ProcessMultipleOvertimeCriteria.GetRoleIdForProcessOvertime(command);
@@ -192,7 +197,8 @@
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime()
         {
             var memberOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -201,7 +207,7 @@
             return View(memberOvertimeViewModel);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult EmployeeOvertime()
         {
             var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
@@ -211,12 +217,13 @@
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             var criteria = new GetMemberOvertimeByLeaderCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 FromDate = month != null ? month.Value : month,
                 ToDate = month != null ? month.Value : month,
                 EmployeeId = employeeId,
@@ -225,20 +232,20 @@
             };
             IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertimeByLeader(criteria);
 
-            ViewBag.CurrentUserId = CurrentUser.Id;
-            ViewBag.HasVerfifyPermision = CurrentUser.HasPermission(FunctionKey.VerifyOvertime, Policy.Host);
-            ViewBag.HasApprovePermision = CurrentUser.HasPermission(FunctionKey.ApproveOvertime, Policy.Host);
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+            ViewBag.HasVerfifyPermision = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+            ViewBag.HasApprovePermision = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
             return View(memberOvertimes);
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
         {
             var criteria = new GetMemberOvertimeCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 FromDate = month != null ? month.Value : month,
                 ToDate = month != null ? month.Value : month,
                 EmployeeId = employeeId,
@@ -259,11 +266,11 @@
             OvertimeRequest overtime = overtimeService.GetOvertimeRequestById(criteria);
 
             ViewBag.IsHRView = isHRView;
-            ViewBag.CurrentUserId = CurrentUser.Id;
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
             return View(overtime);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
+        [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult YearlyReport()
         {
             IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
@@ -276,7 +283,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ReportHome)]
+        [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult YearlyOvertimeReportDetails(YearlyOvertimeReportViewModel model)
         {
             ViewBag.Year = model.Year;
@@ -287,7 +294,7 @@
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
-                    SupervisorId = CurrentUser.Id,
+                    SupervisorId = sessionService.Employee.Id,
                     Year = model.Year,
                     GroupIds = model.SectionIds,
                     EmployeeId = model.EmployeeId,
@@ -310,7 +317,7 @@
             return PartialView("_YearlyReportDetails", listEntity);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {
             var criteria = new GetOvertimeDailyReportCriteria
@@ -324,8 +331,7 @@
             return View(overtime);
         }
 
-        /// [Authorize(Roles = "HR")]
-        [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult HRMonthlyReport(int month, int year, int? calendar)
         {
             var date = new DateTime(year, month, 1);
@@ -379,7 +385,7 @@
             return PartialView("_HRMonthlyReportDetails", entityList);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
             IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
@@ -406,7 +412,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReportDetails(OvertimeDetailReportViewModel model)
         {
             var criteria = new GetOvertimeExcelReportDetailCriteria
@@ -424,7 +430,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
             var criteria = new GetDetailOvertimeByRequestIdsCriteria
@@ -437,7 +443,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public void ReminderClaimOvertime(string subject, string content)
         {
             BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));

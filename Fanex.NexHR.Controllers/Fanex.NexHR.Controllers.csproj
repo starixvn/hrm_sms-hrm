@@ -212,10 +212,6 @@
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Web\Fanex.NexHR.Web.csproj">
-      <Project>{d1d9a098-0ee6-41f8-8198-111cb66a493a}</Project>
-      <Name>Fanex.NexHR.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

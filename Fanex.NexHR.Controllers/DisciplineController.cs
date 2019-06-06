@@ -8,13 +8,13 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
-    using Fanex.NexHR.Web.Providers;
 
     public class DisciplineController : BaseController
     {
@@ -23,16 +23,17 @@
         private readonly IBaseService baseService;
 
         public DisciplineController(
+            ISessionService sessionService,
             ITeamService teamService,
             IDisciplineService disciplineService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.teamService = teamService;
             this.disciplineService = disciplineService;
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult DisciplineSummary(DisciplineSummaryViewModel model)
         {
             if (model != null)
@@ -44,12 +45,12 @@
                 model.DateRange = Utilities.GetDateRangeByQuarter();
             }
 
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
-            ViewBag.IsHostOtherDiscipline = CurrentUser.HasPermission(FunctionKey.OtherDiscipline, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHostOtherDiscipline = sessionService.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
             return View(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialListDisciplineSummary(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineSummaryCriteria
@@ -60,18 +61,18 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id,
+                ApproverId = sessionService.Employee.Id,
                 IsShowAll = model.IsShowAll
             };
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ListDisciplineSummary", disciplines);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult DisciplineDetail(DisciplineSummaryViewModel model)
         {
             if (model != null)
@@ -113,7 +114,7 @@
             return toDate;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult PartialListDisciplineDetail(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineDetailCriteria
@@ -125,17 +126,17 @@
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
                 HasIgnored = model.HasIgnored,
-                ApproverId = CurrentUser.Id
+                ApproverId = sessionService.Employee.Id
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
-            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
-            ViewBag.HasPermissionToUpdateOutOfControlReason = CurrentUser.HasPermission(FunctionKey.UpdateOutOfControlReason, Policy.Host);
+            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            ViewBag.HasPermissionToUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
             return PartialView("_ListDisciplineDetail", disciplines);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetOtherDisciplineOfEmployeeCriteria
@@ -146,12 +147,12 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
+        [HRMPermission(Policy.Host, FunctionKey.OtherDiscipline)]
         public ActionResult PartialAddOtherDiscipline(string employee, int? employeeId = null)
         {
             var criteria = new GetOtherDisciplineTypeCriteria();
@@ -170,7 +171,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
+        [HRMPermission(Policy.Host, FunctionKey.OtherDiscipline)]
         public JsonResult AddOtherDiscipline(AddOtherDisciplineViewModel model)
         {
             var criteria = new InsertOtherDisciplineCriteria
@@ -180,7 +181,7 @@
                 DisciplineTypeId = model.DisciplineTypeId,
                 Score = model.MinusScore,
                 Comment = model.Comment,
-                CreatedBy = CurrentUser.Id
+                CreatedBy = sessionService.Employee.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -188,12 +189,12 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.OtherDiscipline)]
+        [HRMPermission(Policy.Host, FunctionKey.OtherDiscipline)]
         public string DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = CurrentUser.Id;
+                criteria.ModifiedBy = sessionService.Employee.Id;
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)
@@ -206,14 +207,14 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Discipline)]
+        [HRMPermission(Policy.Host, FunctionKey.Discipline)]
         public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
         {
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
                 IgnoredDisciplines = ignoredDisciplineDetails,
-                HasUpdateOutOfControlReason = CurrentUser.HasPermission(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-                ModifiedBy = CurrentUser.Id,
+                HasUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
+                ModifiedBy = sessionService.Employee.Id,
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -225,7 +226,7 @@
         {
             var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 Query = keyword
             };
 

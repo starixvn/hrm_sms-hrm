@@ -29,12 +29,13 @@
         private readonly IWorkingCalendarService workingCalendarService;
 
         public ChangeShiftController(
+            ISessionService sessionService,
             IChangeShiftRequestService changeShiftRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IEmployeeService employeeService,
             IShiftService shiftService,
-            IWorkingCalendarService workingCalendarService)
+            IWorkingCalendarService workingCalendarService) : base(sessionService)
         {
             this.changeShiftRequestService = changeShiftRequestService;
             this.requestService = requestService;
@@ -56,13 +57,13 @@
             ViewBag.Year = year;
             var criteria = new GetRequestCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.ChangeShift,
                 IsQueryByCreatedDate = false,
                 RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = null
             };
 
@@ -74,17 +75,17 @@
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
-            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(CurrentUser.Id, currentDate, currentDate);
+            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(sessionService.Employee.Id, currentDate, currentDate);
 
             var model = new ChangeShiftViewModel
             {
-                Employee = CurrentUser.NickName,
-                EmployeeId = CurrentUser.Id,
+                Employee = sessionService.Employee.Nickname,
+                EmployeeId = sessionService.Employee.Id,
                 FromDate = currentDate,
                 ToDate = currentDate,
                 ShiftDetails = shiftDetails,
-                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id),
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id),
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
 
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
@@ -97,7 +98,7 @@
         {
             var criteria = JsonConverter.FromJson<InsertChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.CreatedBy = CurrentUser.Id;
+            criteria.CreatedBy = sessionService.Employee.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
@@ -115,7 +116,7 @@
                 RequestId = id
             };
             RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -129,15 +130,15 @@
                 var model = new ChangeShiftViewModel
                 {
                     RequestId = request.Id,
-                    Employee = CurrentUser.NickName,
-                    EmployeeId = CurrentUser.Id,
+                    Employee = sessionService.Employee.Nickname,
+                    EmployeeId = sessionService.Employee.Id,
                     FromDate = request.FromDate.Date,
                     ToDate = request.ToDate.Date,
                     VerifierId = request.VerifiedBy.Id,
                     ApproverId = request.ApprovedBy.Id,
                     Remark = request.Remark,
                     ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
-                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
+                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
                 };
 
                 ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
@@ -151,7 +152,7 @@
         {
             var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);
             criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.ModifiedBy = CurrentUser.Id;
+            criteria.ModifiedBy = sessionService.Employee.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)

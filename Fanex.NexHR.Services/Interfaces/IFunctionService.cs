@@ -9,8 +9,6 @@
     {
         IEnumerable<FunctionModel> GetFunctions();
 
-        IEnumerable<FunctionModel> GetFunctionsByUserId(int userId);
-
         IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId);
 
         CommandResult AssignFunctionsToRole(int actorId, int roleId, IEnumerable<FunctionPermission> permissions);

@@ -70,6 +70,9 @@
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="Auth\GetEmployeeLoginByCodeCriteria.cs" />
+    <Compile Include="Auth\GetFunctionsByUserIdCriteria.cs" />
+    <Compile Include="Auth\GetMenusByUserIdCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByWeeklyDefaultShiftCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
@@ -101,7 +104,6 @@
     <Compile Include="Employee\SelfUpdateContactCriteria.cs" />
     <Compile Include="Function\AssignFunctionToRoleCriteria.cs" />
     <Compile Include="Function\GetFunctionsByRoleIdCriteria.cs" />
-    <Compile Include="Function\GetFunctionsByUserIdCriteria.cs" />
     <Compile Include="Function\GetFunctionsCriteria.cs" />
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
@@ -110,7 +112,6 @@
     <Compile Include="Holidays\UpdateHolidayCriteria.cs" />
     <Compile Include="Menu\DeleteMenuCriteria.cs" />
     <Compile Include="Menu\GetMenuByIdCriteria.cs" />
-    <Compile Include="Menu\GetMenusByUserIdCriteria.cs" />
     <Compile Include="Menu\GetMenusCriteria.cs" />
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />

@@ -3,19 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core;
-    using Core.Enums;
-    using Criteria.Request;
-    using Criteria.Team;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Models;
-    using Models.Request;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
-    using Resources;
-    using Services;
-    using Services.ExportExcel;
-    using ViewModels.Request;
-    using Web.Providers;
 
     public class ExportRequestController : BaseExportController
     {
@@ -24,23 +25,25 @@
         private readonly ITeamService teamService;
 
         public ExportRequestController(
+            ISessionService sessionService,
             IExportExcelService exportExcelService,
             IRequestService requestService,
-            ITeamService teamService)
+            ITeamService teamService) : base(sessionService)
         {
             this.exportExcelService = exportExcelService;
             this.requestService = requestService;
             this.teamService = teamService;
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         public ActionResult MemberWorkingTimeRequest(RequestViewModel model)
         {
             model.ViewType = RequestViewType.PersonalSpace;
             return WorkingTimeRequest(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
             model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
@@ -48,7 +51,7 @@
 
             var criteria = new GetRequestCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -88,7 +91,7 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
@@ -103,7 +106,7 @@
         {
             var criteria = new GetGroupBySupervisorCriteria
             {
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             IList<Team> teams = teamService.GetBySupervisor(criteria);
@@ -130,7 +133,7 @@
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 RequestViewType = model.ViewType,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 

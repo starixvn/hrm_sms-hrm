@@ -22,15 +22,6 @@
             this.baseService = baseService;
         }
 
-        public IEnumerable<MenuModel> GetMenusByUserId(int userId)
-        {
-            var criteria = new GetMenusByUserIdCriteria { UserId = userId };
-            IEnumerable<MenuModel> menus = baseService.GetData<MenuModel>(criteria);
-            menus = menus.GroupBy(i => i.Name).Select(g => g.First()).ToList();
-
-            return menus;
-        }
-
         public IEnumerable<MenuViewModel> GetMenus()
         {
             var criteria = new GetMenusCriteria();

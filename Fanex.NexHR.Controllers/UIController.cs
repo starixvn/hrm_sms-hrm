@@ -4,16 +4,18 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Message;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
 
-    [Authorize]
     public class UIController : BaseController
     {
         private readonly IMessageService messageService;
 
-        public UIController(IMessageService messageService)
+        public UIController(
+            ISessionService sessionService,
+            IMessageService messageService) : base(sessionService)
         {
             this.messageService = messageService;
         }
@@ -23,20 +25,21 @@
         {
             var criteria = new GetMessageByEmployeeCriteria
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Today,
                 ToDate = DateTime.Today,
                 IsDisabled = 0
             };
 
             ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
-            return PartialView(CurrentUser);
+            return PartialView(sessionService.Employee);
         }
 
         [ChildActionOnly]
         public ActionResult GlobalScript()
         {
-            ViewBag.Employee = CurrentUser;
+            ViewBag.Employee = sessionService.Employee;
+            ViewBag.IsShowLeftNavigation = sessionService.IsShowLeftNavigation;
             return PartialView();
         }
 
@@ -48,9 +51,9 @@
         }
 
         [NonAction]
-        public IEnumerable<MenuModel> GetNagivationData()
+        public IEnumerable<MenuItemSession> GetNagivationData()
         {
-            return CurrentUser.Menus;
+            return sessionService.MenuItems;
         }
 
         [ChildActionOnly]
@@ -58,14 +61,14 @@
         {
             var criteria = new GetMessageByEmployeeCriteria
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Today,
                 ToDate = DateTime.Today,
                 IsDisabled = 0
             };
 
             ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
-            return PartialView("_NewHeader", CurrentUser);
+            return PartialView("_NewHeader", sessionService.Employee);
         }
 
         [ChildActionOnly]
@@ -75,14 +78,14 @@
             return PartialView("_NewNavBar", menus);
         }
 
-        private IEnumerable<MenuModel> GetNavBar()
+        private IEnumerable<MenuItemSession> GetNavBar()
         {
             var routeData = ControllerContext.ParentActionViewContext.RouteData;
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = CurrentUser.Menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
-            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = CurrentUser.Id };
+            var selectedMenu = sessionService.MenuItems.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
+            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = sessionService.Employee.Id };
             var menus = GetNagivationData();
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
 

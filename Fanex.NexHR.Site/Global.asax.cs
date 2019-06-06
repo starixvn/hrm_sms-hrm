@@ -5,12 +5,12 @@
     using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Common;
-    using Data.Configuration;
+    using Fanex.Common;
+    using Fanex.Data.Configuration;
+    using Fanex.Logging;
+    using Fanex.NexHR.Core.Providers;
+    using Fanex.NexHR.Resources;
     using Hangfire;
-    using Logging;
-    using Resources;
-    using Web.Providers;
 
     public class MvcApplication : HttpApplication
     {

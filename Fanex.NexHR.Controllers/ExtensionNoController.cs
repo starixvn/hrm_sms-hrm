@@ -7,12 +7,12 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.ExtensionNumber;
-    using Fanex.NexHR.Web.Providers;
 
     public class ExtensionNoController : BaseController
     {
@@ -21,16 +21,17 @@
         private readonly IBaseService baseService;
 
         public ExtensionNoController(
+            ISessionService sessionService,
             IExtensionNumberService extensionNumberService,
             ITeamService teamService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.extensionNumberService = extensionNumberService;
             this.teamService = teamService;
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Read, FunctionKey.ExtensionNumber)]
         public ActionResult Index()
         {
             IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
@@ -38,19 +39,19 @@
             var model = (from item in lstEntity
                          group item by item.TeamName into g
                          select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.ExtensionNumber, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create(ExtensionNoModel model)
         {
             if (model != null)
@@ -83,7 +84,7 @@
             return View();
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(bool isInternal, int employeeExtensionId)
         {
             var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
@@ -105,7 +106,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(ExtensionNoModel model)
         {
             CheckExternalEmployee(model);
@@ -143,7 +144,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExtensionNumber(int employeeExtensionId)
         {
             var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = employeeExtensionId };
@@ -153,7 +154,7 @@
 
         #region External Group
 
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult ManageExternalGroup()
         {
             var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = false };
@@ -163,7 +164,7 @@
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult GetGroupExtension(bool isInternal, int? groupId)
         {
             IList<SelectListItem> groups = null;
@@ -197,7 +198,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult AddNewExternalGroup(string groupName)
         {
             var criteria = new InsertExternalGroupCriteria
@@ -210,7 +211,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExternalGroup(int groupId)
         {
             var criteria = new DeleteExternalGroupCriteria { ExternalId = groupId };
@@ -221,7 +222,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.ExtensionNumber)]
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult EditExternalGroup(int groupId, string groupName)
         {
             var criteria = new UpdateExternalNumberCriteria

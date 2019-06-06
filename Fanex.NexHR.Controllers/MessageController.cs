@@ -6,12 +6,12 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Web.Providers;
 
     public class MessageController : BaseController
     {
@@ -21,10 +21,11 @@
         private readonly IBaseService baseService;
 
         public MessageController(
+            ISessionService sessionService,
             IMessageService messageService,
             ITeamService teamService,
             IEmployeeService employeeService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.messageService = messageService;
             this.teamService = teamService;
@@ -32,7 +33,7 @@
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Message)]
+        [HRMPermission(Policy.Read, FunctionKey.Message)]
         public ActionResult Index()
         {
             var criteria = new GetMessageByCreatorCriteria
@@ -40,31 +41,31 @@
                 ToDate = DateTime.Now,
                 FromDate = DateTime.Now.AddMonths(-3),
                 IsDisabled = 0,
-                CreatedBy = CurrentUser.Id
+                CreatedBy = sessionService.Employee.Id
             };
 
             ViewBag.Messages = messageService.GetMessageByCreator(criteria);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
             return View(criteria);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.Message)]
+        [HRMPermission(Policy.Read, FunctionKey.Message)]
         public ActionResult Index(GetMessageByCreatorCriteria criteria)
         {
             if (criteria != null)
             {
-                criteria.CreatedBy = CurrentUser.Id;
+                criteria.CreatedBy = sessionService.Employee.Id;
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(criteria);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Message, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
             return View(criteria);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.Message)]
+        [HRMPermission(Policy.Host, FunctionKey.Message)]
         public ActionResult Create()
         {
             var getEmployeeCriteria = new GetAllEmployeeCriteria
@@ -86,7 +87,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Message)]
+        [HRMPermission(Policy.Host, FunctionKey.Message)]
         public JsonResult Create(Message model)
         {
             var result = new CommandResult();
@@ -95,7 +96,7 @@
             {
                 var criteria = new InsertMessageCriteria(model)
                 {
-                    CreatedBy = CurrentUser.Id
+                    CreatedBy = sessionService.Employee.Id
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -108,7 +109,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.Message)]
+        [HRMPermission(Policy.Host, FunctionKey.Message)]
         public ActionResult Edit(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria
@@ -137,7 +138,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.Message)]
+        [HRMPermission(Policy.Host, FunctionKey.Message)]
         public JsonResult Edit(Message model)
         {
             var result = new CommandResult();
@@ -146,7 +147,7 @@
             {
                 var criteria = new UpdateMessageCriteria(model)
                 {
-                    ModifiedBy = CurrentUser.Id
+                    ModifiedBy = sessionService.Employee.Id
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -160,13 +161,13 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Message)]
+        [HRMPermission(Policy.Host, FunctionKey.Message)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteMessageCriteria
             {
                 MessageId = id,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 ModifiedDate = DateTime.Now
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -181,7 +182,7 @@
                 FromDate = DateTime.Today,
                 ToDate = DateTime.Today,
                 IsDisabled = 0,
-                EmployeeId = CurrentUser.Id
+                EmployeeId = sessionService.Employee.Id
             };
 
             ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
@@ -194,7 +195,7 @@
         {
             if (criteria != null)
             {
-                criteria.EmployeeId = CurrentUser.Id;
+                criteria.EmployeeId = sessionService.Employee.Id;
             }
 
             ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
@@ -208,14 +209,14 @@
             var criteria = new DeleteMessageByEmployeeCriteria
             {
                 MessageId = id,
-                EmployeeId = CurrentUser.Id
+                EmployeeId = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Message)]
+        [HRMPermission(Policy.Read, FunctionKey.Message)]
         public ActionResult Detail(int id)
         {
             var getMessageByIdCriteria = new GetMessageByIdCriteria
@@ -243,7 +244,7 @@
             var criteria = new UpdateReadStatusMessageCriteria
             {
                 MessageId = id,
-                EmployeeId = CurrentUser.Id
+                EmployeeId = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 

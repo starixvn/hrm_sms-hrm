@@ -23,6 +23,8 @@
         public string Modifier { get; set; }
         public DateTime ModifiedDate { get; set; }
 
+        public bool IsPublic => MondaySchedule != null && MondaySchedule.IsPublic;
+
         public DailySchedule MondaySchedule { get; set; }
         public DailySchedule TuesdaySchedule { get; set; }
         public DailySchedule WednesdaySchedule { get; set; }

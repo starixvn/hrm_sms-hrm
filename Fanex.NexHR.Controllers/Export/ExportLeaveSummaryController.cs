@@ -3,14 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria;
-    using Criteria.AnnualLeave;
-    using Criteria.Team;
-    using Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.AnnualLeave;
+    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
-    using Services;
-    using Services.ExportExcel;
-    using ViewModels;
 
     public class ExportLeaveSummaryController : BaseExportController
     {
@@ -20,10 +21,11 @@
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
 
         public ExportLeaveSummaryController(
+            ISessionService sessionService,
             IReportService reportService,
             IExportExcelService exportExcelService,
             ITeamService teamService,
-            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService)
+            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportExcelService = exportExcelService;
@@ -67,7 +69,7 @@
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 GroupIds = model.SectionIds,
                 IsLocal = (byte?)model.Category,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id
                 LeaveType = (int)model.LeaveType
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);

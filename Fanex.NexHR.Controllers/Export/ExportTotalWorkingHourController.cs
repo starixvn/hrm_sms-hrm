@@ -6,6 +6,7 @@
     using System.Web.Mvc;
     using Criteria;
     using Criteria.Report;
+    using Fanex.NexHR.Core.Services;
     using Models;
     using NPOI.HSSF.UserModel;
     using Services;
@@ -16,7 +17,9 @@
     {
         private readonly IReportService reportService;
 
-        public ExportTotalWorkingHourController(IReportService reportService)
+        public ExportTotalWorkingHourController(
+            ISessionService sessionService,
+            IReportService reportService) : base(sessionService)
         {
             this.reportService = reportService;
         }

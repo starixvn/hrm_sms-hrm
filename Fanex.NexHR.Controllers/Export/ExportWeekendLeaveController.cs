@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Criteria.Report;
+    using Fanex.NexHR.Core.Services;
     using Models.Report;
     using Services;
     using ViewModels.Report;
@@ -14,9 +15,10 @@
         private readonly IExportWeekendLeaveDetailService exportWeekendLeaveDetailService;
 
         public ExportWeekendLeaveController(
+            ISessionService sessionService,
             IReportService reportService,
             IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
-            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
+            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportWeekendLeaveSummaryService = exportWeekendLeaveSummaryService;
@@ -33,7 +35,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 MinTotalLeave = model.MinTotalLeave,
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);

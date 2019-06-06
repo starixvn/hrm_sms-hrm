@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Web.Providers
+﻿namespace Fanex.NexHR.Core.Providers
 {
     using System;
     using System.ComponentModel;

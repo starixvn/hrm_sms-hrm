@@ -8,6 +8,8 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Shift;
@@ -15,7 +17,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Web.Providers;
 
     public class CalendarController : BaseController
     {
@@ -26,11 +27,12 @@
         private readonly IEmployeeService employeeService;
 
         public CalendarController(
+            ISessionService sessionService,
             IWorkingCalendarService workingCalendarService,
             ITeamService teamService,
             IShiftService shiftService,
             ILookupDataService lookupDataService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService) : base(sessionService)
         {
             this.workingCalendarService = workingCalendarService;
             this.teamService = teamService;
@@ -39,7 +41,7 @@
             this.employeeService = employeeService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
             var getAllGroupCriteria = new GetAllGroupCriteria();
@@ -55,12 +57,12 @@
             return View(shiftStatisticViewModel);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
             var getShiftCriteria = new GetShiftStatisticCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 Fromtime = fromDate,
                 Totime = toDate,
                 GroupIds = groupIds,
@@ -82,7 +84,7 @@
             return View(shiftStatisticContentViewModel);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
             int? shiftId,
@@ -106,7 +108,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.ScheduleArrange)]
+        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShiftContent(
             DateTime workDate,
             int? shiftId,
@@ -120,7 +122,7 @@
                 WorkDate = workDate,
                 ShiftId = shiftId,
                 EmployeeId = employeeId,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
                 TeamIds = teamIds,
                 IsLocal = isLocal
@@ -167,8 +169,8 @@
                 Selected = string.IsNullOrEmpty(j.Id.ToString())
             }).ToList();
 
-            ViewBag.HasPermissionToViewHoliday = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Read);
-            ViewBag.HasPermissionToViewShift = CurrentUser.HasPermission(FunctionKey.ShiftManagement, Policy.Read);
+            ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
+            ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
 
             var model = new WorkingCalendarFilterViewModel
             {

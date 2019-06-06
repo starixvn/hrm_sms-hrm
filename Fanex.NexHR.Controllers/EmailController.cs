@@ -2,6 +2,7 @@
 {
     using System.Configuration;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Services;
     using Resources;
     using Services;
 
@@ -9,7 +10,9 @@
     {
         private readonly IEmailService emailService;
 
-        public EmailController(IEmailService emailService)
+        public EmailController(
+            ISessionService sessionService,
+            IEmailService emailService) : base(sessionService)
         {
             this.emailService = emailService;
         }

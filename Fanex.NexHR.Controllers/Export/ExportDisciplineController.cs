@@ -2,11 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria.Discipline;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Discipline;
+    using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
-    using Models.Discipline;
-    using Services.ExportExcel;
-    using ViewModels.Discipline;
+    using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.ViewModels.Discipline;
 
     public class ExportDisciplineController : BaseController
     {
@@ -15,9 +16,10 @@
         private readonly IExportDisciplineDetailService exportDisciplineDetailService;
 
         public ExportDisciplineController(
+            ISessionService sessionService,
             IDisciplineService disciplineService,
             IExportDisciplineSummaryService exportDisciplineSummaryService,
-            IExportDisciplineDetailService exportDisciplineDetailService)
+            IExportDisciplineDetailService exportDisciplineDetailService) : base(sessionService)
         {
             this.disciplineService = disciplineService;
             this.exportDisciplineSummaryService = exportDisciplineSummaryService;
@@ -34,7 +36,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id,
+                ApproverId = sessionService.Employee.Id,
                 EmployeeName = model.Employee,
                 GroupName = model.TeamName
             };
@@ -55,7 +57,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = CurrentUser.Id,
+                ApproverId = sessionService.Employee.Id,
                 EmployeeName = model.Employee,
                 GroupName = model.TeamName
             };

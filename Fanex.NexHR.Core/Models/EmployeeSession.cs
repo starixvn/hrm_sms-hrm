@@ -1,0 +1,16 @@
+﻿namespace Fanex.NexHR.Core.Models
+{
+    using System;
+
+    [Serializable]
+    public class EmployeeSession
+    {
+        public int Id { get; set; }
+        public string Code { get; set; }
+        public string FullName { get; set; }
+        public string Nickname { get; set; }
+        public string Password { get; set; }
+        public bool Enabled { get; set; }
+        public string DisplayName => (string.IsNullOrWhiteSpace(Nickname) || string.IsNullOrWhiteSpace(FullName)) ? string.Empty : Nickname + " (" + FullName + ")";
+    }
+}

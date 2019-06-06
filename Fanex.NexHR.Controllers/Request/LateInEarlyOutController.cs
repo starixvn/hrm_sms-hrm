@@ -23,10 +23,11 @@
         private readonly IEmployeeService employeeService;
 
         public LateInEarlyOutController(
+            ISessionService sessionService,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService) : base(sessionService)
         {
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
             this.requestService = requestService;
@@ -38,14 +39,14 @@
         {
             var viewModel = new LateInEarlyOutRequestViewModel
             {
-                Employee = CurrentUser.NickName,
-                EmployeeId = CurrentUser.Id,
-                Date = suggestedDate.HasValue ? suggestedDate.Value : DateTime.Today,
+                Employee = sessionService.Employee.Nickname,
+                EmployeeId = sessionService.Employee.Id,
+                Date = suggestedDate ?? DateTime.Today,
                 Minute = 60,
                 RequestType = (isLateIn.HasValue && isLateIn.Value) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
-                UnavailDates = GetUnavailDate(CurrentUser.Id),
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth(CurrentUser.Id)
+                UnavailDates = GetUnavailDate(sessionService.Employee.Id),
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
+                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id)
             };
 
             return View(viewModel);
@@ -73,7 +74,7 @@
                         EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
-                        CreatedBy = CurrentUser.Id
+                        CreatedBy = sessionService.Employee.Id
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
 
@@ -99,7 +100,7 @@
                 RequestId = id
             };
             RequestEntity request = requestService.GetRequestById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -110,16 +111,16 @@
             var viewModel = new LateInEarlyOutRequestViewModel
             {
                 RequestId = request.Id,
-                Employee = CurrentUser.NickName,
-                EmployeeId = CurrentUser.Id,
+                Employee = sessionService.Employee.Nickname,
+                EmployeeId = sessionService.Employee.Id,
                 Date = request.RequestedDate,
                 Minute = minute,
                 RequestType = type,
                 Remark = request.Remark,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
-                UnavailDates = GetUnavailDate(CurrentUser.Id),
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                UnavailDates = GetUnavailDate(sessionService.Employee.Id),
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
 
             return View(viewModel);
@@ -148,7 +149,7 @@
                         EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
-                        ModifiedBy = CurrentUser.Id,
+                        ModifiedBy = sessionService.Employee.Id,
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -180,13 +181,13 @@
 
             var criteria = new GetRequestCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.LateInEarlyOut,
                 IsQueryByCreatedDate = false,
                 RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = null
             };
 

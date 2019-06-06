@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Team;
@@ -17,7 +18,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
-    using Fanex.NexHR.Web.Providers;
 
     public class AnnualLeaveBalanceController : BaseController
     {
@@ -27,10 +27,11 @@
         private readonly IBaseService baseService;
 
         public AnnualLeaveBalanceController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
             ITeamService teamService,
             IReportService reportService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
@@ -47,7 +48,7 @@
             {
                 EmpIds = model.EmpIds,
                 Description = model.Description,
-                CreatedBy = CurrentUser.Id,
+                CreatedBy = sessionService.Employee.Id,
                 CreatedDate = DateTime.Now,
                 CreditDays = model.CreditDays,
                 DeductDays = model.DeductDays,
@@ -76,7 +77,7 @@
             IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
             var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
             {
-                CreatedBy = CurrentUser.Id,
+                CreatedBy = sessionService.Employee.Id,
                 CreatedDate = DateTime.Now,
                 Description = descriptionReset,
                 AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
@@ -88,7 +89,7 @@
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(
             string sectionIds,
             string employee,
@@ -97,16 +98,16 @@
             int? minAnnualBalance = null,
             int? category = null)
         {
-            bool hasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.AnnualLeaveBalance, Policy.Host);
+            bool hasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
             ViewBag.HasPermissionToEdit = hasPermissionToEdit;
 
             var model = new LeaveSummaryViewModel
             {
-                Year = year.HasValue ? year.Value : DateTime.Now.Year,
+                Year = year ?? DateTime.Now.Year,
                 SectionIds = sectionIds,
                 Employee = employee,
-                EmployeeId = employeeId.HasValue ? employeeId.Value : -1,
-                MinAnnualBalance = minAnnualBalance.HasValue ? minAnnualBalance.Value : 0,
+                EmployeeId = employeeId ?? -1,
+                MinAnnualBalance = minAnnualBalance ?? 0,
                 Category = category,
                 IsShowCloseBalance = ConfigSettings.IsShowCloseBalance
             };
@@ -115,7 +116,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
@@ -149,7 +150,7 @@
             return PartialView(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)
         {
             var model = new AnnualLeaveBalanceViewModel
@@ -165,7 +166,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
@@ -175,7 +176,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
             var criteria = new GetAnnualLeaveTransactionByIdCriteria
@@ -191,7 +192,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
         {
             ViewBag.Employee = GetEmployeeById(model.EmpId);
@@ -205,7 +206,7 @@
             return Edit(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
             ViewBag.Employee = GetEmployeeById(id);
@@ -220,7 +221,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.AnnualLeaveBalance)]
+        [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(AnnualLeaveTransactionViewModel model)
         {
             ViewBag.Employee = GetEmployeeById(model.EmpId);
@@ -237,7 +238,7 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = CurrentUser.Id
+                    CreatedBy = sessionService.Employee.Id
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -263,7 +264,7 @@
                 GroupIds = model.SectionIds,
                 IsLocal = (byte?)model.Category,
                 Role = string.Empty,
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
             return leaveSumaries;
@@ -273,7 +274,7 @@
         {
             var criteria = new GetGroupBySupervisorCriteria
             {
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
             IList<Team> teams = teamService.GetBySupervisor(criteria);
 
@@ -314,7 +315,7 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = CurrentUser.Id
+                    ModifiedBy = sessionService.Employee.Id
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -341,7 +342,7 @@
             {
                 LeaveTransId = model.LeaveTransId,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 

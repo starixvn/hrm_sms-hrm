@@ -2,10 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria.Supervisor;
-    using Models.Supervisor;
-    using Services;
-    using ViewModels;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Supervisor;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
 
     public class ExportSupervisorController : BaseExportController
     {
@@ -14,9 +15,10 @@
         private readonly IExportExcelSectionSupervisorService exportExcelSectionSupervisorService;
 
         public ExportSupervisorController(
+            ISessionService sessionService,
             IReportService reportService,
             IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
-            IExportExcelSectionSupervisorService exportExcelSectionSupervisorService)
+            IExportExcelSectionSupervisorService exportExcelSectionSupervisorService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor;

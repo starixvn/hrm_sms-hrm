@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
@@ -21,7 +22,6 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
-    using Fanex.NexHR.Web.Providers;
 
     public class RequestController : BaseController
     {
@@ -34,13 +34,14 @@
         private readonly IBaseService baseService;
 
         public RequestController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
             IShiftService shiftService,
             IRequestService requestService,
             IRequestMailService requestMailService,
             ILeaveTypeService leaveTypeService,
             ITeamService teamService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.shiftService = shiftService;
@@ -67,7 +68,8 @@
             return PartialView(request);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -83,7 +85,7 @@
             return View("EmployeeRequest", request);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -126,7 +128,7 @@
             return View();
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VoidRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
             request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
@@ -154,7 +156,7 @@
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 Role = (byte)role,
                 RequestType = null,
                 Query = query.Trim(),
@@ -193,7 +195,10 @@
             return supervisors;
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null
@@ -245,7 +250,10 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
         public JsonResult ProcessRequest(ProcessRequestViewModel model)
         {
             CommandResult result;
@@ -279,13 +287,13 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
                 LeaveTypeId = request.LeaveType
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            request.CurrentUserId = CurrentUser.Id;
+            request.CurrentUserId = sessionService.Employee.Id;
             request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
         }
 
@@ -297,8 +305,8 @@
         private bool SortRequestValidate(RequestEntity t)
         {
             bool pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                && (t.ApprovedBy.Id == CurrentUser.Id || t.VerifiedBy.Id == CurrentUser.Id);
-            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == CurrentUser.Id);
+                && (t.ApprovedBy.Id == sessionService.Employee.Id || t.VerifiedBy.Id == sessionService.Employee.Id);
+            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == sessionService.Employee.Id);
             return pending || verified;
         }
 
@@ -306,7 +314,7 @@
         {
             var criteria = new GetGroupBySupervisorCriteria
             {
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             IList<Team> teams = teamService.GetBySupervisor(criteria);
@@ -344,7 +352,7 @@
                 RoleId = model.RoleId,
                 Comment = model.Comment,
                 IgnoredDisciplines = model.IgnoredDisciplines,
-                ProcessedBy = CurrentUser.Id
+                ProcessedBy = sessionService.Employee.Id
             };
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -364,7 +372,7 @@
                 RequestId = model.RequestId,
                 RoleId = model.RoleId,
                 Comment = model.Comment,
-                ProcessedBy = CurrentUser.Id
+                ProcessedBy = sessionService.Employee.Id
             };
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);

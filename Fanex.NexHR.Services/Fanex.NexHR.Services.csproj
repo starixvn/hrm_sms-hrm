@@ -182,6 +182,7 @@
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
+    <Compile Include="Implement\AuthService.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
     <Compile Include="ExportExcel\Attendance\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Attendance\IExportExcelAttendanceReportService.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\RoleService.cs" />
+    <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />

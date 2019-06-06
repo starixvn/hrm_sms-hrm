@@ -2,10 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria;
-    using Criteria.Report;
-    using Models;
-    using Services;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Report;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
 
     public class ExportManpowerController : BaseExportController
     {
@@ -14,9 +15,10 @@
         private readonly IExportExcelManpowerService exportExcelManpowerService;
 
         public ExportManpowerController(
+            ISessionService sessionService,
             IReportService reportService,
             IExportExcelManpowerCategoryService exportExcelManpowerCategoryService,
-            IExportExcelManpowerService exportExcelManpowerService)
+            IExportExcelManpowerService exportExcelManpowerService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportExcelManpowerCategoryService = exportExcelManpowerCategoryService;

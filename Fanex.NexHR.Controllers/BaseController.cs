@@ -1,52 +1,17 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
-    using System.Web.Security;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
 
-    [Authorize]
+    [HRMAuthorize]
     public class BaseController : Controller
     {
-        public UserLoginModel CurrentUser
+        protected readonly ISessionService sessionService;
+
+        public BaseController(ISessionService sessionService)
         {
-            get
-            {
-                return (UserLoginModel)HttpContext.Session["CurrentUser"];
-            }
-        }
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-
-            if (HttpContext.Session["CurrentUser"] == null ||
-                    !HttpContext.User.Identity.IsAuthenticated)
-            {
-                FormsAuthentication.SignOut();
-
-                if (!Request.IsAjaxRequest())
-                {
-                    filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
-                }
-                else
-                {
-                    const string lostLogin = "Session is expired. Please press F5 to login again.";
-                    var contentType = filterContext.HttpContext.Request.ContentType ?? "text/html";
-                    if (contentType.Contains("json"))
-                    {
-                        var result = new JsonResult
-                        {
-                            Data = new { Code = -101, Message = lostLogin },
-                            JsonRequestBehavior = JsonRequestBehavior.AllowGet
-                        };
-                        filterContext.Result = result;
-                    }
-                    else
-                    {
-                        filterContext.Result = Content(lostLogin);
-                    }
-                }
-            }
+            this.sessionService = sessionService;
         }
     }
 }

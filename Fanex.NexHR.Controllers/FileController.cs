@@ -7,11 +7,14 @@
     using System.Web.Hosting;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Resources;
 
     public class FileController : BaseController
     {
-        private const int MaxSizeFileUpload = 5 * 1024 * 1024;
+        public FileController(ISessionService sessionService) : base(sessionService)
+        {
+        }
 
         [HttpPost]
         public string UploadFile(IEnumerable<HttpPostedFileBase> files, int categoryId, bool isOverride)
