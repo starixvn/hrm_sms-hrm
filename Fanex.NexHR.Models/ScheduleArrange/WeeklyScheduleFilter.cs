@@ -9,5 +9,6 @@
         public DateTime ToDate { get; set; }
         public string GroupIds { get; set; }
         public int? EmployeeId { get; set; }
+        public bool IsIFrame { get; set; }
     }
 }

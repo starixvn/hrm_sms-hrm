@@ -25,6 +25,7 @@ module.exports = {
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
+        [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`,
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
         [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,

@@ -105,6 +105,16 @@ input[type="text"] {
     margin-top: 10px;
 }
 
+.section-content.iframe {
+    .table-wrapper {
+        width: 1190px;
+
+        .table-header.fixed {
+            top: 0;
+        }
+    }
+}
+
 .table-wrapper, .table-weekly-default-shift {
     margin-bottom: 10px;
 

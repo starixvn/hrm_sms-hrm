@@ -8,9 +8,9 @@
 
     public interface IScheduleArrangeService
     {
-        IEnumerable<EntityBase<int>> GetGroups(int actorId);
+        IEnumerable<EntityBase<int>> GetGroups(int actorId, bool isIFrame = false);
 
-        IEnumerable<EmployeeSuggestion> GetEmployees(int actorId, string groupIds, string query);
+        IEnumerable<EmployeeSuggestion> GetEmployees(GetEmployeeFilter filter);
 
         IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter);
 

@@ -37,21 +37,30 @@
             return View();
         }
 
-        public CustomJsonResult GetGroups()
+        [AllowAnonymous]
+        public ActionResult IFrame()
         {
-            IEnumerable<EntityBase<int>> groups = scheduleArrangeService.GetGroups(sessionService.Employee.Id);
+            return View();
+        }
+
+        [AllowAnonymous]
+        public CustomJsonResult GetGroups(bool isIFrame = false)
+        {
+            IEnumerable<EntityBase<int>> groups = scheduleArrangeService.GetGroups(sessionService.Employee.Id, isIFrame);
 
             return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public CustomJsonResult GetEmployees(string groupIds, string query)
+        [AllowAnonymous]
+        public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
-            IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(sessionService.Employee.Id, groupIds, query);
+            filter.ActorId = sessionService.Employee.Id;
+            IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(filter);
 
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
+        [AllowAnonymous]
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
             filter.ActorId = sessionService.Employee.Id;
