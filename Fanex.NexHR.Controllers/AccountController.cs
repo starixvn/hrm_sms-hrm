@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
@@ -16,28 +17,31 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
-    using Fanex.NexHR.Web.Providers;
 
     public class AccountController : BaseController
     {
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
+        private readonly IAuthService authService;
 
         public AccountController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
-            IBaseService baseService)
+            IBaseService baseService,
+            IAuthService authService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.baseService = baseService;
+            this.authService = authService;
         }
 
         public ActionResult Index()
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
             Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
 
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = CurrentUser.Id };
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = sessionService.Employee.Id };
             EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
 
             ViewBag.IsUpdated = false;
@@ -50,8 +54,8 @@
         [HttpPost]
         public ActionResult Index(Employee employeeModel)
         {
-            employeeModel.Id = CurrentUser.Id;
-            employeeModel.Modifier = new Employee { Id = CurrentUser.Id };
+            employeeModel.Id = sessionService.Employee.Id;
+            employeeModel.Modifier = new Employee { Id = sessionService.Employee.Id };
             ModelState.Clear();
             UpdateEmployeePersonalInformationCriteria criteria = SetUpdatePersonalInfoCriteria(employeeModel);
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -65,11 +69,11 @@
                 ViewBag.IsUpdated = false;
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
+            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
             Employee displayModel = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
 
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = CurrentUser.Id };
+            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = sessionService.Employee.Id };
             var workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
 
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
@@ -82,7 +86,7 @@
         {
             var criteria = new UpdatePasswordResetStatusCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 PasswordReset = status
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -91,16 +95,16 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult ResetPassword(int id)
         {
-            string hashPassword = Encryptor.ComputeHash(employeeService.HashProvider, "123456");
+            string hashPassword = Encryptor.ComputeHash(authService.HashProvider, "123456");
             var criteria = new ChangePasswordCriteria
             {
                 EmpId = id,
                 Password = hashPassword,
                 PasswordReset = true,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -119,13 +123,13 @@
         {
             if (ModelState.IsValid)
             {
-                int retCode = employeeService.ValidateUser(CurrentUser.Code, model.Password);
+                int retCode = authService.Validate(sessionService.Employee, model.Password);
                 if (retCode == 0)
                 {
                     var criteria = new ChangePasswordCriteria
                     {
-                        EmpId = CurrentUser.Id,
-                        Password = Encryptor.ComputeHash(employeeService.HashProvider, model.NewPassword)
+                        EmpId = sessionService.Employee.Id,
+                        Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);

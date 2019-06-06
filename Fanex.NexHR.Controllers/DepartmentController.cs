@@ -6,11 +6,11 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Department;
-    using Fanex.NexHR.Web.Providers;
 
     public class DepartmentController : BaseController
     {
@@ -18,14 +18,15 @@
         private readonly IBaseService baseService;
 
         public DepartmentController(
+            ISessionService sessionService,
             IDepartmentService departmentService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.departmentService = departmentService;
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(bool? isActive)
         {
             var model = new DepartmentViewModel
@@ -37,7 +38,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.DivisionManagement)]
         public ActionResult Index(DepartmentViewModel model)
         {
             if (model != null)
@@ -45,22 +46,23 @@
                 model.Departments = GetAllDepartment(model.IsActive);
             }
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.DivisionManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DivisionManagement, Policy.Host);
 
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create()
         {
-            var model = new AddDepartmentViewModel();
-
-            model.ParentDepartments = GetAllDepartment(isActive: true);
+            var model = new AddDepartmentViewModel
+            {
+                ParentDepartments = GetAllDepartment(isActive: true)
+            };
             return View(model);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Create(AddDepartmentViewModel model)
         {
             if (model != null)
@@ -76,7 +78,7 @@
                         IsActive = model.IsActive,
                         ParentId = model.ParentId,
                         ManagerId = model.ManagerId,
-                        CreatedBy = CurrentUser.Id
+                        CreatedBy = sessionService.Employee.Id
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -94,7 +96,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
         {
             Department department = GetDepartmentById(departmentId);
@@ -114,7 +116,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(EditDepartmentViewModel model)
         {
             if (model != null)
@@ -128,9 +130,9 @@
                         Code = model.Code,
                         Name = model.Name,
                         IsActive = model.IsActive,
-                        ParentId = model.ParentId.HasValue ? model.ParentId.Value : 0,
+                        ParentId = model.ParentId ?? 0,
                         ManagerId = model.ManagerId,
-                        ModifiedBy = CurrentUser.Id,
+                        ModifiedBy = sessionService.Employee.Id,
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -150,13 +152,13 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.DivisionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public JsonResult Delete(int departmentId)
         {
             var criteria = new DeleteDepartmentCriteria
             {
                 DepartmentId = departmentId,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 

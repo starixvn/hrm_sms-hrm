@@ -2,22 +2,24 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria.Employee;
-    using Models;
-    using Services;
-    using ViewModels;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
 
     public class ExportEmployeeController : BaseExportController
     {
         private readonly IEmployeeService employeeService;
-        private readonly IExportExcelEmployeeInfoService exportExcelEmployeeInfoService;
+        private readonly IExportExcelEmployeeInfoService excelService;
 
         public ExportEmployeeController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
-            IExportExcelEmployeeInfoService exportExcelEmployeeInfoService)
+            IExportExcelEmployeeInfoService excelService) : base(sessionService)
         {
             this.employeeService = employeeService;
-            this.exportExcelEmployeeInfoService = exportExcelEmployeeInfoService;
+            this.excelService = excelService;
         }
 
         public ActionResult EmployeeBasicInfo(UserManagementViewModel model)
@@ -33,7 +35,7 @@
             };
 
             IList<Employee> employees = employeeService.GetEmployees(criteria);
-            exportExcelEmployeeInfoService.ExportEmployeeBasicInfo(employees);
+            excelService.ExportEmployeeBasicInfo(employees);
 
             return new EmptyResult();
         }
@@ -51,7 +53,7 @@
             };
 
             IList<Employee> employees = employeeService.GetEmployees(criteria);
-            exportExcelEmployeeInfoService.ExportEmployeeDetailsInfo(employees);
+            excelService.ExportEmployeeDetailsInfo(employees);
 
             return new EmptyResult();
         }

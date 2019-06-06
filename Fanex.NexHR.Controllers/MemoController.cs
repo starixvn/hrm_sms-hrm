@@ -8,11 +8,11 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Memo;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels.Memo;
-    using Fanex.NexHR.Web.Providers;
     using Services;
 
     public class MemoController : BaseController
@@ -24,10 +24,11 @@
         private readonly IBaseService baseService;
 
         public MemoController(
+            ISessionService sessionService,
             IMemoService memoService,
             ILookupDataService lookupDataService,
             IEmailService emailService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.memoService = memoService;
             this.lookupDataService = lookupDataService;
@@ -35,7 +36,7 @@
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
+        [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -45,13 +46,13 @@
             model.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             model.Memos = memoService.GetAll(criteria);
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Memo, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
             return View(model);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
+        [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index(MemoViewModel model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -60,13 +61,13 @@
             model.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
             model.Memos = memoService.GetAll(criteria);
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Memo, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
             return View(model);
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Host, FunctionKey.Memo)]
+        [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Edit(int id)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -81,7 +82,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.Memo)]
+        [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Edit(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -132,7 +133,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.Memo)]
+        [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Create()
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -154,7 +155,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Host, FunctionKey.Memo)]
+        [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Create(Memo model)
         {
             var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
@@ -202,7 +203,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Memo)]
+        [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public JsonResult DeleteMemo(int id)
         {
             var criteria = new DeleteMemoCriteria { Id = id };
@@ -222,7 +223,7 @@
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.Memo)]
+        [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Detail(int id)
         {
             var criteria = new GetMemoByIdCriteria { Id = id };

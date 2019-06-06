@@ -6,10 +6,10 @@
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Web.Providers;
     using Resources;
 
     public class JobTitleController : BaseController
@@ -18,35 +18,36 @@
         private readonly IBaseService baseService;
 
         public JobTitleController(
+            ISessionService sessionService,
             ILookupDataService lookupDataService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.lookupDataService = lookupDataService;
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult JobTitleManagement()
         {
             IList<SelectListItem> jobCategories = GetJobCategories();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View(jobCategories);
         }
 
         [ValidateInput(false)]
-        [HRAuthorize(Policy.Read, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult GetJobTitles(string jobTitle)
         {
             var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };
             IList<LookupData> jobTitles = lookupDataService.GetJobTitle(criteria);
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.JobTitleManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteLookupDataCriteria
@@ -60,7 +61,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Insert(string name, int categoryId)
         {
             var criteria = new InsertLookupDataCriteria
@@ -76,7 +77,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public JsonResult Update(int id, string name, int categoryId)
         {
             var criteria = new UpdateLookupDataCriteria

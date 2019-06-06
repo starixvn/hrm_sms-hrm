@@ -6,26 +6,28 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.ViewModels.Time;
-    using Fanex.NexHR.Web.Providers;
 
     public class TimeController : BaseController
     {
         private readonly IBaseService baseService;
 
-        public TimeController(IBaseService baseService)
+        public TimeController(
+            ISessionService sessionService,
+            IBaseService baseService) : base(sessionService)
         {
             this.baseService = baseService;
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.TimeRecord)]
+        [HRMPermission(Policy.Host, FunctionKey.TimeRecord)]
         public JsonResult ProcessInOut(UpdateTypeTimeRecordCriteria criteria)
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = CurrentUser.Id;
+                criteria.ModifiedBy = sessionService.Employee.Id;
                 criteria.ModifiedDate = DateTime.Now;
             }
 

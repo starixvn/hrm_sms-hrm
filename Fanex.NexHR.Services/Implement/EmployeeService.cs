@@ -3,11 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Security;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
@@ -24,31 +21,17 @@
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository employeeRepository;
-        private readonly IFunctionService functionService;
         private readonly IRoleService roleService;
-        private readonly IMenuService menuService;
         private readonly IBaseService baseService;
 
         public EmployeeService(
             IEmployeeRepository employeeRepository,
-            IFunctionService functionService,
             IRoleService roleService,
-            IMenuService menuService,
             IBaseService baseService)
         {
             this.employeeRepository = employeeRepository;
-            this.functionService = functionService;
             this.roleService = roleService;
-            this.menuService = menuService;
             this.baseService = baseService;
-        }
-
-        public HashProvider HashProvider
-        {
-            get
-            {
-                return HashProvider.Sha1;
-            }
         }
 
         public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
@@ -69,32 +52,6 @@
             }
 
             return employee;
-        }
-
-        public UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria)
-        {
-            UserLoginModel userLogin = baseService.GetDataEntity<UserLoginModel>(criteria);
-            if (userLogin != null)
-            {
-                userLogin.Functions = functionService.GetFunctionsByUserId(userLogin.Id);
-                userLogin.Menus = menuService.GetMenusByUserId(userLogin.Id);
-                userLogin.Roles = roleService.GetRolesByUserId(userLogin.Id);
-            }
-
-            return userLogin;
-        }
-
-        public UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria)
-        {
-            UserLoginModel userLogin = baseService.GetDataEntity<UserLoginModel>(criteria);
-            if (userLogin != null)
-            {
-                userLogin.Functions = functionService.GetFunctionsByUserId(userLogin.Id);
-                userLogin.Menus = menuService.GetMenusByUserId(userLogin.Id);
-                userLogin.Roles = roleService.GetRolesByUserId(userLogin.Id);
-            }
-
-            return userLogin;
         }
 
         public Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria)
@@ -220,18 +177,6 @@
             return baseService.GetData<DateTime>(criteria).ToList();
         }
 
-        public int ValidateUser(string code, string password)
-        {
-            var criteria = new GetEmployeeByCodeCriteria
-            {
-                Code = code
-            };
-            Employee employee = GetEmployeeByCode(criteria);
-            int retCode = ValidateUser(employee, password);
-
-            return retCode;
-        }
-
         public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
         {
             return baseService.GetData<Country>(criteria).ToList();
@@ -265,40 +210,6 @@
         public IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria)
         {
             return baseService.GetData<SupervisorModel>(criteria).ToList();
-        }
-
-        private int ValidateUser(Employee employee, string password)
-        {
-            //// -1: wrong username
-            ////  1: deleted
-            ////  2: disabled
-            ////  3: wrong password
-            ////  0: success
-
-            if (employee == null)
-            {
-                return -1;
-            }
-
-            if (!employee.Enabled)
-            {
-                return 2;
-            }
-
-            if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) ||
-                (ConfigSettings.AllowAdminLogin && password == Constants.PassWordAdmin))
-            {
-                return 0;
-            }
-
-            if (string.IsNullOrWhiteSpace(employee.Password) ||
-                (!ConfigSettings.AllowAdminLogin) ||
-                (password != Constants.PassWordAdmin))
-            {
-                return 3;
-            }
-
-            return 1;
         }
     }
 }

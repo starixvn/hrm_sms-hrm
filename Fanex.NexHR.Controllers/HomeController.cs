@@ -1,12 +1,16 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Services;
 
     public class HomeController : BaseController
     {
+        public HomeController(ISessionService sessionService) : base(sessionService)
+        {
+        }
+
         public ActionResult Index()
         {
-            ViewBag.Employee = CurrentUser;
             return RedirectToAction("myspace", "employee");
         }
     }

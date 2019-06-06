@@ -1,11 +1,16 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using NPOI.HSSF.UserModel;
     using System.IO;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Services;
+    using NPOI.HSSF.UserModel;
 
     public class BaseExportController : BaseController
     {
+        public BaseExportController(ISessionService sessionService) : base(sessionService)
+        {
+        }
+
         protected ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
         {
             using (var output = new MemoryStream())

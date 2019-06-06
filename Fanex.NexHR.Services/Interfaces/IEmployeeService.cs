@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
@@ -17,17 +16,11 @@
 
     public interface IEmployeeService
     {
-        HashProvider HashProvider { get; }
-
         string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria);
 
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
         IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria);
-
-        UserLoginModel GetUserLoginByCode(GetEmployeeByCodeCriteria criteria);
-
-        UserLoginModel GetUserLoginByEmployeeId(GetEmployeeByIdCriteria criteria);
 
         Employee GetEmployeeById(GetEmployeeByIdCriteria criteria);
 
@@ -64,8 +57,6 @@
         int GetDateRange(GetDateRangeCriteria criteria);
 
         IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria);
-
-        int ValidateUser(string code, string password);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 

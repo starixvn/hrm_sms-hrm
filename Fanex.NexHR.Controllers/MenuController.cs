@@ -4,11 +4,12 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Menu;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using Fanex.NexHR.Web.Providers;
 
     public class MenuController : BaseController
     {
@@ -16,25 +17,26 @@
         private readonly IFunctionService functionService;
 
         public MenuController(
+            ISessionService sessionService,
             IMenuService menuService,
-            IFunctionService functionService)
+            IFunctionService functionService) : base(sessionService)
         {
             this.menuService = menuService;
             this.functionService = functionService;
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.MenuManagement)]
         public ActionResult Index()
         {
             IEnumerable<MenuViewModel> menus = menuService.GetMenus();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.MenuManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.MenuManagement, Policy.Host);
 
             return View(menus);
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Create()
         {
             ViewBag.Menus = menuService.GetMenus();
@@ -44,7 +46,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Create(MenuModel menu)
         {
             if (ModelState.IsValid)
@@ -69,7 +71,7 @@
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Edit(int id)
         {
             MenuModel menu = menuService.GetMenusById(id);
@@ -80,7 +82,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.MenuManagement)]
         public ActionResult Edit(MenuModel menu)
         {
             if (ModelState.IsValid)
@@ -106,7 +108,7 @@
             return View(menu);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.MenuManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.MenuManagement)]
         public JsonResult Delete(int id)
         {
             var result = menuService.Delete(id);

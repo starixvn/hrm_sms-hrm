@@ -4,9 +4,14 @@
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Services;
 
     public class FileController : BaseController
     {
+        public FileController(ISessionService sessionService) : base(sessionService)
+        {
+        }
+
         [HttpPost]
         public string UploadFile(IEnumerable<HttpPostedFileBase> files, int categoryId, bool isOverride)
         {

@@ -928,10 +928,6 @@
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Web\Fanex.NexHR.Web.csproj">
-      <Project>{D1D9A098-0EE6-41F8-8198-111CB66A493A}</Project>
-      <Name>Fanex.NexHR.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Emails\CheckInOut.Request.cshtml">

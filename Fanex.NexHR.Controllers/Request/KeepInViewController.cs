@@ -25,11 +25,12 @@
         private readonly IEmployeeService employeeService;
 
         public KeepInViewController(
+            ISessionService sessionService,
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IShiftService shiftService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService) : base(sessionService)
         {
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
@@ -42,23 +43,23 @@
         {
             var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = sessionService.Employee.Id,
                 Date = DateTime.Now
             };
             Shift shift = shiftService.GetByDate(getShiftByDateCriteria);
 
             var model = new KeepInViewRequestViewModel
             {
-                Employee = CurrentUser.NickName,
-                EmployeeId = CurrentUser.Id,
+                Employee = sessionService.Employee.Nickname,
+                EmployeeId = sessionService.Employee.Id,
                 Date = DateTime.Now.Date,
                 Shift = (shift == null) ? string.Empty : shift.Name,
                 ShiftId = (shift == null) ? 0 : shift.Id,
-                UnavailDates = GetUnavailDate(CurrentUser.Id),
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                UnavailDates = GetUnavailDate(sessionService.Employee.Id),
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -89,7 +90,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
-                        CreatedBy = CurrentUser.Id
+                        CreatedBy = sessionService.Employee.Id
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
@@ -105,8 +106,8 @@
                 }
             }
 
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -118,7 +119,7 @@
                 RequestId = id
             };
             RequestEntity request = requestService.GetRequestById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, request.Requester.Id))
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -129,8 +130,8 @@
                     RequestId = id,
                     RefNo = request.RefNO,
                     HalfDay = request.IsHalfDay,
-                    Employee = CurrentUser.NickName,
-                    EmployeeId = CurrentUser.Id,
+                    Employee = sessionService.Employee.Nickname,
+                    EmployeeId = sessionService.Employee.Id,
                     Date = request.RequestedDate,
                     Shift = request.FromShift.Name,
                     ShiftId = request.FromShift.Id,
@@ -140,11 +141,11 @@
                     CrossDay = request.CrossDay,
                     FromTime = request.FromTime.ToString("HH:mm"),
                     ToTime = request.ToTime.ToString("HH:mm"),
-                    VerifierAndApprover = GetVerifierApprover(CurrentUser.Id),
-                    UnavailDates = GetUnavailDate(CurrentUser.Id)
+                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
+                    UnavailDates = GetUnavailDate(sessionService.Employee.Id)
                 };
-                ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                    || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+                ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                    || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
                 return View(viewModel);
             }
@@ -177,7 +178,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
-                        ModifiedBy = CurrentUser.Id,
+                        ModifiedBy = sessionService.Employee.Id,
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -193,8 +194,8 @@
                 }
             }
 
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -212,13 +213,13 @@
 
             var criteria = new GetRequestCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.KeepInView,
                 IsQueryByCreatedDate = false,
                 RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 IsLocal = null
             };
 

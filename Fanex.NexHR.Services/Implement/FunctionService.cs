@@ -24,12 +24,6 @@
             return baseService.GetData<FunctionModel>(criteria);
         }
 
-        public IEnumerable<FunctionModel> GetFunctionsByUserId(int userId)
-        {
-            var criteria = new GetFunctionByUserIdCriteria { UserId = userId };
-            return baseService.GetData<FunctionModel>(criteria);
-        }
-
         public IEnumerable<FunctionModel> GetFunctionsByRoleId(int roleId)
         {
             var criteria = new GetFunctionsByRoleIdCriteria { RoleId = roleId };

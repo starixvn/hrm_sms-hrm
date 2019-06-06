@@ -30,12 +30,13 @@
         private readonly ILeaveTypeService leaveTypeService;
 
         public LeaveController(
+            ISessionService sessionService,
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
-            ILeaveTypeService leaveTypeService)
+            ILeaveTypeService leaveTypeService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
@@ -50,18 +51,18 @@
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = Constants.GeneralLeave,
-                Employee = CurrentUser.DisplayName,
-                EmployeeId = CurrentUser.Id,
+                Employee = sessionService.Employee.DisplayName,
+                EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Now.Date,
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
                 LeaveTypeList = GetAllLeaveType(),
                 TotalRequest = GetNumberRequestInMonth(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
-                VerifierAndApprover = GetVerifierApprover(CurrentUser.Id)
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -73,7 +74,7 @@
             InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
-            criteria.CreatedBy = CurrentUser.Id;
+            criteria.CreatedBy = sessionService.Employee.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
@@ -92,7 +93,7 @@
             };
             RequestEntity request = requestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-            if (model == null || !Utilities.CheckUserCanEditRequest(CurrentUser.Id, model.EmployeeId))
+            if (model == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -100,11 +101,11 @@
             model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = GetAllLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
-            model.VerifierAndApprover = GetVerifierApprover(CurrentUser.Id);
+            model.VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id);
 
             ViewBag.IsView = false;
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -116,7 +117,7 @@
             UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
             List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
-            criteria.ModifiedBy = CurrentUser.Id;
+            criteria.ModifiedBy = sessionService.Employee.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
@@ -138,8 +139,8 @@
             model.LeaveTypeList = GetAllLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
-            ViewBag.HasOnBehalfOthersPermission = CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || CurrentUser.HasPermission(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -155,8 +156,8 @@
         {
             var criteria = new GetRequestCriteria
             {
-                SupervisorId = CurrentUser.Id,
-                EmpId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
+                EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
                 ToDate = new DateTime(year, 12, 31),
                 RequestType = (int)RequestFilter.Leave,
@@ -432,7 +433,7 @@
         {
             var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 RequestId = requestId,
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };
@@ -448,7 +449,7 @@
             var toDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month));
             var criteria = new GetNumberRequestInMonthCriteria
             {
-                EmployeeId = CurrentUser.Id,
+                EmployeeId = sessionService.Employee.Id,
                 RequestType = (int)RequestType.Leave,
                 FromDate = fromDate,
                 ToDate = toDate

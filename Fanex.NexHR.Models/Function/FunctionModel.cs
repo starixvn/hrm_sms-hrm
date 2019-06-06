@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
 
     [Serializable]
     public class FunctionModel

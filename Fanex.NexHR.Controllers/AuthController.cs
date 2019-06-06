@@ -5,23 +5,26 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Core.Services;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
 
     public class AuthController : Controller
     {
-        private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
+        private readonly ISessionService sessionService;
+        private readonly IAuthService authService;
 
         public AuthController(
-            IEmployeeService employeeService,
-            IBaseService baseService)
+            IBaseService baseService,
+            ISessionService sessionService,
+            IAuthService authService)
         {
-            this.employeeService = employeeService;
             this.baseService = baseService;
+            this.sessionService = sessionService;
+            this.authService = authService;
         }
 
         [HttpGet]
@@ -36,15 +39,16 @@
             if (ModelState.IsValid)
             {
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                int retCode = employeeService.ValidateUser(model.UserName, model.Password);
+                EmployeeSession employee = authService.GetEmployeeByCode(model.UserName);
+                int retCode = authService.Validate(employee, model.Password);
                 switch (retCode)
                 {
                     case 0: // OK
-                        var criteria = new GetEmployeeByCodeCriteria { Code = model.UserName };
-                        UserLoginModel user = employeeService.GetUserLoginByCode(criteria);
-                        LogEmployeeLogin(user.Id);
-                        user.IsShowLeftNavigation = true;
-                        HttpContext.Session["CurrentUser"] = user;
+                        LogEmployeeLogin(employee.Id);
+                        sessionService.IsShowLeftNavigation = true;
+                        sessionService.Employee = employee;
+                        sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
+                        sessionService.Functions = authService.GetFunctionByEmployeeId(employee.Id);
                         FormsAuthentication.SetAuthCookie(model.UserName, false);
                         return RedirectToAction("Index", "Home");
 
@@ -68,11 +72,7 @@
         [HttpGet]
         public ActionResult Logout()
         {
-            if (HttpContext.Session != null)
-            {
-                HttpContext.Session.Abandon();
-                HttpContext.Session.RemoveAll();
-            }
+            sessionService.ClearAll();
 
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");

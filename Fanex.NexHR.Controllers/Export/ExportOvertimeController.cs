@@ -4,12 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Criteria;
-    using Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
-    using Services;
-    using Services.ExportExcel;
-    using ViewModels;
 
     public class ExportOvertimeController : BaseExportController
     {
@@ -19,10 +20,11 @@
         private readonly IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService;
 
         public ExportOvertimeController(
+            ISessionService sessionService,
             IExportExcelService exportExcelService,
             IOvertimeRequestService overtimeService,
             IExportExcelOvertimeReportService exportExcelOvertimeReportService,
-            IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService)
+            IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService) : base(sessionService)
         {
             this.exportExcelService = exportExcelService;
             this.overtimeService = overtimeService;
@@ -53,7 +55,7 @@
             {
                 var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
                 {
-                    SupervisorId = this.CurrentUser.Id,
+                    SupervisorId = this.sessionService.Employee.Id,
                     Year = model.Year,
                     GroupIds = model.SectionIds,
                     EmployeeId = model.EmployeeId,

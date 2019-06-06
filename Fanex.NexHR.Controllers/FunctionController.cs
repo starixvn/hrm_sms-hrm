@@ -6,12 +6,13 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Function;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Function;
-    using Fanex.NexHR.Web.Providers;
 
     public class FunctionController : BaseController
     {
@@ -19,14 +20,15 @@
         private readonly IRoleService roleService;
 
         public FunctionController(
+            ISessionService sessionService,
             IFunctionService functionService,
-            IRoleService roleService)
+            IRoleService roleService) : base(sessionService)
         {
             this.functionService = functionService;
             this.roleService = roleService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.FunctionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
         public ActionResult Index(int? roleId = null)
         {
             IEnumerable<SystemRoleModel> systemRoles = roleService.GetRoles();
@@ -34,7 +36,7 @@
             var functionTrees = new TreeFunctionViewModel
             {
                 RoleId = roleId ?? systemRoles.First().RoleId,
-                IsHost = CurrentUser.HasPermission(FunctionKey.FunctionManagement, Policy.Host),
+                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
                 Functions = GetFunctionTrees(functions)
             };
 
@@ -44,10 +46,10 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.FunctionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.FunctionManagement)]
         public CustomJsonResult AssignPermission(int roleId, IEnumerable<FunctionPermission> permissions)
         {
-            CommandResult commandResult = functionService.AssignFunctionsToRole(CurrentUser.Id, roleId, permissions);
+            CommandResult commandResult = functionService.AssignFunctionsToRole(sessionService.Employee.Id, roleId, permissions);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

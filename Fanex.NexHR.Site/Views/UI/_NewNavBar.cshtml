@@ -1,8 +1,8 @@
-﻿@using Fanex.NexHR.Models;
-@model IEnumerable<MenuModel>
+﻿@using Fanex.NexHR.Core.Models
+@model IEnumerable<MenuItemSession>
 @{
     var unreadMessage = (int)ViewBag.UnreadMessage;
-    var selectedMenu = (MenuModel)ViewBag.SelectedMenu;
+    var selectedMenu = (MenuItemSession)ViewBag.SelectedMenu;
     var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;
 }
 

@@ -3,11 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria.Calendar;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.ExportExcel;
+    using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
-    using Services;
-    using Services.ExportExcel;
-    using ViewModels;
 
     public class ExportCalendarController : BaseExportController
     {
@@ -15,8 +16,9 @@
         private readonly IWorkingCalendarService workingCalendarService;
 
         public ExportCalendarController(
+            ISessionService sessionService,
             IExportExcelService exportExcelService,
-            IWorkingCalendarService workingCalendarService)
+            IWorkingCalendarService workingCalendarService) : base(sessionService)
         {
             this.exportExcelService = exportExcelService;
             this.workingCalendarService = workingCalendarService;

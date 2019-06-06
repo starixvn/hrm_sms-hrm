@@ -7,11 +7,11 @@
     using Criteria.Holidays;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Web.Providers;
 
     public class HolidayController : BaseController
     {
@@ -19,20 +19,21 @@
         private readonly IBaseService baseService;
 
         public HolidayController(
+            ISessionService sessionService,
             IHolidayService holidayService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.holidayService = holidayService;
             this.baseService = baseService;
         }
 
         [HttpGet]
-        [HRAuthorize(Policy.Read, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
-            int yearToCheck = year.HasValue ? year.Value : DateTime.Now.Year;
+            int yearToCheck = year ?? DateTime.Now.Year;
 
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.Holiday, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
             ViewBag.Year = yearToCheck;
 
             IList<Holiday> holidays = holidayService.GetByYear(yearToCheck);
@@ -40,7 +41,7 @@
             return View(holidays);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Edit(int id)
         {
             Holiday holiday = holidayService.GetById(id);
@@ -49,7 +50,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Edit(Holiday model)
         {
             if (ModelState.IsValid)
@@ -60,7 +61,7 @@
                     HolidayName = model.HolidayName,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = CurrentUser.Id,
+                    ModifiedBy = sessionService.Employee.Id,
                     ModifiedDate = DateTime.Now
                 };
 
@@ -81,7 +82,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create()
         {
             var holiday = new Holiday
@@ -94,7 +95,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create(Holiday model)
         {
             if (ModelState.IsValid)
@@ -104,7 +105,7 @@
                     HolidayName = model.HolidayName,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = CurrentUser.Id,
+                    ModifiedBy = sessionService.Employee.Id,
                     ModifiedDate = DateTime.Now
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -125,13 +126,13 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.Holiday)]
+        [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteHolidayCriteria
             {
                 Id = id,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 ModifiedDate = DateTime.Now
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);

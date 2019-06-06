@@ -2,21 +2,23 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Criteria.Report;
-    using Services;
-    using ViewModels;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Report;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
 
     public class ExportAttendanceController : BaseExportController
     {
         private readonly IReportService reportService;
-        private readonly IExportExcelAttendanceReportService exportExcelAttendanceReportService;
+        private readonly IExportExcelAttendanceReportService excelService;
 
         public ExportAttendanceController(
+            ISessionService sessionService,
             IReportService reportService,
-            IExportExcelAttendanceReportService exportExcelAttendanceReportService)
+            IExportExcelAttendanceReportService excelService) : base(sessionService)
         {
             this.reportService = reportService;
-            this.exportExcelAttendanceReportService = exportExcelAttendanceReportService;
+            this.excelService = excelService;
         }
 
         public ActionResult Attendance(EmployeeAttendanceViewModel model)
@@ -33,7 +35,7 @@
                 IsLocal = model.IsLocal
             };
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
-            exportExcelAttendanceReportService.Export(employeeAttendances, model.FromDate, model.ToDate);
+            excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
             return new EmptyResult();
         }

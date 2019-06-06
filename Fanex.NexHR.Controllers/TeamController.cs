@@ -3,10 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -17,7 +18,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
-    using Fanex.NexHR.Web.Providers;
 
     public class TeamController : BaseController
     {
@@ -26,27 +26,28 @@
         private readonly IBaseService baseService;
 
         public TeamController(
+            ISessionService sessionService,
             ITeamService teamService,
             IDepartmentService departmentService,
-            IBaseService baseService)
+            IBaseService baseService) : base(sessionService)
         {
             this.teamService = teamService;
             this.departmentService = departmentService;
             this.baseService = baseService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
             IList<Team> teams = GetAllTeam();
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.SectionManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
 
-            ViewBag.HasPermissionToViewEmployee = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Read);
+            ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
 
             return View(teams);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create()
         {
             var model = new TeamViewModel
@@ -57,7 +58,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = GetAllDepartment(isActive: true);
@@ -72,7 +73,7 @@
                     MailGroup = model.MailGroup,
                     LeaderId = model.LeaderId,
                     AssistantLeaderId = model.AssistantLeaderId,
-                    CreatedBy = CurrentUser.Id
+                    CreatedBy = sessionService.Employee.Id
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -91,7 +92,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Edit(int id)
         {
             var criteria = new GetGroupByIdCriteria
@@ -111,7 +112,7 @@
                 AssistantLeader = team.AssistantLeader != null ? team.AssistantLeader.DisplayName : string.Empty,
                 AssistantLeaderId = team.AssistantLeader != null ? team.AssistantLeader.Id : 0,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = this.CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
                 Departments = GetAllDepartment(isActive: true)
             };
@@ -119,7 +120,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Edit(TeamViewModel model)
         {
             if (model != null)
@@ -137,7 +138,7 @@
                         MailGroup = model.MailGroup,
                         LeaderId = model.LeaderId,
                         AssistantLeaderId = model.AssistantLeaderId,
-                        ModifiedBy = CurrentUser.Id
+                        ModifiedBy = sessionService.Employee.Id
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -160,20 +161,20 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public JsonResult Delete(int id)
         {
             var criteria = new DeleteGroupCriteria
             {
                 GroupId = id,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {
             var criteria = new GetSupervisorByTeamIdCriteria
@@ -187,7 +188,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ManageSupervisor(int teamId, short supervisorRole)
         {
             ViewBag.Groups = GetAllTeam();
@@ -209,7 +210,7 @@
             return View("~/Views/Employee/Supervisor.cshtml", model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult ShiftManager(int teamId)
         {
             ViewBag.Groups = GetAllTeam();
@@ -232,7 +233,7 @@
             return View("~/Views/Employee/ShiftManager.cshtml", model);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult DisciplineSetting(int teamId)
         {
             ViewBag.Groups = GetAllTeam();
@@ -254,7 +255,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Supervisor(SupervisorViewModel model)
         {
             var criteria = new InsertOrUpdateTeamSupervisorCriteria
@@ -266,7 +267,7 @@
                 EmpIdLeaves = model.RoleLeaves,
                 EmpIdOvertimes = model.RoleOvertimes,
                 GroupId = model.TeamId,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 Role = model.SupervisorRole
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -275,14 +276,14 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult ShiftManager(ShiftManagerViewModel model)
         {
             var criteria = new InsertTeamShiftManagerCriteria
             {
                 GroupId = model.TeamId,
                 ShiftArrangers = model.RoleShiftArrange,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -290,14 +291,14 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult UpdateDisciplineSetting(SupervisorViewModel model)
         {
             var criteria = new InsertOrUpdateTeamSupervisorCriteria
             {
                 EmpIdDisciplines = model.RoleDisciplines,
                 GroupId = model.TeamId,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 Role = (short)RoleSystem.DisciplineManager
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);

@@ -14,6 +14,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Country;
@@ -27,7 +28,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
-    using Fanex.NexHR.Web.Providers;
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
 
@@ -38,19 +38,23 @@
         private readonly IEmployeeService employeeService;
         private readonly IBaseService baseService;
         private readonly IRoleService roleService;
+        private readonly IAuthService authService;
 
         public EmployeeController(
+            ISessionService sessionService,
             IEmployeeService employeeService,
             ITeamService teamService,
             ILookupDataService lookupDataService,
             IBaseService baseService,
-            IRoleService roleService)
+            IRoleService roleService,
+            IAuthService authService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.lookupDataService = lookupDataService;
             this.baseService = baseService;
             this.roleService = roleService;
+            this.authService = authService;
         }
 
         public ActionResult Index()
@@ -97,7 +101,7 @@
             return PartialView("_ContactList", employees);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
             IList<LookupData> listJobTitle = GetAllJobTitle();
@@ -123,7 +127,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult ListEmployee(UserManagementViewModel model)
         {
             IList<Employee> employees = new List<Employee>();
@@ -153,7 +157,7 @@
                 ViewBag.PagerOption = pagerOption;
             }
 
-            ViewBag.HasPermissionToEdit = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
 
             return PartialView("_ListEmployee", employees);
         }
@@ -170,12 +174,12 @@
             ViewBag.Thu = employeeShift.ThuShiftName;
             ViewBag.Fri = employeeShift.FriShiftName;
             ViewBag.Sat = employeeShift.SatShiftName;
-            ViewBag.HasPermission = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
 
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
+        [HRMPermission(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
             IList<Team> teams = GetAllTeam();
@@ -186,7 +190,7 @@
 
         [ValidateInput(false)]
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.CreateAccount)]
+        [HRMPermission(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create(CreateEmployeeViewModel model)
         {
             if (model != null && ModelState.IsValid)
@@ -194,12 +198,12 @@
                 var criteria = new InsertEmployeeCriteria
                 {
                     Code = model.Code,
-                    CreateBy = CurrentUser.Id,
+                    CreateBy = sessionService.Employee.Id,
                     DomainUserName = model.DomainUsername,
                     FullName = model.FullName,
                     Nickname = model.Nickname,
                     GroupId = model.TeamId,
-                    Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Code)
+                    Password = Encryptor.ComputeHash(authService.HashProvider, model.Code)
                 };
 
                 CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
@@ -218,7 +222,7 @@
             return View(model);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
             Employee model = GetEmployeeById(id);
@@ -241,7 +245,7 @@
         [ValidateInput(false)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(Employee model)
         {
             if (model != null)
@@ -254,7 +258,7 @@
                     if (result.IsSuccessful)
                     {
                         ViewBag.Updated = true;
-                        UpdateUserSession(model.Id);
+                        UpdateUserSession(model.Id, model.Code);
                     }
                     else
                     {
@@ -279,7 +283,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(int id, DateTime resignedDate)
         {
             var criteria = new DeleteEmployeeCriteria
@@ -295,10 +299,7 @@
         [AllowAnonymous]
         public FileResult Avatar(string id)
         {
-            string avatarName;
-
-            avatarName = string.IsNullOrEmpty(id) ? CurrentUser.Code + ".jpg" : id + ".jpg";
-
+            var avatarName = string.IsNullOrEmpty(id) ? sessionService.Employee.Code + ".jpg" : id + ".jpg";
             if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
             {
                 return File("/avatars/" + avatarName, "image/jpeg");
@@ -308,7 +309,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public JsonResult UploadAvatar(string code, HttpPostedFileBase file)
         {
             if (file != null && file.ContentLength > 0)
@@ -338,15 +339,15 @@
         {
             var getMySpaceCriteria = new GetMySpaceCriteria
             {
-                EmpId = CurrentUser.Id,
+                EmpId = sessionService.Employee.Id,
                 Date = DateTime.Now
             };
             MySpaceModel model = employeeService.GetMySpace(getMySpaceCriteria);
 
-            Employee employee = GetEmployeeById(CurrentUser.Id);
+            Employee employee = GetEmployeeById(sessionService.Employee.Id);
             ViewBag.ResetPassword = employee.PasswordReset;
-            model.HasManagementDashboard = CurrentUser.HasPermission(FunctionKey.VerifyRequest, Policy.Host)
-                || CurrentUser.HasPermission(FunctionKey.ApproveRequest, Policy.Host);
+            model.HasManagementDashboard = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
+                || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
 
             return View(model);
         }
@@ -356,7 +357,7 @@
         {
             var criteria = new GetHRLeaderDashboardCriteria
             {
-                Empid = CurrentUser.Id,
+                Empid = sessionService.Employee.Id,
                 Date = DateTime.Now
             };
             IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
@@ -399,7 +400,7 @@
                 EmpIdCheckInOuts = model.RoleCheckInOuts,
                 EmpIdOvertimes = model.RoleOvertimes,
                 EmpIdKeepInViews = model.RoleKeepInViews,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -436,7 +437,7 @@
             {
                 EmpId = model.EmployeeId,
                 EmpIdShift = model.RoleShiftArrange,
-                ModifiedBy = CurrentUser.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = baseService.ExecuteNonQuery(insertShiftMangerCriteria);
 
@@ -446,12 +447,10 @@
         [HttpPost]
         public void ToogleLeftNavigation(bool isShow)
         {
-            var currentUser = (UserLoginModel)HttpContext.Session["CurrentUser"];
-            currentUser.IsShowLeftNavigation = isShow;
-            HttpContext.Session["CurrentUser"] = currentUser;
+            sessionService.IsShowLeftNavigation = isShow;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult DisciplineSetting(int employeeId)
         {
             ViewBag.Groups = GetAllTeam();
@@ -473,14 +472,14 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult UpdateDisciplineSetting(SupervisorViewModel model)
         {
             var criteria = new UpdateSupervisorCriteria
             {
                 EmpIdDisciplines = model.RoleDisciplines,
                 EmpId = model.EmployeeId,
-                ModifiedBy = CurrentUser.Id,
+                ModifiedBy = sessionService.Employee.Id,
                 Role = (short)RoleSystem.DisciplineManager
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -492,7 +491,7 @@
         {
             var criteria = new GetMemberByManagerCriteria
             {
-                SupervisorId = CurrentUser.Id,
+                SupervisorId = sessionService.Employee.Id,
                 Query = keyword,
                 ExcludedManager = false
             };
@@ -613,18 +612,11 @@
             return Json(newCode, JsonRequestBehavior.AllowGet);
         }
 
-        private void UpdateUserSession(int empId)
+        private void UpdateUserSession(int employeeId, string code)
         {
-            if (CurrentUser.Id == empId)
+            if (sessionService.Employee.Id == employeeId)
             {
-                var criteria = new GetEmployeeByIdCriteria
-                {
-                    EmpId = empId
-                };
-
-                UserLoginModel currentUser = employeeService.GetUserLoginByEmployeeId(criteria);
-                currentUser.IsShowLeftNavigation = CurrentUser.IsShowLeftNavigation;
-                HttpContext.Session["CurrentUser"] = currentUser;
+                sessionService.Employee = authService.GetEmployeeByCode(code);
             }
         }
 
@@ -771,8 +763,8 @@
                 PassportNo = model.PassportNo,
                 PassportExp = model.PassportExp,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = CurrentUser.Id,
-                Password = Encryptor.ComputeHash(employeeService.HashProvider, model.Password ?? string.Empty),
+                ModifiedBy = sessionService.Employee.Id,
+                Password = Encryptor.ComputeHash(authService.HashProvider, model.Password ?? string.Empty),
                 GroupId = model.Team.Id,
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
