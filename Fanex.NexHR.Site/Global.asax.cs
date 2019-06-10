@@ -2,15 +2,12 @@
 {
     using System;
     using System.Web;
-    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Fanex.Common;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.NexHR.Core.Providers;
     using Fanex.NexHR.Resources;
-    using Hangfire;
 
     public class MvcApplication : HttpApplication
     {
@@ -22,11 +19,6 @@
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             DbSettingProviderManager.Current.Start();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
-
-            var connectionString = Cryptography.DeCryptConnectionString(WebConfigurationManager.ConnectionStrings["nexhrx"].ConnectionString);
-            GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-
-            HangfireJobScheduler.ScheduleRecurringJobs();
         }
 
         [ValidateInput(false)]
