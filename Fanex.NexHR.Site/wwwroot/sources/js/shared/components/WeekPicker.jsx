@@ -46,9 +46,7 @@ export default class WeekPicker extends PureComponent {
     }
 
     handleShowCalendar = () => {
-        if (!this.props.isDisabled) {
-            this.$el.toggle();
-        }
+        this.$el.toggle();
     }
 
     render() {

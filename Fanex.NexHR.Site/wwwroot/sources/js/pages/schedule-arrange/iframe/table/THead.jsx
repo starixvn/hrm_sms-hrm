@@ -13,10 +13,6 @@ export default class THead extends PureComponent {
         { name: 'sundaySchedule', value: 6 }
     ];
 
-    handleChangePublics = event => {
-        this.props.onChangePublics(null, null, event.target.checked);
-    }
-
     render() {
         const { fromDate, toDate } = this.props;
 

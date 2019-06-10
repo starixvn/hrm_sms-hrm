@@ -41,8 +41,8 @@ export default class THead extends PureComponent {
                         <button className="btn shiftMultiple" onClick={this.props.onShiftMultiple} disabled={!isHost}>Shift Multiple</button>
                     </div>
                     <div>
-                        <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} />
-                        <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} />
+                        <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} title="Prev" />
+                        <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} title="Next" />
                         <span className="label-week">{`${fromDate} - ${toDate}`}</span>
                         <Dropdown id={`dropdownColorDescription`} componentClass="span" className="dropdown-color">
                             <Dropdown.Toggle noCaret className="btn">
